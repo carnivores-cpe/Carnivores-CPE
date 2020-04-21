@@ -1,0 +1,23 @@
+﻿  RendererD3D.cpp
+c:\source\c2_vs2017\rendererd3d.cpp(1054): warning C4244: '=': conversion from 'float' to 'D3DCOLOR', possible loss of data
+c:\source\c2_vs2017\rendererd3d.cpp(1064): warning C4244: '=': conversion from 'float' to 'D3DCOLOR', possible loss of data
+c:\source\c2_vs2017\rendererd3d.cpp(1074): warning C4244: '=': conversion from 'float' to 'D3DCOLOR', possible loss of data
+c:\source\c2_vs2017\rendererd3d.cpp(1107): warning C4305: 'argument': truncation from 'unsigned int' to 'float'
+c:\source\c2_vs2017\rendererd3d.cpp(1574): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+c:\source\c2_vs2017\rendererd3d.cpp(2732): warning C4244: '=': conversion from 'float' to 'short', possible loss of data
+c:\source\c2_vs2017\rendererd3d.cpp(2735): warning C4244: '=': conversion from 'float' to 'short', possible loss of data
+c:\source\c2_vs2017\rendererd3d.cpp(2738): warning C4244: '=': conversion from 'float' to 'short', possible loss of data
+c:\source\c2_vs2017\rendererd3d.cpp(2837): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+c:\source\c2_vs2017\rendererd3d.cpp(4137): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+c:\source\c2_vs2017\rendererd3d.cpp(4142): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+c:\source\c2_vs2017\rendererd3d.cpp(4147): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+c:\source\c2_vs2017\rendererd3d.cpp(4558): warning C4305: '=': truncation from 'double' to 'D3DVALUE'
+c:\source\c2_vs2017\rendererd3d.cpp(4568): warning C4305: '=': truncation from 'double' to 'D3DVALUE'
+c:\source\c2_vs2017\rendererd3d.cpp(4578): warning C4305: '=': truncation from 'double' to 'D3DVALUE'
+c:\source\c2_vs2017\rendererd3d.cpp(4752): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+c:\source\c2_vs2017\rendererd3d.cpp(4786): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+c:\source\c2_vs2017\rendererd3d.cpp(4813): warning C4244: '=': conversion from 'float' to 'int', possible loss of data
+c:\source\c2_vs2017\rendererd3d.cpp(5218): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+c:\source\c2_vs2017\rendererd3d.cpp(5220): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+c:\source\c2_vs2017\rendererd3d.cpp(5222): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+  C2.vcxproj -> C:\Source\C2_vs2017\Debug D3D\C2.exe

@@ -1,0 +1,38 @@
+﻿  Game.cpp
+c:\users\ojm14\documents\carnivores\00ornipatches\patch1\c2_vs2017\game.cpp(22): warning C4101: 'temp': unreferenced local variable
+c:\users\ojm14\documents\carnivores\00ornipatches\patch1\c2_vs2017\game.cpp(147): warning C4244: 'initializing': conversion from 'float' to 'int', possible loss of data
+c:\users\ojm14\documents\carnivores\00ornipatches\patch1\c2_vs2017\game.cpp(147): warning C4244: '+=': conversion from 'float' to 'int', possible loss of data
+c:\users\ojm14\documents\carnivores\00ornipatches\patch1\c2_vs2017\game.cpp(148): warning C4244: 'initializing': conversion from 'float' to 'int', possible loss of data
+c:\users\ojm14\documents\carnivores\00ornipatches\patch1\c2_vs2017\game.cpp(148): warning C4244: '+=': conversion from 'float' to 'int', possible loss of data
+c:\users\ojm14\documents\carnivores\00ornipatches\patch1\c2_vs2017\game.cpp(238): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+c:\users\ojm14\documents\carnivores\00ornipatches\patch1\c2_vs2017\game.cpp(239): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+c:\users\ojm14\documents\carnivores\00ornipatches\patch1\c2_vs2017\game.cpp(341): warning C4101: 'hh': unreferenced local variable
+c:\users\ojm14\documents\carnivores\00ornipatches\patch1\c2_vs2017\game.cpp(918): warning C4305: '=': truncation from 'double' to 'float'
+c:\users\ojm14\documents\carnivores\00ornipatches\patch1\c2_vs2017\game.cpp(930): warning C4305: '=': truncation from 'double' to 'float'
+c:\users\ojm14\documents\carnivores\00ornipatches\patch1\c2_vs2017\game.cpp(1169): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+c:\users\ojm14\documents\carnivores\00ornipatches\patch1\c2_vs2017\game.cpp(1170): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+c:\users\ojm14\documents\carnivores\00ornipatches\patch1\c2_vs2017\game.cpp(1177): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+c:\users\ojm14\documents\carnivores\00ornipatches\patch1\c2_vs2017\game.cpp(1184): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+c:\users\ojm14\documents\carnivores\00ornipatches\patch1\c2_vs2017\game.cpp(1191): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+c:\users\ojm14\documents\carnivores\00ornipatches\patch1\c2_vs2017\game.cpp(1195): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+c:\users\ojm14\documents\carnivores\00ornipatches\patch1\c2_vs2017\game.cpp(1196): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+c:\users\ojm14\documents\carnivores\00ornipatches\patch1\c2_vs2017\game.cpp(1197): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+c:\users\ojm14\documents\carnivores\00ornipatches\patch1\c2_vs2017\game.cpp(1200): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+c:\users\ojm14\documents\carnivores\00ornipatches\patch1\c2_vs2017\game.cpp(1201): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+c:\users\ojm14\documents\carnivores\00ornipatches\patch1\c2_vs2017\game.cpp(1202): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+c:\users\ojm14\documents\carnivores\00ornipatches\patch1\c2_vs2017\game.cpp(1259): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
+c:\users\ojm14\documents\carnivores\00ornipatches\patch1\c2_vs2017\game.cpp(1261): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
+c:\users\ojm14\documents\carnivores\00ornipatches\patch1\c2_vs2017\game.cpp(1266): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
+c:\users\ojm14\documents\carnivores\00ornipatches\patch1\c2_vs2017\game.cpp(1268): warning C4305: 'argument': truncation from 'double' to 'float'
+c:\users\ojm14\documents\carnivores\00ornipatches\patch1\c2_vs2017\game.cpp(1269): warning C4305: 'argument': truncation from 'double' to 'float'
+c:\users\ojm14\documents\carnivores\00ornipatches\patch1\c2_vs2017\game.cpp(1274): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
+c:\users\ojm14\documents\carnivores\00ornipatches\patch1\c2_vs2017\game.cpp(1281): warning C4244: '-=': conversion from 'float' to 'int', possible loss of data
+c:\users\ojm14\documents\carnivores\00ornipatches\patch1\c2_vs2017\game.cpp(1358): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+c:\users\ojm14\documents\carnivores\00ornipatches\patch1\c2_vs2017\game.cpp(1632): warning C4244: '+=': conversion from 'double' to 'float', possible loss of data
+c:\users\ojm14\documents\carnivores\00ornipatches\patch1\c2_vs2017\game.cpp(1636): warning C4305: 'argument': truncation from 'double' to 'float'
+c:\users\ojm14\documents\carnivores\00ornipatches\patch1\c2_vs2017\game.cpp(1644): warning C4244: '-=': conversion from 'double' to 'float', possible loss of data
+c:\users\ojm14\documents\carnivores\00ornipatches\patch1\c2_vs2017\game.cpp(1647): warning C4305: 'argument': truncation from 'double' to 'float'
+c:\users\ojm14\documents\carnivores\00ornipatches\patch1\c2_vs2017\game.cpp(1680): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+c:\users\ojm14\documents\carnivores\00ornipatches\patch1\c2_vs2017\game.cpp(1681): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+c:\users\ojm14\documents\carnivores\00ornipatches\patch1\c2_vs2017\game.cpp(1682): warning C4244: 'initializing': conversion from 'int' to 'float', possible loss of data
+  C2.vcxproj -> C:\Users\ojm14\Documents\Carnivores\00OrniPatches\Patch1\C2_vs2017\Debug Soft\v_soft.ren

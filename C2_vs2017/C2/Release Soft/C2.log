@@ -1,0 +1,46 @@
+﻿  RenderSoft.cpp
+c:\users\ojm14\documents\carnivores\00ornipatches\patch1\c2_vs2017\rendersoft.cpp(176): warning C4244: '=': conversion from 'float' to 'int', possible loss of data
+c:\users\ojm14\documents\carnivores\00ornipatches\patch1\c2_vs2017\rendersoft.cpp(716): warning C4102: 'SKIP': unreferenced label
+c:\users\ojm14\documents\carnivores\00ornipatches\patch1\c2_vs2017\rendersoft.cpp(1264): warning C4244: '=': conversion from 'float' to 'int', possible loss of data
+c:\users\ojm14\documents\carnivores\00ornipatches\patch1\c2_vs2017\rendersoft.cpp(1265): warning C4244: '=': conversion from 'float' to 'int', possible loss of data
+c:\users\ojm14\documents\carnivores\00ornipatches\patch1\c2_vs2017\rendersoft.cpp(1275): warning C4244: '=': conversion from 'float' to 'int', possible loss of data
+c:\users\ojm14\documents\carnivores\00ornipatches\patch1\c2_vs2017\rendersoft.cpp(1276): warning C4244: '=': conversion from 'float' to 'int', possible loss of data
+c:\users\ojm14\documents\carnivores\00ornipatches\patch1\c2_vs2017\rendersoft.cpp(1777): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+c:\users\ojm14\documents\carnivores\00ornipatches\patch1\c2_vs2017\rendersoft.cpp(1778): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+c:\users\ojm14\documents\carnivores\00ornipatches\patch1\c2_vs2017\rendersoft.cpp(1780): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+c:\users\ojm14\documents\carnivores\00ornipatches\patch1\c2_vs2017\rendersoft.cpp(1781): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+c:\users\ojm14\documents\carnivores\00ornipatches\patch1\c2_vs2017\rendersoft.cpp(1783): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+c:\users\ojm14\documents\carnivores\00ornipatches\patch1\c2_vs2017\rendersoft.cpp(1784): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+c:\users\ojm14\documents\carnivores\00ornipatches\patch1\c2_vs2017\rendersoft.cpp(1830): warning C4244: '=': conversion from 'float' to 'int', possible loss of data
+c:\users\ojm14\documents\carnivores\00ornipatches\patch1\c2_vs2017\rendersoft.cpp(1831): warning C4244: '=': conversion from 'float' to 'int', possible loss of data
+c:\users\ojm14\documents\carnivores\00ornipatches\patch1\c2_vs2017\rendersoft.cpp(1841): warning C4244: '=': conversion from 'float' to 'int', possible loss of data
+c:\users\ojm14\documents\carnivores\00ornipatches\patch1\c2_vs2017\rendersoft.cpp(1842): warning C4244: '=': conversion from 'float' to 'int', possible loss of data
+c:\users\ojm14\documents\carnivores\00ornipatches\patch1\c2_vs2017\rendersoft.cpp(1944): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+c:\users\ojm14\documents\carnivores\00ornipatches\patch1\c2_vs2017\rendersoft.cpp(1945): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+c:\users\ojm14\documents\carnivores\00ornipatches\patch1\c2_vs2017\rendersoft.cpp(1947): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+c:\users\ojm14\documents\carnivores\00ornipatches\patch1\c2_vs2017\rendersoft.cpp(1948): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+c:\users\ojm14\documents\carnivores\00ornipatches\patch1\c2_vs2017\rendersoft.cpp(1950): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+c:\users\ojm14\documents\carnivores\00ornipatches\patch1\c2_vs2017\rendersoft.cpp(1951): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+c:\users\ojm14\documents\carnivores\00ornipatches\patch1\c2_vs2017\rendersoft.cpp(1979): warning C4244: '=': conversion from 'float' to 'int', possible loss of data
+c:\users\ojm14\documents\carnivores\00ornipatches\patch1\c2_vs2017\rendersoft.cpp(1980): warning C4244: '=': conversion from 'float' to 'int', possible loss of data
+c:\users\ojm14\documents\carnivores\00ornipatches\patch1\c2_vs2017\rendersoft.cpp(1990): warning C4244: '=': conversion from 'float' to 'int', possible loss of data
+c:\users\ojm14\documents\carnivores\00ornipatches\patch1\c2_vs2017\rendersoft.cpp(1991): warning C4244: '=': conversion from 'float' to 'int', possible loss of data
+c:\users\ojm14\documents\carnivores\00ornipatches\patch1\c2_vs2017\rendersoft.cpp(2129): warning C4101: 'f': unreferenced local variable
+c:\users\ojm14\documents\carnivores\00ornipatches\patch1\c2_vs2017\rendersoft.cpp(2257): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+c:\users\ojm14\documents\carnivores\00ornipatches\patch1\c2_vs2017\rendersoft.cpp(2258): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+c:\users\ojm14\documents\carnivores\00ornipatches\patch1\c2_vs2017\rendersoft.cpp(2260): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+c:\users\ojm14\documents\carnivores\00ornipatches\patch1\c2_vs2017\rendersoft.cpp(2261): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+c:\users\ojm14\documents\carnivores\00ornipatches\patch1\c2_vs2017\rendersoft.cpp(2263): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+c:\users\ojm14\documents\carnivores\00ornipatches\patch1\c2_vs2017\rendersoft.cpp(2264): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+c:\users\ojm14\documents\carnivores\00ornipatches\patch1\c2_vs2017\rendersoft.cpp(2287): warning C4244: '=': conversion from 'float' to 'int', possible loss of data
+c:\users\ojm14\documents\carnivores\00ornipatches\patch1\c2_vs2017\rendersoft.cpp(2288): warning C4244: '=': conversion from 'float' to 'int', possible loss of data
+c:\users\ojm14\documents\carnivores\00ornipatches\patch1\c2_vs2017\rendersoft.cpp(2301): warning C4244: '=': conversion from 'float' to 'int', possible loss of data
+c:\users\ojm14\documents\carnivores\00ornipatches\patch1\c2_vs2017\rendersoft.cpp(2302): warning C4244: '=': conversion from 'float' to 'int', possible loss of data
+c:\users\ojm14\documents\carnivores\00ornipatches\patch1\c2_vs2017\rendersoft.cpp(2328): warning C4244: '=': conversion from 'float' to 'int', possible loss of data
+c:\users\ojm14\documents\carnivores\00ornipatches\patch1\c2_vs2017\rendersoft.cpp(2375): warning C4244: '=': conversion from 'float' to 'int', possible loss of data
+  Generating code
+  2 of 304 functions ( 0.7%) were compiled, the rest were copied from previous compilation.
+    0 functions were new in current compilation
+    1 functions had inline decision re-evaluated but remain unchanged
+  Finished generating code
+  C2.vcxproj -> C:\Users\ojm14\Documents\Carnivores\00OrniPatches\Patch1\C2_vs2017\Release Soft\v_soft.ren
