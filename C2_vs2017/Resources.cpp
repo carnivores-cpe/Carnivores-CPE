@@ -2160,6 +2160,8 @@ void ReadCharacters(FILE *stream, bool area)
 			if (strstr(line, "gldspd")) DinoInfo[TotalC].gldspd = (float)atof(value);
 			if (strstr(line, "tkfspd")) DinoInfo[TotalC].tkfspd = (float)atof(value);
 			if (strstr(line, "lndspd")) DinoInfo[TotalC].lndspd = (float)atof(value);
+			if (strstr(line, "hunterAnim")) DinoInfo[TotalC].hunterDeathAnim = atoi(value);
+			if (strstr(line, "hunterOffset")) DinoInfo[TotalC].hunterDeathOffset = atoi(value);
 			
 			if (strstr(line, "name"))
 			{

@@ -281,10 +281,7 @@ void AddDeadBody(TCharacter *cptr, int phase)
   MyHealth = 0;
   if (cptr)
   {
-    float pl = 170;
-    if (cptr->AI==AI_SPINO) pl = 200.f;
-    if (cptr->AI==AI_CERAT) pl = 320.f;
-    if (cptr->AI==AI_TREX ) pl = 0;
+	float pl = DinoInfo[cptr->CType].hunterDeathOffset;
     Characters[ChCount].pos.x = cptr->pos.x + cptr->lookx * pl * cptr->scale;
     Characters[ChCount].pos.z = cptr->pos.z + cptr->lookz * pl * cptr->scale;
     Characters[ChCount].pos.y = GetLandQH(Characters[ChCount].pos.x, Characters[ChCount].pos.z);
@@ -2295,7 +2292,7 @@ TBEGIN:
           cptr->State = 1;
           cptr->Phase = RAP_EAT;
         }
-        AddDeadBody(cptr, HUNT_EAT);
+        AddDeadBody(cptr, DinoInfo[cptr->CType].hunterDeathAnim);
       }
   }
 
@@ -2593,7 +2590,7 @@ TBEGIN:
           cptr->Phase = VEL_EAT;
         }
 
-        AddDeadBody(cptr, HUNT_EAT);
+        AddDeadBody(cptr, DinoInfo[cptr->CType].hunterDeathAnim);
       }
   }
 
@@ -2892,7 +2889,7 @@ TBEGIN:
           cptr->Phase = SPN_EAT;
         }
 
-        AddDeadBody(cptr, HUNT_EAT);
+        AddDeadBody(cptr, DinoInfo[cptr->CType].hunterDeathAnim);
       }
   }
 
@@ -3202,7 +3199,7 @@ TBEGIN:
           cptr->Phase = CER_EAT;
         }
 
-        AddDeadBody(cptr, HUNT_EAT);
+        AddDeadBody(cptr, DinoInfo[cptr->CType].hunterDeathAnim);
       }
   }
 
@@ -3461,7 +3458,7 @@ TBEGIN:
         cptr->vspeed/= 8.0f;
         cptr->State = 1;
         cptr->Phase = REX_EAT;
-        AddDeadBody(cptr, HUNT_KILL);
+        AddDeadBody(cptr, DinoInfo[cptr->CType].hunterDeathAnim);
         Characters[ChCount-1].scale = cptr->scale;
         Characters[ChCount-1].alpha = cptr->alpha;
         cptr->bend = 0;
@@ -4323,7 +4320,7 @@ TBEGIN:
 					cptr->State = 1;
 					cptr->Phase = MOSA_EAT;
 				}
-				AddDeadBody(cptr, HUNT_EAT);
+				AddDeadBody(cptr, DinoInfo[cptr->CType].hunterDeathAnim);
 			}
 	}
 
@@ -5519,7 +5516,7 @@ TBEGIN:
 				}
 				//001 WATER KILL ANIM
 
-				AddDeadBody(cptr, HUNT_EAT);//001 HUNTER DEATH ANIMS
+				AddDeadBody(cptr, DinoInfo[cptr->CType].hunterDeathAnim);//001 HUNTER DEATH ANIMS
 			}
 	}
 
@@ -6144,7 +6141,7 @@ TBEGIN:
       if (fabs(PlayerY - cptr->pos.y - 160) < 256)
       {
         cptr->State = 0;
-        AddDeadBody(cptr, HUNT_EAT);
+        AddDeadBody(cptr, DinoInfo[cptr->CType].hunterDeathAnim);
       }
 
   //======== exploring area ===============//

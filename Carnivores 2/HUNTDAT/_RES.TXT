@@ -244,6 +244,8 @@ characters {
  wlkspd = 0.428
  swmspd = 0.4
  jmpspd = 1.1
+ hunterAnim = 0
+ hunterOffset = 170
 }
 
 {
@@ -266,6 +268,8 @@ characters {
  fearCall = 18
  runspd = 1.2
  wlkspd = 0.30
+ hunterAnim = 0
+ hunterOffset = 170
 }
 
 {
@@ -288,6 +292,8 @@ characters {
  wlkspd = 0.428
  swmspd = 0.4
  jmpspd = 1.1
+ hunterAnim = 0
+ hunterOffset = 170
 }
 
 {
@@ -309,6 +315,8 @@ characters {
  wlkspd = 0.70
  swmspd = 0.5
  jmpspd = 1.4
+ hunterAnim = 0
+ hunterOffset = 200
 }
 
 
@@ -330,6 +338,8 @@ characters {
  shipdelta = 96
  runspd = 2.2
  wlkspd = 0.75
+ hunterAnim = 0
+ hunterOffset = 320
 }
 
 
@@ -351,6 +361,8 @@ characters {
  runspd = 2.49
  wlkspd = 0.76
  swmspd = 0.70
+ hunterAnim = 3
+ hunterOffset = 0
 }
 
 

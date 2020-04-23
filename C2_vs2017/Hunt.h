@@ -443,6 +443,7 @@ typedef struct _TDinoInfo
   BOOL Aquatic;
   int maxDepth, minDepth, spacingDepth;
 
+  int hunterDeathAnim, hunterDeathOffset;
   float runspd, jmpspd, wlkspd, swmspd, flyspd, gldspd, tkfspd, lndspd;
 
 } TDinoInfo;

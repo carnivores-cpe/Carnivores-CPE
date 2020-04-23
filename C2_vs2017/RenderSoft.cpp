@@ -728,7 +728,7 @@ SKIP:
 
 void ProcessMapW(int x, int y, int r)
 {
-  if (RunMode) return;
+  //if (RunMode) return;
 
 
   if (x>=ctMapSize-1 || y>=ctMapSize-1 || x<0 || y<0) return;
@@ -839,7 +839,7 @@ S2:
 
 void ProcessMapW2(int x, int y, int r)
 {
-  if (RunMode) return;
+  //if (RunMode) return;
   if (!( (FMap[y  ][x  ] & fmWaterA) &&
          (FMap[y  ][x+2] & fmWaterA) &&
          (FMap[y+2][x  ] & fmWaterA) &&
