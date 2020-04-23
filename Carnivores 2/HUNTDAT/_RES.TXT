@@ -225,7 +225,7 @@ characters {
 
 {
  name = 'Allosaurus'
- file = 'allo.car'
+ file = 'allo_ii.car'
  ai        = 13
  mass      = 0.5
  length    = 4.2
@@ -274,7 +274,7 @@ characters {
 
 {
  name = 'Velociraptor'
- file = 'velo2.car'
+ file = 'velo_iidc.car'
  ai        = 15
  mass      = 0.3
  length    = 4.0
@@ -572,7 +572,7 @@ area3 {
 
 {
  name = 'Allosaurus2'
- file = 'allo.car'
+ file = 'allo_ii.car'
  ai        = 13
  spawnrate = 0.5
  spawnmax  = 12
