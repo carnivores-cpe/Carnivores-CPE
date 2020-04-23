@@ -4002,7 +4002,8 @@ void DrawHMap()
   if (RadarMode)
     for (c=0; c<ChCount; c++)
     {
-      //if (Characters[c].AI<10) continue; //READD THIS LINE
+      
+		//if (Characters[c].AI<10) continue; //READD THIS LINE
       //if (! (TargetDino & (1<<Characters[c].AI)) ) continue;  //READD THIS LINE
 
 		if (Characters[c].AI < 0) { //REMOVE THIS LINE

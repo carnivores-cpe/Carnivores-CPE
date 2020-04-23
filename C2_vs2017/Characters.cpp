@@ -1761,50 +1761,6 @@ void AnimateMoshDead(TCharacter *cptr)
 
 
 
-void AnimateBrachiDead(TCharacter *cptr)
-{
-
-	if (cptr->Phase != BRA_DIE && cptr->Phase != BRA_SLP)
-	{
-		if (cptr->PPMorphTime > 128)
-		{
-			cptr->PrevPhase = cptr->Phase;
-			cptr->PrevPFTime = cptr->FTime;
-			cptr->PPMorphTime = 0;
-		}
-
-		cptr->FTime = 0;
-		cptr->Phase = BRA_DIE;
-		ActivateCharacterFx(cptr);
-	}
-	else
-	{
-		ProcessPrevPhase(cptr);
-
-		cptr->FTime += TimeDt;
-		if (cptr->FTime >= cptr->pinfo->Animation[cptr->Phase].AniTime)
-			if (Tranq)
-			{
-				cptr->FTime = 0;
-				cptr->Phase = BRA_SLP;
-				ActivateCharacterFx(cptr);
-			}
-			else
-				cptr->FTime = cptr->pinfo->Animation[cptr->Phase].AniTime - 1;
-	}
-
-	//======= movement ===========//
-	DeltaFunc(cptr->vspeed, 0, TimeDt / 800.f);
-	cptr->pos.x += cptr->lookx * cptr->vspeed * TimeDt;
-	cptr->pos.z += cptr->lookz * cptr->vspeed * TimeDt;
-
-	ThinkY_Beta_Gamma(cptr, 100, 96, 0.6f, 0.5f);
-
-	DeltaFunc(cptr->gamma, cptr->tggamma, TimeDt / 1600.f);
-}
-
-
-
 void AnimateDimetDead(TCharacter *cptr)
 {
 
@@ -2532,7 +2488,7 @@ TBEGIN:
 	if (!MyHealth) cptr->State = 0;
 	if (cptr->State)
 	{
-		if (pdist > ctViewR * 128 + OptAgres / 4)
+		if (pdist > ctViewR * DinoInfo[cptr->CType].aggress + OptAgres / 4)
 		{
 			nv.x = playerdx;
 			nv.z = playerdz;
@@ -3135,7 +3091,7 @@ TBEGIN:
 	if (!MyHealth) cptr->State = 0;
 	if (cptr->State)
 	{
-		if (pdist > ctViewR * 160 + OptAgres / 8)
+		if (pdist > ctViewR * DinoInfo[cptr->CType].aggress + OptAgres / 8)
 		{
 			nv.x = playerdx;
 			nv.z = playerdz;
@@ -3445,7 +3401,7 @@ TBEGIN:
   if (!MyHealth) cptr->State = 0;
   if (cptr->State)
   {
-    if (pdist > ctViewR*140+OptAgres/8)
+    if (pdist > ctViewR * DinoInfo[cptr->CType].aggress +OptAgres/8)
     {
       nv.x = playerdx;
       nv.z = playerdz;
@@ -3758,7 +3714,7 @@ TBEGIN:
   if (!MyHealth) cptr->State = 0;
   if (cptr->State)
   {
-    if (pdist > ctViewR*200+OptAgres/8)
+    if (pdist > ctViewR * DinoInfo[cptr->CType].aggress + OptAgres/8)
     {
       nv.x = playerdx;
       nv.z = playerdz;
@@ -4839,7 +4795,7 @@ TBEGIN:
 	float tdist2 = (float)sqrt(targetdx * targetdx + targetdz * targetdz); //non-verticle
 	float tdist = (float)sqrt(tdist2 * tdist2 + targetdy * targetdy); //verticle
 
-	float attackDist = ctViewR * 128 + OptAgres / 4;
+	float attackDist = ctViewR * 128 + OptAgres / 4; //TODO ADD THIS TO _RES
 
 	float playerdx = PlayerX - cptr->pos.x - cptr->lookx * 100 * cptr->scale;
 	float playerdz = PlayerZ - cptr->pos.z - cptr->lookz * 100 * cptr->scale;
@@ -6053,7 +6009,7 @@ TBEGIN:
 	float playerdz = PlayerZ - cptr->pos.z - cptr->lookz * 108;
 	float pdist = (float)sqrt(playerdx * playerdx + playerdz * playerdz);
 
-	int attackDist = 256 * 28 + OptAgres / 8;
+	int attackDist = 128 * DinoInfo[cptr->CType].aggress + OptAgres / 8;
 	bool playerAttackable = ((GetLandUpH(PlayerX, PlayerZ) - GetLandH(PlayerX, PlayerZ)) <= 550);
 	bool attacking = false;
 
@@ -6712,7 +6668,7 @@ TBEGIN:
       goto TBEGIN;
     }
 
-    if (pdist > 256*16+OptAgres/8)
+    if (pdist > 128 * DinoInfo[cptr->CType].aggress +OptAgres/8)
     {
       nv.x = playerdx;
       nv.z = playerdz;

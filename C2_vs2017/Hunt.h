@@ -444,6 +444,7 @@ typedef struct _TDinoInfo
   int maxDepth, minDepth, spacingDepth;
 
   int hunterDeathAnim, hunterDeathOffset;
+  int aggress;
   float runspd, jmpspd, wlkspd, swmspd, flyspd, gldspd, tkfspd, lndspd;
 
 } TDinoInfo;
