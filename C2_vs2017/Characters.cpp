@@ -402,7 +402,7 @@ int CheckPlaceCollisionP(Vector3d &v)
 }
 
 
-
+//checks place collision without checking for water I think?
 int AquaticCheckPlaceCollisionP(Vector3d &v)
 {
 	int ccx = (int)v.x / 256;
@@ -1018,8 +1018,8 @@ void SetNewTargetPlace_Icth(TCharacter *cptr, float R)
 		//spacing = (DinoInfo[cptr->CType].XMax - DinoInfo[cptr->CType].XMin)/10;
 		//if (spacing > 20) spacing = 20;
 		if (cptr->pos.x < (DinoInfo[cptr->CType].XMin) * 256) outsideRegion = true;
-		if (cptr->pos.z > (DinoInfo[cptr->CType].XMax) * 256) outsideRegion = true;
-		if (cptr->pos.x < (DinoInfo[cptr->CType].YMin) * 256) outsideRegion = true;
+		if (cptr->pos.x > (DinoInfo[cptr->CType].XMax) * 256) outsideRegion = true;
+		if (cptr->pos.z < (DinoInfo[cptr->CType].YMin) * 256) outsideRegion = true;
 		if (cptr->pos.z > (DinoInfo[cptr->CType].YMax) * 256) outsideRegion = true;
 	}
 	//PrintLog("iT");//TEST20200412
@@ -1052,6 +1052,7 @@ replace:
 	if (tr < 1024)
 	{
 		if (!waterNear(p.x, p.z, 50)) goto replace;
+		if (cptr->spawnAlt + 400 < GetLandUpH(p.x, p.z)) goto replace;
 	}
 	/*
 	else if (R < 10240 && !(tr % 20)) {
@@ -1157,8 +1158,8 @@ void SetNewTargetPlaceRegion(TCharacter *cptr, float R)
 		//spacing = (DinoInfo[cptr->CType].XMax - DinoInfo[cptr->CType].XMin)/10;
 		//if (spacing > 20) spacing = 20;
 		if (cptr->pos.x < (DinoInfo[cptr->CType].XMin) * 256) outsideRegion = true;
-		if (cptr->pos.z > (DinoInfo[cptr->CType].XMax) * 256) outsideRegion = true;
-		if (cptr->pos.x < (DinoInfo[cptr->CType].YMin) * 256) outsideRegion = true;
+		if (cptr->pos.x > (DinoInfo[cptr->CType].XMax) * 256) outsideRegion = true;
+		if (cptr->pos.z < (DinoInfo[cptr->CType].YMin) * 256) outsideRegion = true;
 		if (cptr->pos.z > (DinoInfo[cptr->CType].YMax) * 256) outsideRegion = true;
 	}
 	//PrintLog("hT");//TEST20200415
@@ -1246,8 +1247,8 @@ void SetNewTargetPlaceFish(TCharacter *cptr, float R)
 		//spacing = (DinoInfo[cptr->CType].XMax - DinoInfo[cptr->CType].XMin)/10;
 		//if (spacing > 20) spacing = 20;
 		if (cptr->pos.x < (DinoInfo[cptr->CType].XMin) * 256) outsideRegion = true;
-		if (cptr->pos.z > (DinoInfo[cptr->CType].XMax) * 256) outsideRegion = true;
-		if (cptr->pos.x < (DinoInfo[cptr->CType].YMin) * 256) outsideRegion = true;
+		if (cptr->pos.x > (DinoInfo[cptr->CType].XMax) * 256) outsideRegion = true;
+		if (cptr->pos.z < (DinoInfo[cptr->CType].YMin) * 256) outsideRegion = true;
 		if (cptr->pos.z > (DinoInfo[cptr->CType].YMax) * 256) outsideRegion = true;
 	}
 	//PrintLog("fTXZ");//TEST202004091129
@@ -5247,14 +5248,14 @@ TBEGIN:
 
 		if (tdist < targetNear)
 		{
-			if (!cptr->AfraidTime)
-			{
+			//if (!cptr->AfraidTime)
+			//{
+			//	SetNewTargetPlace_Icth(cptr, 2048.f);
+			//}
+			//else
+			//{
 				SetNewTargetPlace_Icth(cptr, 2048.f);
-			}
-			else
-			{
-				SetNewTargetPlace_Icth(cptr, 2048.f);
-			}
+			//}
 			goto TBEGIN;
 
 		}
@@ -5505,6 +5506,7 @@ ENDPSELECT:
 	{
 		if (cptr->Phase == ICTH_FLY || cptr->Phase == ICTH_FLY2)
 		{
+
 			if ((rand() & 1023) > 880)
 			{
 				ActivateCharacterFx(cptr);
@@ -5661,10 +5663,16 @@ SKIPROT:
 			DeltaFunc(cptr->pos.y, GetLandUpH(cptr->pos.x, cptr->pos.z), TimeDt / 4.f);
 
 
-		if (cptr->gliding == false && cptr->Phase != ICTH_TAKEOFF && cptr->Phase != ICTH_LANDING)
+		if (cptr->gliding == false)
 		{
-			if (cptr->pos.y < GetLandUpH(cptr->pos.x, cptr->pos.z) + 236)
-				cptr->pos.y = GetLandUpH(cptr->pos.x, cptr->pos.z) + 256;
+			if (cptr->Phase != ICTH_LANDING && cptr->Phase != ICTH_TAKEOFF) {
+				if (cptr->pos.y < GetLandUpH(cptr->pos.x, cptr->pos.z) + 236)
+					cptr->pos.y = GetLandUpH(cptr->pos.x, cptr->pos.z) + 256;
+			} else {
+				if (cptr->pos.y < GetLandUpH(cptr->pos.x, cptr->pos.z))
+					cptr->pos.y = GetLandUpH(cptr->pos.x, cptr->pos.z);
+			}
+
 		}
 
 	}
@@ -5720,95 +5728,6 @@ SKIPROT:
 		cptr->beta /= 2;
 		cptr->tggamma = 0;
 	}
-
-	/*	float minAlt = GetLandUpH(cptr->pos.x, cptr->pos.z);
-
-		if (cptr->Phase == ICTH_FLY)
-		{
-			cptr->lastOnGround = false;
-
-			float maxAlt = 1000 + minAlt;
-
-			if (cptr->lastY < maxAlt)
-			{
-				cptr->pos.y = cptr->lastY + 1;
-
-				if (cptr->pos.y > maxAlt)
-				{
-					cptr->pos.y = maxAlt;
-				}
-
-				if (cptr->pos.y < minAlt)
-				{
-					cptr->pos.y = minAlt;
-				}
-
-			}
-			else
-			{
-				cptr->pos.y = cptr->lastY;
-			}
-
-			cptr->beta /= 2;
-			cptr->tggamma = 0;
-		}
-		else if (cptr->Phase == ICTH_GLIDE)
-		{
-
-			if (cptr->lastY > minAlt)
-			{
-				cptr->pos.y = cptr->lastY - 0.5;
-			}
-
-			if (cptr->pos.y < minAlt)
-			{
-				cptr->pos.y = minAlt;
-				cptr->lastOnGround = true;
-			}
-			else
-			{
-				cptr->lastOnGround = false;
-			}
-
-		}
-		else
-		{
-			cptr->lastOnGround = true;
-		}
-
-
-		if (cptr->Phase == ICTH_FLY)
-		{
-			cptr->pos.y += cptr->lastY - 5;
-		}
-
-		if (cptr->Phase == ICTH_FLY2)
-		{
-			cptr->pos.y += cptr->lastY - 5;
-		}
-
-		if (cptr->Phase == ICTH_FLY || cptr->Phase == ICTH_FLY2)
-		{
-			if (cptr->pos.y < GetLandH(cptr->pos.x, cptr->pos.z) + 236)
-				cptr->pos.y = GetLandH(cptr->pos.x, cptr->pos.z) + 256;
-			cptr->lastOnGround = false;
-		}
-
-		if (cptr->Phase == ICTH_GLIDE)
-		{
-			cptr->pos.y += cptr->lastY - 5;
-			if (cptr->pos.y < GetLandH(cptr->pos.x, cptr->pos.z) + 236)
-			{
-				cptr->lastOnGround = true;
-			}
-			else
-			if (cptr->pos.y < GetLandH(cptr->pos.x, cptr->pos.z) + 236)
-			{
-				cptr->lastOnGround = false;
-			}
-		}
-
-		cptr->lastY = cptr->pos.y;*/
 
 }
 
@@ -8116,9 +8035,6 @@ void AnimateCharacters()
 				case AI_FISH:
 					SetNewTargetPlaceFish(cptr, 1024);
 					break;
-				case AI_ICTH:
-					SetNewTargetPlace_Icth(cptr, 2048);
-					break;
 			}
 
 		}
@@ -8127,6 +8043,22 @@ void AnimateCharacters()
 		}
 		
 	}
+
+	if (cptr->tgtime > 50 * 1000 && cptr->Clone == AI_ICTH) {
+		if (cptr->Phase != ICTH_FLY &&
+			cptr->Phase != ICTH_FLY2 &&
+			cptr->Phase != ICTH_TAKEOFF &&
+			cptr->Phase != ICTH_LANDING)
+		{
+			cptr->State = 2;
+			cptr->AfraidTime = (50 + rRand(8)) * 1024;
+			cptr->notFlushed = true;
+		}
+		else {
+			SetNewTargetPlace_Icth(cptr, 2048);
+		}
+	}
+
 
 
 
@@ -8555,6 +8487,9 @@ replace1:
 			  Characters[ChCount].tgx = Characters[ChCount].pos.x;
 			  Characters[ChCount].tgz = Characters[ChCount].pos.z;
 			  Characters[ChCount].tgtime = 0;
+
+			  Characters[ChCount].spawnAlt = GetLandUpH(Characters[ChCount].pos.x,
+				  Characters[ChCount].pos.z);
 
 			  ResetCharacter(&Characters[ChCount]);
 			  ChCount++;

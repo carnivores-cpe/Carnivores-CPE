@@ -325,6 +325,7 @@ typedef struct _TCharacter
   int deathPhase;
   bool canSleep = false;
   float shakeTime = 0;
+  float spawnAlt;
 
   //MOSA
   float depth, tdepth;
