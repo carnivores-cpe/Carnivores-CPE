@@ -2517,7 +2517,7 @@ TBEGIN:
 				if (AngleDifference(cptr->alpha, FindVectorAlpha(playerdx, playerdz)) < 0.2f)
 					cptr->Phase = RAP_JUMP;
 
-		if (pdist < 256)
+		if (pdist < DinoInfo[cptr->CType].killDist)
 			if (fabs(PlayerY - cptr->pos.y - 160) < 256)
 			{
 				if (!(cptr->StateF & csONWATER))
@@ -3119,7 +3119,7 @@ TBEGIN:
 				if (AngleDifference(cptr->alpha, FindVectorAlpha(playerdx, playerdz)) < 0.2f)
 					cptr->Phase = VEL_JUMP;
 
-		if (pdist < 256)
+		if (pdist < DinoInfo[cptr->CType].killDist)
 			if (fabs(PlayerY - cptr->pos.y - 120) < 256)
 			{
 				if (!(cptr->StateF & csONWATER))
@@ -3429,7 +3429,7 @@ TBEGIN:
         if (AngleDifference(cptr->alpha, FindVectorAlpha(playerdx, playerdz)) < 0.2f)
           cptr->Phase = SPN_JUMP;
 
-    if (pdist<300)
+    if (pdist< DinoInfo[cptr->CType].killDist)
       if (fabs(PlayerY - cptr->pos.y - 120) < 256)
       {
         if (!(cptr->StateF & csONWATER))
@@ -3739,7 +3739,7 @@ TBEGIN:
 
 
 
-    if (pdist<350)
+    if (pdist< DinoInfo[cptr->CType].killDist)
       if (fabs(PlayerY - cptr->pos.y - 120) < 256)
       {
         if (!(cptr->StateF & csONWATER))
@@ -4002,7 +4002,7 @@ TBEGIN:
         cptr->rspeed=0;
       }
 
-    if (pdist<380)
+    if (pdist< DinoInfo[cptr->CType].killDist)
       if (fabs(PlayerY - cptr->pos.y) < 256)
       {
         cptr->vspeed/= 8.0f;
@@ -4795,7 +4795,7 @@ TBEGIN:
 	float tdist2 = (float)sqrt(targetdx * targetdx + targetdz * targetdz); //non-verticle
 	float tdist = (float)sqrt(tdist2 * tdist2 + targetdy * targetdy); //verticle
 
-	float attackDist = ctViewR * 128 + OptAgres / 4; //TODO ADD THIS TO _RES
+	float attackDist = ctViewR * DinoInfo[cptr->CType].aggress + OptAgres / 4; //aggress = 128
 
 	float playerdx = PlayerX - cptr->pos.x - cptr->lookx * 100 * cptr->scale;
 	float playerdz = PlayerZ - cptr->pos.z - cptr->lookz * 100 * cptr->scale;
@@ -4861,7 +4861,7 @@ TBEGIN:
 				if (AngleDifference(cptr->alpha, FindVectorAlpha(playerdx, playerdz)) < 0.2f)
 					cptr->Phase = MOSA_JUMP;
 
-		if (pdist < 256)
+		if (pdist < DinoInfo[cptr->CType].killDist) //killdist=256
 			if (fabs(PlayerY - cptr->pos.y - 160) < 256)
 			{
 				if (!(cptr->StateF & csONWATER))
@@ -6009,7 +6009,8 @@ TBEGIN:
 	float playerdz = PlayerZ - cptr->pos.z - cptr->lookz * 108;
 	float pdist = (float)sqrt(playerdx * playerdx + playerdz * playerdz);
 
-	int attackDist = 128 * DinoInfo[cptr->CType].aggress + OptAgres / 8;
+	int attackDist = 128 * DinoInfo[cptr->CType].aggress + OptAgres / 8; //agress = 56
+
 	bool playerAttackable = ((GetLandUpH(PlayerX, PlayerZ) - GetLandH(PlayerX, PlayerZ)) <= 550);
 	bool attacking = false;
 
@@ -6055,7 +6056,7 @@ TBEGIN:
 			}
 		}
 
-		if (pdist < 600) //001 KILL RADIUS
+		if (pdist < DinoInfo[cptr->CType].killDist) //killdist = 600
 			if (fabs(PlayerY - cptr->pos.y - 120) < 256)
 			{
 				if (!(cptr->StateF & csONWATER))
@@ -6687,7 +6688,7 @@ TBEGIN:
   }
 
   if (MyHealth)
-    if (pdist<300)
+    if (pdist< DinoInfo[cptr->CType].killDist)
       if (fabs(PlayerY - cptr->pos.y - 160) < 256)
       {
         cptr->State = 0;

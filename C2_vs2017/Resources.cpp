@@ -2163,6 +2163,7 @@ void ReadCharacters(FILE *stream, bool area)
 			if (strstr(line, "hunterAnim")) DinoInfo[TotalC].hunterDeathAnim = atoi(value);
 			if (strstr(line, "hunterOffset")) DinoInfo[TotalC].hunterDeathOffset = atoi(value);
 			if (strstr(line, "aggress")) DinoInfo[TotalC].aggress = atoi(value);
+			if (strstr(line, "killdist")) DinoInfo[TotalC].killDist = atoi(value);
 			
 			if (strstr(line, "name"))
 			{
