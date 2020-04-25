@@ -4003,10 +4003,12 @@ void DrawHMap()
     for (c=0; c<ChCount; c++)
     {
       
-		//if (Characters[c].AI<10) continue; //READD THIS LINE
-      //if (! (TargetDino & (1<<Characters[c].AI)) ) continue;  //READD THIS LINE
-
-		if (Characters[c].AI < 0) { //REMOVE THIS LINE
+		//if (Characters[c].AI<10) continue;
+		if (DinoInfo[Characters[c].CType].onRadar) {
+			if (Characters[c].AI >= 10) {
+				if (!(TargetDino & (1 << Characters[c].AI))) continue;	
+			}
+		} else continue;
 
 			if (!Characters[c].Health) continue;
 			xx = VideoCX - 128 + (int)Characters[c].pos.x / 1024;
@@ -4014,8 +4016,6 @@ void DrawHMap()
 			if (yy <= 0 || yy >= WinH) goto endmap;
 			if (xx <= 0 || xx >= WinW) goto endmap;
 			DrawBox((WORD*)linfo.lfbPtr, lsw, xx, yy, 30 << 6);
-
-		} //REMOVE THIS LINE
 
     }
 

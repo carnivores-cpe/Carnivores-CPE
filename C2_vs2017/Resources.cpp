@@ -2164,6 +2164,7 @@ void ReadCharacters(FILE *stream, bool area)
 			if (strstr(line, "hunterOffset")) DinoInfo[TotalC].hunterDeathOffset = atoi(value);
 			if (strstr(line, "aggress")) DinoInfo[TotalC].aggress = atoi(value);
 			if (strstr(line, "killdist")) DinoInfo[TotalC].killDist = atoi(value);
+			if (strstr(line, "onradar")) DinoInfo[TotalC].onRadar = TRUE;
 			
 			if (strstr(line, "name"))
 			{

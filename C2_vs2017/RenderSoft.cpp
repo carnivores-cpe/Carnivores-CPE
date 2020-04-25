@@ -2543,8 +2543,16 @@ void DrawHMap()
 
 
 			//if (! (TargetDino & (1<<Characters[c].AI)) ) continue;
-			if (Characters[c].AI > 0) continue;
-			if (!Characters[c].Health) continue;
+			//if (Characters[c].AI > 0) continue;
+		
+		if (DinoInfo[Characters[c].CType].onRadar) {
+			if (Characters[c].AI >= 10) {
+				if (!(TargetDino & (1 << Characters[c].AI))) continue;
+			}
+		}
+		else continue;
+		
+		if (!Characters[c].Health) continue;
 			xx = VideoCX - 128 + (int)Characters[c].pos.x / 1024;
 			yy = VideoCY - 128 + (int)Characters[c].pos.z / 1024;
 			if (yy <= 0 || yy >= WinH) continue;

@@ -446,6 +446,7 @@ typedef struct _TDinoInfo
 
   int hunterDeathAnim, hunterDeathOffset;
   int aggress, killDist;
+  bool onRadar;
   float runspd, jmpspd, wlkspd, swmspd, flyspd, gldspd, tkfspd, lndspd;
 
 } TDinoInfo;

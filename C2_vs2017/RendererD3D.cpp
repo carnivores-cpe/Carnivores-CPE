@@ -5054,8 +5054,16 @@ void DrawHMap()
   if (RadarMode)
     for (c=0; c<ChCount; c++)
     {
-      if (Characters[c].AI<10) continue;
-      if (! (TargetDino & (1<<Characters[c].AI)) ) continue;
+      //if (Characters[c].AI<10) continue;
+      //if (! (TargetDino & (1<<Characters[c].AI)) ) continue;
+
+		if (DinoInfo[Characters[c].CType].onRadar) {
+			if (Characters[c].AI >= 10) {
+				if (!(TargetDino & (1 << Characters[c].AI))) continue;
+			}
+		}
+		else continue;
+
       if (!Characters[c].Health) continue;
       xx = VideoCX - 128 + (int)Characters[c].pos.x / 1024;
       yy = VideoCY - 128 + (int)Characters[c].pos.z / 1024;

@@ -175,6 +175,7 @@ characters {
  fearCall = 18
  runspd = 1.6
  wlkspd = 0.40
+ onradar = TRUE
 }
 
 {
@@ -199,6 +200,7 @@ characters {
  fearCall = 18
  runspd = 0.75
  wlkspd = 0.28
+ onradar = TRUE
 }
 
 {
@@ -221,6 +223,7 @@ characters {
  fearCall = 18
  runspd = 0.96
  wlkspd = 0.36
+ onradar = TRUE
 }
 
 {
@@ -248,6 +251,7 @@ characters {
  hunterOffset = 170
  aggress = 128
  killdist = 256
+ onradar = TRUE
 }
 
 {
@@ -274,6 +278,7 @@ characters {
  hunterOffset = 170
  aggress = 32
  killdist = 300
+ onradar = TRUE
 }
 
 {
@@ -300,6 +305,7 @@ characters {
  hunterOffset = 170
  aggress = 160
  killdist = 256
+ onradar = TRUE
 }
 
 {
@@ -325,6 +331,7 @@ characters {
  hunterOffset = 200
  aggress = 140
  killdist = 300
+ onradar = TRUE
 }
 
 
@@ -350,6 +357,7 @@ characters {
  hunterOffset = 320
  aggress = 200
  killdist = 350
+ onradar = TRUE
 }
 
 
@@ -374,6 +382,7 @@ characters {
  hunterAnim = 3
  hunterOffset = 0
  killdist = 380
+ onradar = TRUE
 }
 
 
