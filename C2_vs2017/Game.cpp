@@ -602,7 +602,7 @@ void AddShipTask(int cindex)
   {
     TrophyTime = 20 * 1000;
     TrophyBody = t;
-    TrophyRoom.Body[t].ctype  = Characters[cindex].CType;
+    TrophyRoom.Body[t].ctype  = DinoInfo[Characters[cindex].CType].trophyCode; //0 is blank trophy
     TrophyRoom.Body[t].scale  = Characters[cindex].scale;
     TrophyRoom.Body[t].weapon = CurrentWeapon;
     TrophyRoom.Body[t].score  = (int)score;
@@ -1283,7 +1283,7 @@ ENDTRACE:
 
   if (!Characters[ShotDino].Health)
   {
-    if (Characters[ShotDino].AI>=10)
+    if (DinoInfo[Characters[ShotDino].CType].trophyCode)
     {
       TrophyRoom.Last.success++;
       AddShipTask(ShotDino);
@@ -1766,7 +1766,8 @@ void RemoveCurrentTrophy()
   if (!TrophyRoom.Body[TrophyBody].ctype) return;
 
   PrintLog("Trophy removed: ");
-  PrintLog(DinoInfo[TrophyRoom.Body[TrophyBody].ctype].Name);
+  //PrintLog(DinoInfo[TrophyRoom.Body[TrophyBody].ctype].Name);
+  PrintLog(DinoInfo[TrophyIndex[TrophyRoom.Body[TrophyBody].ctype]].Name);
   PrintLog("\n");
 
   for (int c=0; c<TrophyBody; c++)

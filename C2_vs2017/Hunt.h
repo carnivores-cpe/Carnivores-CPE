@@ -709,7 +709,7 @@ void CloseLog();
 _EXTORNOT   float BackViewR;
 _EXTORNOT   int   BackViewRR;
 _EXTORNOT   int   UnderWaterT;
-_EXTORNOT   int   TotalC, TotalW, TotalMA;
+_EXTORNOT   int   TotalC, TotalW, TotalMA, TotalTrophy;
 
 
 //========== common ==================//
@@ -798,6 +798,7 @@ _EXTORNOT TDinoInfo DinoInfo[64];
 _EXTORNOT TWeapInfo WeapInfo[10];
 _EXTORNOT TCharacterInfo ShipModel;
 _EXTORNOT int AI_to_CIndex[64];
+_EXTORNOT int TrophyIndex[64];
 _EXTORNOT int ChCount, WCCount, ElCount,
           ShotDino, TrophyBody;
 _EXTORNOT TCharacterInfo WindModel;

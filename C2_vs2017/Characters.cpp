@@ -8358,7 +8358,8 @@ void PlaceTrophy()
   for (int c=0; c<24; c++)
   {
     if (!TrophyRoom.Body[c].ctype) continue;
-    Characters[ChCount].CType = TrophyRoom.Body[c].ctype;
+    //Characters[ChCount].CType = TrophyRoom.Body[c].ctype;
+	Characters[ChCount].CType = TrophyIndex[TrophyRoom.Body[c].ctype];
 
     if (c<6) Characters[ChCount].alpha = pi/2;
     else if (c<12) Characters[ChCount].alpha = pi;

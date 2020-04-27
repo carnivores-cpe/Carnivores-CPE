@@ -187,6 +187,7 @@ characters {
  aggress = 0
  killdist = 300
  onradar = TRUE
+ trophy  = TRUE
 }
 
 {
@@ -217,6 +218,7 @@ characters {
  aggress = 0
  killdist = 250
  onradar = TRUE
+ trophy  = TRUE
 }
 
 {
@@ -245,6 +247,7 @@ characters {
  aggress = 0
  killdist = 415
  onradar = TRUE
+ trophy  = TRUE
 }
 
 {
@@ -274,6 +277,7 @@ characters {
  aggress = 128
  killdist = 256
  onradar = TRUE
+ trophy  = TRUE
 }
 
 {
@@ -302,6 +306,7 @@ characters {
  aggress = 32
  killdist = 300
  onradar = TRUE
+ trophy  = TRUE
 }
 
 {
@@ -330,6 +335,7 @@ characters {
  aggress = 160
  killdist = 256
  onradar = TRUE
+ trophy  = TRUE
 }
 
 {
@@ -357,6 +363,7 @@ characters {
  aggress = 140
  killdist = 300
  onradar = TRUE
+ trophy  = TRUE
 }
 
 
@@ -384,6 +391,7 @@ characters {
  aggress = 200
  killdist = 350
  onradar = TRUE
+ trophy  = TRUE
 }
 
 
@@ -410,6 +418,7 @@ characters {
  hunterOffset = 0
  killdist = 380
  onradar = TRUE
+ trophy  = TRUE
 }
 
 
@@ -443,7 +452,7 @@ mapambient area1 area2 area3 area4 area5 {
 
 {
  name      = 'Pachycephalosaurus'
- file      = 'PACH.CAR'
+ file      = 'pach.car'
  clone 	   = 19
  spawnrate = 0.08
  spawnmax  = 3
@@ -472,6 +481,7 @@ mapambient area1 area2 area3 area4 area5 {
  hunterOffset = 0
  aggress = 0
  killdist = 250
+ trophy  = TRUE
 }
 
 {
@@ -505,6 +515,7 @@ mapambient area1 area2 area3 area4 area5 {
  hunterOffset = 170
  aggress = 32
  killdist = 300
+ trophy  = TRUE
 }
 
 }
@@ -615,7 +626,6 @@ mapambient area2 {
  mass      = 0.2
  length    = 4.5
  radius    = 256
- health    = 1
  health    = 1
  shipdelta = 16
  fearCall = 13

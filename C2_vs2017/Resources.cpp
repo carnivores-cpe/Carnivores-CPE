@@ -2065,7 +2065,33 @@ void SkipSector(FILE *stream)
 }
 
 
-void ReadCharacters(FILE *stream, bool area)
+void ReadTrophyCount(FILE *stream)
+{
+	char line[256], *value;
+	while (fgets(line, 255, stream))
+	{
+		if (strstr(line, "}")) break;
+		if (strstr(line, "{"))
+			while (fgets(line, 255, stream))
+			{
+
+				if (strstr(line, "}")) break;
+
+				value = strstr(line, "=");
+				if (!value)
+					DoHalt("Script loading error");
+				value++;
+
+
+				if (strstr(line, "trophy")) TotalTrophy++;
+
+			}
+
+	}
+}
+
+
+void ReadCharacters(FILE *stream, bool area, bool trophy)
 {
   char line[256], *value;
   while (fgets( line, 255, stream))
@@ -2093,28 +2119,6 @@ void ReadCharacters(FILE *stream, bool area)
           TotalC++;
           break;
         }
-
-		/*
-		if (strstr(line, "avoidance")) {
-			while (fgets(line, 255, stream))
-			{
-				if (strstr(line, "}")) {
-					DinoInfo[TotalC].AvoidTotal++;
-					break;
-				}
-
-				value = strstr(line, "=");
-				if (!value)
-					DoHalt("Script loading error");
-				value++;
-
-				if (strstr(line, "xmax")) DinoInfo[TotalC].AXMax[DinoInfo[TotalC].AvoidTotal] = atoi(value);
-				if (strstr(line, "xmin")) DinoInfo[TotalC].AXMin[DinoInfo[TotalC].AvoidTotal] = atoi(value);
-				if (strstr(line, "ymax")) DinoInfo[TotalC].AYMax[DinoInfo[TotalC].AvoidTotal] = atoi(value);
-				if (strstr(line, "ymin")) DinoInfo[TotalC].AYMin[DinoInfo[TotalC].AvoidTotal] = atoi(value);
-			}
-		} else {
-		*/
 
 			value = strstr(line, "=");
 			if (!value)
@@ -2162,7 +2166,13 @@ void ReadCharacters(FILE *stream, bool area)
 			if (strstr(line, "aggress")) DinoInfo[TotalC].aggress = atoi(value);
 			if (strstr(line, "killdist")) DinoInfo[TotalC].killDist = atoi(value);
 			if (strstr(line, "onradar")) DinoInfo[TotalC].onRadar = TRUE;
-			if (strstr(line, "trophycode")) DinoInfo[TotalC].trophyCode = atoi(value);
+
+
+			if (strstr(line, "trophy")) {
+				TotalTrophy++;
+				DinoInfo[TotalC].trophyCode = TotalTrophy;
+				TrophyIndex[TotalTrophy] = TotalC;
+			}
 			
 			if (strstr(line, "name"))
 			{
@@ -2211,35 +2221,28 @@ void LoadResourcesScript()
   TotalMA = 0;
   int selectedArea = 2; //CALC TODO
 
+  char tempProjectName[128];
+  for (int a = 0; a < __argc; a++)
+  {
+	  LPSTR s = __argv[a];
+	  if (strstr(s, "prj="))
+	  {
+		  strcpy(tempProjectName, (s + 4));
+		  break;
+	  }
+  }
+  //MessageBox(NULL, tempProjectName, "Carnivores Termination", IDOK | MB_SYSTEMMODAL | MB_ICONEXCLAMATION);
+
+
   while (fgets( line, 255, stream))
   {
     if (line[0] == '.') break;
     if (strstr(line, "weapons") ) ReadWeapons(stream);
-    if (strstr(line, "characters") ) ReadCharacters(stream, false);
-	
-	char tempProjectName[128];
-	for (int a = 0; a < __argc; a++)
-	{
-		LPSTR s = __argv[a];
-		if (strstr(s, "prj="))
-		{
-			strcpy(tempProjectName, (s + 4));
-			break;
-		}
-	}
-
-	/*
-	if (strstr(line, "area1")) {
-		if (tempProjectName[18] == '1') {
-			ReadCharacters(stream, true);
-		} else {
-			SkipSector(stream);
-		};
-	}
-	*/
+    if (strstr(line, "characters") ) ReadCharacters(stream, false, tempProjectName[18] == 'h');
 
 	if (strstr(line, "mapambient")) {
 
+		
 		if (tempProjectName[18] == '1' && strstr(line, "area1") ||
 			tempProjectName[18] == '2' && strstr(line, "area2") ||
 			tempProjectName[18] == '3' && strstr(line, "area3") ||
@@ -2248,21 +2251,16 @@ void LoadResourcesScript()
 			tempProjectName[18] == '6' && strstr(line, "area6") ||
 			tempProjectName[18] == '7' && strstr(line, "area7") ||
 			tempProjectName[18] == '8' && strstr(line, "area8") ||
-			tempProjectName[18] == '9' && strstr(line, "area9")
-			) {
-			ReadCharacters(stream, true);
+			tempProjectName[18] == '9' && strstr(line, "area9") ||
+			tempProjectName[18] == 'h') {
+			ReadCharacters(stream, true, tempProjectName[18] == 'h');
 		}
 		else {
-			SkipSector(stream);
+			ReadTrophyCount(stream);
+			//SkipSector(stream);
 		};
 
 	}
-
-
-
-
-
-
 
   }
 
