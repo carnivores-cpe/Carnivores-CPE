@@ -84,6 +84,7 @@ characters {
  name    = 'Hunter'
  file    = 'hunter1.car'
  ai      = 0
+ clone 	 = 0
  health  = 1
 }
 
@@ -91,6 +92,7 @@ characters {
  name    = 'Moshops'
  file    = 'mosh.car'
  ai      = 1
+ clone 	 = 1
  health  = 2
  mass    = 0.15  
  fearCall = 13
@@ -106,6 +108,7 @@ characters {
  name    = 'Galimimus'
  file    = 'gall.car'
  ai      = 2
+ clone 	 = 2
  health  = 2
  mass    = 0.1
  fearCall = 13
@@ -121,6 +124,7 @@ characters {
  name   = 'Dimorphodon'
  file   = 'dimor2.car'
  ai     = 3
+ clone 	= 3
  health = 1
  mass   = 0.05
  flyspd = 1.5
@@ -131,6 +135,7 @@ characters {
  name   = 'Pteranodon'
  file   = 'ptera.car'
  ai     = 4
+ clone 	= 4
  health = 1
  mass   = 0.25
  flyspd = 1.5
@@ -141,6 +146,7 @@ characters {
  name   = 'Dimetrodon'
  file   = 'dimet.car'
  ai     = 5
+ clone 	= 5
  health = 3
  mass   = 0.22
  fearCall = 13
@@ -159,6 +165,7 @@ characters {
  name      = 'Parasaurolophus'
  file      = 'par2.car'
  ai        = 10
+ clone 	   = 10
  mass      = 1.5
  length    = 5.8
  radius    = 320
@@ -186,6 +193,7 @@ characters {
  name = 'Ankylosaurus'
  file = 'ankylo1.car'
  ai        = 11
+ clone 	   = 11
  scale0    = 1200
  scaleA    = 600
  mass      = 0.8
@@ -215,6 +223,7 @@ characters {
  name = 'Stegosaurus'
  file = 'stego.car'
  ai        = 12
+ clone 	   = 12
  mass      = 7
  length    = 7
  radius    = 480
@@ -242,6 +251,7 @@ characters {
  name = 'Allosaurus'
  file = 'allo_ii.car'
  ai        = 13
+ clone 	   = 13
  mass      = 0.5
  length    = 4.2
  radius    = 256
@@ -270,6 +280,7 @@ characters {
  name = 'Chasmosaurus'
  file = 'chasmosa.car'
  ai        = 14
+ clone 	   = 14
  mass      = 3
  length    = 5.0
  radius    = 400
@@ -297,6 +308,7 @@ characters {
  name = 'Velociraptor'
  file = 'velo_iidc.car'
  ai        = 15
+ clone 	   = 15
  mass      = 0.3
  length    = 4.0
  radius    = 256
@@ -324,6 +336,7 @@ characters {
  name = 'Spinosaurus'
  file = 'spino.car'
  ai        = 16
+ clone 	   = 16
  mass      = 0.3
  length    = 4.0
  radius    = 256
@@ -353,6 +366,7 @@ characters {
  name = 'Ceratosaurus'
  file = 'cerato1.car'
  ai        = 17
+ clone 	   = 17
  mass      = 0.3
  length    = 4.0
  radius    = 256
@@ -379,6 +393,7 @@ characters {
  name = 'T-Rex'
  file = 'tirex.car'
  ai        = 18
+ clone 	   = 18
  mass      = 6
  length    = 12
  radius    = 400
@@ -405,7 +420,7 @@ mapambient area1 area2 area3 area4 area5 {
 {
  name = 'Brachiosaurus'
  file = 'brachi8.car'
- ai        = -1
+ clone 	   = -1
  spawnrate = 0.5
  spawnmax  = 4
  spawnmin  = 2
@@ -427,9 +442,9 @@ mapambient area1 area2 area3 area4 area5 {
 }
 
 {
- name      = 'Pachycephaelosaurus'
+ name      = 'Pachycephalosaurus'
  file      = 'PACH.CAR'
- ai        = 19
+ clone 	   = 19
  spawnrate = 0.08
  spawnmax  = 3
  spawnmin  = 0
@@ -462,7 +477,7 @@ mapambient area1 area2 area3 area4 area5 {
 {
  name = 'Triceratops'
  file = 'tricer.car'
- ai        = 14
+ clone 	   = 14
  spawnrate = 0.05
  spawnmax  = 2
  spawnmin  = 0
@@ -499,7 +514,7 @@ mapambient area1 {
 {
  name = 'Climatius'
  fileadf = 'climatius3.car'
- ai        = -3
+ clone 	   = -3
  spawnrate = 0.8
  spawnmax  = 20
  spawnmin  = 8
@@ -528,7 +543,7 @@ mapambient area1 {
 {
  name = 'Parexus'
  fileadf = 'parexusn4.car'
- ai        = -3
+ clone 	   = -3
  spawnrate = 0.6
  spawnmax  = 8
  spawnmin  = 3
@@ -557,7 +572,7 @@ mapambient area1 {
 {
  name = 'Pink Parexus'
  fileadf = 'parexusn4_pink.car'
- ai        = -3
+ clone 	   = -3
  spawnrate = 0.4
  spawnmax  = 3
  spawnmin  = 1
@@ -591,7 +606,7 @@ mapambient area2 {
 {
  name = 'Ichthyornis'
  fileadf = 'icth30.car'
- ai        = -2
+ clone 	   = -2
  spawnrate = 0.8
  spawnmax  = 25
  spawnmin  = 5

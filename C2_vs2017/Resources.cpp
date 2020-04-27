@@ -2077,16 +2077,12 @@ void ReadCharacters(FILE *stream, bool area)
 
         if (strstr(line, "}"))
         {
-			int _ctype = DinoInfo[TotalC].AI;
-			if (area) {
-				DinoInfo[TotalC].Clone = _ctype;
-				TotalMA ++;
-				DinoInfo[TotalC].AI = -TotalMA;
-				_ctype = AI_FINAL + TotalMA;
-			}
-			else {
-				DinoInfo[TotalC].Clone = _ctype;
-			}
+		  int _ctype = DinoInfo[TotalC].AI;
+		  if (area) {
+		  	TotalMA ++;
+		  	DinoInfo[TotalC].AI = -TotalMA;
+		  	_ctype = AI_FINAL + TotalMA;
+		  }
           AI_to_CIndex[_ctype] = TotalC;
 		  if (DinoInfo[TotalC].Clone == AI_MOSA ||
 			  DinoInfo[TotalC].Clone == AI_FISH) {
@@ -2131,6 +2127,7 @@ void ReadCharacters(FILE *stream, bool area)
 			if (strstr(line, "health")) DinoInfo[TotalC].Health0 = atoi(value);
 			if (strstr(line, "basescore")) DinoInfo[TotalC].BaseScore = atoi(value);
 			if (strstr(line, "ai")) DinoInfo[TotalC].AI = atoi(value);
+			if (strstr(line, "clone")) DinoInfo[TotalC].Clone = atoi(value);
 			//if (strstr(line, "clone")) DinoInfo[TotalC].Clone = atoi(value);
 			if (strstr(line, "smell")) DinoInfo[TotalC].SmellK = (float)atof(value);
 			if (strstr(line, "hear")) DinoInfo[TotalC].HearK = (float)atof(value);
@@ -2165,6 +2162,7 @@ void ReadCharacters(FILE *stream, bool area)
 			if (strstr(line, "aggress")) DinoInfo[TotalC].aggress = atoi(value);
 			if (strstr(line, "killdist")) DinoInfo[TotalC].killDist = atoi(value);
 			if (strstr(line, "onradar")) DinoInfo[TotalC].onRadar = TRUE;
+			if (strstr(line, "trophycode")) DinoInfo[TotalC].trophyCode = atoi(value);
 			
 			if (strstr(line, "name"))
 			{

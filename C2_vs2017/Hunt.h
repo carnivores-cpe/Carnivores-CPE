@@ -446,6 +446,7 @@ typedef struct _TDinoInfo
 
   int hunterDeathAnim, hunterDeathOffset;
   int aggress, killDist;
+  int trophyCode;
   bool onRadar;
   float runspd, jmpspd, wlkspd, swmspd, flyspd, gldspd, tkfspd, lndspd;
 
@@ -952,7 +953,7 @@ _EXTORNOT   struct _t
 #define AI_CERAT      17
 #define AI_TREX       18
 
-#define AI_FINAL	  19 //Number of last creature in huntable roster (menu can only display 10)
+#define AI_FINAL	  19 //Last AI of max huntable roster (menu can only display 10)
 
 #define AI_PACH       19
 
