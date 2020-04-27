@@ -951,7 +951,10 @@ _EXTORNOT   struct _t
 #define AI_SPINO      16
 #define AI_CERAT      17
 #define AI_TREX       18
-#define AI_FINAL	  18//FINAL
+
+#define AI_FINAL	  19 //Number of last creature in huntable roster (menu can only display 10)
+
+#define AI_PACH       19
 
 
 

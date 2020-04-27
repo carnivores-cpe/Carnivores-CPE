@@ -514,6 +514,72 @@ area1 {
  runspd = 0.55
 }
 
+{
+ name      = 'Pachycephaelosaurus'
+ file      = 'PACH.CAR'
+ ai        = 19
+ spawnrate = 0.08
+ spawnmax  = 3
+ spawnmin  = 0
+ mass      = 0.8
+ length    = 4.5
+ radius    = 280
+ health    = 6
+ basescore = 8
+ smell     = 0.4 
+ hear      = 0.8
+ look      = 0.6
+ shipdelta = 16
+ fearCall = 13
+ fearCall = 15
+ fearCall = 16
+ fearCall = 17
+ fearCall = 18
+ xmax = 988
+ xmin = 12
+ ymax = 988
+ ymin = 12
+ runspd = 1.6
+ wlkspd = 0.40
+ hunterAnim = 0
+ hunterOffset = 0
+ aggress = 0
+ killdist = 250
+}
+
+{
+ name = 'Triceratops'
+ file = 'tricer.car'
+ ai        = 14
+ spawnrate = 0.05
+ spawnmax  = 2
+ spawnmin  = 0
+ mass      = 3
+ length    = 5.0
+ radius    = 400
+ health    = 8
+ basescore = 9
+ smell     = 0.6 
+ hear      = 0.5
+ look      = 0.4
+ shipdelta = 108
+ fearCall = 13
+ fearCall = 15
+ fearCall = 16
+ fearCall = 17
+ fearCall = 18
+ xmax = 988
+ xmin = 12
+ ymax = 988
+ ymin = 12
+ runspd = 1.2
+ wlkspd = 0.30
+ hunterAnim = 0
+ hunterOffset = 170
+ aggress = 32
+ killdist = 300
+}
+
 }
 
 area2 {
@@ -574,6 +640,72 @@ area2 {
  tkfspd = 1.50
 }
 
+{
+ name      = 'Pachycephaelosaurus'
+ file      = 'PACH.CAR'
+ ai        = 19
+ spawnrate = 0.08
+ spawnmax  = 3
+ spawnmin  = 0
+ mass      = 0.8
+ length    = 4.5
+ radius    = 280
+ health    = 6
+ basescore = 8
+ smell     = 0.4 
+ hear      = 0.8
+ look      = 0.6
+ shipdelta = 16
+ fearCall = 13
+ fearCall = 15
+ fearCall = 16
+ fearCall = 17
+ fearCall = 18
+ xmax = 988
+ xmin = 12
+ ymax = 988
+ ymin = 12
+ runspd = 1.6
+ wlkspd = 0.40
+ hunterAnim = 0
+ hunterOffset = 0
+ aggress = 0
+ killdist = 250
+}
+
+{
+ name = 'Triceratops'
+ file = 'tricer.car'
+ ai        = 14
+ spawnrate = 0.05
+ spawnmax  = 2
+ spawnmin  = 0
+ mass      = 3
+ length    = 5.0
+ radius    = 400
+ health    = 8
+ basescore = 9
+ smell     = 0.6 
+ hear      = 0.5
+ look      = 0.4
+ shipdelta = 108
+ fearCall = 13
+ fearCall = 15
+ fearCall = 16
+ fearCall = 17
+ fearCall = 18
+ xmax = 988
+ xmin = 12
+ ymax = 988
+ ymin = 12
+ runspd = 1.2
+ wlkspd = 0.30
+ hunterAnim = 0
+ hunterOffset = 170
+ aggress = 32
+ killdist = 300
+}
+
 }
 
 area3 {
@@ -603,23 +735,57 @@ area3 {
 }
 
 {
- name = 'Allosaurus2'
- file = 'allo_ii.car'
- ai        = 13
- spawnrate = 0.5
- spawnmax  = 12
- spawnmin  = 5
- mass      = 0.5
- length    = 4.2
- radius    = 256
+ name      = 'Pachycephaelosaurus'
+ file      = 'PACH.CAR'
+ ai        = 19
+ spawnrate = 0.08
+ spawnmax  = 3
+ spawnmin  = 0
+ mass      = 0.8
+ length    = 4.5
+ radius    = 280
  health    = 6
- basescore = 10
- scale0    = 1000
- scaleA    = 600
- smell     = 1.0
- hear      = 0.3
- look      = 0.5
- shipdelta = 0
+ basescore = 8
+ smell     = 0.4 
+ hear      = 0.8
+ look      = 0.6
+ shipdelta = 16
+ fearCall = 13
+ fearCall = 15
+ fearCall = 16
+ fearCall = 17
+ fearCall = 18
+ xmax = 988
+ xmin = 12
+ ymax = 988
+ ymin = 12
+ runspd = 1.6
+ wlkspd = 0.40
+ hunterAnim = 0
+ hunterOffset = 0
+ aggress = 0
+ killdist = 250
+}
+
+{
+ name = 'Triceratops'
+ file = 'tricer.car'
+ ai        = 14
+ spawnrate = 0.05
+ spawnmax  = 2
+ spawnmin  = 0
+ mass      = 3
+ length    = 5.0
+ radius    = 400
+ health    = 8
+ basescore = 9
+ smell     = 0.6 
+ hear      = 0.5
+ look      = 0.4
+ shipdelta = 108
+ fearCall = 13
+ fearCall = 15
+ fearCall = 16
  fearCall = 17
  fearCall = 18
  xmax = 988
@@ -627,11 +793,11 @@ area3 {
  ymax = 988
  ymin = 12
  runspd = 1.2
- wlkspd = 0.428
- swmspd = 0.4
- jmpspd = 1.1
- aggress = 128
- killdist = 256
+ wlkspd = 0.30
+ hunterAnim = 0
+ hunterOffset = 170
+ aggress = 32
+ killdist = 300
 }
 
 }
@@ -663,33 +829,69 @@ area4 {
 }
 
 {
- name = 'Spinosaurus2'
- file = 'spino.car'
- ai        = 16
- spawnrate = 0.5
- spawnmax  = 1
+ name      = 'Pachycephaelosaurus'
+ file      = 'PACH.CAR'
+ ai        = 19
+ spawnrate = 0.08
+ spawnmax  = 3
  spawnmin  = 0
- mass      = 0.3
- length    = 4.0
- radius    = 256
- health    = 12
- basescore = 15
- scaleA    = 400
- smell     = 1.1
- hearK     = 0.6
- lookK     = 0.6
- shipdelta = 60
+ mass      = 0.8
+ length    = 4.5
+ radius    = 280
+ health    = 6
+ basescore = 8
+ smell     = 0.4 
+ hear      = 0.8
+ look      = 0.6
+ shipdelta = 16
+ fearCall = 13
+ fearCall = 15
+ fearCall = 16
+ fearCall = 17
  fearCall = 18
  xmax = 988
  xmin = 12
  ymax = 988
  ymin = 12
  runspd = 1.6
- wlkspd = 0.70
- swmspd = 0.5
- jmpspd = 1.4
- aggress = 140
- killdist = 400
+ wlkspd = 0.40
+ hunterAnim = 0
+ hunterOffset = 0
+ aggress = 0
+ killdist = 250
+}
+
+{
+ name = 'Triceratops'
+ file = 'tricer.car'
+ ai        = 14
+ spawnrate = 0.05
+ spawnmax  = 2
+ spawnmin  = 0
+ mass      = 3
+ length    = 5.0
+ radius    = 400
+ health    = 8
+ basescore = 9
+ smell     = 0.6 
+ hear      = 0.5
+ look      = 0.4
+ shipdelta = 108
+ fearCall = 13
+ fearCall = 15
+ fearCall = 16
+ fearCall = 17
+ fearCall = 18
+ xmax = 988
+ xmin = 12
+ ymax = 988
+ ymin = 12
+ runspd = 1.2
+ wlkspd = 0.30
+ hunterAnim = 0
+ hunterOffset = 170
+ aggress = 32
+ killdist = 300
 }
 
 }
@@ -718,6 +920,72 @@ area5 {
  ymax = 988
  ymin = 12
  wlkspd = 0.2
+}
+
+{
+ name      = 'Pachycephaelosaurus'
+ file      = 'PACH.CAR'
+ ai        = 19
+ spawnrate = 0.08
+ spawnmax  = 3
+ spawnmin  = 0
+ mass      = 0.8
+ length    = 4.5
+ radius    = 280
+ health    = 6
+ basescore = 8
+ smell     = 0.4 
+ hear      = 0.8
+ look      = 0.6
+ shipdelta = 16
+ fearCall = 13
+ fearCall = 15
+ fearCall = 16
+ fearCall = 17
+ fearCall = 18
+ xmax = 988
+ xmin = 12
+ ymax = 988
+ ymin = 12
+ runspd = 1.6
+ wlkspd = 0.40
+ hunterAnim = 0
+ hunterOffset = 0
+ aggress = 0
+ killdist = 250
+}
+
+{
+ name = 'Triceratops'
+ file = 'tricer.car'
+ ai        = 14
+ spawnrate = 0.05
+ spawnmax  = 2
+ spawnmin  = 0
+ mass      = 3
+ length    = 5.0
+ radius    = 400
+ health    = 8
+ basescore = 9
+ smell     = 0.6 
+ hear      = 0.5
+ look      = 0.4
+ shipdelta = 108
+ fearCall = 13
+ fearCall = 15
+ fearCall = 16
+ fearCall = 17
+ fearCall = 18
+ xmax = 988
+ xmin = 12
+ ymax = 988
+ ymin = 12
+ runspd = 1.2
+ wlkspd = 0.30
+ hunterAnim = 0
+ hunterOffset = 170
+ aggress = 32
+ killdist = 300
 }
 
 }

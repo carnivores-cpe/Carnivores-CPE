@@ -6772,214 +6772,226 @@ SKIPROT:
 
 
 
-
+//Updated with dangerous herb code - still need to test in hunt & obs mode
 void AnimatePac(TCharacter *cptr)
 {
-  NewPhase = FALSE;
-  int _Phase = cptr->Phase;
-  int _FTime = cptr->FTime;
-  float _tgalpha = cptr->tgalpha;
-  if (cptr->AfraidTime) cptr->AfraidTime = MAX(0, cptr->AfraidTime - TimeDt);
-  if (cptr->State==2)
-  {
-    NewPhase=TRUE;
-    cptr->State=1;
-  }
+	NewPhase = FALSE;
+	int _Phase = cptr->Phase;
+	int _FTime = cptr->FTime;
+	float _tgalpha = cptr->tgalpha;
+	if (cptr->AfraidTime) cptr->AfraidTime = MAX(0, cptr->AfraidTime - TimeDt);
+	if (cptr->State == 2)
+	{
+		NewPhase = TRUE;
+		cptr->State = 1;
+	}
 
 TBEGIN:
-  float targetx = cptr->tgx;
-  float targetz = cptr->tgz;
-  float targetdx = targetx - cptr->pos.x;
-  float targetdz = targetz - cptr->pos.z;
+	float targetx = cptr->tgx;
+	float targetz = cptr->tgz;
+	float targetdx = targetx - cptr->pos.x;
+	float targetdz = targetz - cptr->pos.z;
 
-  float tdist = (float)sqrt( targetdx * targetdx + targetdz * targetdz );
+	float tdist = (float)sqrt(targetdx * targetdx + targetdz * targetdz);
 
-  float playerdx = PlayerX - cptr->pos.x;
-  float playerdz = PlayerZ - cptr->pos.z;
-  float pdist = (float)sqrt( playerdx * playerdx + playerdz * playerdz );
-
-
-  //=========== run away =================//
-
-  if (cptr->State)
-  {
-
-    if (!cptr->AfraidTime)
-    {
-      cptr->State = 0;
-      SetNewTargetPlace(cptr, 8048.f);
-      goto TBEGIN;
-    }
-
-    nv.x = playerdx;
-    nv.z = playerdz;
-    nv.y = 0;
-    NormVector(nv, 2048.f);
-    cptr->tgx = cptr->pos.x - nv.x;
-    cptr->tgz = cptr->pos.z - nv.z;
-    cptr->tgtime = 0;
-  }
+	float playerdx = PlayerX - cptr->pos.x;
+	float playerdz = PlayerZ - cptr->pos.z;
+	float pdist = (float)sqrt(playerdx * playerdx + playerdz * playerdz);
 
 
-  //======== exploring area ===============//
-  if (!cptr->State)
-  {
-    cptr->AfraidTime = 0;
-    if (pdist<1024.f)
-    {
-      cptr->State = 1;
-      cptr->AfraidTime = (6 + rRand(8)) * 1024;
-      cptr->Phase = PAC_RUN;
-      goto TBEGIN;
-    }
+	//=========== run away =================//
+
+	if (cptr->State)
+	{
+
+		if (pdist < 6000) cptr->AfraidTime = 8000;
+
+		if (!cptr->AfraidTime)
+		{
+			cptr->State = 0;
+			SetNewTargetPlace(cptr, 8048.f);
+			goto TBEGIN;
+		}
+
+		if (pdist > 128 * DinoInfo[cptr->CType].aggress + OptAgres / 8 || DinoInfo[cptr->CType].aggress <= 0)
+		{
+			nv.x = playerdx;
+			nv.z = playerdz;
+			nv.y = 0;
+			NormVector(nv, 2048.f);
+			cptr->tgx = cptr->pos.x - nv.x;
+			cptr->tgz = cptr->pos.z - nv.z;
+			cptr->tgtime = 0;
+		}
+		else
+		{
+			cptr->tgx = PlayerX;
+			cptr->tgz = PlayerZ;
+			cptr->tgtime = 0;
+		}
+
+		if (MyHealth)
+			if (pdist < DinoInfo[cptr->CType].killDist && DinoInfo[cptr->CType].killDist > 0)
+				if (fabs(PlayerY - cptr->pos.y - 160) < 256)
+				{
+					cptr->State = 0;
+					AddDeadBody(cptr, DinoInfo[cptr->CType].hunterDeathAnim);
+				}
+
+	}
 
 
-    if (tdist<456)
-    {
-      SetNewTargetPlace(cptr, 6048.f);
-      goto TBEGIN;
-    }
-  }
+	//======== exploring area ===============//
+	if (!cptr->State)
+	{
+		cptr->AfraidTime = 0;
+
+		if (tdist < 456)
+		{
+			SetNewTargetPlace(cptr, 6048.f);
+			goto TBEGIN;
+		}
+	}
 
 
-//============================================//
+	//============================================//
 
-  if (cptr->NoFindCnt) cptr->NoFindCnt--;
-  else
-  {
-    cptr->tgalpha = CorrectedAlpha(FindVectorAlpha(targetdx, targetdz), cptr->alpha);//FindVectorAlpha(targetdx, targetdz);
-    if (cptr->AfraidTime)
-    {
-      cptr->tgalpha += (float)sin(RealTime/1024.f) / 3.f;
-      if (cptr->tgalpha < 0) cptr->tgalpha+=2*pi;
-      if (cptr->tgalpha > 2*pi) cptr->tgalpha-=2*pi;
-    }
-  }
+	if (cptr->NoFindCnt) cptr->NoFindCnt--;
+	else
+	{
+		cptr->tgalpha = CorrectedAlpha(FindVectorAlpha(targetdx, targetdz), cptr->alpha);//FindVectorAlpha(targetdx, targetdz);
+		if (cptr->AfraidTime)
+		{
+			cptr->tgalpha += (float)sin(RealTime / 1024.f) / 3.f;
+			if (cptr->tgalpha < 0) cptr->tgalpha += 2 * pi;
+			if (cptr->tgalpha > 2 * pi) cptr->tgalpha -= 2 * pi;
+		}
+	}
 
 
-  LookForAWay(cptr, TRUE, TRUE);
-  if (cptr->NoWayCnt>12)
-  {
-    cptr->NoWayCnt=0;
-    cptr->NoFindCnt = 32 + rRand(60);
-  }
+	LookForAWay(cptr, TRUE, TRUE);
+	if (cptr->NoWayCnt > 12)
+	{
+		cptr->NoWayCnt = 0;
+		cptr->NoFindCnt = 32 + rRand(60);
+	}
 
-  if (cptr->tgalpha < 0) cptr->tgalpha+=2*pi;
-  if (cptr->tgalpha > 2*pi) cptr->tgalpha-=2*pi;
+	if (cptr->tgalpha < 0) cptr->tgalpha += 2 * pi;
+	if (cptr->tgalpha > 2 * pi) cptr->tgalpha -= 2 * pi;
 
-//===============================================//
+	//===============================================//
 
-  ProcessPrevPhase(cptr);
+	ProcessPrevPhase(cptr);
 
-//======== select new phase =======================//
-  cptr->FTime+=TimeDt;
+	//======== select new phase =======================//
+	cptr->FTime += TimeDt;
 
-  if (cptr->FTime >= cptr->pinfo->Animation[cptr->Phase].AniTime)
-  {
-    cptr->FTime %= cptr->pinfo->Animation[cptr->Phase].AniTime;
-    NewPhase = TRUE;
-  }
+	if (cptr->FTime >= cptr->pinfo->Animation[cptr->Phase].AniTime)
+	{
+		cptr->FTime %= cptr->pinfo->Animation[cptr->Phase].AniTime;
+		NewPhase = TRUE;
+	}
 
-  if (NewPhase)
-    if (!cptr->State)
-    {
-      if (cptr->Phase == PAC_IDLE1 || cptr->Phase == PAC_IDLE2)
-      {
-        if (rRand(128) > 64 && cptr->Phase == PAC_IDLE2)
-          cptr->Phase = PAC_WALK;
-        else cptr->Phase = PAC_IDLE1 + rRand(1);
-        goto ENDPSELECT;
-      }
-      if (rRand(128) > 120) cptr->Phase=PAC_IDLE1;
-      else cptr->Phase=PAC_WALK;
-    }
-    else if (cptr->AfraidTime) cptr->Phase = PAC_RUN;
-    else cptr->Phase = PAC_WALK;
+	if (NewPhase)
+		if (!cptr->State)
+		{
+			if (cptr->Phase == PAC_IDLE1 || cptr->Phase == PAC_IDLE2)
+			{
+				if (rRand(128) > 64 && cptr->Phase == PAC_IDLE2)
+					cptr->Phase = PAC_WALK;
+				else cptr->Phase = PAC_IDLE1 + rRand(1);
+				goto ENDPSELECT;
+			}
+			if (rRand(128) > 120) cptr->Phase = PAC_IDLE1;
+			else cptr->Phase = PAC_WALK;
+		}
+		else if (cptr->AfraidTime) cptr->Phase = PAC_RUN;
+		else cptr->Phase = PAC_WALK;
 
 ENDPSELECT:
 
-//====== process phase changing ===========//
-  if ( (_Phase != cptr->Phase) || NewPhase)
-    ActivateCharacterFx(cptr);
+	//====== process phase changing ===========//
+	if ((_Phase != cptr->Phase) || NewPhase)
+		ActivateCharacterFx(cptr);
 
-  if (_Phase != cptr->Phase)
-  {
-    if (_Phase<=2 && cptr->Phase<=2)
-      cptr->FTime = _FTime * cptr->pinfo->Animation[cptr->Phase].AniTime / cptr->pinfo->Animation[_Phase].AniTime + 64;
-    else if (!NewPhase) cptr->FTime = 0;
+	if (_Phase != cptr->Phase)
+	{
+		if (_Phase <= 2 && cptr->Phase <= 2)
+			cptr->FTime = _FTime * cptr->pinfo->Animation[cptr->Phase].AniTime / cptr->pinfo->Animation[_Phase].AniTime + 64;
+		else if (!NewPhase) cptr->FTime = 0;
 
-    if (cptr->PPMorphTime>128)
-    {
-      cptr->PrevPhase = _Phase;
-      cptr->PrevPFTime  = _FTime;
-      cptr->PPMorphTime = 0;
-    }
-  }
+		if (cptr->PPMorphTime > 128)
+		{
+			cptr->PrevPhase = _Phase;
+			cptr->PrevPFTime = _FTime;
+			cptr->PPMorphTime = 0;
+		}
+	}
 
-  cptr->FTime %= cptr->pinfo->Animation[cptr->Phase].AniTime;
-
-
-
-  //========== rotation to tgalpha ===================//
-
-  float rspd, currspeed, tgbend;
-  float dalpha = (float)fabs(cptr->tgalpha - cptr->alpha);
-  float drspd = dalpha;
-  if (drspd>pi) drspd = 2*pi - drspd;
+	cptr->FTime %= cptr->pinfo->Animation[cptr->Phase].AniTime;
 
 
-  if (cptr->Phase == PAC_IDLE1 || cptr->Phase == PAC_IDLE2) goto SKIPROT;
-  if (drspd > 0.02)
-    if (cptr->tgalpha > cptr->alpha) currspeed = 0.2f + drspd*1.0f;
-    else currspeed =-0.2f - drspd*1.0f;
-  else currspeed = 0;
 
-  if (cptr->AfraidTime) currspeed*=1.5;
-  if (dalpha > pi) currspeed*=-1;
-  if ((cptr->State & csONWATER) || cptr->Phase==PAC_WALK) currspeed/=1.4f;
+	//========== rotation to tgalpha ===================//
 
-  DeltaFunc(cptr->rspeed, currspeed, (float)TimeDt / 400.f);
-
-  tgbend = drspd/3.0f;
-  if (tgbend>pi/2.f) tgbend = pi/2.f;
-
-  tgbend*= SGN(currspeed);
-  if (fabs(tgbend) > fabs(cptr->bend)) DeltaFunc(cptr->bend, tgbend, (float)TimeDt / 1600.f);
-  else DeltaFunc(cptr->bend, tgbend, (float)TimeDt / 1200.f);
+	float rspd, currspeed, tgbend;
+	float dalpha = (float)fabs(cptr->tgalpha - cptr->alpha);
+	float drspd = dalpha;
+	if (drspd > pi) drspd = 2 * pi - drspd;
 
 
-  rspd=cptr->rspeed * TimeDt / 612.f;
-  if (drspd < fabs(rspd)) cptr->alpha = cptr->tgalpha;
-  else cptr->alpha+=rspd;
+	if (cptr->Phase == PAC_IDLE1 || cptr->Phase == PAC_IDLE2) goto SKIPROT;
+	if (drspd > 0.02)
+		if (cptr->tgalpha > cptr->alpha) currspeed = 0.2f + drspd * 1.0f;
+		else currspeed = -0.2f - drspd * 1.0f;
+	else currspeed = 0;
+
+	if (cptr->AfraidTime) currspeed *= 1.5;
+	if (dalpha > pi) currspeed *= -1;
+	if ((cptr->State & csONWATER) || cptr->Phase == PAC_WALK) currspeed /= 1.4f;
+
+	DeltaFunc(cptr->rspeed, currspeed, (float)TimeDt / 400.f);
+
+	tgbend = drspd / 3.0f;
+	if (tgbend > pi / 2.f) tgbend = pi / 2.f;
+
+	tgbend *= SGN(currspeed);
+	if (fabs(tgbend) > fabs(cptr->bend)) DeltaFunc(cptr->bend, tgbend, (float)TimeDt / 1600.f);
+	else DeltaFunc(cptr->bend, tgbend, (float)TimeDt / 1200.f);
 
 
-  if (cptr->alpha > pi * 2) cptr->alpha-= pi * 2;
-  if (cptr->alpha < 0     ) cptr->alpha+= pi * 2;
+	rspd = cptr->rspeed * TimeDt / 612.f;
+	if (drspd < fabs(rspd)) cptr->alpha = cptr->tgalpha;
+	else cptr->alpha += rspd;
+
+
+	if (cptr->alpha > pi * 2) cptr->alpha -= pi * 2;
+	if (cptr->alpha < 0) cptr->alpha += pi * 2;
 
 SKIPROT:
 
-//========== movement ==============================//
-  cptr->lookx = (float)cos(cptr->alpha);
-  cptr->lookz = (float)sin(cptr->alpha);
+	//========== movement ==============================//
+	cptr->lookx = (float)cos(cptr->alpha);
+	cptr->lookz = (float)sin(cptr->alpha);
 
-  float curspeed = 0;
-  if (cptr->Phase == PAC_RUN) curspeed = cptr->speed_run;//1.6f;
-  if (cptr->Phase == PAC_WALK) curspeed = cptr->speed_walk;// 0.40f;
+	float curspeed = 0;
+	if (cptr->Phase == PAC_RUN) curspeed = cptr->speed_run;//1.6f;
+	if (cptr->Phase == PAC_WALK) curspeed = cptr->speed_walk;// 0.40f;
 
-  if (drspd > pi / 2.f) curspeed*=2.f - 2.f*drspd / pi;
+	if (drspd > pi / 2.f) curspeed *= 2.f - 2.f*drspd / pi;
 
-//========== process speed =============//
-  curspeed*=cptr->scale;
-  if (curspeed>cptr->vspeed) DeltaFunc(cptr->vspeed, curspeed, TimeDt / 1024.f);
-  else DeltaFunc(cptr->vspeed, curspeed, TimeDt / 256.f);
+	//========== process speed =============//
+	curspeed *= cptr->scale;
+	if (curspeed > cptr->vspeed) DeltaFunc(cptr->vspeed, curspeed, TimeDt / 1024.f);
+	else DeltaFunc(cptr->vspeed, curspeed, TimeDt / 256.f);
 
-  MoveCharacter(cptr, cptr->lookx * cptr->vspeed * TimeDt,
-                cptr->lookz * cptr->vspeed * TimeDt, TRUE, TRUE);
+	MoveCharacter(cptr, cptr->lookx * cptr->vspeed * TimeDt,
+		cptr->lookz * cptr->vspeed * TimeDt, TRUE, TRUE);
 
-  ThinkY_Beta_Gamma(cptr, 128, 64, 0.6f, 0.4f);
-  if (cptr->Phase==PAC_WALK) cptr->tggamma+= cptr->rspeed / 12.0f;
-  else cptr->tggamma+= cptr->rspeed / 8.0f;
-  DeltaFunc(cptr->gamma, cptr->tggamma, TimeDt / 2048.f);
+	ThinkY_Beta_Gamma(cptr, 128, 64, 0.6f, 0.4f);
+	if (cptr->Phase == PAC_WALK) cptr->tggamma += cptr->rspeed / 12.0f;
+	else cptr->tggamma += cptr->rspeed / 8.0f;
+	DeltaFunc(cptr->gamma, cptr->tggamma, TimeDt / 2048.f);
 }
 
 
@@ -7024,6 +7036,8 @@ TBEGIN:
   if (cptr->State)
   {
 
+	if (pdist < 6000) cptr->AfraidTime = 8000;
+
     if (!cptr->AfraidTime)
     {
       cptr->State = 0;
@@ -7063,14 +7077,6 @@ TBEGIN:
   if (!cptr->State)
   {
     cptr->AfraidTime = 0;
-    if (pdist<1024.f)
-    {
-      cptr->State = 1;
-      cptr->AfraidTime = (6 + rRand(8)) * 1024;
-      cptr->Phase = ANK_RUN;
-      goto TBEGIN;
-    }
-
 
     if (tdist<456)
     {
@@ -7261,6 +7267,8 @@ TBEGIN:
   if (cptr->State)
   {
 
+	if (pdist < 6000) cptr->AfraidTime = 8000;
+
     if (!cptr->AfraidTime)
     {
       cptr->State = 0;
@@ -7301,14 +7309,6 @@ TBEGIN:
   if (!cptr->State)
   {
     cptr->AfraidTime = 0;
-    if (pdist<1024.f)
-    {
-      cptr->State = 1;
-      cptr->AfraidTime = (6 + rRand(8)) * 1024;
-      cptr->Phase = STG_RUN;
-      goto TBEGIN;
-    }
-
 
     if (tdist<456)
     {
@@ -7492,6 +7492,8 @@ TBEGIN:
   if (cptr->State)
   {
 
+	if (pdist < 6000) cptr->AfraidTime = 8000;
+
     if (!cptr->AfraidTime)
     {
       cptr->State = 0;
@@ -7531,14 +7533,6 @@ TBEGIN:
   if (!cptr->State)
   {
     cptr->AfraidTime = 0;
-    if (pdist<1024.f)
-    {
-      cptr->State = 1;
-      cptr->AfraidTime = (6 + rRand(8)) * 1024;
-      cptr->Phase = PAR_RUN;
-      goto TBEGIN;
-    }
-
 
     if (tdist<456)
     {
@@ -8181,6 +8175,10 @@ void AnimateCharacters()
 		case AI_ANKY:
 			if (cptr->Health) AnimateAnky(cptr);
 			else AnimateAnkyDead(cptr);
+			break;
+		case AI_PACH:
+			if (cptr->Health) AnimatePac(cptr);
+			else AnimatePacDead(cptr);
 			break;
 		case AI_STEGO:
 			if (cptr->Health) AnimateSteg(cptr);
