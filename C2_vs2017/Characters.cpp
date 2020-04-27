@@ -2489,7 +2489,7 @@ TBEGIN:
 	if (!MyHealth) cptr->State = 0;
 	if (cptr->State)
 	{
-		if (pdist > ctViewR * DinoInfo[cptr->CType].aggress + OptAgres / 4)
+		if (pdist > ctViewR * DinoInfo[cptr->CType].aggress + OptAgres / 4 || DinoInfo[cptr->CType].aggress <= 0)
 		{
 			nv.x = playerdx;
 			nv.z = playerdz;
@@ -2518,7 +2518,7 @@ TBEGIN:
 				if (AngleDifference(cptr->alpha, FindVectorAlpha(playerdx, playerdz)) < 0.2f)
 					cptr->Phase = RAP_JUMP;
 
-		if (pdist < DinoInfo[cptr->CType].killDist)
+		if (pdist < DinoInfo[cptr->CType].killDist && DinoInfo[cptr->CType].killDist > 0)
 			if (fabs(PlayerY - cptr->pos.y - 160) < 256)
 			{
 				if (!(cptr->StateF & csONWATER))
@@ -3092,7 +3092,7 @@ TBEGIN:
 	if (!MyHealth) cptr->State = 0;
 	if (cptr->State)
 	{
-		if (pdist > ctViewR * DinoInfo[cptr->CType].aggress + OptAgres / 8)
+		if (pdist > ctViewR * DinoInfo[cptr->CType].aggress + OptAgres / 8 || DinoInfo[cptr->CType].aggress <= 0)
 		{
 			nv.x = playerdx;
 			nv.z = playerdz;
@@ -3120,7 +3120,7 @@ TBEGIN:
 				if (AngleDifference(cptr->alpha, FindVectorAlpha(playerdx, playerdz)) < 0.2f)
 					cptr->Phase = VEL_JUMP;
 
-		if (pdist < DinoInfo[cptr->CType].killDist)
+		if (pdist < DinoInfo[cptr->CType].killDist && DinoInfo[cptr->CType].killDist > 0)
 			if (fabs(PlayerY - cptr->pos.y - 120) < 256)
 			{
 				if (!(cptr->StateF & csONWATER))
@@ -3402,7 +3402,7 @@ TBEGIN:
   if (!MyHealth) cptr->State = 0;
   if (cptr->State)
   {
-    if (pdist > ctViewR * DinoInfo[cptr->CType].aggress +OptAgres/8)
+    if (pdist > ctViewR * DinoInfo[cptr->CType].aggress +OptAgres/8 || DinoInfo[cptr->CType].aggress <= 0)
     {
       nv.x = playerdx;
       nv.z = playerdz;
@@ -3430,7 +3430,7 @@ TBEGIN:
         if (AngleDifference(cptr->alpha, FindVectorAlpha(playerdx, playerdz)) < 0.2f)
           cptr->Phase = SPN_JUMP;
 
-    if (pdist< DinoInfo[cptr->CType].killDist)
+    if (pdist< DinoInfo[cptr->CType].killDist && DinoInfo[cptr->CType].killDist > 0)
       if (fabs(PlayerY - cptr->pos.y - 120) < 256)
       {
         if (!(cptr->StateF & csONWATER))
@@ -3715,7 +3715,7 @@ TBEGIN:
   if (!MyHealth) cptr->State = 0;
   if (cptr->State)
   {
-    if (pdist > ctViewR * DinoInfo[cptr->CType].aggress + OptAgres/8)
+    if (pdist > ctViewR * DinoInfo[cptr->CType].aggress + OptAgres/8 || DinoInfo[cptr->CType].aggress <= 0)
     {
       nv.x = playerdx;
       nv.z = playerdz;
@@ -3740,7 +3740,7 @@ TBEGIN:
 
 
 
-    if (pdist< DinoInfo[cptr->CType].killDist)
+    if (pdist< DinoInfo[cptr->CType].killDist && DinoInfo[cptr->CType].killDist > 0)
       if (fabs(PlayerY - cptr->pos.y - 120) < 256)
       {
         if (!(cptr->StateF & csONWATER))
@@ -4003,7 +4003,7 @@ TBEGIN:
         cptr->rspeed=0;
       }
 
-    if (pdist< DinoInfo[cptr->CType].killDist)
+    if (pdist< DinoInfo[cptr->CType].killDist && DinoInfo[cptr->CType].killDist > 0)
       if (fabs(PlayerY - cptr->pos.y) < 256)
       {
         cptr->vspeed/= 8.0f;
@@ -4822,7 +4822,7 @@ TBEGIN:
 
 	if (!cptr->State)
 	{
-		if (pdist <= attackDist && playerInWater && !ObservMode) {
+		if (pdist <= attackDist && playerInWater && !ObservMode && DinoInfo[cptr->CType].aggress > 0) {
 			cptr->State = 1;
 			cptr->AfraidTime = (int)(10.f) * 1024;
 			//goto TBEGIN;
@@ -4862,7 +4862,7 @@ TBEGIN:
 				if (AngleDifference(cptr->alpha, FindVectorAlpha(playerdx, playerdz)) < 0.2f)
 					cptr->Phase = MOSA_JUMP;
 
-		if (pdist < DinoInfo[cptr->CType].killDist) //killdist=256
+		if (pdist < DinoInfo[cptr->CType].killDist && DinoInfo[cptr->CType].killDist > 0) //killdist=256
 			if (fabs(PlayerY - cptr->pos.y - 160) < 256)
 			{
 				if (!(cptr->StateF & csONWATER))
@@ -5950,7 +5950,7 @@ TBEGIN:
 	if (!MyHealth) cptr->State = 0;
 	if (cptr->State)
 	{
-		if (pdist <= attackDist && playerAttackable)
+		if (pdist <= attackDist && playerAttackable && DinoInfo[cptr->CType].aggress > 0)
 		{
 			attacking = true;
 			cptr->tgx = PlayerX;
@@ -5975,7 +5975,7 @@ TBEGIN:
 			}
 		}
 
-		if (pdist < DinoInfo[cptr->CType].killDist) //killdist = 600
+		if (pdist < DinoInfo[cptr->CType].killDist && DinoInfo[cptr->CType].killDist > 0) //killdist = 600
 			if (fabs(PlayerY - cptr->pos.y - 120) < 256)
 			{
 				if (!(cptr->StateF & csONWATER))
@@ -6588,7 +6588,7 @@ TBEGIN:
       goto TBEGIN;
     }
 
-    if (pdist > 128 * DinoInfo[cptr->CType].aggress +OptAgres/8)
+    if (pdist > 128 * DinoInfo[cptr->CType].aggress +OptAgres/8 || DinoInfo[cptr->CType].aggress <= 0)
     {
       nv.x = playerdx;
       nv.z = playerdz;
@@ -6604,15 +6604,16 @@ TBEGIN:
       cptr->tgz = PlayerZ;
       cptr->tgtime = 0;
     }
-  }
 
-  if (MyHealth)
-    if (pdist< DinoInfo[cptr->CType].killDist)
-      if (fabs(PlayerY - cptr->pos.y - 160) < 256)
-      {
-        cptr->State = 0;
-        AddDeadBody(cptr, DinoInfo[cptr->CType].hunterDeathAnim);
-      }
+	if (MyHealth)
+		if (pdist < DinoInfo[cptr->CType].killDist && DinoInfo[cptr->CType].killDist > 0)
+			if (fabs(PlayerY - cptr->pos.y - 160) < 256)
+			{
+				cptr->State = 0;
+				AddDeadBody(cptr, DinoInfo[cptr->CType].hunterDeathAnim);
+			}
+
+  }
 
   //======== exploring area ===============//
   if (!cptr->State)
@@ -7030,13 +7031,31 @@ TBEGIN:
       goto TBEGIN;
     }
 
-    nv.x = playerdx;
-    nv.z = playerdz;
-    nv.y = 0;
-    NormVector(nv, 2048.f);
-    cptr->tgx = cptr->pos.x - nv.x;
-    cptr->tgz = cptr->pos.z - nv.z;
-    cptr->tgtime = 0;
+	if (pdist > 128 * DinoInfo[cptr->CType].aggress + OptAgres / 8 || DinoInfo[cptr->CType].aggress <= 0)
+	{
+		nv.x = playerdx;
+		nv.z = playerdz;
+		nv.y = 0;
+		NormVector(nv, 2048.f);
+		cptr->tgx = cptr->pos.x - nv.x;
+		cptr->tgz = cptr->pos.z - nv.z;
+		cptr->tgtime = 0;
+	}
+	else
+	{
+		cptr->tgx = PlayerX;
+		cptr->tgz = PlayerZ;
+		cptr->tgtime = 0;
+	}
+
+	if (MyHealth)
+		if (pdist < DinoInfo[cptr->CType].killDist && DinoInfo[cptr->CType].killDist > 0)
+			if (fabs(PlayerY - cptr->pos.y - 160) < 256)
+			{
+				cptr->State = 0;
+				AddDeadBody(cptr, DinoInfo[cptr->CType].hunterDeathAnim);
+			}
+
   }
 
 
@@ -7249,13 +7268,32 @@ TBEGIN:
       goto TBEGIN;
     }
 
-    nv.x = playerdx;
-    nv.z = playerdz;
-    nv.y = 0;
-    NormVector(nv, 2048.f);
-    cptr->tgx = cptr->pos.x - nv.x;
-    cptr->tgz = cptr->pos.z - nv.z;
-    cptr->tgtime = 0;
+
+	if (pdist > 128 * DinoInfo[cptr->CType].aggress + OptAgres / 8 || DinoInfo[cptr->CType].aggress <= 0)
+	{
+		nv.x = playerdx;
+		nv.z = playerdz;
+		nv.y = 0;
+		NormVector(nv, 2048.f);
+		cptr->tgx = cptr->pos.x - nv.x;
+		cptr->tgz = cptr->pos.z - nv.z;
+		cptr->tgtime = 0;
+	}
+	else
+	{
+		cptr->tgx = PlayerX;
+		cptr->tgz = PlayerZ;
+		cptr->tgtime = 0;
+	}
+
+	if (MyHealth)
+		if (pdist < DinoInfo[cptr->CType].killDist && DinoInfo[cptr->CType].killDist > 0)
+			if (fabs(PlayerY - cptr->pos.y - 160) < 256)
+			{
+				cptr->State = 0;
+				AddDeadBody(cptr, DinoInfo[cptr->CType].hunterDeathAnim);
+			}
+
   }
 
 
@@ -7461,13 +7499,31 @@ TBEGIN:
       goto TBEGIN;
     }
 
-    nv.x = playerdx;
-    nv.z = playerdz;
-    nv.y = 0;
-    NormVector(nv, 2048.f);
-    cptr->tgx = cptr->pos.x - nv.x;
-    cptr->tgz = cptr->pos.z - nv.z;
-    cptr->tgtime = 0;
+	if (pdist > 128 * DinoInfo[cptr->CType].aggress + OptAgres / 8 || DinoInfo[cptr->CType].aggress <= 0)
+	{
+		nv.x = playerdx;
+		nv.z = playerdz;
+		nv.y = 0;
+		NormVector(nv, 2048.f);
+		cptr->tgx = cptr->pos.x - nv.x;
+		cptr->tgz = cptr->pos.z - nv.z;
+		cptr->tgtime = 0;
+	}
+	else
+	{
+		cptr->tgx = PlayerX;
+		cptr->tgz = PlayerZ;
+		cptr->tgtime = 0;
+	}
+
+	if (MyHealth)
+		if (pdist < DinoInfo[cptr->CType].killDist && DinoInfo[cptr->CType].killDist > 0)
+			if (fabs(PlayerY - cptr->pos.y - 160) < 256)
+			{
+				cptr->State = 0;
+				AddDeadBody(cptr, DinoInfo[cptr->CType].hunterDeathAnim);
+			}
+
   }
 
 

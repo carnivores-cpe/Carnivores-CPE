@@ -175,6 +175,10 @@ characters {
  fearCall = 18
  runspd = 1.6
  wlkspd = 0.40
+ hunterAnim = 0
+ hunterOffset = 0
+ aggress = 0
+ killdist = 300
  onradar = TRUE
 }
 
@@ -200,6 +204,10 @@ characters {
  fearCall = 18
  runspd = 0.75
  wlkspd = 0.28
+ hunterAnim = 0
+ hunterOffset = 0
+ aggress = 0
+ killdist = 250
  onradar = TRUE
 }
 
@@ -223,6 +231,10 @@ characters {
  fearCall = 18
  runspd = 0.96
  wlkspd = 0.36
+ hunterAnim = 0
+ hunterOffset = 0
+ aggress = 0
+ killdist = 415
  onradar = TRUE
 }
 
