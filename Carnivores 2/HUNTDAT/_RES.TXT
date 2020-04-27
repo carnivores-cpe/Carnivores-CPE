@@ -400,7 +400,7 @@ characters {
 
 } //===== end of characters ==========//
 
-area1 {
+mapambient area1 area2 area3 area4 area5 {
 
 {
  name = 'Brachiosaurus'
@@ -425,6 +425,76 @@ area1 {
  ymin = 12
  wlkspd = 0.2
 }
+
+{
+ name      = 'Pachycephaelosaurus'
+ file      = 'PACH.CAR'
+ ai        = 19
+ spawnrate = 0.08
+ spawnmax  = 3
+ spawnmin  = 0
+ mass      = 0.8
+ length    = 4.5
+ radius    = 280
+ health    = 6
+ basescore = 8
+ smell     = 0.4 
+ hear      = 0.8
+ look      = 0.6
+ shipdelta = 16
+ fearCall = 13
+ fearCall = 15
+ fearCall = 16
+ fearCall = 17
+ fearCall = 18
+ xmax = 988
+ xmin = 12
+ ymax = 988
+ ymin = 12
+ runspd = 1.6
+ wlkspd = 0.40
+ hunterAnim = 0
+ hunterOffset = 0
+ aggress = 0
+ killdist = 250
+}
+
+{
+ name = 'Triceratops'
+ file = 'tricer.car'
+ ai        = 14
+ spawnrate = 0.05
+ spawnmax  = 2
+ spawnmin  = 0
+ mass      = 3
+ length    = 5.0
+ radius    = 400
+ health    = 8
+ basescore = 9
+ smell     = 0.6 
+ hear      = 0.5
+ look      = 0.4
+ shipdelta = 108
+ fearCall = 13
+ fearCall = 15
+ fearCall = 16
+ fearCall = 17
+ fearCall = 18
+ xmax = 988
+ xmin = 12
+ ymax = 988
+ ymin = 12
+ runspd = 1.2
+ wlkspd = 0.30
+ hunterAnim = 0
+ hunterOffset = 170
+ aggress = 32
+ killdist = 300
+}
+
+}
+
+mapambient area1 {
 
 {
  name = 'Climatius'
@@ -514,99 +584,9 @@ area1 {
  runspd = 0.55
 }
 
-{
- name      = 'Pachycephaelosaurus'
- file      = 'PACH.CAR'
- ai        = 19
- spawnrate = 0.08
- spawnmax  = 3
- spawnmin  = 0
- mass      = 0.8
- length    = 4.5
- radius    = 280
- health    = 6
- basescore = 8
- smell     = 0.4 
- hear      = 0.8
- look      = 0.6
- shipdelta = 16
- fearCall = 13
- fearCall = 15
- fearCall = 16
- fearCall = 17
- fearCall = 18
- xmax = 988
- xmin = 12
- ymax = 988
- ymin = 12
- runspd = 1.6
- wlkspd = 0.40
- hunterAnim = 0
- hunterOffset = 0
- aggress = 0
- killdist = 250
 }
 
-{
- name = 'Triceratops'
- file = 'tricer.car'
- ai        = 14
- spawnrate = 0.05
- spawnmax  = 2
- spawnmin  = 0
- mass      = 3
- length    = 5.0
- radius    = 400
- health    = 8
- basescore = 9
- smell     = 0.6 
- hear      = 0.5
- look      = 0.4
- shipdelta = 108
- fearCall = 13
- fearCall = 15
- fearCall = 16
- fearCall = 17
- fearCall = 18
- xmax = 988
- xmin = 12
- ymax = 988
- ymin = 12
- runspd = 1.2
- wlkspd = 0.30
- hunterAnim = 0
- hunterOffset = 170
- aggress = 32
- killdist = 300
-}
-
-}
-
-area2 {
-
-{
- name = 'Brachiosaurus'
- file = 'brachi8.car'
- ai        = -1
- spawnrate = 0.5
- spawnmax  = 4
- spawnmin  = 2
- mass      = 9
- length    = 12
- radius    = 400
- health    = 100
- basescore = 0
- smell     = 0.4
- hear      = 0.8
- look      = 0.6
- shipdelta = 168
- fearCall = 18
- xmax = 988
- xmin = 12
- ymax = 988
- ymin = 12
- wlkspd = 0.2
-}
+mapambient area2 {
 
 {
  name = 'Ichthyornis'
@@ -638,354 +618,6 @@ area2 {
  gldspd = 1.80
  lndspd = 0.30
  tkfspd = 1.50
-}
-
-{
- name      = 'Pachycephaelosaurus'
- file      = 'PACH.CAR'
- ai        = 19
- spawnrate = 0.08
- spawnmax  = 3
- spawnmin  = 0
- mass      = 0.8
- length    = 4.5
- radius    = 280
- health    = 6
- basescore = 8
- smell     = 0.4 
- hear      = 0.8
- look      = 0.6
- shipdelta = 16
- fearCall = 13
- fearCall = 15
- fearCall = 16
- fearCall = 17
- fearCall = 18
- xmax = 988
- xmin = 12
- ymax = 988
- ymin = 12
- runspd = 1.6
- wlkspd = 0.40
- hunterAnim = 0
- hunterOffset = 0
- aggress = 0
- killdist = 250
-}
-
-{
- name = 'Triceratops'
- file = 'tricer.car'
- ai        = 14
- spawnrate = 0.05
- spawnmax  = 2
- spawnmin  = 0
- mass      = 3
- length    = 5.0
- radius    = 400
- health    = 8
- basescore = 9
- smell     = 0.6 
- hear      = 0.5
- look      = 0.4
- shipdelta = 108
- fearCall = 13
- fearCall = 15
- fearCall = 16
- fearCall = 17
- fearCall = 18
- xmax = 988
- xmin = 12
- ymax = 988
- ymin = 12
- runspd = 1.2
- wlkspd = 0.30
- hunterAnim = 0
- hunterOffset = 170
- aggress = 32
- killdist = 300
-}
-
-}
-
-area3 {
-
-{
- name = 'Brachiosaurus'
- file = 'brachi8.car'
- ai        = -1
- spawnrate = 0.5
- spawnmax  = 4
- spawnmin  = 2
- mass      = 9
- length    = 12
- radius    = 400
- health    = 100
- basescore = 0
- smell     = 0.4
- hear      = 0.8
- look      = 0.6
- shipdelta = 168
- fearCall = 18
- xmax = 988
- xmin = 12
- ymax = 988
- ymin = 12
- wlkspd = 0.2
-}
-
-{
- name      = 'Pachycephaelosaurus'
- file      = 'PACH.CAR'
- ai        = 19
- spawnrate = 0.08
- spawnmax  = 3
- spawnmin  = 0
- mass      = 0.8
- length    = 4.5
- radius    = 280
- health    = 6
- basescore = 8
- smell     = 0.4 
- hear      = 0.8
- look      = 0.6
- shipdelta = 16
- fearCall = 13
- fearCall = 15
- fearCall = 16
- fearCall = 17
- fearCall = 18
- xmax = 988
- xmin = 12
- ymax = 988
- ymin = 12
- runspd = 1.6
- wlkspd = 0.40
- hunterAnim = 0
- hunterOffset = 0
- aggress = 0
- killdist = 250
-}
-
-{
- name = 'Triceratops'
- file = 'tricer.car'
- ai        = 14
- spawnrate = 0.05
- spawnmax  = 2
- spawnmin  = 0
- mass      = 3
- length    = 5.0
- radius    = 400
- health    = 8
- basescore = 9
- smell     = 0.6 
- hear      = 0.5
- look      = 0.4
- shipdelta = 108
- fearCall = 13
- fearCall = 15
- fearCall = 16
- fearCall = 17
- fearCall = 18
- xmax = 988
- xmin = 12
- ymax = 988
- ymin = 12
- runspd = 1.2
- wlkspd = 0.30
- hunterAnim = 0
- hunterOffset = 170
- aggress = 32
- killdist = 300
-}
-
-}
-
-area4 {
-
-{
- name = 'Brachiosaurus'
- file = 'brachi8.car'
- ai        = -1
- spawnrate = 0.5
- spawnmax  = 4
- spawnmin  = 2
- mass      = 9
- length    = 12
- radius    = 400
- health    = 100
- basescore = 0
- smell     = 0.4
- hear      = 0.8
- look      = 0.6
- shipdelta = 168
- fearCall = 18
- xmax = 988
- xmin = 12
- ymax = 988
- ymin = 12
- wlkspd = 0.2
-}
-
-{
- name      = 'Pachycephaelosaurus'
- file      = 'PACH.CAR'
- ai        = 19
- spawnrate = 0.08
- spawnmax  = 3
- spawnmin  = 0
- mass      = 0.8
- length    = 4.5
- radius    = 280
- health    = 6
- basescore = 8
- smell     = 0.4 
- hear      = 0.8
- look      = 0.6
- shipdelta = 16
- fearCall = 13
- fearCall = 15
- fearCall = 16
- fearCall = 17
- fearCall = 18
- xmax = 988
- xmin = 12
- ymax = 988
- ymin = 12
- runspd = 1.6
- wlkspd = 0.40
- hunterAnim = 0
- hunterOffset = 0
- aggress = 0
- killdist = 250
-}
-
-{
- name = 'Triceratops'
- file = 'tricer.car'
- ai        = 14
- spawnrate = 0.05
- spawnmax  = 2
- spawnmin  = 0
- mass      = 3
- length    = 5.0
- radius    = 400
- health    = 8
- basescore = 9
- smell     = 0.6 
- hear      = 0.5
- look      = 0.4
- shipdelta = 108
- fearCall = 13
- fearCall = 15
- fearCall = 16
- fearCall = 17
- fearCall = 18
- xmax = 988
- xmin = 12
- ymax = 988
- ymin = 12
- runspd = 1.2
- wlkspd = 0.30
- hunterAnim = 0
- hunterOffset = 170
- aggress = 32
- killdist = 300
-}
-
-}
-
-area5 {
-
-{
- name = 'Brachiosaurus'
- file = 'brachi8.car'
- ai        = -1
- spawnrate = 0.5
- spawnmax  = 4
- spawnmin  = 2
- mass      = 9
- length    = 12
- radius    = 400
- health    = 100
- basescore = 0
- smell     = 0.4
- hear      = 0.8
- look      = 0.6
- shipdelta = 168
- fearCall = 18
- xmax = 988
- xmin = 12
- ymax = 988
- ymin = 12
- wlkspd = 0.2
-}
-
-{
- name      = 'Pachycephaelosaurus'
- file      = 'PACH.CAR'
- ai        = 19
- spawnrate = 0.08
- spawnmax  = 3
- spawnmin  = 0
- mass      = 0.8
- length    = 4.5
- radius    = 280
- health    = 6
- basescore = 8
- smell     = 0.4 
- hear      = 0.8
- look      = 0.6
- shipdelta = 16
- fearCall = 13
- fearCall = 15
- fearCall = 16
- fearCall = 17
- fearCall = 18
- xmax = 988
- xmin = 12
- ymax = 988
- ymin = 12
- runspd = 1.6
- wlkspd = 0.40
- hunterAnim = 0
- hunterOffset = 0
- aggress = 0
- killdist = 250
-}
-
-{
- name = 'Triceratops'
- file = 'tricer.car'
- ai        = 14
- spawnrate = 0.05
- spawnmax  = 2
- spawnmin  = 0
- mass      = 3
- length    = 5.0
- radius    = 400
- health    = 8
- basescore = 9
- smell     = 0.6 
- hear      = 0.5
- look      = 0.4
- shipdelta = 108
- fearCall = 13
- fearCall = 15
- fearCall = 16
- fearCall = 17
- fearCall = 18
- xmax = 988
- xmin = 12
- ymax = 988
- ymin = 12
- runspd = 1.2
- wlkspd = 0.30
- hunterAnim = 0
- hunterOffset = 170
- aggress = 32
- killdist = 300
 }
 
 }

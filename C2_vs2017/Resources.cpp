@@ -2230,8 +2230,7 @@ void LoadResourcesScript()
 		}
 	}
 
-	//MessageBox(NULL, tempProjectName, "Carnivores Termination", IDOK | MB_SYSTEMMODAL | MB_ICONEXCLAMATION);
-	
+	/*
 	if (strstr(line, "area1")) {
 		if (tempProjectName[18] == '1') {
 			ReadCharacters(stream, true);
@@ -2239,78 +2238,33 @@ void LoadResourcesScript()
 			SkipSector(stream);
 		};
 	}
+	*/
 
-	if (strstr(line, "area2")) {
-		if (tempProjectName[18] == '2') {
+	if (strstr(line, "mapambient")) {
+
+		if (tempProjectName[18] == '1' && strstr(line, "area1") ||
+			tempProjectName[18] == '2' && strstr(line, "area2") ||
+			tempProjectName[18] == '3' && strstr(line, "area3") ||
+			tempProjectName[18] == '4' && strstr(line, "area4") ||
+			tempProjectName[18] == '5' && strstr(line, "area5") ||
+			tempProjectName[18] == '6' && strstr(line, "area6") ||
+			tempProjectName[18] == '7' && strstr(line, "area7") ||
+			tempProjectName[18] == '8' && strstr(line, "area8") ||
+			tempProjectName[18] == '9' && strstr(line, "area9")
+			) {
 			ReadCharacters(stream, true);
 		}
 		else {
 			SkipSector(stream);
 		};
+
 	}
 
-	if (strstr(line, "area3")) {
-		if (tempProjectName[18] == '3') {
-			ReadCharacters(stream, true);
-		}
-		else {
-			SkipSector(stream);
-		};
-	}
 
-	if (strstr(line, "area4")) {
-		if (tempProjectName[18] == '4') {
-			ReadCharacters(stream, true);
-		}
-		else {
-			SkipSector(stream);
-		};
-	}
 
-	if (strstr(line, "area5")) {
-		if (tempProjectName[18] == '5') {
-			ReadCharacters(stream, true);
-		}
-		else {
-			SkipSector(stream);
-		};
-	}
 
-	if (strstr(line, "area6")) {
-		if (tempProjectName[18] == '6') {
-			ReadCharacters(stream, true);
-		}
-		else {
-			SkipSector(stream);
-		};
-	}
 
-	if (strstr(line, "area7")) {
-		if (tempProjectName[18] == '7') {
-			ReadCharacters(stream, true);
-		}
-		else {
-			SkipSector(stream);
-		};
-	}
 
-	if (strstr(line, "area8")) {
-		if (tempProjectName[18] == '8') {
-			ReadCharacters(stream, true);
-		}
-		else {
-			SkipSector(stream);
-		};
-	}
-
-	if (strstr(line, "area9")) {
-		if (tempProjectName[18] == '9') {
-			ReadCharacters(stream, true);
-		}
-		else {
-			SkipSector(stream);
-		};
-	}
 
   }
 
