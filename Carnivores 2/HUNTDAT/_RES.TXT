@@ -424,15 +424,12 @@ characters {
 
 } //===== end of characters ==========//
 
-mapambient area1 area2 area3 area4 area5 {
+mapambients {
 
 {
  name = 'Brachiosaurus'
  file = 'brachi8.car'
  clone 	   = -1
- spawnrate = 0.5
- spawnmax  = 4
- spawnmin  = 2
  mass      = 9
  length    = 12
  radius    = 400
@@ -443,20 +440,22 @@ mapambient area1 area2 area3 area4 area5 {
  look      = 0.6
  shipdelta = 168
  fearCall = 18
- xmax = 988
- xmin = 12
- ymax = 988
- ymin = 12
  wlkspd = 0.2
+ spawnarea 12345{
+  spawnrate = 0.5
+  spawnmax  = 4
+  spawnmin  = 2
+  xmax = 988
+  xmin = 12
+  ymax = 988
+  ymin = 12
+ }
 }
 
 {
  name      = 'Pachycephalosaurus'
  file      = 'pach.car'
  clone 	   = 19
- spawnrate = 0.08
- spawnmax  = 3
- spawnmin  = 0
  mass      = 0.8
  length    = 4.5
  radius    = 280
@@ -471,10 +470,6 @@ mapambient area1 area2 area3 area4 area5 {
  fearCall = 16
  fearCall = 17
  fearCall = 18
- xmax = 988
- xmin = 12
- ymax = 988
- ymin = 12
  runspd = 1.6
  wlkspd = 0.40
  hunterAnim = 0
@@ -482,15 +477,21 @@ mapambient area1 area2 area3 area4 area5 {
  aggress = 0
  killdist = 250
  trophy  = TRUE
+ spawnarea 12345{
+  spawnrate = 0.08
+  spawnmax  = 3
+  spawnmin  = 0
+  xmax = 988
+  xmin = 12
+  ymax = 988
+  ymin = 12
+ }
 }
 
 {
  name = 'Triceratops'
  file = 'tricer.car'
  clone 	   = 14
- spawnrate = 0.05
- spawnmax  = 2
- spawnmin  = 0
  mass      = 3
  length    = 5.0
  radius    = 400
@@ -505,10 +506,6 @@ mapambient area1 area2 area3 area4 area5 {
  fearCall = 16
  fearCall = 17
  fearCall = 18
- xmax = 988
- xmin = 12
- ymax = 988
- ymin = 12
  runspd = 1.2
  wlkspd = 0.30
  hunterAnim = 0
@@ -516,19 +513,21 @@ mapambient area1 area2 area3 area4 area5 {
  aggress = 32
  killdist = 300
  trophy  = TRUE
+ spawnarea 12345{
+  spawnrate = 0.05
+  spawnmax  = 2
+  spawnmin  = 0
+  xmax = 988
+  xmin = 12
+  ymax = 988
+  ymin = 12
+ }
 }
-
-}
-
-mapambient area1 {
 
 {
  name = 'Climatius'
  file = 'climatius3.car'
  clone 	   = -3
- spawnrate = 0.8
- spawnmax  = 20
- spawnmin  = 8
  mass      = 2.0
  length    = 9.0
  radius    = 256
@@ -543,21 +542,23 @@ mapambient area1 {
  maxdepth = 10000
  mindepth = 1200
  spcdepth = 100
- xmax = 988
- xmin = 12
- ymax = 988
- ymin = 12
  wlkspd = 0.25
  runspd = 0.55
+ spawnarea 1{
+  spawnrate = 0.8
+  spawnmax  = 20
+  spawnmin  = 8
+  xmax = 988
+  xmin = 12
+  ymax = 988
+  ymin = 12
+ }
 }
 
 {
  name = 'Parexus'
  file = 'parexusn4.car'
  clone 	   = -3
- spawnrate = 0.6
- spawnmax  = 8
- spawnmin  = 3
  mass      = 2.0
  length    = 9.0
  radius    = 256
@@ -572,21 +573,23 @@ mapambient area1 {
  maxdepth = 1000
  mindepth = 150
  spcdepth = 73
- xmax = 988
- xmin = 12
- ymax = 988
- ymin = 12
  wlkspd = 0.25
  runspd = 0.55
+ spawnarea 1{
+  spawnrate = 0.6
+  spawnmax  = 8
+  spawnmin  = 3
+  xmax = 988
+  xmin = 12
+  ymax = 988
+  ymin = 12
+ }
 }
 
 {
  name = 'Pink Parexus'
  file = 'parexusn4_pink.car'
  clone 	   = -3
- spawnrate = 0.4
- spawnmax  = 3
- spawnmin  = 1
  mass      = 2.0
  length    = 9.0
  radius    = 256
@@ -601,26 +604,24 @@ mapambient area1 {
  maxdepth = 1000
  mindepth = 150
  spcdepth = 73
- xmax = 988
- xmin = 500
- ymax = 988
- ymin = 500
- styInRgn = TRUE
  wlkspd = 0.25
  runspd = 0.55
+ spawnarea 1{
+  spawnrate = 0.4
+  spawnmax  = 3
+  spawnmin  = 1
+  xmax = 988
+  xmin = 500
+  ymax = 988
+  ymin = 500
+  styInRgn = TRUE
+ }
 }
-
-}
-
-mapambient area2 {
 
 {
  name = 'Ichthyornis'
  file = 'icth30.car'
  clone 	   = -2
- spawnrate = 0.8
- spawnmax  = 25
- spawnmin  = 5
  scale0    = 500
  scaleA    = 0
  mass      = 0.2
@@ -633,19 +634,24 @@ mapambient area2 {
  fearCall = 16
  fearCall = 17
  fearCall = 18
- xmax = 988
- xmin = 12
- ymax = 988
- ymin = 12
  wlkspd = 0.10
  swmspd = 0.15
  flyspd = 2.00
  gldspd = 1.80
  lndspd = 0.30
  tkfspd = 1.50
+ spawnarea 2{
+  spawnrate = 0.8
+  spawnmax  = 25
+  spawnmin  = 5
+  xmax = 988
+  xmin = 12
+  ymax = 988
+  ymin = 12
+ }
 }
 
-}
+}//===== end of mapambients ==========//
 
 
 prices {
