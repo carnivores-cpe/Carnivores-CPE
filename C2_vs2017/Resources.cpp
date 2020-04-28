@@ -2103,6 +2103,16 @@ void ReadCharacters(FILE *stream, bool area, bool trophy)
 
         if (strstr(line, "}"))
         {
+
+		  if (trophy) {
+			  if (!DinoInfo[TotalC].trophyCode) {
+
+				  DinoInfo[TotalC] = {};
+
+				  break;
+			  }
+		  }
+
 		  int _ctype = DinoInfo[TotalC].AI;
 		  if (area) {
 		  	TotalMA ++;
@@ -2118,6 +2128,7 @@ void ReadCharacters(FILE *stream, bool area, bool trophy)
 		  }
           TotalC++;
           break;
+
         }
 
 			value = strstr(line, "=");

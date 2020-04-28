@@ -524,7 +524,7 @@ mapambient area1 {
 
 {
  name = 'Climatius'
- fileadf = 'climatius3.car'
+ file = 'climatius3.car'
  clone 	   = -3
  spawnrate = 0.8
  spawnmax  = 20
@@ -553,7 +553,7 @@ mapambient area1 {
 
 {
  name = 'Parexus'
- fileadf = 'parexusn4.car'
+ file = 'parexusn4.car'
  clone 	   = -3
  spawnrate = 0.6
  spawnmax  = 8
@@ -582,7 +582,7 @@ mapambient area1 {
 
 {
  name = 'Pink Parexus'
- fileadf = 'parexusn4_pink.car'
+ file = 'parexusn4_pink.car'
  clone 	   = -3
  spawnrate = 0.4
  spawnmax  = 3
@@ -616,7 +616,7 @@ mapambient area2 {
 
 {
  name = 'Ichthyornis'
- fileadf = 'icth30.car'
+ file = 'icth30.car'
  clone 	   = -2
  spawnrate = 0.8
  spawnmax  = 25
