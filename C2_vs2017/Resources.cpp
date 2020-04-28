@@ -2191,7 +2191,7 @@ void ReadCharacters(FILE *stream, bool mapamb)
 			}
 
 			if (strstr(line, "spawnarea")) {
-				if ((tempProjectName[18] == '1' && strstr(line, "1")) ||
+				if ((tempProjectName[18] == '1' && strstr(line, "1") && !tempProjectName[19]) ||
 					(tempProjectName[18] == '2' && strstr(line, "2")) ||
 					(tempProjectName[18] == '3' && strstr(line, "3")) ||
 					(tempProjectName[18] == '4' && strstr(line, "4")) ||
@@ -2200,6 +2200,7 @@ void ReadCharacters(FILE *stream, bool mapamb)
 					(tempProjectName[18] == '7' && strstr(line, "7")) ||
 					(tempProjectName[18] == '8' && strstr(line, "8")) ||
 					(tempProjectName[18] == '9' && strstr(line, "9")) ||
+					(tempProjectName[18] == '1' && strstr(line, "0") && tempProjectName[19]) ||
 					tempProjectName[18] == 'h') {
 
 					while (fgets(line, 255, stream)) {

@@ -441,7 +441,7 @@ mapambients {
  shipdelta = 168
  fearCall = 18
  wlkspd = 0.2
- spawnarea 12345{
+ spawnarea 1234567890{
   spawnrate = 0.5
   spawnmax  = 4
   spawnmin  = 2
@@ -477,7 +477,7 @@ mapambients {
  aggress = 0
  killdist = 250
  trophy  = TRUE
- spawnarea 12345{
+ spawnarea 1234567890{
   spawnrate = 0.08
   spawnmax  = 3
   spawnmin  = 0
@@ -513,7 +513,7 @@ mapambients {
  aggress = 32
  killdist = 300
  trophy  = TRUE
- spawnarea 12345{
+ spawnarea 1234567890{
   spawnrate = 0.05
   spawnmax  = 2
   spawnmin  = 0
