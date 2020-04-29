@@ -2165,6 +2165,7 @@ void ReadCharacters(FILE *stream, bool mapamb)
 				  DinoInfo[TotalC] = {};
 				  DinoInfo[TotalC].Scale0 = 800;
 				  DinoInfo[TotalC].ScaleA = 600;
+				  DinoInfo[TotalC].ShDelta = 0;
 				  break;
 		  }
 
