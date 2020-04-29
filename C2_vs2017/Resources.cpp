@@ -2069,29 +2069,70 @@ void SkipSector(FILE *stream)
 }
 
 
-void ReadTrophyCount(FILE *stream)
-{
-	char line[256], *value;
-	while (fgets(line, 255, stream))
-	{
-		if (strstr(line, "}")) break;
-		if (strstr(line, "{"))
-			while (fgets(line, 255, stream))
-			{
 
-				if (strstr(line, "}")) break;
+void ReadCharacterLine(char *value, char line[256]) {
 
-				value = strstr(line, "=");
-				if (!value)
-					DoHalt("Script loading error");
-				value++;
+	if (strstr(line, "mass")) DinoInfo[TotalC].Mass = (float)atof(value);
+	if (strstr(line, "length")) DinoInfo[TotalC].Length = (float)atof(value);
+	if (strstr(line, "radius")) DinoInfo[TotalC].Radius = (float)atof(value);
+	if (strstr(line, "health")) DinoInfo[TotalC].Health0 = atoi(value);
+	if (strstr(line, "basescore")) DinoInfo[TotalC].BaseScore = atoi(value);
+	if (strstr(line, "clone")) DinoInfo[TotalC].Clone = atoi(value);
+	if (strstr(line, "smell")) DinoInfo[TotalC].SmellK = (float)atof(value);
+	if (strstr(line, "hear")) DinoInfo[TotalC].HearK = (float)atof(value);
+	if (strstr(line, "look")) DinoInfo[TotalC].LookK = (float)atof(value);
+	if (strstr(line, "shipdelta")) DinoInfo[TotalC].ShDelta = (float)atof(value);
+	if (strstr(line, "scale0")) DinoInfo[TotalC].Scale0 = atoi(value);
+	if (strstr(line, "scaleA")) DinoInfo[TotalC].ScaleA = atoi(value);
+	if (strstr(line, "fearCall")) DinoInfo[TotalC].fearCall[atoi(value)] = TRUE;
+	if (strstr(line, "maxdepth")) DinoInfo[TotalC].maxDepth = atoi(value);
+	if (strstr(line, "mindepth")) DinoInfo[TotalC].minDepth = atoi(value);
+	if (strstr(line, "spcdepth")) DinoInfo[TotalC].spacingDepth = atoi(value);
+	if (strstr(line, "runspd")) DinoInfo[TotalC].runspd = (float)atof(value);
+	if (strstr(line, "jmpspd")) DinoInfo[TotalC].jmpspd = (float)atof(value);
+	if (strstr(line, "wlkspd")) DinoInfo[TotalC].wlkspd = (float)atof(value);
+	if (strstr(line, "swmspd")) DinoInfo[TotalC].swmspd = (float)atof(value);
+	if (strstr(line, "flyspd")) DinoInfo[TotalC].flyspd = (float)atof(value);
+	if (strstr(line, "gldspd")) DinoInfo[TotalC].gldspd = (float)atof(value);
+	if (strstr(line, "tkfspd")) DinoInfo[TotalC].tkfspd = (float)atof(value);
+	if (strstr(line, "lndspd")) DinoInfo[TotalC].lndspd = (float)atof(value);
+	if (strstr(line, "hunterAnim")) DinoInfo[TotalC].hunterDeathAnim = atoi(value);
+	if (strstr(line, "hunterOffset")) DinoInfo[TotalC].hunterDeathOffset = atoi(value);
+	if (strstr(line, "aggress")) DinoInfo[TotalC].aggress = atoi(value);
+	if (strstr(line, "killdist")) DinoInfo[TotalC].killDist = atoi(value);
+	if (strstr(line, "onradar")) DinoInfo[TotalC].onRadar = TRUE;
 
-
-				if (strstr(line, "trophy")) TotalTrophy++;
-
-			}
-
+	if (strstr(line, "trophy")) {
+		TotalTrophy++;
+		DinoInfo[TotalC].trophyCode = TotalTrophy;
+		TrophyIndex[TotalTrophy] = TotalC;
 	}
+
+	if (strstr(line, "spawnrate")) DinoInfo[TotalC].SpawnRate = (float)atof(value);
+	if (strstr(line, "spawnmax")) DinoInfo[TotalC].SpawnMax = atoi(value);
+	if (strstr(line, "spawnmin")) DinoInfo[TotalC].SpawnMin = atoi(value);
+	if (strstr(line, "xmax")) DinoInfo[TotalC].XMax = atoi(value);
+	if (strstr(line, "xmin")) DinoInfo[TotalC].XMin = atoi(value);
+	if (strstr(line, "ymax")) DinoInfo[TotalC].YMax = atoi(value);
+	if (strstr(line, "ymin")) DinoInfo[TotalC].YMin = atoi(value);
+	if (strstr(line, "styInRgn")) DinoInfo[TotalC].stayInRegion = TRUE;
+
+	if (strstr(line, "name"))
+	{
+		value = strstr(line, "'");
+		if (!value) DoHalt("Script loading error");
+		value[strlen(value) - 2] = 0;
+		strcpy(DinoInfo[TotalC].Name, &value[1]);
+	}
+
+	if (strstr(line, "file"))
+	{
+		value = strstr(line, "'");
+		if (!value) DoHalt("Script loading error");
+		value[strlen(value) - 2] = 0;
+		strcpy(DinoInfo[TotalC].FName, &value[1]);
+	}
+
 }
 
 
@@ -2146,62 +2187,75 @@ void ReadCharacters(FILE *stream, bool mapamb)
         }
 
 			value = strstr(line, "=");
-			if (!value && !strstr(line, "spawnarea"))
+			if (!value &&
+				!strstr(line, "overwrite")	&&
+				!strstr(line, "region")		)
 				DoHalt("Script loading error");
 			value++;
 
-			if (strstr(line, "mass")) DinoInfo[TotalC].Mass = (float)atof(value);
-			if (strstr(line, "length")) DinoInfo[TotalC].Length = (float)atof(value);
-			if (strstr(line, "radius")) DinoInfo[TotalC].Radius = (float)atof(value);
-			if (strstr(line, "health")) DinoInfo[TotalC].Health0 = atoi(value);
-			if (strstr(line, "basescore")) DinoInfo[TotalC].BaseScore = atoi(value);
 			if (strstr(line, "ai")) DinoInfo[TotalC].AI = atoi(value);
-			if (strstr(line, "clone")) DinoInfo[TotalC].Clone = atoi(value);
-			//if (strstr(line, "clone")) DinoInfo[TotalC].Clone = atoi(value);
-			if (strstr(line, "smell")) DinoInfo[TotalC].SmellK = (float)atof(value);
-			if (strstr(line, "hear")) DinoInfo[TotalC].HearK = (float)atof(value);
-			if (strstr(line, "look")) DinoInfo[TotalC].LookK = (float)atof(value);
-			if (strstr(line, "shipdelta")) DinoInfo[TotalC].ShDelta = (float)atof(value);
-			if (strstr(line, "scale0")) DinoInfo[TotalC].Scale0 = atoi(value);
-			if (strstr(line, "scaleA")) DinoInfo[TotalC].ScaleA = atoi(value);
-			//if (strstr(line, "danger"   )) DinoInfo[TotalC].DangerCall= TRUE;
-			if (strstr(line, "fearCall")) DinoInfo[TotalC].fearCall[atoi(value)] = TRUE;
-			//if (strstr(line, "addTrophy")) DinoInfo[TotalC].canAddTrophy = TRUE;
-			if (strstr(line, "maxdepth")) DinoInfo[TotalC].maxDepth = atoi(value);
-			if (strstr(line, "mindepth")) DinoInfo[TotalC].minDepth = atoi(value);
-			if (strstr(line, "spcdepth")) DinoInfo[TotalC].spacingDepth = atoi(value);
-			if (strstr(line, "runspd")) DinoInfo[TotalC].runspd = (float)atof(value);
-			if (strstr(line, "jmpspd")) DinoInfo[TotalC].jmpspd = (float)atof(value);
-			if (strstr(line, "wlkspd")) DinoInfo[TotalC].wlkspd = (float)atof(value);
-			if (strstr(line, "swmspd")) DinoInfo[TotalC].swmspd = (float)atof(value);
-			if (strstr(line, "flyspd")) DinoInfo[TotalC].flyspd = (float)atof(value);
-			if (strstr(line, "gldspd")) DinoInfo[TotalC].gldspd = (float)atof(value);
-			if (strstr(line, "tkfspd")) DinoInfo[TotalC].tkfspd = (float)atof(value);
-			if (strstr(line, "lndspd")) DinoInfo[TotalC].lndspd = (float)atof(value);
-			if (strstr(line, "hunterAnim")) DinoInfo[TotalC].hunterDeathAnim = atoi(value);
-			if (strstr(line, "hunterOffset")) DinoInfo[TotalC].hunterDeathOffset = atoi(value);
-			if (strstr(line, "aggress")) DinoInfo[TotalC].aggress = atoi(value);
-			if (strstr(line, "killdist")) DinoInfo[TotalC].killDist = atoi(value);
-			if (strstr(line, "onradar")) DinoInfo[TotalC].onRadar = TRUE;
 
-			if (strstr(line, "trophy")) {
-				TotalTrophy++;
-				DinoInfo[TotalC].trophyCode = TotalTrophy;
-				TrophyIndex[TotalTrophy] = TotalC;
-			}
+			ReadCharacterLine(value, line);
 
-			if (strstr(line, "spawnarea")) {
-				if ((tempProjectName[18] == '1' && strstr(line, "1") && !tempProjectName[19]) ||
-					(tempProjectName[18] == '2' && strstr(line, "2")) ||
-					(tempProjectName[18] == '3' && strstr(line, "3")) ||
-					(tempProjectName[18] == '4' && strstr(line, "4")) ||
-					(tempProjectName[18] == '5' && strstr(line, "5")) ||
-					(tempProjectName[18] == '6' && strstr(line, "6")) ||
-					(tempProjectName[18] == '7' && strstr(line, "7")) ||
-					(tempProjectName[18] == '8' && strstr(line, "8")) ||
-					(tempProjectName[18] == '9' && strstr(line, "9")) ||
-					(tempProjectName[18] == '1' && strstr(line, "0") && tempProjectName[19]) ||
-					tempProjectName[18] == 'h') {
+			if (strstr(line, "overwrite")) {
+
+				bool readThis = false;
+
+				//trophy
+				if (tempProjectName[18] == 'h') {
+					readThis = true;
+					goto startReading;
+				}
+
+				//area-specific
+				if ( strstr(line, "area") ) { // and not "time"
+
+					if (strstr(line, "area1") && tempProjectName[18] == '1' && !tempProjectName[19]) {
+						readThis = true;
+						goto startReading;
+					}
+					if (strstr(line, "area2") && tempProjectName[18] == '2') {
+						readThis = true;
+						goto startReading;
+					}
+					if (strstr(line, "area3") && tempProjectName[18] == '3') {
+						readThis = true;
+						goto startReading;
+					}
+					if (strstr(line, "area4") && tempProjectName[18] == '4') {
+						readThis = true;
+						goto startReading;
+					}
+					if (strstr(line, "area5") && tempProjectName[18] == '5') {
+						readThis = true;
+						goto startReading;
+					}
+					if (strstr(line, "area6") && tempProjectName[18] == '6') {
+						readThis = true;
+						goto startReading;
+					}
+					if (strstr(line, "area7") && tempProjectName[18] == '7') {
+						readThis = true;
+						goto startReading;
+					}
+					if (strstr(line, "area8") && tempProjectName[18] == '8') {
+						readThis = true;
+						goto startReading;
+					}
+					if (strstr(line, "area9") && tempProjectName[18] == '9') {
+						readThis = true;
+						goto startReading;
+					}
+					if (strstr(line, "area0") && tempProjectName[18] == '1' && tempProjectName[19]) {
+						readThis = true;
+						goto startReading;
+					}
+
+				}
+
+			startReading:
+
+				if (readThis) {
 
 					while (fgets(line, 255, stream)) {
 						if (strstr(line, "}")) break;
@@ -2209,14 +2263,9 @@ void ReadCharacters(FILE *stream, bool mapamb)
 						if (!value)
 							DoHalt("Script loading error");
 						value++;
-						if (strstr(line, "spawnrate")) DinoInfo[TotalC].SpawnRate = (float)atof(value);
-						if (strstr(line, "spawnmax")) DinoInfo[TotalC].SpawnMax = atoi(value);
-						if (strstr(line, "spawnmin")) DinoInfo[TotalC].SpawnMin = atoi(value);
-						if (strstr(line, "xmax")) DinoInfo[TotalC].XMax = atoi(value);
-						if (strstr(line, "xmin")) DinoInfo[TotalC].XMin = atoi(value);
-						if (strstr(line, "ymax")) DinoInfo[TotalC].YMax = atoi(value);
-						if (strstr(line, "ymin")) DinoInfo[TotalC].YMin = atoi(value);
-						if (strstr(line, "styInRgn")) DinoInfo[TotalC].stayInRegion = TRUE;
+
+						ReadCharacterLine(value, line);
+
 					}
 
 				} else {
@@ -2224,22 +2273,7 @@ void ReadCharacters(FILE *stream, bool mapamb)
 				}
 			}
 
-			if (strstr(line, "name"))
-			{
-				value = strstr(line, "'");
-				if (!value) DoHalt("Script loading error");
-				value[strlen(value) - 2] = 0;
-				strcpy(DinoInfo[TotalC].Name, &value[1]);
-			}
-
-			if (strstr(line, "file"))
-			{
-				value = strstr(line, "'");
-				if (!value) DoHalt("Script loading error");
-				value[strlen(value) - 2] = 0;
-				strcpy(DinoInfo[TotalC].FName, &value[1]);
-			}
-
+			/*
 			if (strstr(line, "pic"))
 			{
 				value = strstr(line, "'");
@@ -2247,7 +2281,7 @@ void ReadCharacters(FILE *stream, bool mapamb)
 				value[strlen(value) - 2] = 0;
 				strcpy(DinoInfo[TotalC].PName, &value[1]);
 			}
-
+			*/
 
 
 		//}
