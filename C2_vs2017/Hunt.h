@@ -336,6 +336,8 @@ typedef struct _TCharacter
   float speed_run, speed_walk, speed_jump, speed_swim,
 	  speed_fly, speed_glide, speed_takeoff, speed_land;
 
+  int RType;
+
 } TCharacter;
 
 
@@ -434,13 +436,9 @@ typedef struct _TDinoInfo
   int   Scale0, ScaleA, BaseScore;
   TPicture CallIcon;
   
+  int RType0[32];
+
   BOOL fearCall[32];
-  BOOL stayInRegion;
-  
-  int XMax, YMax, XMin, YMin;
-  //int AXMax[32], AXMin[32], AYMax[32], AYMin[32];
-  //int AvoidTotal = 0;
-  
   BOOL Aquatic;
   int maxDepth, minDepth, spacingDepth;
 
@@ -451,6 +449,12 @@ typedef struct _TDinoInfo
   float runspd, jmpspd, wlkspd, swmspd, flyspd, gldspd, tkfspd, lndspd;
 
 } TDinoInfo;
+
+typedef struct _TRegion
+{
+	int XMax, YMax, XMin, YMin;
+	BOOL stayInRegion;
+} TRegion;
 
 
 typedef struct _TWeapInfo
@@ -709,7 +713,7 @@ void CloseLog();
 _EXTORNOT   float BackViewR;
 _EXTORNOT   int   BackViewRR;
 _EXTORNOT   int   UnderWaterT;
-_EXTORNOT   int   TotalC, TotalW, TotalMA, TotalTrophy;
+_EXTORNOT   int   TotalC, TotalW, TotalMA, TotalTrophy, TotalRegion;
 
 
 //========== common ==================//
@@ -795,6 +799,7 @@ _EXTORNOT TCharacterInfo WCircleModel;
 _EXTORNOT TModel *CompasModel;
 _EXTORNOT TModel *Binocular;
 _EXTORNOT TDinoInfo DinoInfo[64];
+_EXTORNOT TRegion Region[256];
 _EXTORNOT TWeapInfo WeapInfo[10];
 _EXTORNOT TCharacterInfo ShipModel;
 _EXTORNOT int AI_to_CIndex[64];

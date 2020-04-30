@@ -2111,11 +2111,11 @@ void ReadCharacterLine(char *value, char line[256]) {
 	if (strstr(line, "spawnrate")) DinoInfo[TotalC].SpawnRate = (float)atof(value);
 	if (strstr(line, "spawnmax")) DinoInfo[TotalC].SpawnMax = atoi(value);
 	if (strstr(line, "spawnmin")) DinoInfo[TotalC].SpawnMin = atoi(value);
-	if (strstr(line, "xmax")) DinoInfo[TotalC].XMax = atoi(value);
-	if (strstr(line, "xmin")) DinoInfo[TotalC].XMin = atoi(value);
-	if (strstr(line, "ymax")) DinoInfo[TotalC].YMax = atoi(value);
-	if (strstr(line, "ymin")) DinoInfo[TotalC].YMin = atoi(value);
-	if (strstr(line, "styInRgn")) DinoInfo[TotalC].stayInRegion = TRUE;
+	if (strstr(line, "xmax")) Region[TotalRegion].XMax = atoi(value);
+	if (strstr(line, "xmin")) Region[TotalRegion].XMin = atoi(value);
+	if (strstr(line, "ymax")) Region[TotalRegion].YMax = atoi(value);
+	if (strstr(line, "ymin")) Region[TotalRegion].YMin = atoi(value);
+	if (strstr(line, "styInRgn")) Region[TotalRegion].stayInRegion = TRUE;
 
 	if (strstr(line, "name"))
 	{
@@ -2166,6 +2166,7 @@ void ReadCharacters(FILE *stream, bool mapamb)
 				  DinoInfo[TotalC].Scale0 = 800;
 				  DinoInfo[TotalC].ScaleA = 600;
 				  DinoInfo[TotalC].ShDelta = 0;
+				  Region[TotalRegion] = {};
 				  break;
 		  }
 
@@ -2182,7 +2183,9 @@ void ReadCharacters(FILE *stream, bool mapamb)
 		  } else {
 			  DinoInfo[TotalC].Aquatic = FALSE;
 		  }
+		  DinoInfo[TotalC].RType0[0] = TotalRegion;
           TotalC++;
+		  TotalRegion++;
           break;
 
         }

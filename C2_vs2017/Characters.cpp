@@ -259,6 +259,8 @@ void ResetCharacter(TCharacter *cptr)
   if (OptAgres>128) cptr->Health= (cptr->Health*OptAgres)/128;
 
   cptr->scale =  (float)(DinoInfo[cptr->CType].Scale0 + rRand(DinoInfo[cptr->CType].ScaleA)) / 1000.f;
+
+  cptr->RType = DinoInfo[cptr->CType].RType0[0];
 }
 
 
@@ -1013,14 +1015,14 @@ void SetNewTargetPlace_Icth(TCharacter *cptr, float R)
 	bool outsideRegion = false;
 	bool stayRegion = false;
 	//float spacing;
-	if (DinoInfo[cptr->CType].stayInRegion && cptr->AI < 0) {
+	if (Region[cptr->RType].stayInRegion && cptr->AI < 0) {
 		stayRegion = true;
 		//spacing = (DinoInfo[cptr->CType].XMax - DinoInfo[cptr->CType].XMin)/10;
 		//if (spacing > 20) spacing = 20;
-		if (cptr->pos.x < (DinoInfo[cptr->CType].XMin) * 256) outsideRegion = true;
-		if (cptr->pos.x > (DinoInfo[cptr->CType].XMax) * 256) outsideRegion = true;
-		if (cptr->pos.z < (DinoInfo[cptr->CType].YMin) * 256) outsideRegion = true;
-		if (cptr->pos.z > (DinoInfo[cptr->CType].YMax) * 256) outsideRegion = true;
+		if (cptr->pos.x < (Region[cptr->RType].XMin) * 256) outsideRegion = true;
+		if (cptr->pos.x > (Region[cptr->RType].XMax) * 256) outsideRegion = true;
+		if (cptr->pos.z < (Region[cptr->RType].YMin) * 256) outsideRegion = true;
+		if (cptr->pos.z > (Region[cptr->RType].YMax) * 256) outsideRegion = true;
 	}
 	//PrintLog("iT");//TEST20200412
 replace:
@@ -1028,10 +1030,10 @@ replace:
 	p.x = cptr->pos.x + siRand((int)R);
 	p.z = cptr->pos.z + siRand((int)R);
 	if (stayRegion) {
-		if (p.x < (DinoInfo[cptr->CType].XMin) * 256) p.x = DinoInfo[cptr->CType].XMin * 256;
-		if (p.x > (DinoInfo[cptr->CType].XMax) * 256) p.x = DinoInfo[cptr->CType].XMax * 256;
-		if (p.z < (DinoInfo[cptr->CType].YMin) * 256) p.z = DinoInfo[cptr->CType].YMin * 256;
-		if (p.z > (DinoInfo[cptr->CType].YMax) * 256) p.z = DinoInfo[cptr->CType].YMax * 256;
+		if (p.x < (Region[cptr->RType].XMin) * 256) p.x = Region[cptr->RType].XMin * 256;
+		if (p.x > (Region[cptr->RType].XMax) * 256) p.x = Region[cptr->RType].XMax * 256;
+		if (p.z < (Region[cptr->RType].YMin) * 256) p.z = Region[cptr->RType].YMin * 256;
+		if (p.z > (Region[cptr->RType].YMax) * 256) p.z = Region[cptr->RType].YMax * 256;
 	}
 	if (p.x < 512) p.x = 512;
 	if (p.x > 1018 * 256) p.x = 1018 * 256;
@@ -1153,14 +1155,14 @@ void SetNewTargetPlaceRegion(TCharacter *cptr, float R)
 	bool outsideRegion = false;
 	bool stayRegion = false;
 	//float spacing;
-	if (DinoInfo[cptr->CType].stayInRegion && cptr->AI < 0) {
+	if (Region[cptr->RType].stayInRegion && cptr->AI < 0) {
 		stayRegion = true;
 		//spacing = (DinoInfo[cptr->CType].XMax - DinoInfo[cptr->CType].XMin)/10;
 		//if (spacing > 20) spacing = 20;
-		if (cptr->pos.x < (DinoInfo[cptr->CType].XMin) * 256) outsideRegion = true;
-		if (cptr->pos.x > (DinoInfo[cptr->CType].XMax) * 256) outsideRegion = true;
-		if (cptr->pos.z < (DinoInfo[cptr->CType].YMin) * 256) outsideRegion = true;
-		if (cptr->pos.z > (DinoInfo[cptr->CType].YMax) * 256) outsideRegion = true;
+		if (cptr->pos.x < (Region[cptr->RType].XMin) * 256) outsideRegion = true;
+		if (cptr->pos.x > (Region[cptr->RType].XMax) * 256) outsideRegion = true;
+		if (cptr->pos.z < (Region[cptr->RType].YMin) * 256) outsideRegion = true;
+		if (cptr->pos.z > (Region[cptr->RType].YMax) * 256) outsideRegion = true;
 	}
 	//PrintLog("hT");//TEST20200415
 replace:
@@ -1168,10 +1170,10 @@ replace:
 	p.x = cptr->pos.x + siRand((int)R);
 	p.z = cptr->pos.z + siRand((int)R);
 	if (stayRegion) {
-		if (p.x < (DinoInfo[cptr->CType].XMin) * 256) p.x = DinoInfo[cptr->CType].XMin * 256;
-		if (p.x > (DinoInfo[cptr->CType].XMax) * 256) p.x = DinoInfo[cptr->CType].XMax * 256;
-		if (p.z < (DinoInfo[cptr->CType].YMin) * 256) p.z = DinoInfo[cptr->CType].YMin * 256;
-		if (p.z > (DinoInfo[cptr->CType].YMax) * 256) p.z = DinoInfo[cptr->CType].YMax * 256;
+		if (p.x < (Region[cptr->RType].XMin) * 256) p.x = Region[cptr->RType].XMin * 256;
+		if (p.x > (Region[cptr->RType].XMax) * 256) p.x = Region[cptr->RType].XMax * 256;
+		if (p.z < (Region[cptr->RType].YMin) * 256) p.z = Region[cptr->RType].YMin * 256;
+		if (p.z > (Region[cptr->RType].YMax) * 256) p.z = Region[cptr->RType].YMax * 256;
 	}
 	if (p.x < 512) p.x = 512;
 	if (p.x > 1018 * 256) p.x = 1018 * 256;
@@ -1242,14 +1244,14 @@ void SetNewTargetPlaceFish(TCharacter *cptr, float R)
 	bool outsideRegion = false;
 	bool stayRegion = false;
 	//float spacing;
-	if (DinoInfo[cptr->CType].stayInRegion && cptr->AI < 0) {
+	if (Region[cptr->RType].stayInRegion && cptr->AI < 0) {
 		stayRegion = true;
 		//spacing = (DinoInfo[cptr->CType].XMax - DinoInfo[cptr->CType].XMin)/10;
 		//if (spacing > 20) spacing = 20;
-		if (cptr->pos.x < (DinoInfo[cptr->CType].XMin) * 256) outsideRegion = true;
-		if (cptr->pos.x > (DinoInfo[cptr->CType].XMax) * 256) outsideRegion = true;
-		if (cptr->pos.z < (DinoInfo[cptr->CType].YMin) * 256) outsideRegion = true;
-		if (cptr->pos.z > (DinoInfo[cptr->CType].YMax) * 256) outsideRegion = true;
+		if (cptr->pos.x < (Region[cptr->RType].XMin) * 256) outsideRegion = true;
+		if (cptr->pos.x > (Region[cptr->RType].XMax) * 256) outsideRegion = true;
+		if (cptr->pos.z < (Region[cptr->RType].YMin) * 256) outsideRegion = true;
+		if (cptr->pos.z > (Region[cptr->RType].YMax) * 256) outsideRegion = true;
 	}
 	//PrintLog("fTXZ");//TEST202004091129
 replace:
@@ -1257,10 +1259,10 @@ replace:
 	p.x = cptr->pos.x + siRand((int)R);
 	p.z = cptr->pos.z + siRand((int)R);
 	if (stayRegion) {
-		if (p.x < (DinoInfo[cptr->CType].XMin) * 256) p.x = DinoInfo[cptr->CType].XMin * 256;
-		if (p.x > (DinoInfo[cptr->CType].XMax) * 256) p.x = DinoInfo[cptr->CType].XMax * 256;
-		if (p.z < (DinoInfo[cptr->CType].YMin) * 256) p.z = DinoInfo[cptr->CType].YMin * 256;
-		if (p.z > (DinoInfo[cptr->CType].YMax) * 256) p.z = DinoInfo[cptr->CType].YMax * 256;
+		if (p.x < (Region[cptr->RType].XMin) * 256) p.x = Region[cptr->RType].XMin * 256;
+		if (p.x > (Region[cptr->RType].XMax) * 256) p.x = Region[cptr->RType].XMax * 256;
+		if (p.z < (Region[cptr->RType].YMin) * 256) p.z = Region[cptr->RType].YMin * 256;
+		if (p.z > (Region[cptr->RType].YMax) * 256) p.z = Region[cptr->RType].YMax * 256;
 	}
 	if (p.x < 512) p.x = 512;
 	if (p.x > 1018 * 256) p.x = 1018 * 256;
@@ -8454,6 +8456,8 @@ replace1:
 		  if (DinoInfo[DinoInfoIndex].SpawnRate * 1000 > rRand(1000)) spawnNo++;
 	  }
 
+	  int RegionNo;
+
 	  switch (DinoInfo[DinoInfoIndex].Clone) {
 
 	  case AI_BRACH:
@@ -8468,13 +8472,13 @@ replace1:
 			  //PrintLog("-");//TEST202004111501
 			  //Characters[ChCount].pos.x = 512 * 256 + siRand(50 * 256)*10.f;
 			  //Characters[ChCount].pos.z = 512 * 256 + siRand(50 * 256)*10.f;
+			  RegionNo = DinoInfo[DinoInfoIndex].RType0[0];
 
+			  Characters[ChCount].pos.x = Region[RegionNo].XMin * 256
+				  + abs(rRand(Region[RegionNo].XMax - Region[RegionNo].XMin) * 256);
 			  
-			  Characters[ChCount].pos.x = DinoInfo[DinoInfoIndex].XMin * 256
-				  + abs(rRand(DinoInfo[DinoInfoIndex].XMax - DinoInfo[DinoInfoIndex].XMin) * 256);
-			  
-			  Characters[ChCount].pos.z = DinoInfo[DinoInfoIndex].YMin * 256
-				  + abs(rRand(DinoInfo[DinoInfoIndex].YMax - DinoInfo[DinoInfoIndex].YMin) * 256);
+			  Characters[ChCount].pos.z = Region[RegionNo].YMin * 256
+				  + abs(rRand(Region[RegionNo].YMax - Region[RegionNo].YMin) * 256);
 
 
 			  Characters[ChCount].pos.y = GetLandH(Characters[ChCount].pos.x,
@@ -8491,6 +8495,7 @@ replace1:
 			  Characters[ChCount].tgz = Characters[ChCount].pos.z;
 			  Characters[ChCount].tgtime = 0;
 
+			  Characters[ChCount].RType = RegionNo;
 			  ResetCharacter(&Characters[ChCount]);
 			  ChCount++;
 		  }
@@ -8520,13 +8525,14 @@ replace1:
 
 			  //Characters[ChCount].pos.x = 512 * 256 + siRand(50 * 256)*10.f;
 			  //Characters[ChCount].pos.z = 512 * 256 + siRand(50 * 256)*10.f;
+			  RegionNo = DinoInfo[DinoInfoIndex].RType0[0];
 
 			  
-			  Characters[ChCount].pos.x = DinoInfo[DinoInfoIndex].XMin * 256
-				  + abs(rRand(DinoInfo[DinoInfoIndex].XMax - DinoInfo[DinoInfoIndex].XMin) * 256);
+			  Characters[ChCount].pos.x = Region[RegionNo].XMin * 256
+				  + abs(rRand(Region[RegionNo].XMax - Region[RegionNo].XMin) * 256);
 
-			  Characters[ChCount].pos.z = DinoInfo[DinoInfoIndex].YMin * 256
-				  + abs(rRand(DinoInfo[DinoInfoIndex].YMax - DinoInfo[DinoInfoIndex].YMin) * 256);
+			  Characters[ChCount].pos.z = Region[RegionNo].YMin * 256
+				  + abs(rRand(Region[RegionNo].YMax - Region[RegionNo].YMin) * 256);
 				  
 			  
 			  Characters[ChCount].pos.y = GetLandH(Characters[ChCount].pos.x,
@@ -8546,6 +8552,7 @@ replace1:
 			  Characters[ChCount].spawnAlt = GetLandUpH(Characters[ChCount].pos.x,
 				  Characters[ChCount].pos.z);
 
+			  Characters[ChCount].RType = RegionNo;
 			  ResetCharacter(&Characters[ChCount]);
 			  ChCount++;
 		  }
@@ -8584,12 +8591,13 @@ case AI_FISH:
 
 		//Characters[ChCount].pos.x = 512 * 256 + siRand(50 * 256)*10.f;
 		//Characters[ChCount].pos.z = 512 * 256 + siRand(50 * 256)*10.f;
+		RegionNo = DinoInfo[DinoInfoIndex].RType0[0];
 
-		Characters[ChCount].pos.x = DinoInfo[DinoInfoIndex].XMin * 256
-			+ abs(rRand(DinoInfo[DinoInfoIndex].XMax - DinoInfo[DinoInfoIndex].XMin) * 256);
+		Characters[ChCount].pos.x = Region[RegionNo].XMin * 256
+			+ abs(rRand(Region[RegionNo].XMax - Region[RegionNo].XMin) * 256);
 
-		Characters[ChCount].pos.z = DinoInfo[DinoInfoIndex].YMin * 256
-			+ abs(rRand(DinoInfo[DinoInfoIndex].YMax - DinoInfo[DinoInfoIndex].YMin) * 256);
+		Characters[ChCount].pos.z = Region[RegionNo].YMin * 256
+			+ abs(rRand(Region[RegionNo].YMax - Region[RegionNo].YMin) * 256);
 
 		Characters[ChCount].pos.y = GetLandH(Characters[ChCount].pos.x,
 			Characters[ChCount].pos.z);
@@ -8615,6 +8623,7 @@ case AI_FISH:
 
 		Characters[ChCount].tdepth = Characters[ChCount].depth;
 
+		Characters[ChCount].RType = RegionNo;
 		ResetCharacter(&Characters[ChCount]);
 		ChCount++;
 
@@ -8628,7 +8637,7 @@ case AI_FISH:
 
 
 		  /*
-	  case AI_MOSA:
+	  case AI_MOSA:	//compare with fish AI when you readd
 
 		  // SPAWN MOSASAURUS
 		  tr = 0;
@@ -8700,12 +8709,13 @@ case AI_FISH:
 			  Characters[ChCount].pos.x = 512 * 256 + siRand(50 * 256) * 10;
 			  Characters[ChCount].pos.z = 512 * 256 + siRand(50 * 256) * 10;
 			  */
+			  RegionNo = DinoInfo[DinoInfoIndex].RType0[0];
 
-			  Characters[ChCount].pos.x = DinoInfo[DinoInfoIndex].XMin * 256
-				  + abs(rRand(DinoInfo[DinoInfoIndex].XMax - DinoInfo[DinoInfoIndex].XMin) * 256);
+			  Characters[ChCount].pos.x = Region[RegionNo].XMin * 256
+				  + abs(rRand(Region[RegionNo].XMax - Region[RegionNo].XMin) * 256);
 
-			  Characters[ChCount].pos.z = DinoInfo[DinoInfoIndex].YMin * 256
-				  + abs(rRand(DinoInfo[DinoInfoIndex].YMax - DinoInfo[DinoInfoIndex].YMin) * 256);
+			  Characters[ChCount].pos.z = Region[RegionNo].YMin * 256
+				  + abs(rRand(Region[RegionNo].YMax - Region[RegionNo].YMin) * 256);
 
 			  Characters[ChCount].pos.y = GetLandH(Characters[ChCount].pos.x,
 				  Characters[ChCount].pos.z);
@@ -8722,6 +8732,7 @@ case AI_FISH:
 			  Characters[ChCount].tgz = Characters[ChCount].pos.z;
 			  Characters[ChCount].tgtime = 0;
 
+			  Characters[ChCount].RType = RegionNo;
 			  ResetCharacter(&Characters[ChCount]);
 			  ChCount++;
 
