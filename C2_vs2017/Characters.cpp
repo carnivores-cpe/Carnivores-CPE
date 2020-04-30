@@ -8609,6 +8609,7 @@ case AI_FISH:
 			if (wy < DinoInfo[DinoInfoIndex].minDepth) goto replaceFish;
 			if (wy > DinoInfo[DinoInfoIndex].maxDepth) goto replaceFish;
 		}
+		else break;
 
 		Characters[ChCount].tgx = Characters[ChCount].pos.x;
 		Characters[ChCount].tgz = Characters[ChCount].pos.z;
