@@ -8439,18 +8439,6 @@ replace1:
 
 	  int DinoInfoIndex = AI_to_CIndex[i9 + AI_FINAL + 1];
 
-	  /*
-	  int spawnNo = 0;
-	  float spawnRt = DinoInfo[DinoInfoIndex].SpawnRate;
-	  while (spawnRt >= 1) {
-		  spawnNo++;
-		  spawnRt--;
-	  }
-	  if (spawnRt > 0) {
-		  if (spawnRt * 1000 > rRand(1000)) spawnNo++;
-	  }
-	  */
-
 	  int spawnNo = DinoInfo[DinoInfoIndex].SpawnMin;
 	  for (int i = 0; i < DinoInfo[DinoInfoIndex].SpawnMax - DinoInfo[DinoInfoIndex].SpawnMin; i++) {
 		  if (DinoInfo[DinoInfoIndex].SpawnRate * 1000 > rRand(1000)) spawnNo++;
@@ -8472,7 +8460,7 @@ replace1:
 			  //PrintLog("-");//TEST202004111501
 			  //Characters[ChCount].pos.x = 512 * 256 + siRand(50 * 256)*10.f;
 			  //Characters[ChCount].pos.z = 512 * 256 + siRand(50 * 256)*10.f;
-			  RegionNo = DinoInfo[DinoInfoIndex].RType0[0];
+			  RegionNo = DinoInfo[DinoInfoIndex].RType0[rRand(DinoInfo[DinoInfoIndex].RegionCount - 1)];
 
 			  Characters[ChCount].pos.x = Region[RegionNo].XMin * 256
 				  + abs(rRand(Region[RegionNo].XMax - Region[RegionNo].XMin) * 256);
@@ -8525,7 +8513,7 @@ replace1:
 
 			  //Characters[ChCount].pos.x = 512 * 256 + siRand(50 * 256)*10.f;
 			  //Characters[ChCount].pos.z = 512 * 256 + siRand(50 * 256)*10.f;
-			  RegionNo = DinoInfo[DinoInfoIndex].RType0[0];
+			  RegionNo = DinoInfo[DinoInfoIndex].RType0[rRand(DinoInfo[DinoInfoIndex].RegionCount - 1)];
 
 			  
 			  Characters[ChCount].pos.x = Region[RegionNo].XMin * 256
@@ -8591,7 +8579,7 @@ case AI_FISH:
 
 		//Characters[ChCount].pos.x = 512 * 256 + siRand(50 * 256)*10.f;
 		//Characters[ChCount].pos.z = 512 * 256 + siRand(50 * 256)*10.f;
-		RegionNo = DinoInfo[DinoInfoIndex].RType0[0];
+		RegionNo = DinoInfo[DinoInfoIndex].RType0[rRand(DinoInfo[DinoInfoIndex].RegionCount - 1)];
 
 		Characters[ChCount].pos.x = Region[RegionNo].XMin * 256
 			+ abs(rRand(Region[RegionNo].XMax - Region[RegionNo].XMin) * 256);
@@ -8710,7 +8698,7 @@ case AI_FISH:
 			  Characters[ChCount].pos.x = 512 * 256 + siRand(50 * 256) * 10;
 			  Characters[ChCount].pos.z = 512 * 256 + siRand(50 * 256) * 10;
 			  */
-			  RegionNo = DinoInfo[DinoInfoIndex].RType0[0];
+			  RegionNo = DinoInfo[DinoInfoIndex].RType0[rRand(DinoInfo[DinoInfoIndex].RegionCount - 1)];
 
 			  Characters[ChCount].pos.x = Region[RegionNo].XMin * 256
 				  + abs(rRand(Region[RegionNo].XMax - Region[RegionNo].XMin) * 256);

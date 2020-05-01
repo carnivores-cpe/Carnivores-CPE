@@ -2063,14 +2063,35 @@ void SkipSector(FILE *stream)
 				if (strstr(line, "{"))
 					while (fgets(line, 255, stream)) {
 						if (strstr(line, "}")) break;
+						if (strstr(line, "{"))
+							while (fgets(line, 255, stream)) {
+								if (strstr(line, "}")) break;
+							}
 					}
 			}
 	}
 }
 
+void WipeRegions() {
+
+	if (DinoInfo[TotalC].RegionCount) {
+
+		for (int i = 0; i < DinoInfo[TotalC].RegionCount; i++) {
+			TotalRegion--;
+			Region[TotalRegion] = {};
+			DinoInfo[TotalC].RType0[i] = 0;
+		}
+		DinoInfo[TotalC].RegionCount = 0;
+
+	}
+
+}
 
 
-void ReadCharacterLine(char *value, char line[256]) {
+bool ReadCharacterLine(FILE *stream, char *_value, char line[256], bool _overwrite) {
+
+	char *value = _value;
+	bool overwrite = _overwrite;
 
 	if (strstr(line, "mass")) DinoInfo[TotalC].Mass = (float)atof(value);
 	if (strstr(line, "length")) DinoInfo[TotalC].Length = (float)atof(value);
@@ -2111,11 +2132,6 @@ void ReadCharacterLine(char *value, char line[256]) {
 	if (strstr(line, "spawnrate")) DinoInfo[TotalC].SpawnRate = (float)atof(value);
 	if (strstr(line, "spawnmax")) DinoInfo[TotalC].SpawnMax = atoi(value);
 	if (strstr(line, "spawnmin")) DinoInfo[TotalC].SpawnMin = atoi(value);
-	if (strstr(line, "xmax")) Region[TotalRegion].XMax = atoi(value);
-	if (strstr(line, "xmin")) Region[TotalRegion].XMin = atoi(value);
-	if (strstr(line, "ymax")) Region[TotalRegion].YMax = atoi(value);
-	if (strstr(line, "ymin")) Region[TotalRegion].YMin = atoi(value);
-	if (strstr(line, "styInRgn")) Region[TotalRegion].stayInRegion = TRUE;
 
 	if (strstr(line, "name"))
 	{
@@ -2133,6 +2149,36 @@ void ReadCharacterLine(char *value, char line[256]) {
 		strcpy(DinoInfo[TotalC].FName, &value[1]);
 	}
 
+
+	if (strstr(line, "region")){
+
+		if (overwrite) {
+			WipeRegions();
+			overwrite = false;
+		}
+
+		while (fgets(line, 255, stream)) {
+			if (strstr(line, "}")) {
+				DinoInfo[TotalC].RType0[DinoInfo[TotalC].RegionCount] = TotalRegion;
+				DinoInfo[TotalC].RegionCount++;
+				TotalRegion++;
+				break;
+			}
+			value = strstr(line, "=");
+			if (!value)
+				DoHalt("Script loading error");
+			value++;
+
+			if (strstr(line, "xmax")) Region[TotalRegion].XMax = atoi(value);
+			if (strstr(line, "xmin")) Region[TotalRegion].XMin = atoi(value);
+			if (strstr(line, "ymax")) Region[TotalRegion].YMax = atoi(value);
+			if (strstr(line, "ymin")) Region[TotalRegion].YMin = atoi(value);
+			if (strstr(line, "styInRgn")) Region[TotalRegion].stayInRegion = TRUE;
+
+		}
+	}
+
+	return overwrite;
 }
 
 
@@ -2162,11 +2208,13 @@ void ReadCharacters(FILE *stream, bool mapamb)
 
 		  if (tempProjectName[18] == 'h' && !DinoInfo[TotalC].trophyCode ||
 			  mapamb && !DinoInfo[TotalC].SpawnMax) {
+				  
+			  WipeRegions();
+
 				  DinoInfo[TotalC] = {};
 				  DinoInfo[TotalC].Scale0 = 800;
 				  DinoInfo[TotalC].ScaleA = 600;
 				  DinoInfo[TotalC].ShDelta = 0;
-				  Region[TotalRegion] = {};
 				  break;
 		  }
 
@@ -2183,9 +2231,7 @@ void ReadCharacters(FILE *stream, bool mapamb)
 		  } else {
 			  DinoInfo[TotalC].Aquatic = FALSE;
 		  }
-		  DinoInfo[TotalC].RType0[0] = TotalRegion;
-          TotalC++;
-		  TotalRegion++;
+		  TotalC++;
           break;
 
         }
@@ -2199,7 +2245,7 @@ void ReadCharacters(FILE *stream, bool mapamb)
 
 			if (strstr(line, "ai")) DinoInfo[TotalC].AI = atoi(value);
 
-			ReadCharacterLine(value, line);
+			ReadCharacterLine(stream, value, line, false);
 
 			if (strstr(line, "overwrite")) {
 
@@ -2261,14 +2307,19 @@ void ReadCharacters(FILE *stream, bool mapamb)
 
 				if (readThis) {
 
+					bool regionOverwrite = true;
+
 					while (fgets(line, 255, stream)) {
 						if (strstr(line, "}")) break;
+
 						value = strstr(line, "=");
-						if (!value)
+						if (!value &&
+							!strstr(line, "overwrite") &&
+							!strstr(line, "region"))
 							DoHalt("Script loading error");
 						value++;
 
-						ReadCharacterLine(value, line);
+						regionOverwrite = ReadCharacterLine(stream, value, line, regionOverwrite);
 
 					}
 
@@ -2307,7 +2358,6 @@ void LoadResourcesScript()
 
   TotalC = 0;
   TotalMA = 0;
-
 
   while (fgets( line, 255, stream))
   {

@@ -444,10 +444,12 @@ mapambients {
  spawnrate = 0.5
  spawnmax  = 4
  spawnmin  = 2
- xmax = 988
- xmin = 12
- ymax = 988
- ymin = 12
+ region {
+  xmax = 988
+  xmin = 12
+  ymax = 988
+  ymin = 12
+ }
 }
 
 {
@@ -478,10 +480,12 @@ mapambients {
  spawnrate = 0.08
  spawnmax  = 3
  spawnmin  = 0
- xmax = 988
- xmin = 12
- ymax = 988
- ymin = 12
+ region {
+  xmax = 988
+  xmin = 12
+  ymax = 988
+  ymin = 12
+ }
 }
 
 {
@@ -512,10 +516,12 @@ mapambients {
  spawnrate = 0.05
  spawnmax  = 2
  spawnmin  = 0
- xmax = 988
- xmin = 12
- ymax = 988
- ymin = 12
+ region {
+  xmax = 988
+  xmin = 12
+  ymax = 988
+  ymin = 12
+ }
 }
 
 {
@@ -538,14 +544,16 @@ mapambients {
  spcdepth = 100
  wlkspd = 0.25
  runspd = 0.55
- overwrite area1{
+ overwrite area1 {
   spawnrate = 0.8
   spawnmax  = 20
   spawnmin  = 8
-  xmax = 988
-  xmin = 12
-  ymax = 988
-  ymin = 12
+  region {
+   xmax = 988
+   xmin = 12
+   ymax = 988
+   ymin = 12
+  }
  }
 }
 
@@ -569,14 +577,16 @@ mapambients {
  spcdepth = 73
  wlkspd = 0.25
  runspd = 0.55
- overwrite area1{
+ overwrite area1 {
   spawnrate = 0.6
   spawnmax  = 8
   spawnmin  = 3
-  xmax = 988
-  xmin = 12
-  ymax = 988
-  ymin = 12
+  region {
+   xmax = 988
+   xmin = 12
+   ymax = 988
+   ymin = 12
+  }
  }
 }
 
@@ -600,15 +610,17 @@ mapambients {
  spcdepth = 73
  wlkspd = 0.25
  runspd = 0.55
- overwrite area1{
+ overwrite area1 {
   spawnrate = 0.4
   spawnmax  = 3
   spawnmin  = 1
-  xmax = 988
-  xmin = 500
-  ymax = 988
-  ymin = 500
-  styInRgn = TRUE
+  region {
+   xmax = 988
+   xmin = 500
+   ymax = 988
+   ymin = 500
+   styInRgn = TRUE
+  }
  }
 }
 
@@ -634,14 +646,16 @@ mapambients {
  gldspd = 1.80
  lndspd = 0.30
  tkfspd = 1.50
- overwrite area2{
+ overwrite area2 {
   spawnrate = 0.8
   spawnmax  = 25
   spawnmin  = 5
-  xmax = 988
-  xmin = 12
-  ymax = 988
-  ymin = 12
+  region {
+   xmax = 988
+   xmin = 12
+   ymax = 988
+   ymin = 12
+  }
  }
 }
 

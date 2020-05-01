@@ -436,6 +436,7 @@ typedef struct _TDinoInfo
   int   Scale0, ScaleA, BaseScore;
   TPicture CallIcon;
   
+  int RegionCount;
   int RType0[32];
 
   BOOL fearCall[32];
