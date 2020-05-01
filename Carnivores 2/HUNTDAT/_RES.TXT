@@ -445,10 +445,6 @@ mapambients {
  spawnrate = 0.5
  spawnmax  = 4
  spawnmin  = 2
-  xmax = 988
-  xmin = 12
-  ymax = 988
-  ymin = 12
  }
 }
 
@@ -481,10 +477,6 @@ mapambients {
  spawnrate = 0.08
  spawnmax  = 3
  spawnmin  = 0
-  xmax = 988
-  xmin = 12
-  ymax = 988
-  ymin = 12
  }
 }
 
@@ -517,10 +509,6 @@ mapambients {
  spawnrate = 0.05
  spawnmax  = 2
  spawnmin  = 0
-  xmax = 988
-  xmin = 12
-  ymax = 988
-  ymin = 12
  }
 }
 

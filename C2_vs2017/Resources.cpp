@@ -2368,6 +2368,19 @@ void LoadResourcesScript()
 
   }
 
+  //default region
+  for (int r = 0; r < TotalRegion; r++) {
+	  if (!Region[r].XMax &&
+		  !Region[r].XMin &&
+		  !Region[r].YMax &&
+		  !Region[r].YMin) {
+		  Region[r].XMax = 988;
+		  Region[r].YMax = 988;
+		  Region[r].XMin = 12;
+		  Region[r].YMin = 12;
+	  }
+  }
+
   fclose (stream);
 }
 //===============================================================================================
