@@ -429,9 +429,9 @@ typedef struct _TTrophyRoom
 typedef struct _TDinoInfo
 {
   char Name[48], FName[48], PName[48];
-  int Health0, AI, Clone, SpawnMax, SpawnMin;
+  int Health0, AI, Clone;
   float Mass, Length, Radius,
-        SmellK, HearK, LookK, SpawnRate,
+        SmellK, HearK, LookK,
         ShDelta;
   int   Scale0, ScaleA, BaseScore;
   TPicture CallIcon;
@@ -453,6 +453,8 @@ typedef struct _TDinoInfo
 
 typedef struct _TRegion
 {
+	int SpawnMax, SpawnMin;
+	float SpawnRate;
 	int XMax, YMax, XMin, YMin;
 	BOOL stayInRegion;
 } TRegion;

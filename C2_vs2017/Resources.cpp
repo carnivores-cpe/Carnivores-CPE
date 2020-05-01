@@ -2129,10 +2129,6 @@ bool ReadCharacterLine(FILE *stream, char *_value, char line[256], bool _overwri
 		TrophyIndex[TotalTrophy] = TotalC;
 	}
 
-	if (strstr(line, "spawnrate")) DinoInfo[TotalC].SpawnRate = (float)atof(value);
-	if (strstr(line, "spawnmax")) DinoInfo[TotalC].SpawnMax = atoi(value);
-	if (strstr(line, "spawnmin")) DinoInfo[TotalC].SpawnMin = atoi(value);
-
 	if (strstr(line, "name"))
 	{
 		value = strstr(line, "'");
@@ -2150,7 +2146,7 @@ bool ReadCharacterLine(FILE *stream, char *_value, char line[256], bool _overwri
 	}
 
 
-	if (strstr(line, "region")){
+	if (strstr(line, "spawninfo")){
 
 		if (overwrite) {
 			WipeRegions();
@@ -2168,6 +2164,10 @@ bool ReadCharacterLine(FILE *stream, char *_value, char line[256], bool _overwri
 			if (!value)
 				DoHalt("Script loading error");
 			value++;
+
+			if (strstr(line, "spawnrate")) Region[TotalRegion].SpawnRate = (float)atof(value);
+			if (strstr(line, "spawnmax")) Region[TotalRegion].SpawnMax = atoi(value);
+			if (strstr(line, "spawnmin")) Region[TotalRegion].SpawnMin = atoi(value);
 
 			if (strstr(line, "xmax")) Region[TotalRegion].XMax = atoi(value);
 			if (strstr(line, "xmin")) Region[TotalRegion].XMin = atoi(value);
@@ -2207,7 +2207,7 @@ void ReadCharacters(FILE *stream, bool mapamb)
         {
 
 		  if (tempProjectName[18] == 'h' && !DinoInfo[TotalC].trophyCode ||
-			  mapamb && !DinoInfo[TotalC].SpawnMax) {
+			  mapamb && !DinoInfo[TotalC].RegionCount) {
 				  
 			  WipeRegions();
 
@@ -2239,7 +2239,7 @@ void ReadCharacters(FILE *stream, bool mapamb)
 			value = strstr(line, "=");
 			if (!value &&
 				!strstr(line, "overwrite")	&&
-				!strstr(line, "region")		)
+				!strstr(line, "spawninfo")		)
 				DoHalt("Script loading error");
 			value++;
 
@@ -2315,7 +2315,7 @@ void ReadCharacters(FILE *stream, bool mapamb)
 						value = strstr(line, "=");
 						if (!value &&
 							!strstr(line, "overwrite") &&
-							!strstr(line, "region"))
+							!strstr(line, "spawninfo"))
 							DoHalt("Script loading error");
 						value++;
 

@@ -441,10 +441,10 @@ mapambients {
  shipdelta = 168
  fearCall = 18
  wlkspd = 0.2
+ spawninfo {
  spawnrate = 0.5
  spawnmax  = 4
  spawnmin  = 2
- region {
   xmax = 988
   xmin = 12
   ymax = 988
@@ -477,10 +477,10 @@ mapambients {
  aggress = 0
  killdist = 250
  trophy  = TRUE
+ spawninfo {
  spawnrate = 0.08
  spawnmax  = 3
  spawnmin  = 0
- region {
   xmax = 988
   xmin = 12
   ymax = 988
@@ -513,10 +513,10 @@ mapambients {
  aggress = 32
  killdist = 370
  trophy  = TRUE
+ spawninfo {
  spawnrate = 0.05
  spawnmax  = 2
  spawnmin  = 0
- region {
   xmax = 988
   xmin = 12
   ymax = 988
@@ -545,10 +545,10 @@ mapambients {
  wlkspd = 0.25
  runspd = 0.55
  overwrite area1 {
+  spawninfo {
   spawnrate = 0.8
   spawnmax  = 20
   spawnmin  = 8
-  region {
    xmax = 988
    xmin = 12
    ymax = 988
@@ -578,17 +578,20 @@ mapambients {
  wlkspd = 0.25
  runspd = 0.55
  overwrite area1 {
+  spawninfo {
   spawnrate = 0.6
   spawnmax  = 8
   spawnmin  = 3
-  region {
 xmin = 322
 ymin = 277
 xmax = 493
 ymax = 411
 styInRgn  = TRUE
   }
-  region {
+  spawninfo {
+  spawnrate = 0.5
+  spawnmax  = 4
+  spawnmin  = 2
 xmin = 285
 ymin = 586
 xmax = 391
@@ -619,10 +622,10 @@ styInRgn  = TRUE
  wlkspd = 0.25
  runspd = 0.55
  overwrite area1 {
+  spawninfo {
   spawnrate = 0.4
   spawnmax  = 7
   spawnmin  = 4
-  region {
    xmax = 757
    xmin = 718
    ymax = 133
@@ -654,10 +657,10 @@ styInRgn  = TRUE
  lndspd = 0.30
  tkfspd = 1.50
  overwrite area2 {
+  spawninfo {
   spawnrate = 0.8
   spawnmax  = 25
   spawnmin  = 5
-  region {
    xmax = 988
    xmin = 12
    ymax = 988
