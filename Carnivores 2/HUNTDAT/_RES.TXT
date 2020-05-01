@@ -446,6 +446,9 @@ mapambients {
  spawnmax  = 4
  spawnmin  = 2
  }
+ overwrite area3 {
+ file = 'brachi8alt.car'
+ } 
 }
 
 {
@@ -537,10 +540,6 @@ mapambients {
   spawnrate = 0.8
   spawnmax  = 20
   spawnmin  = 8
-   xmax = 988
-   xmin = 12
-   ymax = 988
-   ymin = 12
   }
  }
 }
@@ -644,15 +643,16 @@ styInRgn  = TRUE
  gldspd = 1.80
  lndspd = 0.30
  tkfspd = 1.50
- overwrite area2 {
+ spawninfo {
+  spawnrate = 0.5
+  spawnmax  = 5
+  spawnmin  = 0
+ }
+ overwrite area5 {
   spawninfo {
-  spawnrate = 0.8
-  spawnmax  = 25
-  spawnmin  = 5
-   xmax = 988
-   xmin = 12
-   ymax = 988
-   ymin = 12
+   spawnrate = 0.8
+   spawnmax  = 25
+   spawnmin  = 5
   }
  }
 }
