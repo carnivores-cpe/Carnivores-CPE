@@ -511,7 +511,7 @@ mapambients {
  hunterAnim = 0
  hunterOffset = 170
  aggress = 32
- killdist = 300
+ killdist = 370
  trophy  = TRUE
  spawnrate = 0.05
  spawnmax  = 2
@@ -540,7 +540,7 @@ mapambients {
  look      = 0.5
  shipdelta = 0
  maxdepth = 10000
- mindepth = 1200
+ mindepth = 2500
  spcdepth = 100
  wlkspd = 0.25
  runspd = 0.55
@@ -573,7 +573,7 @@ mapambients {
  look      = 0.5
  shipdelta = 0
  maxdepth = 1000
- mindepth = 150
+ mindepth = 450
  spcdepth = 73
  wlkspd = 0.25
  runspd = 0.55
@@ -582,10 +582,18 @@ mapambients {
   spawnmax  = 8
   spawnmin  = 3
   region {
-   xmax = 988
-   xmin = 12
-   ymax = 988
-   ymin = 12
+xmin = 322
+ymin = 277
+xmax = 493
+ymax = 411
+styInRgn  = TRUE
+  }
+  region {
+xmin = 285
+ymin = 586
+xmax = 391
+ymax = 691
+styInRgn  = TRUE
   }
  }
 }
@@ -605,21 +613,20 @@ mapambients {
  hear      = 0.3
  look      = 0.5
  shipdelta = 0
- maxdepth = 1000
- mindepth = 150
- spcdepth = 73
+ maxdepth = 10000
+ mindepth = 200
+ spcdepth = 100
  wlkspd = 0.25
  runspd = 0.55
  overwrite area1 {
   spawnrate = 0.4
-  spawnmax  = 3
-  spawnmin  = 1
+  spawnmax  = 7
+  spawnmin  = 4
   region {
-   xmax = 988
-   xmin = 500
-   ymax = 988
-   ymin = 500
-   styInRgn = TRUE
+   xmax = 757
+   xmin = 718
+   ymax = 133
+   ymin = 94
   }
  }
 }
