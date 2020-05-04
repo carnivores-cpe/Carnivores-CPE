@@ -166,9 +166,6 @@ BOOL NewPhase;
 #define BRA_DIE    4
 #define BRA_SLP    5
 #define BRA_RUN    6
-#define BRA_IDLE4  7
-#define BRA_IDLE5  8
-#define BRA_IDLE6  9
 #define BRA_EAT    10
 
 int CurDino;
@@ -6055,27 +6052,13 @@ NOTHINK:
 				}
 				else
 				{
-					if (cptr->StateF & csONWATER)
-					{
-						cptr->Phase = BRA_IDLE1 + rRand(2);
-					}
-					else
-					{
-						cptr->Phase = BRA_IDLE4 + rRand(2);
-					}
+					cptr->Phase = BRA_IDLE1 + rRand(2);
 				}
 				goto ENDPSELECT;
 			}
 			if (rRand(128) > 64)
 			{
-				if (cptr->StateF & csONWATER)
-				{
-					cptr->Phase = BRA_IDLE1;
-				}
-				else
-				{
-					cptr->Phase = BRA_IDLE4;
-				}
+				cptr->Phase = BRA_IDLE1;
 			}
 			else
 			{
@@ -6129,9 +6112,7 @@ ENDPSELECT:
 
 
 	if (cptr->Phase == BRA_IDLE1 || cptr->Phase == BRA_EAT ||
-		cptr->Phase == BRA_IDLE3 || cptr->Phase == BRA_IDLE2 ||
-		cptr->Phase == BRA_IDLE4 || cptr->Phase == BRA_IDLE5 ||
-		cptr->Phase == BRA_IDLE6) goto SKIPROT;
+		cptr->Phase == BRA_IDLE3 || cptr->Phase == BRA_IDLE2) goto SKIPROT;
 
 	if (drspd > 0.02)
 		if (cptr->tgalpha > cptr->alpha) currspeed = 0.2f + drspd * 0.2f;
