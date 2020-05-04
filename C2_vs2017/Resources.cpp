@@ -2248,8 +2248,9 @@ void ReadCharacters(FILE *stream, bool mapamb)
 
 			value = strstr(line, "=");
 			if (!value &&
-				!strstr(line, "overwrite")	&&
-				!strstr(line, "spawninfo")		)
+				!strstr(line, "overwrite") &&
+				!strstr(line, "addition") &&
+				!strstr(line, "spawninfo"))
 				DoHalt("Script loading error");
 			value++;
 
@@ -2257,7 +2258,7 @@ void ReadCharacters(FILE *stream, bool mapamb)
 
 			ReadCharacterLine(stream, value, line, false);
 
-			if (strstr(line, "overwrite")) {
+			if (strstr(line, "overwrite") || strstr(line, "addition")) {
 
 				bool readThis = true;
 				char mapNo1 = tempProjectName[18];
@@ -2324,15 +2325,13 @@ void ReadCharacters(FILE *stream, bool mapamb)
 
 				if (readThis) {
 
-					bool regionOverwrite = true;
+					bool regionOverwrite = strstr(line, "overwrite");
 
 					while (fgets(line, 255, stream)) {
 						if (strstr(line, "}")) break;
 
 						value = strstr(line, "=");
-						if (!value &&
-							!strstr(line, "overwrite") &&
-							!strstr(line, "spawninfo"))
+						if (!value && !strstr(line, "spawninfo"))
 							DoHalt("Script loading error");
 						value++;
 
