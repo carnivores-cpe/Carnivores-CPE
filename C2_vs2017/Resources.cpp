@@ -2184,6 +2184,7 @@ bool ReadCharacterLine(FILE *stream, char *_value, char line[256], bool _overwri
 
 void ReadCharacters(FILE *stream, bool mapamb)
 {
+	//area
 	char tempProjectName[128];
 	for (int a = 0; a < __argc; a++)
 	{
@@ -2194,6 +2195,15 @@ void ReadCharacters(FILE *stream, bool mapamb)
 			break;
 		}
 	}
+
+	//time
+	int timeOfDay;
+	for (int a = 0; a < __argc; a++)
+	{
+		LPSTR s = __argv[a];
+		if (strstr(s, "dtm=")) timeOfDay = atoi(&s[4]);
+	}
+
 
   char line[256], *value;
   while (fgets( line, 255, stream))
@@ -2249,61 +2259,68 @@ void ReadCharacters(FILE *stream, bool mapamb)
 
 			if (strstr(line, "overwrite")) {
 
-				bool readThis = false;
+				bool readThis = true;
+				char mapNo1 = tempProjectName[18];
+				while (readThis == true) {
+					
+					//trophy
+					if (tempProjectName[18] == 'h') break;
 
-				//trophy
-				if (tempProjectName[18] == 'h') {
-					readThis = true;
-					goto startReading;
+					if (strstr(line, "area")) {
+
+						switch ((char)tempProjectName[18]) {
+						case '1':
+							if (tempProjectName[19]) {
+								if (!strstr(line, "area0")) readThis = false;//area10
+							}
+							else if (!strstr(line, "area1")) readThis = false;
+							break;
+						case '2':
+							if (!strstr(line, "area2")) readThis = false;
+							break;
+						case '3':
+							if (!strstr(line, "area3")) readThis = false;
+							break;
+						case '4':
+							if (!strstr(line, "area4")) readThis = false;
+							break;
+						case '5':
+							if (!strstr(line, "area5")) readThis = false;
+							break;
+						case '6':
+							if (!strstr(line, "area6")) readThis = false;
+							break;
+						case '7':
+							if (!strstr(line, "area7")) readThis = false;
+							break;
+						case '8':
+							if (!strstr(line, "area8")) readThis = false;
+							break;
+						case '9':
+							if (!strstr(line, "area9")) readThis = false;
+							break;
+						}
+					}
+
+					if (strstr(line, "time")) {
+						switch (timeOfDay) {
+						case 0:
+							if (!strstr(line, "time0")) readThis = false;
+							break;
+						case 1:
+							if (!strstr(line, "time1")) readThis = false;
+							break;
+						case 2:
+							if (!strstr(line, "time2")) readThis = false;
+							break;
+						}
+					}
+
+					break;
 				}
 
-				//area-specific
-				if ( strstr(line, "area") ) { // and not "time"
 
-					if (strstr(line, "area1") && tempProjectName[18] == '1' && !tempProjectName[19]) {
-						readThis = true;
-						goto startReading;
-					}
-					if (strstr(line, "area2") && tempProjectName[18] == '2') {
-						readThis = true;
-						goto startReading;
-					}
-					if (strstr(line, "area3") && tempProjectName[18] == '3') {
-						readThis = true;
-						goto startReading;
-					}
-					if (strstr(line, "area4") && tempProjectName[18] == '4') {
-						readThis = true;
-						goto startReading;
-					}
-					if (strstr(line, "area5") && tempProjectName[18] == '5') {
-						readThis = true;
-						goto startReading;
-					}
-					if (strstr(line, "area6") && tempProjectName[18] == '6') {
-						readThis = true;
-						goto startReading;
-					}
-					if (strstr(line, "area7") && tempProjectName[18] == '7') {
-						readThis = true;
-						goto startReading;
-					}
-					if (strstr(line, "area8") && tempProjectName[18] == '8') {
-						readThis = true;
-						goto startReading;
-					}
-					if (strstr(line, "area9") && tempProjectName[18] == '9') {
-						readThis = true;
-						goto startReading;
-					}
-					if (strstr(line, "area0") && tempProjectName[18] == '1' && tempProjectName[19]) {
-						readThis = true;
-						goto startReading;
-					}
 
-				}
-
-			startReading:
 
 				if (readThis) {
 
