@@ -2087,11 +2087,87 @@ void WipeRegions() {
 
 }
 
+void WipeAvoidances() {
 
-bool ReadCharacterLine(FILE *stream, char *_value, char line[256], bool _overwrite) {
+	if (DinoInfo[TotalC].AvoidCount) {
+
+		for (int i = 0; i < DinoInfo[TotalC].AvoidCount; i++) {
+			TotalAvoid--;
+			Avoid[TotalAvoid] = {};
+			DinoInfo[TotalC].Avoidances[i] = 0;
+		}
+		DinoInfo[TotalC].AvoidCount = 0;
+
+	}
+
+}
+
+void ReadSpawnInfo(FILE *stream)
+{
+	char *value;
+	char line[256];
+
+	while (fgets(line, 255, stream)) {
+		if (strstr(line, "}")) {
+			DinoInfo[TotalC].RType0[DinoInfo[TotalC].RegionCount] = TotalRegion;
+			DinoInfo[TotalC].RegionCount++;
+			TotalRegion++;
+			break;
+		}
+		value = strstr(line, "=");
+		if (!value)
+			DoHalt("Script loading error");
+		value++;
+
+		if (strstr(line, "spawnrate")) Region[TotalRegion].SpawnRate = (float)atof(value);
+		if (strstr(line, "spawnmax")) Region[TotalRegion].SpawnMax = atoi(value);
+		if (strstr(line, "spawnmin")) Region[TotalRegion].SpawnMin = atoi(value);
+
+		if (strstr(line, "xmax")) Region[TotalRegion].XMax = atoi(value);
+		if (strstr(line, "xmin")) Region[TotalRegion].XMin = atoi(value);
+		if (strstr(line, "ymax")) Region[TotalRegion].YMax = atoi(value);
+		if (strstr(line, "ymin")) Region[TotalRegion].YMin = atoi(value);
+		if (strstr(line, "styInRgn")) Region[TotalRegion].stayInRegion = TRUE;
+
+	}
+}
+
+void ReadAvoidInfo(FILE *stream)
+{
+	char *value;
+	char line[256];
+
+	while (fgets(line, 255, stream)) {
+		if (strstr(line, "}")) {
+			if (Avoid[TotalAvoid].XMax ||
+				Avoid[TotalAvoid].YMax ||
+				Avoid[TotalAvoid].XMin ||
+				Avoid[TotalAvoid].YMin) {
+				DinoInfo[TotalC].Avoidances[DinoInfo[TotalC].AvoidCount] = TotalAvoid;
+				DinoInfo[TotalC].AvoidCount++;
+				TotalAvoid++;
+			}
+			break;
+		}
+		value = strstr(line, "=");
+		if (!value)
+			DoHalt("Script loading error");
+		value++;
+
+		if (strstr(line, "xmax")) Avoid[TotalAvoid].XMax = atoi(value);
+		if (strstr(line, "xmin")) Avoid[TotalAvoid].XMin = atoi(value);
+		if (strstr(line, "ymax")) Avoid[TotalAvoid].YMax = atoi(value);
+		if (strstr(line, "ymin")) Avoid[TotalAvoid].YMin = atoi(value);
+
+	}
+
+}
+
+
+void ReadCharacterLine(FILE *stream, char *_value, char line[256], bool &regionOverwrite, bool &avoidOverwrite) {
 
 	char *value = _value;
-	bool overwrite = _overwrite;
+//	bool overwrite = _overwrite;
 
 	if (strstr(line, "mass")) DinoInfo[TotalC].Mass = (float)atof(value);
 	if (strstr(line, "length")) DinoInfo[TotalC].Length = (float)atof(value);
@@ -2145,40 +2221,28 @@ bool ReadCharacterLine(FILE *stream, char *_value, char line[256], bool _overwri
 		strcpy(DinoInfo[TotalC].FName, &value[1]);
 	}
 
-
 	if (strstr(line, "spawninfo")){
 
-		if (overwrite) {
+		if (regionOverwrite) {
 			WipeRegions();
-			overwrite = false;
+			regionOverwrite = false;
 		}
 
-		while (fgets(line, 255, stream)) {
-			if (strstr(line, "}")) {
-				DinoInfo[TotalC].RType0[DinoInfo[TotalC].RegionCount] = TotalRegion;
-				DinoInfo[TotalC].RegionCount++;
-				TotalRegion++;
-				break;
-			}
-			value = strstr(line, "=");
-			if (!value)
-				DoHalt("Script loading error");
-			value++;
-
-			if (strstr(line, "spawnrate")) Region[TotalRegion].SpawnRate = (float)atof(value);
-			if (strstr(line, "spawnmax")) Region[TotalRegion].SpawnMax = atoi(value);
-			if (strstr(line, "spawnmin")) Region[TotalRegion].SpawnMin = atoi(value);
-
-			if (strstr(line, "xmax")) Region[TotalRegion].XMax = atoi(value);
-			if (strstr(line, "xmin")) Region[TotalRegion].XMin = atoi(value);
-			if (strstr(line, "ymax")) Region[TotalRegion].YMax = atoi(value);
-			if (strstr(line, "ymin")) Region[TotalRegion].YMin = atoi(value);
-			if (strstr(line, "styInRgn")) Region[TotalRegion].stayInRegion = TRUE;
-
-		}
+		ReadSpawnInfo(stream);
 	}
 
-	return overwrite;
+	if (strstr(line, "avoid")) {
+
+		if (avoidOverwrite) {
+			WipeAvoidances();
+			avoidOverwrite = false;
+		}
+		ReadAvoidInfo(stream);
+		
+	}
+
+
+
 }
 
 
@@ -2220,6 +2284,7 @@ void ReadCharacters(FILE *stream, bool mapamb)
 			  mapamb && !DinoInfo[TotalC].RegionCount) {
 				  
 			  WipeRegions();
+			  WipeAvoidances();
 
 				  DinoInfo[TotalC] = {};
 				  DinoInfo[TotalC].Scale0 = 800;
@@ -2250,13 +2315,15 @@ void ReadCharacters(FILE *stream, bool mapamb)
 			if (!value &&
 				!strstr(line, "overwrite") &&
 				!strstr(line, "addition") &&
-				!strstr(line, "spawninfo"))
+				!strstr(line, "spawninfo") &&
+				!strstr(line, "avoid"))
 				DoHalt("Script loading error");
 			value++;
 
 			if (strstr(line, "ai")) DinoInfo[TotalC].AI = atoi(value);
 
-			ReadCharacterLine(stream, value, line, false);
+			bool temp, temp2;
+			ReadCharacterLine(stream, value, line, temp, temp2);
 
 			if (strstr(line, "overwrite") || strstr(line, "addition")) {
 
@@ -2326,16 +2393,17 @@ void ReadCharacters(FILE *stream, bool mapamb)
 				if (readThis) {
 
 					bool regionOverwrite = strstr(line, "overwrite");
+					bool avoidOverwrite = strstr(line, "overwrite");
 
 					while (fgets(line, 255, stream)) {
 						if (strstr(line, "}")) break;
 
 						value = strstr(line, "=");
-						if (!value && !strstr(line, "spawninfo"))
+						if (!value && !strstr(line, "spawninfo") && !strstr(line, "avoid"))
 							DoHalt("Script loading error");
 						value++;
 
-						regionOverwrite = ReadCharacterLine(stream, value, line, regionOverwrite);
+						ReadCharacterLine(stream, value, line, regionOverwrite, avoidOverwrite);
 
 					}
 

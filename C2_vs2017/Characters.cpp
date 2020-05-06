@@ -453,7 +453,7 @@ int AquaticCheckPlaceCollisionP(Vector3d &v)
 
 
 
-int CheckPlaceCollisionFish(Vector3d &v, float mosaDepth, int maxDepth, int minDepth)
+int CheckPlaceCollisionFish(TCharacter *cptr, Vector3d &v, float mosaDepth, int maxDepth, int minDepth)
 {
 
 	int ccx = (int)v.x / 256;
@@ -467,6 +467,16 @@ int CheckPlaceCollisionFish(Vector3d &v, float mosaDepth, int maxDepth, int minD
 			FMap[ccz + 1][ccx] | FMap[ccz][ccx + 1] | FMap[ccz + 1][ccx + 1]) & fmWater)
 			return 1;
 	 */
+
+	if (DinoInfo[cptr->CType].AvoidCount)
+	{
+		for (int i = 0; i < DinoInfo[cptr->CType].AvoidCount; i++) {
+			if (ccx < (Avoid[DinoInfo[cptr->CType].Avoidances[i]].XMax) &&
+				ccz < (Avoid[DinoInfo[cptr->CType].Avoidances[i]].YMax) &&
+				ccx >(Avoid[DinoInfo[cptr->CType].Avoidances[i]].XMin) &&
+				ccz >(Avoid[DinoInfo[cptr->CType].Avoidances[i]].YMin)) return 1;
+		}
+	}
 
 	 // #C1 KEEP THIS
 	if ((GetLandUpH(v.x, v.z) - GetLandH(v.x, v.z)) < minDepth ||
@@ -530,7 +540,7 @@ int CheckPlaceCollisionFish(Vector3d &v, float mosaDepth, int maxDepth, int minD
 
 
 
-int CheckPlaceCollisionMosasaurus(Vector3d &v, float mosaDepth)
+int CheckPlaceCollisionMosasaurus(TCharacter *cptr, Vector3d &v, float mosaDepth)
 {
 
 	int ccx = (int)v.x / 256;
@@ -544,6 +554,16 @@ int CheckPlaceCollisionMosasaurus(Vector3d &v, float mosaDepth)
 			FMap[ccz + 1][ccx] | FMap[ccz][ccx + 1] | FMap[ccz + 1][ccx + 1]) & fmWater)
 			return 1;
 	 */
+
+	if (DinoInfo[cptr->CType].AvoidCount)
+	{
+		for (int i = 0; i < DinoInfo[cptr->CType].AvoidCount; i++) {
+			if (ccx < (Avoid[DinoInfo[cptr->CType].Avoidances[i]].XMax) &&
+				ccz < (Avoid[DinoInfo[cptr->CType].Avoidances[i]].YMax) &&
+				ccx >(Avoid[DinoInfo[cptr->CType].Avoidances[i]].XMin) &&
+				ccz >(Avoid[DinoInfo[cptr->CType].Avoidances[i]].YMin)) return 1;
+		}
+	}
 
 	 // #C1 KEEP THIS
 	if ((GetLandUpH(v.x, v.z) - GetLandH(v.x, v.z)) < 1500 ||
@@ -598,7 +618,7 @@ int CheckPlaceCollisionMosasaurus(Vector3d &v, float mosaDepth)
 
 
 
-int CheckPlaceCollision(Vector3d &v, BOOL wc, BOOL mc)
+int CheckPlaceCollision(TCharacter *cptr, Vector3d &v, BOOL wc, BOOL mc)
 {
   int ccx = (int)v.x / 256;
   int ccz = (int)v.z / 256;
@@ -615,6 +635,16 @@ int CheckPlaceCollision(Vector3d &v, BOOL wc, BOOL mc)
   float h = GetLandH(v.x, v.z);
   if (! (FMap[ccz][ccx] & fmWater) )
     if (fabs(h - v.y) > 64) return 1;
+
+  if (DinoInfo[cptr->CType].AvoidCount)
+  {
+	  for (int i = 0; i < DinoInfo[cptr->CType].AvoidCount; i++) {
+		  if (ccx < (Avoid[DinoInfo[cptr->CType].Avoidances[i]].XMax) &&
+			  ccz < (Avoid[DinoInfo[cptr->CType].Avoidances[i]].YMax) &&
+			  ccx >(Avoid[DinoInfo[cptr->CType].Avoidances[i]].XMin) &&
+			  ccz >(Avoid[DinoInfo[cptr->CType].Avoidances[i]].YMin)) return 1;
+	  }
+  }
 
   v.y = h;
 
@@ -646,7 +676,7 @@ int CheckPlaceCollision(Vector3d &v, BOOL wc, BOOL mc)
   return 0;
 }
 
-int CheckPlaceCollisionBrahi(Vector3d &v, BOOL wc, BOOL mc)
+int CheckPlaceCollisionBrahi(TCharacter *cptr, Vector3d &v, BOOL wc, BOOL mc)
 {
 	int ccx = (int)v.x / 256;
 	int ccz = (int)v.z / 256;
@@ -660,6 +690,15 @@ int CheckPlaceCollisionBrahi(Vector3d &v, BOOL wc, BOOL mc)
 			return 1;
 	 */
 
+	if (DinoInfo[cptr->CType].AvoidCount)
+	{
+		for (int i = 0; i < DinoInfo[cptr->CType].AvoidCount; i++) {
+			if (ccx < (Avoid[DinoInfo[cptr->CType].Avoidances[i]].XMax) &&
+				ccz < (Avoid[DinoInfo[cptr->CType].Avoidances[i]].YMax) &&
+				ccx >(Avoid[DinoInfo[cptr->CType].Avoidances[i]].XMin) &&
+				ccz >(Avoid[DinoInfo[cptr->CType].Avoidances[i]].YMin)) return 1;
+		}
+	}
 
 
 	if (wc) {
@@ -712,7 +751,7 @@ int CheckPlaceCollisionBrahi(Vector3d &v, BOOL wc, BOOL mc)
 
 
 
-int CheckPlaceCollision2(Vector3d &v, BOOL wc)
+int CheckPlaceCollision2(TCharacter *cptr, Vector3d &v, BOOL wc)
 {
   int ccx = (int)v.x / 256;
   int ccz = (int)v.z / 256;
@@ -724,6 +763,16 @@ int CheckPlaceCollision2(Vector3d &v, BOOL wc)
           FMap[ccz][ccx] |
           FMap[ccz+1][ccx] | FMap[ccz][ccx+1] | FMap[ccz+1][ccx+1]) & fmWater)
       return 1;
+
+  if (DinoInfo[cptr->CType].AvoidCount)
+  {
+	  for (int i = 0; i < DinoInfo[cptr->CType].AvoidCount; i++) {
+		  if (ccx < (Avoid[DinoInfo[cptr->CType].Avoidances[i]].XMax) &&
+			  ccz < (Avoid[DinoInfo[cptr->CType].Avoidances[i]].YMax) &&
+			  ccx >(Avoid[DinoInfo[cptr->CType].Avoidances[i]].XMin) &&
+			  ccz >(Avoid[DinoInfo[cptr->CType].Avoidances[i]].YMin)) return 1;
+	  }
+  }
 
   float h = GetLandH(v.x, v.z);
   /*if (! (FMap[ccz][ccx] & fmWater) )
@@ -755,18 +804,18 @@ int CheckPossiblePath(TCharacter *cptr, BOOL wc, BOOL mc)
 	  if (cptr->Clone == AI_BRACH) {
 		  p.x += lookx * 256.f;
 		  p.z += lookz * 256.f;
-		  if (CheckPlaceCollisionBrahi(p, wc, mc)) c++;
+		  if (CheckPlaceCollisionBrahi(cptr, p, wc, mc)) c++;
 	  }
 	  else if ((cptr->Clone == AI_MOSA)) {
 		  p.x += lookx * 64.f;
 		  p.z += lookz * 64.f;
-		  if (CheckPlaceCollisionMosasaurus(p, cptr->depth)) c++;
+		  if (CheckPlaceCollisionMosasaurus(cptr, p, cptr->depth)) c++;
 
 	  }
 	  else if ((cptr->Clone == AI_FISH)) {
 		  p.x += lookx * 64.f;
 		  p.z += lookz * 64.f;
-		  if (CheckPlaceCollisionFish(p, cptr->depth,
+		  if (CheckPlaceCollisionFish(cptr, p, cptr->depth,
 			  DinoInfo[cptr->CType].maxDepth,
 			  DinoInfo[cptr->CType].minDepth)) c++;
 
@@ -774,7 +823,7 @@ int CheckPossiblePath(TCharacter *cptr, BOOL wc, BOOL mc)
 	  else {
 		  p.x += lookx * 64.f;
 		  p.z += lookz * 64.f;
-		  if (CheckPlaceCollision(p, wc, mc)) c++;
+		  if (CheckPlaceCollision(cptr, p, wc, mc)) c++;
 	  }
   }
   return c;
@@ -888,7 +937,7 @@ void MoveCharacterFish(TCharacter *cptr, float dx, float dz)
 	//return;
 	Vector3d p = cptr->pos;
 
-	if (CheckPlaceCollisionFish(p, cptr->depth,
+	if (CheckPlaceCollisionFish(cptr, p, cptr->depth,
 		DinoInfo[cptr->CType].maxDepth,
 		DinoInfo[cptr->CType].minDepth))
 	{
@@ -900,7 +949,7 @@ void MoveCharacterFish(TCharacter *cptr, float dx, float dz)
 	p.x += dx;
 	p.z += dz;
 
-	if (!CheckPlaceCollisionFish(p, cptr->depth,
+	if (!CheckPlaceCollisionFish(cptr, p, cptr->depth,
 		DinoInfo[cptr->CType].maxDepth,
 		DinoInfo[cptr->CType].minDepth))
 	{
@@ -911,7 +960,7 @@ void MoveCharacterFish(TCharacter *cptr, float dx, float dz)
 	p = cptr->pos;
 	p.x += dx / 2;
 	p.z += dz / 2;
-	if (!CheckPlaceCollisionFish(p, cptr->depth,
+	if (!CheckPlaceCollisionFish(cptr, p, cptr->depth,
 		DinoInfo[cptr->CType].maxDepth,
 		DinoInfo[cptr->CType].minDepth)) cptr->pos = p;
 	p = cptr->pos;
@@ -930,7 +979,7 @@ void MoveCharacterMosasaurus(TCharacter *cptr, float dx, float dz)
 	//return;
 	Vector3d p = cptr->pos;
 
-	if (CheckPlaceCollisionMosasaurus(p, cptr->depth))
+	if (CheckPlaceCollisionMosasaurus(cptr, p, cptr->depth))
 	{
 		cptr->pos.x += dx / 2;
 		cptr->pos.z += dz / 2;
@@ -940,7 +989,7 @@ void MoveCharacterMosasaurus(TCharacter *cptr, float dx, float dz)
 	p.x += dx;
 	p.z += dz;
 
-	if (!CheckPlaceCollisionMosasaurus(p, cptr->depth))
+	if (!CheckPlaceCollisionMosasaurus(cptr, p, cptr->depth))
 	{
 		cptr->pos = p;
 		return;
@@ -949,7 +998,7 @@ void MoveCharacterMosasaurus(TCharacter *cptr, float dx, float dz)
 	p = cptr->pos;
 	p.x += dx / 2;
 	p.z += dz / 2;
-	if (!CheckPlaceCollisionMosasaurus(p, cptr->depth)) cptr->pos = p;
+	if (!CheckPlaceCollisionMosasaurus(cptr, p, cptr->depth)) cptr->pos = p;
 	p = cptr->pos;
 
 	p.x += dx / 4;
@@ -966,7 +1015,7 @@ void MoveCharacter(TCharacter *cptr, float dx, float dz, BOOL wc, BOOL mc)
   //return;
   Vector3d p = cptr->pos;
 
-  if (CheckPlaceCollision2(p, wc))
+  if (CheckPlaceCollision2(cptr, p, wc))
   {
     cptr->pos.x+=dx / 2;
     cptr->pos.z+=dz / 2;
@@ -976,7 +1025,7 @@ void MoveCharacter(TCharacter *cptr, float dx, float dz, BOOL wc, BOOL mc)
   p.x+=dx;
   p.z+=dz;
 
-  if (!CheckPlaceCollision2(p, wc))
+  if (!CheckPlaceCollision2(cptr, p, wc))
   {
     cptr->pos = p;
     return;
@@ -985,7 +1034,7 @@ void MoveCharacter(TCharacter *cptr, float dx, float dz, BOOL wc, BOOL mc)
   p = cptr->pos;
   p.x+=dx/2;
   p.z+=dz/2;
-  if (!CheckPlaceCollision2(p, wc)) cptr->pos = p;
+  if (!CheckPlaceCollision2(cptr, p, wc)) cptr->pos = p;
   p = cptr->pos;
 
   p.x+=dx/4;
@@ -1039,6 +1088,16 @@ replace:
 	tr++;
 	if (tr < 16)
 		if (fabs(p.x - cptr->pos.x) + fabs(p.z - cptr->pos.z) < R / 2.f) goto replace;
+
+	if (DinoInfo[cptr->CType].AvoidCount && tr < 128)
+	{
+		for (int i = 0; i < DinoInfo[cptr->CType].AvoidCount; i++) {
+			if (Characters[ChCount].pos.x < (Avoid[DinoInfo[cptr->CType].Avoidances[i]].XMax + 1) * 256 &&
+				Characters[ChCount].pos.z < (Avoid[DinoInfo[cptr->CType].Avoidances[i]].YMax + 1) * 256 &&
+				Characters[ChCount].pos.x >(Avoid[DinoInfo[cptr->CType].Avoidances[i]].XMin - 1) * 256 &&
+				Characters[ChCount].pos.z >(Avoid[DinoInfo[cptr->CType].Avoidances[i]].YMin - 1) * 256) goto replace;
+		}
+	}
 
 	if (stayRegion && outsideRegion && tr > 64) {
 		if (fabs(p.x - cptr->pos.x) + fabs(p.z - cptr->pos.z) > R * 25.f) {
@@ -1179,8 +1238,20 @@ replace:
 	if (p.z > 1018 * 256) p.z = 1018 * 256;
 	p.y = GetLandH(p.x, p.z);
 	tr++;
-	if (tr < 128)
+	if (tr < 128) {
 		if (fabs(p.x - cptr->pos.x) + fabs(p.z - cptr->pos.z) < R / 2.f) goto replace;
+
+		if (DinoInfo[cptr->CType].AvoidCount)
+		{
+			for (int i = 0; i < DinoInfo[cptr->CType].AvoidCount; i++) {
+				if (Characters[ChCount].pos.x < (Avoid[DinoInfo[cptr->CType].Avoidances[i]].XMax + 1) * 256 &&
+					Characters[ChCount].pos.z < (Avoid[DinoInfo[cptr->CType].Avoidances[i]].YMax + 1) * 256 &&
+					Characters[ChCount].pos.x >(Avoid[DinoInfo[cptr->CType].Avoidances[i]].XMin - 1) * 256 &&
+					Characters[ChCount].pos.z >(Avoid[DinoInfo[cptr->CType].Avoidances[i]].YMin - 1) * 256) goto replace;
+			}
+		}
+
+	}
 
 	if (stayRegion && outsideRegion && tr > 64) {
 		if (fabs(p.x - cptr->pos.x) + fabs(p.z - cptr->pos.z) > 2048 * 25.f) {
@@ -1225,6 +1296,15 @@ replace:
   {
     if (wy > 400) goto replace;
     if (wy < 200) goto replace;
+	if (DinoInfo[cptr->CType].AvoidCount)
+	{
+		for (int i = 0; i < DinoInfo[cptr->CType].AvoidCount; i++) {
+			if (Characters[ChCount].pos.x < (Avoid[DinoInfo[cptr->CType].Avoidances[i]].XMax + 1) * 256 &&
+				Characters[ChCount].pos.z < (Avoid[DinoInfo[cptr->CType].Avoidances[i]].YMax + 1) * 256 &&
+				Characters[ChCount].pos.x >(Avoid[DinoInfo[cptr->CType].Avoidances[i]].XMin - 1) * 256 &&
+				Characters[ChCount].pos.z >(Avoid[DinoInfo[cptr->CType].Avoidances[i]].YMin - 1) * 256) goto replace;
+		}
+	}
   }
 
   cptr->tgtime = 0;
@@ -1267,8 +1347,20 @@ replace:
 	if (p.z > 1018 * 256) p.z = 1018 * 256;
 
 	tr++;
-	if (tr < 128)
+	if (tr < 128) {
 		if (fabs(p.x - cptr->pos.x) + fabs(p.z - cptr->pos.z) < R / 2.f) goto replace;
+
+		if (DinoInfo[cptr->CType].AvoidCount)
+		{
+			for (int i = 0; i < DinoInfo[cptr->CType].AvoidCount; i++) {
+				if (Characters[ChCount].pos.x < (Avoid[DinoInfo[cptr->CType].Avoidances[i]].XMax + 1) * 256 &&
+					Characters[ChCount].pos.z < (Avoid[DinoInfo[cptr->CType].Avoidances[i]].YMax + 1) * 256 &&
+					Characters[ChCount].pos.x >(Avoid[DinoInfo[cptr->CType].Avoidances[i]].XMin - 1) * 256 &&
+					Characters[ChCount].pos.z >(Avoid[DinoInfo[cptr->CType].Avoidances[i]].YMin - 1) * 256) goto replace;
+			}
+		}
+
+	}
 
 	if (stayRegion && outsideRegion && tr > 64){
 		if (fabs(p.x - cptr->pos.x) + fabs(p.z - cptr->pos.z) > R * 25.f) {
@@ -1376,6 +1468,19 @@ replace:
 	if (tr < 8024)
 	{
 		if (wy < 1500) goto replace;
+	}
+
+	if (tr < 128)
+	{
+		if (DinoInfo[cptr->CType].AvoidCount)
+		{
+			for (int i = 0; i < DinoInfo[cptr->CType].AvoidCount; i++) {
+				if (Characters[ChCount].pos.x < (Avoid[DinoInfo[cptr->CType].Avoidances[i]].XMax + 1) * 256 &&
+					Characters[ChCount].pos.z < (Avoid[DinoInfo[cptr->CType].Avoidances[i]].YMax + 1) * 256 &&
+					Characters[ChCount].pos.x >(Avoid[DinoInfo[cptr->CType].Avoidances[i]].XMin - 1) * 256 &&
+					Characters[ChCount].pos.z >(Avoid[DinoInfo[cptr->CType].Avoidances[i]].YMin - 1) * 256) goto replace;
+			}
+		}
 	}
 
 	float targetDepthTemp;
@@ -8463,6 +8568,16 @@ replace1:
 				  if (wy > 380) goto replace3;
 				  if (wy < 220) goto replace3;
 
+				  if (DinoInfo[DinoInfoIndex].AvoidCount)
+				  {
+					  for (int i = 0; i < DinoInfo[DinoInfoIndex].AvoidCount; i++) {
+						  if (Characters[ChCount].pos.x < (Avoid[DinoInfo[DinoInfoIndex].Avoidances[i]].XMax + 1) * 256 &&
+							  Characters[ChCount].pos.z < (Avoid[DinoInfo[DinoInfoIndex].Avoidances[i]].YMax + 1) * 256 &&
+							  Characters[ChCount].pos.x >(Avoid[DinoInfo[DinoInfoIndex].Avoidances[i]].XMin - 1) * 256 &&
+							  Characters[ChCount].pos.z >(Avoid[DinoInfo[DinoInfoIndex].Avoidances[i]].YMin - 1) * 256) goto replace3;
+					  }
+				  }
+
 				  Characters[ChCount].tgx = Characters[ChCount].pos.x;
 				  Characters[ChCount].tgz = Characters[ChCount].pos.z;
 				  Characters[ChCount].tgtime = 0;
@@ -8516,6 +8631,16 @@ replace1:
 
 				  if (wy > 380) goto replaceIcth;
 				  if (wy < 220) goto replaceIcth;
+
+				  if (DinoInfo[DinoInfoIndex].AvoidCount)
+				  {
+					  for (int i = 0; i < DinoInfo[DinoInfoIndex].AvoidCount; i++) {
+						  if (Characters[ChCount].pos.x < (Avoid[DinoInfo[DinoInfoIndex].Avoidances[i]].XMax + 1) * 256 &&
+							  Characters[ChCount].pos.z < (Avoid[DinoInfo[DinoInfoIndex].Avoidances[i]].YMax + 1) * 256 &&
+							  Characters[ChCount].pos.x >(Avoid[DinoInfo[DinoInfoIndex].Avoidances[i]].XMin - 1) * 256 &&
+							  Characters[ChCount].pos.z >(Avoid[DinoInfo[DinoInfoIndex].Avoidances[i]].YMin - 1) * 256) goto replaceIcth;
+					  }
+				  }
 
 				  Characters[ChCount].tgx = Characters[ChCount].pos.x;
 				  Characters[ChCount].tgz = Characters[ChCount].pos.z;
@@ -8582,6 +8707,16 @@ replace1:
 					  if (wy > DinoInfo[DinoInfoIndex].maxDepth) goto replaceFish;
 				  }
 				  else break;
+
+				  if (DinoInfo[DinoInfoIndex].AvoidCount)
+				  {
+					  for (int i = 0; i < DinoInfo[DinoInfoIndex].AvoidCount; i++) {
+						  if (Characters[ChCount].pos.x < (Avoid[DinoInfo[DinoInfoIndex].Avoidances[i]].XMax + 1) * 256 &&
+							  Characters[ChCount].pos.z < (Avoid[DinoInfo[DinoInfoIndex].Avoidances[i]].YMax + 1) * 256 &&
+							  Characters[ChCount].pos.x >(Avoid[DinoInfo[DinoInfoIndex].Avoidances[i]].XMin - 1) * 256 &&
+							  Characters[ChCount].pos.z >(Avoid[DinoInfo[DinoInfoIndex].Avoidances[i]].YMin - 1) * 256) goto replaceFish;
+					  }
+				  }
 
 				  Characters[ChCount].tgx = Characters[ChCount].pos.x;
 				  Characters[ChCount].tgz = Characters[ChCount].pos.z;
@@ -8694,6 +8829,16 @@ replace1:
 					  Characters[ChCount].pos.z);
 				  tr++;
 				  if (tr > 10240) break;
+
+				  if (DinoInfo[DinoInfoIndex].AvoidCount)
+				  {
+					  for (int i = 0; i < DinoInfo[DinoInfoIndex].AvoidCount; i++) {
+						  if (Characters[ChCount].pos.x < (Avoid[DinoInfo[DinoInfoIndex].Avoidances[i]].XMax + 1) * 256 &&
+							  Characters[ChCount].pos.z < (Avoid[DinoInfo[DinoInfoIndex].Avoidances[i]].YMax + 1) * 256 &&
+							  Characters[ChCount].pos.x >(Avoid[DinoInfo[DinoInfoIndex].Avoidances[i]].XMin - 1) * 256 &&
+							  Characters[ChCount].pos.z >(Avoid[DinoInfo[DinoInfoIndex].Avoidances[i]].YMin - 1) * 256) goto replaceHuntableMapAmb;
+					  }
+				  }
 
 				  if (fabs(Characters[ChCount].pos.x - PlayerX) +
 					  fabs(Characters[ChCount].pos.z - PlayerZ) < 256 * 40)

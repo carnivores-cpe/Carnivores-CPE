@@ -438,6 +438,8 @@ typedef struct _TDinoInfo
   
   int RegionCount;
   int RType0[32];
+  int AvoidCount;
+  int Avoidances[32];
 
   BOOL fearCall[32];
   BOOL Aquatic;
@@ -716,7 +718,7 @@ void CloseLog();
 _EXTORNOT   float BackViewR;
 _EXTORNOT   int   BackViewRR;
 _EXTORNOT   int   UnderWaterT;
-_EXTORNOT   int   TotalC, TotalW, TotalMA, TotalTrophy, TotalRegion;
+_EXTORNOT   int   TotalC, TotalW, TotalMA, TotalTrophy, TotalRegion, TotalAvoid;
 
 
 //========== common ==================//
@@ -803,6 +805,7 @@ _EXTORNOT TModel *CompasModel;
 _EXTORNOT TModel *Binocular;
 _EXTORNOT TDinoInfo DinoInfo[64];
 _EXTORNOT TRegion Region[256];
+_EXTORNOT TRegion Avoid[256];
 _EXTORNOT TWeapInfo WeapInfo[10];
 _EXTORNOT TCharacterInfo ShipModel;
 _EXTORNOT int AI_to_CIndex[64];
