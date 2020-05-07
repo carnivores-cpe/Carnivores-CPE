@@ -4580,7 +4580,7 @@ TBEGIN:
 
 	if (!cptr->State)
 	{
-		if (pdist <= attackDist && playerInWater) {
+		if (pdist <= attackDist && playerInWater && !DinoInfo[cptr->CType].dontSwimAway) {
 			cptr->State = 1;
 			cptr->turny = 0;
 			cptr->lastTBeta = cptr->beta;

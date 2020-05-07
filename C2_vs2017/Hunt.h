@@ -444,6 +444,7 @@ typedef struct _TDinoInfo
   BOOL fearCall[32];
   BOOL Aquatic;
   int maxDepth, minDepth, spacingDepth;
+  BOOL dontSwimAway;
 
   int hunterDeathAnim, hunterDeathOffset;
   int aggress, killDist;
