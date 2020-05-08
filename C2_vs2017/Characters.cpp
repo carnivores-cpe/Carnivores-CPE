@@ -4378,7 +4378,7 @@ TBEGIN:
     cptr->tgtime = 0;
   }
 
-  if (pdist>(ctViewR+20)*256)
+  if (pdist>(ctViewR+20)*256 && cptr->AI > 0)
     if (ReplaceCharacterForward(cptr)) goto TBEGIN;
 
 
@@ -6469,7 +6469,7 @@ TBEGIN:
     cptr->tgtime = 0;
   }
 
-  if (pdist>(ctViewR+20)*256)
+  if (pdist>(ctViewR+20)*256 && cptr->AI > 0)
     if (ReplaceCharacterForward(cptr)) goto TBEGIN;
 
 
@@ -7830,7 +7830,7 @@ TBEGIN:
     cptr->tgtime = 0;
   }
 
-  if (pdist>(ctViewR+20)*256)
+  if (pdist>(ctViewR+20)*256 && cptr->AI > 0)
     if (ReplaceCharacterForward(cptr)) goto TBEGIN;
 
 
@@ -8011,7 +8011,7 @@ TBEGIN:
 
   //=========== run away =================//
 
-  if (pdist>(ctViewR+20)*256)
+  if (pdist>(ctViewR+20)*256 && cptr->AI > 0)
     if (ReplaceCharacterForward(cptr)) goto TBEGIN;
 
 
@@ -8800,8 +8800,8 @@ replace1:
 		  }
 
 
-		  //SPAWN DANGER MAP AMBIENTS
-		  if (DinoInfo[DinoInfoIndex].Clone >= 10) {
+		  //SPAWN DANGER MAP AMBIENTS + Classic Ambients
+		  if (DinoInfo[DinoInfoIndex].Clone >= 0) {
 
 			  tr = 0;
 			  for (c = 0; c < spawnNo; c++)//001 revert this to 3
