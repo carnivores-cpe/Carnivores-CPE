@@ -428,8 +428,8 @@ mapambients {
 
 {
  name = 'Brachiosaurus'
- file = 'brachi8.car'
- clone 	   = -1
+ file = 'brachi11.car'
+ clone 	   = -5
  mass      = 9
  length    = 12
  radius    = 400
@@ -441,13 +441,21 @@ mapambients {
  shipdelta = 168
  fearCall = 18
  wlkspd = 0.2
+ runspd = 0.32
+ aggress = 42
+ killdist = 380
+ runrotatespeed = 2.0
+ collisiondist = 128
+ hunterAnim = 0
+ hunterOffset = 0
+ onradar = TRUE
  spawninfo {
  spawnrate = 0.5
  spawnmax  = 4
  spawnmin  = 2
  }
  overwrite area3 {
- file = 'brachi8alt.car'
+ file = 'brachi11alt.car'
  } 
 }
 

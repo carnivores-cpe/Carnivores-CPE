@@ -452,6 +452,9 @@ typedef struct _TDinoInfo
   bool onRadar;
   float runspd, jmpspd, wlkspd, swmspd, flyspd, gldspd, tkfspd, lndspd;
 
+  int maxGrad;
+  float rotspdmulti;
+
 } TDinoInfo;
 
 typedef struct _TRegion
@@ -948,6 +951,7 @@ _EXTORNOT   struct _t
 #define AI_ICTH       -2
 #define AI_FISH       -3
 #define AI_MOSA       -4
+#define AI_BRACHDANGER -5
 
 
 #define AI_MOSH       1

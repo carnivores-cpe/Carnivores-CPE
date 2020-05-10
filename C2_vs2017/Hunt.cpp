@@ -1385,14 +1385,15 @@ void ProcessDemoMovement()
 
   DemoPoint.pos = Characters[DemoPoint.CIndex].pos;
   DemoPoint.pos.y+=256;
-  if (Characters[DemoPoint.CIndex].Clone==AI_TREX) DemoPoint.pos.y+=512;
+  if (Characters[DemoPoint.CIndex].Clone ==AI_TREX) DemoPoint.pos.y+=512;
+
 
   Vector3d nv = SubVectors(DemoPoint.pos,  CameraPos);
   Vector3d pp = DemoPoint.pos;
   pp.y = CameraPos.y;
   float l = VectorLength( SubVectors(pp,  CameraPos) );
   float base = 824;
-  if (Characters[DemoPoint.CIndex].Clone==AI_TREX) base=1424;
+  if (Characters[DemoPoint.CIndex].Clone ==AI_TREX) base=1424;
 
   if (DemoPoint.DemoTime==1)
     if (l < base) DemoPoint.DemoTime = 2;

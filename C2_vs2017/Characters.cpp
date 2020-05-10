@@ -305,6 +305,13 @@ void AddDeadBody(TCharacter *cptr, int phase)
   DemoPoint.DemoTime = 1;
   DemoPoint.CIndex = ChCount;
 
+  if (phase > 0) {
+	  Characters[ChCount].scale = cptr->scale;
+	  Characters[ChCount].alpha = cptr->alpha;
+	  cptr->bend = 0;
+	  DemoPoint.CIndex = CurDino;
+  }
+  
   ChCount++;
 }
 
@@ -700,7 +707,6 @@ int CheckPlaceCollisionBrahi(TCharacter *cptr, Vector3d &v, BOOL wc, BOOL mc)
 		}
 	}
 
-
 	if (wc) {
 		if ((GetLandUpH(v.x, v.z) - GetLandH(v.x, v.z)) > 550 ||
 			(GetLandUpH(v.x + 256, v.z) - GetLandH(v.x + 256, v.z)) > 550 ||
@@ -717,7 +723,7 @@ int CheckPlaceCollisionBrahi(TCharacter *cptr, Vector3d &v, BOOL wc, BOOL mc)
 	if (fabs(h - v.y) > 64) return 1;
 
 	v.y = h;
-
+	
 	float hh = GetLandH(v.x - 64, v.z - 64);
 	if (fabs(hh - h) > 100) return 1;
 	hh = GetLandH(v.x + 64, v.z - 64);
@@ -726,7 +732,7 @@ int CheckPlaceCollisionBrahi(TCharacter *cptr, Vector3d &v, BOOL wc, BOOL mc)
 	if (fabs(hh - h) > 100) return 1;
 	hh = GetLandH(v.x + 64, v.z + 64);
 	if (fabs(hh - h) > 100) return 1;
-
+	
 	if (mc)
 		for (int z = -2; z <= 2; z++)
 			for (int x = -2; x <= 2; x++)
@@ -801,9 +807,15 @@ int CheckPossiblePath(TCharacter *cptr, BOOL wc, BOOL mc)
   int c=0;
   for (int t=0; t<20; t++)
   {
+
 	  if (cptr->Clone == AI_BRACH) {
 		  p.x += lookx * 256.f;
 		  p.z += lookz * 256.f;
+		  if (CheckPlaceCollisionBrahi(cptr, p, wc, mc)) c++;
+	  }
+	  else if (cptr->Clone == AI_BRACHDANGER) {
+		  p.x += lookx * DinoInfo[cptr->CType].maxGrad;//128
+		  p.z += lookz * DinoInfo[cptr->CType].maxGrad;//128
 		  if (CheckPlaceCollisionBrahi(cptr, p, wc, mc)) c++;
 	  }
 	  else if ((cptr->Clone == AI_MOSA)) {
@@ -4114,10 +4126,6 @@ TBEGIN:
         cptr->State = 1;
         cptr->Phase = REX_EAT;
         AddDeadBody(cptr, DinoInfo[cptr->CType].hunterDeathAnim);
-        Characters[ChCount-1].scale = cptr->scale;
-        Characters[ChCount-1].alpha = cptr->alpha;
-        cptr->bend = 0;
-        DemoPoint.CIndex = CurDino;
       }
   }
 
@@ -6111,12 +6119,16 @@ NOTHINK:
 	else
 	{
 		cptr->tgalpha = CorrectedAlpha(FindVectorAlpha(targetdx, targetdz), cptr->alpha);//FindVectorAlpha(targetdx, targetdz);
+		
+		/*
 		if (cptr->State && pdist > 1648)
 		{
 			cptr->tgalpha += (float)sin(RealTime / 824.f) / 4.f;
 			if (cptr->tgalpha < 0) cptr->tgalpha += 2 * pi;
 			if (cptr->tgalpha > 2 * pi) cptr->tgalpha -= 2 * pi;
 		}
+		*/
+
 	}
 
 	LookForAWay(cptr, !attacking && cptr->State, TRUE);
@@ -6215,7 +6227,6 @@ ENDPSELECT:
 	float drspd = dalpha;
 	if (drspd > pi) drspd = 2 * pi - drspd;
 
-
 	if (cptr->Phase == BRA_IDLE1 || cptr->Phase == BRA_EAT ||
 		cptr->Phase == BRA_IDLE3 || cptr->Phase == BRA_IDLE2) goto SKIPROT;
 
@@ -6223,7 +6234,7 @@ ENDPSELECT:
 		if (cptr->tgalpha > cptr->alpha) currspeed = 0.2f + drspd * 0.2f;
 		else currspeed = -0.2f - drspd * 0.2f;
 	else currspeed = 0;
-	//if (cptr->AfraidTime) currspeed*=2.5; //001 is this needed?
+	if (cptr->AfraidTime) currspeed*= DinoInfo[cptr->CType].rotspdmulti;
 
 	if (dalpha > pi) currspeed *= -1;
 
@@ -8167,6 +8178,9 @@ void AnimateCharacters()
 				case AI_BRACH:
 					SetNewTargetPlace_Brahi(cptr, 2048.f);
 					break;
+				case AI_BRACHDANGER:
+					SetNewTargetPlace_Brahi(cptr, 2048.f);
+					break;
 				case AI_MOSA:
 					SetNewTargetPlaceMosasaurus(cptr, 3048);
 					break;
@@ -8228,6 +8242,10 @@ void AnimateCharacters()
 			break;
 		case AI_BRACH:
 			if (cptr->Health) AnimateBrahiOld(cptr);
+			else AnimateBrahiDead(cptr);
+			break;
+		case AI_BRACHDANGER:
+			if (cptr->Health) AnimateBrahi(cptr);
 			else AnimateBrahiDead(cptr);
 			break;
 		case AI_ICTH:
@@ -8538,6 +8556,7 @@ replace1:
 		  switch (DinoInfo[DinoInfoIndex].Clone) {
 
 		  case AI_BRACH:
+		  case AI_BRACHDANGER:
 			  //======== brahi ============//
 
 			  tr = 0;
