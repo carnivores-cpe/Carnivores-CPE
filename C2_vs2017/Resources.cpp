@@ -2201,6 +2201,9 @@ void ReadCharacterLine(FILE *stream, char *_value, char line[256], bool &regionO
 	if (strstr(line, "dontswimaway")) DinoInfo[TotalC].dontSwimAway = TRUE;
 	if (strstr(line, "collisiondist")) DinoInfo[TotalC].maxGrad = atoi(value);
 	if (strstr(line, "runrotatespeed")) DinoInfo[TotalC].rotspdmulti = (float)atof(value);
+	if (strstr(line, "packMax")) DinoInfo[TotalC].packMax = atoi(value);
+	if (strstr(line, "packMin")) DinoInfo[TotalC].packMin = atoi(value);
+	if (strstr(line, "packDensity")) DinoInfo[TotalC].packDensity = (float)atof(value);
 
 	if (strstr(line, "trophy")) {
 		TotalTrophy++;

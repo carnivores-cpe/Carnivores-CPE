@@ -448,7 +448,6 @@ mapambients {
  collisiondist = 128
  hunterAnim = 0
  hunterOffset = 0
- onradar = TRUE
  spawninfo {
  spawnrate = 0.5
  spawnmax  = 4

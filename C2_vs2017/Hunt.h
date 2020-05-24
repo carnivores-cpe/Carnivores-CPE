@@ -455,6 +455,9 @@ typedef struct _TDinoInfo
   int maxGrad;
   float rotspdmulti;
 
+  int packMax, packMin;
+  float packDensity;
+
 } TDinoInfo;
 
 typedef struct _TRegion
@@ -819,6 +822,7 @@ _EXTORNOT int ChCount, WCCount, ElCount,
 _EXTORNOT TCharacterInfo WindModel;
 _EXTORNOT TCharacterInfo PlayerInfo;
 _EXTORNOT TCharacterInfo ChInfo[64];
+_EXTORNOT TCharacter     Packs[256][64];
 _EXTORNOT TCharacter     Characters[256];
 _EXTORNOT TWCircle       WCircles[128];
 _EXTORNOT TDemoPoint     DemoPoint;
@@ -947,10 +951,10 @@ _EXTORNOT   struct _t
 #define HUNT_KILL     3
 
 
-#define AI_BRACH      -1
-#define AI_ICTH       -2
-#define AI_FISH       -3
-#define AI_MOSA       -4
+#define AI_BRACH       -1
+#define AI_ICTH        -2
+#define AI_FISH        -3
+#define AI_MOSA        -4
 #define AI_BRACHDANGER -5
 
 

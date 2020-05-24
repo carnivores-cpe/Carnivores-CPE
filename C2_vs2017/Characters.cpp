@@ -8488,6 +8488,139 @@ void PlaceTrophy()
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+void spawnPositionPackLeader(int RegionNo) {
+	Characters[ChCount].pos.x = Region[RegionNo].XMin * 256
+		+ abs(rRand(Region[RegionNo].XMax - Region[RegionNo].XMin) * 256);
+
+	Characters[ChCount].pos.z = Region[RegionNo].YMin * 256
+		+ abs(rRand(Region[RegionNo].YMax - Region[RegionNo].YMin) * 256);
+}
+
+void spawnPositionPackFollower(int DinoInfoIndex, int leader, int RegionNo) {
+	Characters[ChCount].pos.x = Characters[leader].pos.x + siRand(DinoInfo[DinoInfoIndex].packDensity);
+	Characters[ChCount].pos.z = Characters[leader].pos.z + siRand(DinoInfo[DinoInfoIndex].packDensity);
+	if (Characters[ChCount].pos.x > Region[RegionNo].XMin) Characters[ChCount].pos.x = Region[RegionNo].XMin;
+	if (Characters[ChCount].pos.x < Region[RegionNo].XMax) Characters[ChCount].pos.x = Region[RegionNo].XMax;
+	if (Characters[ChCount].pos.z > Region[RegionNo].YMin) Characters[ChCount].pos.z = Region[RegionNo].YMin;
+	if (Characters[ChCount].pos.z < Region[RegionNo].YMax) Characters[ChCount].pos.z = Region[RegionNo].YMax;
+}
+
+void spawnMapAmbient(int DinoInfoIndex, int RegionNo, int &tr, int leader) {
+	
+
+	Characters[ChCount].CType = DinoInfoIndex; //i9 + 1];
+replaceSMA:
+
+	if (leader >=0) {
+		spawnPositionPackFollower(DinoInfoIndex, leader, RegionNo);
+	} else {
+		spawnPositionPackLeader(RegionNo);
+	}
+
+	Characters[ChCount].pos.y = GetLandH(Characters[ChCount].pos.x,
+		Characters[ChCount].pos.z);
+	float wy = GetLandUpH(Characters[ChCount].pos.x,
+		Characters[ChCount].pos.z) - Characters[ChCount].pos.y;
+	tr++;
+	if (tr > 10240) return;
+	
+	if (DinoInfo[DinoInfoIndex].Clone == AI_BRACH ||
+		DinoInfo[DinoInfoIndex].Clone == AI_BRACHDANGER ||
+		DinoInfo[DinoInfoIndex].Clone == AI_ICTH) {	
+
+		if (wy > 380) goto replaceSMA;
+		if (wy < 220) goto replaceSMA;
+
+	}
+
+	if (DinoInfo[DinoInfoIndex].Clone == AI_FISH ||
+		DinoInfo[DinoInfoIndex].Clone == AI_MOSA) {
+		if (wy < DinoInfo[DinoInfoIndex].minDepth) goto replaceSMA;
+		if (wy > DinoInfo[DinoInfoIndex].maxDepth) goto replaceSMA;
+	}
+	
+
+	if (DinoInfo[DinoInfoIndex].AvoidCount)
+	{
+		for (int i = 0; i < DinoInfo[DinoInfoIndex].AvoidCount; i++) {
+			if (Characters[ChCount].pos.x < (Avoid[DinoInfo[DinoInfoIndex].Avoidances[i]].XMax + 1) * 256 &&
+				Characters[ChCount].pos.z < (Avoid[DinoInfo[DinoInfoIndex].Avoidances[i]].YMax + 1) * 256 &&
+				Characters[ChCount].pos.x >(Avoid[DinoInfo[DinoInfoIndex].Avoidances[i]].XMin - 1) * 256 &&
+				Characters[ChCount].pos.z >(Avoid[DinoInfo[DinoInfoIndex].Avoidances[i]].YMin - 1) * 256) goto replaceSMA;
+		}
+	}
+
+	if (DinoInfo[DinoInfoIndex].Clone >= 0) {
+		if (fabs(Characters[ChCount].pos.x - PlayerX) +
+			fabs(Characters[ChCount].pos.z - PlayerZ) < 256 * 40)
+			goto replaceSMA;
+
+		if (CheckPlaceCollisionP(Characters[ChCount].pos)) goto replaceSMA;
+	}
+
+	Characters[ChCount].tgx = Characters[ChCount].pos.x;
+	Characters[ChCount].tgz = Characters[ChCount].pos.z;
+	Characters[ChCount].tgtime = 0;
+
+	if (DinoInfo[DinoInfoIndex].Clone == AI_BRACH ||
+		DinoInfo[DinoInfoIndex].Clone == AI_BRACHDANGER ||
+		DinoInfo[DinoInfoIndex].Clone == AI_ICTH) {
+		
+		Characters[ChCount].spawnAlt = GetLandUpH(Characters[ChCount].pos.x,
+			Characters[ChCount].pos.z);
+
+	}
+
+	if (DinoInfo[DinoInfoIndex].Clone == AI_FISH ||
+		DinoInfo[DinoInfoIndex].Clone == AI_MOSA) {
+
+		Characters[ChCount].depth = GetLandH(Characters[ChCount].tgx, Characters[ChCount].tgz) +
+			((GetLandUpH(Characters[ChCount].tgx, Characters[ChCount].tgz) - GetLandH(Characters[ChCount].tgx, Characters[ChCount].tgz) / 2)
+				);
+		Characters[ChCount].tdepth = Characters[ChCount].depth;
+
+	}
+
+	Characters[ChCount].RType = RegionNo;
+	ResetCharacter(&Characters[ChCount]);
+	ChCount++;
+
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 void PlaceCharacters()
 {
   int c, tr;
@@ -8509,6 +8642,7 @@ void PlaceCharacters()
 
   tr = 0;
 
+  // NO PACKING HUNTING FOR CLASSIC AMBS
   for (c=0; c<MC; c++)
   {
     Characters[ChCount].CType = 1 + c % 5; //rRand(3);
@@ -8553,333 +8687,12 @@ replace1:
 			  if (Region[RegionNo].SpawnRate * 1000 > rRand(1000)) spawnNo++;
 		  }
 
-		  switch (DinoInfo[DinoInfoIndex].Clone) {
-
-		  case AI_BRACH:
-		  case AI_BRACHDANGER:
-			  //======== brahi ============//
-
-			  tr = 0;
-			  for (c = 0; c < spawnNo; c++)
-			  {
-				  Characters[ChCount].CType = DinoInfoIndex; //i9 + 1];
-				  //PrintLog("bS");//TEST202004111501
-			  replace3:
-				  //PrintLog("-");//TEST202004111501
-				  //Characters[ChCount].pos.x = 512 * 256 + siRand(50 * 256)*10.f;
-				  //Characters[ChCount].pos.z = 512 * 256 + siRand(50 * 256)*10.f;
-				  //RegionNo = DinoInfo[DinoInfoIndex].RType0[rRand(DinoInfo[DinoInfoIndex].RegionCount - 1)];
-
-				  Characters[ChCount].pos.x = Region[RegionNo].XMin * 256
-					  + abs(rRand(Region[RegionNo].XMax - Region[RegionNo].XMin) * 256);
-
-				  Characters[ChCount].pos.z = Region[RegionNo].YMin * 256
-					  + abs(rRand(Region[RegionNo].YMax - Region[RegionNo].YMin) * 256);
-
-
-				  Characters[ChCount].pos.y = GetLandH(Characters[ChCount].pos.x,
-					  Characters[ChCount].pos.z);
-				  float wy = GetLandUpH(Characters[ChCount].pos.x,
-					  Characters[ChCount].pos.z) - Characters[ChCount].pos.y;
-				  tr++;
-				  if (tr > 10240) break;
-
-				  if (wy > 380) goto replace3;
-				  if (wy < 220) goto replace3;
-
-				  if (DinoInfo[DinoInfoIndex].AvoidCount)
-				  {
-					  for (int i = 0; i < DinoInfo[DinoInfoIndex].AvoidCount; i++) {
-						  if (Characters[ChCount].pos.x < (Avoid[DinoInfo[DinoInfoIndex].Avoidances[i]].XMax + 1) * 256 &&
-							  Characters[ChCount].pos.z < (Avoid[DinoInfo[DinoInfoIndex].Avoidances[i]].YMax + 1) * 256 &&
-							  Characters[ChCount].pos.x >(Avoid[DinoInfo[DinoInfoIndex].Avoidances[i]].XMin - 1) * 256 &&
-							  Characters[ChCount].pos.z >(Avoid[DinoInfo[DinoInfoIndex].Avoidances[i]].YMin - 1) * 256) goto replace3;
-					  }
-				  }
-
-				  Characters[ChCount].tgx = Characters[ChCount].pos.x;
-				  Characters[ChCount].tgz = Characters[ChCount].pos.z;
-				  Characters[ChCount].tgtime = 0;
-
-				  Characters[ChCount].RType = RegionNo;
-				  ResetCharacter(&Characters[ChCount]);
-				  ChCount++;
-			  }
-
-
-			  break;
-
-
-		  case AI_ICTH:
-
-
-
-
-
-
-
-
-
-			  //======== spawn ichth ============//
-			  tr = 0;
-			  for (c = 0; c < spawnNo; c++) //TESTING PURPOSES - TODO adjust the number to spawn
-			  {
-				  Characters[ChCount].CType = DinoInfoIndex;
-				  //PrintLog("iS");//TEST20200412
-			  replaceIcth:
-				  //PrintLog("-");//TEST20200412
-
-				  //Characters[ChCount].pos.x = 512 * 256 + siRand(50 * 256)*10.f;
-				  //Characters[ChCount].pos.z = 512 * 256 + siRand(50 * 256)*10.f;
-				  //RegionNo = DinoInfo[DinoInfoIndex].RType0[rRand(DinoInfo[DinoInfoIndex].RegionCount - 1)];
-
-
-				  Characters[ChCount].pos.x = Region[RegionNo].XMin * 256
-					  + abs(rRand(Region[RegionNo].XMax - Region[RegionNo].XMin) * 256);
-
-				  Characters[ChCount].pos.z = Region[RegionNo].YMin * 256
-					  + abs(rRand(Region[RegionNo].YMax - Region[RegionNo].YMin) * 256);
-
-
-				  Characters[ChCount].pos.y = GetLandH(Characters[ChCount].pos.x,
-					  Characters[ChCount].pos.z);
-				  float wy = GetLandUpH(Characters[ChCount].pos.x,
-					  Characters[ChCount].pos.z) - Characters[ChCount].pos.y;
-				  tr++;
-				  if (tr > 10240) break;
-
-				  if (wy > 380) goto replaceIcth;
-				  if (wy < 220) goto replaceIcth;
-
-				  if (DinoInfo[DinoInfoIndex].AvoidCount)
-				  {
-					  for (int i = 0; i < DinoInfo[DinoInfoIndex].AvoidCount; i++) {
-						  if (Characters[ChCount].pos.x < (Avoid[DinoInfo[DinoInfoIndex].Avoidances[i]].XMax + 1) * 256 &&
-							  Characters[ChCount].pos.z < (Avoid[DinoInfo[DinoInfoIndex].Avoidances[i]].YMax + 1) * 256 &&
-							  Characters[ChCount].pos.x >(Avoid[DinoInfo[DinoInfoIndex].Avoidances[i]].XMin - 1) * 256 &&
-							  Characters[ChCount].pos.z >(Avoid[DinoInfo[DinoInfoIndex].Avoidances[i]].YMin - 1) * 256) goto replaceIcth;
-					  }
-				  }
-
-				  Characters[ChCount].tgx = Characters[ChCount].pos.x;
-				  Characters[ChCount].tgz = Characters[ChCount].pos.z;
-				  Characters[ChCount].tgtime = 0;
-
-				  Characters[ChCount].spawnAlt = GetLandUpH(Characters[ChCount].pos.x,
-					  Characters[ChCount].pos.z);
-
-				  Characters[ChCount].RType = RegionNo;
-				  ResetCharacter(&Characters[ChCount]);
-				  ChCount++;
-			  }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-			  break;
-
-
-
-
-		  case AI_FISH:
-
-			  // SPAWN FISH
-			  tr = 0;
-			  for (c = 0; c < spawnNo; c++)//001 revert this to 3
-			  {
-				  Characters[ChCount].CType = DinoInfoIndex;
-				  //PrintLog("fSPAWN");//TEST202004091129
-			  replaceFish:
-				  tr++;
-
-				  //PrintLog("-");//TEST202004091129
-
-				  //Characters[ChCount].pos.x = 512 * 256 + siRand(50 * 256)*10.f;
-				  //Characters[ChCount].pos.z = 512 * 256 + siRand(50 * 256)*10.f;
-				  //RegionNo = DinoInfo[DinoInfoIndex].RType0[rRand(DinoInfo[DinoInfoIndex].RegionCount - 1)];
-
-				  Characters[ChCount].pos.x = Region[RegionNo].XMin * 256
-					  + abs(rRand(Region[RegionNo].XMax - Region[RegionNo].XMin) * 256);
-
-				  Characters[ChCount].pos.z = Region[RegionNo].YMin * 256
-					  + abs(rRand(Region[RegionNo].YMax - Region[RegionNo].YMin) * 256);
-
-				  Characters[ChCount].pos.y = GetLandH(Characters[ChCount].pos.x,
-					  Characters[ChCount].pos.z);
-
-				  float wy = GetLandUpH(Characters[ChCount].pos.x,
-					  Characters[ChCount].pos.z) - Characters[ChCount].pos.y;
-
-				  if (tr < 10240) {
-					  if (wy < DinoInfo[DinoInfoIndex].minDepth) goto replaceFish;
-					  if (wy > DinoInfo[DinoInfoIndex].maxDepth) goto replaceFish;
-				  }
-				  else break;
-
-				  if (DinoInfo[DinoInfoIndex].AvoidCount)
-				  {
-					  for (int i = 0; i < DinoInfo[DinoInfoIndex].AvoidCount; i++) {
-						  if (Characters[ChCount].pos.x < (Avoid[DinoInfo[DinoInfoIndex].Avoidances[i]].XMax + 1) * 256 &&
-							  Characters[ChCount].pos.z < (Avoid[DinoInfo[DinoInfoIndex].Avoidances[i]].YMax + 1) * 256 &&
-							  Characters[ChCount].pos.x >(Avoid[DinoInfo[DinoInfoIndex].Avoidances[i]].XMin - 1) * 256 &&
-							  Characters[ChCount].pos.z >(Avoid[DinoInfo[DinoInfoIndex].Avoidances[i]].YMin - 1) * 256) goto replaceFish;
-					  }
-				  }
-
-				  Characters[ChCount].tgx = Characters[ChCount].pos.x;
-				  Characters[ChCount].tgz = Characters[ChCount].pos.z;
-				  Characters[ChCount].tgtime = 0;
-
-				  Characters[ChCount].depth = GetLandH(Characters[ChCount].tgx, Characters[ChCount].tgz) +
-					  ((GetLandUpH(Characters[ChCount].tgx, Characters[ChCount].tgz) - GetLandH(Characters[ChCount].tgx, Characters[ChCount].tgz) / 2)
-						  );
-				  //if (wy - 650 > 0) {
-				  //	Characters[ChCount].depth = Characters[ChCount].depth + rRand(wy - (2 * DinoInfo[DinoInfoIndex].spacingDepth));
-				  //}
-
-				  Characters[ChCount].tdepth = Characters[ChCount].depth;
-
-				  Characters[ChCount].RType = RegionNo;
-				  ResetCharacter(&Characters[ChCount]);
-				  ChCount++;
-
-			  }
-
-
-			  break;
-
-
-
-
-
-			  /*
-		  case AI_MOSA:	//compare with fish AI when you readd
-
-			  // SPAWN MOSASAURUS
-			  tr = 0;
-			  for (c = 0; c < spawnNo; c++)//001 revert this to 3
-			  {
-				  Characters[ChCount].CType = DinoInfoIndex;
-			  replaceMosasaur:
-
-
-				  //Characters[ChCount].pos.x = 512 * 256 + siRand(50 * 256)*10.f;
-				  //Characters[ChCount].pos.z = 512 * 256 + siRand(50 * 256)*10.f;
-
-				  Characters[ChCount].pos.x = DinoInfo[DinoInfoIndex].XMin * 256
-					  + abs(rRand(DinoInfo[DinoInfoIndex].XMax - DinoInfo[DinoInfoIndex].XMin) * 256);
-
-				  Characters[ChCount].pos.z = DinoInfo[DinoInfoIndex].XMin * 256
-					  + abs(rRand(DinoInfo[DinoInfoIndex].YMax - DinoInfo[DinoInfoIndex].YMin) * 256);
-
-
-				  Characters[ChCount].pos.y = GetLandH(Characters[ChCount].pos.x,
-					  Characters[ChCount].pos.z);
-				  float wy = GetLandUpH(Characters[ChCount].pos.x,
-					  Characters[ChCount].pos.z) - Characters[ChCount].pos.y;
-				  tr++;
-				  if (tr < 10240) {
-					  if (wy < 1700) goto replaceMosasaur;
-				  }
-
-				  Characters[ChCount].tgx = Characters[ChCount].pos.x;
-				  Characters[ChCount].tgz = Characters[ChCount].pos.z;
-				  Characters[ChCount].tgtime = 0;
-
-				  Characters[ChCount].depth = GetLandH(Characters[ChCount].tgx, Characters[ChCount].tgz) + 550;
-				  if (wy - 650 > 0) {
-					  Characters[ChCount].depth = Characters[ChCount].depth + rRand(wy - 1300);
-				  }
-
-				  Characters[ChCount].tdepth = Characters[ChCount].depth;
-
-				  ResetCharacter(&Characters[ChCount]);
-				  ChCount++;
-
-			  }
-
-
-			  break;
-			  */
-
-
-
-
+		  tr = 0;
+		  for (c = 0; c < spawnNo; c++)
+		  {
+			  // pack leaders
+			  spawnMapAmbient(DinoInfoIndex, RegionNo, tr, -1);
 		  }
-
-
-		  //SPAWN DANGER MAP AMBIENTS + Classic Ambients
-		  if (DinoInfo[DinoInfoIndex].Clone >= 0) {
-
-			  tr = 0;
-			  for (c = 0; c < spawnNo; c++)//001 revert this to 3
-			  {
-
-				  Characters[ChCount].CType = DinoInfoIndex;
-
-				  //PrintLog("hS");//TEST20200415
-			  replaceHuntableMapAmb:
-				  //PrintLog("-");//TEST20200415
-
-				  /*
-				  Characters[ChCount].pos.x = 512 * 256 + siRand(50 * 256) * 10;
-				  Characters[ChCount].pos.z = 512 * 256 + siRand(50 * 256) * 10;
-				  */
-				  //RegionNo = DinoInfo[DinoInfoIndex].RType0[rRand(DinoInfo[DinoInfoIndex].RegionCount - 1)];
-
-				  Characters[ChCount].pos.x = Region[RegionNo].XMin * 256
-					  + abs(rRand(Region[RegionNo].XMax - Region[RegionNo].XMin) * 256);
-
-				  Characters[ChCount].pos.z = Region[RegionNo].YMin * 256
-					  + abs(rRand(Region[RegionNo].YMax - Region[RegionNo].YMin) * 256);
-
-				  Characters[ChCount].pos.y = GetLandH(Characters[ChCount].pos.x,
-					  Characters[ChCount].pos.z);
-				  tr++;
-				  if (tr > 10240) break;
-
-				  if (DinoInfo[DinoInfoIndex].AvoidCount)
-				  {
-					  for (int i = 0; i < DinoInfo[DinoInfoIndex].AvoidCount; i++) {
-						  if (Characters[ChCount].pos.x < (Avoid[DinoInfo[DinoInfoIndex].Avoidances[i]].XMax + 1) * 256 &&
-							  Characters[ChCount].pos.z < (Avoid[DinoInfo[DinoInfoIndex].Avoidances[i]].YMax + 1) * 256 &&
-							  Characters[ChCount].pos.x >(Avoid[DinoInfo[DinoInfoIndex].Avoidances[i]].XMin - 1) * 256 &&
-							  Characters[ChCount].pos.z >(Avoid[DinoInfo[DinoInfoIndex].Avoidances[i]].YMin - 1) * 256) goto replaceHuntableMapAmb;
-					  }
-				  }
-
-				  if (fabs(Characters[ChCount].pos.x - PlayerX) +
-					  fabs(Characters[ChCount].pos.z - PlayerZ) < 256 * 40)
-					  goto replaceHuntableMapAmb;
-
-				  if (CheckPlaceCollisionP(Characters[ChCount].pos)) goto replaceHuntableMapAmb;
-
-				  Characters[ChCount].tgx = Characters[ChCount].pos.x;
-				  Characters[ChCount].tgz = Characters[ChCount].pos.z;
-				  Characters[ChCount].tgtime = 0;
-
-				  Characters[ChCount].RType = RegionNo;
-				  ResetCharacter(&Characters[ChCount]);
-				  ChCount++;
-
-			  }
-
-		  }
-
-
-
-
 
 
 	  }
