@@ -338,6 +338,9 @@ typedef struct _TCharacter
 
   int RType;
 
+  int pack;
+  bool followLeader;
+
 } TCharacter;
 
 
@@ -458,7 +461,38 @@ typedef struct _TDinoInfo
   int packMax, packMin;
   float packDensity;
 
+  int runAnim, jumpAnim, walkAnim, swimAnim, flyAnim, glideAnim, takeoffAnim, landAnim,
+	  slideAnim, sleepAnim, dieAnim, fallAnim;
+
+  int idleAnim[32];
+  int idleCount;
+
 } TDinoInfo;
+
+typedef struct _TPack
+{
+	TCharacter *leader;
+	bool alert;
+	bool _alert;
+	bool attack;
+	bool _attack;
+} TPack;
+
+typedef struct _TAIInfo {
+	float targetDistance;
+	int noWayCntMin;
+	int noFindWayMed;
+	int noFindWayRange;
+	float targetBendRotSpd;
+	float targetBendMin;
+	float targetBendDelta1;
+	float targetBendDelta2;
+	float walkTargetGammaRot;
+	float targetGammaRot;
+	int idleStart;
+	float yBetaGamma4;
+} TAIInfo;
+
 
 typedef struct _TRegion
 {
@@ -811,6 +845,7 @@ _EXTORNOT TCharacterInfo WCircleModel;
 _EXTORNOT TModel *CompasModel;
 _EXTORNOT TModel *Binocular;
 _EXTORNOT TDinoInfo DinoInfo[64];
+_EXTORNOT TAIInfo AIInfo[64];
 _EXTORNOT TRegion Region[256];
 _EXTORNOT TRegion Avoid[256];
 _EXTORNOT TWeapInfo WeapInfo[10];
@@ -822,7 +857,8 @@ _EXTORNOT int ChCount, WCCount, ElCount,
 _EXTORNOT TCharacterInfo WindModel;
 _EXTORNOT TCharacterInfo PlayerInfo;
 _EXTORNOT TCharacterInfo ChInfo[64];
-_EXTORNOT TCharacter     Packs[256][64];
+_EXTORNOT TPack          Packs[256];
+_EXTORNOT int PackCount;
 _EXTORNOT TCharacter     Characters[256];
 _EXTORNOT TWCircle       WCircles[128];
 _EXTORNOT TDemoPoint     DemoPoint;

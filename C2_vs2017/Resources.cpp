@@ -2164,7 +2164,8 @@ void ReadAvoidInfo(FILE *stream)
 }
 
 
-void ReadCharacterLine(FILE *stream, char *_value, char line[256], bool &regionOverwrite, bool &avoidOverwrite) {
+
+void ReadCharacterLine(FILE *stream, char *_value, char line[256], bool &regionOverwrite, bool &avoidOverwrite, bool &idleOverwrite) {
 
 	char *value = _value;
 //	bool overwrite = _overwrite;
@@ -2201,6 +2202,34 @@ void ReadCharacterLine(FILE *stream, char *_value, char line[256], bool &regionO
 	if (strstr(line, "dontswimaway")) DinoInfo[TotalC].dontSwimAway = TRUE;
 	if (strstr(line, "collisiondist")) DinoInfo[TotalC].maxGrad = atoi(value);
 	if (strstr(line, "runrotatespeed")) DinoInfo[TotalC].rotspdmulti = (float)atof(value);
+
+
+	if (strstr(line, "runAnim")) DinoInfo[TotalC].runAnim = atoi(value);
+	if (strstr(line, "jumpAnim")) DinoInfo[TotalC].jumpAnim = atoi(value);
+	if (strstr(line, "walkAnim")) DinoInfo[TotalC].walkAnim = atoi(value);
+	if (strstr(line, "swimAnim")) DinoInfo[TotalC].swimAnim = atoi(value);
+	if (strstr(line, "flyAnim")) DinoInfo[TotalC].flyAnim = atoi(value);
+	if (strstr(line, "glideAnim")) DinoInfo[TotalC].glideAnim = atoi(value);
+	if (strstr(line, "takeoffAnim")) DinoInfo[TotalC].takeoffAnim = atoi(value);
+	if (strstr(line, "landAnim")) DinoInfo[TotalC].landAnim = atoi(value);
+	if (strstr(line, "slideAnim")) DinoInfo[TotalC].slideAnim = atoi(value);
+	if (strstr(line, "sleepAnim")) DinoInfo[TotalC].sleepAnim = atoi(value);
+	if (strstr(line, "dieAnim")) DinoInfo[TotalC].dieAnim = atoi(value);
+	if (strstr(line, "fallAnim")) DinoInfo[TotalC].fallAnim = atoi(value);
+
+	if (strstr(line, "idleAnim")) {
+
+		if (idleOverwrite) {
+			DinoInfo[TotalC].idleCount = 0;
+			idleOverwrite = false;
+		}
+
+		DinoInfo[TotalC].idleAnim[DinoInfo[TotalC].idleCount] = atoi(value);
+		DinoInfo[TotalC].idleCount++;
+
+	}
+
+	//pack stuff
 	if (strstr(line, "packMax")) DinoInfo[TotalC].packMax = atoi(value);
 	if (strstr(line, "packMin")) DinoInfo[TotalC].packMin = atoi(value);
 	if (strstr(line, "packDensity")) DinoInfo[TotalC].packDensity = (float)atof(value);
@@ -2328,8 +2357,8 @@ void ReadCharacters(FILE *stream, bool mapamb)
 
 			if (strstr(line, "ai")) DinoInfo[TotalC].AI = atoi(value);
 
-			bool temp, temp2;
-			ReadCharacterLine(stream, value, line, temp, temp2);
+			bool temp, temp2, temp3;
+			ReadCharacterLine(stream, value, line, temp, temp2, temp3);
 
 			if (strstr(line, "overwrite") || strstr(line, "addition")) {
 
@@ -2400,6 +2429,7 @@ void ReadCharacters(FILE *stream, bool mapamb)
 
 					bool regionOverwrite = strstr(line, "overwrite");
 					bool avoidOverwrite = strstr(line, "overwrite");
+					bool idleOverwrite = strstr(line, "overwrite");
 
 					while (fgets(line, 255, stream)) {
 						if (strstr(line, "}")) break;
@@ -2409,7 +2439,7 @@ void ReadCharacters(FILE *stream, bool mapamb)
 							DoHalt("Script loading error");
 						value++;
 
-						ReadCharacterLine(stream, value, line, regionOverwrite, avoidOverwrite);
+						ReadCharacterLine(stream, value, line, regionOverwrite, avoidOverwrite, idleOverwrite);
 
 					}
 
@@ -2440,6 +2470,73 @@ void ReadCharacters(FILE *stream, bool mapamb)
 
 void LoadResourcesScript()
 {
+
+	AIInfo[AI_PARA].targetDistance = 8048.f;
+	AIInfo[AI_PARA].noWayCntMin = 8;
+	AIInfo[AI_PARA].noFindWayMed = 44;
+	AIInfo[AI_PARA].noFindWayRange = 80;
+	AIInfo[AI_PARA].targetBendRotSpd = 3.0f;
+	AIInfo[AI_PARA].targetBendMin = 2.f;
+	AIInfo[AI_PARA].targetBendDelta1 = 1600.f;
+	AIInfo[AI_PARA].targetBendDelta2 = 1200.f;
+	AIInfo[AI_PARA].walkTargetGammaRot = 12.0f;
+	AIInfo[AI_PARA].targetGammaRot = 8.0f;
+	AIInfo[AI_PARA].idleStart = 120;
+	AIInfo[AI_PARA].yBetaGamma4 = 0.4f;
+
+	AIInfo[AI_ANKY].targetDistance = 8048.f;
+	AIInfo[AI_ANKY].noWayCntMin = 12;
+	AIInfo[AI_ANKY].noFindWayMed = 32;
+	AIInfo[AI_ANKY].noFindWayRange = 60;
+	AIInfo[AI_ANKY].targetBendRotSpd = 2.f;
+	AIInfo[AI_ANKY].targetBendMin = 3.f;
+	AIInfo[AI_ANKY].targetBendDelta1 = 2000.f;
+	AIInfo[AI_ANKY].targetBendDelta2 = AIInfo[AI_ANKY].targetBendDelta1;
+	AIInfo[AI_ANKY].walkTargetGammaRot = 16.0f;
+	AIInfo[AI_ANKY].targetGammaRot = 10.0f;
+	AIInfo[AI_ANKY].idleStart = 120;
+	AIInfo[AI_ANKY].yBetaGamma4 = 0.4f;
+
+	AIInfo[AI_PACH].targetDistance = 6048.f;
+	AIInfo[AI_PACH].noWayCntMin = 12;
+	AIInfo[AI_PACH].noFindWayMed = 32;
+	AIInfo[AI_PACH].noFindWayRange = 60;
+	AIInfo[AI_PACH].targetBendRotSpd = 3.0f;
+	AIInfo[AI_PACH].targetBendMin = 2.f;
+	AIInfo[AI_PACH].targetBendDelta1 = 1600.f;
+	AIInfo[AI_PACH].targetBendDelta2 = 1200.f;
+	AIInfo[AI_PACH].walkTargetGammaRot = 12.0f;
+	AIInfo[AI_PACH].targetGammaRot = 8.0f;
+	AIInfo[AI_PACH].idleStart = 120;
+	AIInfo[AI_PACH].yBetaGamma4 = 0.4f;
+
+	AIInfo[AI_STEGO].targetDistance = 8048.f;
+	AIInfo[AI_STEGO].noWayCntMin = 12;
+	AIInfo[AI_STEGO].noFindWayMed = 32;
+	AIInfo[AI_STEGO].noFindWayRange = 60;
+	AIInfo[AI_STEGO].targetBendRotSpd = 2.f;
+	AIInfo[AI_STEGO].targetBendMin = 3.f;
+	AIInfo[AI_STEGO].targetBendDelta1 = 2000.f;
+	AIInfo[AI_STEGO].targetBendDelta2 = AIInfo[AI_STEGO].targetBendDelta1;
+	AIInfo[AI_STEGO].walkTargetGammaRot = 16.0f;
+	AIInfo[AI_STEGO].targetGammaRot = 10.0f;
+	AIInfo[AI_STEGO].idleStart = 120;
+	AIInfo[AI_STEGO].yBetaGamma4 = 0.4f;
+
+	AIInfo[AI_CHASM].targetDistance = 8048.f;
+	AIInfo[AI_CHASM].noWayCntMin = 8;
+	AIInfo[AI_CHASM].noFindWayMed = 48;
+	AIInfo[AI_CHASM].noFindWayRange = 80;
+	AIInfo[AI_CHASM].idleStart = 124;
+	AIInfo[AI_CHASM].targetBendRotSpd = 3.5f;
+	AIInfo[AI_CHASM].targetBendMin = 2.f;
+	AIInfo[AI_CHASM].targetBendDelta1 = 1600.f;
+	AIInfo[AI_CHASM].targetBendDelta2 = 1200.f;
+	AIInfo[AI_CHASM].yBetaGamma4 = 0.3f;
+	AIInfo[AI_CHASM].walkTargetGammaRot = 12.0f;
+	AIInfo[AI_CHASM].targetGammaRot = 8.0f;
+
+
   FILE *stream;
   char line[256];
 
