@@ -185,15 +185,9 @@ characters {
  hunterAnim = 0
  hunterOffset = 0
  aggress = 0
- killdist = 0
+ killdist = 300
  onradar = TRUE
  trophy  = TRUE
- runAnim = 1
- walkAnim = 0
- idleAnim = 2
- idleAnim = 3
- dieAnim = 4
- sleepAnim = 5
 }
 
 {
@@ -222,15 +216,9 @@ characters {
  hunterAnim = 0
  hunterOffset = 0
  aggress = 0
- killdist = 0
+ killdist = 250
  onradar = TRUE
  trophy  = TRUE
- runAnim = 0
- walkAnim = 1
- idleAnim = 2
- idleAnim = 3
- dieAnim = 4
- sleepAnim = 5
 }
 
 {
@@ -257,15 +245,9 @@ characters {
  hunterAnim = 0
  hunterOffset = 0
  aggress = 0
- killdist = 0
+ killdist = 415
  onradar = TRUE
  trophy  = TRUE
- runAnim = 0
- walkAnim = 1
- idleAnim = 3
- idleAnim = 4
- dieAnim = 2
- sleepAnim = 5
 }
 
 {
@@ -296,17 +278,6 @@ characters {
  killdist = 256
  onradar = TRUE
  trophy  = TRUE
- canswim = TRUE
- runAnim = 0
- walkAnim = 1
- swimAnim = 2
- slideAnim = 3
- jumpAnim = 4
- dieAnim = 5
- eatAnim = 6
- sleepAnim = 7
- idleAnim = 8
- idleAnim = 9
 }
 
 {
@@ -336,13 +307,6 @@ characters {
  killdist = 300
  onradar = TRUE
  trophy  = TRUE
- runAnim = 0
- walkAnim = 1
- idleAnim = 2
- idleAnim = 3
- idleAnim = 4
- dieAnim = 5
- sleepAnim = 6
 }
 
 {
@@ -372,22 +336,11 @@ characters {
  killdist = 256
  onradar = TRUE
  trophy  = TRUE
- canswim = TRUE
- runAnim = 0
- walkAnim = 1
- swimAnim = 3
- slideAnim = 2
- jumpAnim = 4
- dieAnim = 5
- eatAnim = 6
- sleepAnim = 7
- idleAnim = 8
- idleAnim = 9
 }
 
 {
  name = 'Spinosaurus'
- file = 'spino_s.car'
+ file = 'spino.car'
  ai        = 16
  clone 	   = 16
  mass      = 0.3
@@ -411,17 +364,6 @@ characters {
  killdist = 300
  onradar = TRUE
  trophy  = TRUE
- canswim = TRUE
- runAnim = 0
- walkAnim = 1
- swimAnim = 9
- slideAnim = 2
- jumpAnim = 5
- dieAnim = 6
- eatAnim = 7
- sleepAnim = 8
- idleAnim = 3
- idleAnim = 4
 }
 
 
@@ -429,7 +371,7 @@ characters {
 
 {
  name = 'Ceratosaurus'
- file = 'cerato1_s.car'
+ file = 'cerato1.car'
  ai        = 17
  clone 	   = 17
  mass      = 0.3
@@ -444,23 +386,12 @@ characters {
  shipdelta = 96
  runspd = 2.2
  wlkspd = 0.75
- swmspd = 0.75
  hunterAnim = 0
  hunterOffset = 320
  aggress = 200
  killdist = 350
  onradar = TRUE
  trophy  = TRUE
- canswim = TRUE
- runAnim = 1
- walkAnim = 0
- swimAnim = 8
- dieAnim = 5
- eatAnim = 7
- sleepAnim = 6
- idleAnim = 2
- idleAnim = 3
- idleAnim = 4
 }
 
 
@@ -488,7 +419,6 @@ characters {
  killdist = 380
  onradar = TRUE
  trophy  = TRUE
- canswim = TRUE
 }
 
 
@@ -529,52 +459,6 @@ mapambients {
 }
 
 {
- name = 'Velociraptor2'
- file = 'velo_iidc.car'
- clone 	   = 15
- mass      = 0.3
- length    = 4.0
- radius    = 256
- health    = 6
- basescore = 12
- scaleA    = 400
- smell     = 1.3
- hearK     = 0.7
- lookK     = 0.5
- shipdelta = -32
- fearCall = 17
- fearCall = 18
- runspd = 1.2
- wlkspd = 0.428
- swmspd = 0.4
- jmpspd = 1.1
- hunterAnim = 0
- hunterOffset = 170
- aggress = 160
- killdist = 256
- trophy  = TRUE
- canswim = TRUE
- runAnim = 0
- walkAnim = 1
- swimAnim = 3
- slideAnim = 2
- jumpAnim = 4
- dieAnim = 5
- eatAnim = 6
- sleepAnim = 7
- idleAnim = 8
- idleAnim = 9
- packMax = 5
- packMin = 3
- packDensity = 2000
- spawninfo {
- spawnrate = 1
- spawnmax  = 5
- spawnmin  = 0
- }
-}
-
-{
  name      = 'Pachycephalosaurus'
  file      = 'pach.car'
  clone 	   = 19
@@ -597,24 +481,13 @@ mapambients {
  hunterAnim = 0
  hunterOffset = 0
  aggress = 0
- killdist = 0
+ killdist = 250
  trophy  = TRUE
- onradar = TRUE
- runAnim = 1
- walkAnim = 0
- slideAnim = 2
- idleAnim = 4
- idleAnim = 5
- dieAnim = 3
- sleepAnim = 6
  spawninfo {
- spawnrate = 1
- spawnmax  = 5
+ spawnrate = 0.08
+ spawnmax  = 3
  spawnmin  = 0
  }
- packMax = 5
- packMin = 3
- packDensity = 1000
 }
 
 {
@@ -642,13 +515,6 @@ mapambients {
  aggress = 32
  killdist = 370
  trophy  = TRUE
- runAnim = 0
- walkAnim = 1
- idleAnim = 2
- idleAnim = 3
- idleAnim = 4
- dieAnim = 5
- sleepAnim = 6
  spawninfo {
  spawnrate = 0.05
  spawnmax  = 2

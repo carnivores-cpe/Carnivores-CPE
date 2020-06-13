@@ -462,10 +462,12 @@ typedef struct _TDinoInfo
   float packDensity;
 
   int runAnim, jumpAnim, walkAnim, swimAnim, flyAnim, glideAnim, takeoffAnim, landAnim,
-	  slideAnim, sleepAnim, dieAnim, fallAnim;
+	  slideAnim, sleepAnim, dieAnim, fallAnim, eatAnim;
 
   int idleAnim[32];
   int idleCount;
+
+  bool canSwim;
 
 } TDinoInfo;
 
@@ -490,7 +492,14 @@ typedef struct _TAIInfo {
 	float walkTargetGammaRot;
 	float targetGammaRot;
 	int idleStart;
-	float yBetaGamma4;
+	float yBetaGamma1, yBetaGamma2, yBetaGamma3, yBetaGamma4;
+
+	int agressMulti;
+	int waterLevel1, waterLevel2, waterLevel3;
+	float tGAIncrement;
+	int idleStartD;
+	bool jumper;
+
 } TAIInfo;
 
 

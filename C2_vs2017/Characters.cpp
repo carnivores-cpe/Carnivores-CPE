@@ -5,7 +5,7 @@ BOOL NewPhase;
 
 #define fx_DIE    0
 
-
+/*
 #define RAP_RUN    0
 #define RAP_WALK   1
 #define RAP_SWIM   2
@@ -16,6 +16,40 @@ BOOL NewPhase;
 #define RAP_SLP    7
 #define RAP_IDLE1  8
 #define RAP_IDLE2  9
+
+#define SPN_RUN    0
+#define SPN_WALK   1
+#define SPN_SLIDE  2
+#define SPN_SWIM   1
+#define SPN_IDLE1  3
+#define SPN_IDLE2  4
+#define SPN_JUMP   5
+#define SPN_DIE    6
+#define SPN_EAT    7
+#define SPN_SLP    8
+
+#define VEL_RUN    0
+#define VEL_WALK   1
+#define VEL_SWIM   3
+#define VEL_SLIDE  2
+#define VEL_JUMP   4
+#define VEL_DIE    5
+#define VEL_EAT    6
+#define VEL_SLP    7
+#define VEL_IDLE1  8
+#define VEL_IDLE2  9
+
+#define CER_WALK   0
+#define CER_RUN    1
+#define CER_IDLE1  2
+#define CER_IDLE2  3
+#define CER_IDLE3  4
+#define CER_DIE    5
+#define CER_SLP    6
+#define CER_EAT    7
+#define CER_SWIM   0
+
+*/
 
 #define MOSA_RUN    0
 #define MOSA_WALK   1
@@ -40,29 +74,6 @@ BOOL NewPhase;
 #define REX_EAT    9
 #define REX_SLP    10
 
-#define VEL_RUN    0
-#define VEL_WALK   1
-#define VEL_SWIM   3
-#define VEL_SLIDE  2
-#define VEL_JUMP   4
-#define VEL_DIE    5
-#define VEL_EAT    6
-#define VEL_SLP    7
-#define VEL_IDLE1  8
-#define VEL_IDLE2  9
-
-
-#define SPN_RUN    0
-#define SPN_WALK   1
-#define SPN_SLIDE  2
-#define SPN_SWIM   1
-#define SPN_IDLE1  3
-#define SPN_IDLE2  4
-#define SPN_JUMP   5
-#define SPN_DIE    6
-#define SPN_EAT    7
-#define SPN_SLP    8
-
 #define ICTH_WALK           0
 #define ICTH_WALK_IDLE1     1
 #define ICTH_WALK_IDLE2     2
@@ -79,16 +90,6 @@ BOOL NewPhase;
 #define ICTH_LAND_DIE       13
 #define ICTH_WATER_DIE      14
 #define ICTH_SLEEP          15
-
-#define CER_WALK   0
-#define CER_RUN    1
-#define CER_IDLE1  2
-#define CER_IDLE2  3
-#define CER_IDLE3  4
-#define CER_DIE    5
-#define CER_SLP    6
-#define CER_EAT    7
-#define CER_SWIM   0
 
 #define MOS_RUN    0
 #define MOS_WALK   1
@@ -1631,180 +1632,6 @@ void AnimateHuntDead(TCharacter *cptr)
 
 
 
-void AnimateRaptorDead(TCharacter *cptr)
-{
-
-  if (cptr->Phase!=RAP_DIE && cptr->Phase!=RAP_SLP)
-  {
-    if (cptr->PPMorphTime>128)
-    {
-      cptr->PrevPhase = cptr->Phase;
-      cptr->PrevPFTime  = cptr->FTime;
-      cptr->PPMorphTime = 0;
-    }
-
-    cptr->FTime = 0;
-    cptr->Phase = RAP_DIE;
-    ActivateCharacterFx(cptr);
-  }
-  else
-  {
-    ProcessPrevPhase(cptr);
-
-    cptr->FTime+=TimeDt;
-    if (cptr->FTime >= cptr->pinfo->Animation[cptr->Phase].AniTime)
-      if (Tranq)
-      {
-        cptr->FTime=0;
-        cptr->Phase = RAP_SLP;
-        ActivateCharacterFx(cptr);
-      }
-      else
-        cptr->FTime = cptr->pinfo->Animation[cptr->Phase].AniTime-1;
-  }
-
-//======= movement ===========//
-  DeltaFunc(cptr->vspeed, 0, TimeDt / 800.f);
-  cptr->pos.x+=cptr->lookx * cptr->vspeed * TimeDt;
-  cptr->pos.z+=cptr->lookz * cptr->vspeed * TimeDt;
-
-  ThinkY_Beta_Gamma(cptr, 100, 96, 0.6f, 0.5f);
-  DeltaFunc(cptr->gamma, cptr->tggamma, TimeDt / 1600.f);
-}
-
-
-
-void AnimateVeloDead(TCharacter *cptr)
-{
-
-  if (cptr->Phase!=VEL_DIE && cptr->Phase!=VEL_SLP)
-  {
-    if (cptr->PPMorphTime>128)
-    {
-      cptr->PrevPhase = cptr->Phase;
-      cptr->PrevPFTime  = cptr->FTime;
-      cptr->PPMorphTime = 0;
-    }
-
-    cptr->FTime = 0;
-    cptr->Phase = VEL_DIE;
-    ActivateCharacterFx(cptr);
-  }
-  else
-  {
-    ProcessPrevPhase(cptr);
-
-    cptr->FTime+=TimeDt;
-    if (cptr->FTime >= cptr->pinfo->Animation[cptr->Phase].AniTime)
-      if (Tranq)
-      {
-        cptr->FTime=0;
-        cptr->Phase = VEL_SLP;
-        ActivateCharacterFx(cptr);
-      }
-      else
-        cptr->FTime = cptr->pinfo->Animation[cptr->Phase].AniTime-1;
-  }
-
-//======= movement ===========//
-  DeltaFunc(cptr->vspeed, 0, TimeDt / 800.f);
-  cptr->pos.x+=cptr->lookx * cptr->vspeed * TimeDt;
-  cptr->pos.z+=cptr->lookz * cptr->vspeed * TimeDt;
-
-  ThinkY_Beta_Gamma(cptr, 100, 96, 0.6f, 0.5f);
-  DeltaFunc(cptr->gamma, cptr->tggamma, TimeDt / 1600.f);
-}
-
-
-
-
-void AnimateSpinDead(TCharacter *cptr)
-{
-
-  if (cptr->Phase!=SPN_DIE && cptr->Phase!=SPN_SLP)
-  {
-    if (cptr->PPMorphTime>128)
-    {
-      cptr->PrevPhase = cptr->Phase;
-      cptr->PrevPFTime  = cptr->FTime;
-      cptr->PPMorphTime = 0;
-    }
-
-    cptr->FTime = 0;
-    cptr->Phase = SPN_DIE;
-    ActivateCharacterFx(cptr);
-  }
-  else
-  {
-    ProcessPrevPhase(cptr);
-
-    cptr->FTime+=TimeDt;
-    if (cptr->FTime >= cptr->pinfo->Animation[cptr->Phase].AniTime)
-      if (Tranq)
-      {
-        cptr->FTime=0;
-        cptr->Phase = SPN_SLP;
-        ActivateCharacterFx(cptr);
-      }
-      else
-        cptr->FTime = cptr->pinfo->Animation[cptr->Phase].AniTime-1;
-  }
-
-//======= movement ===========//
-  DeltaFunc(cptr->vspeed, 0, TimeDt / 800.f);
-  cptr->pos.x+=cptr->lookx * cptr->vspeed * TimeDt;
-  cptr->pos.z+=cptr->lookz * cptr->vspeed * TimeDt;
-
-  ThinkY_Beta_Gamma(cptr, 100, 96, 0.6f, 0.5f);
-  DeltaFunc(cptr->gamma, cptr->tggamma, TimeDt / 1600.f);
-}
-
-
-
-void AnimateCeraDead(TCharacter *cptr)
-{
-
-  if (cptr->Phase!=CER_DIE && cptr->Phase!=CER_SLP)
-  {
-    if (cptr->PPMorphTime>128)
-    {
-      cptr->PrevPhase = cptr->Phase;
-      cptr->PrevPFTime  = cptr->FTime;
-      cptr->PPMorphTime = 0;
-    }
-
-    cptr->FTime = 0;
-    cptr->Phase = CER_DIE;
-    ActivateCharacterFx(cptr);
-  }
-  else
-  {
-    ProcessPrevPhase(cptr);
-
-    cptr->FTime+=TimeDt;
-    if (cptr->FTime >= cptr->pinfo->Animation[cptr->Phase].AniTime)
-      if (Tranq)
-      {
-        cptr->FTime=0;
-        cptr->Phase = CER_SLP;
-        ActivateCharacterFx(cptr);
-      }
-      else
-        cptr->FTime = cptr->pinfo->Animation[cptr->Phase].AniTime-1;
-  }
-
-//======= movement ===========//
-  DeltaFunc(cptr->vspeed, 0, TimeDt / 800.f);
-  cptr->pos.x+=cptr->lookx * cptr->vspeed * TimeDt;
-  cptr->pos.z+=cptr->lookz * cptr->vspeed * TimeDt;
-
-  ThinkY_Beta_Gamma(cptr, 100, 96, 0.6f, 0.5f);
-  DeltaFunc(cptr->gamma, cptr->tggamma, TimeDt / 1600.f);
-}
-
-
-
-
 void AnimateTRexDead(TCharacter *cptr)
 {
 
@@ -2101,8 +1928,369 @@ void AnimateDeadCommon(TCharacter *cptr)
 }
 
 
+
+
+
+void AnimateCarnivore(TCharacter *cptr)
+{
+	NewPhase = FALSE;
+	int _Phase = cptr->Phase;
+	int _FTime = cptr->FTime;
+	float _tgalpha = cptr->tgalpha;
+
+TBEGIN:
+	float targetx = cptr->tgx;
+	float targetz = cptr->tgz;
+	float targetdx = targetx - cptr->pos.x;
+	float targetdz = targetz - cptr->pos.z;
+
+	float tdist = (float)sqrt(targetdx * targetdx + targetdz * targetdz);
+
+	float playerdx = PlayerX - cptr->pos.x - cptr->lookx * 108;
+	float playerdz = PlayerZ - cptr->pos.z - cptr->lookz * 108;
+
+	if (cptr->Clone == AI_ALLO) {
+		playerdx = PlayerX - cptr->pos.x - cptr->lookx * 100 * cptr->scale;
+		playerdz = PlayerZ - cptr->pos.z - cptr->lookz * 100 * cptr->scale;
+	}
+
+	float pdist = (float)sqrt(playerdx * playerdx + playerdz * playerdz);
+	if (cptr->State == 2)
+	{
+		if (AIInfo[cptr->Clone].jumper) {
+			if (cptr->Phase != DinoInfo[cptr->CType].jumpAnim) NewPhase = TRUE;
+		}
+		cptr->State = 1;
+		if (cptr->Clone == AI_SPINO || cptr->Clone == AI_CERAT) cptr->Phase = DinoInfo[cptr->CType].runAnim;
+	}
+
+
+	if (GetLandUpH(cptr->pos.x, cptr->pos.z) - GetLandH(cptr->pos.x, cptr->pos.z) > AIInfo[cptr->Clone].waterLevel1 * cptr->scale)
+		cptr->StateF |= csONWATER;
+	else
+		cptr->StateF &= (!csONWATER);
+
+	if (cptr->Phase == DinoInfo[cptr->CType].eatAnim) goto NOTHINK;
+
+	//============================================//
+	if (!MyHealth) cptr->State = 0;
+	if (cptr->State)
+	{
+		if (pdist > ctViewR * DinoInfo[cptr->CType].aggress + OptAgres / AIInfo[cptr->Clone].agressMulti || DinoInfo[cptr->CType].aggress <= 0)
+		{
+			nv.x = playerdx;
+			nv.z = playerdz;
+			nv.y = 0;
+			NormVector(nv, 2048.f);
+			cptr->tgx = cptr->pos.x - nv.x;
+			cptr->tgz = cptr->pos.z - nv.z;
+			cptr->tgtime = 0;
+			cptr->AfraidTime -= TimeDt;
+			if (cptr->AfraidTime <= 0)
+			{
+				cptr->AfraidTime = 0;
+				cptr->State = 0;
+			}
+
+		}
+		else
+		{
+			cptr->tgx = PlayerX;
+			cptr->tgz = PlayerZ;
+			cptr->tgtime = 0;
+		}
+
+		if (AIInfo[cptr->Clone].jumper) {
+			if (!(cptr->StateF & csONWATER))
+				if (pdist < 1324 * cptr->scale && pdist>900 * cptr->scale)
+					if (AngleDifference(cptr->alpha, FindVectorAlpha(playerdx, playerdz)) < 0.2f)
+						cptr->Phase = DinoInfo[cptr->CType].jumpAnim;
+		}
+
+		if (pdist < DinoInfo[cptr->CType].killDist && DinoInfo[cptr->CType].killDist > 0)
+			if (fabs(PlayerY - cptr->pos.y - AIInfo[cptr->Clone].waterLevel2) < 256)
+			{
+				if (!(cptr->StateF & csONWATER))
+				{
+					cptr->vspeed /= 8.0f;
+					cptr->State = 1;
+					cptr->Phase = DinoInfo[cptr->CType].eatAnim;
+				}
+				AddDeadBody(cptr, DinoInfo[cptr->CType].hunterDeathAnim);
+			}
+	}
+
+	if (!cptr->State)
+	{
+		if (cptr->Clone == AI_VELO || cptr->Clone == AI_CERAT) cptr->AfraidTime = 0;
+
+		if (tdist < 456)
+		{
+			SetNewTargetPlace(cptr, 8048.f);
+			goto TBEGIN;
+		}
+	}
+
+NOTHINK:
+	if (pdist < 2048) cptr->NoFindCnt = 0;
+	if (cptr->NoFindCnt) cptr->NoFindCnt--;
+	else
+	{
+		cptr->tgalpha = CorrectedAlpha(FindVectorAlpha(targetdx, targetdz), cptr->alpha);//FindVectorAlpha(targetdx, targetdz);
+		if (cptr->State && pdist > 1648)
+		{
+			cptr->tgalpha += (float)sin(RealTime / 824.f) / AIInfo[cptr->Clone].tGAIncrement;
+			if (cptr->tgalpha < 0) cptr->tgalpha += 2 * pi;
+			if (cptr->tgalpha > 2 * pi) cptr->tgalpha -= 2 * pi;
+		}
+	}
+
+	LookForAWay(cptr, !DinoInfo[cptr->CType].canSwim, TRUE);
+	if (cptr->NoWayCnt > 12)
+	{
+		cptr->NoWayCnt = 0;
+		cptr->NoFindCnt = 16 + rRand(20);
+	}
+
+
+	if (cptr->tgalpha < 0) cptr->tgalpha += 2 * pi;
+	if (cptr->tgalpha > 2 * pi) cptr->tgalpha -= 2 * pi;
+
+	//===============================================//
+
+	ProcessPrevPhase(cptr);
+
+
+	//======== select new phase =======================//
+	cptr->FTime += TimeDt;
+
+	if (cptr->FTime >= cptr->pinfo->Animation[cptr->Phase].AniTime)
+	{
+		cptr->FTime %= cptr->pinfo->Animation[cptr->Phase].AniTime;
+		NewPhase = TRUE;
+	}
+
+	if (cptr->Phase == DinoInfo[cptr->CType].eatAnim)  goto ENDPSELECT;
+
+	if (AIInfo[cptr->Clone].jumper) {
+		if (NewPhase && _Phase == DinoInfo[cptr->CType].jumpAnim)
+		{
+			cptr->Phase = DinoInfo[cptr->CType].runAnim;
+			goto ENDPSELECT;
+		}
+
+		if (cptr->Phase == DinoInfo[cptr->CType].jumpAnim) goto ENDPSELECT;
+	}
+
+	if (NewPhase)
+		if (!cptr->State)
+		{
+		
+
+
+
+			if (DinoInfo[cptr->CType].idleCount) {
+
+				if (rRand(AIInfo[cptr->Clone].idleStartD) > 110) {
+					cptr->Phase = DinoInfo[cptr->CType].idleAnim[rRand(DinoInfo[cptr->CType].idleCount - 1)];
+					goto ENDPSELECT;
+				} else {
+					cptr->Phase = DinoInfo[cptr->CType].walkAnim;
+				}
+
+			}
+			else {
+				cptr->Phase = DinoInfo[cptr->CType].walkAnim;
+			}
+
+		}
+		else cptr->Phase = DinoInfo[cptr->CType].runAnim;
+
+	bool idlePhase = false;
+	for (int i = 0; i < DinoInfo[cptr->CType].idleCount; i++) {
+		if (cptr->Phase == DinoInfo[cptr->CType].idleAnim[i]) idlePhase = true;
+	}
+
+	if (!idlePhase)
+		if (!cptr->State) cptr->Phase = DinoInfo[cptr->CType].walkAnim;
+		else if (fabs(cptr->tgalpha - cptr->alpha) < 1.0 ||
+			fabs(cptr->tgalpha - cptr->alpha) > 2 * pi - 1.0)
+			cptr->Phase = DinoInfo[cptr->CType].runAnim;
+		else cptr->Phase = DinoInfo[cptr->CType].walkAnim;
+
+	if (DinoInfo[cptr->CType].canSwim) {
+		if (cptr->StateF & csONWATER) cptr->Phase = DinoInfo[cptr->CType].swimAnim;
+	}
+
+	if (cptr->Clone != AI_CERAT) {
+		if (cptr->Slide > 40) cptr->Phase = DinoInfo[cptr->CType].slideAnim;
+	}
+
+
+ENDPSELECT:
+
+	//====== process phase changing ===========//
+	if ((_Phase != cptr->Phase) || NewPhase)
+		ActivateCharacterFx(cptr);
+
+	if (_Phase != cptr->Phase)
+	{
+		//==== set proportional FTime for better morphing =//
+		if (MORPHP)
+			if (_Phase <= 3 && cptr->Phase <= 3)
+				cptr->FTime = _FTime * cptr->pinfo->Animation[cptr->Phase].AniTime / cptr->pinfo->Animation[_Phase].AniTime + 64;
+			else if (!NewPhase) cptr->FTime = 0;
+
+		if (cptr->PPMorphTime > 128)
+		{
+			cptr->PrevPhase = _Phase;
+			cptr->PrevPFTime = _FTime;
+			cptr->PPMorphTime = 0;
+		}
+	}
+
+	cptr->FTime %= cptr->pinfo->Animation[cptr->Phase].AniTime;
+
+
+
+	//========== rotation to tgalpha ===================//
+
+	float rspd, currspeed, tgbend;
+	float dalpha = (float)fabs(cptr->tgalpha - cptr->alpha);
+	float drspd = dalpha;
+	if (drspd > pi) drspd = 2 * pi - drspd;
+
+	if (AIInfo[cptr->Clone].jumper) {
+		if (cptr->Phase == DinoInfo[cptr->CType].jumpAnim) goto SKIPROT;
+	}
+	if (cptr->Phase == DinoInfo[cptr->CType].eatAnim) goto SKIPROT;
+	for (int i = 0; i < DinoInfo[cptr->CType].idleCount; i++) {
+		if (cptr->Phase == DinoInfo[cptr->CType].idleAnim[i]) goto SKIPROT;
+	}
+
+	if (drspd > 0.02)
+		if (cptr->tgalpha > cptr->alpha) currspeed = 0.6f + drspd * 1.2f;
+		else currspeed = -0.6f - drspd * 1.2f;
+	else currspeed = 0;
+	if (cptr->AfraidTime) currspeed *= 2.5;
+
+	if (dalpha > pi) currspeed *= -1;
+	if ((cptr->StateF & csONWATER) || cptr->Phase == DinoInfo[cptr->CType].walkAnim) currspeed /= 1.4f;
+
+	if (cptr->AfraidTime) DeltaFunc(cptr->rspeed, currspeed, (float)TimeDt / 160.f);
+	else DeltaFunc(cptr->rspeed, currspeed, (float)TimeDt / 180.f);
+
+	tgbend = drspd / AIInfo[cptr->Clone].targetBendRotSpd;
+	if (tgbend > pi / 5) tgbend = pi / 5;
+
+	tgbend *= SGN(currspeed);
+	if (fabs(tgbend) > fabs(cptr->bend)) DeltaFunc(cptr->bend, tgbend, (float)TimeDt / 800.f);
+	else DeltaFunc(cptr->bend, tgbend, (float)TimeDt / 600.f);
+
+
+	rspd = cptr->rspeed * TimeDt / 1024.f;
+	if (drspd < fabs(rspd)) cptr->alpha = cptr->tgalpha;
+	else cptr->alpha += rspd;
+
+
+	if (cptr->alpha > pi * 2) cptr->alpha -= pi * 2;
+	if (cptr->alpha < 0) cptr->alpha += pi * 2;
+
+SKIPROT:
+
+	if (cptr->Clone != AI_CERAT) {
+		//======= set slide mode ===========//
+		if (!cptr->Slide && cptr->vspeed > 0.6 && (cptr->Phase != DinoInfo[cptr->CType].jumpAnim || !AIInfo[cptr->Clone].jumper))
+			if (AngleDifference(cptr->tgalpha, cptr->alpha) > pi * 2 / 3.f)
+			{
+				cptr->Slide = (int)(cptr->vspeed*700.f);
+				cptr->slidex = cptr->lookx;
+				cptr->slidez = cptr->lookz;
+				cptr->vspeed = 0;
+			}
+	}
+
+	//========== movement ==============================//
+	cptr->lookx = (float)cos(cptr->alpha);
+	cptr->lookz = (float)sin(cptr->alpha);
+
+	float curspeed = 0;
+	if (cptr->Phase == DinoInfo[cptr->CType].runAnim) curspeed = cptr->speed_run;
+	if (cptr->Phase == DinoInfo[cptr->CType].walkAnim) curspeed = cptr->speed_walk;
+	if (DinoInfo[cptr->CType].canSwim) {
+		if (cptr->Phase == DinoInfo[cptr->CType].swimAnim) curspeed = cptr->speed_swim;
+	}
+	if (AIInfo[cptr->Clone].jumper) {
+		if (cptr->Phase == DinoInfo[cptr->CType].jumpAnim) curspeed = cptr->speed_jump;
+	}
+
+	if (cptr->Phase == DinoInfo[cptr->CType].eatAnim) curspeed = 0.0f;
+
+	if (cptr->Phase == DinoInfo[cptr->CType].runAnim && cptr->Slide && cptr->Clone != AI_CERAT)
+	{
+		curspeed /= 8;
+		if (drspd > pi / 2.f) curspeed = 0;
+		else if (drspd > pi / 4.f) curspeed *= 2.f - 4.f*drspd / pi;
+	}
+	else if (drspd > pi / 2.f) curspeed *= 2.f - 2.f*drspd / pi;
+
+	//========== process speed =============//
+
+	DeltaFunc(cptr->vspeed, curspeed, TimeDt / 500.f);
+
+	if (AIInfo[cptr->Clone].jumper) {
+		if (cptr->Phase == DinoInfo[cptr->CType].jumpAnim) cptr->vspeed = 1.1f;
+	}
+
+	MoveCharacter(cptr, cptr->lookx * cptr->vspeed * TimeDt * cptr->scale,
+		cptr->lookz * cptr->vspeed * TimeDt * cptr->scale, !DinoInfo[cptr->CType].canSwim, TRUE);
+
+	if (cptr->Clone != AI_CERAT) {
+		//========== slide ==============//
+		if (cptr->Slide)
+		{
+			MoveCharacter(cptr, cptr->slidex * cptr->Slide / 600.f * TimeDt * cptr->scale,
+				cptr->slidez * cptr->Slide / 600.f * TimeDt * cptr->scale, !DinoInfo[cptr->CType].canSwim, TRUE);
+	
+			cptr->Slide -= TimeDt;
+			if (cptr->Slide < 0) cptr->Slide = 0;
+		}
+	}
+
+
+	//============ Y movement =================//
+	if (cptr->StateF & csONWATER && DinoInfo[cptr->CType].canSwim)
+	{
+		cptr->pos.y = GetLandUpH(cptr->pos.x, cptr->pos.z) - AIInfo[cptr->Clone].waterLevel3 * cptr->scale;
+		cptr->beta /= 2;
+		cptr->tggamma = 0;
+	}
+	else
+	{
+		ThinkY_Beta_Gamma(cptr,
+			AIInfo[cptr->Clone].yBetaGamma1,
+			AIInfo[cptr->Clone].yBetaGamma2,
+			AIInfo[cptr->Clone].yBetaGamma3,
+			AIInfo[cptr->Clone].yBetaGamma4);
+	}
+
+	//=== process to tggamma ===//
+	if (cptr->Phase == DinoInfo[cptr->CType].walkAnim) cptr->tggamma += cptr->rspeed / AIInfo[cptr->Clone].walkTargetGammaRot;
+	else cptr->tggamma += cptr->rspeed / AIInfo[cptr->Clone].targetGammaRot;
+	if (AIInfo[cptr->Clone].jumper) {
+		if (cptr->Phase == DinoInfo[cptr->CType].jumpAnim) cptr->tggamma = 0;
+	}
+
+	DeltaFunc(cptr->gamma, cptr->tggamma, TimeDt / 1624.f);
+
+
+	//==================================================//
+
+}
+
+
 //universal animate proc
-void AnimateCommon(TCharacter *cptr)
+void AnimateHerbivore(TCharacter *cptr)
 {
 	NewPhase = FALSE;
 	int _Phase = cptr->Phase;
@@ -2351,1202 +2539,8 @@ SKIPROT:
 
 
 
-void AnimateRaptorOld(TCharacter *cptr)
-{
-  NewPhase = FALSE;
-  int _Phase = cptr->Phase;
-  int _FTime = cptr->FTime;
-  float _tgalpha = cptr->tgalpha;
 
-
-TBEGIN:
-  float targetx = cptr->tgx;
-  float targetz = cptr->tgz;
-  float targetdx = targetx - cptr->pos.x;
-  float targetdz = targetz - cptr->pos.z;
-
-  float tdist = (float)sqrt( targetdx * targetdx + targetdz * targetdz );
-
-  float playerdx = PlayerX - cptr->pos.x - cptr->lookx * 100 * cptr->scale;
-  float playerdz = PlayerZ - cptr->pos.z - cptr->lookz * 100 * cptr->scale;
-  float pdist = (float)sqrt( playerdx * playerdx + playerdz * playerdz );
-  if (cptr->State==2)
-  {
-    if (cptr->Phase!=RAP_JUMP) NewPhase=TRUE;
-    cptr->State=1;
-  }
-
-
-  if (GetLandUpH(cptr->pos.x, cptr->pos.z) - GetLandH(cptr->pos.x, cptr->pos.z) > 180 * cptr->scale)
-    cptr->StateF |= csONWATER;
-  else
-    cptr->StateF &= (!csONWATER);
-
-  if (cptr->Phase == RAP_EAT) goto NOTHINK;
-
-//============================================//
-  if (!MyHealth) cptr->State = 0;
-  if (cptr->State)
-  {
-    if (pdist > ctViewR*128+OptAgres/4)
-    {
-      nv.x = playerdx;
-      nv.z = playerdz;
-      nv.y = 0;
-      NormVector(nv, 2048.f);
-      cptr->tgx = cptr->pos.x - nv.x;
-      cptr->tgz = cptr->pos.z - nv.z;
-      cptr->tgtime = 0;
-      cptr->AfraidTime-=TimeDt;
-      if (cptr->AfraidTime<=0)
-      {
-        cptr->AfraidTime=0;
-        cptr->State = 0;
-      }
-
-    }
-    else
-    {
-      cptr->tgx = PlayerX;
-      cptr->tgz = PlayerZ;
-      cptr->tgtime = 0;
-    }
-
-    if (!(cptr->StateF & csONWATER))
-      if (pdist<1324 * cptr->scale && pdist>900 * cptr->scale)
-        if (AngleDifference(cptr->alpha, FindVectorAlpha(playerdx, playerdz)) < 0.2f)
-          cptr->Phase = RAP_JUMP;
-
-    if (pdist<256)
-      if (fabs(PlayerY - cptr->pos.y - 160) < 256)
-      {
-        if (!(cptr->StateF & csONWATER))
-        {
-          cptr->vspeed/= 8.0f;
-          cptr->State = 1;
-          cptr->Phase = RAP_EAT;
-        }
-        AddDeadBody(cptr, DinoInfo[cptr->CType].hunterDeathAnim);
-      }
-  }
-
-  if (!cptr->State)
-  {
-    if (tdist<456)
-    {
-      SetNewTargetPlace(cptr, 8048.f);
-      goto TBEGIN;
-    }
-  }
-
-NOTHINK:
-  if (pdist<2048) cptr->NoFindCnt = 0;
-  if (cptr->NoFindCnt) cptr->NoFindCnt--;
-  else
-  {
-    cptr->tgalpha = CorrectedAlpha(FindVectorAlpha(targetdx, targetdz), cptr->alpha);//FindVectorAlpha(targetdx, targetdz);
-    if (cptr->State && pdist>1648)
-    {
-      cptr->tgalpha += (float)sin(RealTime/824.f) / 2.f;
-      if (cptr->tgalpha < 0) cptr->tgalpha+=2*pi;
-      if (cptr->tgalpha > 2*pi) cptr->tgalpha-=2*pi;
-    }
-  }
-
-  LookForAWay(cptr, FALSE, TRUE);
-  if (cptr->NoWayCnt>12)
-  {
-    cptr->NoWayCnt=0;
-    cptr->NoFindCnt = 16 + rRand(20);
-  }
-
-
-  if (cptr->tgalpha < 0) cptr->tgalpha+=2*pi;
-  if (cptr->tgalpha > 2*pi) cptr->tgalpha-=2*pi;
-
-//===============================================//
-
-  ProcessPrevPhase(cptr);
-
-
-//======== select new phase =======================//
-  cptr->FTime+=TimeDt;
-
-  if (cptr->FTime >= cptr->pinfo->Animation[cptr->Phase].AniTime)
-  {
-    cptr->FTime %= cptr->pinfo->Animation[cptr->Phase].AniTime;
-    NewPhase = TRUE;
-  }
-
-  if (cptr->Phase==RAP_EAT)  goto ENDPSELECT;
-  if (NewPhase && _Phase==RAP_JUMP)
-  {
-    cptr->Phase = RAP_RUN;
-    goto ENDPSELECT;
-  }
-
-
-  if (cptr->Phase== RAP_JUMP) goto ENDPSELECT;
-
-  if (!cptr->State) cptr->Phase=RAP_WALK;
-  else if (fabs(cptr->tgalpha - cptr->alpha)<1.0 ||
-           fabs(cptr->tgalpha - cptr->alpha)>2*pi-1.0)
-    cptr->Phase = RAP_RUN;
-  else cptr->Phase=RAP_WALK;
-
-  if (cptr->StateF & csONWATER) cptr->Phase = RAP_SWIM;
-  if (cptr->Slide>40) cptr->Phase = RAP_SLIDE;
-
-
-ENDPSELECT:
-
-//====== process phase changing ===========//
-  if ( (_Phase != cptr->Phase) || NewPhase)
-    ActivateCharacterFx(cptr);
-
-  if (_Phase != cptr->Phase)
-  {
-    //==== set proportional FTime for better morphing =//
-    if (MORPHP)
-      if (_Phase<=3 && cptr->Phase<=3)
-        cptr->FTime = _FTime * cptr->pinfo->Animation[cptr->Phase].AniTime / cptr->pinfo->Animation[_Phase].AniTime + 64;
-      else if (!NewPhase) cptr->FTime = 0;
-
-    if (cptr->PPMorphTime>128)
-    {
-      cptr->PrevPhase = _Phase;
-      cptr->PrevPFTime  = _FTime;
-      cptr->PPMorphTime = 0;
-    }
-  }
-
-  cptr->FTime %= cptr->pinfo->Animation[cptr->Phase].AniTime;
-
-
-
-  //========== rotation to tgalpha ===================//
-
-  float rspd, currspeed, tgbend;
-  float dalpha = (float)fabs(cptr->tgalpha - cptr->alpha);
-  float drspd = dalpha;
-  if (drspd>pi) drspd = 2*pi - drspd;
-
-  if (cptr->Phase==RAP_JUMP || cptr->Phase==RAP_EAT) goto SKIPROT;
-
-  if (drspd > 0.02)
-    if (cptr->tgalpha > cptr->alpha) currspeed = 0.6f + drspd*1.2f;
-    else currspeed =-0.6f - drspd*1.2f;
-  else currspeed = 0;
-  if (cptr->AfraidTime) currspeed*=2.5;
-
-  if (dalpha > pi) currspeed*=-1;
-  if ((cptr->StateF & csONWATER) || cptr->Phase==RAP_WALK) currspeed/=1.4f;
-
-  if (cptr->AfraidTime) DeltaFunc(cptr->rspeed, currspeed, (float)TimeDt / 160.f);
-  else DeltaFunc(cptr->rspeed, currspeed, (float)TimeDt / 180.f);
-
-  tgbend = drspd/2;
-  if (tgbend>pi/5) tgbend = pi/5;
-
-  tgbend*= SGN(currspeed);
-  if (fabs(tgbend) > fabs(cptr->bend)) DeltaFunc(cptr->bend, tgbend, (float)TimeDt / 800.f);
-  else DeltaFunc(cptr->bend, tgbend, (float)TimeDt / 600.f);
-
-
-  rspd=cptr->rspeed * TimeDt / 1024.f;
-  if (drspd < fabs(rspd)) cptr->alpha = cptr->tgalpha;
-  else cptr->alpha+=rspd;
-
-
-  if (cptr->alpha > pi * 2) cptr->alpha-= pi * 2;
-  if (cptr->alpha < 0     ) cptr->alpha+= pi * 2;
-
-SKIPROT:
-
-  //======= set slide mode ===========//
-  if (!cptr->Slide && cptr->vspeed>0.6 && cptr->Phase!=RAP_JUMP)
-    if (AngleDifference(cptr->tgalpha, cptr->alpha)>pi*2/3.f)
-    {
-      cptr->Slide = (int)(cptr->vspeed*700.f);
-      cptr->slidex = cptr->lookx;
-      cptr->slidez = cptr->lookz;
-      cptr->vspeed = 0;
-    }
-
-
-
-//========== movement ==============================//
-  cptr->lookx = (float)cos(cptr->alpha);
-  cptr->lookz = (float)sin(cptr->alpha);
-
-  float curspeed = 0;
-  if (cptr->Phase == RAP_RUN ) curspeed = cptr->speed_run;
-  if (cptr->Phase == RAP_JUMP) curspeed = cptr->speed_jump;
-  if (cptr->Phase == RAP_WALK) curspeed = cptr->speed_walk;
-  if (cptr->Phase == RAP_SWIM) curspeed = cptr->speed_swim;
-  if (cptr->Phase == RAP_EAT) curspeed = 0.0f;
-
-  if (cptr->Phase == RAP_RUN && cptr->Slide)
-  {
-    curspeed /= 8;
-    if (drspd > pi / 2.f) curspeed=0;
-    else if (drspd > pi / 4.f) curspeed*=2.f - 4.f*drspd / pi;
-  }
-  else if (drspd > pi / 2.f) curspeed*=2.f - 2.f*drspd / pi;
-
-//========== process speed =============//
-
-  DeltaFunc(cptr->vspeed, curspeed, TimeDt / 500.f);
-
-  if (cptr->Phase==RAP_JUMP) cptr->vspeed = 1.1f;
-
-  MoveCharacter(cptr, cptr->lookx * cptr->vspeed * TimeDt * cptr->scale,
-                cptr->lookz * cptr->vspeed * TimeDt * cptr->scale, FALSE, TRUE);
-
-
-//========== slide ==============//
-  if (cptr->Slide)
-  {
-    MoveCharacter(cptr, cptr->slidex * cptr->Slide / 600.f * TimeDt * cptr->scale,
-                  cptr->slidez * cptr->Slide / 600.f * TimeDt * cptr->scale, FALSE, TRUE);
-
-    cptr->Slide-=TimeDt;
-    if (cptr->Slide<0) cptr->Slide=0;
-  }
-
-
-//============ Y movement =================//
-  if (cptr->StateF & csONWATER)
-  {
-    cptr->pos.y = GetLandUpH(cptr->pos.x, cptr->pos.z) - 200 * cptr->scale;
-    cptr->beta/=2;
-    cptr->tggamma=0;
-  }
-  else
-  {
-    ThinkY_Beta_Gamma(cptr, 64, 32, 0.5f, 0.4f);
-  }
-
-  //=== process to tggamma ===//
-  if (cptr->Phase==RAP_WALK) cptr->tggamma+= cptr->rspeed / 10.0f;
-  else cptr->tggamma+= cptr->rspeed / 8.0f;
-  if (cptr->Phase==RAP_JUMP) cptr->tggamma=0;
-
-  DeltaFunc(cptr->gamma, cptr->tggamma, TimeDt / 1624.f);
-
-
-//==================================================//
-
-}
-
-
-
-
-
-void AnimateRaptor(TCharacter *cptr)
-{
-	NewPhase = FALSE;
-	int _Phase = cptr->Phase;
-	int _FTime = cptr->FTime;
-	float _tgalpha = cptr->tgalpha;
-
-
-TBEGIN:
-	float targetx = cptr->tgx;
-	float targetz = cptr->tgz;
-	float targetdx = targetx - cptr->pos.x;
-	float targetdz = targetz - cptr->pos.z;
-
-	float tdist = (float)sqrt(targetdx * targetdx + targetdz * targetdz);
-
-	float playerdx = PlayerX - cptr->pos.x - cptr->lookx * 100 * cptr->scale;
-	float playerdz = PlayerZ - cptr->pos.z - cptr->lookz * 100 * cptr->scale;
-	float pdist = (float)sqrt(playerdx * playerdx + playerdz * playerdz);
-	if (cptr->State == 2)
-	{
-		if (cptr->Phase != RAP_JUMP) NewPhase = TRUE;
-		cptr->State = 1;
-	}
-
-
-	if (GetLandUpH(cptr->pos.x, cptr->pos.z) - GetLandH(cptr->pos.x, cptr->pos.z) > 180 * cptr->scale)
-		cptr->StateF |= csONWATER;
-	else
-		cptr->StateF &= (!csONWATER);
-
-	if (cptr->Phase == RAP_EAT) goto NOTHINK;
-
-	//============================================//
-	if (!MyHealth) cptr->State = 0;
-	if (cptr->State)
-	{
-		if (pdist > ctViewR * DinoInfo[cptr->CType].aggress + OptAgres / 4 || DinoInfo[cptr->CType].aggress <= 0)
-		{
-			nv.x = playerdx;
-			nv.z = playerdz;
-			nv.y = 0;
-			NormVector(nv, 2048.f);
-			cptr->tgx = cptr->pos.x - nv.x;
-			cptr->tgz = cptr->pos.z - nv.z;
-			cptr->tgtime = 0;
-			cptr->AfraidTime -= TimeDt;
-			if (cptr->AfraidTime <= 0)
-			{
-				cptr->AfraidTime = 0;
-				cptr->State = 0;
-			}
-
-		}
-		else
-		{
-			cptr->tgx = PlayerX;
-			cptr->tgz = PlayerZ;
-			cptr->tgtime = 0;
-		}
-
-		if (!(cptr->StateF & csONWATER))
-			if (pdist < 1324 * cptr->scale && pdist>900 * cptr->scale)
-				if (AngleDifference(cptr->alpha, FindVectorAlpha(playerdx, playerdz)) < 0.2f)
-					cptr->Phase = RAP_JUMP;
-
-		if (pdist < DinoInfo[cptr->CType].killDist && DinoInfo[cptr->CType].killDist > 0)
-			if (fabs(PlayerY - cptr->pos.y - 160) < 256)
-			{
-				if (!(cptr->StateF & csONWATER))
-				{
-					cptr->vspeed /= 8.0f;
-					cptr->State = 1;
-					cptr->Phase = RAP_EAT;
-				}
-				AddDeadBody(cptr, DinoInfo[cptr->CType].hunterDeathAnim);
-			}
-	}
-
-	if (!cptr->State)
-	{
-		if (tdist < 456)
-		{
-			SetNewTargetPlace(cptr, 8048.f);
-			goto TBEGIN;
-		}
-	}
-
-NOTHINK:
-	if (pdist < 2048) cptr->NoFindCnt = 0;
-	if (cptr->NoFindCnt) cptr->NoFindCnt--;
-	else
-	{
-		cptr->tgalpha = CorrectedAlpha(FindVectorAlpha(targetdx, targetdz), cptr->alpha);//FindVectorAlpha(targetdx, targetdz);
-		if (cptr->State && pdist > 1648)
-		{
-			cptr->tgalpha += (float)sin(RealTime / 824.f) / 2.f;
-			if (cptr->tgalpha < 0) cptr->tgalpha += 2 * pi;
-			if (cptr->tgalpha > 2 * pi) cptr->tgalpha -= 2 * pi;
-		}
-	}
-
-	LookForAWay(cptr, FALSE, TRUE);
-	if (cptr->NoWayCnt > 12)
-	{
-		cptr->NoWayCnt = 0;
-		cptr->NoFindCnt = 16 + rRand(20);
-	}
-
-
-	if (cptr->tgalpha < 0) cptr->tgalpha += 2 * pi;
-	if (cptr->tgalpha > 2 * pi) cptr->tgalpha -= 2 * pi;
-
-	//===============================================//
-
-	ProcessPrevPhase(cptr);
-
-
-	//======== select new phase =======================//
-	cptr->FTime += TimeDt;
-
-	if (cptr->FTime >= cptr->pinfo->Animation[cptr->Phase].AniTime)
-	{
-		cptr->FTime %= cptr->pinfo->Animation[cptr->Phase].AniTime;
-		NewPhase = TRUE;
-	}
-
-	if (cptr->Phase == RAP_EAT)  goto ENDPSELECT;
-	if (NewPhase && _Phase == RAP_JUMP)
-	{
-		cptr->Phase = RAP_RUN;
-		goto ENDPSELECT;
-	}
-
-
-	if (cptr->Phase == RAP_JUMP) goto ENDPSELECT;
-
-	if (NewPhase)
-		if (!cptr->State)
-			if (rRand(118) > 110)
-			{
-				cptr->Phase = RAP_IDLE1 + rRand(1);
-				goto ENDPSELECT;
-			}
-			else cptr->Phase = RAP_WALK;
-		else cptr->Phase = RAP_RUN;
-
-	if (cptr->Phase != RAP_IDLE1 && cptr->Phase != RAP_IDLE2)
-		if (!cptr->State) cptr->Phase = RAP_WALK;
-		else if (fabs(cptr->tgalpha - cptr->alpha) < 1.0 ||
-			fabs(cptr->tgalpha - cptr->alpha) > 2 * pi - 1.0)
-			cptr->Phase = RAP_RUN;
-		else cptr->Phase = RAP_WALK;
-
-	if (cptr->StateF & csONWATER) cptr->Phase = RAP_SWIM;
-	if (cptr->Slide > 40) cptr->Phase = RAP_SLIDE;
-
-
-ENDPSELECT:
-
-	//====== process phase changing ===========//
-	if ((_Phase != cptr->Phase) || NewPhase)
-		ActivateCharacterFx(cptr);
-
-	if (_Phase != cptr->Phase)
-	{
-		//==== set proportional FTime for better morphing =//
-		if (MORPHP)
-			if (_Phase <= 3 && cptr->Phase <= 3)
-				cptr->FTime = _FTime * cptr->pinfo->Animation[cptr->Phase].AniTime / cptr->pinfo->Animation[_Phase].AniTime + 64;
-			else if (!NewPhase) cptr->FTime = 0;
-
-		if (cptr->PPMorphTime > 128)
-		{
-			cptr->PrevPhase = _Phase;
-			cptr->PrevPFTime = _FTime;
-			cptr->PPMorphTime = 0;
-		}
-	}
-
-	cptr->FTime %= cptr->pinfo->Animation[cptr->Phase].AniTime;
-
-
-
-	//========== rotation to tgalpha ===================//
-
-	float rspd, currspeed, tgbend;
-	float dalpha = (float)fabs(cptr->tgalpha - cptr->alpha);
-	float drspd = dalpha;
-	if (drspd > pi) drspd = 2 * pi - drspd;
-
-	if (cptr->Phase == RAP_JUMP || cptr->Phase == RAP_EAT ||
-		cptr->Phase == RAP_IDLE1 || cptr->Phase == RAP_IDLE2) goto SKIPROT;
-
-	if (drspd > 0.02)
-		if (cptr->tgalpha > cptr->alpha) currspeed = 0.6f + drspd * 1.2f;
-		else currspeed = -0.6f - drspd * 1.2f;
-	else currspeed = 0;
-	if (cptr->AfraidTime) currspeed *= 2.5;
-
-	if (dalpha > pi) currspeed *= -1;
-	if ((cptr->StateF & csONWATER) || cptr->Phase == RAP_WALK) currspeed /= 1.4f;
-
-	if (cptr->AfraidTime) DeltaFunc(cptr->rspeed, currspeed, (float)TimeDt / 160.f);
-	else DeltaFunc(cptr->rspeed, currspeed, (float)TimeDt / 180.f);
-
-	tgbend = drspd / 2;
-	if (tgbend > pi / 5) tgbend = pi / 5;
-
-	tgbend *= SGN(currspeed);
-	if (fabs(tgbend) > fabs(cptr->bend)) DeltaFunc(cptr->bend, tgbend, (float)TimeDt / 800.f);
-	else DeltaFunc(cptr->bend, tgbend, (float)TimeDt / 600.f);
-
-
-	rspd = cptr->rspeed * TimeDt / 1024.f;
-	if (drspd < fabs(rspd)) cptr->alpha = cptr->tgalpha;
-	else cptr->alpha += rspd;
-
-
-	if (cptr->alpha > pi * 2) cptr->alpha -= pi * 2;
-	if (cptr->alpha < 0) cptr->alpha += pi * 2;
-
-SKIPROT:
-
-	//======= set slide mode ===========//
-	if (!cptr->Slide && cptr->vspeed > 0.6 && cptr->Phase != RAP_JUMP)
-		if (AngleDifference(cptr->tgalpha, cptr->alpha) > pi * 2 / 3.f)
-		{
-			cptr->Slide = (int)(cptr->vspeed*700.f);
-			cptr->slidex = cptr->lookx;
-			cptr->slidez = cptr->lookz;
-			cptr->vspeed = 0;
-		}
-
-
-
-	//========== movement ==============================//
-	cptr->lookx = (float)cos(cptr->alpha);
-	cptr->lookz = (float)sin(cptr->alpha);
-
-	float curspeed = 0;
-	if (cptr->Phase == RAP_RUN) curspeed = cptr->speed_run;
-	if (cptr->Phase == RAP_JUMP) curspeed = cptr->speed_jump;
-	if (cptr->Phase == RAP_WALK) curspeed = cptr->speed_walk;
-	if (cptr->Phase == RAP_SWIM) curspeed = cptr->speed_swim;
-	if (cptr->Phase == RAP_EAT) curspeed = 0.0f;
-
-	if (cptr->Phase == RAP_RUN && cptr->Slide)
-	{
-		curspeed /= 8;
-		if (drspd > pi / 2.f) curspeed = 0;
-		else if (drspd > pi / 4.f) curspeed *= 2.f - 4.f*drspd / pi;
-	}
-	else if (drspd > pi / 2.f) curspeed *= 2.f - 2.f*drspd / pi;
-
-	//========== process speed =============//
-
-	DeltaFunc(cptr->vspeed, curspeed, TimeDt / 500.f);
-
-	if (cptr->Phase == RAP_JUMP) cptr->vspeed = 1.1f;
-
-	MoveCharacter(cptr, cptr->lookx * cptr->vspeed * TimeDt * cptr->scale,
-		cptr->lookz * cptr->vspeed * TimeDt * cptr->scale, FALSE, TRUE);
-
-
-	//========== slide ==============//
-	if (cptr->Slide)
-	{
-		MoveCharacter(cptr, cptr->slidex * cptr->Slide / 600.f * TimeDt * cptr->scale,
-			cptr->slidez * cptr->Slide / 600.f * TimeDt * cptr->scale, FALSE, TRUE);
-
-		cptr->Slide -= TimeDt;
-		if (cptr->Slide < 0) cptr->Slide = 0;
-	}
-
-
-	//============ Y movement =================//
-	if (cptr->StateF & csONWATER)
-	{
-		cptr->pos.y = GetLandUpH(cptr->pos.x, cptr->pos.z) - 200 * cptr->scale;
-		cptr->beta /= 2;
-		cptr->tggamma = 0;
-	}
-	else
-	{
-		ThinkY_Beta_Gamma(cptr, 64, 32, 0.5f, 0.4f);
-	}
-
-	//=== process to tggamma ===//
-	if (cptr->Phase == RAP_WALK) cptr->tggamma += cptr->rspeed / 10.0f;
-	else cptr->tggamma += cptr->rspeed / 8.0f;
-	if (cptr->Phase == RAP_JUMP) cptr->tggamma = 0;
-
-	DeltaFunc(cptr->gamma, cptr->tggamma, TimeDt / 1624.f);
-
-
-	//==================================================//
-
-}
-
-
-
-
-
-
-
-
-
-
-
-void AnimateVeloOld(TCharacter *cptr)
-{
-  NewPhase = FALSE;
-  int _Phase = cptr->Phase;
-  int _FTime = cptr->FTime;
-  float _tgalpha = cptr->tgalpha;
-
-
-TBEGIN:
-  float targetx = cptr->tgx;
-  float targetz = cptr->tgz;
-  float targetdx = targetx - cptr->pos.x;
-  float targetdz = targetz - cptr->pos.z;
-
-  float tdist = (float)sqrt( targetdx * targetdx + targetdz * targetdz );
-
-  float playerdx = PlayerX - cptr->pos.x - cptr->lookx * 108;
-  float playerdz = PlayerZ - cptr->pos.z - cptr->lookz * 108;
-  float pdist = (float)sqrt( playerdx * playerdx + playerdz * playerdz );
-  if (cptr->State==2)
-  {
-    if (cptr->Phase!=VEL_JUMP) NewPhase=TRUE;
-    cptr->State=1;
-  }
-
-
-  if (GetLandUpH(cptr->pos.x, cptr->pos.z) - GetLandH(cptr->pos.x, cptr->pos.z) > 140 * cptr->scale)
-    cptr->StateF |= csONWATER;
-  else
-    cptr->StateF &= (!csONWATER);
-
-  if (cptr->Phase == VEL_EAT) goto NOTHINK;
-
-//============================================//
-  if (!MyHealth) cptr->State = 0;
-  if (cptr->State)
-  {
-    if (pdist > ctViewR*160+OptAgres/8)
-    {
-      nv.x = playerdx;
-      nv.z = playerdz;
-      nv.y = 0;
-      NormVector(nv, 2048.f);
-      cptr->tgx = cptr->pos.x - nv.x;
-      cptr->tgz = cptr->pos.z - nv.z;
-      cptr->tgtime = 0;
-      cptr->AfraidTime-=TimeDt;
-      if (cptr->AfraidTime<=0)
-      {
-        cptr->AfraidTime=0;
-        cptr->State = 0;
-      }
-    }
-    else
-    {
-      cptr->tgx = PlayerX;
-      cptr->tgz = PlayerZ;
-      cptr->tgtime = 0;
-    }
-
-    if (!(cptr->StateF & csONWATER))
-      if (pdist<1324 * cptr->scale && pdist>900 * cptr->scale)
-        if (AngleDifference(cptr->alpha, FindVectorAlpha(playerdx, playerdz)) < 0.2f)
-          cptr->Phase = VEL_JUMP;
-
-    if (pdist<256)
-      if (fabs(PlayerY - cptr->pos.y - 120) < 256)
-      {
-        if (!(cptr->StateF & csONWATER))
-        {
-          cptr->vspeed/= 8.0f;
-          cptr->State = 1;
-          cptr->Phase = VEL_EAT;
-        }
-
-        AddDeadBody(cptr, DinoInfo[cptr->CType].hunterDeathAnim);
-      }
-  }
-
-  if (!cptr->State)
-  {
-    cptr->AfraidTime = 0;
-    if (tdist<456)
-    {
-      SetNewTargetPlace(cptr, 8048.f);
-      goto TBEGIN;
-    }
-  }
-
-NOTHINK:
-  if (pdist<2048) cptr->NoFindCnt = 0;
-  if (cptr->NoFindCnt) cptr->NoFindCnt--;
-  else
-  {
-    cptr->tgalpha = CorrectedAlpha(FindVectorAlpha(targetdx, targetdz), cptr->alpha);//FindVectorAlpha(targetdx, targetdz);
-    if (cptr->State && pdist>1648)
-    {
-      cptr->tgalpha += (float)sin(RealTime/824.f) / 2.f;
-      if (cptr->tgalpha < 0) cptr->tgalpha+=2*pi;
-      if (cptr->tgalpha > 2*pi) cptr->tgalpha-=2*pi;
-    }
-  }
-
-  LookForAWay(cptr, FALSE, TRUE);
-  if (cptr->NoWayCnt>12)
-  {
-    cptr->NoWayCnt=0;
-    cptr->NoFindCnt = 16 + rRand(20);
-  }
-
-
-  if (cptr->tgalpha < 0) cptr->tgalpha+=2*pi;
-  if (cptr->tgalpha > 2*pi) cptr->tgalpha-=2*pi;
-
-//===============================================//
-
-  ProcessPrevPhase(cptr);
-
-
-//======== select new phase =======================//
-  cptr->FTime+=TimeDt;
-
-  if (cptr->FTime >= cptr->pinfo->Animation[cptr->Phase].AniTime)
-  {
-    cptr->FTime %= cptr->pinfo->Animation[cptr->Phase].AniTime;
-    NewPhase = TRUE;
-  }
-
-  if (cptr->Phase==VEL_EAT)  goto ENDPSELECT;
-  if (NewPhase && _Phase==VEL_JUMP)
-  {
-    cptr->Phase = VEL_RUN;
-    goto ENDPSELECT;
-  }
-
-
-  if (cptr->Phase== VEL_JUMP) goto ENDPSELECT;
-
-  if (!cptr->State) cptr->Phase=VEL_WALK;
-  else if (fabs(cptr->tgalpha - cptr->alpha)<1.0 ||
-           fabs(cptr->tgalpha - cptr->alpha)>2*pi-1.0)
-    cptr->Phase = VEL_RUN;
-  else cptr->Phase=VEL_WALK;
-
-  if (cptr->StateF & csONWATER) cptr->Phase = VEL_SWIM;
-  if (cptr->Slide>40) cptr->Phase = VEL_SLIDE;
-
-
-ENDPSELECT:
-
-//====== process phase changing ===========//
-  if ( (_Phase != cptr->Phase) || NewPhase)
-    ActivateCharacterFx(cptr);
-
-  if (_Phase != cptr->Phase)
-  {
-    //==== set proportional FTime for better morphing =//
-    if (MORPHP)
-      if (_Phase<=3 && cptr->Phase<=3)
-        cptr->FTime = _FTime * cptr->pinfo->Animation[cptr->Phase].AniTime / cptr->pinfo->Animation[_Phase].AniTime + 64;
-      else if (!NewPhase) cptr->FTime = 0;
-
-    if (cptr->PPMorphTime>128)
-    {
-      cptr->PrevPhase = _Phase;
-      cptr->PrevPFTime  = _FTime;
-      cptr->PPMorphTime = 0;
-    }
-  }
-
-  cptr->FTime %= cptr->pinfo->Animation[cptr->Phase].AniTime;
-
-
-
-  //========== rotation to tgalpha ===================//
-
-  float rspd, currspeed, tgbend;
-  float dalpha = (float)fabs(cptr->tgalpha - cptr->alpha);
-  float drspd = dalpha;
-  if (drspd>pi) drspd = 2*pi - drspd;
-
-  if (cptr->Phase==VEL_JUMP || cptr->Phase==VEL_EAT) goto SKIPROT;
-
-  if (drspd > 0.02)
-    if (cptr->tgalpha > cptr->alpha) currspeed = 0.6f + drspd*1.2f;
-    else currspeed =-0.6f - drspd*1.2f;
-  else currspeed = 0;
-  if (cptr->AfraidTime) currspeed*=2.5;
-
-  if (dalpha > pi) currspeed*=-1;
-  if ((cptr->StateF & csONWATER) || cptr->Phase==VEL_WALK) currspeed/=1.4f;
-
-  if (cptr->AfraidTime) DeltaFunc(cptr->rspeed, currspeed, (float)TimeDt / 160.f);
-  else DeltaFunc(cptr->rspeed, currspeed, (float)TimeDt / 180.f);
-
-  tgbend = drspd/3;
-  if (tgbend>pi/5) tgbend = pi/5;
-
-  tgbend*= SGN(currspeed);
-  if (fabs(tgbend) > fabs(cptr->bend)) DeltaFunc(cptr->bend, tgbend, (float)TimeDt / 800.f);
-  else DeltaFunc(cptr->bend, tgbend, (float)TimeDt / 600.f);
-
-
-  rspd=cptr->rspeed * TimeDt / 1024.f;
-  if (drspd < fabs(rspd)) cptr->alpha = cptr->tgalpha;
-  else cptr->alpha+=rspd;
-
-
-  if (cptr->alpha > pi * 2) cptr->alpha-= pi * 2;
-  if (cptr->alpha < 0     ) cptr->alpha+= pi * 2;
-
-SKIPROT:
-
-  //======= set slide mode ===========//
-  if (!cptr->Slide && cptr->vspeed>0.6 && cptr->Phase!=VEL_JUMP)
-    if (AngleDifference(cptr->tgalpha, cptr->alpha)>pi*2/3.f)
-    {
-      cptr->Slide = (int)(cptr->vspeed*700.f);
-      cptr->slidex = cptr->lookx;
-      cptr->slidez = cptr->lookz;
-      cptr->vspeed = 0;
-    }
-
-
-
-//========== movement ==============================//
-  cptr->lookx = (float)cos(cptr->alpha);
-  cptr->lookz = (float)sin(cptr->alpha);
-
-  float curspeed = 0;
-  if (cptr->Phase == VEL_RUN ) curspeed = cptr->speed_run;
-  if (cptr->Phase == VEL_JUMP) curspeed = cptr->speed_jump;
-  if (cptr->Phase == VEL_WALK) curspeed = cptr->speed_walk;
-  if (cptr->Phase == VEL_SWIM) curspeed = cptr->speed_swim;
-  if (cptr->Phase == VEL_EAT) curspeed = 0.0f;
-
-  if (cptr->Phase == VEL_RUN && cptr->Slide)
-  {
-    curspeed /= 8;
-    if (drspd > pi / 2.f) curspeed=0;
-    else if (drspd > pi / 4.f) curspeed*=2.f - 4.f*drspd / pi;
-  }
-  else if (drspd > pi / 2.f) curspeed*=2.f - 2.f*drspd / pi;
-
-//========== process speed =============//
-
-  DeltaFunc(cptr->vspeed, curspeed, TimeDt / 500.f);
-
-  if (cptr->Phase==VEL_JUMP) cptr->vspeed = 1.1f;
-
-  MoveCharacter(cptr, cptr->lookx * cptr->vspeed * TimeDt * cptr->scale,
-                cptr->lookz * cptr->vspeed * TimeDt * cptr->scale, FALSE, TRUE);
-
-
-//========== slide ==============//
-  if (cptr->Slide)
-  {
-    MoveCharacter(cptr, cptr->slidex * cptr->Slide / 600.f * TimeDt * cptr->scale,
-                  cptr->slidez * cptr->Slide / 600.f * TimeDt * cptr->scale, FALSE, TRUE);
-
-    cptr->Slide-=TimeDt;
-    if (cptr->Slide<0) cptr->Slide=0;
-  }
-
-
-//============ Y movement =================//
-  if (cptr->StateF & csONWATER)
-  {
-    cptr->pos.y = GetLandUpH(cptr->pos.x, cptr->pos.z) - 160 * cptr->scale;
-    cptr->beta/=2;
-    cptr->tggamma=0;
-  }
-  else
-  {
-    ThinkY_Beta_Gamma(cptr, 48, 24, 0.5f, 0.4f);
-  }
-
-  //=== process to tggamma ===//
-  if (cptr->Phase==VEL_WALK) cptr->tggamma+= cptr->rspeed / 7.0f;
-  else cptr->tggamma+= cptr->rspeed / 5.0f;
-  if (cptr->Phase==VEL_JUMP) cptr->tggamma=0;
-
-  DeltaFunc(cptr->gamma, cptr->tggamma, TimeDt / 1624.f);
-
-
-//==================================================//
-
-}
-
-
-
-void AnimateVelo(TCharacter *cptr)
-{
-	NewPhase = FALSE;
-	int _Phase = cptr->Phase;
-	int _FTime = cptr->FTime;
-	float _tgalpha = cptr->tgalpha;
-
-
-TBEGIN:
-	float targetx = cptr->tgx;
-	float targetz = cptr->tgz;
-	float targetdx = targetx - cptr->pos.x;
-	float targetdz = targetz - cptr->pos.z;
-
-	float tdist = (float)sqrt(targetdx * targetdx + targetdz * targetdz);
-
-	float playerdx = PlayerX - cptr->pos.x - cptr->lookx * 108;
-	float playerdz = PlayerZ - cptr->pos.z - cptr->lookz * 108;
-	float pdist = (float)sqrt(playerdx * playerdx + playerdz * playerdz);
-	if (cptr->State == 2)
-	{
-		if (cptr->Phase != VEL_JUMP) NewPhase = TRUE;
-		cptr->State = 1;
-	}
-
-
-	if (GetLandUpH(cptr->pos.x, cptr->pos.z) - GetLandH(cptr->pos.x, cptr->pos.z) > 140 * cptr->scale)
-		cptr->StateF |= csONWATER;
-	else
-		cptr->StateF &= (!csONWATER);
-
-	if (cptr->Phase == VEL_EAT) goto NOTHINK;
-
-	//============================================//
-	if (!MyHealth) cptr->State = 0;
-	if (cptr->State)
-	{
-		if (pdist > ctViewR * 160 + OptAgres / 8)
-		{
-			nv.x = playerdx;
-			nv.z = playerdz;
-			nv.y = 0;
-			NormVector(nv, 2048.f);
-			cptr->tgx = cptr->pos.x - nv.x;
-			cptr->tgz = cptr->pos.z - nv.z;
-			cptr->tgtime = 0;
-			cptr->AfraidTime -= TimeDt;
-			if (cptr->AfraidTime <= 0)
-			{
-				cptr->AfraidTime = 0;
-				cptr->State = 0;
-			}
-		}
-		else
-		{
-			cptr->tgx = PlayerX;
-			cptr->tgz = PlayerZ;
-			cptr->tgtime = 0;
-		}
-
-		if (!(cptr->StateF & csONWATER))
-			if (pdist < 1324 * cptr->scale && pdist>900 * cptr->scale)
-				if (AngleDifference(cptr->alpha, FindVectorAlpha(playerdx, playerdz)) < 0.2f)
-					cptr->Phase = VEL_JUMP;
-
-		if (pdist < DinoInfo[cptr->CType].killDist && DinoInfo[cptr->CType].killDist > 0)
-			if (fabs(PlayerY - cptr->pos.y - 120) < 256)
-			{
-				if (!(cptr->StateF & csONWATER))
-				{
-					cptr->vspeed /= 8.0f;
-					cptr->State = 1;
-					cptr->Phase = VEL_EAT;
-				}
-
-				AddDeadBody(cptr, DinoInfo[cptr->CType].hunterDeathAnim);
-			}
-	}
-
-	if (!cptr->State)
-	{
-		cptr->AfraidTime = 0;
-		if (tdist < 456)
-		{
-			SetNewTargetPlace(cptr, 8048.f);
-			goto TBEGIN;
-		}
-	}
-
-NOTHINK:
-	if (pdist < 2048) cptr->NoFindCnt = 0;
-	if (cptr->NoFindCnt) cptr->NoFindCnt--;
-	else
-	{
-		cptr->tgalpha = CorrectedAlpha(FindVectorAlpha(targetdx, targetdz), cptr->alpha);//FindVectorAlpha(targetdx, targetdz);
-		if (cptr->State && pdist > 1648)
-		{
-			cptr->tgalpha += (float)sin(RealTime / 824.f) / 2.f;
-			if (cptr->tgalpha < 0) cptr->tgalpha += 2 * pi;
-			if (cptr->tgalpha > 2 * pi) cptr->tgalpha -= 2 * pi;
-		}
-	}
-
-	LookForAWay(cptr, FALSE, TRUE);
-	if (cptr->NoWayCnt > 12)
-	{
-		cptr->NoWayCnt = 0;
-		cptr->NoFindCnt = 16 + rRand(20);
-	}
-
-
-	if (cptr->tgalpha < 0) cptr->tgalpha += 2 * pi;
-	if (cptr->tgalpha > 2 * pi) cptr->tgalpha -= 2 * pi;
-
-	//===============================================//
-
-	ProcessPrevPhase(cptr);
-
-
-	//======== select new phase =======================//
-	cptr->FTime += TimeDt;
-
-	if (cptr->FTime >= cptr->pinfo->Animation[cptr->Phase].AniTime)
-	{
-		cptr->FTime %= cptr->pinfo->Animation[cptr->Phase].AniTime;
-		NewPhase = TRUE;
-	}
-
-	if (cptr->Phase == VEL_EAT)  goto ENDPSELECT;
-	if (NewPhase && _Phase == VEL_JUMP)
-	{
-		cptr->Phase = VEL_RUN;
-		goto ENDPSELECT;
-	}
-
-
-	if (cptr->Phase == VEL_JUMP) goto ENDPSELECT;
-
-	if (NewPhase)
-		if (!cptr->State)
-			if (rRand(118) > 110)
-			{
-				cptr->Phase = VEL_IDLE1 + rRand(1);
-				goto ENDPSELECT;
-			}
-			else cptr->Phase = VEL_WALK;
-		else cptr->Phase = VEL_RUN;
-	if (cptr->Phase != VEL_IDLE1 && cptr->Phase != VEL_IDLE2)
-		if (!cptr->State) cptr->Phase = VEL_WALK;
-		else if (fabs(cptr->tgalpha - cptr->alpha) < 1.0 ||
-			fabs(cptr->tgalpha - cptr->alpha) > 2 * pi - 1.0)
-			cptr->Phase = VEL_RUN;
-		else cptr->Phase = VEL_WALK;
-
-	if (cptr->StateF & csONWATER) cptr->Phase = VEL_SWIM;
-	if (cptr->Slide > 40) cptr->Phase = VEL_SLIDE;
-
-
-ENDPSELECT:
-
-	//====== process phase changing ===========//
-	if ((_Phase != cptr->Phase) || NewPhase)
-		ActivateCharacterFx(cptr);
-
-	if (_Phase != cptr->Phase)
-	{
-		//==== set proportional FTime for better morphing =//
-		if (MORPHP)
-			if (_Phase <= 3 && cptr->Phase <= 3)
-				cptr->FTime = _FTime * cptr->pinfo->Animation[cptr->Phase].AniTime / cptr->pinfo->Animation[_Phase].AniTime + 64;
-			else if (!NewPhase) cptr->FTime = 0;
-
-		if (cptr->PPMorphTime > 128)
-		{
-			cptr->PrevPhase = _Phase;
-			cptr->PrevPFTime = _FTime;
-			cptr->PPMorphTime = 0;
-		}
-	}
-
-	cptr->FTime %= cptr->pinfo->Animation[cptr->Phase].AniTime;
-
-
-
-	//========== rotation to tgalpha ===================//
-
-	float rspd, currspeed, tgbend;
-	float dalpha = (float)fabs(cptr->tgalpha - cptr->alpha);
-	float drspd = dalpha;
-	if (drspd > pi) drspd = 2 * pi - drspd;
-
-	if (cptr->Phase == VEL_JUMP || cptr->Phase == VEL_EAT ||
-		cptr->Phase == VEL_IDLE1 || cptr->Phase == VEL_IDLE2) goto SKIPROT;
-
-	if (drspd > 0.02)
-		if (cptr->tgalpha > cptr->alpha) currspeed = 0.6f + drspd * 1.2f;
-		else currspeed = -0.6f - drspd * 1.2f;
-	else currspeed = 0;
-	if (cptr->AfraidTime) currspeed *= 2.5;
-
-	if (dalpha > pi) currspeed *= -1;
-	if ((cptr->StateF & csONWATER) || cptr->Phase == VEL_WALK) currspeed /= 1.4f;
-
-	if (cptr->AfraidTime) DeltaFunc(cptr->rspeed, currspeed, (float)TimeDt / 160.f);
-	else DeltaFunc(cptr->rspeed, currspeed, (float)TimeDt / 180.f);
-
-	tgbend = drspd / 3;
-	if (tgbend > pi / 5) tgbend = pi / 5;
-
-	tgbend *= SGN(currspeed);
-	if (fabs(tgbend) > fabs(cptr->bend)) DeltaFunc(cptr->bend, tgbend, (float)TimeDt / 800.f);
-	else DeltaFunc(cptr->bend, tgbend, (float)TimeDt / 600.f);
-
-
-	rspd = cptr->rspeed * TimeDt / 1024.f;
-	if (drspd < fabs(rspd)) cptr->alpha = cptr->tgalpha;
-	else cptr->alpha += rspd;
-
-
-	if (cptr->alpha > pi * 2) cptr->alpha -= pi * 2;
-	if (cptr->alpha < 0) cptr->alpha += pi * 2;
-
-SKIPROT:
-
-	//======= set slide mode ===========//
-	if (!cptr->Slide && cptr->vspeed > 0.6 && cptr->Phase != VEL_JUMP)
-		if (AngleDifference(cptr->tgalpha, cptr->alpha) > pi * 2 / 3.f)
-		{
-			cptr->Slide = (int)(cptr->vspeed*700.f);
-			cptr->slidex = cptr->lookx;
-			cptr->slidez = cptr->lookz;
-			cptr->vspeed = 0;
-		}
-
-
-
-	//========== movement ==============================//
-	cptr->lookx = (float)cos(cptr->alpha);
-	cptr->lookz = (float)sin(cptr->alpha);
-
-	float curspeed = 0;
-	if (cptr->Phase == VEL_RUN) curspeed = cptr->speed_run;
-	if (cptr->Phase == VEL_JUMP) curspeed = cptr->speed_jump;
-	if (cptr->Phase == VEL_WALK) curspeed = cptr->speed_walk;
-	if (cptr->Phase == VEL_SWIM) curspeed = cptr->speed_swim;
-	if (cptr->Phase == VEL_EAT) curspeed = 0.0f;
-
-	if (cptr->Phase == VEL_RUN && cptr->Slide)
-	{
-		curspeed /= 8;
-		if (drspd > pi / 2.f) curspeed = 0;
-		else if (drspd > pi / 4.f) curspeed *= 2.f - 4.f*drspd / pi;
-	}
-	else if (drspd > pi / 2.f) curspeed *= 2.f - 2.f*drspd / pi;
-
-	//========== process speed =============//
-
-	DeltaFunc(cptr->vspeed, curspeed, TimeDt / 500.f);
-
-	if (cptr->Phase == VEL_JUMP) cptr->vspeed = 1.1f;
-
-	MoveCharacter(cptr, cptr->lookx * cptr->vspeed * TimeDt * cptr->scale,
-		cptr->lookz * cptr->vspeed * TimeDt * cptr->scale, FALSE, TRUE);
-
-
-	//========== slide ==============//
-	if (cptr->Slide)
-	{
-		MoveCharacter(cptr, cptr->slidex * cptr->Slide / 600.f * TimeDt * cptr->scale,
-			cptr->slidez * cptr->Slide / 600.f * TimeDt * cptr->scale, FALSE, TRUE);
-
-		cptr->Slide -= TimeDt;
-		if (cptr->Slide < 0) cptr->Slide = 0;
-	}
-
-
-	//============ Y movement =================//
-	if (cptr->StateF & csONWATER)
-	{
-		cptr->pos.y = GetLandUpH(cptr->pos.x, cptr->pos.z) - 160 * cptr->scale;
-		cptr->beta /= 2;
-		cptr->tggamma = 0;
-	}
-	else
-	{
-		ThinkY_Beta_Gamma(cptr, 48, 24, 0.5f, 0.4f);
-	}
-
-	//=== process to tggamma ===//
-	if (cptr->Phase == VEL_WALK) cptr->tggamma += cptr->rspeed / 7.0f;
-	else cptr->tggamma += cptr->rspeed / 5.0f;
-	if (cptr->Phase == VEL_JUMP) cptr->tggamma = 0;
-
-	DeltaFunc(cptr->gamma, cptr->tggamma, TimeDt / 1624.f);
-
-
-	//==================================================//
-
-}
-
-
-
-
+/*
 void AnimateVeloPackOld(TCharacter *cptr)
 {
 	NewPhase = FALSE;
@@ -3915,590 +2909,7 @@ SKIPROT:
 	//==================================================//
 
 }
-
-
-
-
-
-
-
-
-
-
-void AnimateSpin(TCharacter *cptr)
-{
-  NewPhase = FALSE;
-  int _Phase = cptr->Phase;
-  int _FTime = cptr->FTime;
-  float _tgalpha = cptr->tgalpha;
-
-
-TBEGIN:
-  float targetx = cptr->tgx;
-  float targetz = cptr->tgz;
-  float targetdx = targetx - cptr->pos.x;
-  float targetdz = targetz - cptr->pos.z;
-
-  float tdist = (float)sqrt( targetdx * targetdx + targetdz * targetdz );
-
-  float playerdx = PlayerX - cptr->pos.x - cptr->lookx * 108;
-  float playerdz = PlayerZ - cptr->pos.z - cptr->lookz * 108;
-  float pdist = (float)sqrt( playerdx * playerdx + playerdz * playerdz );
-  if (cptr->State==2)
-  {
-    if (cptr->Phase!=SPN_JUMP) NewPhase=TRUE;
-    cptr->State=1;
-    cptr->Phase=SPN_RUN;
-  }
-
-
-  if (GetLandUpH(cptr->pos.x, cptr->pos.z) - GetLandH(cptr->pos.x, cptr->pos.z) > 140 * cptr->scale)
-    cptr->StateF |= csONWATER;
-  else
-    cptr->StateF &= (!csONWATER);
-
-  if (cptr->Phase == SPN_EAT) goto NOTHINK;
-
-//============================================//
-  if (!MyHealth) cptr->State = 0;
-  if (cptr->State)
-  {
-    if (pdist > ctViewR * DinoInfo[cptr->CType].aggress +OptAgres/8 || DinoInfo[cptr->CType].aggress <= 0)
-    {
-      nv.x = playerdx;
-      nv.z = playerdz;
-      nv.y = 0;
-      NormVector(nv, 2048.f);
-      cptr->tgx = cptr->pos.x - nv.x;
-      cptr->tgz = cptr->pos.z - nv.z;
-      cptr->tgtime = 0;
-      cptr->AfraidTime-=TimeDt;
-      if (cptr->AfraidTime<=0)
-      {
-        cptr->AfraidTime=0;
-        cptr->State = 0;
-      }
-    }
-    else
-    {
-      cptr->tgx = PlayerX;
-      cptr->tgz = PlayerZ;
-      cptr->tgtime = 0;
-    }
-
-    if (!(cptr->StateF & csONWATER))
-      if (pdist<1324 * cptr->scale && pdist>900 * cptr->scale)
-        if (AngleDifference(cptr->alpha, FindVectorAlpha(playerdx, playerdz)) < 0.2f)
-          cptr->Phase = SPN_JUMP;
-
-    if (pdist< DinoInfo[cptr->CType].killDist && DinoInfo[cptr->CType].killDist > 0)
-      if (fabs(PlayerY - cptr->pos.y - 120) < 256)
-      {
-        if (!(cptr->StateF & csONWATER))
-        {
-          cptr->vspeed/= 8.0f;
-          cptr->State = 1;
-          cptr->Phase = SPN_EAT;
-        }
-
-        AddDeadBody(cptr, DinoInfo[cptr->CType].hunterDeathAnim);
-      }
-  }
-
-  if (!cptr->State)
-  {
-    cptr->AfraidTime = 0;
-    if (tdist<456)
-    {
-      SetNewTargetPlace(cptr, 8048.f);
-      goto TBEGIN;
-    }
-  }
-
-NOTHINK:
-  if (pdist<2048) cptr->NoFindCnt = 0;
-  if (cptr->NoFindCnt) cptr->NoFindCnt--;
-  else
-  {
-    cptr->tgalpha = CorrectedAlpha(FindVectorAlpha(targetdx, targetdz), cptr->alpha);//FindVectorAlpha(targetdx, targetdz);
-    if (cptr->State && pdist>1648)
-    {
-      cptr->tgalpha += (float)sin(RealTime/824.f) / 4.f;
-      if (cptr->tgalpha < 0) cptr->tgalpha+=2*pi;
-      if (cptr->tgalpha > 2*pi) cptr->tgalpha-=2*pi;
-    }
-  }
-
-  LookForAWay(cptr, FALSE, TRUE);
-  if (cptr->NoWayCnt>12)
-  {
-    cptr->NoWayCnt=0;
-    cptr->NoFindCnt = 16 + rRand(20);
-  }
-
-
-  if (cptr->tgalpha < 0) cptr->tgalpha+=2*pi;
-  if (cptr->tgalpha > 2*pi) cptr->tgalpha-=2*pi;
-
-//===============================================//
-
-  ProcessPrevPhase(cptr);
-
-
-//======== select new phase =======================//
-  cptr->FTime+=TimeDt;
-
-  if (cptr->FTime >= cptr->pinfo->Animation[cptr->Phase].AniTime)
-  {
-    cptr->FTime %= cptr->pinfo->Animation[cptr->Phase].AniTime;
-    NewPhase = TRUE;
-  }
-
-  if (cptr->Phase==SPN_EAT)  goto ENDPSELECT;
-  if (NewPhase && _Phase==SPN_JUMP)
-  {
-    cptr->Phase = SPN_RUN;
-    goto ENDPSELECT;
-  }
-
-  if (cptr->Phase== SPN_JUMP) goto ENDPSELECT;
-
-  if (NewPhase)
-    if (!cptr->State)
-      if (rRand(128)>110)
-      {
-        cptr->Phase = SPN_IDLE1 + rRand(1);
-        goto ENDPSELECT;
-      }
-      else cptr->Phase = SPN_WALK;
-    else cptr->Phase = SPN_RUN;
-
-  if (cptr->Phase!=SPN_IDLE1 && cptr->Phase!=SPN_IDLE2)
-    if (!cptr->State) cptr->Phase=SPN_WALK;
-    else if (fabs(cptr->tgalpha - cptr->alpha)<1.0 ||
-             fabs(cptr->tgalpha - cptr->alpha)>2*pi-1.0)
-      cptr->Phase = SPN_RUN;
-    else cptr->Phase=SPN_WALK;
-
-  if (cptr->StateF & csONWATER) cptr->Phase = SPN_SWIM;
-  if (cptr->Slide>40) cptr->Phase = SPN_SLIDE;
-
-
-ENDPSELECT:
-
-//====== process phase changing ===========//
-  if ( (_Phase != cptr->Phase) || NewPhase)
-    ActivateCharacterFx(cptr);
-
-  if (_Phase != cptr->Phase)
-  {
-    //==== set proportional FTime for better morphing =//
-    if (MORPHP)
-      if (_Phase<=3 && cptr->Phase<=3)
-        cptr->FTime = _FTime * cptr->pinfo->Animation[cptr->Phase].AniTime / cptr->pinfo->Animation[_Phase].AniTime + 64;
-      else if (!NewPhase) cptr->FTime = 0;
-
-    if (cptr->PPMorphTime>128)
-    {
-      cptr->PrevPhase = _Phase;
-      cptr->PrevPFTime  = _FTime;
-      cptr->PPMorphTime = 0;
-    }
-  }
-
-  cptr->FTime %= cptr->pinfo->Animation[cptr->Phase].AniTime;
-
-
-
-  //========== rotation to tgalpha ===================//
-
-  float rspd, currspeed, tgbend;
-  float dalpha = (float)fabs(cptr->tgalpha - cptr->alpha);
-  float drspd = dalpha;
-  if (drspd>pi) drspd = 2*pi - drspd;
-
-  if (cptr->Phase==SPN_JUMP  || cptr->Phase==SPN_EAT ||
-      cptr->Phase==SPN_IDLE1 || cptr->Phase==SPN_IDLE2) goto SKIPROT;
-
-  if (drspd > 0.02)
-    if (cptr->tgalpha > cptr->alpha) currspeed = 0.6f + drspd*1.2f;
-    else currspeed =-0.6f - drspd*1.2f;
-  else currspeed = 0;
-  if (cptr->AfraidTime) currspeed*=2.5;
-
-  if (dalpha > pi) currspeed*=-1;
-  if ((cptr->StateF & csONWATER) || cptr->Phase==SPN_WALK) currspeed/=1.4f;
-
-  if (cptr->AfraidTime) DeltaFunc(cptr->rspeed, currspeed, (float)TimeDt / 160.f);
-  else DeltaFunc(cptr->rspeed, currspeed, (float)TimeDt / 180.f);
-
-  tgbend = drspd/3;
-  if (tgbend>pi/5) tgbend = pi/5;
-
-  tgbend*= SGN(currspeed);
-  if (fabs(tgbend) > fabs(cptr->bend)) DeltaFunc(cptr->bend, tgbend, (float)TimeDt / 800.f);
-  else DeltaFunc(cptr->bend, tgbend, (float)TimeDt / 600.f);
-
-
-  rspd=cptr->rspeed * TimeDt / 1024.f;
-  if (drspd < fabs(rspd)) cptr->alpha = cptr->tgalpha;
-  else cptr->alpha+=rspd;
-
-
-  if (cptr->alpha > pi * 2) cptr->alpha-= pi * 2;
-  if (cptr->alpha < 0     ) cptr->alpha+= pi * 2;
-
-SKIPROT:
-
-  //======= set slide mode ===========//
-  if (!cptr->Slide && cptr->vspeed>0.6 && cptr->Phase!=SPN_JUMP)
-    if (AngleDifference(cptr->tgalpha, cptr->alpha)>pi*2/3.f)
-    {
-      cptr->Slide = (int)(cptr->vspeed*700.f);
-      cptr->slidex = cptr->lookx;
-      cptr->slidez = cptr->lookz;
-      cptr->vspeed = 0;
-    }
-
-
-
-//========== movement ==============================//
-  cptr->lookx = (float)cos(cptr->alpha);
-  cptr->lookz = (float)sin(cptr->alpha);
-
-  float curspeed = 0;
-  if (cptr->Phase == SPN_RUN ) curspeed = cptr->speed_run;
-  if (cptr->Phase == SPN_JUMP) curspeed = cptr->speed_jump;
-  if (cptr->Phase == SPN_WALK) curspeed = cptr->speed_walk;
-  if (cptr->Phase == SPN_SWIM) curspeed = cptr->speed_swim;
-  if (cptr->Phase == SPN_EAT)  curspeed = 0.0f;
-
-  if (cptr->Phase == SPN_RUN && cptr->Slide)
-  {
-    curspeed /= 8;
-    if (drspd > pi / 2.f) curspeed=0;
-    else if (drspd > pi / 4.f) curspeed*=2.f - 4.f*drspd / pi;
-  }
-  else if (drspd > pi / 2.f) curspeed*=2.f - 2.f*drspd / pi;
-
-//========== process speed =============//
-
-  DeltaFunc(cptr->vspeed, curspeed, TimeDt / 500.f);
-
-  if (cptr->Phase==SPN_JUMP) cptr->vspeed = 1.1f;
-
-  MoveCharacter(cptr, cptr->lookx * cptr->vspeed * TimeDt * cptr->scale,
-                cptr->lookz * cptr->vspeed * TimeDt * cptr->scale, FALSE, TRUE);
-
-
-//========== slide ==============//
-  if (cptr->Slide)
-  {
-    MoveCharacter(cptr, cptr->slidex * cptr->Slide / 600.f * TimeDt * cptr->scale,
-                  cptr->slidez * cptr->Slide / 600.f * TimeDt * cptr->scale, FALSE, TRUE);
-
-    cptr->Slide-=TimeDt;
-    if (cptr->Slide<0) cptr->Slide=0;
-  }
-
-
-//============ Y movement =================//
-  if (cptr->StateF & csONWATER)
-  {
-    cptr->pos.y = GetLandUpH(cptr->pos.x, cptr->pos.z) - 160 * cptr->scale;
-    cptr->beta/=2;
-    cptr->tggamma=0;
-  }
-  else
-  {
-    ThinkY_Beta_Gamma(cptr, 98, 84, 0.4f, 0.3f);
-  }
-
-  //=== process to tggamma ===//
-  if (cptr->Phase==SPN_WALK) cptr->tggamma+= cptr->rspeed / 9.0f;
-  else cptr->tggamma+= cptr->rspeed / 6.0f;
-  if (cptr->Phase==SPN_JUMP) cptr->tggamma=0;
-
-  DeltaFunc(cptr->gamma, cptr->tggamma, TimeDt / 1624.f);
-
-
-//==================================================//
-
-}
-
-
-
-
-
-
-
-
-
-
-
-
-
-void AnimateCera(TCharacter *cptr)
-{
-  NewPhase = FALSE;
-  int _Phase = cptr->Phase;
-  int _FTime = cptr->FTime;
-  float _tgalpha = cptr->tgalpha;
-
-
-TBEGIN:
-  float targetx = cptr->tgx;
-  float targetz = cptr->tgz;
-  float targetdx = targetx - cptr->pos.x;
-  float targetdz = targetz - cptr->pos.z;
-
-  float tdist = (float)sqrt( targetdx * targetdx + targetdz * targetdz );
-
-  float playerdx = PlayerX - cptr->pos.x - cptr->lookx * 108;
-  float playerdz = PlayerZ - cptr->pos.z - cptr->lookz * 108;
-  float pdist = (float)sqrt( playerdx * playerdx + playerdz * playerdz );
-  if (cptr->State==2)
-  {
-    NewPhase=TRUE;
-    cptr->State=1;
-    cptr->Phase=CER_RUN;
-  }
-
-
-  if (GetLandUpH(cptr->pos.x, cptr->pos.z) - GetLandH(cptr->pos.x, cptr->pos.z) > 140 * cptr->scale)
-    cptr->StateF |= csONWATER;
-  else
-    cptr->StateF &= (!csONWATER);
-
-  if (cptr->Phase == CER_EAT) goto NOTHINK;
-
-//============================================//
-  if (!MyHealth) cptr->State = 0;
-  if (cptr->State)
-  {
-    if (pdist > ctViewR * DinoInfo[cptr->CType].aggress + OptAgres/8 || DinoInfo[cptr->CType].aggress <= 0)
-    {
-      nv.x = playerdx;
-      nv.z = playerdz;
-      nv.y = 0;
-      NormVector(nv, 2048.f);
-      cptr->tgx = cptr->pos.x - nv.x;
-      cptr->tgz = cptr->pos.z - nv.z;
-      cptr->tgtime = 0;
-      cptr->AfraidTime-=TimeDt;
-      if (cptr->AfraidTime<=0)
-      {
-        cptr->AfraidTime=0;
-        cptr->State = 0;
-      }
-    }
-    else
-    {
-      cptr->tgx = PlayerX;
-      cptr->tgz = PlayerZ;
-      cptr->tgtime = 0;
-    }
-
-
-
-    if (pdist< DinoInfo[cptr->CType].killDist && DinoInfo[cptr->CType].killDist > 0)
-      if (fabs(PlayerY - cptr->pos.y - 120) < 256)
-      {
-        if (!(cptr->StateF & csONWATER))
-        {
-          cptr->vspeed/= 8.0f;
-          cptr->State = 1;
-          cptr->Phase = CER_EAT;
-        }
-
-        AddDeadBody(cptr, DinoInfo[cptr->CType].hunterDeathAnim);
-      }
-  }
-
-  if (!cptr->State)
-  {
-    cptr->AfraidTime = 0;
-    if (tdist<456)
-    {
-      SetNewTargetPlace(cptr, 8048.f);
-      goto TBEGIN;
-    }
-  }
-
-NOTHINK:
-  if (pdist<2048) cptr->NoFindCnt = 0;
-  if (cptr->NoFindCnt) cptr->NoFindCnt--;
-  else
-  {
-    cptr->tgalpha = CorrectedAlpha(FindVectorAlpha(targetdx, targetdz), cptr->alpha);//FindVectorAlpha(targetdx, targetdz);
-    if (cptr->State && pdist>1648)
-    {
-      cptr->tgalpha += (float)sin(RealTime/824.f) / 4.f;
-      if (cptr->tgalpha < 0) cptr->tgalpha+=2*pi;
-      if (cptr->tgalpha > 2*pi) cptr->tgalpha-=2*pi;
-    }
-  }
-
-  LookForAWay(cptr, FALSE, TRUE);
-  if (cptr->NoWayCnt>12)
-  {
-    cptr->NoWayCnt=0;
-    cptr->NoFindCnt = 16 + rRand(20);
-  }
-
-
-  if (cptr->tgalpha < 0) cptr->tgalpha+=2*pi;
-  if (cptr->tgalpha > 2*pi) cptr->tgalpha-=2*pi;
-
-//===============================================//
-
-  ProcessPrevPhase(cptr);
-
-
-//======== select new phase =======================//
-  cptr->FTime+=TimeDt;
-
-  if (cptr->FTime >= cptr->pinfo->Animation[cptr->Phase].AniTime)
-  {
-    cptr->FTime %= cptr->pinfo->Animation[cptr->Phase].AniTime;
-    NewPhase = TRUE;
-  }
-
-  if (cptr->Phase==CER_EAT)  goto ENDPSELECT;
-
-
-  if (NewPhase)
-    if (!cptr->State)
-      if (rRand(128)>110)
-      {
-        cptr->Phase = CER_IDLE1 + rRand(2);
-        goto ENDPSELECT;
-      }
-      else cptr->Phase = CER_WALK;
-    else cptr->Phase = CER_RUN;
-
-  if (cptr->Phase!=CER_IDLE1 && cptr->Phase!=CER_IDLE2 && cptr->Phase!=CER_IDLE3)
-    if (!cptr->State) cptr->Phase=CER_WALK;
-    else if (fabs(cptr->tgalpha - cptr->alpha)<1.0 ||
-             fabs(cptr->tgalpha - cptr->alpha)>2*pi-1.0)
-      cptr->Phase = CER_RUN;
-    else cptr->Phase=CER_WALK;
-
-  if (cptr->StateF & csONWATER) cptr->Phase = CER_SWIM;
-
-
-ENDPSELECT:
-
-//====== process phase changing ===========//
-  if ( (_Phase != cptr->Phase) || NewPhase)
-    ActivateCharacterFx(cptr);
-
-  if (_Phase != cptr->Phase)
-  {
-    //==== set proportional FTime for better morphing =//
-    if (MORPHP)
-      if (_Phase<=3 && cptr->Phase<=3)
-        cptr->FTime = _FTime * cptr->pinfo->Animation[cptr->Phase].AniTime / cptr->pinfo->Animation[_Phase].AniTime + 64;
-      else if (!NewPhase) cptr->FTime = 0;
-
-    if (cptr->PPMorphTime>128)
-    {
-      cptr->PrevPhase = _Phase;
-      cptr->PrevPFTime  = _FTime;
-      cptr->PPMorphTime = 0;
-    }
-  }
-
-  cptr->FTime %= cptr->pinfo->Animation[cptr->Phase].AniTime;
-
-
-
-  //========== rotation to tgalpha ===================//
-
-  float rspd, currspeed, tgbend;
-  float dalpha = (float)fabs(cptr->tgalpha - cptr->alpha);
-  float drspd = dalpha;
-  if (drspd>pi) drspd = 2*pi - drspd;
-
-  if (cptr->Phase==CER_IDLE1 || cptr->Phase==CER_EAT ||
-      cptr->Phase==CER_IDLE2 || cptr->Phase==CER_IDLE3) goto SKIPROT;
-
-  if (drspd > 0.02)
-    if (cptr->tgalpha > cptr->alpha) currspeed = 0.6f + drspd*1.2f;
-    else currspeed =-0.6f - drspd*1.2f;
-  else currspeed = 0;
-  if (cptr->AfraidTime) currspeed*=2.5;
-
-  if (dalpha > pi) currspeed*=-1;
-  if ((cptr->StateF & csONWATER) || cptr->Phase==CER_WALK) currspeed/=1.4f;
-
-  if (cptr->AfraidTime) DeltaFunc(cptr->rspeed, currspeed, (float)TimeDt / 160.f);
-  else DeltaFunc(cptr->rspeed, currspeed, (float)TimeDt / 180.f);
-
-  tgbend = drspd/3;
-  if (tgbend>pi/5) tgbend = pi/5;
-
-  tgbend*= SGN(currspeed);
-  if (fabs(tgbend) > fabs(cptr->bend)) DeltaFunc(cptr->bend, tgbend, (float)TimeDt / 800.f);
-  else DeltaFunc(cptr->bend, tgbend, (float)TimeDt / 600.f);
-
-
-  rspd=cptr->rspeed * TimeDt / 1024.f;
-  if (drspd < fabs(rspd)) cptr->alpha = cptr->tgalpha;
-  else cptr->alpha+=rspd;
-
-
-  if (cptr->alpha > pi * 2) cptr->alpha-= pi * 2;
-  if (cptr->alpha < 0     ) cptr->alpha+= pi * 2;
-
-SKIPROT:
-
-
-
-
-//========== movement ==============================//
-  cptr->lookx = (float)cos(cptr->alpha);
-  cptr->lookz = (float)sin(cptr->alpha);
-
-  float curspeed = 0;
-  if (cptr->Phase == CER_RUN ) curspeed = cptr->speed_run;
-  if (cptr->Phase == CER_WALK) curspeed = cptr->speed_walk;
-  if (cptr->Phase == CER_EAT)  curspeed = 0.0f;
-
-  //if (drspd > pi / 2.f) curspeed*=2.f - 2.f*drspd / pi;
-
-//========== process speed =============//
-
-  DeltaFunc(cptr->vspeed, curspeed, TimeDt / 500.f);
-
-
-  MoveCharacter(cptr, cptr->lookx * cptr->vspeed * TimeDt * cptr->scale,
-                cptr->lookz * cptr->vspeed * TimeDt * cptr->scale, FALSE, TRUE);
-
-
-//============ Y movement =================//
-  if (cptr->StateF & csONWATER)
-  {
-    cptr->pos.y = GetLandUpH(cptr->pos.x, cptr->pos.z) - 160 * cptr->scale;
-    cptr->beta/=2;
-    cptr->tggamma=0;
-  }
-  else
-  {
-    ThinkY_Beta_Gamma(cptr, 348, 324, 0.5f, 0.4f);
-  }
-
-  //=== process to tggamma ===//
-  if (cptr->Phase==CER_WALK) cptr->tggamma+= cptr->rspeed / 9.0f;
-  else cptr->tggamma+= cptr->rspeed / 6.0f;
-
-  DeltaFunc(cptr->gamma, cptr->tggamma, TimeDt / 1624.f);
-
-
-//==================================================//
-
-}
-
+*/
 
 
 
@@ -7592,42 +6003,42 @@ void AnimateCharacters()
 
 
 		case AI_PARA:
-			if (cptr->Health) AnimateCommon(cptr);
+			if (cptr->Health) AnimateHerbivore(cptr);
 			else AnimateDeadCommon(cptr);
 			break;
 		case AI_ANKY:
-			if (cptr->Health) AnimateCommon(cptr);
+			if (cptr->Health) AnimateHerbivore(cptr);
 			else AnimateDeadCommon(cptr);
 			break;
 		case AI_PACH:
-			if (cptr->Health) AnimateCommon(cptr);
+			if (cptr->Health) AnimateHerbivore(cptr);
 			else AnimateDeadCommon(cptr);
 			break;
 		case AI_STEGO:
-			if (cptr->Health) AnimateCommon(cptr);
+			if (cptr->Health) AnimateHerbivore(cptr);
 			else AnimateDeadCommon(cptr);
 			break;
 
 		case AI_ALLO:
-			if (cptr->Health) AnimateRaptor(cptr);
-			else AnimateRaptorDead(cptr);
+			if (cptr->Health) AnimateCarnivore(cptr);
+			else AnimateDeadCommon(cptr);
 			break;
 		case AI_CHASM:
-			if (cptr->Health) AnimateCommon(cptr);
+			if (cptr->Health) AnimateHerbivore(cptr);
 			else AnimateDeadCommon(cptr);
 			break;
 
 		case AI_VELO:
-			if (cptr->Health) AnimateVelo(cptr);
-			else AnimateVeloDead(cptr);
+			if (cptr->Health) AnimateCarnivore(cptr);
+			else AnimateDeadCommon(cptr);
 			break;
 		case AI_SPINO:
-			if (cptr->Health) AnimateSpin(cptr);
-			else AnimateSpinDead(cptr);
+			if (cptr->Health) AnimateCarnivore(cptr);
+			else AnimateDeadCommon(cptr);
 			break;
 		case AI_CERAT:
-			if (cptr->Health) AnimateCera(cptr);
-			else AnimateCeraDead(cptr);
+			if (cptr->Health) AnimateCarnivore(cptr);
+			else AnimateDeadCommon(cptr);
 			break;
 		case AI_TREX:
 			if (cptr->Health) AnimateTRex(cptr);

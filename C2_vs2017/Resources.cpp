@@ -2203,6 +2203,7 @@ void ReadCharacterLine(FILE *stream, char *_value, char line[256], bool &regionO
 	if (strstr(line, "collisiondist")) DinoInfo[TotalC].maxGrad = atoi(value);
 	if (strstr(line, "runrotatespeed")) DinoInfo[TotalC].rotspdmulti = (float)atof(value);
 
+	if (strstr(line, "canswim")) DinoInfo[TotalC].canSwim = TRUE;
 
 	if (strstr(line, "runAnim")) DinoInfo[TotalC].runAnim = atoi(value);
 	if (strstr(line, "jumpAnim")) DinoInfo[TotalC].jumpAnim = atoi(value);
@@ -2216,6 +2217,7 @@ void ReadCharacterLine(FILE *stream, char *_value, char line[256], bool &regionO
 	if (strstr(line, "sleepAnim")) DinoInfo[TotalC].sleepAnim = atoi(value);
 	if (strstr(line, "dieAnim")) DinoInfo[TotalC].dieAnim = atoi(value);
 	if (strstr(line, "fallAnim")) DinoInfo[TotalC].fallAnim = atoi(value);
+	if (strstr(line, "eatAnim")) DinoInfo[TotalC].eatAnim = atoi(value);
 
 	if (strstr(line, "idleAnim")) {
 
@@ -2535,6 +2537,67 @@ void LoadResourcesScript()
 	AIInfo[AI_CHASM].yBetaGamma4 = 0.3f;
 	AIInfo[AI_CHASM].walkTargetGammaRot = 12.0f;
 	AIInfo[AI_CHASM].targetGammaRot = 8.0f;
+
+	AIInfo[AI_ALLO].agressMulti = 4;
+	AIInfo[AI_ALLO].targetBendRotSpd = 2;
+	AIInfo[AI_ALLO].waterLevel1 = 180;
+	AIInfo[AI_ALLO].waterLevel2 = 160;
+	AIInfo[AI_ALLO].waterLevel3 = 200;
+	AIInfo[AI_ALLO].yBetaGamma1 = 64;
+	AIInfo[AI_ALLO].yBetaGamma2 = 32;
+	AIInfo[AI_ALLO].yBetaGamma3 = 0.5f;
+	AIInfo[AI_ALLO].yBetaGamma4 = 0.4f;
+	AIInfo[AI_ALLO].walkTargetGammaRot = 10.0f;
+	AIInfo[AI_ALLO].targetGammaRot = 8.0f;
+	AIInfo[AI_ALLO].tGAIncrement = 2.f;
+	AIInfo[AI_ALLO].idleStartD = 118;
+	AIInfo[AI_ALLO].jumper = true;
+
+	AIInfo[AI_VELO].agressMulti = 8;
+	AIInfo[AI_VELO].targetBendRotSpd = 3;
+	AIInfo[AI_VELO].waterLevel1 = 140;
+	AIInfo[AI_VELO].waterLevel2 = 120;
+	AIInfo[AI_VELO].waterLevel3 = 160;
+	AIInfo[AI_VELO].yBetaGamma1 = 48;
+	AIInfo[AI_VELO].yBetaGamma2 = 24;
+	AIInfo[AI_VELO].yBetaGamma3 = 0.5f;
+	AIInfo[AI_VELO].yBetaGamma4 = 0.4f;
+	AIInfo[AI_VELO].walkTargetGammaRot = 7.0f;
+	AIInfo[AI_VELO].targetGammaRot = 5.0f;
+	AIInfo[AI_VELO].tGAIncrement = 2.f;
+	AIInfo[AI_VELO].idleStartD = 118;
+	AIInfo[AI_VELO].jumper = true;
+
+	AIInfo[AI_SPINO].agressMulti = 8;
+	AIInfo[AI_SPINO].waterLevel1 = 140;
+	AIInfo[AI_SPINO].waterLevel2 = 120;
+	AIInfo[AI_SPINO].tGAIncrement = 4.f;
+	AIInfo[AI_SPINO].idleStartD = 128;
+	AIInfo[AI_SPINO].targetBendRotSpd = 3;
+	AIInfo[AI_SPINO].waterLevel3 = 160;
+	AIInfo[AI_SPINO].yBetaGamma1 = 98;
+	AIInfo[AI_SPINO].yBetaGamma2 = 84;
+	AIInfo[AI_SPINO].yBetaGamma3 = 0.4f;
+	AIInfo[AI_SPINO].yBetaGamma4 = 0.3f;
+	AIInfo[AI_SPINO].walkTargetGammaRot = 9.0f;
+	AIInfo[AI_SPINO].targetGammaRot = 6.0f;
+	AIInfo[AI_SPINO].jumper = true;
+
+	AIInfo[AI_CERAT].jumper = false;
+	AIInfo[AI_CERAT].agressMulti = 8;
+	AIInfo[AI_CERAT].waterLevel1 = 140;
+	AIInfo[AI_CERAT].waterLevel2 = 120;
+	AIInfo[AI_CERAT].tGAIncrement = 4.f;
+	AIInfo[AI_CERAT].idleStartD = 128;
+	AIInfo[AI_CERAT].targetBendRotSpd = 3;
+	AIInfo[AI_CERAT].waterLevel3 = 160;
+	AIInfo[AI_CERAT].yBetaGamma1 = 348;
+	AIInfo[AI_CERAT].yBetaGamma2 = 324;
+	AIInfo[AI_CERAT].yBetaGamma3 = 0.5f;
+	AIInfo[AI_CERAT].yBetaGamma4 = 0.4f;
+	AIInfo[AI_CERAT].walkTargetGammaRot = 9.0f;
+	AIInfo[AI_CERAT].targetGammaRot = 6.0f;
+
 
 
   FILE *stream;
