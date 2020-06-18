@@ -61,7 +61,7 @@ BOOL NewPhase;
 #define FISH_WALK   0
 #define FISH_RUN    1
 
-
+/*
 #define REX_RUN    0
 #define REX_WALK   1
 #define REX_SCREAM 2
@@ -73,6 +73,7 @@ BOOL NewPhase;
 #define REX_DIE    8
 #define REX_EAT    9
 #define REX_SLP    10
+*/
 
 #define ICTH_WALK           0
 #define ICTH_WALK_IDLE1     1
@@ -1635,7 +1636,7 @@ void AnimateHuntDead(TCharacter *cptr)
 void AnimateTRexDead(TCharacter *cptr)
 {
 
-  if (cptr->Phase!=REX_DIE)
+  if (cptr->Phase!= DinoInfo[cptr->CType].dieAnim)
   {
     if (cptr->PPMorphTime>128)
     {
@@ -1645,7 +1646,7 @@ void AnimateTRexDead(TCharacter *cptr)
     }
 
     cptr->FTime = 0;
-    cptr->Phase = REX_DIE;
+    cptr->Phase = DinoInfo[cptr->CType].dieAnim;
     ActivateCharacterFx(cptr);
   }
   else
@@ -2136,10 +2137,15 @@ ENDPSELECT:
 	if (_Phase != cptr->Phase)
 	{
 		//==== set proportional FTime for better morphing =//
-		if (MORPHP)
-			if (_Phase <= 3 && cptr->Phase <= 3)
+
+		if (MORPHP){
+			if ((_Phase == DinoInfo[cptr->CType].runAnim ||
+				_Phase == DinoInfo[cptr->CType].walkAnim) &&
+				(cptr->Phase == DinoInfo[cptr->CType].runAnim ||
+				cptr->Phase == DinoInfo[cptr->CType].walkAnim))
 				cptr->FTime = _FTime * cptr->pinfo->Animation[cptr->Phase].AniTime / cptr->pinfo->Animation[_Phase].AniTime + 64;
 			else if (!NewPhase) cptr->FTime = 0;
+		}
 
 		if (cptr->PPMorphTime > 128)
 		{
@@ -2945,7 +2951,7 @@ TBEGIN:
   {
     NewPhase=TRUE;
     cptr->State=1;
-    cptr->Phase = REX_WALK;
+    cptr->Phase = DinoInfo[cptr->CType].walkAnim;
     cptr->FTime=0;
     cptr->tgx = PlayerX;
     cptr->tgz = PlayerZ;
@@ -2957,7 +2963,7 @@ TBEGIN:
   else
     cptr->StateF &= (!csONWATER);
 
-  if (cptr->Phase == REX_EAT) goto NOTHINK;
+  if (cptr->Phase == DinoInfo[cptr->CType].eatAnim) goto NOTHINK;
 
 //============================================//
   if (!MyHealth) cptr->State = 0;
@@ -2969,10 +2975,19 @@ TBEGIN:
     if (cptr->State>1)
       if (AngleDifference(cptr->alpha, palpha) < 0.4f)
       {
-        if (cptr->State==2) cptr->Phase = REX_SEE1 + rRand(1);
-        else cptr->Phase = REX_SMEL + rRand(1);
-        cptr->State=1;
-        cptr->rspeed=0;
+		  if (cptr->State == 2) {
+			  if (DinoInfo[cptr->CType].lookCount) {
+				  cptr->Phase = DinoInfo[cptr->CType].lookAnim[rRand(DinoInfo[cptr->CType].lookCount - 1)];
+				  cptr->State = 1;
+				  cptr->rspeed = 0;
+			  }
+		  } else {
+			  if (DinoInfo[cptr->CType].smellCount) {
+				  cptr->Phase = DinoInfo[cptr->CType].smellAnim[rRand(DinoInfo[cptr->CType].smellCount - 1)];
+				  cptr->State = 1;
+				  cptr->rspeed = 0;
+			  }
+		  }
       }
 
     if (pdist< DinoInfo[cptr->CType].killDist && DinoInfo[cptr->CType].killDist > 0)
@@ -2980,7 +2995,7 @@ TBEGIN:
       {
         cptr->vspeed/= 8.0f;
         cptr->State = 1;
-        cptr->Phase = REX_EAT;
+        cptr->Phase = DinoInfo[cptr->CType].eatAnim;
         AddDeadBody(cptr, DinoInfo[cptr->CType].hunterDeathAnim);
       }
   }
@@ -3007,7 +3022,7 @@ NOTHINK:
     }
   }
 
-  LookForAWay(cptr, FALSE, !cptr->State);
+  LookForAWay(cptr, !DinoInfo[cptr->CType].canSwim, !cptr->State);
   if (cptr->NoWayCnt>12)
   {
     cptr->NoWayCnt=0;
@@ -3024,8 +3039,13 @@ NOTHINK:
 
 
 //======== select new phase =======================//
-  if (cptr->Phase==REX_SEE  || cptr->Phase==REX_SEE1 ||
-      cptr->Phase==REX_SMEL || cptr->Phase==REX_SMEL1)   LookMode = TRUE;
+  for (int i = 0; i < DinoInfo[cptr->CType].lookCount; i++) {
+	  if (cptr->Phase == DinoInfo[cptr->CType].lookAnim[i]) LookMode = TRUE;
+  }
+
+  for (int i = 0; i < DinoInfo[cptr->CType].smellCount; i++) {
+	  if (cptr->Phase == DinoInfo[cptr->CType].smellAnim[i]) LookMode = TRUE;
+  }
 
   cptr->FTime+=TimeDt;
 
@@ -3035,17 +3055,24 @@ NOTHINK:
     NewPhase = TRUE;
   }
 
-  if (cptr->Phase==REX_EAT)    goto ENDPSELECT;
+  if (cptr->Phase== DinoInfo[cptr->CType].eatAnim)    goto ENDPSELECT;
 
   if (!NewPhase)
-    if (cptr->Phase==REX_SCREAM) goto ENDPSELECT;
+    if (cptr->Phase== DinoInfo[cptr->CType].roarAnim) goto ENDPSELECT;
 
   if (!cptr->State)
     if (NewPhase)
       if (rRand(128)>110)
       {
-        if (rRand(128) > 64) cptr->Phase = REX_SEE1 + rRand(1);
-        else cptr->Phase = REX_SMEL + rRand(1);
+		  if (rRand(128) > 64) {
+			  if (DinoInfo[cptr->CType].lookCount) {
+				  cptr->Phase = DinoInfo[cptr->CType].lookAnim[rRand(DinoInfo[cptr->CType].lookCount - 1)];
+			  }
+		  } else {
+			  if (DinoInfo[cptr->CType].smellCount) {
+				  cptr->Phase = DinoInfo[cptr->CType].smellAnim[rRand(DinoInfo[cptr->CType].smellCount - 1)];
+			  }
+		  }
         goto ENDPSELECT;
       }
 
@@ -3055,17 +3082,19 @@ NOTHINK:
   if (cptr->State)
     if (NewPhase && LookMode)
     {
-      cptr->Phase = REX_SCREAM;
+      cptr->Phase = DinoInfo[cptr->CType].roarAnim;
       goto ENDPSELECT;
     }
 
-  if (!cptr->State || cptr->State>1) cptr->Phase=REX_WALK;
+  if (!cptr->State || cptr->State>1) cptr->Phase= DinoInfo[cptr->CType].walkAnim;
   else if (fabs(cptr->tgalpha - cptr->alpha)<1.0 ||
            fabs(cptr->tgalpha - cptr->alpha)>2*pi-1.0)
-    cptr->Phase = REX_RUN;
-  else cptr->Phase=REX_WALK;
+    cptr->Phase = DinoInfo[cptr->CType].runAnim;
+  else cptr->Phase= DinoInfo[cptr->CType].walkAnim;
 
-  if (cptr->StateF & csONWATER) cptr->Phase = REX_SWIM;
+  if (DinoInfo[cptr->CType].canSwim) {
+	  if (cptr->StateF & csONWATER) cptr->Phase = DinoInfo[cptr->CType].swimAnim;
+  }
 
 ENDPSELECT:
 
@@ -3076,10 +3105,15 @@ ENDPSELECT:
   if (_Phase != cptr->Phase)
   {
     //==== set proportional FTime for better morphing =//
-    if (MORPHP)
-      if (_Phase<=1 && cptr->Phase<=1)
-        cptr->FTime = _FTime * cptr->pinfo->Animation[cptr->Phase].AniTime / cptr->pinfo->Animation[_Phase].AniTime + 64;
-      else if (!NewPhase) cptr->FTime = 0;
+
+	if (MORPHP) {
+		if ((_Phase == DinoInfo[cptr->CType].runAnim ||
+			_Phase == DinoInfo[cptr->CType].walkAnim) &&
+			(cptr->Phase == DinoInfo[cptr->CType].runAnim ||
+				cptr->Phase == DinoInfo[cptr->CType].walkAnim))
+			cptr->FTime = _FTime * cptr->pinfo->Animation[cptr->Phase].AniTime / cptr->pinfo->Animation[_Phase].AniTime + 64;
+		else if (!NewPhase) cptr->FTime = 0;
+	}
 
     if (cptr->PPMorphTime>128)
     {
@@ -3100,7 +3134,7 @@ ENDPSELECT:
   float drspd = dalpha;
   if (drspd>pi) drspd = 2*pi - drspd;
 
-  if (cptr->Phase==REX_SCREAM || cptr->Phase==REX_EAT) goto SKIPROT;
+  if (cptr->Phase== DinoInfo[cptr->CType].roarAnim || cptr->Phase== DinoInfo[cptr->CType].eatAnim) goto SKIPROT;
   if (LookMode) goto SKIPROT;
 
   if (drspd > 0.02)
@@ -3138,9 +3172,11 @@ SKIPROT:
   cptr->lookz = (float)sin(cptr->alpha);
 
   float curspeed = 0;
-  if (cptr->Phase == REX_RUN ) curspeed = cptr->speed_run;
-  if (cptr->Phase == REX_WALK) curspeed = cptr->speed_walk;
-  if (cptr->Phase == REX_SWIM) curspeed = cptr->speed_swim;
+  if (cptr->Phase == DinoInfo[cptr->CType].runAnim) curspeed = cptr->speed_run;
+  if (cptr->Phase == DinoInfo[cptr->CType].walkAnim) curspeed = cptr->speed_walk;
+  if (DinoInfo[cptr->CType].canSwim) {
+	  if (cptr->Phase == DinoInfo[cptr->CType].swimAnim) curspeed = cptr->speed_swim;
+  }
 
   if (drspd > pi / 2.f) curspeed*=2.f - 2.f*drspd / pi;
 
@@ -3149,10 +3185,10 @@ SKIPROT:
   DeltaFunc(cptr->vspeed, curspeed, TimeDt / 200.f);
 
   MoveCharacter(cptr, cptr->lookx * cptr->vspeed * TimeDt * cptr->scale,
-                cptr->lookz * cptr->vspeed * TimeDt * cptr->scale, FALSE, TRUE);
+                cptr->lookz * cptr->vspeed * TimeDt * cptr->scale, !DinoInfo[cptr->CType].canSwim, TRUE);
 
 //============ Y movement =================//
-  if (cptr->StateF & csONWATER)
+  if ((cptr->StateF & csONWATER) && DinoInfo[cptr->CType].canSwim)
   {
     cptr->pos.y = GetLandUpH(cptr->pos.x, cptr->pos.z) - 540 * cptr->scale;
     cptr->beta/=2;
@@ -3166,7 +3202,7 @@ SKIPROT:
 
 
   //=== process to tggamma ===//
-  if (cptr->Phase==REX_WALK) cptr->tggamma+= cptr->rspeed / 16.0f;
+  if (cptr->Phase== DinoInfo[cptr->CType].walkAnim) cptr->tggamma+= cptr->rspeed / 16.0f;
   else cptr->tggamma+= cptr->rspeed / 12.0f;
 
   DeltaFunc(cptr->gamma, cptr->tggamma, TimeDt / 2024.f);

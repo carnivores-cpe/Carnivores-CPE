@@ -462,10 +462,17 @@ typedef struct _TDinoInfo
   float packDensity;
 
   int runAnim, jumpAnim, walkAnim, swimAnim, flyAnim, glideAnim, takeoffAnim, landAnim,
-	  slideAnim, sleepAnim, dieAnim, fallAnim, eatAnim;
+	  slideAnim, sleepAnim, dieAnim, fallAnim, eatAnim, roarAnim;
+
 
   int idleAnim[32];
   int idleCount;
+  
+  int lookAnim[32];
+  int lookCount;
+  
+  int smellAnim[32];
+  int smellCount;
 
   bool canSwim;
 

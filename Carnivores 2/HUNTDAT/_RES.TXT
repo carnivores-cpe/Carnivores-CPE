@@ -489,6 +489,16 @@ characters {
  onradar = TRUE
  trophy  = TRUE
  canswim = TRUE
+ runAnim = 0
+ walkAnim = 1
+ roarAnim = 2
+ swimAnim = 3
+ lookAnim = 4
+ lookAnim = 5
+ smellAnim = 6
+ smellAnim = 7
+ dieAnim = 8
+ eatAnim = 9
 }
 
 

@@ -2218,18 +2218,35 @@ void ReadCharacterLine(FILE *stream, char *_value, char line[256], bool &regionO
 	if (strstr(line, "dieAnim")) DinoInfo[TotalC].dieAnim = atoi(value);
 	if (strstr(line, "fallAnim")) DinoInfo[TotalC].fallAnim = atoi(value);
 	if (strstr(line, "eatAnim")) DinoInfo[TotalC].eatAnim = atoi(value);
+	if (strstr(line, "roarAnim")) DinoInfo[TotalC].roarAnim = atoi(value);
 
 	if (strstr(line, "idleAnim")) {
-
 		if (idleOverwrite) {
 			DinoInfo[TotalC].idleCount = 0;
 			idleOverwrite = false;
 		}
-
 		DinoInfo[TotalC].idleAnim[DinoInfo[TotalC].idleCount] = atoi(value);
 		DinoInfo[TotalC].idleCount++;
-
 	}
+
+	if (strstr(line, "lookAnim")) {
+		if (idleOverwrite) {
+			DinoInfo[TotalC].lookCount = 0;
+			idleOverwrite = false;
+		}
+		DinoInfo[TotalC].lookAnim[DinoInfo[TotalC].lookCount] = atoi(value);
+		DinoInfo[TotalC].lookCount++;
+	}
+
+	if (strstr(line, "smellAnim")) {
+		if (idleOverwrite) {
+			DinoInfo[TotalC].smellCount = 0;
+			idleOverwrite = false;
+		}
+		DinoInfo[TotalC].smellAnim[DinoInfo[TotalC].smellCount] = atoi(value);
+		DinoInfo[TotalC].smellCount++;
+	}
+
 
 	//pack stuff
 	if (strstr(line, "packMax")) DinoInfo[TotalC].packMax = atoi(value);
