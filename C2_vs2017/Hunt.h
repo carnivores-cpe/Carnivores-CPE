@@ -341,6 +341,8 @@ typedef struct _TCharacter
   int pack;
   bool followLeader;
 
+  int killType;
+
 } TCharacter;
 
 
@@ -428,6 +430,13 @@ typedef struct _TTrophyRoom
 } TTrophyRoom;
 
 
+typedef struct _TDinoKill
+{
+	int anim;
+	int offset;
+	int hunteranim;
+	bool elevate;
+} TDinoKill;
 
 typedef struct _TDinoInfo
 {
@@ -449,7 +458,7 @@ typedef struct _TDinoInfo
   int maxDepth, minDepth, spacingDepth;
   BOOL dontSwimAway;
 
-  int hunterDeathAnim, hunterDeathOffset;
+  //int hunterDeathAnim, hunterDeathOffset;
   int aggress, killDist;
   int trophyCode;
   bool onRadar;
@@ -462,8 +471,10 @@ typedef struct _TDinoInfo
   float packDensity;
 
   int runAnim, jumpAnim, walkAnim, swimAnim, flyAnim, glideAnim, takeoffAnim, landAnim,
-	  slideAnim, sleepAnim, dieAnim, fallAnim, eatAnim, roarAnim;
+	  slideAnim, sleepAnim, dieAnim, fallAnim, roarAnim;
 
+  TDinoKill killType[32];
+  int killTypeCount;
 
   int idleAnim[32];
   int idleCount;
@@ -475,6 +486,7 @@ typedef struct _TDinoInfo
   int smellCount;
 
   bool canSwim;
+  int waterLevel;
 
 } TDinoInfo;
 
@@ -502,7 +514,6 @@ typedef struct _TAIInfo {
 	float yBetaGamma1, yBetaGamma2, yBetaGamma3, yBetaGamma4;
 
 	int agressMulti;
-	int waterLevel1, waterLevel2, waterLevel3;
 	float tGAIncrement;
 	int idleStartD;
 	bool jumper;

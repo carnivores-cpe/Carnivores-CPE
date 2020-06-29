@@ -2087,6 +2087,16 @@ void WipeRegions() {
 
 }
 
+void WipeKillTypes() {
+	if (DinoInfo[TotalC].killTypeCount) {
+		for (int i = 0; i < DinoInfo[TotalC].killTypeCount; i++) {
+			DinoInfo[TotalC].killType[i] = {};
+			DinoInfo[TotalC].RType0[i] = 0;
+		}
+	}
+	DinoInfo[TotalC].killTypeCount = 0;
+}
+
 void WipeAvoidances() {
 
 	if (DinoInfo[TotalC].AvoidCount) {
@@ -2101,6 +2111,35 @@ void WipeAvoidances() {
 	}
 
 }
+
+void ReadKillTypeInfo(FILE *stream)
+{
+	char *value;
+	char line[256];
+
+	while (fgets(line, 255, stream)) {
+		if (strstr(line, "}")) {
+			DinoInfo[TotalC].killTypeCount++;
+			break;
+		}
+		value = strstr(line, "=");
+		if (!value)
+			DoHalt("Script loading error");
+		value++;
+
+		if (strstr(line, "hunterAnim")) DinoInfo[TotalC].killType[DinoInfo[TotalC].killTypeCount].hunteranim = atoi(value);
+		if (strstr(line, "hunterOffset")) DinoInfo[TotalC].killType[DinoInfo[TotalC].killTypeCount].offset = atoi(value);
+		if (strstr(line, "eatAnim")) DinoInfo[TotalC].killType[DinoInfo[TotalC].killTypeCount].anim = atoi(value);
+		if (strstr(line, "elevate")) DinoInfo[TotalC].killType[DinoInfo[TotalC].killTypeCount].elevate = TRUE;
+
+	}
+}
+
+
+
+
+
+
 
 void ReadSpawnInfo(FILE *stream)
 {
@@ -2165,7 +2204,7 @@ void ReadAvoidInfo(FILE *stream)
 
 
 
-void ReadCharacterLine(FILE *stream, char *_value, char line[256], bool &regionOverwrite, bool &avoidOverwrite, bool &idleOverwrite) {
+void ReadCharacterLine(FILE *stream, char *_value, char line[256], bool &regionOverwrite, bool &avoidOverwrite, bool &idleOverwrite, bool &killOverwrite) {
 
 	char *value = _value;
 //	bool overwrite = _overwrite;
@@ -2194,14 +2233,15 @@ void ReadCharacterLine(FILE *stream, char *_value, char line[256], bool &regionO
 	if (strstr(line, "gldspd")) DinoInfo[TotalC].gldspd = (float)atof(value);
 	if (strstr(line, "tkfspd")) DinoInfo[TotalC].tkfspd = (float)atof(value);
 	if (strstr(line, "lndspd")) DinoInfo[TotalC].lndspd = (float)atof(value);
-	if (strstr(line, "hunterAnim")) DinoInfo[TotalC].hunterDeathAnim = atoi(value);
-	if (strstr(line, "hunterOffset")) DinoInfo[TotalC].hunterDeathOffset = atoi(value);
 	if (strstr(line, "aggress")) DinoInfo[TotalC].aggress = atoi(value);
 	if (strstr(line, "killdist")) DinoInfo[TotalC].killDist = atoi(value);
 	if (strstr(line, "onradar")) DinoInfo[TotalC].onRadar = TRUE;
 	if (strstr(line, "dontswimaway")) DinoInfo[TotalC].dontSwimAway = TRUE;
 	if (strstr(line, "collisiondist")) DinoInfo[TotalC].maxGrad = atoi(value);
 	if (strstr(line, "runrotatespeed")) DinoInfo[TotalC].rotspdmulti = (float)atof(value);
+
+	if (strstr(line, "waterLevel")) DinoInfo[TotalC].waterLevel = atoi(value);
+
 
 	if (strstr(line, "canswim")) DinoInfo[TotalC].canSwim = TRUE;
 
@@ -2217,7 +2257,6 @@ void ReadCharacterLine(FILE *stream, char *_value, char line[256], bool &regionO
 	if (strstr(line, "sleepAnim")) DinoInfo[TotalC].sleepAnim = atoi(value);
 	if (strstr(line, "dieAnim")) DinoInfo[TotalC].dieAnim = atoi(value);
 	if (strstr(line, "fallAnim")) DinoInfo[TotalC].fallAnim = atoi(value);
-	if (strstr(line, "eatAnim")) DinoInfo[TotalC].eatAnim = atoi(value);
 	if (strstr(line, "roarAnim")) DinoInfo[TotalC].roarAnim = atoi(value);
 
 	if (strstr(line, "idleAnim")) {
@@ -2273,6 +2312,17 @@ void ReadCharacterLine(FILE *stream, char *_value, char line[256], bool &regionO
 		if (!value) DoHalt("Script loading error");
 		value[strlen(value) - 2] = 0;
 		strcpy(DinoInfo[TotalC].FName, &value[1]);
+	}
+
+	
+	if (strstr(line, "killtype")) {
+
+		if (killOverwrite) {
+			WipeKillTypes();
+			killOverwrite = false;
+		}
+
+		ReadKillTypeInfo(stream);
 	}
 
 	if (strstr(line, "spawninfo")){
@@ -2370,14 +2420,15 @@ void ReadCharacters(FILE *stream, bool mapamb)
 				!strstr(line, "overwrite") &&
 				!strstr(line, "addition") &&
 				!strstr(line, "spawninfo") &&
+				!strstr(line, "killtype") &&
 				!strstr(line, "avoid"))
 				DoHalt("Script loading error");
 			value++;
 
 			if (strstr(line, "ai")) DinoInfo[TotalC].AI = atoi(value);
 
-			bool temp, temp2, temp3;
-			ReadCharacterLine(stream, value, line, temp, temp2, temp3);
+			bool temp, temp2, temp3, temp4;
+			ReadCharacterLine(stream, value, line, temp, temp2, temp3, temp4);
 
 			if (strstr(line, "overwrite") || strstr(line, "addition")) {
 
@@ -2449,6 +2500,7 @@ void ReadCharacters(FILE *stream, bool mapamb)
 					bool regionOverwrite = strstr(line, "overwrite");
 					bool avoidOverwrite = strstr(line, "overwrite");
 					bool idleOverwrite = strstr(line, "overwrite");
+					bool killOverwrite = strstr(line, "overwrite");
 
 					while (fgets(line, 255, stream)) {
 						if (strstr(line, "}")) break;
@@ -2458,7 +2510,7 @@ void ReadCharacters(FILE *stream, bool mapamb)
 							DoHalt("Script loading error");
 						value++;
 
-						ReadCharacterLine(stream, value, line, regionOverwrite, avoidOverwrite, idleOverwrite);
+						ReadCharacterLine(stream, value, line, regionOverwrite, avoidOverwrite, idleOverwrite, killOverwrite);
 
 					}
 
@@ -2502,6 +2554,7 @@ void LoadResourcesScript()
 	AIInfo[AI_PARA].targetGammaRot = 8.0f;
 	AIInfo[AI_PARA].idleStart = 120;
 	AIInfo[AI_PARA].yBetaGamma4 = 0.4f;
+	//waterLevel = 160;
 
 	AIInfo[AI_ANKY].targetDistance = 8048.f;
 	AIInfo[AI_ANKY].noWayCntMin = 12;
@@ -2515,6 +2568,7 @@ void LoadResourcesScript()
 	AIInfo[AI_ANKY].targetGammaRot = 10.0f;
 	AIInfo[AI_ANKY].idleStart = 120;
 	AIInfo[AI_ANKY].yBetaGamma4 = 0.4f;
+	//waterLevel = 60;
 
 	AIInfo[AI_PACH].targetDistance = 6048.f;
 	AIInfo[AI_PACH].noWayCntMin = 12;
@@ -2528,6 +2582,7 @@ void LoadResourcesScript()
 	AIInfo[AI_PACH].targetGammaRot = 8.0f;
 	AIInfo[AI_PACH].idleStart = 120;
 	AIInfo[AI_PACH].yBetaGamma4 = 0.4f;
+	//waterLevel = 140;
 
 	AIInfo[AI_STEGO].targetDistance = 8048.f;
 	AIInfo[AI_STEGO].noWayCntMin = 12;
@@ -2541,6 +2596,7 @@ void LoadResourcesScript()
 	AIInfo[AI_STEGO].targetGammaRot = 10.0f;
 	AIInfo[AI_STEGO].idleStart = 120;
 	AIInfo[AI_STEGO].yBetaGamma4 = 0.4f;
+	//waterLevel = 160;
 
 	AIInfo[AI_CHASM].targetDistance = 8048.f;
 	AIInfo[AI_CHASM].noWayCntMin = 8;
@@ -2554,12 +2610,11 @@ void LoadResourcesScript()
 	AIInfo[AI_CHASM].yBetaGamma4 = 0.3f;
 	AIInfo[AI_CHASM].walkTargetGammaRot = 12.0f;
 	AIInfo[AI_CHASM].targetGammaRot = 8.0f;
+	//waterLevel = 120;
 
 	AIInfo[AI_ALLO].agressMulti = 4;
 	AIInfo[AI_ALLO].targetBendRotSpd = 2;
-	AIInfo[AI_ALLO].waterLevel1 = 180;
-	AIInfo[AI_ALLO].waterLevel2 = 160;
-	AIInfo[AI_ALLO].waterLevel3 = 200;
+	//AIInfo[AI_ALLO].waterLevel = 180;
 	AIInfo[AI_ALLO].yBetaGamma1 = 64;
 	AIInfo[AI_ALLO].yBetaGamma2 = 32;
 	AIInfo[AI_ALLO].yBetaGamma3 = 0.5f;
@@ -2572,9 +2627,7 @@ void LoadResourcesScript()
 
 	AIInfo[AI_VELO].agressMulti = 8;
 	AIInfo[AI_VELO].targetBendRotSpd = 3;
-	AIInfo[AI_VELO].waterLevel1 = 140;
-	AIInfo[AI_VELO].waterLevel2 = 120;
-	AIInfo[AI_VELO].waterLevel3 = 160;
+	//AIInfo[AI_VELO].waterLevel = 140;
 	AIInfo[AI_VELO].yBetaGamma1 = 48;
 	AIInfo[AI_VELO].yBetaGamma2 = 24;
 	AIInfo[AI_VELO].yBetaGamma3 = 0.5f;
@@ -2586,12 +2639,10 @@ void LoadResourcesScript()
 	AIInfo[AI_VELO].jumper = true;
 
 	AIInfo[AI_SPINO].agressMulti = 8;
-	AIInfo[AI_SPINO].waterLevel1 = 140;
-	AIInfo[AI_SPINO].waterLevel2 = 120;
+	//AIInfo[AI_SPINO].waterLevel = 140;
 	AIInfo[AI_SPINO].tGAIncrement = 4.f;
 	AIInfo[AI_SPINO].idleStartD = 128;
 	AIInfo[AI_SPINO].targetBendRotSpd = 3;
-	AIInfo[AI_SPINO].waterLevel3 = 160;
 	AIInfo[AI_SPINO].yBetaGamma1 = 98;
 	AIInfo[AI_SPINO].yBetaGamma2 = 84;
 	AIInfo[AI_SPINO].yBetaGamma3 = 0.4f;
@@ -2602,18 +2653,18 @@ void LoadResourcesScript()
 
 	AIInfo[AI_CERAT].jumper = false;
 	AIInfo[AI_CERAT].agressMulti = 8;
-	AIInfo[AI_CERAT].waterLevel1 = 140;
-	AIInfo[AI_CERAT].waterLevel2 = 120;
+	//AIInfo[AI_CERAT].waterLevel = 140;
 	AIInfo[AI_CERAT].tGAIncrement = 4.f;
 	AIInfo[AI_CERAT].idleStartD = 128;
 	AIInfo[AI_CERAT].targetBendRotSpd = 3;
-	AIInfo[AI_CERAT].waterLevel3 = 160;
 	AIInfo[AI_CERAT].yBetaGamma1 = 348;
 	AIInfo[AI_CERAT].yBetaGamma2 = 324;
 	AIInfo[AI_CERAT].yBetaGamma3 = 0.5f;
 	AIInfo[AI_CERAT].yBetaGamma4 = 0.4f;
 	AIInfo[AI_CERAT].walkTargetGammaRot = 9.0f;
 	AIInfo[AI_CERAT].targetGammaRot = 6.0f;
+
+	//AIInfo[AI_TREX].waterLevel = 560;
 
 
 

@@ -102,6 +102,12 @@ characters {
  fearCall = 18
  runspd = 0.6
  wlkspd = 0.3
+ runAnim = 0
+ walkAnim = 1
+ dieAnim = 2
+ idleAnim = 3
+ idleAnim = 4
+ sleepAnim = 5
 }
 
 {
@@ -156,6 +162,12 @@ characters {
  fearCall = 18
  runspd = 0.6
  wlkspd = 0.3
+ runAnim = 1
+ walkAnim = 0
+ dieAnim = 4
+ idleAnim = 2
+ idleAnim = 3
+ sleepAnim = 5
 }
 
 
@@ -194,6 +206,7 @@ characters {
  idleAnim = 3
  dieAnim = 4
  sleepAnim = 5
+ waterLevel = 160
 }
 
 {
@@ -231,6 +244,7 @@ characters {
  idleAnim = 3
  dieAnim = 4
  sleepAnim = 5
+ waterLevel = 60
 }
 
 {
@@ -266,6 +280,7 @@ characters {
  idleAnim = 4
  dieAnim = 2
  sleepAnim = 5
+ waterLevel = 160
 }
 
 {
@@ -290,8 +305,6 @@ characters {
  wlkspd = 0.428
  swmspd = 0.4
  jmpspd = 1.1
- hunterAnim = 0
- hunterOffset = 170
  aggress = 128
  killdist = 256
  onradar = TRUE
@@ -303,10 +316,13 @@ characters {
  slideAnim = 3
  jumpAnim = 4
  dieAnim = 5
- eatAnim = 6
  sleepAnim = 7
  idleAnim = 8
  idleAnim = 9
+ waterLevel = 180
+ hunterAnim = 0
+ hunterOffset = 170
+ eatAnim = 6
 }
 
 {
@@ -343,6 +359,7 @@ characters {
  idleAnim = 4
  dieAnim = 5
  sleepAnim = 6
+ waterLevel = 120
 }
 
 {
@@ -383,6 +400,7 @@ characters {
  sleepAnim = 7
  idleAnim = 8
  idleAnim = 9
+ waterLevel = 140
 }
 
 {
@@ -422,6 +440,7 @@ characters {
  sleepAnim = 8
  idleAnim = 3
  idleAnim = 4
+ waterLevel = 140
 }
 
 
@@ -461,6 +480,7 @@ characters {
  idleAnim = 2
  idleAnim = 3
  idleAnim = 4
+ waterLevel = 140
 }
 
 
@@ -499,6 +519,7 @@ characters {
  smellAnim = 7
  dieAnim = 8
  eatAnim = 9
+ waterLevel = 560
 }
 
 
@@ -539,52 +560,6 @@ mapambients {
 }
 
 {
- name = 'Velociraptor2'
- file = 'velo_iidc.car'
- clone 	   = 15
- mass      = 0.3
- length    = 4.0
- radius    = 256
- health    = 6
- basescore = 12
- scaleA    = 400
- smell     = 1.3
- hearK     = 0.7
- lookK     = 0.5
- shipdelta = -32
- fearCall = 17
- fearCall = 18
- runspd = 1.2
- wlkspd = 0.428
- swmspd = 0.4
- jmpspd = 1.1
- hunterAnim = 0
- hunterOffset = 170
- aggress = 160
- killdist = 256
- trophy  = TRUE
- canswim = TRUE
- runAnim = 0
- walkAnim = 1
- swimAnim = 3
- slideAnim = 2
- jumpAnim = 4
- dieAnim = 5
- eatAnim = 6
- sleepAnim = 7
- idleAnim = 8
- idleAnim = 9
- packMax = 5
- packMin = 3
- packDensity = 2000
- spawninfo {
- spawnrate = 1
- spawnmax  = 5
- spawnmin  = 0
- }
-}
-
-{
  name      = 'Pachycephalosaurus'
  file      = 'pach.car'
  clone 	   = 19
@@ -617,6 +592,7 @@ mapambients {
  idleAnim = 5
  dieAnim = 3
  sleepAnim = 6
+ waterLevel = 140
  spawninfo {
  spawnrate = 1
  spawnmax  = 5
@@ -659,6 +635,7 @@ mapambients {
  idleAnim = 4
  dieAnim = 5
  sleepAnim = 6
+ waterLevel = 120
  spawninfo {
  spawnrate = 0.05
  spawnmax  = 2
