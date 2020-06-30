@@ -1387,10 +1387,10 @@ void ProcessDemoMovement()
   DemoPoint.pos.y+=256;
 
   float base = 824;
-  if (Characters[DemoPoint.CIndex].Clone == AI_TREX &&
-	  !(GetLandUpH(Characters[DemoPoint.CIndex].pos.x, Characters[DemoPoint.CIndex].pos.z) -
-	  GetLandH(Characters[DemoPoint.CIndex].pos.x, Characters[DemoPoint.CIndex].pos.z) >
-	  DinoInfo[Characters[DemoPoint.CIndex].CType].waterLevel * Characters[DemoPoint.CIndex].scale))
+  if (killerDino->Clone == AI_TREX && !killedwater)
+//	  !(GetLandUpH(Characters[DemoPoint.CIndex].pos.x, Characters[DemoPoint.CIndex].pos.z) -
+//	  GetLandH(Characters[DemoPoint.CIndex].pos.x, Characters[DemoPoint.CIndex].pos.z) >
+//	  DinoInfo[Characters[DemoPoint.CIndex].CType].waterLevel * Characters[DemoPoint.CIndex].scale))
   {
 	  DemoPoint.pos.y += 512;
 	  base = 1424;

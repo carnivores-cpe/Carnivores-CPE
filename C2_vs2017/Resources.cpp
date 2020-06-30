@@ -2130,7 +2130,7 @@ void ReadKillTypeInfo(FILE *stream)
 		if (strstr(line, "hunterAnim")) DinoInfo[TotalC].killType[DinoInfo[TotalC].killTypeCount].hunteranim = atoi(value);
 		if (strstr(line, "hunterOffset")) DinoInfo[TotalC].killType[DinoInfo[TotalC].killTypeCount].offset = atoi(value);
 		if (strstr(line, "eatAnim")) DinoInfo[TotalC].killType[DinoInfo[TotalC].killTypeCount].anim = atoi(value);
-		if (strstr(line, "elevate")) DinoInfo[TotalC].killType[DinoInfo[TotalC].killTypeCount].elevate = TRUE;
+		if (strstr(line, "hunterSync")) DinoInfo[TotalC].killType[DinoInfo[TotalC].killTypeCount].elevate = TRUE;
 
 	}
 }

@@ -174,6 +174,7 @@ BOOL NewPhase;
 
 int CurDino;
 
+
 void SetNewTargetPlace(TCharacter *cptr, float R);
 void SetNewTargetPlaceRegion(TCharacter *cptr, float R);
 void SetNewTargetPlaceVanilla(TCharacter *cptr, float R);
@@ -293,6 +294,17 @@ void AddDeadBody(TCharacter *cptr, int phase)
 	MyHealth = 0;
 	if (cptr)
 	{
+		killerDino = cptr;
+
+		if (GetLandUpH(killerDino->pos.x, killerDino->pos.z) -
+			GetLandH(killerDino->pos.x, killerDino->pos.z) >
+			DinoInfo[killerDino->CType].waterLevel * killerDino->scale) {
+			killedwater = TRUE;
+		}
+		else {
+			killedwater = FALSE;
+		}
+
 		float pl = DinoInfo[cptr->CType].killType[cptr->killType].offset;
 		Characters[ChCount].pos.x = cptr->pos.x + cptr->lookx * pl * cptr->scale;
 		Characters[ChCount].pos.z = cptr->pos.z + cptr->lookz * pl * cptr->scale;
@@ -315,12 +327,15 @@ void AddDeadBody(TCharacter *cptr, int phase)
 	DemoPoint.DemoTime = 1;
 	DemoPoint.CIndex = ChCount;
 
-	if (phase > 0) {
+	/*
+	//if (phase > 0) {
+	if (DinoInfo[cptr->CType].killType[cptr->killType].elevate) {
 		Characters[ChCount].scale = cptr->scale;
 		Characters[ChCount].alpha = cptr->alpha;
 		cptr->bend = 0;
 		DemoPoint.CIndex = CurDino;
 	}
+	*/
 
 	ChCount++;
 }
@@ -1623,33 +1638,26 @@ void AnimateHuntDead(TCharacter *cptr)
 		DeltaFunc(cptr->gamma, cptr->tggamma, TimeDt / 1800.f);
 	}
 
-
-	TCharacter *cptr2 = &Characters[DemoPoint.CIndex];
-
-	//if (cptr2->Clone==AI_TREX)   //==== T-rex =======//
-	if (!(GetLandUpH(cptr2->pos.x, cptr2->pos.z) - GetLandH(cptr2->pos.x, cptr2->pos.z) >
-		DinoInfo[cptr2->CType].waterLevel * cptr2->scale))
+	if (!(GetLandUpH(killerDino->pos.x, killerDino->pos.z) - GetLandH(killerDino->pos.x, killerDino->pos.z) >
+		DinoInfo[killerDino->CType].waterLevel * killerDino->scale))
 	{
-		if (DinoInfo[cptr->CType].killTypeCount) {
+		if (DinoInfo[killerDino->CType].killTypeCount) {
+			if (DinoInfo[killerDino->CType].killType[killerDino->killType].elevate) {
 
-			if (DinoInfo[cptr->CType].killType[cptr->killType].elevate) {
 
-				//cptr->pos = cptr2->pos;
-				float pl = DinoInfo[cptr->CType].killType[cptr->killType].offset;
-				cptr->pos.x = cptr2->pos.x + (cptr2->lookx * pl * cptr2->scale);
-				cptr->pos.z = cptr2->pos.z + (cptr2->lookz * pl * cptr2->scale);
-				cptr->pos.y = cptr2->pos.y;
-				//cptr->pos.y = GetLandQH(cptr->pos.x, cptr->pos.z);
-				cptr->FTime = cptr2->FTime;
-				cptr->beta = cptr2->beta;
-				cptr->gamma = cptr2->gamma;
+				cptr->pos = killerDino->pos;
+				cptr->FTime = killerDino->FTime;
+				cptr->beta = killerDino->beta;
+				cptr->gamma = killerDino->gamma;
+				cptr->scale = killerDino->scale;
+				cptr->alpha = killerDino->alpha;
+				killerDino->bend = 0;
 
 			}
 
 		}
 
 	}
-	
 
 }
 
@@ -3163,9 +3171,8 @@ ENDPSELECT:
 	float drspd = dalpha;
 	if (drspd > pi) drspd = 2 * pi - drspd;
 
-	if (cptr->Phase == DinoInfo[cptr->CType].roarAnim || (
-		DinoInfo[cptr->CType].killType[cptr->killType].anim && DinoInfo[cptr->CType].killTypeCount
-		)) goto SKIPROT;
+	if (cptr->Phase == DinoInfo[cptr->CType].roarAnim) goto SKIPROT;
+	if (cptr->Phase == DinoInfo[cptr->CType].killType[cptr->killType].anim && DinoInfo[cptr->CType].killTypeCount) goto SKIPROT;
 	if (LookMode) goto SKIPROT;
 
 	if (drspd > 0.02)

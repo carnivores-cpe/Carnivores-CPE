@@ -320,9 +320,11 @@ characters {
  idleAnim = 8
  idleAnim = 9
  waterLevel = 180
+killtype{
  hunterAnim = 0
  hunterOffset = 170
  eatAnim = 6
+}
 }
 
 {
@@ -383,8 +385,6 @@ characters {
  wlkspd = 0.428
  swmspd = 0.4
  jmpspd = 1.1
- hunterAnim = 0
- hunterOffset = 170
  aggress = 160
  killdist = 256
  onradar = TRUE
@@ -396,11 +396,15 @@ characters {
  slideAnim = 2
  jumpAnim = 4
  dieAnim = 5
- eatAnim = 6
  sleepAnim = 7
  idleAnim = 8
  idleAnim = 9
  waterLevel = 140
+killtype{
+ hunterAnim = 0
+ hunterOffset = 170
+ eatAnim = 6
+}
 }
 
 {
@@ -423,8 +427,6 @@ characters {
  wlkspd = 0.70
  swmspd = 0.5
  jmpspd = 1.4
- hunterAnim = 0
- hunterOffset = 200
  aggress = 140
  killdist = 300
  onradar = TRUE
@@ -436,11 +438,15 @@ characters {
  slideAnim = 2
  jumpAnim = 5
  dieAnim = 6
- eatAnim = 7
  sleepAnim = 8
  idleAnim = 3
  idleAnim = 4
  waterLevel = 140
+killtype{
+ hunterAnim = 0
+ hunterOffset = 200
+ eatAnim = 7
+}
 }
 
 
@@ -464,8 +470,6 @@ characters {
  runspd = 2.2
  wlkspd = 0.75
  swmspd = 0.75
- hunterAnim = 0
- hunterOffset = 320
  aggress = 200
  killdist = 350
  onradar = TRUE
@@ -475,12 +479,16 @@ characters {
  walkAnim = 0
  swimAnim = 8
  dieAnim = 5
- eatAnim = 7
  sleepAnim = 6
  idleAnim = 2
  idleAnim = 3
  idleAnim = 4
  waterLevel = 140
+killtype{
+ hunterAnim = 0
+ hunterOffset = 320
+ eatAnim = 7
+}
 }
 
 
@@ -503,8 +511,6 @@ characters {
  runspd = 2.49
  wlkspd = 0.76
  swmspd = 0.70
- hunterAnim = 3
- hunterOffset = 0
  killdist = 380
  onradar = TRUE
  trophy  = TRUE
@@ -518,8 +524,13 @@ characters {
  smellAnim = 6
  smellAnim = 7
  dieAnim = 8
- eatAnim = 9
  waterLevel = 560
+killtype{
+ hunterAnim = 3
+ eatAnim = 9
+ hunterOffset = 0
+ hunterSync = TRUE
+}
 }
 
 
@@ -579,8 +590,6 @@ mapambients {
  fearCall = 18
  runspd = 1.6
  wlkspd = 0.40
- hunterAnim = 0
- hunterOffset = 0
  aggress = 0
  killdist = 0
  trophy  = TRUE
@@ -789,7 +798,7 @@ styInRgn  = TRUE
 
 
 prices {
- start = 100
+ start = 10000
  area = 20
  area = 50
  area = 100

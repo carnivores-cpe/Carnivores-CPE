@@ -889,6 +889,8 @@ _EXTORNOT int PackCount;
 _EXTORNOT TCharacter     Characters[256];
 _EXTORNOT TWCircle       WCircles[128];
 _EXTORNOT TDemoPoint     DemoPoint;
+_EXTORNOT TCharacter     *killerDino;
+_EXTORNOT BOOL			 killedwater;
 
 _EXTORNOT TPlayer        Players[16];
 _EXTORNOT Vector3d       PlayerPos, CameraPos;
