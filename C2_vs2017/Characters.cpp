@@ -163,6 +163,7 @@ BOOL NewPhase;
 #define DIM_FALL   2
 #define DIM_DIE    3
 
+/*
 #define BRA_WALK   0
 #define BRA_IDLE1  1
 #define BRA_IDLE2  2
@@ -171,6 +172,7 @@ BOOL NewPhase;
 #define BRA_SLP    5
 #define BRA_RUN    6
 #define BRA_EAT    10
+*/
 
 int CurDino;
 
@@ -708,6 +710,81 @@ int CheckPlaceCollision(TCharacter *cptr, Vector3d &v, BOOL wc, BOOL mc)
 	return 0;
 }
 
+int CheckPlaceCollisionLandBrahi(TCharacter *cptr, Vector3d &v, BOOL wc, BOOL mc)
+{
+	int ccx = (int)v.x / 256;
+	int ccz = (int)v.z / 256;
+
+	if (ccx < 4 || ccz < 4 || ccx>1018 || ccz>1018) return 1;
+
+	/*if (wc)
+		if ((FMap[ccz][ccx - 1] | FMap[ccz - 1][ccx] | FMap[ccz - 1][ccx - 1] |
+			FMap[ccz][ccx] |
+			FMap[ccz + 1][ccx] | FMap[ccz][ccx + 1] | FMap[ccz + 1][ccx + 1]) & fmWater)
+			return 1;
+	 */
+
+	if (DinoInfo[cptr->CType].AvoidCount)
+	{
+		for (int i = 0; i < DinoInfo[cptr->CType].AvoidCount; i++) {
+			if (ccx < (Avoid[DinoInfo[cptr->CType].Avoidances[i]].XMax) &&
+				ccz < (Avoid[DinoInfo[cptr->CType].Avoidances[i]].YMax) &&
+				ccx >(Avoid[DinoInfo[cptr->CType].Avoidances[i]].XMin) &&
+				ccz >(Avoid[DinoInfo[cptr->CType].Avoidances[i]].YMin)) return 1;
+		}
+	}
+
+	if (wc){
+		if ((FMap[ccz][ccx - 1] | FMap[ccz - 1][ccx] | FMap[ccz - 1][ccx - 1] |
+			FMap[ccz][ccx] |
+			FMap[ccz + 1][ccx] | FMap[ccz][ccx + 1] | FMap[ccz + 1][ccx + 1]) & fmWater){ 
+			return 1;
+		}
+	} else {
+		if ((GetLandUpH(v.x, v.z) - GetLandH(v.x, v.z)) > 550 ||
+			(GetLandUpH(v.x + 256, v.z) - GetLandH(v.x + 256, v.z)) > 550 ||
+			(GetLandUpH(v.x, v.z + 256) - GetLandH(v.x, v.z + 256)) > 550 ||
+			(GetLandUpH(v.x + 256, v.z + 256) - GetLandH(v.x + 256, v.z + 256)) > 550 ||
+			(GetLandUpH(v.x - 256, v.z) - GetLandH(v.x - 256, v.z)) > 550 ||
+			(GetLandUpH(v.x, v.z - 256) - GetLandH(v.x, v.z - 256)) > 550 ||
+			(GetLandUpH(v.x - 256, v.z - 256) - GetLandH(v.x - 256, v.z - 256)) > 550 ||
+			(GetLandUpH(v.x + 256, v.z - 256) - GetLandH(v.x + 256, v.z - 256)) > 550 ||
+			(GetLandUpH(v.x - 256, v.z + 256) - GetLandH(v.x - 256, v.z + 256)) > 550) return 1;
+	}
+
+	float h = GetLandH(v.x, v.z);
+	if (fabs(h - v.y) > 64) return 1;
+
+	v.y = h;
+
+	float hh = GetLandH(v.x - 64, v.z - 64);
+	if (fabs(hh - h) > 100) return 1;
+	hh = GetLandH(v.x + 64, v.z - 64);
+	if (fabs(hh - h) > 100) return 1;
+	hh = GetLandH(v.x - 64, v.z + 64);
+	if (fabs(hh - h) > 100) return 1;
+	hh = GetLandH(v.x + 64, v.z + 64);
+	if (fabs(hh - h) > 100) return 1;
+
+	if (mc)
+		for (int z = -2; z <= 2; z++)
+			for (int x = -2; x <= 2; x++)
+				if (OMap[ccz + z][ccx + x] != 255)
+				{
+					int ob = OMap[ccz + z][ccx + x];
+					if (MObjects[ob].info.Radius < 10) continue;
+					float CR = (float)MObjects[ob].info.Radius + 64;
+
+					float oz = (ccz + z) * 256.f + 128.f;
+					float ox = (ccx + x) * 256.f + 128.f;
+
+					float r = (float)sqrt((ox - v.x)*(ox - v.x) + (oz - v.z)*(oz - v.z));
+					if (r < CR) return 1;
+				}
+
+	return 0;
+}
+
 int CheckPlaceCollisionBrahi(TCharacter *cptr, Vector3d &v, BOOL wc, BOOL mc)
 {
 	int ccx = (int)v.x / 256;
@@ -842,6 +919,10 @@ int CheckPossiblePath(TCharacter *cptr, BOOL wc, BOOL mc)
 			p.x += lookx * DinoInfo[cptr->CType].maxGrad;//128
 			p.z += lookz * DinoInfo[cptr->CType].maxGrad;//128
 			if (CheckPlaceCollisionBrahi(cptr, p, wc, mc)) c++;
+		} if (cptr->Clone == AI_LANDBRACH) {
+			p.x += lookx * DinoInfo[cptr->CType].maxGrad;//128
+			p.z += lookz * DinoInfo[cptr->CType].maxGrad;//128
+			if (CheckPlaceCollisionLandBrahi(cptr, p, wc, mc)) c++;
 		}
 		else if ((cptr->Clone == AI_MOSA)) {
 			p.x += lookx * 64.f;
@@ -1335,8 +1416,16 @@ replace:
 
 	if (tr < 128)
 	{
-		if (wy > 400) goto replace;
-		if (wy < 200) goto replace;
+		if (cptr->Clone == AI_LANDBRACH) {
+			if (DinoInfo[cptr->CType].canSwim) {
+				if (wy > 400) goto replace;
+			} else {
+				if (wy > 0) goto replace;
+			}
+		} else {
+			if (wy > 400) goto replace;
+			if (wy < 200) goto replace;
+		}
 		if (DinoInfo[cptr->CType].AvoidCount)
 		{
 			for (int i = 0; i < DinoInfo[cptr->CType].AvoidCount; i++) {
@@ -1638,8 +1727,9 @@ void AnimateHuntDead(TCharacter *cptr)
 		DeltaFunc(cptr->gamma, cptr->tggamma, TimeDt / 1800.f);
 	}
 
-	if (!(GetLandUpH(killerDino->pos.x, killerDino->pos.z) - GetLandH(killerDino->pos.x, killerDino->pos.z) >
-		DinoInfo[killerDino->CType].waterLevel * killerDino->scale))
+//	if (!(GetLandUpH(killerDino->pos.x, killerDino->pos.z) - GetLandH(killerDino->pos.x, killerDino->pos.z) >
+//		DinoInfo[killerDino->CType].waterLevel * killerDino->scale))
+	if (!killedwater)
 	{
 		if (DinoInfo[killerDino->CType].killTypeCount) {
 			if (DinoInfo[killerDino->CType].killType[killerDino->killType].elevate) {
@@ -4887,50 +4977,6 @@ void AnimateIcthDead(TCharacter *cptr)
 
 
 
-void AnimateBrahiDead(TCharacter *cptr)
-{
-
-	if (cptr->Phase != BRA_DIE && cptr->Phase != BRA_SLP)
-	{
-		if (cptr->PPMorphTime > 128)
-		{
-			cptr->PrevPhase = cptr->Phase;
-			cptr->PrevPFTime = cptr->FTime;
-			cptr->PPMorphTime = 0;
-		}
-
-		cptr->FTime = 0;
-		cptr->Phase = BRA_DIE;
-		ActivateCharacterFx(cptr);
-	}
-	else
-	{
-		ProcessPrevPhase(cptr);
-
-		cptr->FTime += TimeDt;
-		if (cptr->FTime >= cptr->pinfo->Animation[cptr->Phase].AniTime)
-			if (Tranq)
-			{
-				cptr->FTime = 0;
-				cptr->Phase = BRA_SLP;
-				ActivateCharacterFx(cptr);
-			}
-			else
-				cptr->FTime = cptr->pinfo->Animation[cptr->Phase].AniTime - 1;
-	}
-
-	//======= movement ===========//
-	DeltaFunc(cptr->vspeed, 0, TimeDt / 800.f);
-	cptr->pos.x += cptr->lookx * cptr->vspeed * TimeDt;
-	cptr->pos.z += cptr->lookz * cptr->vspeed * TimeDt;
-
-	ThinkY_Beta_Gamma(cptr, 100, 96, 0.6f, 0.5f);
-
-	DeltaFunc(cptr->gamma, cptr->tggamma, TimeDt / 1600.f);
-}
-
-
-
 
 
 
@@ -4964,7 +5010,7 @@ TBEGIN:
 	if (cptr->State == 2)
 	{
 		cptr->State = 1;
-		cptr->Phase = BRA_RUN;
+		cptr->Phase = DinoInfo[cptr->CType].runAnim;
 	}
 
 	if (GetLandUpH(cptr->pos.x, cptr->pos.z) - GetLandH(cptr->pos.x, cptr->pos.z) > 140 * cptr->scale)
@@ -5057,7 +5103,12 @@ NOTHINK:
 
 	}
 
-	LookForAWay(cptr, !attacking && cptr->State, TRUE);
+	if (cptr->Clone == AI_LANDBRACH) {
+		LookForAWay(cptr, !DinoInfo[cptr->CType].canSwim, TRUE);
+	} else {
+		LookForAWay(cptr, !attacking && cptr->State, TRUE);
+	}
+
 
 	if (cptr->NoWayCnt > 12)
 	{
@@ -5087,30 +5138,30 @@ NOTHINK:
 	{
 		if (!cptr->State)
 		{
-			if (cptr->Phase > BRA_WALK)
+			if (cptr->Phase > DinoInfo[cptr->CType].walkAnim)
 			{
 				if (rRand(128) > 90)
 				{
-					cptr->Phase = BRA_WALK;
+					cptr->Phase = DinoInfo[cptr->CType].walkAnim;
 				}
 				else
 				{
-					cptr->Phase = BRA_IDLE1 + rRand(2);
+					cptr->Phase = DinoInfo[cptr->CType].idleAnim[rRand(DinoInfo[cptr->CType].idleCount - 1)];
 				}
 				goto ENDPSELECT;
 			}
 			if (rRand(128) > 64)
 			{
-				cptr->Phase = BRA_IDLE1;
+				cptr->Phase = DinoInfo[cptr->CType].idleAnim[0];
 			}
 			else
 			{
-				cptr->Phase = BRA_WALK;
+				cptr->Phase = DinoInfo[cptr->CType].walkAnim;
 			}
 		}
 		else
 		{
-			cptr->Phase = BRA_RUN;
+			cptr->Phase = DinoInfo[cptr->CType].runAnim;
 		}
 	}
 
@@ -5155,8 +5206,9 @@ ENDPSELECT:
 
 	if (cptr->Phase == DinoInfo[cptr->CType].killType[cptr->killType].anim && DinoInfo[cptr->CType].killTypeCount) goto SKIPROT;
 
-	if (cptr->Phase == BRA_IDLE1 || cptr->Phase == BRA_EAT ||
-		cptr->Phase == BRA_IDLE3 || cptr->Phase == BRA_IDLE2) goto SKIPROT;
+	for (int i = 0; i < DinoInfo[cptr->CType].idleCount; i++) {
+		if (cptr->Phase == DinoInfo[cptr->CType].idleAnim[i]) goto SKIPROT;
+	}
 
 	if (drspd > 0.02)
 		if (cptr->tgalpha > cptr->alpha) currspeed = 0.2f + drspd * 0.2f;
@@ -5189,8 +5241,8 @@ SKIPROT:
 
 	float curspeed = 0;
 
-	if (cptr->Phase == BRA_WALK) curspeed = cptr->speed_walk;
-	if (cptr->Phase == BRA_RUN) curspeed = cptr->speed_run;
+	if (cptr->Phase == DinoInfo[cptr->CType].walkAnim) curspeed = cptr->speed_walk;
+	if (cptr->Phase == DinoInfo[cptr->CType].runAnim) curspeed = cptr->speed_run;
 
 	if (cptr->Phase == DinoInfo[cptr->CType].killType[cptr->killType].anim && DinoInfo[cptr->CType].killTypeCount) curspeed = 0.0f;
 
@@ -5263,17 +5315,30 @@ TBEGIN:
 
 	if (NewPhase)
 	{
-		if (cptr->Phase > BRA_WALK)
+
+		/*
+		
+							cptr->Phase = DinoInfo[cptr->CType].idleAnim[rRand(DinoInfo[cptr->CType].idleCount - 1)];
+				}
+				goto ENDPSELECT;
+			}
+			if (rRand(128) > 64)
+			{
+				cptr->Phase = DinoInfo[cptr->CType].idleAnim[0];
+		
+		*/
+
+
+		if (cptr->Phase > DinoInfo[cptr->CType].walkAnim)
 		{
-			if (rRand(128) > 90)  cptr->Phase = BRA_WALK;
-			else cptr->Phase = BRA_IDLE1 + rRand(2);
+			if (rRand(128) > 90)  cptr->Phase = DinoInfo[cptr->CType].walkAnim;
+			else cptr->Phase = DinoInfo[cptr->CType].idleAnim[rRand(DinoInfo[cptr->CType].idleCount - 1)];
 			goto ENDPSELECT;
 		}
-		if (rRand(128) > 64) cptr->Phase = BRA_IDLE1;
-		else cptr->Phase = BRA_WALK;
+		if (rRand(128) > 64) cptr->Phase = DinoInfo[cptr->CType].idleAnim[0];
+		else cptr->Phase = DinoInfo[cptr->CType].walkAnim;
 	}
 
-	//cptr->Phase=BRA_WALK;
 
 ENDPSELECT:
 
@@ -5303,8 +5368,10 @@ ENDPSELECT:
 	float drspd = dalpha;
 	if (drspd > pi) drspd = 2 * pi - drspd;
 
+	for (int i = 0; i < DinoInfo[cptr->CType].idleCount; i++) {
+		if (cptr->Phase == DinoInfo[cptr->CType].idleAnim[i]) goto SKIPROT;
+	}
 
-	if (cptr->Phase > BRA_WALK) goto SKIPROT;
 	if (drspd > 0.02)
 		if (cptr->tgalpha > cptr->alpha) currspeed = 0.2f + drspd * 0.2f;
 		else currspeed = -0.2f - drspd * 0.2f;
@@ -5334,7 +5401,7 @@ SKIPROT:
 	cptr->lookz = (float)sin(cptr->alpha);
 
 	float curspeed = 0;
-	if (cptr->Phase == BRA_WALK) curspeed = cptr->speed_walk;
+	if (cptr->Phase == DinoInfo[cptr->CType].walkAnim) curspeed = cptr->speed_walk;
 
 	if (drspd > pi / 2.f) curspeed *= 2.f - 2.f*drspd / pi;
 
@@ -5773,6 +5840,9 @@ void AnimateCharacters()
 				case AI_BRACHDANGER:
 					SetNewTargetPlace_Brahi(cptr, 2048.f);
 					break;
+				case AI_LANDBRACH:
+					SetNewTargetPlace_Brahi(cptr, 2048.f);
+					break;
 				case AI_MOSA:
 					SetNewTargetPlaceMosasaurus(cptr, 3048);
 					break;
@@ -5834,11 +5904,15 @@ void AnimateCharacters()
 			break;
 		case AI_BRACH:
 			if (cptr->Health) AnimateBrahiOld(cptr);
-			else AnimateBrahiDead(cptr);
+			else AnimateDeadCommon(cptr);
 			break;
 		case AI_BRACHDANGER:
 			if (cptr->Health) AnimateBrahi(cptr);
-			else AnimateBrahiDead(cptr);
+			else AnimateDeadCommon(cptr);
+			break;
+		case AI_LANDBRACH:
+			if (cptr->Health) AnimateBrahi(cptr);
+			else AnimateDeadCommon(cptr);
 			break;
 		case AI_ICTH:
 			if (cptr->Health) AnimateIcth(cptr);
@@ -6155,7 +6229,7 @@ replaceSMA:
 		}
 	}
 
-	if (DinoInfo[DinoInfoIndex].Clone >= 0) {
+	if (DinoInfo[DinoInfoIndex].Clone >= 0 || DinoInfo[DinoInfoIndex].Clone == AI_LANDBRACH) {
 		if (fabs(Characters[ChCount].pos.x - PlayerX) +
 			fabs(Characters[ChCount].pos.z - PlayerZ) < 256 * 40)
 			goto replaceSMA;
@@ -6169,6 +6243,7 @@ replaceSMA:
 
 	if (DinoInfo[DinoInfoIndex].Clone == AI_BRACH ||
 		DinoInfo[DinoInfoIndex].Clone == AI_BRACHDANGER ||
+		DinoInfo[DinoInfoIndex].Clone == AI_LANDBRACH ||
 		DinoInfo[DinoInfoIndex].Clone == AI_ICTH) {
 
 		Characters[ChCount].spawnAlt = GetLandUpH(Characters[ChCount].pos.x,

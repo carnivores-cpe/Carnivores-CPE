@@ -2243,7 +2243,7 @@ void ReadCharacterLine(FILE *stream, char *_value, char line[256], bool &regionO
 	if (strstr(line, "waterLevel")) DinoInfo[TotalC].waterLevel = atoi(value);
 
 
-	if (strstr(line, "canswim")) DinoInfo[TotalC].canSwim = TRUE;
+	if (strstr(line, "canswim")) DinoInfo[TotalC].canSwim = TRUE; //check animate subroutines for what this includes. LandBrach needs this attribute, but maybe rename to wade? (and default to off for landbrach ai? maybe?)
 
 	if (strstr(line, "runAnim")) DinoInfo[TotalC].runAnim = atoi(value);
 	if (strstr(line, "jumpAnim")) DinoInfo[TotalC].jumpAnim = atoi(value);

@@ -1021,6 +1021,8 @@ _EXTORNOT   struct _t
 #define AI_FISH        -3
 #define AI_MOSA        -4
 #define AI_BRACHDANGER -5
+#define AI_LANDBRACH   -6
+
 
 
 #define AI_MOSH       1

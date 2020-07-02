@@ -567,7 +567,20 @@ mapambients {
  }
  overwrite area3 {
  file = 'brachi11alt.car'
- } 
+ }
+ runAnim = 6
+ walkAnim = 0
+ dieAnim = 4
+ sleepAnim = 5
+ idleAnim = 1
+ idleAnim = 2
+ idleAnim = 3
+killtype{
+ hunterAnim = 0
+ eatAnim = 10
+ hunterOffset = 0
+ hunterSync = TRUE
+}
 }
 
 {
