@@ -123,7 +123,7 @@ BOOL NewPhase;
 #define STG_IDLE1  3
 #define STG_IDLE2  4
 #define STG_SLP    5
-*/
+
 #define GAL_RUN    0
 #define GAL_WALK   1
 #define GAL_SLIDE  2
@@ -132,7 +132,7 @@ BOOL NewPhase;
 #define GAL_IDLE2  5
 #define GAL_SLP    6
 
-/*
+
 #define TRI_RUN    0
 #define TRI_WALK   1
 #define TRI_IDLE1  2
@@ -1789,51 +1789,6 @@ void AnimateTRexDead(TCharacter *cptr)
 
 
 
-
-
-void AnimateGallDead(TCharacter *cptr)
-{
-
-	if (cptr->Phase != GAL_DIE && cptr->Phase != GAL_SLP)
-	{
-		if (cptr->PPMorphTime > 128)
-		{
-			cptr->PrevPhase = cptr->Phase;
-			cptr->PrevPFTime = cptr->FTime;
-			cptr->PPMorphTime = 0;
-		}
-
-		cptr->FTime = 0;
-		cptr->Phase = GAL_DIE;
-		ActivateCharacterFx(cptr);
-	}
-	else
-	{
-		ProcessPrevPhase(cptr);
-
-		cptr->FTime += TimeDt;
-		if (cptr->FTime >= cptr->pinfo->Animation[cptr->Phase].AniTime)
-			if (Tranq)
-			{
-				cptr->FTime = 0;
-				cptr->Phase = GAL_SLP;
-				ActivateCharacterFx(cptr);
-			}
-			else
-				cptr->FTime = cptr->pinfo->Animation[cptr->Phase].AniTime - 1;
-	}
-
-	//======= movement ===========//
-	DeltaFunc(cptr->vspeed, 0, TimeDt / 800.f);
-	cptr->pos.x += cptr->lookx * cptr->vspeed * TimeDt;
-	cptr->pos.z += cptr->lookz * cptr->vspeed * TimeDt;
-
-	ThinkY_Beta_Gamma(cptr, 100, 96, 0.6f, 0.5f);
-	DeltaFunc(cptr->gamma, cptr->tggamma, TimeDt / 1600.f);
-}
-
-
-
 void AnimateDimorDead(TCharacter *cptr)
 {
 
@@ -3378,6 +3333,11 @@ TBEGIN:
 	float playerdz = PlayerZ - cptr->pos.z;
 	float pdist = (float)sqrt(playerdx * playerdx + playerdz * playerdz);
 
+	if (GetLandUpH(cptr->pos.x, cptr->pos.z) - GetLandH(cptr->pos.x, cptr->pos.z) > DinoInfo[cptr->CType].waterLevel * cptr->scale)
+		cptr->StateF |= csONWATER;
+	else
+		cptr->StateF &= (!csONWATER);
+
 
 	//=========== run away =================//
 
@@ -3385,7 +3345,10 @@ TBEGIN:
 	{
 		if (!cptr->AfraidTime)
 		{
-			if (pdist < 2048.f) cptr->AfraidTime = (5 + rRand(5)) * 1024;
+			if (pdist < 2048.f) {
+				if (cptr->Clone == AI_GALL) cptr->State = 1;
+				cptr->AfraidTime = (5 + rRand(5)) * 1024;
+			}
 
 			if (!cptr->AfraidTime)
 				if (pdist > 4096.f)
@@ -3435,11 +3398,15 @@ TBEGIN:
 
 	if (cptr->NoFindCnt) cptr->NoFindCnt--;
 	else cptr->tgalpha = CorrectedAlpha(FindVectorAlpha(targetdx, targetdz), cptr->alpha);//FindVectorAlpha(targetdx, targetdz);
-	LookForAWay(cptr, TRUE, TRUE);
+	LookForAWay(cptr, !DinoInfo[cptr->CType].canSwim, TRUE);
 	if (cptr->NoWayCnt > 8)
 	{
 		cptr->NoWayCnt = 0;
-		cptr->NoFindCnt = 8 + rRand(80);
+		if (cptr->Clone == AI_GALL){
+			cptr->NoFindCnt = 8 + rRand(40);
+		} else {
+			cptr->NoFindCnt = 8 + rRand(80);
+		}
 	}
 
 	if (cptr->tgalpha < 0) cptr->tgalpha += 2 * pi;
@@ -3483,6 +3450,10 @@ TBEGIN:
 		}
 		else if (cptr->AfraidTime) cptr->Phase = DinoInfo[cptr->CType].runAnim;
 		else cptr->Phase = DinoInfo[cptr->CType].walkAnim;
+
+	if (DinoInfo[cptr->CType].canSwim) {
+		if (cptr->StateF & csONWATER) cptr->Phase = DinoInfo[cptr->CType].swimAnim;
+	}
 
 ENDPSELECT:
 
@@ -3535,7 +3506,12 @@ ENDPSELECT:
 
 	DeltaFunc(cptr->rspeed, currspeed, (float)TimeDt / 260.f);
 
-	tgbend = drspd / 2;
+	if (cptr->Clone == AI_GALL) {
+		tgbend = drspd / 3;
+	} else {
+		tgbend = drspd / 2;
+	}
+
 	if (tgbend > pi / 2) tgbend = pi / 2;
 
 	tgbend *= SGN(currspeed);
@@ -3561,6 +3537,10 @@ SKIPROT:
 	if (cptr->Phase == DinoInfo[cptr->CType].runAnim) curspeed = cptr->speed_run;
 	if (cptr->Phase == DinoInfo[cptr->CType].walkAnim) curspeed = cptr->speed_walk;
 
+	if (DinoInfo[cptr->CType].canSwim) {
+		if (cptr->Phase == DinoInfo[cptr->CType].swimAnim) curspeed = cptr->speed_swim;
+	}
+
 	if (drspd > pi / 2.f) curspeed *= 2.f - 2.f*drspd / pi;
 
 	//========== process speed =============//
@@ -3568,9 +3548,19 @@ SKIPROT:
 	DeltaFunc(cptr->vspeed, curspeed, TimeDt / 1024.f);
 
 	MoveCharacter(cptr, cptr->lookx * cptr->vspeed * TimeDt,
-		cptr->lookz * cptr->vspeed * TimeDt, TRUE, TRUE);
+		cptr->lookz * cptr->vspeed * TimeDt, !DinoInfo[cptr->CType].canSwim, TRUE);
 
-	ThinkY_Beta_Gamma(cptr, 64, 32, 0.7f, 0.4f);
+	//============ Y movement =================//
+	if (cptr->StateF & csONWATER && DinoInfo[cptr->CType].canSwim)
+	{
+		cptr->pos.y = GetLandUpH(cptr->pos.x, cptr->pos.z) - (DinoInfo[cptr->CType].waterLevel + 20) * cptr->scale;
+		cptr->beta /= 2;
+		cptr->tggamma = 0;
+	}
+	else {
+		ThinkY_Beta_Gamma(cptr, 64, 32, 0.7f, 0.4f);
+	}
+
 	if (cptr->Phase == DinoInfo[cptr->CType].walkAnim) cptr->tggamma += cptr->rspeed / 12.0f;
 	else cptr->tggamma += cptr->rspeed / 8.0f;
 	DeltaFunc(cptr->gamma, cptr->tggamma, TimeDt / 2048.f);
@@ -5424,223 +5414,6 @@ SKIPROT:
 
 
 
-
-
-
-
-
-void AnimateGall(TCharacter *cptr)
-{
-	NewPhase = FALSE;
-	int _Phase = cptr->Phase;
-	int _FTime = cptr->FTime;
-	float _tgalpha = cptr->tgalpha;
-	if (cptr->AfraidTime) cptr->AfraidTime = MAX(0, cptr->AfraidTime - TimeDt);
-	if (cptr->State == 2)
-	{
-		NewPhase = TRUE;
-		cptr->State = 1;
-	}
-
-TBEGIN:
-	float targetx = cptr->tgx;
-	float targetz = cptr->tgz;
-	float targetdx = targetx - cptr->pos.x;
-	float targetdz = targetz - cptr->pos.z;
-
-	float tdist = (float)sqrt(targetdx * targetdx + targetdz * targetdz);
-
-	float playerdx = PlayerX - cptr->pos.x;
-	float playerdz = PlayerZ - cptr->pos.z;
-	float pdist = (float)sqrt(playerdx * playerdx + playerdz * playerdz);
-
-
-	//=========== run away =================//
-
-	if (cptr->State)
-	{
-		if (!cptr->AfraidTime)
-		{
-			if (pdist < 2048.f)
-			{
-				cptr->State = 1;
-				cptr->AfraidTime = (5 + rRand(5)) * 1024;
-			}
-			if (pdist > 4096.f)
-			{
-				cptr->State = 0;
-				SetNewTargetPlace(cptr, 2048.f);
-				goto TBEGIN;
-			}
-		}
-
-		nv.x = playerdx;
-		nv.z = playerdz;
-		nv.y = 0;
-		NormVector(nv, 2048.f);
-		cptr->tgx = cptr->pos.x - nv.x;
-		cptr->tgz = cptr->pos.z - nv.z;
-		cptr->tgtime = 0;
-	}
-
-	if (pdist > (ctViewR + 20) * 256 && cptr->AI > 0)
-		if (ReplaceCharacterForward(cptr)) goto TBEGIN;
-
-
-
-	//======== exploring area ===============//
-	if (!cptr->State)
-	{
-		cptr->AfraidTime = 0;
-		if (pdist < 812.f)
-		{
-			cptr->State = 1;
-			cptr->AfraidTime = (5 + rRand(5)) * 1024;
-			cptr->Phase = GAL_RUN;
-			goto TBEGIN;
-		}
-
-		if (tdist < 456)
-		{
-			SetNewTargetPlace(cptr, 2048.f);
-			goto TBEGIN;
-		}
-	}
-
-
-	//============================================//
-
-	if (cptr->NoFindCnt > 0) cptr->NoFindCnt--;
-	else cptr->tgalpha = CorrectedAlpha(FindVectorAlpha(targetdx, targetdz), cptr->alpha);//FindVectorAlpha(targetdx, targetdz);
-	LookForAWay(cptr, TRUE, TRUE);
-	if (cptr->NoWayCnt > 8)
-	{
-		cptr->NoWayCnt = 0;
-		cptr->NoFindCnt = 8 + rRand(40);
-	}
-
-	if (cptr->tgalpha < 0) cptr->tgalpha += 2 * pi;
-	if (cptr->tgalpha > 2 * pi) cptr->tgalpha -= 2 * pi;
-
-	//===============================================//
-
-	ProcessPrevPhase(cptr);
-
-	//======== select new phase =======================//
-	cptr->FTime += TimeDt;
-
-	if (cptr->FTime >= cptr->pinfo->Animation[cptr->Phase].AniTime)
-	{
-		cptr->FTime %= cptr->pinfo->Animation[cptr->Phase].AniTime;
-		NewPhase = TRUE;
-	}
-
-	if (NewPhase)
-		if (!cptr->State)
-		{
-			if (cptr->Phase == GAL_IDLE1 || cptr->Phase == GAL_IDLE2)
-			{
-				if (rRand(128) > 76 && cptr->Phase == GAL_IDLE2)
-					cptr->Phase = GAL_WALK;
-				else cptr->Phase = GAL_IDLE1 + rRand(3) / 3;
-				goto ENDPSELECT;
-			}
-			if (rRand(128) > 120) cptr->Phase = GAL_IDLE1;
-			else cptr->Phase = GAL_WALK;
-		}
-		else if (cptr->AfraidTime) cptr->Phase = GAL_RUN;
-		else cptr->Phase = GAL_WALK;
-
-ENDPSELECT:
-
-	//====== process phase changing ===========//
-
-	if ((_Phase != cptr->Phase) || NewPhase)
-		ActivateCharacterFx(cptr);
-
-	if (_Phase != cptr->Phase)
-	{
-		if (_Phase <= 2 && cptr->Phase <= 2)
-			cptr->FTime = _FTime * cptr->pinfo->Animation[cptr->Phase].AniTime / cptr->pinfo->Animation[_Phase].AniTime + 64;
-		else if (!NewPhase) cptr->FTime = 0;
-
-		if (cptr->PPMorphTime > 128)
-		{
-			cptr->PrevPhase = _Phase;
-			cptr->PrevPFTime = _FTime;
-			cptr->PPMorphTime = 0;
-		}
-	}
-
-	cptr->FTime %= cptr->pinfo->Animation[cptr->Phase].AniTime;
-
-
-
-	//========== rotation to tgalpha ===================//
-
-	float rspd, currspeed, tgbend;
-	float dalpha = (float)fabs(cptr->tgalpha - cptr->alpha);
-	float drspd = dalpha;
-	if (drspd > pi) drspd = 2 * pi - drspd;
-
-	if (cptr->Phase == GAL_IDLE1 || cptr->Phase == GAL_IDLE2) goto SKIPROT;
-	if (drspd > 0.02)
-		if (cptr->tgalpha > cptr->alpha) currspeed = 0.8f + drspd * 1.4f;
-		else currspeed = -0.8f - drspd * 1.4f;
-	else currspeed = 0;
-	if (cptr->AfraidTime) currspeed *= 1.5;
-
-	if (dalpha > pi) currspeed *= -1;
-	if ((cptr->State & csONWATER) || cptr->Phase == GAL_WALK) currspeed /= 1.4f;
-
-	DeltaFunc(cptr->rspeed, currspeed, (float)TimeDt / 260.f);
-
-	tgbend = drspd / 3;
-	if (tgbend > pi / 2) tgbend = pi / 2;
-
-	tgbend *= SGN(currspeed);
-	if (fabs(tgbend) > fabs(cptr->bend)) DeltaFunc(cptr->bend, tgbend, (float)TimeDt / 800.f);
-	else DeltaFunc(cptr->bend, tgbend, (float)TimeDt / 400.f);
-
-
-	rspd = cptr->rspeed * TimeDt / 1024.f;
-	if (drspd < fabs(rspd)) cptr->alpha = cptr->tgalpha;
-	else cptr->alpha += rspd;
-
-
-	if (cptr->alpha > pi * 2) cptr->alpha -= pi * 2;
-	if (cptr->alpha < 0) cptr->alpha += pi * 2;
-
-SKIPROT:
-
-	//========== movement ==============================//
-	cptr->lookx = (float)cos(cptr->alpha);
-	cptr->lookz = (float)sin(cptr->alpha);
-
-	float curspeed = 0;
-	if (cptr->Phase == GAL_RUN) curspeed = cptr->speed_run;
-	if (cptr->Phase == GAL_WALK) curspeed = cptr->speed_walk;
-
-	if (drspd > pi / 2.f) curspeed *= 2.f - 2.f*drspd / pi;
-
-	//========== process speed =============//
-	curspeed *= cptr->scale;
-	DeltaFunc(cptr->vspeed, curspeed, TimeDt / 1024.f);
-
-	MoveCharacter(cptr, cptr->lookx * cptr->vspeed * TimeDt,
-		cptr->lookz * cptr->vspeed * TimeDt, TRUE, TRUE);
-
-	ThinkY_Beta_Gamma(cptr, 64, 32, 0.7f, 0.4f);
-	if (cptr->Phase == GAL_WALK) cptr->tggamma += cptr->rspeed / 12.0f;
-	else cptr->tggamma += cptr->rspeed / 8.0f;
-	DeltaFunc(cptr->gamma, cptr->tggamma, TimeDt / 2048.f);
-}
-
-
-
-
-
-
 void AnimateDimor(TCharacter *cptr)
 {
 	NewPhase = FALSE;
@@ -5923,8 +5696,8 @@ void AnimateCharacters()
 			else AnimateDeadCommon(cptr);
 			break;
 		case AI_GALL:
-			if (cptr->Health) AnimateGall(cptr);
-			else AnimateGallDead(cptr);
+			if (cptr->Health) AnimateClassicAmbient(cptr);
+			else AnimateDeadCommon(cptr);
 			break;
 		case AI_DIMOR:
 			if (cptr->Health) AnimateDimor(cptr);

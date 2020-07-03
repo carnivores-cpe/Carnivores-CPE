@@ -2542,6 +2542,11 @@ void ReadCharacters(FILE *stream, bool mapamb)
 void LoadResourcesScript()
 {
 
+
+	//mosh/dimet waterlevel 50
+	//gall waterlevel 100
+
+
 	AIInfo[AI_PARA].targetDistance = 8048.f;
 	AIInfo[AI_PARA].noWayCntMin = 8;
 	AIInfo[AI_PARA].noFindWayMed = 44;

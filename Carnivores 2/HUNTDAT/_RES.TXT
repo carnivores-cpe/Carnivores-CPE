@@ -108,6 +108,7 @@ characters {
  idleAnim = 3
  idleAnim = 4
  sleepAnim = 5
+ waterLevel = 50
 }
 
 {
@@ -124,6 +125,14 @@ characters {
  fearCall = 18
  runspd = 0.9
  wlkspd = 0.32
+ runAnim = 0
+ walkAnim = 1
+ slideAnim = 2
+ dieAnim = 3
+ idleAnim = 4
+ idleAnim = 5
+ sleepAnim = 6
+ waterLevel = 100
 }
 
 {
@@ -168,6 +177,7 @@ characters {
  idleAnim = 2
  idleAnim = 3
  sleepAnim = 5
+ waterLevel = 50
 }
 
 
