@@ -2204,7 +2204,8 @@ void ReadAvoidInfo(FILE *stream)
 
 
 
-void ReadCharacterLine(FILE *stream, char *_value, char line[256], bool &regionOverwrite, bool &avoidOverwrite, bool &idleOverwrite, bool &killOverwrite) {
+void ReadCharacterLine(FILE *stream, char *_value, char line[256], bool &regionOverwrite, bool &avoidOverwrite,
+	bool &idleOverwrite, bool &idle2Overwrite, bool &roarOverwrite, bool &killOverwrite) {
 
 	char *value = _value;
 //	bool overwrite = _overwrite;
@@ -2257,9 +2258,9 @@ void ReadCharacterLine(FILE *stream, char *_value, char line[256], bool &regionO
 	if (strstr(line, "sleepAnim")) DinoInfo[TotalC].sleepAnim = atoi(value);
 	if (strstr(line, "dieAnim")) DinoInfo[TotalC].dieAnim = atoi(value);
 	if (strstr(line, "fallAnim")) DinoInfo[TotalC].fallAnim = atoi(value);
-	if (strstr(line, "roarAnim")) DinoInfo[TotalC].roarAnim = atoi(value);
+	//if (strstr(line, "roarAnim")) DinoInfo[TotalC].roarAnim = atoi(value);
 
-	if (strstr(line, "idleAnim")) {
+	if (strstr(line, "idleAnim") || strstr(line, "lookAnim")) {
 		if (idleOverwrite) {
 			DinoInfo[TotalC].idleCount = 0;
 			idleOverwrite = false;
@@ -2268,22 +2269,22 @@ void ReadCharacterLine(FILE *stream, char *_value, char line[256], bool &regionO
 		DinoInfo[TotalC].idleCount++;
 	}
 
-	if (strstr(line, "lookAnim")) {
-		if (idleOverwrite) {
-			DinoInfo[TotalC].lookCount = 0;
-			idleOverwrite = false;
+	if (strstr(line, "smellAnim") || strstr(line, "waterIdleAnim")) {
+		if (idle2Overwrite) {
+			DinoInfo[TotalC].idle2Count = 0;
+			idle2Overwrite = false;
 		}
-		DinoInfo[TotalC].lookAnim[DinoInfo[TotalC].lookCount] = atoi(value);
-		DinoInfo[TotalC].lookCount++;
+		DinoInfo[TotalC].idle2Anim[DinoInfo[TotalC].idle2Count] = atoi(value);
+		DinoInfo[TotalC].idle2Count++;
 	}
 
-	if (strstr(line, "smellAnim")) {
-		if (idleOverwrite) {
-			DinoInfo[TotalC].smellCount = 0;
-			idleOverwrite = false;
+	if (strstr(line, "roarAnim")) {
+		if (roarOverwrite) {
+			DinoInfo[TotalC].roarCount = 0;
+			roarOverwrite = false;
 		}
-		DinoInfo[TotalC].smellAnim[DinoInfo[TotalC].smellCount] = atoi(value);
-		DinoInfo[TotalC].smellCount++;
+		DinoInfo[TotalC].roarAnim[DinoInfo[TotalC].roarCount] = atoi(value);
+		DinoInfo[TotalC].roarCount++;
 	}
 
 
@@ -2427,8 +2428,8 @@ void ReadCharacters(FILE *stream, bool mapamb)
 
 			if (strstr(line, "ai")) DinoInfo[TotalC].AI = atoi(value);
 
-			bool temp, temp2, temp3, temp4;
-			ReadCharacterLine(stream, value, line, temp, temp2, temp3, temp4);
+			bool temp, temp2, temp3, temp4, temp5, temp6;
+			ReadCharacterLine(stream, value, line, temp, temp2, temp3, temp4, temp5, temp6);
 
 			if (strstr(line, "overwrite") || strstr(line, "addition")) {
 
@@ -2501,6 +2502,9 @@ void ReadCharacters(FILE *stream, bool mapamb)
 					bool avoidOverwrite = strstr(line, "overwrite");
 					bool idleOverwrite = strstr(line, "overwrite");
 					bool killOverwrite = strstr(line, "overwrite");
+					bool idle2Overwrite = strstr(line, "overwrite");
+					bool roarOverwrite = strstr(line, "overwrite");
+
 
 					while (fgets(line, 255, stream)) {
 						if (strstr(line, "}")) break;
@@ -2510,7 +2514,8 @@ void ReadCharacters(FILE *stream, bool mapamb)
 							DoHalt("Script loading error");
 						value++;
 
-						ReadCharacterLine(stream, value, line, regionOverwrite, avoidOverwrite, idleOverwrite, killOverwrite);
+						ReadCharacterLine(stream, value, line, regionOverwrite, avoidOverwrite,
+							idleOverwrite, idle2Overwrite, roarOverwrite, killOverwrite);
 
 					}
 

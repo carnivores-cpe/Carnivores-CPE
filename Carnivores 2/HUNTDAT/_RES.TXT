@@ -144,6 +144,10 @@ characters {
  mass   = 0.05
  flyspd = 1.5
  gldspd = 1.3
+ flyAnim = 0
+ glideAnim = 1
+ fallAnim = 2
+ dieAnim = 3
 }
 
 {
@@ -155,6 +159,10 @@ characters {
  mass   = 0.25
  flyspd = 1.5
  gldspd = 1.3
+ flyAnim = 0
+ glideAnim = 1
+ fallAnim = 2
+ dieAnim = 3
 }
 
 {
@@ -695,6 +703,8 @@ killtype{
  spcdepth = 100
  wlkspd = 0.25
  runspd = 0.55
+ runAnim = 1
+ walkAnim = 0
  overwrite area1 {
   spawninfo {
   spawnrate = 0.8
@@ -724,6 +734,8 @@ killtype{
  spcdepth = 73
  wlkspd = 0.25
  runspd = 0.55
+ runAnim = 1
+ walkAnim = 0
  overwrite area1 {
   spawninfo {
   spawnrate = 0.6
@@ -768,6 +780,8 @@ styInRgn  = TRUE
  spcdepth = 100
  wlkspd = 0.25
  runspd = 0.55
+ runAnim = 1
+ walkAnim = 0
  overwrite area1 {
   spawninfo {
   spawnrate = 0.4
