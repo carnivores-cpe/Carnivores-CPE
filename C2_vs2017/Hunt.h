@@ -472,7 +472,7 @@ typedef struct _TDinoInfo
   float packDensity;
 
   int runAnim, jumpAnim, walkAnim, swimAnim, flyAnim, glideAnim, takeoffAnim, landAnim,
-	  slideAnim, sleepAnim, dieAnim, fallAnim;
+	  slideAnim, sleepAnim, dieAnim, fallAnim, shakeLandAnim, shakeWaterAnim, waterDieAnim;
 
   TDinoKill killType[32]; //trex look
   int killTypeCount;

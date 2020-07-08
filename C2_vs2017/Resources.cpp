@@ -2258,6 +2258,9 @@ void ReadCharacterLine(FILE *stream, char *_value, char line[256], bool &regionO
 	if (strstr(line, "sleepAnim")) DinoInfo[TotalC].sleepAnim = atoi(value);
 	if (strstr(line, "dieAnim")) DinoInfo[TotalC].dieAnim = atoi(value);
 	if (strstr(line, "fallAnim")) DinoInfo[TotalC].fallAnim = atoi(value);
+	if (strstr(line, "shakeLAnim")) DinoInfo[TotalC].shakeLandAnim = atoi(value);
+	if (strstr(line, "shakeWAnim")) DinoInfo[TotalC].shakeWaterAnim = atoi(value);
+	if (strstr(line, "waterDAnim")) DinoInfo[TotalC].waterDieAnim = atoi(value);
 	//if (strstr(line, "roarAnim")) DinoInfo[TotalC].roarAnim = atoi(value);
 
 	if (strstr(line, "idleAnim") || strstr(line, "lookAnim")) {
@@ -2269,7 +2272,7 @@ void ReadCharacterLine(FILE *stream, char *_value, char line[256], bool &regionO
 		DinoInfo[TotalC].idleCount++;
 	}
 
-	if (strstr(line, "smellAnim") || strstr(line, "waterIdleAnim")) {
+	if (strstr(line, "smellAnim") || strstr(line, "waterIAnim")) {
 		if (idle2Overwrite) {
 			DinoInfo[TotalC].idle2Count = 0;
 			idle2Overwrite = false;

@@ -73,7 +73,7 @@ BOOL NewPhase;
 #define REX_DIE    8
 #define REX_EAT    9
 #define REX_SLP    10
-*/
+
 
 #define ICTH_WALK           0
 #define ICTH_WALK_IDLE1     1
@@ -92,7 +92,7 @@ BOOL NewPhase;
 #define ICTH_WATER_DIE      14
 #define ICTH_SLEEP          15
 
-/*
+
 #define MOS_RUN    0
 #define MOS_WALK   1
 #define MOS_DIE    2
@@ -3748,10 +3748,14 @@ ENDPSELECT:
 	if (_Phase != cptr->Phase)
 	{
 		//==== set proportional FTime for better morphing =//
-		if (MORPHP)
-			if (_Phase <= 3 && cptr->Phase <= 3)
-				cptr->FTime = _FTime * cptr->pinfo->Animation[cptr->Phase].AniTime / cptr->pinfo->Animation[_Phase].AniTime + 64;
-			else if (!NewPhase) cptr->FTime = 0;
+		//if (MORPHP)
+		//	if (_Phase <= 3 && cptr->Phase <= 3)
+		
+		
+		cptr->FTime = _FTime * cptr->pinfo->Animation[cptr->Phase].AniTime / cptr->pinfo->Animation[_Phase].AniTime + 64;
+		
+
+		//	else if (!NewPhase) cptr->FTime = 0;
 
 		if (cptr->PPMorphTime > 128)
 		{
@@ -4331,7 +4335,7 @@ TBEGIN:
 			}
 			else
 			{
-				cptr->Phase = ICTH_LANDING;
+				cptr->Phase = DinoInfo[cptr->CType].landAnim;
 				NewPhase = true;
 				SetNewTargetPlace_Icth(cptr, 2048.f);
 			}
@@ -4365,7 +4369,7 @@ TBEGIN:
 
 		int targetNear = 456;
 
-		if (cptr->Phase == ICTH_FLY || cptr->Phase == ICTH_FLY2) {
+		if (cptr->Phase == DinoInfo[cptr->CType].flyAnim || cptr->Phase == DinoInfo[cptr->CType].glideAnim) {
 			targetNear = 2024;
 		}
 
@@ -4412,21 +4416,29 @@ TBEGIN:
 
 			if (cptr->gliding == true)
 			{
-				cptr->Phase = ICTH_FLY2;
+				cptr->Phase = DinoInfo[cptr->CType].glideAnim;
 			}
-			else if (cptr->Phase != ICTH_LANDING)
+			else if (cptr->Phase != DinoInfo[cptr->CType].landAnim)
 			{
 				if (wy >= swimLevel) {
-					cptr->Phase = ICTH_SWIM;
+					cptr->Phase = DinoInfo[cptr->CType].swimAnim;
 					if (rRand(128) > 110) {
-						cptr->Phase = ICTH_SWIM_IDLE1 + rRand(1);
+
+						if (DinoInfo[cptr->CType].idle2Count > 0) {
+							cptr->Phase = DinoInfo[cptr->CType].idle2Anim[rRand(DinoInfo[cptr->CType].idle2Count - 1)];
+						}
+
 					}
 				}
 				else
 				{
-					cptr->Phase = ICTH_WALK;
+					cptr->Phase = DinoInfo[cptr->CType].walkAnim;
 					if (rRand(128) > 110) {
-						cptr->Phase = ICTH_WALK_IDLE1 + rRand(1);
+						
+						if (DinoInfo[cptr->CType].idleCount > 0) {
+							cptr->Phase = DinoInfo[cptr->CType].idleAnim[rRand(DinoInfo[cptr->CType].idleCount - 1)];
+						}
+
 					}
 				}
 			}
@@ -4434,32 +4446,32 @@ TBEGIN:
 		}
 		else if (cptr->AfraidTime) {
 
-			if (cptr->Phase == ICTH_FLY)
+			if (cptr->Phase == DinoInfo[cptr->CType].flyAnim)
 			{
 				if (cptr->pos.y > GetLandUpH(cptr->pos.x, cptr->pos.z) + 2100)
 				{
-					cptr->Phase = ICTH_FLY2;
+					cptr->Phase = DinoInfo[cptr->CType].glideAnim;
 					SetNewTargetPlace_Icth(cptr, 2048.f);
 				}
 			}
-			else if (cptr->Phase == ICTH_FLY2)
+			else if (cptr->Phase == DinoInfo[cptr->CType].glideAnim)
 			{
 				if (cptr->pos.y < GetLandUpH(cptr->pos.x, cptr->pos.z) + 1600)
 				{
-					cptr->Phase = ICTH_FLY;
+					cptr->Phase = DinoInfo[cptr->CType].flyAnim;
 					SetNewTargetPlace_Icth(cptr, 2048.f);
 				}
 			}
-			else if (cptr->Phase == ICTH_TAKEOFF)
+			else if (cptr->Phase == DinoInfo[cptr->CType].takeoffAnim)
 			{
 				if (cptr->pos.y > GetLandUpH(cptr->pos.x, cptr->pos.z) + 236)
 				{
-					cptr->Phase = ICTH_FLY;
+					cptr->Phase = DinoInfo[cptr->CType].flyAnim;
 				}
 			}
 			else
 			{
-				cptr->Phase = ICTH_TAKEOFF;
+				cptr->Phase = DinoInfo[cptr->CType].takeoffAnim;
 				if (cptr->notFlushed == false)
 				{
 					ActivateCharacterFx(cptr);
@@ -4479,40 +4491,70 @@ TBEGIN:
 		else {
 			if (cptr->gliding == true)
 			{
-				cptr->Phase = ICTH_FLY2;
+				cptr->Phase = DinoInfo[cptr->CType].glideAnim;
 			}
-			else if (cptr->Phase != ICTH_LANDING)
+			else if (cptr->Phase != DinoInfo[cptr->CType].landAnim)
 			{
 				if (wy >= swimLevel) {
-					cptr->Phase = ICTH_SWIM;
+					cptr->Phase = DinoInfo[cptr->CType].swimAnim;
 					if (rRand(128) > 110) {
-						cptr->Phase = ICTH_SWIM_IDLE1 + rRand(1);
+
+						if (DinoInfo[cptr->CType].idle2Count > 0) {
+							cptr->Phase = DinoInfo[cptr->CType].idle2Anim[rRand(DinoInfo[cptr->CType].idle2Count - 1)];
+						}
+
 					}
 				}
 				else
 				{
-					cptr->Phase = ICTH_WALK;
+					cptr->Phase = DinoInfo[cptr->CType].walkAnim;
 					if (rRand(128) > 110) {
-						cptr->Phase = ICTH_WALK_IDLE1 + rRand(1);
+						
+						if (DinoInfo[cptr->CType].idleCount > 0) {
+							cptr->Phase = DinoInfo[cptr->CType].idleAnim[rRand(DinoInfo[cptr->CType].idleCount - 1)];
+						}
+
 					}
 				}
 			}
 		}
 
-		if (cptr->Phase == ICTH_SWIM_IDLE1 || cptr->Phase == ICTH_SWIM_IDLE2 || cptr->Phase == ICTH_WALK_IDLE1 || cptr->Phase == ICTH_WALK_IDLE2)
-		{
+		if (DinoInfo[cptr->CType].idleCount > 0) {
+			for (int i = 0; i < DinoInfo[cptr->CType].idleCount; i++) {
+				if (cptr->Phase == DinoInfo[cptr->CType].idleAnim[i]) {
 
-			if (rRand(24) > 23)
-			{
-				cptr->State = 1;
-				SetNewTargetPlace_Icth(cptr, 2048.f);
-				cptr->AfraidTime = (50 + rRand(8)) * 1024;
-				cptr->notFlushed = true;
-				NewPhase = true;
-				goto TBEGIN;
+					if (rRand(24) > 23)
+					{
+						cptr->State = 1;
+						SetNewTargetPlace_Icth(cptr, 2048.f);
+						cptr->AfraidTime = (50 + rRand(8)) * 1024;
+						cptr->notFlushed = true;
+						NewPhase = true;
+						goto TBEGIN;
+					}
+
+				}
 			}
-
 		}
+
+		if (DinoInfo[cptr->CType].idle2Count > 0) {
+			for (int i = 0; i < DinoInfo[cptr->CType].idle2Count; i++) {
+				if (cptr->Phase == DinoInfo[cptr->CType].idle2Anim[i]) {
+
+					if (rRand(24) > 23)
+					{
+						cptr->State = 1;
+						SetNewTargetPlace_Icth(cptr, 2048.f);
+						cptr->AfraidTime = (50 + rRand(8)) * 1024;
+						cptr->notFlushed = true;
+						NewPhase = true;
+						goto TBEGIN;
+					}
+
+				}
+			}
+		}
+
 
 	}
 
@@ -4520,22 +4562,22 @@ TBEGIN:
 		if (cptr->pos.y <= GetLandUpH(cptr->pos.x, cptr->pos.z) + 236)
 		{
 			cptr->gliding = false;
-			cptr->Phase = ICTH_LANDING;
+			cptr->Phase = DinoInfo[cptr->CType].landAnim;
 			NewPhase = true;
 			goto TBEGIN;
 		}
 	}
 
-	if (cptr->Phase == ICTH_LANDING) {
+	if (cptr->Phase == DinoInfo[cptr->CType].landAnim) {
 		if (cptr->pos.y <= GetLandUpH(cptr->pos.x, cptr->pos.z) + 15)
 		{
 			if (cptr->StateF & csONWATER)
 			{
-				cptr->Phase = ICTH_WINGDOWN_WATER;
+				cptr->Phase = DinoInfo[cptr->CType].shakeWaterAnim;
 			}
 			else
 			{
-				cptr->Phase = ICTH_WINGDOWN_LAND;
+				cptr->Phase = DinoInfo[cptr->CType].shakeLandAnim;
 			}
 			//TODO Set beta/gamma and such on land? - might be better to set it further down?
 		}
@@ -4549,15 +4591,39 @@ TBEGIN:
 
 
 
-	if ((wy >= swimLevel) && (cptr->Phase == ICTH_WALK || cptr->Phase == ICTH_WALK_IDLE1 || cptr->Phase == ICTH_WALK_IDLE2))
+	if (wy >= swimLevel)
 	{
-		NewPhase = true;
-		goto TBEGIN;
+		if (cptr->Phase == DinoInfo[cptr->CType].walkAnim) {
+			NewPhase = true;
+			goto TBEGIN;
+		}
+
+		if (DinoInfo[cptr->CType].idleCount > 0) {
+			for (int i = 0; i < DinoInfo[cptr->CType].idleCount; i++) {
+				if (cptr->Phase == DinoInfo[cptr->CType].idleAnim[i]) {
+					NewPhase = true;
+					goto TBEGIN;
+				}
+			}
+		}
 	}
-	if (!(wy >= swimLevel) && (cptr->Phase == ICTH_SWIM || cptr->Phase == ICTH_SWIM_IDLE1 || cptr->Phase == ICTH_SWIM_IDLE2))
+
+
+	if (!(wy >= swimLevel))
 	{
-		NewPhase = true;
-		goto TBEGIN;
+		if (cptr->Phase == DinoInfo[cptr->CType].swimAnim) {
+			NewPhase = true;
+			goto TBEGIN;
+		}
+
+		if (DinoInfo[cptr->CType].idle2Count > 0) {
+			for (int i = 0; i < DinoInfo[cptr->CType].idle2Count; i++) {
+				if (cptr->Phase == DinoInfo[cptr->CType].idle2Anim[i]) {
+					NewPhase = true;
+					goto TBEGIN;
+				}
+			}
+		}
 	}
 
 
@@ -4568,7 +4634,17 @@ TBEGIN:
 	if (NewPhase)
 	{
 
-		if (cptr->Phase == ICTH_WALK || cptr->Phase == ICTH_WALK_IDLE1 || cptr->Phase == ICTH_WALK_IDLE2)
+		bool idleWalk = false;
+
+		if (DinoInfo[cptr->CType].idleCount > 0) {
+			for (int i = 0; i < DinoInfo[cptr->CType].idleCount; i++) {
+				if (cptr->Phase == DinoInfo[cptr->CType].idleAnim[i]) {
+					idleWalk = true;
+				}
+			}
+		}
+
+		if (cptr->Phase == DinoInfo[cptr->CType].walkAnim || idleWalk)
 		{
 			if (cptr->shakeTime < 9)
 			{
@@ -4577,7 +4653,7 @@ TBEGIN:
 
 			if (cptr->shakeTime == 8)
 			{
-				cptr->Phase = ICTH_WINGDOWN_LAND;
+				cptr->Phase = DinoInfo[cptr->CType].shakeLandAnim;
 			}
 		}
 		else
@@ -4590,7 +4666,8 @@ TBEGIN:
 
 	//============================================//
 
-	if (cptr->Phase == ICTH_FLY || cptr->Phase == ICTH_FLY2 || cptr->Phase == ICTH_TAKEOFF || cptr->Phase == ICTH_LANDING) {
+	if (cptr->Phase == DinoInfo[cptr->CType].flyAnim || cptr->Phase == DinoInfo[cptr->CType].glideAnim
+		|| cptr->Phase == DinoInfo[cptr->CType].takeoffAnim || cptr->Phase == DinoInfo[cptr->CType].landAnim) {
 		cptr->tgalpha = CorrectedAlpha(FindVectorAlpha(targetdx, targetdz), cptr->alpha);//FindVectorAlpha(targetdx, targetdz);
 	}
 	else
@@ -4627,7 +4704,7 @@ ENDPSELECT:
 
 	if ((_Phase != cptr->Phase) || NewPhase)
 	{
-		if (cptr->Phase == ICTH_FLY || cptr->Phase == ICTH_FLY2)
+		if (cptr->Phase == DinoInfo[cptr->CType].flyAnim || cptr->Phase == DinoInfo[cptr->CType].glideAnim)
 		{
 
 			if ((rand() & 1023) > 880)
@@ -4635,7 +4712,7 @@ ENDPSELECT:
 				ActivateCharacterFx(cptr);
 			}
 		}
-		else if (cptr->Phase != ICTH_TAKEOFF)
+		else if (cptr->Phase != DinoInfo[cptr->CType].takeoffAnim)
 		{
 			ActivateCharacterFx(cptr);
 		}
@@ -4644,8 +4721,12 @@ ENDPSELECT:
 
 	if (_Phase != cptr->Phase)
 	{
-		if ((_Phase == ICTH_WALK || _Phase == ICTH_SWIM || _Phase == ICTH_SWIM_IDLE1 || _Phase == ICTH_SWIM_IDLE2 || _Phase == ICTH_WINGDOWN_WATER) &&
-			(cptr->Phase == ICTH_WALK || cptr->Phase == ICTH_SWIM || cptr->Phase == ICTH_SWIM_IDLE1 || cptr->Phase == ICTH_SWIM_IDLE2 || cptr->Phase == ICTH_WINGDOWN_WATER))
+
+		if((_Phase == DinoInfo[cptr->CType].walkAnim || _Phase == DinoInfo[cptr->CType].swimAnim || _Phase == DinoInfo[cptr->CType].flyAnim
+			|| _Phase == DinoInfo[cptr->CType].glideAnim || _Phase == DinoInfo[cptr->CType].landAnim || _Phase == DinoInfo[cptr->CType].takeoffAnim)
+			&&
+			(cptr->Phase == DinoInfo[cptr->CType].walkAnim || cptr->Phase == DinoInfo[cptr->CType].swimAnim || cptr->Phase == DinoInfo[cptr->CType].flyAnim
+				|| cptr->Phase == DinoInfo[cptr->CType].glideAnim || cptr->Phase == DinoInfo[cptr->CType].landAnim || cptr->Phase == DinoInfo[cptr->CType].takeoffAnim))
 			cptr->FTime = _FTime * cptr->pinfo->Animation[cptr->Phase].AniTime / cptr->pinfo->Animation[_Phase].AniTime + 64;
 		else if (!NewPhase) cptr->FTime = 0;
 
@@ -4669,11 +4750,19 @@ ENDPSELECT:
 	float drspd = dalpha;
 	if (drspd > pi) drspd = 2 * pi - drspd;
 
-	if (cptr->Phase == ICTH_WALK_IDLE1 || cptr->Phase == ICTH_WALK_IDLE2 ||
-		cptr->Phase == ICTH_WINGDOWN_LAND) goto SKIPROT;
+	if (DinoInfo[cptr->CType].idleCount > 0) {
+		for (int i = 0; i < DinoInfo[cptr->CType].idleCount; i++) {
+			if (cptr->Phase == DinoInfo[cptr->CType].idleAnim[i]) {
+				goto SKIPROT;
+			}
+		}
+	}
+
+	if (cptr->Phase == DinoInfo[cptr->CType].shakeLandAnim) goto SKIPROT;
 
 	if (drspd > 0.02)
-		if (cptr->Phase == ICTH_FLY || cptr->Phase == ICTH_FLY2 || cptr->Phase == ICTH_TAKEOFF || cptr->Phase == ICTH_LANDING)
+		if (cptr->Phase == DinoInfo[cptr->CType].flyAnim || cptr->Phase == DinoInfo[cptr->CType].glideAnim
+			|| cptr->Phase == DinoInfo[cptr->CType].takeoffAnim || cptr->Phase == DinoInfo[cptr->CType].landAnim)
 		{
 			if (cptr->tgalpha > cptr->alpha) currspeed = 0.6f + drspd * 1.2f;
 			else currspeed = -0.6f - drspd * 1.2f;
@@ -4687,9 +4776,20 @@ ENDPSELECT:
 
 	//if (cptr->AfraidTime) currspeed *= 1.5;
 	if (dalpha > pi) currspeed *= -1;
-	if (cptr->Phase == ICTH_SWIM || cptr->Phase == ICTH_SWIM_IDLE1 || cptr->Phase == ICTH_SWIM_IDLE2 || cptr->Phase == ICTH_WALK || cptr->Phase == ICTH_WINGDOWN_WATER) currspeed /= 1.4f;
 
-	if (cptr->Phase == ICTH_FLY || cptr->Phase == ICTH_FLY2 || cptr->Phase == ICTH_TAKEOFF || cptr->Phase == ICTH_LANDING)
+
+	if (DinoInfo[cptr->CType].idle2Count > 0) {
+		for (int i = 0; i < DinoInfo[cptr->CType].idle2Count; i++) {
+			if (cptr->Phase == DinoInfo[cptr->CType].idle2Anim[i]) {
+				currspeed /= 1.4f;
+			}
+		}
+	}
+
+	if (cptr->Phase == DinoInfo[cptr->CType].swimAnim || cptr->Phase == DinoInfo[cptr->CType].shakeWaterAnim) currspeed /= 1.4f;
+
+	if (cptr->Phase == DinoInfo[cptr->CType].flyAnim || cptr->Phase == DinoInfo[cptr->CType].glideAnim
+		|| cptr->Phase == DinoInfo[cptr->CType].takeoffAnim || cptr->Phase == DinoInfo[cptr->CType].landAnim)
 	{
 		DeltaFunc(cptr->rspeed, currspeed, (float)TimeDt / 460.f);
 	}
@@ -4699,7 +4799,8 @@ ENDPSELECT:
 	}
 
 	tgbend = drspd / 2.f;
-	if (cptr->Phase == ICTH_FLY || cptr->Phase == ICTH_FLY2 || cptr->Phase == ICTH_TAKEOFF || cptr->Phase == ICTH_LANDING)
+	if (cptr->Phase == DinoInfo[cptr->CType].flyAnim || cptr->Phase == DinoInfo[cptr->CType].glideAnim
+		|| cptr->Phase == DinoInfo[cptr->CType].takeoffAnim || cptr->Phase == DinoInfo[cptr->CType].landAnim)
 	{
 		if (tgbend > pi / 2) tgbend = pi / 2;
 	}
@@ -4709,7 +4810,8 @@ ENDPSELECT:
 	}
 
 	tgbend *= SGN(currspeed);
-	if (cptr->Phase == ICTH_FLY || cptr->Phase == ICTH_FLY2 || cptr->Phase == ICTH_TAKEOFF || cptr->Phase == ICTH_LANDING)
+	if (cptr->Phase == DinoInfo[cptr->CType].flyAnim || cptr->Phase == DinoInfo[cptr->CType].glideAnim
+		|| cptr->Phase == DinoInfo[cptr->CType].takeoffAnim || cptr->Phase == DinoInfo[cptr->CType].landAnim)
 	{
 		if (fabs(tgbend) > fabs(cptr->bend)) DeltaFunc(cptr->bend, tgbend, (float)TimeDt / 800.f);
 		else DeltaFunc(cptr->bend, tgbend, (float)TimeDt / 400.f);
@@ -4748,26 +4850,33 @@ SKIPROT:
 	if (cptr->Phase == ICTH_SWIM_IDLE2) curspeed = cptr->speed_swim;//0.15f;
 	if (cptr->Phase == ICTH_WINGDOWN_WATER) curspeed = cptr->speed_swim;//0.15f;
 	*/
-	if (cptr->Phase == ICTH_FLY) curspeed = cptr->speed_fly;
-	if (cptr->Phase == ICTH_FLY2) curspeed = cptr->speed_glide;
-	if (cptr->Phase == ICTH_TAKEOFF) curspeed = cptr->speed_takeoff;
-	if (cptr->Phase == ICTH_LANDING) curspeed = cptr->speed_land;
-	if (cptr->Phase == ICTH_WALK) curspeed = cptr->speed_walk;
-	if (cptr->Phase == ICTH_SWIM) curspeed = cptr->speed_swim;
-	if (cptr->Phase == ICTH_SWIM_IDLE1) curspeed = cptr->speed_swim;
-	if (cptr->Phase == ICTH_SWIM_IDLE2) curspeed = cptr->speed_swim;
-	if (cptr->Phase == ICTH_WINGDOWN_WATER) curspeed = cptr->speed_swim;
+	if (cptr->Phase == DinoInfo[cptr->CType].flyAnim) curspeed = cptr->speed_fly;
+	if (cptr->Phase == DinoInfo[cptr->CType].glideAnim) curspeed = cptr->speed_glide;
+	if (cptr->Phase == DinoInfo[cptr->CType].takeoffAnim) curspeed = cptr->speed_takeoff;
+	if (cptr->Phase == DinoInfo[cptr->CType].landAnim) curspeed = cptr->speed_land;
+	if (cptr->Phase == DinoInfo[cptr->CType].walkAnim) curspeed = cptr->speed_walk;
+	if (cptr->Phase == DinoInfo[cptr->CType].swimAnim) curspeed = cptr->speed_swim;
+	if (cptr->Phase == DinoInfo[cptr->CType].shakeWaterAnim) curspeed = cptr->speed_swim;
+
+	if (DinoInfo[cptr->CType].idle2Count > 0) {
+		for (int i = 0; i < DinoInfo[cptr->CType].idle2Count; i++) {
+			if (cptr->Phase == DinoInfo[cptr->CType].idle2Anim[i]) {
+				curspeed = cptr->speed_swim;
+			}
+		}
+	}
 
 	if (drspd > pi / 2.f) curspeed *= 2.f - 2.f*drspd / pi;
 
 
 
-	if (cptr->Phase == ICTH_FLY || cptr->Phase == ICTH_FLY2 || cptr->Phase == ICTH_TAKEOFF || cptr->Phase == ICTH_LANDING)
+	if (cptr->Phase == DinoInfo[cptr->CType].flyAnim || cptr->Phase == DinoInfo[cptr->CType].glideAnim
+		|| cptr->Phase == DinoInfo[cptr->CType].takeoffAnim || cptr->Phase == DinoInfo[cptr->CType].landAnim)
 	{
-		if (cptr->Phase == ICTH_FLY)
+		if (cptr->Phase == DinoInfo[cptr->CType].flyAnim)
 			DeltaFunc(cptr->pos.y, GetLandUpH(cptr->pos.x, cptr->pos.z) + 4048, TimeDt / 6.f);
 
-		if (cptr->Phase == ICTH_FLY2)
+		if (cptr->Phase == DinoInfo[cptr->CType].glideAnim)
 		{
 			if (cptr->gliding == true)
 			{
@@ -4779,16 +4888,16 @@ SKIPROT:
 			}
 		}
 
-		if (cptr->Phase == ICTH_TAKEOFF)
+		if (cptr->Phase == DinoInfo[cptr->CType].takeoffAnim)
 			DeltaFunc(cptr->pos.y, GetLandUpH(cptr->pos.x, cptr->pos.z) + 4048, TimeDt / 5.f);
 
-		if (cptr->Phase == ICTH_LANDING)
+		if (cptr->Phase == DinoInfo[cptr->CType].landAnim)
 			DeltaFunc(cptr->pos.y, GetLandUpH(cptr->pos.x, cptr->pos.z), TimeDt / 4.f);
 
 
 		if (cptr->gliding == false)
 		{
-			if (cptr->Phase != ICTH_LANDING && cptr->Phase != ICTH_TAKEOFF) {
+			if (cptr->Phase != DinoInfo[cptr->CType].landAnim && cptr->Phase != DinoInfo[cptr->CType].takeoffAnim) {
 				if (cptr->pos.y < GetLandUpH(cptr->pos.x, cptr->pos.z) + 236)
 					cptr->pos.y = GetLandUpH(cptr->pos.x, cptr->pos.z) + 256;
 			}
@@ -4805,9 +4914,20 @@ SKIPROT:
 
 	//========== process speed =============//
 
+	bool swimmingAnim = FALSE;
+	if (cptr->Phase == DinoInfo[cptr->CType].swimAnim || DinoInfo[cptr->CType].shakeWaterAnim) swimmingAnim = TRUE;
+	if (DinoInfo[cptr->CType].idle2Count > 0) {
+		for (int i = 0; i < DinoInfo[cptr->CType].idle2Count; i++) {
+			if (cptr->Phase == DinoInfo[cptr->CType].idle2Anim[i]) {
+				swimmingAnim = TRUE;
+			}
+		}
+	}
+
 	curspeed *= cptr->scale;
 
-	if (cptr->Phase == ICTH_FLY || cptr->Phase == ICTH_FLY2 || cptr->Phase == ICTH_TAKEOFF || cptr->Phase == ICTH_LANDING)
+	if (cptr->Phase == DinoInfo[cptr->CType].flyAnim || cptr->Phase == DinoInfo[cptr->CType].glideAnim
+		|| cptr->Phase == DinoInfo[cptr->CType].takeoffAnim || cptr->Phase == DinoInfo[cptr->CType].landAnim)
 	{
 		DeltaFunc(cptr->vspeed, curspeed, TimeDt / 2024.f);
 
@@ -4826,15 +4946,15 @@ SKIPROT:
 		MoveCharacter(cptr, cptr->lookx * cptr->vspeed * TimeDt,
 			cptr->lookz * cptr->vspeed * TimeDt, FALSE, TRUE);
 
-		if (cptr->Phase != ICTH_SWIM && cptr->Phase != ICTH_SWIM_IDLE1 && cptr->Phase != ICTH_SWIM_IDLE2 && cptr->Phase != ICTH_WINGDOWN_WATER)
+		if (!swimmingAnim)
 		{
 			ThinkY_Beta_Gamma(cptr, 128, 64, 0.6f, 0.4f);
-			if (cptr->Phase == ICTH_WALK) cptr->tggamma += cptr->rspeed / 16.0f;
+			if (cptr->Phase == DinoInfo[cptr->CType].walkAnim) cptr->tggamma += cptr->rspeed / 16.0f;
 			else cptr->tggamma += cptr->rspeed / 10.0f;
 		}
 	}
 
-	if (cptr->Phase == ICTH_SWIM || cptr->Phase == ICTH_SWIM_IDLE1 || cptr->Phase == ICTH_SWIM_IDLE2 || cptr->Phase == ICTH_WINGDOWN_WATER)
+	if (swimmingAnim)
 	{
 		cptr->gamma = 0;
 	}
@@ -4845,7 +4965,8 @@ SKIPROT:
 
 
 	//============ Y movement =================//
-	if ((wy >= swimLevel) && cptr->Phase != ICTH_FLY && cptr->Phase != ICTH_FLY2 && cptr->Phase != ICTH_TAKEOFF && cptr->Phase != ICTH_LANDING)
+	if ((wy >= swimLevel) && cptr->Phase != DinoInfo[cptr->CType].flyAnim && cptr->Phase != DinoInfo[cptr->CType].glideAnim
+		&& cptr->Phase != DinoInfo[cptr->CType].takeoffAnim && cptr->Phase != DinoInfo[cptr->CType].landAnim)
 	{
 		cptr->pos.y = GetLandUpH(cptr->pos.x, cptr->pos.z);
 		//cptr->pos.y = GetLandUpH(cptr->pos.x, cptr->pos.z) - 20;
@@ -4864,7 +4985,8 @@ SKIPROT:
 void AnimateIcthDead(TCharacter *cptr)
 {
 
-	if (cptr->Phase != ICTH_FALL && cptr->Phase != ICTH_LAND_DIE && cptr->Phase != ICTH_WATER_DIE && cptr->Phase != ICTH_SLEEP)
+	if (cptr->Phase != DinoInfo[cptr->CType].fallAnim && cptr->Phase != DinoInfo[cptr->CType].dieAnim
+		&& cptr->Phase != DinoInfo[cptr->CType].waterDieAnim && cptr->Phase != DinoInfo[cptr->CType].sleepAnim)
 	{
 		cptr->deathPhase = cptr->Phase;
 		if (cptr->PPMorphTime > 128)
@@ -4875,7 +4997,7 @@ void AnimateIcthDead(TCharacter *cptr)
 		}
 
 		cptr->FTime = 0;
-		cptr->Phase = ICTH_FALL;
+		cptr->Phase = DinoInfo[cptr->CType].fallAnim;
 		cptr->rspeed = 0;
 		ActivateCharacterFx(cptr);
 		return;
@@ -4890,12 +5012,13 @@ void AnimateIcthDead(TCharacter *cptr)
 	cptr->FTime += TimeDt;
 	if (cptr->FTime >= cptr->pinfo->Animation[cptr->Phase].AniTime)
 	{
-		if (cptr->Phase == ICTH_LAND_DIE || cptr->Phase == ICTH_WATER_DIE || cptr->Phase == ICTH_SLEEP)
+		if (cptr->Phase == DinoInfo[cptr->CType].dieAnim || cptr->Phase == DinoInfo[cptr->CType].waterDieAnim
+			|| cptr->Phase == DinoInfo[cptr->CType].sleepAnim)
 		{
 			if (cptr->canSleep)
 			{
 				cptr->FTime = 0;
-				cptr->Phase = ICTH_SLEEP;
+				cptr->Phase = DinoInfo[cptr->CType].sleepAnim;
 				ActivateCharacterFx(cptr);
 			}
 			else
@@ -4911,7 +5034,8 @@ void AnimateIcthDead(TCharacter *cptr)
 
 
 	//======= movement ===========//
-	if (cptr->Phase == ICTH_LAND_DIE || cptr->Phase == ICTH_WATER_DIE || cptr->Phase == ICTH_SLEEP)
+	if (cptr->Phase == DinoInfo[cptr->CType].dieAnim || cptr->Phase == DinoInfo[cptr->CType].waterDieAnim
+		|| cptr->Phase == DinoInfo[cptr->CType].sleepAnim)
 		DeltaFunc(cptr->vspeed, 0, TimeDt / 400.f);
 	else
 		DeltaFunc(cptr->vspeed, 0, TimeDt / 1200.f);
@@ -4919,7 +5043,7 @@ void AnimateIcthDead(TCharacter *cptr)
 	cptr->pos.x += cptr->lookx * cptr->vspeed * TimeDt;
 	cptr->pos.z += cptr->lookz * cptr->vspeed * TimeDt;
 
-	if (cptr->Phase == ICTH_FALL)
+	if (cptr->Phase == DinoInfo[cptr->CType].fallAnim)
 	{
 		if (OnWater)
 			if (cptr->pos.y >= wh && (cptr->pos.y + cptr->rspeed * TimeDt / 1024) < wh)
@@ -4949,19 +5073,27 @@ void AnimateIcthDead(TCharacter *cptr)
 				//				AddElements(cptr->pos.x + siRand(128), lh, cptr->pos.z + siRand(128), 4, 10);
 				//				AddElements(cptr->pos.x + siRand(128), lh, cptr->pos.z + siRand(128), 4, 10);
 				//				AddElements(cptr->pos.x + siRand(128), lh, cptr->pos.z + siRand(128), 4, 10);
-				cptr->Phase = ICTH_WATER_DIE;
+				cptr->Phase = DinoInfo[cptr->CType].waterDieAnim;
 			}
 			else
 			{
-				cptr->Phase = ICTH_LAND_DIE;
+				cptr->Phase = DinoInfo[cptr->CType].dieAnim;
 			}
 			cptr->FTime = 0;
 			ActivateCharacterFx(cptr);
 		}
 
+		bool walkingidle = false;
+		if (DinoInfo[cptr->CType].idleCount > 0) {
+			for (int i = 0; i < DinoInfo[cptr->CType].idleCount; i++) {
+				if (cptr->deathPhase == DinoInfo[cptr->CType].idleAnim[i]) {
+					walkingidle = TRUE;
+				}
+			}
+		}
+
 		cptr->canSleep = (Tranq && !OnWater &&
-			(cptr->deathPhase == ICTH_WALK || cptr->deathPhase == ICTH_WALK_IDLE1 ||
-				cptr->deathPhase == ICTH_WALK_IDLE2 || cptr->deathPhase == ICTH_WINGDOWN_LAND));
+			(cptr->deathPhase == DinoInfo[cptr->CType].walkAnim || cptr->deathPhase == DinoInfo[cptr->CType].shakeLandAnim || walkingidle));
 
 	}
 	else
@@ -4970,7 +5102,7 @@ void AnimateIcthDead(TCharacter *cptr)
 		DeltaFunc(cptr->gamma, cptr->tggamma, TimeDt / 1600.f);
 	}
 
-	if (cptr->Phase == ICTH_WATER_DIE)
+	if (cptr->Phase == DinoInfo[cptr->CType].waterDieAnim)
 	{
 		cptr->pos.y = wh;
 		cptr->gamma = 0;
@@ -5144,7 +5276,7 @@ NOTHINK:
 	{
 		if (!cptr->State)
 		{
-			if (cptr->Phase > DinoInfo[cptr->CType].walkAnim)
+			if (cptr->Phase != DinoInfo[cptr->CType].walkAnim)
 			{
 				if (rRand(128) > 90)
 				{
@@ -5648,10 +5780,10 @@ void AnimateCharacters()
 		}
 
 		if (cptr->tgtime > 50 * 1000 && cptr->Clone == AI_ICTH) {
-			if (cptr->Phase != ICTH_FLY &&
-				cptr->Phase != ICTH_FLY2 &&
-				cptr->Phase != ICTH_TAKEOFF &&
-				cptr->Phase != ICTH_LANDING)
+			if (cptr->Phase != DinoInfo[cptr->CType].flyAnim &&
+				cptr->Phase != DinoInfo[cptr->CType].glideAnim &&
+				cptr->Phase != DinoInfo[cptr->CType].takeoffAnim &&
+				cptr->Phase != DinoInfo[cptr->CType].landAnim)
 			{
 				cptr->State = 2;
 				cptr->AfraidTime = (50 + rRand(8)) * 1024;
