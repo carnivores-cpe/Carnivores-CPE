@@ -2091,10 +2091,18 @@ void WipeKillTypes() {
 	if (DinoInfo[TotalC].killTypeCount) {
 		for (int i = 0; i < DinoInfo[TotalC].killTypeCount; i++) {
 			DinoInfo[TotalC].killType[i] = {};
-			DinoInfo[TotalC].RType0[i] = 0;
 		}
 	}
 	DinoInfo[TotalC].killTypeCount = 0;
+}
+
+void WipeDeathTypes() {
+	if (DinoInfo[TotalC].deathTypeCount) {
+		for (int i = 0; i < DinoInfo[TotalC].deathTypeCount; i++) {
+			DinoInfo[TotalC].deathType[i] = {};
+		}
+	}
+	DinoInfo[TotalC].deathTypeCount = 0;
 }
 
 void WipeAvoidances() {
@@ -2110,6 +2118,28 @@ void WipeAvoidances() {
 
 	}
 
+}
+
+
+void ReadDeathTypeInfo(FILE *stream)
+{
+	char *value;
+	char line[256];
+
+	while (fgets(line, 255, stream)) {
+		if (strstr(line, "}")) {
+			DinoInfo[TotalC].deathTypeCount++;
+			break;
+		}
+		value = strstr(line, "=");
+		if (!value)
+			DoHalt("Script loading error");
+		value++;
+
+		if (strstr(line, "dieAnim")) DinoInfo[TotalC].deathType[DinoInfo[TotalC].deathTypeCount].die = atoi(value);
+		if (strstr(line, "sleepAnim")) DinoInfo[TotalC].deathType[DinoInfo[TotalC].deathTypeCount].sleep = atoi(value);
+
+	}
 }
 
 void ReadKillTypeInfo(FILE *stream)
@@ -2205,7 +2235,8 @@ void ReadAvoidInfo(FILE *stream)
 
 
 void ReadCharacterLine(FILE *stream, char *_value, char line[256], bool &regionOverwrite, bool &avoidOverwrite,
-	bool &idleOverwrite, bool &idle2Overwrite, bool &roarOverwrite, bool &killOverwrite) {
+	bool &idleOverwrite, bool &idle2Overwrite, bool &roarOverwrite, bool &killOverwrite, bool &waterDieOverwrite,
+	bool &deathTypeOverwrite) {
 
 	char *value = _value;
 //	bool overwrite = _overwrite;
@@ -2255,12 +2286,12 @@ void ReadCharacterLine(FILE *stream, char *_value, char line[256], bool &regionO
 	if (strstr(line, "takeoffAnim")) DinoInfo[TotalC].takeoffAnim = atoi(value);
 	if (strstr(line, "landAnim")) DinoInfo[TotalC].landAnim = atoi(value);
 	if (strstr(line, "slideAnim")) DinoInfo[TotalC].slideAnim = atoi(value);
-	if (strstr(line, "sleepAnim")) DinoInfo[TotalC].sleepAnim = atoi(value);
-	if (strstr(line, "dieAnim")) DinoInfo[TotalC].dieAnim = atoi(value);
+//	if (strstr(line, "sleepAnim")) DinoInfo[TotalC].sleepAnim = atoi(value);
+//	if (strstr(line, "dieAnim")) DinoInfo[TotalC].dieAnim = atoi(value);
 	if (strstr(line, "fallAnim")) DinoInfo[TotalC].fallAnim = atoi(value);
 	if (strstr(line, "shakeLAnim")) DinoInfo[TotalC].shakeLandAnim = atoi(value);
 	if (strstr(line, "shakeWAnim")) DinoInfo[TotalC].shakeWaterAnim = atoi(value);
-	if (strstr(line, "waterDAnim")) DinoInfo[TotalC].waterDieAnim = atoi(value);
+	//if (strstr(line, "waterDAnim")) DinoInfo[TotalC].waterDieAnim = atoi(value);
 	//if (strstr(line, "roarAnim")) DinoInfo[TotalC].roarAnim = atoi(value);
 
 	if (strstr(line, "idleAnim") || strstr(line, "lookAnim")) {
@@ -2288,6 +2319,15 @@ void ReadCharacterLine(FILE *stream, char *_value, char line[256], bool &regionO
 		}
 		DinoInfo[TotalC].roarAnim[DinoInfo[TotalC].roarCount] = atoi(value);
 		DinoInfo[TotalC].roarCount++;
+	}
+
+	if (strstr(line, "waterDAnim")) {
+		if (waterDieOverwrite) {
+			DinoInfo[TotalC].waterDieCount = 0;
+			waterDieOverwrite = false;
+		}
+		DinoInfo[TotalC].waterDieAnim[DinoInfo[TotalC].waterDieCount] = atoi(value);
+		DinoInfo[TotalC].waterDieCount++;
 	}
 
 
@@ -2327,6 +2367,16 @@ void ReadCharacterLine(FILE *stream, char *_value, char line[256], bool &regionO
 		}
 
 		ReadKillTypeInfo(stream);
+	}
+
+	if (strstr(line, "deathtype")) {
+
+		if (deathTypeOverwrite) {
+			WipeDeathTypes();
+			deathTypeOverwrite = false;
+		}
+
+		ReadDeathTypeInfo(stream);
 	}
 
 	if (strstr(line, "spawninfo")){
@@ -2425,14 +2475,15 @@ void ReadCharacters(FILE *stream, bool mapamb)
 				!strstr(line, "addition") &&
 				!strstr(line, "spawninfo") &&
 				!strstr(line, "killtype") &&
-				!strstr(line, "avoid"))
+				!strstr(line, "avoid") &&
+				!strstr(line, "deathtype"))
 				DoHalt("Script loading error");
 			value++;
 
 			if (strstr(line, "ai")) DinoInfo[TotalC].AI = atoi(value);
 
-			bool temp, temp2, temp3, temp4, temp5, temp6;
-			ReadCharacterLine(stream, value, line, temp, temp2, temp3, temp4, temp5, temp6);
+			bool temp, temp2, temp3, temp4, temp5, temp6, temp7, temp8;
+			ReadCharacterLine(stream, value, line, temp, temp2, temp3, temp4, temp5, temp6, temp7, temp8);
 
 			if (strstr(line, "overwrite") || strstr(line, "addition")) {
 
@@ -2507,18 +2558,24 @@ void ReadCharacters(FILE *stream, bool mapamb)
 					bool killOverwrite = strstr(line, "overwrite");
 					bool idle2Overwrite = strstr(line, "overwrite");
 					bool roarOverwrite = strstr(line, "overwrite");
-
+					bool waterDieOverwrite = strstr(line, "overwrite");
+					bool deathTypeOverwrite = strstr(line, "overwrite");
 
 					while (fgets(line, 255, stream)) {
 						if (strstr(line, "}")) break;
 
 						value = strstr(line, "=");
-						if (!value && !strstr(line, "spawninfo") && !strstr(line, "avoid"))
+						if (!value
+							&& !strstr(line, "spawninfo")
+							&& !strstr(line, "avoid")
+							&& !strstr(line, "deathtype")
+							&& !strstr(line, "killtype"))
 							DoHalt("Script loading error");
 						value++;
 
 						ReadCharacterLine(stream, value, line, regionOverwrite, avoidOverwrite,
-							idleOverwrite, idle2Overwrite, roarOverwrite, killOverwrite);
+							idleOverwrite, idle2Overwrite, roarOverwrite, killOverwrite,
+							waterDieOverwrite, deathTypeOverwrite);
 
 					}
 

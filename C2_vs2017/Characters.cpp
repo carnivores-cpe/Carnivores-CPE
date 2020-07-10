@@ -249,6 +249,14 @@ void ResetCharacter(TCharacter *cptr)
 		cptr->roarAnim = DinoInfo[cptr->CType].roarAnim[rRand(DinoInfo[cptr->CType].roarCount - 1)];
 	}
 
+	if (DinoInfo[cptr->CType].deathTypeCount > 1) {
+		cptr->deathType = rRand(DinoInfo[cptr->CType].deathTypeCount - 1);
+	}
+
+	if (DinoInfo[cptr->CType].waterDieCount > 0) {
+		cptr->waterDieAnim = DinoInfo[cptr->CType].waterDieAnim[rRand(DinoInfo[cptr->CType].waterDieCount - 1)];
+	}
+
 	cptr->speed_run = DinoInfo[cptr->CType].runspd;
 	cptr->speed_walk = DinoInfo[cptr->CType].wlkspd;
 	cptr->speed_jump = DinoInfo[cptr->CType].jmpspd;
@@ -1758,7 +1766,7 @@ void AnimateHuntDead(TCharacter *cptr)
 void AnimateTRexDead(TCharacter *cptr)
 {
 
-	if (cptr->Phase != DinoInfo[cptr->CType].dieAnim)
+	if (cptr->Phase != DinoInfo[cptr->CType].deathType[cptr->deathType].die)
 	{
 		if (cptr->PPMorphTime > 128)
 		{
@@ -1768,7 +1776,7 @@ void AnimateTRexDead(TCharacter *cptr)
 		}
 
 		cptr->FTime = 0;
-		cptr->Phase = DinoInfo[cptr->CType].dieAnim;
+		cptr->Phase = DinoInfo[cptr->CType].deathType[cptr->deathType].die;
 		ActivateCharacterFx(cptr);
 	}
 	else
@@ -1794,7 +1802,7 @@ void AnimateTRexDead(TCharacter *cptr)
 void AnimateDimorDead(TCharacter *cptr)
 {
 
-	if (cptr->Phase != DinoInfo[cptr->CType].fallAnim && cptr->Phase != DinoInfo[cptr->CType].dieAnim)
+	if (cptr->Phase != DinoInfo[cptr->CType].fallAnim && cptr->Phase != DinoInfo[cptr->CType].deathType[cptr->deathType].die)
 	{
 		if (cptr->PPMorphTime > 128)
 		{
@@ -1814,14 +1822,14 @@ void AnimateDimorDead(TCharacter *cptr)
 
 	cptr->FTime += TimeDt;
 	if (cptr->FTime >= cptr->pinfo->Animation[cptr->Phase].AniTime)
-		if (cptr->Phase == DinoInfo[cptr->CType].dieAnim)
+		if (cptr->Phase == DinoInfo[cptr->CType].deathType[cptr->deathType].die)
 			cptr->FTime = cptr->pinfo->Animation[cptr->Phase].AniTime - 1;
 		else
 			cptr->FTime %= cptr->pinfo->Animation[cptr->Phase].AniTime;
 
 
 	//======= movement ===========//
-	if (cptr->Phase == DinoInfo[cptr->CType].dieAnim)
+	if (cptr->Phase == DinoInfo[cptr->CType].deathType[cptr->deathType].die)
 		DeltaFunc(cptr->vspeed, 0, TimeDt / 400.f);
 	else
 		DeltaFunc(cptr->vspeed, 0, TimeDt / 1200.f);
@@ -1863,7 +1871,7 @@ void AnimateDimorDead(TCharacter *cptr)
 				cptr->PPMorphTime = 0;
 			}
 
-			cptr->Phase = DinoInfo[cptr->CType].dieAnim;
+			cptr->Phase = DinoInfo[cptr->CType].deathType[cptr->deathType].die;
 			cptr->FTime = 0;
 			ActivateCharacterFx(cptr);
 		}
@@ -1881,7 +1889,7 @@ void AnimateDimorDead(TCharacter *cptr)
 void AnimateDeadCommon(TCharacter *cptr)
 {
 
-	if (cptr->Phase != DinoInfo[cptr->CType].dieAnim && cptr->Phase != DinoInfo[cptr->CType].sleepAnim)
+	if (cptr->Phase != DinoInfo[cptr->CType].deathType[cptr->deathType].die && cptr->Phase != DinoInfo[cptr->CType].deathType[cptr->deathType].sleep)
 	{
 		if (cptr->PPMorphTime > 128)
 		{
@@ -1891,7 +1899,7 @@ void AnimateDeadCommon(TCharacter *cptr)
 		}
 
 		cptr->FTime = 0;
-		cptr->Phase = DinoInfo[cptr->CType].dieAnim;
+		cptr->Phase = DinoInfo[cptr->CType].deathType[cptr->deathType].die;
 		ActivateCharacterFx(cptr);
 	}
 	else
@@ -1903,7 +1911,7 @@ void AnimateDeadCommon(TCharacter *cptr)
 			if (Tranq)
 			{
 				cptr->FTime = 0;
-				cptr->Phase = DinoInfo[cptr->CType].sleepAnim;
+				cptr->Phase = DinoInfo[cptr->CType].deathType[cptr->deathType].sleep;
 				ActivateCharacterFx(cptr);
 			}
 			else
@@ -4985,8 +4993,8 @@ SKIPROT:
 void AnimateIcthDead(TCharacter *cptr)
 {
 
-	if (cptr->Phase != DinoInfo[cptr->CType].fallAnim && cptr->Phase != DinoInfo[cptr->CType].dieAnim
-		&& cptr->Phase != DinoInfo[cptr->CType].waterDieAnim && cptr->Phase != DinoInfo[cptr->CType].sleepAnim)
+	if (cptr->Phase != DinoInfo[cptr->CType].fallAnim && cptr->Phase != DinoInfo[cptr->CType].deathType[cptr->deathType].die
+		&& cptr->Phase != cptr->waterDieAnim && cptr->Phase != DinoInfo[cptr->CType].deathType[cptr->deathType].sleep)
 	{
 		cptr->deathPhase = cptr->Phase;
 		if (cptr->PPMorphTime > 128)
@@ -5012,13 +5020,13 @@ void AnimateIcthDead(TCharacter *cptr)
 	cptr->FTime += TimeDt;
 	if (cptr->FTime >= cptr->pinfo->Animation[cptr->Phase].AniTime)
 	{
-		if (cptr->Phase == DinoInfo[cptr->CType].dieAnim || cptr->Phase == DinoInfo[cptr->CType].waterDieAnim
-			|| cptr->Phase == DinoInfo[cptr->CType].sleepAnim)
+		if (cptr->Phase == DinoInfo[cptr->CType].deathType[cptr->deathType].die || cptr->Phase == cptr->waterDieAnim
+			|| cptr->Phase == DinoInfo[cptr->CType].deathType[cptr->deathType].sleep)
 		{
 			if (cptr->canSleep)
 			{
 				cptr->FTime = 0;
-				cptr->Phase = DinoInfo[cptr->CType].sleepAnim;
+				cptr->Phase = DinoInfo[cptr->CType].deathType[cptr->deathType].sleep;
 				ActivateCharacterFx(cptr);
 			}
 			else
@@ -5034,8 +5042,8 @@ void AnimateIcthDead(TCharacter *cptr)
 
 
 	//======= movement ===========//
-	if (cptr->Phase == DinoInfo[cptr->CType].dieAnim || cptr->Phase == DinoInfo[cptr->CType].waterDieAnim
-		|| cptr->Phase == DinoInfo[cptr->CType].sleepAnim)
+	if (cptr->Phase == DinoInfo[cptr->CType].deathType[cptr->deathType].die || cptr->Phase == cptr->waterDieAnim
+		|| cptr->Phase == DinoInfo[cptr->CType].deathType[cptr->deathType].sleep)
 		DeltaFunc(cptr->vspeed, 0, TimeDt / 400.f);
 	else
 		DeltaFunc(cptr->vspeed, 0, TimeDt / 1200.f);
@@ -5073,11 +5081,11 @@ void AnimateIcthDead(TCharacter *cptr)
 				//				AddElements(cptr->pos.x + siRand(128), lh, cptr->pos.z + siRand(128), 4, 10);
 				//				AddElements(cptr->pos.x + siRand(128), lh, cptr->pos.z + siRand(128), 4, 10);
 				//				AddElements(cptr->pos.x + siRand(128), lh, cptr->pos.z + siRand(128), 4, 10);
-				cptr->Phase = DinoInfo[cptr->CType].waterDieAnim;
+				cptr->Phase = cptr->waterDieAnim;
 			}
 			else
 			{
-				cptr->Phase = DinoInfo[cptr->CType].dieAnim;
+				cptr->Phase = DinoInfo[cptr->CType].deathType[cptr->deathType].die;
 			}
 			cptr->FTime = 0;
 			ActivateCharacterFx(cptr);
@@ -5102,7 +5110,7 @@ void AnimateIcthDead(TCharacter *cptr)
 		DeltaFunc(cptr->gamma, cptr->tggamma, TimeDt / 1600.f);
 	}
 
-	if (cptr->Phase == DinoInfo[cptr->CType].waterDieAnim)
+	if (cptr->Phase == cptr->waterDieAnim)
 	{
 		cptr->pos.y = wh;
 		cptr->gamma = 0;

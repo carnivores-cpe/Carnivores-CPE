@@ -342,7 +342,9 @@ typedef struct _TCharacter
   bool followLeader;
 
   int killType;
+  int deathType;
   int roarAnim;
+  int waterDieAnim;
 
 } TCharacter;
 
@@ -439,6 +441,12 @@ typedef struct _TDinoKill
 	bool elevate;
 } TDinoKill;
 
+typedef struct _TDinoDeathType
+{
+	int die;
+	int sleep;
+} TDinoDeathType;
+
 typedef struct _TDinoInfo
 {
   char Name[48], FName[48], PName[48];
@@ -472,12 +480,18 @@ typedef struct _TDinoInfo
   float packDensity;
 
   int runAnim, jumpAnim, walkAnim, swimAnim, flyAnim, glideAnim, takeoffAnim, landAnim,
-	  slideAnim, sleepAnim, dieAnim, fallAnim, shakeLandAnim, shakeWaterAnim, waterDieAnim;
+	  slideAnim, fallAnim, shakeLandAnim, shakeWaterAnim;
 
-  TDinoKill killType[32]; //trex look
+  TDinoDeathType deathType[32];
+  int deathTypeCount;
+
+  TDinoKill killType[32];
   int killTypeCount;
 
-  int idleAnim[32];
+  int waterDieAnim[32];
+  int waterDieCount;
+
+  int idleAnim[32];//trex look
   int idleCount;
   
   int idle2Anim[32]; //icth wateridle   trex smell

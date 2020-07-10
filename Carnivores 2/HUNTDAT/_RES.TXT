@@ -104,10 +104,12 @@ characters {
  wlkspd = 0.3
  runAnim = 0
  walkAnim = 1
+deathtype{
  dieAnim = 2
+ sleepAnim = 5
+}
  idleAnim = 3
  idleAnim = 4
- sleepAnim = 5
  waterLevel = 50
 }
 
@@ -128,10 +130,12 @@ characters {
  runAnim = 0
  walkAnim = 1
  slideAnim = 2
+deathtype{
  dieAnim = 3
+ sleepAnim = 6
+}
  idleAnim = 4
  idleAnim = 5
- sleepAnim = 6
  waterLevel = 100
 }
 
@@ -147,7 +151,9 @@ characters {
  flyAnim = 0
  glideAnim = 1
  fallAnim = 2
+deathtype{
  dieAnim = 3
+}
 }
 
 {
@@ -162,7 +168,9 @@ characters {
  flyAnim = 0
  glideAnim = 1
  fallAnim = 2
+deathtype{
  dieAnim = 3
+}
 }
 
 {
@@ -181,10 +189,12 @@ characters {
  wlkspd = 0.3
  runAnim = 1
  walkAnim = 0
+deathtype{
  dieAnim = 4
+ sleepAnim = 5
+}
  idleAnim = 2
  idleAnim = 3
- sleepAnim = 5
  waterLevel = 50
 }
 
@@ -222,8 +232,10 @@ characters {
  walkAnim = 0
  idleAnim = 2
  idleAnim = 3
+deathtype{
  dieAnim = 4
  sleepAnim = 5
+}
  waterLevel = 160
 }
 
@@ -260,8 +272,10 @@ characters {
  walkAnim = 1
  idleAnim = 2
  idleAnim = 3
+deathtype{
  dieAnim = 4
  sleepAnim = 5
+}
  waterLevel = 60
 }
 
@@ -296,8 +310,10 @@ characters {
  walkAnim = 1
  idleAnim = 3
  idleAnim = 4
+deathtype{
  dieAnim = 2
  sleepAnim = 5
+}
  waterLevel = 160
 }
 
@@ -333,8 +349,10 @@ characters {
  swimAnim = 2
  slideAnim = 3
  jumpAnim = 4
+deathtype{
  dieAnim = 5
  sleepAnim = 7
+}
  idleAnim = 8
  idleAnim = 9
  waterLevel = 180
@@ -377,8 +395,10 @@ killtype{
  idleAnim = 2
  idleAnim = 3
  idleAnim = 4
+deathtype{
  dieAnim = 5
  sleepAnim = 6
+}
  waterLevel = 120
 }
 
@@ -413,8 +433,10 @@ killtype{
  swimAnim = 3
  slideAnim = 2
  jumpAnim = 4
+deathtype{
  dieAnim = 5
  sleepAnim = 7
+}
  idleAnim = 8
  idleAnim = 9
  waterLevel = 140
@@ -455,8 +477,10 @@ killtype{
  swimAnim = 9
  slideAnim = 2
  jumpAnim = 5
+deathtype{
  dieAnim = 6
  sleepAnim = 8
+}
  idleAnim = 3
  idleAnim = 4
  waterLevel = 140
@@ -496,8 +520,10 @@ killtype{
  runAnim = 1
  walkAnim = 0
  swimAnim = 8
+deathtype{
  dieAnim = 5
  sleepAnim = 6
+}
  idleAnim = 2
  idleAnim = 3
  idleAnim = 4
@@ -541,7 +567,9 @@ killtype{
  lookAnim = 5
  smellAnim = 6
  smellAnim = 7
+deathtype{
  dieAnim = 8
+}
  waterLevel = 560
 killtype{
  hunterAnim = 3
@@ -588,8 +616,10 @@ mapambients {
  }
  runAnim = 6
  walkAnim = 0
+deathtype{
  dieAnim = 4
  sleepAnim = 5
+}
  idleAnim = 1
  idleAnim = 2
  idleAnim = 3
@@ -630,8 +660,10 @@ killtype{
  slideAnim = 2
  idleAnim = 4
  idleAnim = 5
+deathtype{
  dieAnim = 3
  sleepAnim = 6
+}
  waterLevel = 140
  spawninfo {
  spawnrate = 1
@@ -673,8 +705,10 @@ killtype{
  idleAnim = 2
  idleAnim = 3
  idleAnim = 4
+deathtype{
  dieAnim = 5
  sleepAnim = 6
+}
  waterLevel = 120
  spawninfo {
  spawnrate = 0.05
@@ -828,11 +862,13 @@ styInRgn  = TRUE
  takeoffAnim = 10
  landAnim = 11
  fallAnim = 12
+deathtype{
  dieAnim = 13
+ sleepAnim = 15
+}
  waterIAnim = 5
  waterIAnim = 6
  waterDAnim = 14
- sleepAnim = 15
  spawninfo {
   spawnrate = 0.5
   spawnmax  = 5
