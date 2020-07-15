@@ -3455,21 +3455,25 @@ TBEGIN:
 		if (!cptr->State)
 		{
 
+			if (DinoInfo[cptr->CType].idleCount)
+			{
 
-			bool idlePhase = false;
-			for (int i = 0; i < DinoInfo[cptr->CType].idleCount; i++) {
-				if (cptr->Phase == DinoInfo[cptr->CType].idleAnim[i]) idlePhase = true;
-			}
+				bool idlePhase = false;
+				for (int i = 0; i < DinoInfo[cptr->CType].idleCount; i++) {
+					if (cptr->Phase == DinoInfo[cptr->CType].idleAnim[i]) idlePhase = true;
+				}
 
 
-			if (idlePhase) {
-				if (rRand(128) > 76 && cptr->Phase == DinoInfo[cptr->CType].idleAnim[DinoInfo[cptr->CType].idleCount - 1])
-					cptr->Phase = DinoInfo[cptr->CType].walkAnim;
-				else cptr->Phase = DinoInfo[cptr->CType].idleAnim[rRand(DinoInfo[cptr->CType].idleCount - 1)];
-				goto ENDPSELECT;
-			}
-			if (rRand(128) > 120) cptr->Phase = DinoInfo[cptr->CType].idleAnim[0];
-			else cptr->Phase = DinoInfo[cptr->CType].walkAnim;
+				if (idlePhase) {
+					if (rRand(128) > 76 && cptr->Phase == DinoInfo[cptr->CType].idleAnim[DinoInfo[cptr->CType].idleCount - 1])
+						cptr->Phase = DinoInfo[cptr->CType].walkAnim;
+					else cptr->Phase = DinoInfo[cptr->CType].idleAnim[rRand(DinoInfo[cptr->CType].idleCount - 1)];
+					goto ENDPSELECT;
+				}
+				if (rRand(128) > 120) cptr->Phase = DinoInfo[cptr->CType].idleAnim[0];
+				else cptr->Phase = DinoInfo[cptr->CType].walkAnim;
+
+			} else cptr->Phase = DinoInfo[cptr->CType].walkAnim;
 
 		}
 		else if (cptr->AfraidTime) cptr->Phase = DinoInfo[cptr->CType].runAnim;
@@ -5284,26 +5288,33 @@ NOTHINK:
 	{
 		if (!cptr->State)
 		{
-			if (cptr->Phase != DinoInfo[cptr->CType].walkAnim)
-			{
-				if (rRand(128) > 90)
+			if (DinoInfo[cptr->CType].idleCount) {
+
+
+				if (cptr->Phase != DinoInfo[cptr->CType].walkAnim)
 				{
-					cptr->Phase = DinoInfo[cptr->CType].walkAnim;
+					if (rRand(128) > 90)
+					{
+						cptr->Phase = DinoInfo[cptr->CType].walkAnim;
+					}
+					else
+					{
+						cptr->Phase = DinoInfo[cptr->CType].idleAnim[rRand(DinoInfo[cptr->CType].idleCount - 1)];
+					}
+					goto ENDPSELECT;
+				}
+				if (rRand(128) > 64)
+				{
+					cptr->Phase = DinoInfo[cptr->CType].idleAnim[0];
 				}
 				else
 				{
-					cptr->Phase = DinoInfo[cptr->CType].idleAnim[rRand(DinoInfo[cptr->CType].idleCount - 1)];
+					cptr->Phase = DinoInfo[cptr->CType].walkAnim;
 				}
-				goto ENDPSELECT;
-			}
-			if (rRand(128) > 64)
-			{
-				cptr->Phase = DinoInfo[cptr->CType].idleAnim[0];
-			}
-			else
-			{
-				cptr->Phase = DinoInfo[cptr->CType].walkAnim;
-			}
+
+
+			} else cptr->Phase = DinoInfo[cptr->CType].walkAnim;
+
 		}
 		else
 		{
@@ -5474,14 +5485,26 @@ TBEGIN:
 		
 		*/
 
+		if (DinoInfo[cptr->CType].idleCount) {
 
-		if (cptr->Phase > DinoInfo[cptr->CType].walkAnim)
-		{
-			if (rRand(128) > 90)  cptr->Phase = DinoInfo[cptr->CType].walkAnim;
-			else cptr->Phase = DinoInfo[cptr->CType].idleAnim[rRand(DinoInfo[cptr->CType].idleCount - 1)];
-			goto ENDPSELECT;
+
+			bool idlePhase2 = false;
+			for (int i = 0; i < DinoInfo[cptr->CType].idleCount; i++) {
+				if (cptr->Phase == DinoInfo[cptr->CType].idleAnim[i]) idlePhase2 = true;
+			}
+
+			if (idlePhase2)
+			{
+
+				if (rRand(128) > 90)  cptr->Phase = DinoInfo[cptr->CType].walkAnim;
+				else cptr->Phase = DinoInfo[cptr->CType].idleAnim[rRand(DinoInfo[cptr->CType].idleCount - 1)];
+				goto ENDPSELECT;
+			}
+			if (rRand(128) > 64) cptr->Phase = DinoInfo[cptr->CType].idleAnim[0];
+			else cptr->Phase = DinoInfo[cptr->CType].walkAnim;
+
+
 		}
-		if (rRand(128) > 64) cptr->Phase = DinoInfo[cptr->CType].idleAnim[0];
 		else cptr->Phase = DinoInfo[cptr->CType].walkAnim;
 	}
 
