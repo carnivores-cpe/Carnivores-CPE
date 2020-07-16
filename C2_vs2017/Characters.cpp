@@ -4997,8 +4997,11 @@ SKIPROT:
 void AnimateIcthDead(TCharacter *cptr)
 {
 
+	bool waterDieQ = cptr->Phase == cptr->waterDieAnim;
+	if (!DinoInfo[cptr->CType].waterDieCount) waterDieQ = false;
+
 	if (cptr->Phase != DinoInfo[cptr->CType].fallAnim && cptr->Phase != DinoInfo[cptr->CType].deathType[cptr->deathType].die
-		&& cptr->Phase != cptr->waterDieAnim && cptr->Phase != DinoInfo[cptr->CType].deathType[cptr->deathType].sleep)
+		&& cptr->Phase != DinoInfo[cptr->CType].deathType[cptr->deathType].sleep && !waterDieQ)
 	{
 		cptr->deathPhase = cptr->Phase;
 		if (cptr->PPMorphTime > 128)
@@ -5019,12 +5022,13 @@ void AnimateIcthDead(TCharacter *cptr)
 
 	float wh = GetLandUpH(cptr->pos.x, cptr->pos.z);
 	float lh = GetLandH(cptr->pos.x, cptr->pos.z);
-	BOOL OnWater = (wh - lh > 10);
+	BOOL OnWaterQ = (wh - lh > 10);
+	if (!DinoInfo[cptr->CType].waterDieCount) OnWaterQ = false;
 
 	cptr->FTime += TimeDt;
 	if (cptr->FTime >= cptr->pinfo->Animation[cptr->Phase].AniTime)
 	{
-		if (cptr->Phase == DinoInfo[cptr->CType].deathType[cptr->deathType].die || cptr->Phase == cptr->waterDieAnim
+		if (cptr->Phase == DinoInfo[cptr->CType].deathType[cptr->deathType].die || waterDieQ
 			|| cptr->Phase == DinoInfo[cptr->CType].deathType[cptr->deathType].sleep)
 		{
 			if (cptr->canSleep)
@@ -5038,15 +5042,15 @@ void AnimateIcthDead(TCharacter *cptr)
 				cptr->FTime = cptr->pinfo->Animation[cptr->Phase].AniTime - 1;
 			}
 		}
+		else
+			cptr->FTime %= cptr->pinfo->Animation[cptr->Phase].AniTime;
 
 
 	}
-	else
-		cptr->FTime %= cptr->pinfo->Animation[cptr->Phase].AniTime;
 
 
 	//======= movement ===========//
-	if (cptr->Phase == DinoInfo[cptr->CType].deathType[cptr->deathType].die || cptr->Phase == cptr->waterDieAnim
+	if (cptr->Phase == DinoInfo[cptr->CType].deathType[cptr->deathType].die || waterDieQ
 		|| cptr->Phase == DinoInfo[cptr->CType].deathType[cptr->deathType].sleep)
 		DeltaFunc(cptr->vspeed, 0, TimeDt / 400.f);
 	else
@@ -5057,7 +5061,7 @@ void AnimateIcthDead(TCharacter *cptr)
 
 	if (cptr->Phase == DinoInfo[cptr->CType].fallAnim)
 	{
-		if (OnWater)
+		if (OnWaterQ)
 			if (cptr->pos.y >= wh && (cptr->pos.y + cptr->rspeed * TimeDt / 1024) < wh)
 			{
 				AddWCircle(cptr->pos.x + siRand(128), cptr->pos.z + siRand(128), 2.0);
@@ -5080,7 +5084,7 @@ void AnimateIcthDead(TCharacter *cptr)
 				cptr->PPMorphTime = 0;
 			}
 
-			if (OnWater)
+			if (OnWaterQ)
 			{
 				//				AddElements(cptr->pos.x + siRand(128), lh, cptr->pos.z + siRand(128), 4, 10);
 				//				AddElements(cptr->pos.x + siRand(128), lh, cptr->pos.z + siRand(128), 4, 10);
@@ -5104,7 +5108,7 @@ void AnimateIcthDead(TCharacter *cptr)
 			}
 		}
 
-		cptr->canSleep = (Tranq && !OnWater &&
+		cptr->canSleep = (Tranq && !OnWaterQ &&
 			(cptr->deathPhase == DinoInfo[cptr->CType].walkAnim || cptr->deathPhase == DinoInfo[cptr->CType].shakeLandAnim || walkingidle));
 
 	}
@@ -5114,7 +5118,7 @@ void AnimateIcthDead(TCharacter *cptr)
 		DeltaFunc(cptr->gamma, cptr->tggamma, TimeDt / 1600.f);
 	}
 
-	if (cptr->Phase == cptr->waterDieAnim)
+	if (waterDieQ)
 	{
 		cptr->pos.y = wh;
 		cptr->gamma = 0;
@@ -5484,7 +5488,7 @@ TBEGIN:
 				cptr->Phase = DinoInfo[cptr->CType].idleAnim[0];
 		
 		*/
-
+		
 		if (DinoInfo[cptr->CType].idleCount) {
 
 
