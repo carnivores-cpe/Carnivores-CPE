@@ -1798,7 +1798,7 @@ void AnimateTRexDead(TCharacter *cptr)
 }
 
 
-
+/*
 void AnimateDimorDead(TCharacter *cptr)
 {
 
@@ -1882,7 +1882,7 @@ void AnimateDimorDead(TCharacter *cptr)
 		DeltaFunc(cptr->gamma, cptr->tggamma, TimeDt / 1600.f);
 	}
 }
-
+*/
 
 
 //universal animate dead proc
@@ -4996,12 +4996,11 @@ SKIPROT:
 
 void AnimateIcthDead(TCharacter *cptr)
 {
-
-	bool waterDieQ = cptr->Phase == cptr->waterDieAnim;
-	if (!DinoInfo[cptr->CType].waterDieCount) waterDieQ = false;
+	cptr->bend = 0;
 
 	if (cptr->Phase != DinoInfo[cptr->CType].fallAnim && cptr->Phase != DinoInfo[cptr->CType].deathType[cptr->deathType].die
-		&& cptr->Phase != DinoInfo[cptr->CType].deathType[cptr->deathType].sleep && !waterDieQ)
+		&& !(cptr->Phase == DinoInfo[cptr->CType].deathType[cptr->deathType].sleep && cptr->Clone == AI_ICTH)
+		&& !(cptr->Phase == cptr->waterDieAnim && DinoInfo[cptr->CType].waterDieCount))
 	{
 		cptr->deathPhase = cptr->Phase;
 		if (cptr->PPMorphTime > 128)
@@ -5028,8 +5027,9 @@ void AnimateIcthDead(TCharacter *cptr)
 	cptr->FTime += TimeDt;
 	if (cptr->FTime >= cptr->pinfo->Animation[cptr->Phase].AniTime)
 	{
-		if (cptr->Phase == DinoInfo[cptr->CType].deathType[cptr->deathType].die || waterDieQ
-			|| cptr->Phase == DinoInfo[cptr->CType].deathType[cptr->deathType].sleep)
+		if (cptr->Phase == DinoInfo[cptr->CType].deathType[cptr->deathType].die ||
+			(cptr->Phase == cptr->waterDieAnim && DinoInfo[cptr->CType].waterDieCount) ||
+			(cptr->Phase == DinoInfo[cptr->CType].deathType[cptr->deathType].sleep && cptr->Clone == AI_ICTH))
 		{
 			if (cptr->canSleep)
 			{
@@ -5050,8 +5050,9 @@ void AnimateIcthDead(TCharacter *cptr)
 
 
 	//======= movement ===========//
-	if (cptr->Phase == DinoInfo[cptr->CType].deathType[cptr->deathType].die || waterDieQ
-		|| cptr->Phase == DinoInfo[cptr->CType].deathType[cptr->deathType].sleep)
+	if (cptr->Phase == DinoInfo[cptr->CType].deathType[cptr->deathType].die || 
+		(cptr->Phase == cptr->waterDieAnim && DinoInfo[cptr->CType].waterDieCount) || 
+		(cptr->Phase == DinoInfo[cptr->CType].deathType[cptr->deathType].sleep && cptr->Clone == AI_ICTH))
 		DeltaFunc(cptr->vspeed, 0, TimeDt / 400.f);
 	else
 		DeltaFunc(cptr->vspeed, 0, TimeDt / 1200.f);
@@ -5108,7 +5109,7 @@ void AnimateIcthDead(TCharacter *cptr)
 			}
 		}
 
-		cptr->canSleep = (Tranq && !OnWaterQ &&
+		cptr->canSleep = (Tranq && !OnWaterQ && cptr->Clone == AI_ICTH &&
 			(cptr->deathPhase == DinoInfo[cptr->CType].walkAnim || cptr->deathPhase == DinoInfo[cptr->CType].shakeLandAnim || walkingidle));
 
 	}
@@ -5118,7 +5119,7 @@ void AnimateIcthDead(TCharacter *cptr)
 		DeltaFunc(cptr->gamma, cptr->tggamma, TimeDt / 1600.f);
 	}
 
-	if (waterDieQ)
+	if (DinoInfo[cptr->CType].waterDieCount && cptr->Phase == cptr->waterDieAnim)
 	{
 		cptr->pos.y = wh;
 		cptr->gamma = 0;
@@ -5884,11 +5885,11 @@ void AnimateCharacters()
 			break;
 		case AI_DIMOR:
 			if (cptr->Health) AnimateDimor(cptr);
-			else AnimateDimorDead(cptr);
+			else AnimateIcthDead(cptr);
 			break;
 		case AI_PTERA:
 			if (cptr->Health) AnimateDimor(cptr);
-			else AnimateDimorDead(cptr);
+			else AnimateIcthDead(cptr);
 			break;
 		case AI_DIMET:
 			if (cptr->Health) AnimateClassicAmbient(cptr);
