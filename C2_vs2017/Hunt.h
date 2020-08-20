@@ -439,6 +439,7 @@ typedef struct _TDinoKill
 	int offset;
 	int hunteranim;
 	bool elevate;
+	bool dontloop;
 } TDinoKill;
 
 typedef struct _TDinoDeathType

@@ -586,7 +586,7 @@ mapambients {
 
 {
  name = 'Brachiosaurus'
- file = 'brachi11.car'
+ file = 'dangerbrachikillertest.car'
  clone 	   = -5
  mass      = 9
  length    = 12
@@ -611,10 +611,7 @@ mapambients {
  spawnmax  = 4
  spawnmin  = 2
  }
- overwrite area3 {
- file = 'brachi11alt.car'
- }
- runAnim = 6
+ runAnim = 7
  walkAnim = 0
 deathtype{
  dieAnim = 4
@@ -625,9 +622,10 @@ deathtype{
  idleAnim = 3
 killtype{
  hunterAnim = 0
- eatAnim = 10
+ eatAnim = 6
  hunterOffset = 0
  hunterSync = TRUE
+ dontloop = TRUE
 }
 }
 

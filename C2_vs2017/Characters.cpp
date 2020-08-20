@@ -1685,10 +1685,15 @@ void AnimateHuntDead(TCharacter *cptr)
 
 	ProcessPrevPhase(cptr);
 	BOOL NewPhase = FALSE;
+	bool loopDone = FALSE;
 
 	cptr->FTime += TimeDt;
 	if (cptr->FTime >= cptr->pinfo->Animation[cptr->Phase].AniTime)
 	{
+		if (DinoInfo[killerDino->CType].killType[killerDino->killType].dontloop) {
+			loopDone = true;
+		}
+
 		NewPhase = TRUE;
 		if (cptr->Phase == 2)
 			cptr->FTime = cptr->pinfo->Animation[cptr->Phase].AniTime - 1;
@@ -1742,8 +1747,8 @@ void AnimateHuntDead(TCharacter *cptr)
 	if (!killedwater)
 	{
 		if (DinoInfo[killerDino->CType].killTypeCount) {
-			if (DinoInfo[killerDino->CType].killType[killerDino->killType].elevate) {
-
+			if (DinoInfo[killerDino->CType].killType[killerDino->killType].elevate &&
+				killerDino->Phase == DinoInfo[killerDino->CType].killType[killerDino->killType].anim) {
 
 				cptr->pos = killerDino->pos;
 				cptr->FTime = killerDino->FTime;
@@ -1757,6 +1762,10 @@ void AnimateHuntDead(TCharacter *cptr)
 
 		}
 
+	}
+
+	if (loopDone) {
+		cptr->FTime = cptr->pinfo->Animation[cptr->Phase].AniTime - 1;
 	}
 
 }
@@ -2022,6 +2031,7 @@ TBEGIN:
 						cptr->vspeed /= 8.0f;
 						cptr->State = 1;
 						cptr->Phase = DinoInfo[cptr->CType].killType[cptr->killType].anim;
+						if (DinoInfo[cptr->CType].killType[cptr->killType].dontloop) cptr->FTime = 0;
 						AddDeadBody(cptr, DinoInfo[cptr->CType].killType[cptr->killType].hunteranim);
 					}
 					else AddDeadBody(cptr, HUNT_EAT);
@@ -2084,6 +2094,15 @@ NOTHINK:
 	if (cptr->FTime >= cptr->pinfo->Animation[cptr->Phase].AniTime)
 	{
 		cptr->FTime %= cptr->pinfo->Animation[cptr->Phase].AniTime;
+
+		if (cptr->Phase == DinoInfo[cptr->CType].killType[cptr->killType].anim && DinoInfo[cptr->CType].killTypeCount) {
+			if (DinoInfo[cptr->CType].killType[cptr->killType].dontloop) {
+				cptr->Phase = DinoInfo[cptr->CType].walkAnim;
+				cptr->State = 0;
+			}
+		}
+
+
 		NewPhase = TRUE;
 	}
 
@@ -2399,6 +2418,7 @@ TBEGIN:
 							cptr->vspeed /= 8.0f;
 							cptr->State = 1;
 							cptr->Phase = DinoInfo[cptr->CType].killType[cptr->killType].anim;
+							if (DinoInfo[cptr->CType].killType[cptr->killType].dontloop) cptr->FTime = 0;
 							AddDeadBody(cptr, DinoInfo[cptr->CType].killType[cptr->killType].hunteranim);
 						}
 						else AddDeadBody(cptr, HUNT_EAT);
@@ -2466,6 +2486,15 @@ NOTHINK:
 	if (cptr->FTime >= cptr->pinfo->Animation[cptr->Phase].AniTime)
 	{
 		cptr->FTime %= cptr->pinfo->Animation[cptr->Phase].AniTime;
+
+		if (cptr->Phase == DinoInfo[cptr->CType].killType[cptr->killType].anim && DinoInfo[cptr->CType].killTypeCount) {
+			if (DinoInfo[cptr->CType].killType[cptr->killType].dontloop) {
+				cptr->Phase = DinoInfo[cptr->CType].walkAnim;
+				cptr->State = 0;
+			}
+		}
+
+
 		NewPhase = TRUE;
 	}
 
@@ -3086,6 +3115,7 @@ TBEGIN:
 						cptr->vspeed /= 8.0f;
 						cptr->State = 1;
 						cptr->Phase = DinoInfo[cptr->CType].killType[cptr->killType].anim;
+						if (DinoInfo[cptr->CType].killType[cptr->killType].dontloop) cptr->FTime = 0;
 						AddDeadBody(cptr, DinoInfo[cptr->CType].killType[cptr->killType].hunteranim);
 					}
 					else AddDeadBody(cptr, HUNT_EAT);
@@ -3155,6 +3185,15 @@ NOTHINK:
 	if (cptr->FTime >= cptr->pinfo->Animation[cptr->Phase].AniTime)
 	{
 		cptr->FTime %= cptr->pinfo->Animation[cptr->Phase].AniTime;
+
+		if (cptr->Phase == DinoInfo[cptr->CType].killType[cptr->killType].anim && DinoInfo[cptr->CType].killTypeCount) {
+			if (DinoInfo[cptr->CType].killType[cptr->killType].dontloop) {
+				cptr->Phase = DinoInfo[cptr->CType].walkAnim;
+				cptr->State = 0;
+			}
+		}
+
+
 		NewPhase = TRUE;
 	}
 
@@ -5215,6 +5254,7 @@ TBEGIN:
 						cptr->vspeed /= 8.0f;
 						cptr->State = 1;
 						cptr->Phase = DinoInfo[cptr->CType].killType[cptr->killType].anim;
+						if (DinoInfo[cptr->CType].killType[cptr->killType].dontloop) cptr->FTime = 0;
 						AddDeadBody(cptr, DinoInfo[cptr->CType].killType[cptr->killType].hunteranim);
 					}
 					else AddDeadBody(cptr, HUNT_EAT);
@@ -5284,6 +5324,14 @@ NOTHINK:
 	if (cptr->FTime >= cptr->pinfo->Animation[cptr->Phase].AniTime)
 	{
 		cptr->FTime %= cptr->pinfo->Animation[cptr->Phase].AniTime;
+
+		if (cptr->Phase == DinoInfo[cptr->CType].killType[cptr->killType].anim && DinoInfo[cptr->CType].killTypeCount) {
+			if (DinoInfo[cptr->CType].killType[cptr->killType].dontloop) {
+				cptr->Phase = DinoInfo[cptr->CType].walkAnim;
+				cptr->State = 0;
+			}
+		}
+
 		NewPhase = TRUE;
 	}
 
