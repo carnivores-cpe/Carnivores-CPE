@@ -504,6 +504,8 @@ typedef struct _TDinoInfo
   bool canSwim;
   int waterLevel;
 
+  bool dogSmell;
+
 } TDinoInfo;
 
 typedef struct _TPack
@@ -1046,6 +1048,8 @@ _EXTORNOT   struct _t
 #define AI_DIMOR      3
 #define AI_PTERA      4
 #define AI_DIMET      5
+
+#define AI_HUNTDOG    9
 
 #define AI_PARA       10
 #define AI_ANKY       11

@@ -200,12 +200,55 @@ deathtype{
 
 
 
+{
+ name      = 'Hunting Dog'
+ file      = 'hound1.car'
+ ai        = 9
+ clone 	   = 9
+ scale0    = 700
+ scaleA    = 0
+ mass      = 1.5
+ length    = 5.8
+ radius    = 320
+ health    = 6
+ basescore = 5
+ smell     = 0.0
+ hear      = 0.0
+ look      = 0.4
+ shipdelta = 48
+ fearCall = 13
+ fearCall = 15
+ fearCall = 16
+ fearCall = 17
+ fearCall = 18
+ runspd = 1.6
+ wlkspd = 0.40
+ hunterAnim = 0
+ hunterOffset = 0
+ aggress = 0
+ killdist = 0
+ onradar = TRUE
+ trophy  = TRUE
+ runAnim = 1
+ walkAnim = 0
+ idleAnim = 2
+ smellAnim = 4
+ roarAnim = 3
+deathtype{
+ dieAnim = 5
+ sleepAnim = 6
+}
+ waterLevel = 160
+}
+
+
 
 {
  name      = 'Parasaurolophus'
  file      = 'par2.car'
  ai        = 10
  clone 	   = 10
+ dogSmell  = TRUE
  mass      = 1.5
  length    = 5.8
  radius    = 320
@@ -652,7 +695,6 @@ killtype{
  aggress = 0
  killdist = 0
  trophy  = TRUE
- onradar = TRUE
  runAnim = 1
  walkAnim = 0
  slideAnim = 2

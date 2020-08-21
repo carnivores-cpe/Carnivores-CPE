@@ -2276,6 +2276,9 @@ void ReadCharacterLine(FILE *stream, char *_value, char line[256], bool &regionO
 	if (strstr(line, "waterLevel")) DinoInfo[TotalC].waterLevel = atoi(value);
 
 
+	if (strstr(line, "dogSmell")) DinoInfo[TotalC].dogSmell = TRUE;
+
+
 	if (strstr(line, "canswim")) DinoInfo[TotalC].canSwim = TRUE; //check animate subroutines for what this includes. LandBrach needs this attribute, but maybe rename to wade? (and default to off for landbrach ai? maybe?)
 
 	if (strstr(line, "runAnim")) DinoInfo[TotalC].runAnim = atoi(value);
@@ -2626,6 +2629,20 @@ void LoadResourcesScript()
 	AIInfo[AI_PARA].idleStart = 120;
 	AIInfo[AI_PARA].yBetaGamma4 = 0.4f;
 	//waterLevel = 160;
+
+	AIInfo[AI_HUNTDOG].targetDistance = 8048.f;
+	AIInfo[AI_HUNTDOG].noWayCntMin = 8;
+	AIInfo[AI_HUNTDOG].noFindWayMed = 44;
+	AIInfo[AI_HUNTDOG].noFindWayRange = 80;
+	AIInfo[AI_HUNTDOG].targetBendRotSpd = 3.0f;
+	AIInfo[AI_HUNTDOG].targetBendMin = 2.f;
+	AIInfo[AI_HUNTDOG].targetBendDelta1 = 1600.f;
+	AIInfo[AI_HUNTDOG].targetBendDelta2 = 1200.f;
+	AIInfo[AI_HUNTDOG].walkTargetGammaRot = 12.0f;
+	AIInfo[AI_HUNTDOG].targetGammaRot = 8.0f;
+	AIInfo[AI_HUNTDOG].idleStart = 120;
+	AIInfo[AI_HUNTDOG].yBetaGamma4 = 0.4f;
+	AIInfo[AI_HUNTDOG].idleStartD = 128;
 
 	AIInfo[AI_ANKY].targetDistance = 8048.f;
 	AIInfo[AI_ANKY].noWayCntMin = 12;

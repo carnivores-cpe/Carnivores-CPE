@@ -2331,6 +2331,424 @@ SKIPROT:
 }
 
 
+
+
+
+
+
+boolean huntDogSearch(TCharacter *cptr)
+{
+	bool preyFound = FALSE;
+	Vector3d preyPos;
+	float preyDist;
+
+	//if (!MyHealth) return false;
+	if (TrophyMode) return false;
+
+	float kR, kwind, klook, kstand;
+
+	float kmask = 1.0f;
+	float kscent = 1.5f;
+
+	for (int c = 0; c < ChCount; c++)
+	{
+		TCharacter *dino = &Characters[c];
+
+		Vector3d ppos, plook, clook, wlook, rlook;
+		ppos = dino->pos;
+
+		wlook = Wind.nv;
+
+		plook.y = 0;
+		plook.x = (float)sin(dino->alpha);
+		plook.z = (float)-cos(dino->alpha);
+
+		if (!dino->Health) continue;
+		if (!DinoInfo[dino->CType].dogSmell) continue;
+
+		rlook = SubVectors(dino->pos, cptr->pos);
+		kR = VectorLength(rlook) / 256.f / (32.f + ctViewR / 2);
+		NormVector(rlook, 1.0f);
+
+		kR *= 2.5f / (float)(1.5 + OptSens / 128.f);
+		if (kR > 3.0f) continue;
+
+		clook.x = cptr->lookx;
+		clook.y = 0;
+		clook.z = cptr->lookz;
+
+		MulVectorsScal(wlook, rlook, kwind);
+		kwind *= Wind.speed / 10;
+		MulVectorsScal(clook, rlook, klook);
+		klook *= -1.f;
+
+		if (HeadY > 180) kstand = 0.7f;
+		else kstand = 1.2f;
+
+		//============= reasons ==============//
+
+		float kALook = kR * ((klook + 3.f) / 3.f) * kstand * kmask;
+		if (klook > 0.3) kALook *= 2.0;
+		if (klook > 0.8) kALook *= 2.0;
+		kALook /= DinoInfo[cptr->CType].LookK;
+		if (kALook < 1.0)
+			if (TraceLook(cptr->pos.x, cptr->pos.y + 220, cptr->pos.z,
+				dino->pos.x, dino->pos.y, dino->pos.z)) kALook *= 1.3f;
+
+		if (kALook < 1.0)
+			if (TraceLook(cptr->pos.x, cptr->pos.y + 220, cptr->pos.z,
+				dino->pos.x, dino->pos.y, dino->pos.z))   kALook = 2.0;
+		kALook *= (1.f + (float)ObjectsOnLook / 6.f);
+
+		float kASmell = kR * ((kwind + 2.0f) / 2.0F) * ((klook + 3.f) / 3.f) * kscent;
+		if (kwind > 0) kASmell *= 2.0;
+		kASmell /= DinoInfo[cptr->CType].SmellK;
+
+		float kRes = MIN(kALook, kASmell);
+
+		if (kRes < 1.0)
+		{
+			kRes = MIN(kRes, kR);
+
+			if (preyFound) {
+				float dx = dino->pos.x - cptr->pos.x;
+				float dz = dino->pos.z - cptr->pos.z;
+				float tempDist = (float)sqrt(dx * dx + dz * dz);
+				if (tempDist < preyDist) {
+					preyDist = tempDist;
+					preyPos = dino->pos;
+				}
+			} else {
+				float dx = dino->pos.x - cptr->pos.x;
+				float dz = dino->pos.z - cptr->pos.z;
+				preyDist = (float)sqrt(dx * dx + dz * dz);
+				preyPos = dino->pos;
+				preyFound = true;
+			}
+
+		}
+	}
+
+	if (preyFound) {
+		cptr->tgx = preyPos.x;
+		cptr->tgz = preyPos.z;
+		cptr->tgtime = 0;
+		return true;
+	}
+
+	return false;
+}
+
+
+
+
+
+
+
+
+
+void AnimateHuntdog(TCharacter *cptr)
+{
+	NewPhase = FALSE;
+	int _Phase = cptr->Phase;
+	int _FTime = cptr->FTime;
+	float _tgalpha = cptr->tgalpha;
+//	if (cptr->AfraidTime) {
+//		cptr->AfraidTime = MAX(0, cptr->AfraidTime - TimeDt);
+//	}
+
+TBEGIN:
+	float targetx = cptr->tgx;
+	float targetz = cptr->tgz;
+	float targetdx = targetx - cptr->pos.x;
+	float targetdz = targetz - cptr->pos.z;
+
+	float tdist = (float)sqrt(targetdx * targetdx + targetdz * targetdz);
+
+	float playerdx = PlayerX - cptr->pos.x;
+	float playerdz = PlayerZ - cptr->pos.z;
+
+	float pdist = (float)sqrt(playerdx * playerdx + playerdz * playerdz);
+
+
+	if (GetLandUpH(cptr->pos.x, cptr->pos.z) - GetLandH(cptr->pos.x, cptr->pos.z) > DinoInfo[cptr->CType].waterLevel * cptr->scale)
+		cptr->StateF |= csONWATER;
+	else
+		cptr->StateF &= (!csONWATER);
+
+	if (cptr->Phase == DinoInfo[cptr->CType].killType[cptr->killType].anim && DinoInfo[cptr->CType].killTypeCount) goto NOTHINK;
+
+
+	//======== exploring area ===============//
+
+	if (cptr->State == 1){
+		cptr->tgx = PlayerX;
+		cptr->tgz = PlayerZ;
+		cptr->tgtime = 0;
+
+		if (pdist < 3 * 256) {
+			cptr->State = 0;
+			SetNewTargetPlace(cptr, 8048.f);
+		}
+
+	}
+
+	if (cptr->State == 0)
+	{
+
+		if (huntDogSearch(cptr)) {
+			cptr->State = 2;
+		} else {
+
+			if (tdist < 456)
+			{
+				SetNewTargetPlace(cptr, 8048.f);
+				goto TBEGIN;
+			}
+
+			if (pdist > 4 * 256) {
+				cptr->tgx = PlayerX;
+				cptr->tgz = PlayerZ;
+				cptr->tgtime = 0;
+			}
+
+			if (pdist > 8 * 256) {
+				cptr->State = 1;
+			}
+
+		}
+
+	}
+
+	if (cptr->State == 2) {
+
+		if (pdist > 17 * 256) {
+			cptr->State = 1;
+		}
+
+		if (tdist < 456)
+		{
+			if (!huntDogSearch(cptr)) {
+				cptr->State = 0;
+				SetNewTargetPlace(cptr, 8048.f);
+				goto TBEGIN;
+			}
+		}
+
+	}
+
+
+
+	//============================================//
+
+
+NOTHINK:
+
+	if (cptr->NoFindCnt) cptr->NoFindCnt--;
+	else
+	{
+		cptr->tgalpha = CorrectedAlpha(FindVectorAlpha(targetdx, targetdz), cptr->alpha);//FindVectorAlpha(targetdx, targetdz);
+		if (cptr->AfraidTime)
+		{
+			cptr->tgalpha += (float)sin(RealTime / 1024.f) / 3.f;
+			if (cptr->tgalpha < 0) cptr->tgalpha += 2 * pi;
+			if (cptr->tgalpha > 2 * pi) cptr->tgalpha -= 2 * pi;
+		}
+	}
+
+
+	LookForAWay(cptr, !DinoInfo[cptr->CType].canSwim, TRUE);
+	if (cptr->NoWayCnt > AIInfo[cptr->Clone].noWayCntMin)
+	{
+		cptr->NoWayCnt = 0;
+		cptr->NoFindCnt = AIInfo[cptr->Clone].noFindWayMed + rRand(AIInfo[cptr->Clone].noFindWayRange);
+	}
+
+	if (cptr->tgalpha < 0) cptr->tgalpha += 2 * pi;
+	if (cptr->tgalpha > 2 * pi) cptr->tgalpha -= 2 * pi;
+
+	//===============================================//
+
+	ProcessPrevPhase(cptr);
+
+	//======== select new phase =======================//
+	cptr->FTime += TimeDt;
+
+	if (cptr->FTime >= cptr->pinfo->Animation[cptr->Phase].AniTime)
+	{
+		cptr->FTime %= cptr->pinfo->Animation[cptr->Phase].AniTime;
+
+		NewPhase = TRUE;
+	}
+
+	if (cptr->Phase == 2 && _Phase != 2) {
+			cptr->Phase == cptr->roarAnim;
+			cptr->FTime = 0;
+			goto ENDPSELECT;
+	}
+
+	if (NewPhase){
+
+		if (cptr->State == 1) {
+			cptr->Phase = DinoInfo[cptr->CType].runAnim;
+		
+		} else if (cptr->State == 0){
+			if (DinoInfo[cptr->CType].idleCount) {
+
+				if (rRand(AIInfo[cptr->Clone].idleStartD) > 110) {
+					cptr->Phase = DinoInfo[cptr->CType].idleAnim[rRand(DinoInfo[cptr->CType].idleCount - 1)];
+					goto ENDPSELECT;
+				}
+				else {
+					cptr->Phase = DinoInfo[cptr->CType].walkAnim;
+				}
+
+			}
+			else {
+				cptr->Phase = DinoInfo[cptr->CType].walkAnim;
+			}
+
+		} else if (cptr->State == 2) {
+
+			if (rRand(AIInfo[cptr->Clone].idleStartD) > 120) {
+				cptr->Phase = cptr->roarAnim;
+				goto ENDPSELECT;
+			}
+			else {
+				cptr->Phase = DinoInfo[cptr->CType].runAnim;
+			}
+
+		}
+
+	}
+
+	if (DinoInfo[cptr->CType].canSwim) {
+		if (cptr->StateF & csONWATER) cptr->Phase = DinoInfo[cptr->CType].swimAnim;
+	}
+
+ENDPSELECT:
+
+	//====== process phase changing ===========//
+	if ((_Phase != cptr->Phase) || NewPhase)
+		ActivateCharacterFx(cptr);
+
+	if (_Phase != cptr->Phase)
+	{
+		if ((_Phase == DinoInfo[cptr->CType].runAnim ||
+			_Phase == DinoInfo[cptr->CType].walkAnim) &&
+			(cptr->Phase == DinoInfo[cptr->CType].runAnim ||
+				cptr->Phase == DinoInfo[cptr->CType].walkAnim))
+			cptr->FTime = _FTime * cptr->pinfo->Animation[cptr->Phase].AniTime / cptr->pinfo->Animation[_Phase].AniTime + 64;
+		else if (!NewPhase) cptr->FTime = 0;
+
+		if (cptr->PPMorphTime > 128)
+		{
+			cptr->PrevPhase = _Phase;
+			cptr->PrevPFTime = _FTime;
+			cptr->PPMorphTime = 0;
+		}
+	}
+
+	cptr->FTime %= cptr->pinfo->Animation[cptr->Phase].AniTime;
+
+
+
+	//========== rotation to tgalpha ===================//
+
+	float rspd, currspeed, tgbend;
+	float dalpha = (float)fabs(cptr->tgalpha - cptr->alpha);
+	float drspd = dalpha;
+	if (drspd > pi) drspd = 2 * pi - drspd;
+
+	//if (cptr->Phase == DinoInfo[cptr->CType].killType[cptr->killType].anim && DinoInfo[cptr->CType].killTypeCount) goto SKIPROT;
+
+	if (cptr->Phase == cptr->roarAnim) goto SKIPROT;
+
+	for (int i = 0; i < DinoInfo[cptr->CType].idleCount; i++) {
+		if (cptr->Phase == DinoInfo[cptr->CType].idleAnim[i]) goto SKIPROT;
+	}
+
+	if (drspd > 0.02)
+		if (cptr->tgalpha > cptr->alpha) currspeed = 0.2f + drspd * 1.0f;
+		else currspeed = -0.2f - drspd * 1.0f;
+	else currspeed = 0;
+
+	//only if fleeing?
+	//if (cptr->AfraidTime) currspeed *= 1.5;
+	if (dalpha > pi) currspeed *= -1;
+	if ((cptr->State & csONWATER) || cptr->Phase == DinoInfo[cptr->CType].walkAnim) currspeed /= 1.4f;
+
+	DeltaFunc(cptr->rspeed, currspeed, (float)TimeDt / 400.f);
+
+	tgbend = drspd / AIInfo[cptr->Clone].targetBendRotSpd;
+	if (tgbend > pi / AIInfo[cptr->Clone].targetBendMin) tgbend = pi / AIInfo[cptr->Clone].targetBendMin;
+
+	tgbend *= SGN(currspeed);
+	if (fabs(tgbend) > fabs(cptr->bend)) DeltaFunc(cptr->bend, tgbend, (float)TimeDt / AIInfo[cptr->Clone].targetBendDelta1);
+	else DeltaFunc(cptr->bend, tgbend, (float)TimeDt / AIInfo[cptr->Clone].targetBendDelta2);
+
+
+	rspd = cptr->rspeed * TimeDt / 612.f;
+	if (drspd < fabs(rspd)) cptr->alpha = cptr->tgalpha;
+	else cptr->alpha += rspd;
+
+
+	if (cptr->alpha > pi * 2) cptr->alpha -= pi * 2;
+	if (cptr->alpha < 0) cptr->alpha += pi * 2;
+
+SKIPROT:
+
+	//========== movement ==============================//
+	cptr->lookx = (float)cos(cptr->alpha);
+	cptr->lookz = (float)sin(cptr->alpha);
+
+	float curspeed = 0;
+	if (cptr->Phase == DinoInfo[cptr->CType].runAnim) curspeed = cptr->speed_run;
+	if (cptr->Phase == DinoInfo[cptr->CType].walkAnim) curspeed = cptr->speed_walk;
+
+	if (DinoInfo[cptr->CType].canSwim) {
+		if (cptr->Phase == DinoInfo[cptr->CType].swimAnim) curspeed = cptr->speed_swim;
+	}
+
+	if (cptr->Phase == DinoInfo[cptr->CType].killType[cptr->killType].anim && DinoInfo[cptr->CType].killTypeCount) curspeed = 0.0f;
+
+
+	if (drspd > pi / 2.f) curspeed *= 2.f - 2.f*drspd / pi;
+
+	//========== process speed =============//
+	curspeed *= cptr->scale;
+	if (curspeed > cptr->vspeed) DeltaFunc(cptr->vspeed, curspeed, TimeDt / 1024.f);
+	else DeltaFunc(cptr->vspeed, curspeed, TimeDt / 256.f);
+
+	MoveCharacter(cptr, cptr->lookx * cptr->vspeed * TimeDt,
+		cptr->lookz * cptr->vspeed * TimeDt, !DinoInfo[cptr->CType].canSwim, TRUE);
+
+
+	//============ Y movement =================//
+	if (cptr->StateF & csONWATER && DinoInfo[cptr->CType].canSwim)
+	{
+		cptr->pos.y = GetLandUpH(cptr->pos.x, cptr->pos.z) - (DinoInfo[cptr->CType].waterLevel + 20) * cptr->scale;
+		cptr->beta /= 2;
+		cptr->tggamma = 0;
+	}
+	else {
+		ThinkY_Beta_Gamma(cptr, 128, 64, 0.6f, AIInfo[cptr->Clone].yBetaGamma4);
+	}
+
+	if (cptr->Phase == DinoInfo[cptr->CType].walkAnim) cptr->tggamma += cptr->rspeed / AIInfo[cptr->Clone].walkTargetGammaRot;
+	else cptr->tggamma += cptr->rspeed / AIInfo[cptr->Clone].targetGammaRot;
+	DeltaFunc(cptr->gamma, cptr->tggamma, TimeDt / 2048.f);
+}
+
+
+
+
+
+
+
+
+
+
 //universal animate proc
 void AnimateHerbivore(TCharacter *cptr)
 {
@@ -5927,6 +6345,10 @@ void AnimateCharacters()
 			if (cptr->Health) AnimateClassicAmbient(cptr);
 			else AnimateDeadCommon(cptr);
 			break;
+		case AI_HUNTDOG:
+			if (cptr->Health) AnimateHuntdog(cptr);
+			else AnimateDeadCommon(cptr);
+			break;
 		case AI_GALL:
 			if (cptr->Health) AnimateClassicAmbient(cptr);
 			else AnimateDeadCommon(cptr);
@@ -6011,7 +6433,7 @@ void MakeNoise(Vector3d pos, float range)
 		if (cptr->Clone == AI_TREX)  //===== T-Rex
 			if (!cptr->State) cptr->State = 2;
 
-		if (cptr->Clone != AI_TREX && !DinoInfo[cptr->CType].Aquatic)
+		if (cptr->Clone != AI_TREX && !DinoInfo[cptr->CType].Aquatic && cptr->Clone != AI_HUNTDOG)
 		{
 			cptr->AfraidTime = (int)(10.f + (range - l) / 256.f) * 1024;
 			cptr->State = 2;
@@ -6339,6 +6761,28 @@ void PlaceCharacters()
 
 		ChCount++;
 	}
+
+	//place hunting dog
+
+	Characters[ChCount].CType = AI_to_CIndex[AI_HUNTDOG];
+	replacehuntDog:
+		Characters[ChCount].pos.x = PlayerX + siRand(5) * 256;
+		Characters[ChCount].pos.z = PlayerZ + siRand(5) * 256;
+		Characters[ChCount].pos.y = GetLandH(Characters[ChCount].pos.x,
+			Characters[ChCount].pos.z);
+		tr++;
+		if (tr > 10240) goto endHuntDog;
+
+		if (CheckPlaceCollisionP(Characters[ChCount].pos)) goto replacehuntDog;
+
+		Characters[ChCount].tgx = Characters[ChCount].pos.x;
+		Characters[ChCount].tgz = Characters[ChCount].pos.z;
+		Characters[ChCount].tgtime = 0;
+
+		ResetCharacter(&Characters[ChCount]);
+		ChCount++;
+	endHuntDog:
+
 
 
 	//MAP AMBIENTS
