@@ -2341,6 +2341,7 @@ boolean huntDogSearch(TCharacter *cptr)
 	bool preyFound = FALSE;
 	Vector3d preyPos;
 	float preyDist;
+	int preyNo;
 
 	//if (!MyHealth) return false;
 	if (TrophyMode) return false;
@@ -2417,12 +2418,14 @@ boolean huntDogSearch(TCharacter *cptr)
 				if (tempDist < preyDist) {
 					preyDist = tempDist;
 					preyPos = dino->pos;
+					preyNo = c;
 				}
 			} else {
 				float dx = dino->pos.x - cptr->pos.x;
 				float dz = dino->pos.z - cptr->pos.z;
 				preyDist = (float)sqrt(dx * dx + dz * dz);
 				preyPos = dino->pos;
+				preyNo = c;
 				preyFound = true;
 			}
 
@@ -2433,6 +2436,7 @@ boolean huntDogSearch(TCharacter *cptr)
 		cptr->tgx = preyPos.x;
 		cptr->tgz = preyPos.z;
 		cptr->tgtime = 0;
+		cptr->dogPrey = preyNo;
 		return true;
 	}
 
@@ -2526,7 +2530,7 @@ TBEGIN:
 			cptr->State = 1;
 		}
 
-		if (tdist < 456)
+		if (tdist < 456 || !Characters[cptr->dogPrey].Health)
 		{
 			if (!huntDogSearch(cptr)) {
 				cptr->State = 0;

@@ -216,11 +216,6 @@ deathtype{
  hear      = 0.0
  look      = 0.4
  shipdelta = 48
- fearCall = 13
- fearCall = 15
- fearCall = 16
- fearCall = 17
- fearCall = 18
  runspd = 1.6
  wlkspd = 0.40
  hunterAnim = 0
@@ -228,7 +223,6 @@ deathtype{
  aggress = 0
  killdist = 0
  onradar = TRUE
- trophy  = TRUE
  runAnim = 1
  walkAnim = 0
  idleAnim = 2
@@ -287,6 +281,7 @@ deathtype{
  file = 'ankylo1.car'
  ai        = 11
  clone 	   = 11
+ dogSmell  = TRUE
  scale0    = 1200
  scaleA    = 600
  mass      = 0.8
@@ -327,6 +322,7 @@ deathtype{
  file = 'stego.car'
  ai        = 12
  clone 	   = 12
+ dogSmell  = TRUE
  mass      = 7
  length    = 7
  radius    = 480
@@ -365,6 +361,7 @@ deathtype{
  file = 'allo_ii.car'
  ai        = 13
  clone 	   = 13
+ dogSmell  = TRUE
  mass      = 0.5
  length    = 4.2
  radius    = 256
@@ -411,6 +408,7 @@ killtype{
  file = 'chasmosa.car'
  ai        = 14
  clone 	   = 14
+ dogSmell  = TRUE
  mass      = 3
  length    = 5.0
  radius    = 400
@@ -450,6 +448,7 @@ deathtype{
  file = 'velo_iidc.car'
  ai        = 15
  clone 	   = 15
+ dogSmell  = TRUE
  mass      = 0.3
  length    = 4.0
  radius    = 256
@@ -495,6 +494,7 @@ killtype{
  file = 'spino_s.car'
  ai        = 16
  clone 	   = 16
+ dogSmell  = TRUE
  mass      = 0.3
  length    = 4.0
  radius    = 256
@@ -542,6 +542,7 @@ killtype{
  file = 'cerato1_s.car'
  ai        = 17
  clone 	   = 17
+ dogSmell  = TRUE
  mass      = 0.3
  length    = 4.0
  radius    = 256
@@ -586,6 +587,7 @@ killtype{
  file = 'tirex.car'
  ai        = 18
  clone 	   = 18
+ dogSmell  = TRUE
  mass      = 6
  length    = 12
  radius    = 400

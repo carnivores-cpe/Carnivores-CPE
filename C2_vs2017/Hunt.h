@@ -346,6 +346,8 @@ typedef struct _TCharacter
   int roarAnim;
   int waterDieAnim;
 
+  int dogPrey;
+
 } TCharacter;
 
 
