@@ -2537,7 +2537,7 @@ void DrawHMap()
     *((WORD*)lpVideoBuf + yy*1024 + xx+1) = 31<<10;
   }
 
-  if (RadarMode)
+  
     for (int c=0; c<ChCount; c++)
     {
 
@@ -2553,15 +2553,26 @@ void DrawHMap()
 		else continue;
 		
 		if (!Characters[c].Health) continue;
+		if (!RadarMode && Characters[c].AI != AI_HUNTDOG) continue;
 			xx = VideoCX - 128 + (int)Characters[c].pos.x / 1024;
 			yy = VideoCY - 128 + (int)Characters[c].pos.z / 1024;
 			if (yy <= 0 || yy >= WinH) continue;
 			if (xx <= 0 || xx >= WinW) continue;
-			*((WORD*)lpVideoBuf + yy * 1024 + xx) = 30 << 5;
-			*((WORD*)lpVideoBuf + yy * 1024 + xx + 1) = 30 << 5;
-			yy++;
-			*((WORD*)lpVideoBuf + yy * 1024 + xx) = 30 << 5;
-			*((WORD*)lpVideoBuf + yy * 1024 + xx + 1) = 30 << 5;
+
+			if (Characters[c].AI == AI_HUNTDOG) {
+				*((WORD*)lpVideoBuf + yy * 1024 + xx) = 31 << 10;
+				*((WORD*)lpVideoBuf + yy * 1024 + xx + 1) = 31 << 10;
+				yy++;
+				*((WORD*)lpVideoBuf + yy * 1024 + xx) = 31 << 10;
+				*((WORD*)lpVideoBuf + yy * 1024 + xx + 1) = 31 << 10;
+			}
+			else {
+				*((WORD*)lpVideoBuf + yy * 1024 + xx) = 30 << 5;
+				*((WORD*)lpVideoBuf + yy * 1024 + xx + 1) = 30 << 5;
+				yy++;
+				*((WORD*)lpVideoBuf + yy * 1024 + xx) = 30 << 5;
+				*((WORD*)lpVideoBuf + yy * 1024 + xx + 1) = 30 << 5;
+			}
 
     }
 }

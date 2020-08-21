@@ -5051,7 +5051,7 @@ void DrawHMap()
   CColor = 18<<GShift;
   DrawCircle(xx, yy, (ctViewR/4));
 
-  if (RadarMode)
+  
     for (c=0; c<ChCount; c++)
     {
       //if (Characters[c].AI<10) continue;
@@ -5065,11 +5065,20 @@ void DrawHMap()
 		else continue;
 
       if (!Characters[c].Health) continue;
+	  if (!RadarMode && Characters[c].AI != AI_HUNTDOG) continue;
       xx = VideoCX - 128 + (int)Characters[c].pos.x / 1024;
       yy = VideoCY - 128 + (int)Characters[c].pos.z / 1024;
       if (yy<=0 || yy>=WinH) goto endmap;
       if (xx<=0 || xx>=WinW) goto endmap;
-      DrawBox((WORD*)ddsd.lpSurface, lsw, xx, yy, 30<<GShift);
+
+	  if (Characters[c].AI == AI_HUNTDOG) {
+		  DrawBox((WORD*)ddsd.lpSurface, lsw, xx, yy, 30 << RShift);
+	  }
+	  else {
+		  DrawBox((WORD*)ddsd.lpSurface, lsw, xx, yy, 30 << GShift);
+	  }
+
+
     }
 
 endmap:

@@ -2585,10 +2585,16 @@ NOTHINK:
 		NewPhase = TRUE;
 	}
 
+	//even if not newphase...
 	if (cptr->Phase == 2 && _Phase != 2) {
-			cptr->Phase == cptr->roarAnim;
-			cptr->FTime = 0;
-			goto ENDPSELECT;
+
+		if (DinoInfo[cptr->CType].idle2Count > 0) {
+			cptr->Phase = DinoInfo[cptr->CType].idle2Anim[rRand(DinoInfo[cptr->CType].idle2Count - 1)];
+		}
+
+		//cptr->Phase == cptr->roarAnim;
+		cptr->FTime = 0;
+		goto ENDPSELECT;
 	}
 
 	if (NewPhase){
@@ -2615,7 +2621,12 @@ NOTHINK:
 		} else if (cptr->State == 2) {
 
 			if (rRand(AIInfo[cptr->Clone].idleStartD) > 120) {
-				cptr->Phase = cptr->roarAnim;
+
+				if (DinoInfo[cptr->CType].idle2Count > 0) {
+					cptr->Phase = DinoInfo[cptr->CType].idle2Anim[rRand(DinoInfo[cptr->CType].idle2Count - 1)];
+				}
+
+				//cptr->Phase = cptr->roarAnim;
 				goto ENDPSELECT;
 			}
 			else {
@@ -2626,9 +2637,11 @@ NOTHINK:
 
 	}
 
+	/*
 	if (DinoInfo[cptr->CType].canSwim) {
 		if (cptr->StateF & csONWATER) cptr->Phase = DinoInfo[cptr->CType].swimAnim;
 	}
+	*/
 
 ENDPSELECT:
 
@@ -2666,7 +2679,11 @@ ENDPSELECT:
 
 	//if (cptr->Phase == DinoInfo[cptr->CType].killType[cptr->killType].anim && DinoInfo[cptr->CType].killTypeCount) goto SKIPROT;
 
-	if (cptr->Phase == cptr->roarAnim) goto SKIPROT;
+	//if (cptr->Phase == cptr->roarAnim) goto SKIPROT;
+
+	for (int i = 0; i < DinoInfo[cptr->CType].idle2Count; i++) {
+		if (cptr->Phase == DinoInfo[cptr->CType].idle2Anim[i]) goto SKIPROT;
+	}
 
 	for (int i = 0; i < DinoInfo[cptr->CType].idleCount; i++) {
 		if (cptr->Phase == DinoInfo[cptr->CType].idleAnim[i]) goto SKIPROT;

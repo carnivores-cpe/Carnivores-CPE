@@ -226,8 +226,7 @@ deathtype{
  runAnim = 1
  walkAnim = 0
  idleAnim = 2
- smellAnim = 4
- roarAnim = 3
+ smellAnim = 3
 deathtype{
  dieAnim = 5
  sleepAnim = 6
