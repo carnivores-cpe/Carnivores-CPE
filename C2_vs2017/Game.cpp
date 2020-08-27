@@ -542,6 +542,7 @@ void ProcessCommandLine()
 
     if (strstr(s,"-debug"))   DEBUG = TRUE;
     if (strstr(s,"-double"))  DoubleAmmo = TRUE;
+	if (strstr(s, "-huntdog"))  DogMode = TRUE;
     if (strstr(s,"-radar"))   RadarMode = TRUE;
     if (strstr(s,"-tranq")) Tranq = TRUE;
     if (strstr(s,"-observ")) ObservMode = TRUE;

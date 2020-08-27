@@ -6784,25 +6784,24 @@ void PlaceCharacters()
 	}
 
 	//place hunting dog
-
-	Characters[ChCount].CType = AI_to_CIndex[AI_HUNTDOG];
-	replacehuntDog:
+	DogMode = false;
+	if (DogMode) {
+		tr = 0;
+		Characters[ChCount].CType = AI_to_CIndex[AI_HUNTDOG];
+		replacehuntDog:
 		Characters[ChCount].pos.x = PlayerX + siRand(5) * 256;
 		Characters[ChCount].pos.z = PlayerZ + siRand(5) * 256;
 		Characters[ChCount].pos.y = GetLandH(Characters[ChCount].pos.x,
 			Characters[ChCount].pos.z);
 		tr++;
-		if (tr > 10240) goto endHuntDog;
-
-		if (CheckPlaceCollisionP(Characters[ChCount].pos)) goto replacehuntDog;
-
+		if (tr < 10240 && CheckPlaceCollisionP(Characters[ChCount].pos)) goto replacehuntDog;
 		Characters[ChCount].tgx = Characters[ChCount].pos.x;
 		Characters[ChCount].tgz = Characters[ChCount].pos.z;
 		Characters[ChCount].tgtime = 0;
-
+		
 		ResetCharacter(&Characters[ChCount]);
 		ChCount++;
-	endHuntDog:
+	}
 
 
 

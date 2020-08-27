@@ -866,7 +866,8 @@ _EXTORNOT int answtime, answcall;
 
 _EXTORNOT BOOL ScentMode, CamoMode,
           RadarMode, LockLanding,
-          TrophyMode, DoubleAmmo;
+          TrophyMode, DoubleAmmo,
+	      DogMode;
 
 _EXTORNOT TTrophyRoom TrophyRoom;
 //_EXTORNOT TPlayerR PlayerR[16];
