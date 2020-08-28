@@ -5057,8 +5057,8 @@ void DrawHMap()
       //if (Characters[c].AI<10) continue;
       //if (! (TargetDino & (1<<Characters[c].AI)) ) continue;
 
-		if (DinoInfo[Characters[c].CType].onRadar) {
-			if (Characters[c].AI >= 10) {
+		if (DinoInfo[Characters[c].CType].onRadar > 0) {
+			if (Characters[c].AI >= 10 && DinoInfo[Characters[c].CType].onRadar == 1) {
 				if (!(TargetDino & (1 << Characters[c].AI))) continue;
 			}
 		}

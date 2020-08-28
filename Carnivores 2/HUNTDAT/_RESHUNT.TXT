@@ -222,7 +222,7 @@ deathtype{
  hunterOffset = 0
  aggress = 0
  killdist = 0
- onradar = TRUE
+ radar = 2
  runAnim = 1
  walkAnim = 0
  idleAnim = 2
@@ -262,7 +262,7 @@ deathtype{
  hunterOffset = 0
  aggress = 0
  killdist = 0
- onradar = TRUE
+ radar = 1
  trophy  = TRUE
  runAnim = 1
  walkAnim = 0
@@ -303,7 +303,7 @@ deathtype{
  hunterOffset = 0
  aggress = 0
  killdist = 0
- onradar = TRUE
+ radar = 1
  trophy  = TRUE
  runAnim = 0
  walkAnim = 1
@@ -342,7 +342,7 @@ deathtype{
  hunterOffset = 0
  aggress = 0
  killdist = 0
- onradar = TRUE
+ radar = 1
  trophy  = TRUE
  runAnim = 0
  walkAnim = 1
@@ -380,7 +380,7 @@ deathtype{
  jmpspd = 1.1
  aggress = 128
  killdist = 256
- onradar = TRUE
+ radar = 1
  trophy  = TRUE
  canswim = TRUE
  runAnim = 0
@@ -428,7 +428,7 @@ killtype{
  hunterOffset = 170
  aggress = 32
  killdist = 300
- onradar = TRUE
+ radar = 1
  trophy  = TRUE
  runAnim = 0
  walkAnim = 1
@@ -466,7 +466,7 @@ deathtype{
  jmpspd = 1.1
  aggress = 160
  killdist = 256
- onradar = TRUE
+ radar = 1
  trophy  = TRUE
  canswim = TRUE
  runAnim = 0
@@ -511,7 +511,7 @@ killtype{
  jmpspd = 1.4
  aggress = 140
  killdist = 300
- onradar = TRUE
+ radar = 1
  trophy  = TRUE
  canswim = TRUE
  runAnim = 0
@@ -557,7 +557,7 @@ killtype{
  swmspd = 0.75
  aggress = 200
  killdist = 350
- onradar = TRUE
+ radar = 1
  trophy  = TRUE
  canswim = TRUE
  runAnim = 1
@@ -600,7 +600,7 @@ killtype{
  wlkspd = 0.76
  swmspd = 0.70
  killdist = 380
- onradar = TRUE
+ radar = 1
  trophy  = TRUE
  canswim = TRUE
  runAnim = 0
@@ -632,6 +632,8 @@ mapambients {
  name = 'Brachiosaurus'
  file = 'dangerbrachikillertest.car'
  clone 	   = -5
+ canswim = TRUE
+ waterLevel = 550
  mass      = 9
  length    = 12
  radius    = 400

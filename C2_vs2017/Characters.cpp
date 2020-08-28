@@ -751,15 +751,15 @@ int CheckPlaceCollisionLandBrahi(TCharacter *cptr, Vector3d &v, BOOL wc, BOOL mc
 			return 1;
 		}
 	} else {
-		if ((GetLandUpH(v.x, v.z) - GetLandH(v.x, v.z)) > 550 ||
-			(GetLandUpH(v.x + 256, v.z) - GetLandH(v.x + 256, v.z)) > 550 ||
-			(GetLandUpH(v.x, v.z + 256) - GetLandH(v.x, v.z + 256)) > 550 ||
-			(GetLandUpH(v.x + 256, v.z + 256) - GetLandH(v.x + 256, v.z + 256)) > 550 ||
-			(GetLandUpH(v.x - 256, v.z) - GetLandH(v.x - 256, v.z)) > 550 ||
-			(GetLandUpH(v.x, v.z - 256) - GetLandH(v.x, v.z - 256)) > 550 ||
-			(GetLandUpH(v.x - 256, v.z - 256) - GetLandH(v.x - 256, v.z - 256)) > 550 ||
-			(GetLandUpH(v.x + 256, v.z - 256) - GetLandH(v.x + 256, v.z - 256)) > 550 ||
-			(GetLandUpH(v.x - 256, v.z + 256) - GetLandH(v.x - 256, v.z + 256)) > 550) return 1;
+		if ((GetLandUpH(v.x, v.z) - GetLandH(v.x, v.z)) > DinoInfo[cptr->CType].waterLevel ||
+			(GetLandUpH(v.x + 256, v.z) - GetLandH(v.x + 256, v.z)) > DinoInfo[cptr->CType].waterLevel ||
+			(GetLandUpH(v.x, v.z + 256) - GetLandH(v.x, v.z + 256)) > DinoInfo[cptr->CType].waterLevel ||
+			(GetLandUpH(v.x + 256, v.z + 256) - GetLandH(v.x + 256, v.z + 256)) > DinoInfo[cptr->CType].waterLevel ||
+			(GetLandUpH(v.x - 256, v.z) - GetLandH(v.x - 256, v.z)) > DinoInfo[cptr->CType].waterLevel ||
+			(GetLandUpH(v.x, v.z - 256) - GetLandH(v.x, v.z - 256)) > DinoInfo[cptr->CType].waterLevel ||
+			(GetLandUpH(v.x - 256, v.z - 256) - GetLandH(v.x - 256, v.z - 256)) > DinoInfo[cptr->CType].waterLevel ||
+			(GetLandUpH(v.x + 256, v.z - 256) - GetLandH(v.x + 256, v.z - 256)) > DinoInfo[cptr->CType].waterLevel ||
+			(GetLandUpH(v.x - 256, v.z + 256) - GetLandH(v.x - 256, v.z + 256)) > DinoInfo[cptr->CType].waterLevel) return 1;
 	}
 
 	float h = GetLandH(v.x, v.z);

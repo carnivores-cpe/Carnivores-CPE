@@ -473,7 +473,7 @@ typedef struct _TDinoInfo
   //int hunterDeathAnim, hunterDeathOffset;
   int aggress, killDist;
   int trophyCode;
-  bool onRadar;
+  int onRadar;
   float runspd, jmpspd, wlkspd, swmspd, flyspd, gldspd, tkfspd, lndspd;
 
   int maxGrad;

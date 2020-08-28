@@ -2268,7 +2268,7 @@ void ReadCharacterLine(FILE *stream, char *_value, char line[256], bool &regionO
 	if (strstr(line, "lndspd")) DinoInfo[TotalC].lndspd = (float)atof(value);
 	if (strstr(line, "aggress")) DinoInfo[TotalC].aggress = atoi(value);
 	if (strstr(line, "killdist")) DinoInfo[TotalC].killDist = atoi(value);
-	if (strstr(line, "onradar")) DinoInfo[TotalC].onRadar = TRUE;
+	if (strstr(line, "radar")) DinoInfo[TotalC].onRadar = atoi(value);
 	if (strstr(line, "dontswimaway")) DinoInfo[TotalC].dontSwimAway = TRUE;
 	if (strstr(line, "collisiondist")) DinoInfo[TotalC].maxGrad = atoi(value);
 	if (strstr(line, "runrotatespeed")) DinoInfo[TotalC].rotspdmulti = (float)atof(value);
