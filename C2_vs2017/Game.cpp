@@ -1296,6 +1296,7 @@ ENDTRACE:
   }
   else
   {
+	Characters[ShotDino].awareHunter = TRUE;
     Characters[ShotDino].AfraidTime = 60*1000;
     if (Characters[ShotDino].Clone!=AI_TREX || Characters[ShotDino].State==0)
       Characters[ShotDino].State = 2;

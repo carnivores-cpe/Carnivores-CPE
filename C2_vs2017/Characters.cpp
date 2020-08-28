@@ -241,6 +241,8 @@ void ResetCharacter(TCharacter *cptr)
 	cptr->BloodTTime = 0;
 	cptr->BloodTime = 0;
 
+	cptr->awareHunter = FALSE;
+
 	if (DinoInfo[cptr->CType].killTypeCount > 1) {
 		cptr->killType = rRand(DinoInfo[cptr->CType].killTypeCount - 1);
 	}
@@ -1986,7 +1988,8 @@ TBEGIN:
 	if (!MyHealth) cptr->State = 0;
 	if (cptr->State)
 	{
-		if (pdist > ctViewR * DinoInfo[cptr->CType].aggress + OptAgres / AIInfo[cptr->Clone].agressMulti || DinoInfo[cptr->CType].aggress <= 0)
+		if (pdist > ctViewR * DinoInfo[cptr->CType].aggress + OptAgres / AIInfo[cptr->Clone].agressMulti
+			|| DinoInfo[cptr->CType].aggress <= 0 || !cptr->awareHunter)
 		{
 			nv.x = playerdx;
 			nv.z = playerdz;
@@ -2281,7 +2284,7 @@ SKIPROT:
 	DeltaFunc(cptr->vspeed, curspeed, TimeDt / 500.f);
 
 	if (AIInfo[cptr->Clone].jumper) {
-		if (cptr->Phase == DinoInfo[cptr->CType].jumpAnim) cptr->vspeed = 1.1f;
+		if (cptr->Phase == DinoInfo[cptr->CType].jumpAnim) cptr->vspeed = cptr->speed_jump;
 	}
 
 	MoveCharacter(cptr, cptr->lookx * cptr->vspeed * TimeDt * cptr->scale,
@@ -2824,7 +2827,7 @@ TBEGIN:
 			goto TBEGIN;
 		}
 
-		if (pdist > 128 * DinoInfo[cptr->CType].aggress + OptAgres / 8 || DinoInfo[cptr->CType].aggress <= 0)
+		if (pdist > 128 * DinoInfo[cptr->CType].aggress + OptAgres / 8 || DinoInfo[cptr->CType].aggress <= 0 || !cptr->awareHunter)
 		{
 			nv.x = playerdx;
 			nv.z = playerdz;
@@ -5657,7 +5660,7 @@ TBEGIN:
 	if (!MyHealth) cptr->State = 0;
 	if (cptr->State)
 	{
-		if (pdist <= attackDist && playerAttackable && DinoInfo[cptr->CType].aggress > 0)
+		if (pdist <= attackDist && playerAttackable && DinoInfo[cptr->CType].aggress > 0 && cptr->awareHunter)
 		{
 			attacking = true;
 			cptr->tgx = PlayerX;
@@ -6337,6 +6340,7 @@ void AnimateCharacters()
 				}
 			}
 
+		if (cptr->AfraidTime <= 0) { cptr->awareHunter = FALSE; }
 
 		switch (cptr->Clone)
 		{
@@ -6451,14 +6455,23 @@ void MakeNoise(Vector3d pos, float range)
 		float l = VectorLength(SubVectors(cptr->pos, pos));
 		if (l > range) continue;
 
-		if (cptr->Clone == AI_TREX)  //===== T-Rex
-			if (!cptr->State) cptr->State = 2;
+
+		if (cptr->Clone == AI_TREX) {  //===== T-Rex
+			if (!cptr->State) {
+				cptr->State = 2;
+				cptr->awareHunter = TRUE;
+			}
+		}
 
 		if (cptr->Clone != AI_TREX && !DinoInfo[cptr->CType].Aquatic && cptr->Clone != AI_HUNTDOG)
 		{
 			cptr->AfraidTime = (int)(10.f + (range - l) / 256.f) * 1024;
-			cptr->State = 2;
+			if (cptr->State == 0) {
+				cptr->State = 2;
+			}
 			cptr->NoFindCnt = 0;
+
+			cptr->awareHunter = TRUE;
 		}
 	}
 }
@@ -6494,7 +6507,9 @@ void CheckAfraid()
 		TCharacter *cptr = &Characters[c];
 		if (!cptr->Health) continue;
 		if (cptr->Clone < 10) continue;
-		if (cptr->AfraidTime || cptr->State == 1) continue;
+		//if (cptr->AfraidTime || cptr->State == 1) continue;
+
+		if (cptr->Clone == AI_TREX && (cptr->AfraidTime || cptr->State == 1)) continue; //here to check if hunter detected once it starts running from fear call, trex doesn't like it tho
 
 		rlook = SubVectors(ppos, cptr->pos);
 		kR = VectorLength(rlook) / 256.f / (32.f + ctViewR / 2);
@@ -6559,7 +6574,10 @@ void CheckAfraid()
 
 			kRes = MIN(kRes, kR);
 			cptr->AfraidTime = (int)(1.0 / (kRes + 0.1) * 10.f * 1000.f);
-			cptr->State = 2;
+			if (cptr->State==0) {
+				cptr->State = 2;
+			}
+			cptr->awareHunter = TRUE;
 			if (cptr->Clone == AI_TREX) //===== T-Rex
 				if (kALook > kASmell) cptr->State = 3;
 			cptr->NoFindCnt = 0;
