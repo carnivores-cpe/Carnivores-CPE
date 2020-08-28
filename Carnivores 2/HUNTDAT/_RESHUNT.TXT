@@ -144,6 +144,7 @@ deathtype{
  file   = 'dimor2.car'
  ai     = 3
  clone 	= 3
+ waterLevel = 40
  health = 1
  mass   = 0.05
  flyspd = 1.5
@@ -161,6 +162,7 @@ deathtype{
  file   = 'ptera.car'
  ai     = 4
  clone 	= 4
+ waterLevel = 40
  health = 1
  mass   = 0.25
  flyspd = 1.5
@@ -876,6 +878,7 @@ styInRgn  = TRUE
  name = 'Ichthyornis'
  file = 'icth30.car'
  clone 	   = -2
+ waterLevel = 40
  scale0    = 500
  scaleA    = 0
  mass      = 0.2

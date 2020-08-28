@@ -4897,7 +4897,7 @@ TBEGIN:
 	float wy = GetLandUpH(cptr->pos.x,
 		cptr->pos.z) - GetLandH(cptr->pos.x,
 			cptr->pos.z);
-	float swimLevel = 40;
+	float swimLevel = DinoInfo[cptr->CType].waterLevel;// 40;
 
 	if (NewPhase)
 	{
@@ -5499,7 +5499,7 @@ void AnimateIcthDead(TCharacter *cptr)
 
 	float wh = GetLandUpH(cptr->pos.x, cptr->pos.z);
 	float lh = GetLandH(cptr->pos.x, cptr->pos.z);
-	BOOL OnWaterQ = (wh - lh > 10);
+	BOOL OnWaterQ = (wh > lh);
 	if (!DinoInfo[cptr->CType].waterDieCount) OnWaterQ = false;
 
 	cptr->FTime += TimeDt;
