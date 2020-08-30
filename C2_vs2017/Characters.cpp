@@ -2054,11 +2054,18 @@ TBEGIN:
 	{
 		if (cptr->Clone == AI_VELO || cptr->Clone == AI_CERAT) cptr->AfraidTime = 0;
 
+
+
+		//if (cptr->Pack > 1) {}
+
 		if (tdist < 456)
 		{
 			SetNewTargetPlace(cptr, 8048.f);
 			goto TBEGIN;
 		}
+
+
+
 	}
 
 NOTHINK:
@@ -6256,11 +6263,10 @@ void AnimateCharacters()
 	//packs
 	for (int packN = 0; packN < PackCount; packN++) {
 
-		//PrintLog("PACKTESTING_");
-		Packs[packN].alert = Packs[packN]._alert;
-		Packs[packN].attack = Packs[packN]._attack;
-		Packs[packN]._alert = FALSE;
-		Packs[packN]._attack = FALSE;
+		Packs[packN]._alert = Packs[packN].alert;
+		Packs[packN]._attack = Packs[packN].attack;
+		Packs[packN].alert = FALSE;
+		Packs[packN].attack = FALSE;
 
 	}
 
@@ -6271,8 +6277,8 @@ void AnimateCharacters()
 		cptr->tgtime += TimeDt;
 
 		// replace pack leader
-		if (cptr->Health && cptr->pack >= 1) {
-			if (!Packs[cptr->pack].leader->Health) Packs[cptr->pack].leader = cptr;
+		if (cptr->Health && cptr->packId >= 0) {
+			if (!Packs[cptr->packId].leader->Health) Packs[cptr->packId].leader = cptr;
 		}
 
 
@@ -6643,11 +6649,46 @@ void spawnPositionPackLeader(int RegionNo) {
 		+ abs(rRand(Region[RegionNo].YMax - Region[RegionNo].YMin) * 256);
 }
 
-void spawnPositionPackFollower(int RegionNo, int leader) {
+
+void spawnPositionPackFollower(int leader) {
 	//spawn on same spot, so the pack doesn't spawn over a cliff edge or something
 	Characters[ChCount].pos.x = Characters[leader].pos.x;
 	Characters[ChCount].pos.z = Characters[leader].pos.z;
 }
+
+
+void spawnHuntable(int &tr, int leader) {
+
+replace2:
+	if (leader >= 0) {
+		spawnPositionPackFollower(leader);
+	}
+	else { //scrap this if we use huntable regions?
+		Characters[ChCount].pos.x = 512 * 256 + siRand(50 * 256) * 10;
+		Characters[ChCount].pos.z = 512 * 256 + siRand(50 * 256) * 10;
+	}
+
+	Characters[ChCount].pos.y = GetLandH(Characters[ChCount].pos.x,
+		Characters[ChCount].pos.z);
+	tr++;
+	if (tr > 10240) return;
+
+	if (fabs(Characters[ChCount].pos.x - PlayerX) +
+		fabs(Characters[ChCount].pos.z - PlayerZ) < 256 * 40)
+		goto replace2;
+
+	if (CheckPlaceCollisionP(Characters[ChCount].pos)) goto replace2;
+
+	Characters[ChCount].tgx = Characters[ChCount].pos.x;
+	Characters[ChCount].tgz = Characters[ChCount].pos.z;
+	Characters[ChCount].tgtime = 0;
+
+	ResetCharacter(&Characters[ChCount]);
+	ChCount++;
+
+
+}
+
 
 void spawnMapAmbient(int DinoInfoIndex, int RegionNo, int &tr, int leader) {
 
@@ -6656,7 +6697,7 @@ void spawnMapAmbient(int DinoInfoIndex, int RegionNo, int &tr, int leader) {
 replaceSMA:
 
 	if (leader >= 0) {
-		spawnPositionPackFollower(RegionNo, leader);
+		spawnPositionPackFollower(leader);
 	}
 	else {
 		spawnPositionPackLeader(RegionNo);
@@ -6740,18 +6781,6 @@ replaceSMA:
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
 void PlaceCharacters()
 {
 	int c, tr;
@@ -6787,6 +6816,7 @@ void PlaceCharacters()
 
 		if (CheckPlaceCollisionP(Characters[ChCount].pos)) goto replace1;
 
+		Characters[ChCount].packId = -1;
 		ResetCharacter(&Characters[ChCount]);
 
 		if (Characters[ChCount].Clone == AI_DIMET ||
@@ -6817,6 +6847,7 @@ void PlaceCharacters()
 		Characters[ChCount].tgz = Characters[ChCount].pos.z;
 		Characters[ChCount].tgtime = 0;
 		
+		Characters[ChCount].packId = -1;
 		ResetCharacter(&Characters[ChCount]);
 		ChCount++;
 	}
@@ -6864,14 +6895,14 @@ void PlaceCharacters()
 					Packs[PackCount].attack = FALSE;
 					Packs[PackCount]._alert = FALSE;
 					Packs[PackCount]._attack = FALSE;
-					Characters[leaderIndex].pack = PackCount;
+					Characters[leaderIndex].packId = PackCount;
 					for (int packN = 0; packN < packNo - 1; packN++) {
-						Characters[ChCount].pack = PackCount;
+						Characters[ChCount].packId = PackCount;
 						spawnMapAmbient(DinoInfoIndex, RegionNo, tr, leaderIndex);
 					}
 					PackCount++;
 				}
-				else Characters[leaderIndex].pack = -1;
+				else Characters[leaderIndex].packId = -1;
 
 				if (tr > 10500) break;
 
@@ -6907,26 +6938,44 @@ void PlaceCharacters()
 		//else Characters[ChCount].CType = AI_to_CIndex[ TDi[rRand(TC-1)] ];
 
 		//Characters[ChCount].CType = AI_to_CIndex[10] + 7;//rRand(3);
-	replace2:
-		Characters[ChCount].pos.x = 512 * 256 + siRand(50 * 256) * 10;
-		Characters[ChCount].pos.z = 512 * 256 + siRand(50 * 256) * 10;
-		Characters[ChCount].pos.y = GetLandH(Characters[ChCount].pos.x,
-			Characters[ChCount].pos.z);
-		tr++;
-		if (tr > 10240) break;
 
-		if (fabs(Characters[ChCount].pos.x - PlayerX) +
-			fabs(Characters[ChCount].pos.z - PlayerZ) < 256 * 40)
-			goto replace2;
+		
 
-		if (CheckPlaceCollisionP(Characters[ChCount].pos)) goto replace2;
 
-		Characters[ChCount].tgx = Characters[ChCount].pos.x;
-		Characters[ChCount].tgz = Characters[ChCount].pos.z;
-		Characters[ChCount].tgtime = 0;
+		int DinoInfoIndex = Characters[ChCount].CType;
 
-		ResetCharacter(&Characters[ChCount]);
-		ChCount++;
+		int leaderIndex = ChCount;
+		// pack leaders
+		spawnHuntable(tr, -1);
+
+		//pack size
+		int packNo = 1;
+		if (DinoInfo[DinoInfoIndex].packMax > 1) {
+			packNo = DinoInfo[DinoInfoIndex].packMin;
+			for (int i = 0; i < DinoInfo[DinoInfoIndex].packMax - DinoInfo[DinoInfoIndex].packMin; i++) {
+				if (1 == rRand(2)) packNo++;
+			}
+		}
+
+		//pack members
+		if (packNo > 1) {
+			Packs[PackCount].leader = &Characters[leaderIndex];
+			Packs[PackCount].alert = FALSE;
+			Packs[PackCount].attack = FALSE;
+			Packs[PackCount]._alert = FALSE;
+			Packs[PackCount]._attack = FALSE;
+			Characters[leaderIndex].packId = PackCount;
+			for (int packN = 0; packN < packNo - 1; packN++) {
+				Characters[ChCount].packId = PackCount;
+				Characters[ChCount].CType = DinoInfoIndex;
+				spawnHuntable(tr, leaderIndex);
+			}
+			PackCount++;
+		}
+		else Characters[leaderIndex].packId = -1;
+
+		if (tr > 10500) break;
+
 	}
 
 	PrintLog("\n");

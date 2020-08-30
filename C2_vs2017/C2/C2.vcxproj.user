@@ -5,4 +5,12 @@
     <LocalDebuggerWorkingDirectory>..\..\C2 Source Testing - Copy\Carnivores 2</LocalDebuggerWorkingDirectory>
     <DebuggerFlavor>WindowsLocalDebugger</DebuggerFlavor>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release 3DFX|Win32'">
+    <LocalDebuggerCommandArguments>prj=huntdat\areas\area1 reg=0 din=1 wep=16 dtm=1</LocalDebuggerCommandArguments>
+    <DebuggerFlavor>WindowsLocalDebugger</DebuggerFlavor>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release D3D|Win32'">
+    <LocalDebuggerCommandArguments>prj=huntdat\areas\area1 reg=0 din=1 wep=16 dtm=1</LocalDebuggerCommandArguments>
+    <DebuggerFlavor>WindowsLocalDebugger</DebuggerFlavor>
+  </PropertyGroup>
 </Project>

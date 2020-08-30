@@ -777,7 +777,20 @@ HRESULT CreateDirect3D( HWND hwnd )
     OptRes = 3;
     hRes = lpDD->SetDisplayMode( WinW, WinH, 16 );
   }
-  if (FAILED(hRes)) DoHalt("Error setting display mode\n");
+  if (FAILED(hRes)) {
+	  if (hRes == DDERR_GENERIC) DoHalt("Error setting display mode: DDERR_GENERIC\n");
+	  if (hRes == DDERR_INVALIDMODE) DoHalt("Error setting display mode: DDERR_INVALIDMODE\n");
+	  if (hRes == DDERR_INVALIDOBJECT) DoHalt("Error setting display mode: DDERR_INVALIDOBJECT\n");
+	  if (hRes == DDERR_INVALIDPARAMS) DoHalt("Error setting display mode: DDERR_INVALIDPARAMS\n");
+	  if (hRes == DDERR_LOCKEDSURFACES) DoHalt("Error setting display mode: DDERR_LOCKEDSURFACES\n");
+	  if (hRes == DDERR_NOEXCLUSIVEMODE) DoHalt("Error setting display mode: DDERR_NOEXCLUSIVEMODE\n");
+	  if (hRes == DDERR_SURFACEBUSY) DoHalt("Error setting display mode: DDERR_SURFACEBUSY\n");
+	  if (hRes == DDERR_UNSUPPORTED) DoHalt("Error setting display mode: DDERR_UNSUPPORTED\n");
+	  if (hRes == DDERR_UNSUPPORTEDMODE) DoHalt("Error setting display mode: DDERR_UNSUPPORTEDMODE\n");
+	  if (hRes == DDERR_WASSTILLDRAWING) DoHalt("Error setting display mode: DDERR_WASSTILLDRAWINGn");
+	  DoHalt("Error setting display mode\n");
+  }
+
   wsprintf(logt, "Set Display mode %dx%d, 16bpp\n", WinW, WinH);
   PrintLog(logt);
 

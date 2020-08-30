@@ -338,7 +338,7 @@ typedef struct _TCharacter
 
   int RType;
 
-  int pack;
+  int packId;
   bool followLeader;
 
   int killType;

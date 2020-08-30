@@ -1,0 +1,7 @@
+Weapon : Double-barelled shotgun
+
+This weapon is same as shotgun, but can
+make two shots almost simultaneously. 
+However, it makes a lot of noise, so it 
+will scare all plant eaters and some small
+carnivores, causing them to run away.
