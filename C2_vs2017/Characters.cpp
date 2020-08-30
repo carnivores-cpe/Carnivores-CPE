@@ -6271,7 +6271,7 @@ void AnimateCharacters()
 		cptr->tgtime += TimeDt;
 
 		// replace pack leader
-		if (cptr->Health && cptr->pack >= 0) {
+		if (cptr->Health && cptr->pack >= 1) {
 			if (!Packs[cptr->pack].leader->Health) Packs[cptr->pack].leader = cptr;
 		}
 
