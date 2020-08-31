@@ -2056,9 +2056,33 @@ TBEGIN:
 
 
 
-		//if (cptr->Pack > 1) {}
+		if (cptr->packId >= 0) {
+			float leaderdx = Packs[cptr->packId].leader->pos.x - cptr->pos.x;
+			float leaderdz = Packs[cptr->packId].leader->pos.z - cptr->pos.z;
+			float leaderdist = (float)sqrt(leaderdx * leaderdx + leaderdz * leaderdz);
 
-		if (tdist < 456)
+			if (cptr->followLeader) {
+				if (leaderdist < DinoInfo[cptr->CType].packDensity * 128 * 0.6)
+				{
+					cptr->followLeader = false;
+					SetNewTargetPlace(cptr, 8048.f);
+					goto TBEGIN;
+				}
+			}
+			else {
+				if (leaderdist > DinoInfo[cptr->CType].packDensity * 128 * 1.3)
+				{
+					cptr->followLeader = true;
+				}
+			}
+
+		}
+
+		if (cptr->followLeader) {
+			cptr->tgx = Packs[cptr->packId].leader->pos.x;
+			cptr->tgz = Packs[cptr->packId].leader->pos.z;
+		}
+		else if (tdist < 456)
 		{
 			SetNewTargetPlace(cptr, 8048.f);
 			goto TBEGIN;
@@ -2890,7 +2914,31 @@ TBEGIN:
 	{
 		cptr->AfraidTime = 0;
 
-		if (tdist < 456)
+		if (cptr->packId >=0) {
+			float leaderdx = Packs[cptr->packId].leader->pos.x - cptr->pos.x;
+			float leaderdz = Packs[cptr->packId].leader->pos.z - cptr->pos.z;
+			float leaderdist = (float)sqrt(leaderdx * leaderdx + leaderdz * leaderdz);
+
+			if (cptr->followLeader) {
+				if (leaderdist < DinoInfo[cptr->CType].packDensity * 128 * 0.6)
+				{
+					cptr->followLeader = false;
+					SetNewTargetPlace(cptr, 8048.f);
+					goto TBEGIN;
+				}
+			} else{
+				if (leaderdist > DinoInfo[cptr->CType].packDensity * 128 * 1.3)
+				{
+					cptr->followLeader = true;
+				}
+			}
+
+		}
+
+		if (cptr->followLeader) {
+			cptr->tgx = Packs[cptr->packId].leader->pos.x;
+			cptr->tgz = Packs[cptr->packId].leader->pos.z;
+		} else if (tdist < 456)
 		{
 			SetNewTargetPlace(cptr, 8048.f);
 			goto TBEGIN;
@@ -3582,12 +3630,41 @@ TBEGIN:
 
 	}
 
-	if (!cptr->State)
-		if (tdist < 1224)
+	if (!cptr->State) {
+
+
+		if (cptr->packId >= 0) {
+			float leaderdx = Packs[cptr->packId].leader->pos.x - cptr->pos.x;
+			float leaderdz = Packs[cptr->packId].leader->pos.z - cptr->pos.z;
+			float leaderdist = (float)sqrt(leaderdx * leaderdx + leaderdz * leaderdz);
+
+			if (cptr->followLeader) {
+				if (leaderdist < DinoInfo[cptr->CType].packDensity * 128 * 0.6)
+				{
+					cptr->followLeader = false;
+					SetNewTargetPlace(cptr, 8048.f);
+					goto TBEGIN;
+				}
+			}
+			else {
+				if (leaderdist > DinoInfo[cptr->CType].packDensity * 128 * 1.3)
+				{
+					cptr->followLeader = true;
+				}
+			}
+
+		}
+
+		if (cptr->followLeader) {
+			cptr->tgx = Packs[cptr->packId].leader->pos.x;
+			cptr->tgz = Packs[cptr->packId].leader->pos.z;
+		}
+		else if (tdist < 1224)
 		{
 			SetNewTargetPlace(cptr, 8048.f);
 			goto TBEGIN;
 		}
+	}
 
 
 NOTHINK:
@@ -3897,8 +3974,33 @@ TBEGIN:
 			goto TBEGIN;
 		}
 
+		if (cptr->packId >= 0) {
+			float leaderdx = Packs[cptr->packId].leader->pos.x - cptr->pos.x;
+			float leaderdz = Packs[cptr->packId].leader->pos.z - cptr->pos.z;
+			float leaderdist = (float)sqrt(leaderdx * leaderdx + leaderdz * leaderdz);
 
-		if (tdist < 456)
+			if (cptr->followLeader) {
+				if (leaderdist < DinoInfo[cptr->CType].packDensity * 128 * 0.6)
+				{
+					cptr->followLeader = false;
+					SetNewTargetPlace(cptr, 8048.f);
+					goto TBEGIN;
+				}
+			}
+			else {
+				if (leaderdist > DinoInfo[cptr->CType].packDensity * 128 * 1.3)
+				{
+					cptr->followLeader = true;
+				}
+			}
+
+		}
+
+		if (cptr->followLeader) {
+			cptr->tgx = Packs[cptr->packId].leader->pos.x;
+			cptr->tgz = Packs[cptr->packId].leader->pos.z;
+		}
+		else if (tdist < 456)
 		{
 			SetNewTargetPlace(cptr, 2048.f);
 			goto TBEGIN;
@@ -6123,7 +6225,37 @@ TBEGIN:
 
 
 	//======== exploring area ===============//
-	if (tdist < 1024)
+
+
+
+
+	if (cptr->packId >= 0) {
+		float leaderdx = Packs[cptr->packId].leader->pos.x - cptr->pos.x;
+		float leaderdz = Packs[cptr->packId].leader->pos.z - cptr->pos.z;
+		float leaderdist = (float)sqrt(leaderdx * leaderdx + leaderdz * leaderdz);
+
+		if (cptr->followLeader) {
+			if (leaderdist < DinoInfo[cptr->CType].packDensity * 128 * 0.6)
+			{
+				cptr->followLeader = false;
+				SetNewTargetPlace(cptr, 8048.f);
+				goto TBEGIN;
+			}
+		}
+		else {
+			if (leaderdist > DinoInfo[cptr->CType].packDensity * 128 * 1.3)
+			{
+				cptr->followLeader = true;
+			}
+		}
+
+	}
+
+	if (cptr->followLeader) {
+		cptr->tgx = Packs[cptr->packId].leader->pos.x;
+		cptr->tgz = Packs[cptr->packId].leader->pos.z;
+	}
+	else if (tdist < 1024)
 	{
 		SetNewTargetPlace(cptr, 4048.f);
 		goto TBEGIN;

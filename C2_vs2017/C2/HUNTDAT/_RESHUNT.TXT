@@ -717,7 +717,7 @@ deathtype{
  }
  packMax = 5
  packMin = 3
- packDensity = 1000
+ packDensity = 25
 }
 
 {
