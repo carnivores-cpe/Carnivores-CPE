@@ -7123,8 +7123,10 @@ void PlaceCharacters()
 				int packNo = 1;
 				if (DinoInfo[DinoInfoIndex].packMax > 1) {
 					packNo = DinoInfo[DinoInfoIndex].packMin;
-					for (int i = 0; i < DinoInfo[DinoInfoIndex].packMax - DinoInfo[DinoInfoIndex].packMin; i++) {
-						if (1 == rRand(2)) packNo++;
+					if (DinoInfo[DinoInfoIndex].packMax != DinoInfo[DinoInfoIndex].packMin) {
+						for (int i = 0; i < DinoInfo[DinoInfoIndex].packMax - DinoInfo[DinoInfoIndex].packMin; i++) {
+							if (1 == rRand(2)) packNo++;
+						}
 					}
 				}
 
@@ -7192,8 +7194,10 @@ void PlaceCharacters()
 		int packNo = 1;
 		if (DinoInfo[DinoInfoIndex].packMax > 1) {
 			packNo = DinoInfo[DinoInfoIndex].packMin;
-			for (int i = 0; i < DinoInfo[DinoInfoIndex].packMax - DinoInfo[DinoInfoIndex].packMin; i++) {
-				if (1 == rRand(2)) packNo++;
+			if(DinoInfo[DinoInfoIndex].packMax != DinoInfo[DinoInfoIndex].packMin){
+				for (int i = 0; i < DinoInfo[DinoInfoIndex].packMax - DinoInfo[DinoInfoIndex].packMin; i++) {
+					if (1 == rRand(2)) packNo++;
+				}
 			}
 		}
 
