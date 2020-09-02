@@ -3983,7 +3983,7 @@ TBEGIN:
 				if (leaderdist < DinoInfo[cptr->CType].packDensity * 128 * 0.6)
 				{
 					cptr->followLeader = false;
-					SetNewTargetPlace(cptr, 8048.f);
+					SetNewTargetPlace(cptr, 2048.f);
 					goto TBEGIN;
 				}
 			}
@@ -4240,10 +4240,43 @@ TBEGIN:
 			cptr->AfraidTime = (int)(10.f) * 1024;
 			//goto TBEGIN;
 		}
-		else if (tdist2 < 456) // Ignore vertical
-		{
-			SetNewTargetPlaceFish(cptr, 1024.f);
-			goto TBEGIN;
+		else {
+
+			if (cptr->packId >= 0) {
+				float leaderdx = Packs[cptr->packId].leader->pos.x - cptr->pos.x;
+				float leaderdz = Packs[cptr->packId].leader->pos.z - cptr->pos.z;
+				float leaderdist = (float)sqrt(leaderdx * leaderdx + leaderdz * leaderdz);
+
+
+				if (cptr->followLeader) {
+					if (leaderdist < DinoInfo[cptr->CType].packDensity * 128 * 0.6)
+					{
+						cptr->followLeader = false;
+						SetNewTargetPlaceFish(cptr, 1024.f);
+						goto TBEGIN;
+					}
+				}
+				else {
+					if (leaderdist > DinoInfo[cptr->CType].packDensity * 128 * 1.3)
+					{
+						cptr->followLeader = true;
+						cptr->turny = 0;
+						cptr->lastTBeta = cptr->beta;
+					}
+				}
+
+			}
+
+			if (cptr->followLeader) {
+				cptr->tgx = Packs[cptr->packId].leader->pos.x;
+				cptr->tgz = Packs[cptr->packId].leader->pos.z;
+				cptr->tdepth = Packs[cptr->packId].leader->depth;
+
+			} else if (tdist2 < 456) // Ignore vertical
+			{
+				SetNewTargetPlaceFish(cptr, 1024.f);
+				goto TBEGIN;
+			}
 		}
 	}
 
@@ -4969,26 +5002,47 @@ TBEGIN:
 			goto TBEGIN;
 		}
 
-		int targetNear = 456;
-
-		if (cptr->Phase == DinoInfo[cptr->CType].flyAnim || cptr->Phase == DinoInfo[cptr->CType].glideAnim) {
-			targetNear = 2024;
-		}
-
-		if (tdist < targetNear)
-		{
-			//if (!cptr->AfraidTime)
-			//{
-			//	SetNewTargetPlace_Icth(cptr, 2048.f);
-			//}
-			//else
-			//{
-			SetNewTargetPlace_Icth(cptr, 2048.f);
-			//}
-			goto TBEGIN;
-
-		}
 	}
+
+	int targetNear = 456;
+
+	if (cptr->Phase == DinoInfo[cptr->CType].flyAnim || cptr->Phase == DinoInfo[cptr->CType].glideAnim) {
+		targetNear = 2024;
+	}
+
+	
+	if (cptr->packId >= 0) {
+		float leaderdx = Packs[cptr->packId].leader->pos.x - cptr->pos.x;
+		float leaderdz = Packs[cptr->packId].leader->pos.z - cptr->pos.z;
+		float leaderdist = (float)sqrt(leaderdx * leaderdx + leaderdz * leaderdz);
+
+		if (cptr->followLeader) {
+			if (leaderdist < DinoInfo[cptr->CType].packDensity * 128 * 0.6)
+			{
+				cptr->followLeader = false;
+				SetNewTargetPlace(cptr, 4048.f);
+				goto TBEGIN;
+			}
+		}
+		else {
+			if (leaderdist > DinoInfo[cptr->CType].packDensity * 128 * 1.3)
+			{
+				cptr->followLeader = true;
+			}
+		}
+
+	}
+
+	if (cptr->followLeader) {
+		cptr->tgx = Packs[cptr->packId].leader->pos.x;
+		cptr->tgz = Packs[cptr->packId].leader->pos.z;
+	}
+	else if (tdist < targetNear)
+	{
+		SetNewTargetPlace_Icth(cptr, 2048.f);
+		goto TBEGIN;
+	}
+	
 
 
 	//===============================================//
@@ -5824,7 +5878,35 @@ TBEGIN:
 	{
 		attacking = false;
 		cptr->AfraidTime = 0;
-		if (tdist < 256)
+
+
+		if (cptr->packId >= 0) {
+			float leaderdx = Packs[cptr->packId].leader->pos.x - cptr->pos.x;
+			float leaderdz = Packs[cptr->packId].leader->pos.z - cptr->pos.z;
+			float leaderdist = (float)sqrt(leaderdx * leaderdx + leaderdz * leaderdz);
+
+			if (cptr->followLeader) {
+				if (leaderdist < DinoInfo[cptr->CType].packDensity * 128 * 0.6)
+				{
+					cptr->followLeader = false;
+					SetNewTargetPlace_Brahi(cptr, 2048.f);
+					goto TBEGIN;
+				}
+			}
+			else {
+				if (leaderdist > DinoInfo[cptr->CType].packDensity * 128 * 1.3)
+				{
+					cptr->followLeader = true;
+				}
+			}
+
+		}
+
+		if (cptr->followLeader) {
+			cptr->tgx = Packs[cptr->packId].leader->pos.x;
+			cptr->tgz = Packs[cptr->packId].leader->pos.z;
+		}
+		else if (tdist < 256)
 		{
 			SetNewTargetPlace_Brahi(cptr, 2048.f);
 			goto TBEGIN;
@@ -6047,7 +6129,33 @@ TBEGIN:
 	float tdist = (float)sqrt(targetdx * targetdx + targetdz * targetdz);
 
 
-	if (tdist < 256)
+	if (cptr->packId >= 0) {
+		float leaderdx = Packs[cptr->packId].leader->pos.x - cptr->pos.x;
+		float leaderdz = Packs[cptr->packId].leader->pos.z - cptr->pos.z;
+		float leaderdist = (float)sqrt(leaderdx * leaderdx + leaderdz * leaderdz);
+
+		if (cptr->followLeader) {
+			if (leaderdist < DinoInfo[cptr->CType].packDensity * 128 * 0.6)
+			{
+				cptr->followLeader = false;
+				SetNewTargetPlace_Brahi(cptr, 2048.f);
+				goto TBEGIN;
+			}
+		}
+		else {
+			if (leaderdist > DinoInfo[cptr->CType].packDensity * 128 * 1.3)
+			{
+				cptr->followLeader = true;
+			}
+		}
+
+	}
+
+	if (cptr->followLeader) {
+		cptr->tgx = Packs[cptr->packId].leader->pos.x;
+		cptr->tgz = Packs[cptr->packId].leader->pos.z;
+	}
+	else if (tdist < 256)
 	{
 		SetNewTargetPlace_Brahi(cptr, 2048.f);
 		goto TBEGIN;
@@ -6238,7 +6346,7 @@ TBEGIN:
 			if (leaderdist < DinoInfo[cptr->CType].packDensity * 128 * 0.6)
 			{
 				cptr->followLeader = false;
-				SetNewTargetPlace(cptr, 8048.f);
+				SetNewTargetPlace(cptr, 4048.f);
 				goto TBEGIN;
 			}
 		}
