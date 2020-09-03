@@ -1967,12 +1967,20 @@ TBEGIN:
 	}
 
 	float pdist = (float)sqrt(playerdx * playerdx + playerdz * playerdz);
-	if (cptr->State == 2)
+
+	bool alertInit = FALSE;
+	if (cptr->State == 2) alertInit = TRUE;
+	if (cptr->packId >= 0) {
+		if (!cptr->State && Packs[cptr->packId]._alert) alertInit = TRUE;
+	}
+
+	if (alertInit)
 	{
 		if (AIInfo[cptr->Clone].jumper) {
 			if (cptr->Phase != DinoInfo[cptr->CType].jumpAnim) NewPhase = TRUE;
 		}
 		cptr->State = 1;
+
 		if (cptr->Clone == AI_SPINO || cptr->Clone == AI_CERAT) cptr->Phase = DinoInfo[cptr->CType].runAnim;
 	}
 
@@ -1999,8 +2007,16 @@ TBEGIN:
 			cptr->tgz = cptr->pos.z - nv.z;
 			cptr->tgtime = 0;
 			cptr->AfraidTime -= TimeDt;
-			if (cptr->AfraidTime <= 0)
-			{
+
+			if (cptr->packId >= 0) {
+				if (cptr->AfraidTime <= 0)
+				{
+					if (!Packs[cptr->packId]._alert) {
+						cptr->AfraidTime = 0;
+						cptr->State = 0;
+					}
+				} else Packs[cptr->packId].alert = true;
+			} else if (cptr->AfraidTime <= 0) {
 				cptr->AfraidTime = 0;
 				cptr->State = 0;
 			}
@@ -2011,6 +2027,9 @@ TBEGIN:
 			cptr->tgx = PlayerX;
 			cptr->tgz = PlayerZ;
 			cptr->tgtime = 0;
+			if (cptr->packId >= 0) {
+				Packs[cptr->packId].alert = true;
+			}
 		}
 
 		if (AIInfo[cptr->Clone].jumper) {
@@ -2812,8 +2831,14 @@ void AnimateHerbivore(TCharacter *cptr)
 	int _FTime = cptr->FTime;
 	float _tgalpha = cptr->tgalpha;
 	if (cptr->AfraidTime) cptr->AfraidTime = MAX(0, cptr->AfraidTime - TimeDt);
-	if (cptr->State == 2)
-	{
+
+	bool alertInit = FALSE;
+	if (cptr->State == 2) alertInit = TRUE;
+	if (cptr->packId >= 0) {
+		if (!cptr->State && Packs[cptr->packId]._alert) alertInit = TRUE;
+	}
+
+	if (alertInit) {
 		NewPhase = TRUE;
 		cptr->State = 1;
 	}
@@ -2848,14 +2873,21 @@ TBEGIN:
 
 	if (cptr->State)
 	{
-
+		
 		if (pdist < 6000) cptr->AfraidTime = 8000;
 
-		if (!cptr->AfraidTime)
-		{
+		if (cptr->packId >= 0) {
+			if (cptr->AfraidTime <= 0) {
+				if (!Packs[cptr->packId]._alert) {
+					cptr->State = 0;
+					SetNewTargetPlace(cptr, AIInfo[cptr->Clone].targetDistance);
+					//goto TBEGIN;
+				}
+			} else Packs[cptr->packId].alert = TRUE;
+		} else if (cptr->AfraidTime <= 0) {
 			cptr->State = 0;
 			SetNewTargetPlace(cptr, AIInfo[cptr->Clone].targetDistance);
-			goto TBEGIN;
+			//goto TBEGIN;
 		}
 
 		if (pdist > 128 * DinoInfo[cptr->CType].aggress + OptAgres / 8 || DinoInfo[cptr->CType].aggress <= 0 || !cptr->awareHunter)
@@ -3022,9 +3054,7 @@ NOTHINK:
 				cptr->Phase = DinoInfo[cptr->CType].walkAnim;
 			}
 
-		}
-		else if (cptr->AfraidTime) cptr->Phase = DinoInfo[cptr->CType].runAnim;
-		else cptr->Phase = DinoInfo[cptr->CType].walkAnim;
+		} else cptr->Phase = DinoInfo[cptr->CType].runAnim;
 
 	if (DinoInfo[cptr->CType].canSwim) {
 		if (cptr->StateF & csONWATER) cptr->Phase = DinoInfo[cptr->CType].swimAnim;
