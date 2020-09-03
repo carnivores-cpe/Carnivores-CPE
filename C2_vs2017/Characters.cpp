@@ -4293,14 +4293,21 @@ TBEGIN:
 
 	if (!cptr->State)
 	{
-		if (pdist <= attackDist && playerInWater && !DinoInfo[cptr->CType].dontSwimAway) {
+
+		bool attackmode = pdist <= attackDist && playerInWater && !DinoInfo[cptr->CType].dontSwimAway;
+		if (attackmode)	cptr->AfraidTime = (int)(10.f) * 1024;
+		if (cptr->packId >= 0) {
+			if (attackmode) Packs[cptr->packId].alert = TRUE;
+			if (Packs[cptr->packId]._alert) attackmode = TRUE;
+		}
+
+		if (attackmode) {
 			cptr->State = 1;
 			cptr->turny = 0;
 			cptr->lastTBeta = cptr->beta;
-			cptr->AfraidTime = (int)(10.f) * 1024;
+			//cptr->AfraidTime = (int)(10.f) * 1024;
 			//goto TBEGIN;
-		}
-		else {
+		} else {
 
 			if (cptr->packId >= 0) {
 				float leaderdx = Packs[cptr->packId].leader->pos.x - cptr->pos.x;
@@ -4345,17 +4352,31 @@ TBEGIN:
 		if (pdist > attackDist || !playerInWater)
 		{
 			cptr->AfraidTime -= TimeDt;
-			if (cptr->AfraidTime <= 0)
-			{
+
+			if (cptr->packId >= 0) {
+				if (cptr->AfraidTime <= 0) {
+
+					if (!Packs[cptr->packId]._alert) {
+						cptr->AfraidTime = 0;
+						cptr->State = 0;
+						SetNewTargetPlaceFish(cptr, 1024.f);
+						goto TBEGIN;
+					}
+
+				} else Packs[cptr->packId].alert = TRUE;
+			} else if (cptr->AfraidTime <= 0) {
 				cptr->AfraidTime = 0;
 				cptr->State = 0;
 				SetNewTargetPlaceFish(cptr, 1024.f);
 				goto TBEGIN;
 			}
 
+
+
+
 		}
 
-		if (cptr->AfraidTime > 0) {
+		
 
 			nv.x = playerdx;
 			nv.z = playerdz;
@@ -4369,7 +4390,7 @@ TBEGIN:
 				((GetLandUpH(cptr->pos.x, cptr->pos.z) - GetLandH(cptr->pos.x, cptr->pos.z)) / 2);
 
 			cptr->tgtime = 0;
-		}
+		
 
 	}
 
