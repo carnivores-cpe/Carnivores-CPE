@@ -52,9 +52,8 @@ Loading: HUNTDAT\dimet.car
 Loading: HUNTDAT\par2.car
 Loading: HUNTDAT\ankylo1.car
 Loading: HUNTDAT\allo_ii.car
-Loading: HUNTDAT\spino_s.car
+Loading: HUNTDAT\velo_iidc.car
 Loading: HUNTDAT\dangerbrachikillertest.car
-Loading: HUNTDAT\mosh.car
 Loading: HUNTDAT\pach.car
 Loading: HUNTDAT\climatius3.car
 Loading: HUNTDAT\parexusn4.car
@@ -65,22 +64,6 @@ Loading: HUNTDAT\WEAPONS\bullet1.tga
 Start Address: 0
 End   Address: 8388592
 Audio_UpdateGeometry: 324 faces uploaded
-Trophy Loaded.
-  AudioStop ()
-Entered game
-ReInitGame();
-Placing...
-Loading: HUNTDAT\chasmosa.car
-Loading: HUNTDAT\velo_iidc.car
-Start Address: 0
-End   Address: 8388592
-Trophy Loaded.
-  AudioStop ()
-Entered game
-ReInitGame();
-Placing...
-Start Address: 0
-End   Address: 8388592
 Trophy Saved.
   AudioStop ()
  Releasing Listener3D

@@ -5866,10 +5866,15 @@ TBEGIN:
 	bool playerAttackable = ((GetLandUpH(PlayerX, PlayerZ) - GetLandH(PlayerX, PlayerZ)) <= 550);
 	bool attacking = false;
 
-	if (cptr->State == 2)
-	{
+	bool alertInit = FALSE;
+	if (cptr->State == 2) alertInit = TRUE;
+	if (cptr->packId >= 0) {
+		if (!cptr->State && Packs[cptr->packId]._alert) alertInit = TRUE;
+	}
+
+	if (alertInit) {
+		NewPhase = TRUE;
 		cptr->State = 1;
-		cptr->Phase = DinoInfo[cptr->CType].runAnim;
 	}
 
 	if (GetLandUpH(cptr->pos.x, cptr->pos.z) - GetLandH(cptr->pos.x, cptr->pos.z) > 140 * cptr->scale)
@@ -5883,12 +5888,16 @@ TBEGIN:
 	if (!MyHealth) cptr->State = 0;
 	if (cptr->State)
 	{
+
 		if (pdist <= attackDist && playerAttackable && DinoInfo[cptr->CType].aggress > 0 && cptr->awareHunter)
 		{
 			attacking = true;
 			cptr->tgx = PlayerX;
 			cptr->tgz = PlayerZ;
 			cptr->tgtime = 0;
+			if (cptr->packId >= 0) {
+				Packs[cptr->packId].alert = true;
+			}
 		}
 		else
 		{
@@ -5901,11 +5910,23 @@ TBEGIN:
 			cptr->tgz = cptr->pos.z - nv.z;
 			cptr->tgtime = 0;
 			cptr->AfraidTime -= TimeDt;
-			if (cptr->AfraidTime <= 0)
-			{
+
+
+			if (cptr->packId >= 0) {
+				if (cptr->AfraidTime <= 0)
+				{
+					if (!Packs[cptr->packId]._alert) {
+						cptr->AfraidTime = 0;
+						cptr->State = 0;
+					}
+				}
+				else Packs[cptr->packId].alert = true;
+			}
+			else if (cptr->AfraidTime <= 0) {
 				cptr->AfraidTime = 0;
 				cptr->State = 0;
 			}
+
 		}
 
 		if (pdist < DinoInfo[cptr->CType].killDist && DinoInfo[cptr->CType].killDist > 0) //killdist = 600
