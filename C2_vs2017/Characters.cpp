@@ -3570,7 +3570,15 @@ TBEGIN:
 	float pdist = (float)sqrt(playerdx * playerdx + playerdz * playerdz);
 	float palpha = FindVectorAlpha(playerdx, playerdz);
 	//if (cptr->State==2) { NewPhase=TRUE; cptr->State=1; }
-	if (cptr->State == 5)
+
+
+	bool alertInit = FALSE;
+	if (cptr->State == 5) alertInit = TRUE;
+	if (cptr->packId >= 0) {
+		if (!cptr->State && Packs[cptr->packId]._alert) alertInit = TRUE;
+	}
+
+	if (alertInit)
 	{
 		NewPhase = TRUE;
 		cptr->State = 1;
@@ -3580,6 +3588,10 @@ TBEGIN:
 		cptr->tgz = PlayerZ;
 		goto TBEGIN;
 	}
+
+	if (cptr->State) Packs[cptr->packId].alert = TRUE;
+
+
 
 	if (GetLandUpH(cptr->pos.x, cptr->pos.z) - GetLandH(cptr->pos.x, cptr->pos.z) > DinoInfo[cptr->CType].waterLevel * cptr->scale)
 		cptr->StateF |= csONWATER;
@@ -3934,8 +3946,14 @@ void AnimateClassicAmbient(TCharacter *cptr)
 	int _FTime = cptr->FTime;
 	float _tgalpha = cptr->tgalpha;
 	if (cptr->AfraidTime) cptr->AfraidTime = MAX(0, cptr->AfraidTime - TimeDt);
-	if (cptr->State == 2)
-	{
+
+	bool alertInit = FALSE;
+	if (cptr->State == 2) alertInit = TRUE;
+	if (cptr->packId >= 0) {
+		if (!cptr->State && Packs[cptr->packId]._alert) alertInit = TRUE;
+	}
+
+	if (alertInit) {
 		NewPhase = TRUE;
 		cptr->State = 1;
 	}
@@ -3962,21 +3980,34 @@ TBEGIN:
 
 	if (cptr->State)
 	{
+
+
+
 		if (!cptr->AfraidTime)
 		{
 			if (pdist < 2048.f) {
 				if (cptr->Clone == AI_GALL) cptr->State = 1;
 				cptr->AfraidTime = (5 + rRand(5)) * 1024;
+				if (cptr->packId >= 0) {
+					Packs[cptr->packId].alert = TRUE;
+				}
 			}
 
-			if (!cptr->AfraidTime)
-				if (pdist > 4096.f)
-				{
+			if (pdist > 4096.f)
+			{
+				if (cptr->packId >= 0) {
+					if (!Packs[cptr->packId]._alert) {
+						cptr->State = 0;
+						SetNewTargetPlace(cptr, 2048.f);
+						goto TBEGIN;
+					}
+				} else {
 					cptr->State = 0;
 					SetNewTargetPlace(cptr, 2048.f);
 					goto TBEGIN;
 				}
-		}
+			}
+		} else if (cptr->packId >= 0) Packs[cptr->packId].alert = TRUE;
 
 
 		nv.x = playerdx;
@@ -4096,8 +4127,7 @@ TBEGIN:
 			} else cptr->Phase = DinoInfo[cptr->CType].walkAnim;
 
 		}
-		else if (cptr->AfraidTime) cptr->Phase = DinoInfo[cptr->CType].runAnim;
-		else cptr->Phase = DinoInfo[cptr->CType].walkAnim;
+		else cptr->Phase = DinoInfo[cptr->CType].runAnim;
 
 	if (DinoInfo[cptr->CType].canSwim) {
 		if (cptr->StateF & csONWATER) cptr->Phase = DinoInfo[cptr->CType].swimAnim;
