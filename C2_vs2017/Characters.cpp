@@ -6775,8 +6775,9 @@ void AnimateCharacters()
 			else AnimateDeadCommon(cptr);
 			break;
 		case AI_HUNTDOG:
-			if (cptr->Health) AnimateHuntdog(cptr);
-			else AnimateDeadCommon(cptr);
+			//	HUNTDOG TEMPP DISABLED
+			/* if (cptr->Health) AnimateHuntdog(cptr);
+			else AnimateDeadCommon(cptr);*/
 			break;
 		case AI_GALL:
 			if (cptr->Health) AnimateClassicAmbient(cptr);
