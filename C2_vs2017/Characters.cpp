@@ -5007,11 +5007,19 @@ void AnimateIcth(TCharacter *cptr)
 	int _FTime = cptr->FTime;
 	float _tgalpha = cptr->tgalpha;
 	if (cptr->AfraidTime) cptr->AfraidTime = MAX(0, cptr->AfraidTime - TimeDt);
-	if (cptr->State == 2)
-	{
+
+
+	bool alertInit = FALSE;
+	if (cptr->State == 2) alertInit = TRUE;
+	if (cptr->packId >= 0) {
+		if (!cptr->State && Packs[cptr->packId]._alert) alertInit = TRUE;
+	}
+
+	if (alertInit) {
 		NewPhase = TRUE;
 		cptr->State = 1;
 	}
+
 	cptr->FTime += TimeDt;
 
 TBEGIN:
@@ -5042,7 +5050,14 @@ TBEGIN:
 	if (cptr->State)
 	{
 
-		if (!cptr->AfraidTime)
+		bool relax = FALSE;
+		if (cptr->packId >= 0) {
+			if (!cptr->AfraidTime) {
+				if (!Packs[cptr->packId]._alert) relax = TRUE;
+			} else Packs[cptr->packId].alert = TRUE;
+		} else if (!cptr->AfraidTime) relax = TRUE;
+
+		if (relax)
 		{
 			if (cptr->pos.y >= GetLandUpH(cptr->pos.x, cptr->pos.z) + 236)
 			{
@@ -5059,14 +5074,6 @@ TBEGIN:
 			goto TBEGIN;
 		}
 
-		/*		nv.x = playerdx;
-				nv.z = playerdz;
-				nv.y = 0;
-				NormVector(nv, 2048.f);
-				cptr->tgx = cptr->pos.x - nv.x;
-				cptr->tgz = cptr->pos.z - nv.z;
-				cptr->tgtime = 0;
-				*/
 	}
 
 
@@ -5080,6 +5087,7 @@ TBEGIN:
 			SetNewTargetPlace_Icth(cptr, 2048.f);
 			cptr->AfraidTime = (50 + rRand(8)) * 1024;
 			NewPhase = true;
+			if (cptr->packId >= 0) Packs[cptr->packId].alert = TRUE;
 			goto TBEGIN;
 		}
 
@@ -5181,116 +5189,136 @@ TBEGIN:
 			}
 
 		}
-		else if (cptr->AfraidTime) {
+		
+		if (cptr->State) {
 
-			if (cptr->Phase == DinoInfo[cptr->CType].flyAnim)
-			{
-				if (cptr->pos.y > GetLandUpH(cptr->pos.x, cptr->pos.z) + 2100)
+			bool afraid = FALSE;
+			if (cptr->AfraidTime) afraid = TRUE;
+
+			if (cptr->packId >= 0) {
+				if (Packs[cptr->packId]._alert) afraid = TRUE;
+			}
+
+
+			if (afraid) {
+
+				if (cptr->Phase == DinoInfo[cptr->CType].flyAnim)
+				{
+					if (cptr->pos.y > GetLandUpH(cptr->pos.x, cptr->pos.z) + 2100)
+					{
+						cptr->Phase = DinoInfo[cptr->CType].glideAnim;
+						SetNewTargetPlace_Icth(cptr, 2048.f);
+					}
+				}
+				else if (cptr->Phase == DinoInfo[cptr->CType].glideAnim)
+				{
+					if (cptr->pos.y < GetLandUpH(cptr->pos.x, cptr->pos.z) + 1600)
+					{
+						cptr->Phase = DinoInfo[cptr->CType].flyAnim;
+						SetNewTargetPlace_Icth(cptr, 2048.f);
+					}
+				}
+				else if (cptr->Phase == DinoInfo[cptr->CType].takeoffAnim)
+				{
+					if (cptr->pos.y > GetLandUpH(cptr->pos.x, cptr->pos.z) + 236)
+					{
+						cptr->Phase = DinoInfo[cptr->CType].flyAnim;
+					}
+				}
+				else
+				{
+					cptr->Phase = DinoInfo[cptr->CType].takeoffAnim;
+					if (cptr->notFlushed == false)
+					{
+						ActivateCharacterFx(cptr);
+					}
+					else
+					{
+						cptr->notFlushed = false;
+					}
+
+					cptr->gamma = 0;
+					cptr->beta = 0;
+					cptr->bend = 0;//?
+				}
+
+
+			}
+			else {
+				if (cptr->gliding == true)
 				{
 					cptr->Phase = DinoInfo[cptr->CType].glideAnim;
-					SetNewTargetPlace_Icth(cptr, 2048.f);
 				}
-			}
-			else if (cptr->Phase == DinoInfo[cptr->CType].glideAnim)
-			{
-				if (cptr->pos.y < GetLandUpH(cptr->pos.x, cptr->pos.z) + 1600)
+				else if (cptr->Phase != DinoInfo[cptr->CType].landAnim)
 				{
-					cptr->Phase = DinoInfo[cptr->CType].flyAnim;
-					SetNewTargetPlace_Icth(cptr, 2048.f);
-				}
-			}
-			else if (cptr->Phase == DinoInfo[cptr->CType].takeoffAnim)
-			{
-				if (cptr->pos.y > GetLandUpH(cptr->pos.x, cptr->pos.z) + 236)
-				{
-					cptr->Phase = DinoInfo[cptr->CType].flyAnim;
-				}
-			}
-			else
-			{
-				cptr->Phase = DinoInfo[cptr->CType].takeoffAnim;
-				if (cptr->notFlushed == false)
-				{
-					ActivateCharacterFx(cptr);
-				}
-				else
-				{
-					cptr->notFlushed = false;
-				}
+					if (wy >= swimLevel) {
+						cptr->Phase = DinoInfo[cptr->CType].swimAnim;
+						if (rRand(128) > 110) {
 
-				cptr->gamma = 0;
-				cptr->beta = 0;
-				cptr->bend = 0;//?
-			}
+							if (DinoInfo[cptr->CType].idle2Count > 0) {
+								cptr->Phase = DinoInfo[cptr->CType].idle2Anim[rRand(DinoInfo[cptr->CType].idle2Count - 1)];
+							}
 
-
-		}
-		else {
-			if (cptr->gliding == true)
-			{
-				cptr->Phase = DinoInfo[cptr->CType].glideAnim;
-			}
-			else if (cptr->Phase != DinoInfo[cptr->CType].landAnim)
-			{
-				if (wy >= swimLevel) {
-					cptr->Phase = DinoInfo[cptr->CType].swimAnim;
-					if (rRand(128) > 110) {
-
-						if (DinoInfo[cptr->CType].idle2Count > 0) {
-							cptr->Phase = DinoInfo[cptr->CType].idle2Anim[rRand(DinoInfo[cptr->CType].idle2Count - 1)];
 						}
+					}
+					else
+					{
+						cptr->Phase = DinoInfo[cptr->CType].walkAnim;
+						if (rRand(128) > 110) {
 
+							if (DinoInfo[cptr->CType].idleCount > 0) {
+								cptr->Phase = DinoInfo[cptr->CType].idleAnim[rRand(DinoInfo[cptr->CType].idleCount - 1)];
+							}
+
+						}
 					}
 				}
-				else
-				{
-					cptr->Phase = DinoInfo[cptr->CType].walkAnim;
-					if (rRand(128) > 110) {
-						
-						if (DinoInfo[cptr->CType].idleCount > 0) {
-							cptr->Phase = DinoInfo[cptr->CType].idleAnim[rRand(DinoInfo[cptr->CType].idleCount - 1)];
+			}
+
+			if (DinoInfo[cptr->CType].idleCount > 0) {
+				for (int i = 0; i < DinoInfo[cptr->CType].idleCount; i++) {
+					if (cptr->Phase == DinoInfo[cptr->CType].idleAnim[i]) {
+
+						if (rRand(24) > 23)
+						{
+							cptr->State = 1;
+							SetNewTargetPlace_Icth(cptr, 2048.f);
+							cptr->AfraidTime = (50 + rRand(8)) * 1024;
+							cptr->notFlushed = true;
+							NewPhase = true;
+							goto TBEGIN;
 						}
 
 					}
 				}
 			}
-		}
 
-		if (DinoInfo[cptr->CType].idleCount > 0) {
-			for (int i = 0; i < DinoInfo[cptr->CType].idleCount; i++) {
-				if (cptr->Phase == DinoInfo[cptr->CType].idleAnim[i]) {
+			if (DinoInfo[cptr->CType].idle2Count > 0) {
+				for (int i = 0; i < DinoInfo[cptr->CType].idle2Count; i++) {
+					if (cptr->Phase == DinoInfo[cptr->CType].idle2Anim[i]) {
 
-					if (rRand(24) > 23)
-					{
-						cptr->State = 1;
-						SetNewTargetPlace_Icth(cptr, 2048.f);
-						cptr->AfraidTime = (50 + rRand(8)) * 1024;
-						cptr->notFlushed = true;
-						NewPhase = true;
-						goto TBEGIN;
+						if (rRand(24) > 23)
+						{
+							cptr->State = 1;
+							SetNewTargetPlace_Icth(cptr, 2048.f);
+							cptr->AfraidTime = (50 + rRand(8)) * 1024;
+							cptr->notFlushed = true;
+							NewPhase = true;
+							goto TBEGIN;
+						}
+
 					}
-
 				}
 			}
+
+
+
+
+
+
+
 		}
 
-		if (DinoInfo[cptr->CType].idle2Count > 0) {
-			for (int i = 0; i < DinoInfo[cptr->CType].idle2Count; i++) {
-				if (cptr->Phase == DinoInfo[cptr->CType].idle2Anim[i]) {
-
-					if (rRand(24) > 23)
-					{
-						cptr->State = 1;
-						SetNewTargetPlace_Icth(cptr, 2048.f);
-						cptr->AfraidTime = (50 + rRand(8)) * 1024;
-						cptr->notFlushed = true;
-						NewPhase = true;
-						goto TBEGIN;
-					}
-
-				}
-			}
-		}
 
 
 	}

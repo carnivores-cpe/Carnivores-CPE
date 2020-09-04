@@ -22,16 +22,16 @@ c:\users\ojm14\documents\github\carnivores-cpe\c2_vs2017\characters.cpp(4594): w
 c:\users\ojm14\documents\github\carnivores-cpe\c2_vs2017\characters.cpp(4397): warning C4102: 'NOTHINK': unreferenced label
 c:\users\ojm14\documents\github\carnivores-cpe\c2_vs2017\characters.cpp(4451): warning C4102: 'ENDPSELECT': unreferenced label
 c:\users\ojm14\documents\github\carnivores-cpe\c2_vs2017\characters.cpp(4523): warning C4102: 'SKIPROT': unreferenced label
-c:\users\ojm14\documents\github\carnivores-cpe\c2_vs2017\characters.cpp(5147): warning C4244: 'initializing': conversion from 'int' to 'float', possible loss of data
-c:\users\ojm14\documents\github\carnivores-cpe\c2_vs2017\characters.cpp(5438): warning C4102: 'ENDPSELECT': unreferenced label
-c:\users\ojm14\documents\github\carnivores-cpe\c2_vs2017\characters.cpp(5800): warning C4244: '-=': conversion from 'double' to 'float', possible loss of data
-c:\users\ojm14\documents\github\carnivores-cpe\c2_vs2017\characters.cpp(6988): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
-c:\users\ojm14\documents\github\carnivores-cpe\c2_vs2017\characters.cpp(6991): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
-c:\users\ojm14\documents\github\carnivores-cpe\c2_vs2017\characters.cpp(7009): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
-c:\users\ojm14\documents\github\carnivores-cpe\c2_vs2017\characters.cpp(7010): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+c:\users\ojm14\documents\github\carnivores-cpe\c2_vs2017\characters.cpp(5155): warning C4244: 'initializing': conversion from 'int' to 'float', possible loss of data
+c:\users\ojm14\documents\github\carnivores-cpe\c2_vs2017\characters.cpp(5466): warning C4102: 'ENDPSELECT': unreferenced label
+c:\users\ojm14\documents\github\carnivores-cpe\c2_vs2017\characters.cpp(5828): warning C4244: '-=': conversion from 'double' to 'float', possible loss of data
+c:\users\ojm14\documents\github\carnivores-cpe\c2_vs2017\characters.cpp(7016): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+c:\users\ojm14\documents\github\carnivores-cpe\c2_vs2017\characters.cpp(7019): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+c:\users\ojm14\documents\github\carnivores-cpe\c2_vs2017\characters.cpp(7037): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+c:\users\ojm14\documents\github\carnivores-cpe\c2_vs2017\characters.cpp(7038): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
   Generating code
   2 of 299 functions ( 0.7%) were compiled, the rest were copied from previous compilation.
     0 functions were new in current compilation
-    2 functions had inline decision re-evaluated but remain unchanged
+    1 functions had inline decision re-evaluated but remain unchanged
   Finished generating code
   C2.vcxproj -> C:\Users\ojm14\Documents\GitHub\Carnivores-CPE\C2_vs2017\Release 3DFX\v_3dfx.ren
