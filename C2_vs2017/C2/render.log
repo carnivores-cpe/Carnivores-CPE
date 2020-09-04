@@ -52,7 +52,8 @@ Loading: HUNTDAT\dimet.car
 Loading: HUNTDAT\par2.car
 Loading: HUNTDAT\ankylo1.car
 Loading: HUNTDAT\stego.car
-Loading: HUNTDAT\spino_s.car
+Loading: HUNTDAT\chasmosa.car
+Loading: HUNTDAT\velo_iidc.car
 Loading: HUNTDAT\dangerbrachikillertest.car
 Loading: HUNTDAT\pach.car
 Loading: HUNTDAT\climatius3.car
@@ -70,9 +71,31 @@ Entered game
 ReInitGame();
 Placing...
 Loading: HUNTDAT\allo_ii.car
+Loading: HUNTDAT\tricer.car
 Start Address: 0
 End   Address: 8388592
-Trophy Saved.
+Trophy Loaded.
+  AudioStop ()
+Entered game
+ReInitGame();
+Placing...
+Start Address: 0
+End   Address: 8388592
+Trophy Loaded.
+  AudioStop ()
+Entered game
+ReInitGame();
+Placing...
+Start Address: 0
+End   Address: 8388592
+Trophy Loaded.
+  AudioStop ()
+Entered game
+ReInitGame();
+Placing...
+Loading: HUNTDAT\spino_s.car
+Start Address: 0
+End   Address: 8388592
   AudioStop ()
  Releasing Listener3D
  Releasing PrimaryBuffer

@@ -1996,9 +1996,18 @@ TBEGIN:
 	if (!MyHealth) cptr->State = 0;
 	if (cptr->State)
 	{
-		if (pdist > ctViewR * DinoInfo[cptr->CType].aggress + OptAgres / AIInfo[cptr->Clone].agressMulti
-			|| DinoInfo[cptr->CType].aggress <= 0 || !cptr->awareHunter)
-		{
+
+		bool fleeMode = FALSE;
+		if (pdist > ctViewR * DinoInfo[cptr->CType].aggress + OptAgres / AIInfo[cptr->Clone].agressMulti ||
+			DinoInfo[cptr->CType].aggress <= 0 || !cptr->awareHunter ) {
+			fleeMode = TRUE;
+		} else if (cptr->packId >= 0) Packs[cptr->packId].attack = TRUE;
+
+		if (cptr->packId >= 0) {
+			if (Packs[cptr->packId]._attack) fleeMode = FALSE;
+		}
+
+		if (fleeMode) {
 			nv.x = playerdx;
 			nv.z = playerdz;
 			nv.y = 0;
@@ -2890,7 +2899,16 @@ TBEGIN:
 			//goto TBEGIN;
 		}
 
-		if (pdist > 128 * DinoInfo[cptr->CType].aggress + OptAgres / 8 || DinoInfo[cptr->CType].aggress <= 0 || !cptr->awareHunter)
+		bool fleeMode = FALSE;
+		if (pdist > 128 * DinoInfo[cptr->CType].aggress + OptAgres / 8 || DinoInfo[cptr->CType].aggress <= 0 || !cptr->awareHunter) {
+			fleeMode = TRUE;
+		} else if (cptr->packId >= 0) Packs[cptr->packId].attack = TRUE;
+
+		if (cptr->packId >= 0) {
+			if (Packs[cptr->packId]._attack) fleeMode = FALSE;
+		}
+
+		if (fleeMode)
 		{
 			nv.x = playerdx;
 			nv.z = playerdz;
@@ -5938,7 +5956,17 @@ TBEGIN:
 	if (cptr->State)
 	{
 
-		if (pdist <= attackDist && playerAttackable && DinoInfo[cptr->CType].aggress > 0 && cptr->awareHunter)
+		bool fleeMode = FALSE;
+		if (pdist > attackDist || !playerAttackable || DinoInfo[cptr->CType].aggress <= 0 || !cptr->awareHunter) {
+			fleeMode = TRUE;
+		}
+		else if (cptr->packId >= 0) Packs[cptr->packId].attack = TRUE;
+
+		if (cptr->packId >= 0) {
+			if (Packs[cptr->packId]._attack) fleeMode = FALSE;
+		}
+
+		if (!fleeMode)
 		{
 			attacking = true;
 			cptr->tgx = PlayerX;
