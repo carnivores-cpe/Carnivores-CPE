@@ -426,8 +426,6 @@ killtype{
  fearCall = 18
  runspd = 1.2
  wlkspd = 0.30
- hunterAnim = 0
- hunterOffset = 170
  aggress = 32
  killdist = 300
  radar = 1
@@ -488,6 +486,9 @@ killtype{
  hunterOffset = 170
  eatAnim = 6
 }
+ packMax = 4
+ packMin = 3
+ packDensity = 25
 }
 
 {
@@ -711,13 +712,10 @@ deathtype{
 }
  waterLevel = 140
  spawninfo {
- spawnrate = 1
- spawnmax  = 5
+ spawnrate = 0.08
+ spawnmax  = 3
  spawnmin  = 0
  }
- packMax = 5
- packMin = 3
- packDensity = 25
 }
 
 {
@@ -740,8 +738,6 @@ deathtype{
  fearCall = 18
  runspd = 1.2
  wlkspd = 0.30
- hunterAnim = 0
- hunterOffset = 170
  aggress = 32
  killdist = 370
  trophy  = TRUE
@@ -961,7 +957,6 @@ prices {
  acces  = 0
  acces  = 0
  acces  = 0
- acces  = 250
 }
 
 .
