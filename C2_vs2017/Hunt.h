@@ -444,6 +444,7 @@ typedef struct _TDinoKill
 	int hunteranim;
 	bool elevate;
 	bool dontloop;
+	bool scream;
 } TDinoKill;
 
 typedef struct _TDinoDeathType
@@ -687,7 +688,7 @@ void WaitRetrace();
 
 //============= Characters =======================
 void Characters_AddSecondaryOne(int ctype);
-void AddDeadBody(TCharacter *cptr, int);
+void AddDeadBody(TCharacter *cptr, int, bool);
 void PlaceCharacters();
 void PlaceTrophy();
 void AnimateCharacters();

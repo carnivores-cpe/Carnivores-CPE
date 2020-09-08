@@ -2162,6 +2162,7 @@ void ReadKillTypeInfo(FILE *stream)
 		if (strstr(line, "eatAnim")) DinoInfo[TotalC].killType[DinoInfo[TotalC].killTypeCount].anim = atoi(value);
 		if (strstr(line, "hunterSync")) DinoInfo[TotalC].killType[DinoInfo[TotalC].killTypeCount].elevate = TRUE;
 		if (strstr(line, "dontloop")) DinoInfo[TotalC].killType[DinoInfo[TotalC].killTypeCount].dontloop = TRUE;
+		if (strstr(line, "scream")) DinoInfo[TotalC].killType[DinoInfo[TotalC].killTypeCount].scream = TRUE;
 
 	}
 }

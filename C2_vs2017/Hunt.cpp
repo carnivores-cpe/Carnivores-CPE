@@ -1650,7 +1650,7 @@ SKIPYMOVE:
       MyHealth-=TimeDt*12;
       //if ( !(Takt & 31)) AddElements(CameraX + sa*64*cb, CameraY - 32 - sb*64, CameraZ - ca*64*cb, 4);
       if (MyHealth<=0)
-        AddDeadBody(NULL, HUNT_BREATH);
+        AddDeadBody(NULL, HUNT_BREATH, TRUE);
     }
 
   if (UNDERWATER)
@@ -1718,7 +1718,7 @@ SKIPYMOVE:
         if (MyHealth>100000) MyHealth = 100000;
         MyHealth-=TimeDt*64;
         if (MyHealth<=0)
-          AddDeadBody(NULL, HUNT_EAT);
+          AddDeadBody(NULL, HUNT_EAT, TRUE);
       }
 
   int CameraAmb = AmbMap [((int)CameraZ)>>9][((int)CameraX)>>9];

@@ -82,7 +82,7 @@ characters {
 
 {
  name    = 'Hunter'
- file    = 'hunter1.car'
+ file    = 'hunter1_brach.car'
  ai      = 0
  clone 	 = 0
  health  = 1
@@ -393,6 +393,7 @@ killtype{
  hunterAnim = 0
  hunterOffset = 170
  eatAnim = 6
+ scream = TRUE
 }
 }
 
@@ -477,6 +478,7 @@ killtype{
  hunterAnim = 0
  hunterOffset = 170
  eatAnim = 6
+ scream = TRUE
 }
 }
 
@@ -522,6 +524,7 @@ killtype{
  hunterAnim = 0
  hunterOffset = 200
  eatAnim = 7
+ scream = TRUE
 }
 }
 
@@ -567,6 +570,7 @@ killtype{
  hunterAnim = 0
  hunterOffset = 320
  eatAnim = 7
+ scream = TRUE
 }
 }
 
@@ -612,6 +616,7 @@ killtype{
  eatAnim = 9
  hunterOffset = 0
  hunterSync = TRUE
+ scream = TRUE
 }
 }
 
@@ -622,7 +627,7 @@ mapambients {
 
 {
  name = 'Brachiosaurus'
- file = 'dangerbrachikillertest.car'
+ file = 'dangerbrachikiller2.car'
  clone 	   = -5
  canswim = TRUE
  waterLevel = 550
@@ -657,7 +662,7 @@ deathtype{
  idleAnim = 2
  idleAnim = 3
 killtype{
- hunterAnim = 0
+ hunterAnim = 4
  eatAnim = 6
  hunterOffset = 0
  hunterSync = TRUE

@@ -286,7 +286,7 @@ void ResetCharacter(TCharacter *cptr)
 }
 
 
-void AddDeadBody(TCharacter *cptr, int phase)
+void AddDeadBody(TCharacter *cptr, int phase, bool scream)
 {
 	if (!MyHealth) return;
 
@@ -301,8 +301,9 @@ void AddDeadBody(TCharacter *cptr, int phase)
 	ResetCharacter(&Characters[ChCount]);
 
 	int v = rRand(3);
-	if (phase != HUNT_BREATH)
+	if (phase != HUNT_BREATH && scream){
 		AddVoicev(fxScream[r].length, fxScream[r].lpData, 256);
+	}
 
 	Characters[ChCount].Health = 0;
 	MyHealth = 0;
@@ -2063,12 +2064,14 @@ TBEGIN:
 						cptr->State = 1;
 						cptr->Phase = DinoInfo[cptr->CType].killType[cptr->killType].anim;
 						if (DinoInfo[cptr->CType].killType[cptr->killType].dontloop) cptr->FTime = 0;
-						AddDeadBody(cptr, DinoInfo[cptr->CType].killType[cptr->killType].hunteranim);
+						AddDeadBody(cptr,
+									DinoInfo[cptr->CType].killType[cptr->killType].hunteranim,
+									DinoInfo[cptr->CType].killType[cptr->killType].scream);
 					}
-					else AddDeadBody(cptr, HUNT_EAT);
+					else AddDeadBody(cptr, HUNT_EAT, TRUE);
 
 				} else {
-					AddDeadBody(cptr, HUNT_EAT);
+					AddDeadBody(cptr, HUNT_EAT, TRUE);
 					cptr->State = 0;
 				}
 
@@ -2942,13 +2945,15 @@ TBEGIN:
 							cptr->State = 1;
 							cptr->Phase = DinoInfo[cptr->CType].killType[cptr->killType].anim;
 							if (DinoInfo[cptr->CType].killType[cptr->killType].dontloop) cptr->FTime = 0;
-							AddDeadBody(cptr, DinoInfo[cptr->CType].killType[cptr->killType].hunteranim);
+							AddDeadBody(cptr,
+								DinoInfo[cptr->CType].killType[cptr->killType].hunteranim,
+								DinoInfo[cptr->CType].killType[cptr->killType].scream);
 						}
-						else AddDeadBody(cptr, HUNT_EAT);
+						else AddDeadBody(cptr, HUNT_EAT, TRUE);
 
 					}
 					else {
-						AddDeadBody(cptr, HUNT_EAT);
+						AddDeadBody(cptr, HUNT_EAT, TRUE);
 						cptr->State = 0;
 					}
 				}
@@ -3673,13 +3678,15 @@ TBEGIN:
 						cptr->State = 1;
 						cptr->Phase = DinoInfo[cptr->CType].killType[cptr->killType].anim;
 						if (DinoInfo[cptr->CType].killType[cptr->killType].dontloop) cptr->FTime = 0;
-						AddDeadBody(cptr, DinoInfo[cptr->CType].killType[cptr->killType].hunteranim);
+						AddDeadBody(cptr,
+							DinoInfo[cptr->CType].killType[cptr->killType].hunteranim,
+							DinoInfo[cptr->CType].killType[cptr->killType].scream);
 					}
-					else AddDeadBody(cptr, HUNT_EAT);
+					else AddDeadBody(cptr, HUNT_EAT, TRUE);
 
 				}
 				else {
-					AddDeadBody(cptr, HUNT_EAT);
+					AddDeadBody(cptr, HUNT_EAT, TRUE);
 					cptr->State = 0;
 				}
 
@@ -6018,13 +6025,15 @@ TBEGIN:
 						cptr->State = 1;
 						cptr->Phase = DinoInfo[cptr->CType].killType[cptr->killType].anim;
 						if (DinoInfo[cptr->CType].killType[cptr->killType].dontloop) cptr->FTime = 0;
-						AddDeadBody(cptr, DinoInfo[cptr->CType].killType[cptr->killType].hunteranim);
+						AddDeadBody(cptr,
+							DinoInfo[cptr->CType].killType[cptr->killType].hunteranim,
+							DinoInfo[cptr->CType].killType[cptr->killType].scream);
 					}
-					else AddDeadBody(cptr, HUNT_EAT);
+					else AddDeadBody(cptr, HUNT_EAT, TRUE);
 
 				}
 				else {
-					AddDeadBody(cptr, HUNT_EAT);
+					AddDeadBody(cptr, HUNT_EAT, TRUE);
 					cptr->State = 0;
 				}
 
