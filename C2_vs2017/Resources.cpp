@@ -2087,6 +2087,15 @@ void WipeRegions() {
 
 }
 
+void readBool(char *value, BOOL &out) {
+	if (strstr(value, "TRUE")) out = TRUE;
+	if (strstr(value, "FALSE")) out = FALSE;
+}
+void readBool(char *value, bool &out) {
+	if (strstr(value, "TRUE")) out = TRUE;
+	if (strstr(value, "FALSE")) out = FALSE;
+}
+
 void WipeKillTypes() {
 	if (DinoInfo[TotalC].killTypeCount) {
 		for (int i = 0; i < DinoInfo[TotalC].killTypeCount; i++) {
@@ -2138,6 +2147,7 @@ void ReadDeathTypeInfo(FILE *stream)
 
 		if (strstr(line, "dieAnim")) DinoInfo[TotalC].deathType[DinoInfo[TotalC].deathTypeCount].die = atoi(value);
 		if (strstr(line, "sleepAnim")) DinoInfo[TotalC].deathType[DinoInfo[TotalC].deathTypeCount].sleep = atoi(value);
+		if (strstr(line, "fallAnim")) DinoInfo[TotalC].deathType[DinoInfo[TotalC].deathTypeCount].fall = atoi(value);
 
 	}
 }
@@ -2160,9 +2170,10 @@ void ReadKillTypeInfo(FILE *stream)
 		if (strstr(line, "hunterAnim")) DinoInfo[TotalC].killType[DinoInfo[TotalC].killTypeCount].hunteranim = atoi(value);
 		if (strstr(line, "hunterOffset")) DinoInfo[TotalC].killType[DinoInfo[TotalC].killTypeCount].offset = atoi(value);
 		if (strstr(line, "eatAnim")) DinoInfo[TotalC].killType[DinoInfo[TotalC].killTypeCount].anim = atoi(value);
-		if (strstr(line, "hunterSync")) DinoInfo[TotalC].killType[DinoInfo[TotalC].killTypeCount].elevate = TRUE;
-		if (strstr(line, "dontloop")) DinoInfo[TotalC].killType[DinoInfo[TotalC].killTypeCount].dontloop = TRUE;
-		if (strstr(line, "scream")) DinoInfo[TotalC].killType[DinoInfo[TotalC].killTypeCount].scream = TRUE;
+		if (strstr(line, "hunterSync")) readBool(value, DinoInfo[TotalC].killType[DinoInfo[TotalC].killTypeCount].elevate);
+		if (strstr(line, "dontloop")) readBool(value, DinoInfo[TotalC].killType[DinoInfo[TotalC].killTypeCount].dontloop);
+		if (strstr(line, "scream")) readBool(value, DinoInfo[TotalC].killType[DinoInfo[TotalC].killTypeCount].scream);
+		
 
 	}
 }
@@ -2198,7 +2209,7 @@ void ReadSpawnInfo(FILE *stream)
 		if (strstr(line, "xmin")) Region[TotalRegion].XMin = atoi(value);
 		if (strstr(line, "ymax")) Region[TotalRegion].YMax = atoi(value);
 		if (strstr(line, "ymin")) Region[TotalRegion].YMin = atoi(value);
-		if (strstr(line, "styInRgn")) Region[TotalRegion].stayInRegion = TRUE;
+		if (strstr(line, "styInRgn")) readBool(value, Region[TotalRegion].stayInRegion);
 
 	}
 }
@@ -2256,6 +2267,7 @@ void ReadCharacterLine(FILE *stream, char *_value, char line[256], bool &regionO
 	if (strstr(line, "scale0")) DinoInfo[TotalC].Scale0 = atoi(value);
 	if (strstr(line, "scaleA")) DinoInfo[TotalC].ScaleA = atoi(value);
 	if (strstr(line, "fearCall")) DinoInfo[TotalC].fearCall[atoi(value)] = TRUE;
+	if (strstr(line, "dontFear")) DinoInfo[TotalC].fearCall[atoi(value)] = FALSE;
 	if (strstr(line, "maxdepth")) DinoInfo[TotalC].maxDepth = atoi(value);
 	if (strstr(line, "mindepth")) DinoInfo[TotalC].minDepth = atoi(value);
 	if (strstr(line, "spcdepth")) DinoInfo[TotalC].spacingDepth = atoi(value);
@@ -2270,17 +2282,17 @@ void ReadCharacterLine(FILE *stream, char *_value, char line[256], bool &regionO
 	if (strstr(line, "aggress")) DinoInfo[TotalC].aggress = atoi(value);
 	if (strstr(line, "killdist")) DinoInfo[TotalC].killDist = atoi(value);
 	if (strstr(line, "radar")) DinoInfo[TotalC].onRadar = atoi(value);
-	if (strstr(line, "dontswimaway")) DinoInfo[TotalC].dontSwimAway = TRUE;
+	if (strstr(line, "dontswimaway")) readBool(value, DinoInfo[TotalC].dontSwimAway);
 	if (strstr(line, "collisiondist")) DinoInfo[TotalC].maxGrad = atoi(value);
 	if (strstr(line, "runrotatespeed")) DinoInfo[TotalC].rotspdmulti = (float)atof(value);
 
 	if (strstr(line, "waterLevel")) DinoInfo[TotalC].waterLevel = atoi(value);
 
 
-	if (strstr(line, "dogSmell")) DinoInfo[TotalC].dogSmell = TRUE;
+	if (strstr(line, "dogSmell")) readBool(value, DinoInfo[TotalC].dogSmell);
 
 
-	if (strstr(line, "canswim")) DinoInfo[TotalC].canSwim = TRUE; //check animate subroutines for what this includes. LandBrach needs this attribute, but maybe rename to wade? (and default to off for landbrach ai? maybe?)
+	if (strstr(line, "canswim")) readBool(value, DinoInfo[TotalC].canSwim); //check animate subroutines for what this includes. LandBrach needs this attribute, but maybe rename to wade? (and default to off for landbrach ai? maybe?)
 
 	if (strstr(line, "runAnim")) DinoInfo[TotalC].runAnim = atoi(value);
 	if (strstr(line, "jumpAnim")) DinoInfo[TotalC].jumpAnim = atoi(value);
@@ -2293,7 +2305,6 @@ void ReadCharacterLine(FILE *stream, char *_value, char line[256], bool &regionO
 	if (strstr(line, "slideAnim")) DinoInfo[TotalC].slideAnim = atoi(value);
 //	if (strstr(line, "sleepAnim")) DinoInfo[TotalC].sleepAnim = atoi(value);
 //	if (strstr(line, "dieAnim")) DinoInfo[TotalC].dieAnim = atoi(value);
-	if (strstr(line, "fallAnim")) DinoInfo[TotalC].fallAnim = atoi(value);
 	if (strstr(line, "shakeLAnim")) DinoInfo[TotalC].shakeLandAnim = atoi(value);
 	if (strstr(line, "shakeWAnim")) DinoInfo[TotalC].shakeWaterAnim = atoi(value);
 	//if (strstr(line, "waterDAnim")) DinoInfo[TotalC].waterDieAnim = atoi(value);
@@ -2342,10 +2353,18 @@ void ReadCharacterLine(FILE *stream, char *_value, char line[256], bool &regionO
 	if (strstr(line, "packDensity")) DinoInfo[TotalC].packDensity = (float)atof(value);
 
 	if (strstr(line, "trophy")) {
-		TotalTrophy++;
-		DinoInfo[TotalC].trophyCode = TotalTrophy;
-		TrophyIndex[TotalTrophy] = TotalC;
+		if (!DinoInfo[TotalC].trophyCode) {
+			bool temp = FALSE;
+			readBool(value, temp);
+			if (temp) {
+				TotalTrophy++;
+				DinoInfo[TotalC].trophyCode = TotalTrophy;
+				TrophyIndex[TotalTrophy] = TotalC;
+			}
+		}
+		readBool(value, DinoInfo[TotalC].trophySession);
 	}
+	
 
 	if (strstr(line, "name"))
 	{

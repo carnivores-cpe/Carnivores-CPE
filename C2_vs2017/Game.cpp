@@ -1284,7 +1284,7 @@ ENDTRACE:
 
   if (!Characters[ShotDino].Health)
   {
-    if (DinoInfo[Characters[ShotDino].CType].trophyCode)
+    if (DinoInfo[Characters[ShotDino].CType].trophySession)
     {
       TrophyRoom.Last.success++;
       AddShipTask(ShotDino);

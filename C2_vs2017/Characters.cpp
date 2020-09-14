@@ -1057,6 +1057,7 @@ replace1:
 	Characters[ChCount].tgz = Characters[ChCount].pos.z;
 	Characters[ChCount].tgtime = 0;
 
+	Characters[ChCount].packId = -1;	//Classic ambient- no pack hunting
 	ResetCharacter(&Characters[ChCount]);
 	ChCount++;
 }
@@ -1297,7 +1298,7 @@ replace:
 void SetNewTargetPlace(TCharacter *cptr, float R)
 {
 
-	if (cptr->AI < 0) {
+	if (cptr->AI < 0) {//STILL NEED THIS FOR CLASSIC AMBIENTS
 		SetNewTargetPlaceRegion(cptr, R);
 	}
 	else {
@@ -5724,9 +5725,12 @@ SKIPROT:
 		cptr->pos.x += cptr->lookx * cptr->vspeed * TimeDt;
 		cptr->pos.z += cptr->lookz * cptr->vspeed * TimeDt;
 
+		
 		cptr->tggamma = cptr->rspeed / 4.0f;
 		if (cptr->tggamma > pi / 6.f) cptr->tggamma = pi / 6.f;
 		if (cptr->tggamma < -pi / 6.f) cptr->tggamma = -pi / 6.f;
+		DeltaFunc(cptr->gamma, cptr->tggamma, TimeDt / 2048.f);
+		
 	}
 	else
 	{
@@ -5741,9 +5745,16 @@ SKIPROT:
 			ThinkY_Beta_Gamma(cptr, 128, 64, 0.6f, 0.4f);
 			if (cptr->Phase == DinoInfo[cptr->CType].walkAnim) cptr->tggamma += cptr->rspeed / 16.0f;
 			else cptr->tggamma += cptr->rspeed / 10.0f;
+
+			DeltaFunc(cptr->gamma, cptr->tggamma, TimeDt / 2048.f);
+		}
+		else {
+			cptr->gamma = 0;
 		}
 	}
 
+
+	/*
 	if (swimmingAnim)
 	{
 		cptr->gamma = 0;
@@ -5752,6 +5763,8 @@ SKIPROT:
 	{
 		DeltaFunc(cptr->gamma, cptr->tggamma, TimeDt / 2048.f);
 	}
+	*/
+
 
 
 	//============ Y movement =================//
@@ -5776,7 +5789,7 @@ void AnimateIcthDead(TCharacter *cptr)
 {
 	cptr->bend = 0;
 
-	if (cptr->Phase != DinoInfo[cptr->CType].fallAnim && cptr->Phase != DinoInfo[cptr->CType].deathType[cptr->deathType].die
+	if (cptr->Phase != DinoInfo[cptr->CType].deathType[cptr->deathType].fall && cptr->Phase != DinoInfo[cptr->CType].deathType[cptr->deathType].die
 		&& !(cptr->Phase == DinoInfo[cptr->CType].deathType[cptr->deathType].sleep && cptr->Clone == AI_ICTH)
 		&& !(cptr->Phase == cptr->waterDieAnim && DinoInfo[cptr->CType].waterDieCount))
 	{
@@ -5789,7 +5802,7 @@ void AnimateIcthDead(TCharacter *cptr)
 		}
 
 		cptr->FTime = 0;
-		cptr->Phase = DinoInfo[cptr->CType].fallAnim;
+		cptr->Phase = DinoInfo[cptr->CType].deathType[cptr->deathType].fall;
 		cptr->rspeed = 0;
 		ActivateCharacterFx(cptr);
 		return;
@@ -5838,7 +5851,7 @@ void AnimateIcthDead(TCharacter *cptr)
 	cptr->pos.x += cptr->lookx * cptr->vspeed * TimeDt;
 	cptr->pos.z += cptr->lookz * cptr->vspeed * TimeDt;
 
-	if (cptr->Phase == DinoInfo[cptr->CType].fallAnim)
+	if (cptr->Phase == DinoInfo[cptr->CType].deathType[cptr->deathType].fall)
 	{
 		if (OnWaterQ)
 			if (cptr->pos.y >= wh && (cptr->pos.y + cptr->rspeed * TimeDt / 1024) < wh)

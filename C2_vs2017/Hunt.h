@@ -442,15 +442,16 @@ typedef struct _TDinoKill
 	int anim;
 	int offset;
 	int hunteranim;
-	bool elevate;
-	bool dontloop;
-	bool scream;
+	BOOL elevate;
+	BOOL dontloop;
+	BOOL scream;
 } TDinoKill;
 
 typedef struct _TDinoDeathType
 {
 	int die;
 	int sleep;
+	int fall;
 } TDinoDeathType;
 
 typedef struct _TDinoInfo
@@ -486,7 +487,7 @@ typedef struct _TDinoInfo
   float packDensity;
 
   int runAnim, jumpAnim, walkAnim, swimAnim, flyAnim, glideAnim, takeoffAnim, landAnim,
-	  slideAnim, fallAnim, shakeLandAnim, shakeWaterAnim;
+	  slideAnim, shakeLandAnim, shakeWaterAnim;
 
   TDinoDeathType deathType[32];
   int deathTypeCount;
@@ -509,7 +510,9 @@ typedef struct _TDinoInfo
   bool canSwim;
   int waterLevel;
 
-  bool dogSmell;
+  BOOL dogSmell;
+
+  bool trophySession;
 
 } TDinoInfo;
 
