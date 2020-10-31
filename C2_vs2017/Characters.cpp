@@ -3749,7 +3749,8 @@ NOTHINK:
 		}
 	}
 
-	LookForAWay(cptr, !DinoInfo[cptr->CType].canSwim, !cptr->State);
+	//LookForAWay(cptr, !DinoInfo[cptr->CType].canSwim, !cptr->State);
+	LookForAWay(cptr, !DinoInfo[cptr->CType].canSwim, TRUE);
 	if (cptr->NoWayCnt > 12)
 	{
 		cptr->NoWayCnt = 0;
