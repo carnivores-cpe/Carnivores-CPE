@@ -6,11 +6,15 @@
     <DebuggerFlavor>WindowsLocalDebugger</DebuggerFlavor>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release 3DFX|Win32'">
-    <LocalDebuggerCommandArguments>prj=huntdat\areas\area1 reg=0 din=8 wep=1 dtm=1</LocalDebuggerCommandArguments>
+    <LocalDebuggerCommandArguments>prj=huntdat\areas\area1 reg=0 din=511 wep=63 dtm=1 -double</LocalDebuggerCommandArguments>
     <DebuggerFlavor>WindowsLocalDebugger</DebuggerFlavor>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release D3D|Win32'">
     <LocalDebuggerCommandArguments>prj=huntdat\areas\area1 reg=0 din=1 wep=16 dtm=1</LocalDebuggerCommandArguments>
+    <DebuggerFlavor>WindowsLocalDebugger</DebuggerFlavor>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release Soft|Win32'">
+    <LocalDebuggerCommandArguments>prj=huntdat\areas\area1 reg=1 din=511 wep=63 dtm=1 -double -multiplayer -host</LocalDebuggerCommandArguments>
     <DebuggerFlavor>WindowsLocalDebugger</DebuggerFlavor>
   </PropertyGroup>
 </Project>

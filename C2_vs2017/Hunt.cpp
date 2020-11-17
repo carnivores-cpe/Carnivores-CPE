@@ -1845,7 +1845,8 @@ void ProcessGame()
 int PASCAL WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
                    LPSTR lpszCmdLine, int nCmdShow)
 {
-  MSG msg;
+	
+	MSG msg;
 
   hInst = hInstance;
   CreateLog();

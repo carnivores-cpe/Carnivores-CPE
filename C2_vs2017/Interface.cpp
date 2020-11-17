@@ -87,6 +87,26 @@ void DoHalt(LPSTR Mess)
   TerminateProcess(GetCurrentProcess(), 0);
 }
 
+//For stopping the program before audio/3d hardware startup
+void DoHalt2(LPSTR Mess)
+{
+//	AudioStop();
+//	Audio_Shutdown();
+
+//	ShutDown3DHardware();
+	EnableWindow(hwndMain, FALSE);
+	if (strlen(Mess))
+	{
+		PrintLog("ABNORMAL_HALT: ");
+		PrintLog(Mess);
+		PrintLog("\n");
+		MessageBox(NULL, Mess, "Carnivores Termination", IDOK | MB_SYSTEMMODAL | MB_ICONEXCLAMATION);
+	}
+
+	CloseLog();
+	TerminateProcess(GetCurrentProcess(), 0);
+}
+
 
 void WaitRetrace()
 {

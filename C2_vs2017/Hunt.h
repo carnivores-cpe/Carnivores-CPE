@@ -803,6 +803,7 @@ void AddElements(float, float, float, int, int);
 void AddWCircle(float, float, float);
 void AnimateProcesses();
 void DoHalt(LPSTR);
+void DoHalt2(LPSTR);
 
 _EXTORNOT   char logt[128];
 void CreateLog();
@@ -826,6 +827,7 @@ _EXTORNOT   int     KeyFlags, _shotcounter;
 
 _EXTORNOT   TMessageList MessageList;
 _EXTORNOT   char    ProjectName[128];
+_EXTORNOT   char    ServerAddress[128];
 _EXTORNOT   int     _GameState;
 _EXTORNOT   TSFX    fxCall[10][3], fxScream[4];
 _EXTORNOT   TSFX    fxUnderwater, fxWaterIn, fxWaterOut, fxJump, fxStep[3], fxStepW[3];
@@ -873,7 +875,8 @@ _EXTORNOT int answtime, answcall;
 _EXTORNOT BOOL ScentMode, CamoMode,
           RadarMode, LockLanding,
           TrophyMode, DoubleAmmo,
-	      DogMode;
+	      DogMode, Multiplayer,
+		  Host;
 
 _EXTORNOT TTrophyRoom TrophyRoom;
 //_EXTORNOT TPlayerR PlayerR[16];
