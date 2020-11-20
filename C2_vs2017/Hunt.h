@@ -849,6 +849,15 @@ _EXTORNOT   struct addrinfo hints;
 
 _EXTORNOT   int iSendResult;
 
+_EXTORNOT   HANDLE CommsThreadHandle;
+_EXTORNOT   LPDWORD CommsThreadID;
+_EXTORNOT   BOOL HaltThread;
+
+
+void StartupServerCommsThread();
+void StartupClientCommsThread();
+
+
 
 
 //========== common ==================//

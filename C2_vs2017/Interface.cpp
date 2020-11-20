@@ -71,16 +71,18 @@ void PrintText(LPSTR s, int x, int y, int rgb)
 
 void DoHalt(LPSTR Mess)
 {
+
+	if (Multiplayer) {
+		if (Host) {
+			ShutDownServer();
+		}
+		else {
+			ShutDownClient();
+		}
+	}
+
   AudioStop();
   Audio_Shutdown();
-
-  if (Multiplayer) {
-	  if (Host) {
-		  ShutDownServer();
-	  } else {
-		  ShutDownClient();
-	  }
-  }
 
   ShutDown3DHardware();
   EnableWindow(hwndMain, FALSE);

@@ -1815,6 +1815,7 @@ void ProcessGame()
 
   ProcessSyncro();
 
+
   if (!PAUSE || !MyHealth)
   {
     ProcessControls();
@@ -1925,8 +1926,20 @@ int PASCAL WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
   ProcessSyncro();
   blActive = TRUE;
 
+
+  //multiplayer
+  if (Multiplayer) {
+	  if (Host) {
+		  StartupServerCommsThread();
+	  }
+	  else {
+		  StartupClientCommsThread();
+	  }
+  }
+
+
   PrintLog("Entering messages loop.\n");
-  for( ; ; )
+  for( ; ; ){
     if( PeekMessage( &msg, NULL, NULL, NULL, PM_REMOVE ) )
     {
       if (msg.message == WM_QUIT)  break;
@@ -1938,6 +1951,16 @@ int PASCAL WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
       if (blActive) ProcessGame();
       else Sleep(100);
     }
+  }
+
+  if (Multiplayer) {
+	  if (Host) {
+		  ShutDownServer();
+	  }
+	  else {
+		  ShutDownClient();
+	  }
+  }
 
   AudioStop();
   Audio_Shutdown();

@@ -839,9 +839,35 @@ void InitGameInfo()
   LoadResourcesScript();
 }
 
+DWORD WINAPI ServerCommsThread(LPVOID lpParameter)
+{
+	while (HaltThread) {
+		Sleep(1000);//test
+		// if laggy, add sleep statement
+	}
+	PrintLog("Server Comms Thread Shutdown Successful!\n");
+	return 0;
+}
+
+DWORD WINAPI ClientCommsThread(LPVOID lpParameter)
+{
+	while (HaltThread) {
+		Sleep(1000);//test
+		// if laggy, add sleep statement
+	}
+	PrintLog("Client Comms Thread Shutdown Successful!\n");
+	return 0;
+}
 
 void ShutDownServer() {
 
+	//shutdown thread
+	PrintLog("Server Comms Thread Shutting Down...\n");
+	HaltThread = FALSE;
+	WaitForSingleObject(CommsThreadHandle, INFINITE);
+	CloseHandle(CommsThreadHandle);
+
+	
 	//tell clients to shut down
 
 	// shutdown the connection since we're done
@@ -850,7 +876,7 @@ void ShutDownServer() {
 		PrintLog("shutdown failed\n");
 		closesocket(ClientSocket);
 		WSACleanup();
-		DoHalt2("Multiplayer Host: shutdown failed");
+		DoHalt2("Multiplayer Host: shutdown failed\n");
 	}
 
 	// cleanup
@@ -862,15 +888,39 @@ void ShutDownServer() {
 	PrintLog("COMPLETE!\n");
 }
 
+
+
 void ShutDownClient() {
+
+	//shutdown thread
+	PrintLog("Client Comms Thread Shutting Down...\n");
+	HaltThread = FALSE;
+	WaitForSingleObject(CommsThreadHandle, INFINITE);
+	CloseHandle(CommsThreadHandle);
+
 	// cleanup
 	closesocket(ConnectSocket);
 	WSACleanup();
 
 	//test
-	PrintLog("Client connection closed!");
-	PrintLog("COMPLETE!");
+	PrintLog("Client connection closed!\n");
+	PrintLog("COMPLETE!\n");
 }
+
+
+
+void StartupServerCommsThread() {
+	PrintLog("Starting Server Comms...\n");
+	CommsThreadHandle = CreateThread(0, 0, ServerCommsThread, NULL, 0, CommsThreadID);
+	PrintLog("Server Comms Thread Started\n");
+}
+
+void StartupClientCommsThread() {
+	PrintLog("Starting Client Comms...\n");
+	CommsThreadHandle = CreateThread(0, 0, ClientCommsThread, NULL, 0, CommsThreadID);
+	PrintLog("Client Comms Thread Started\n");
+}
+
 
 
 
@@ -905,6 +955,7 @@ void InitEngine()
   RadarMode    = FALSE;
 
   Multiplayer = FALSE;
+  HaltThread = TRUE;
   Host = FALSE;
   ListenSocket = INVALID_SOCKET;
   ClientSocket = INVALID_SOCKET;
@@ -1124,6 +1175,9 @@ void InitEngine()
 
 		  } while (iResult > 0);
 
+		  //test end
+
+
 	  } else {
 
 	  //CLIENT
@@ -1248,10 +1302,6 @@ void InitEngine()
 	  } while (!responded);
 
 	  //multiplayer test end
-
-
-
-
 
 
 	  }
