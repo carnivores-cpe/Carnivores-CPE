@@ -1,3 +1,18 @@
+#define WIN32_LEAN_AND_MEAN
+
+#include <winsock2.h>
+#include <windows.h>
+#include <ws2tcpip.h>
+#include <stdlib.h>
+#include <stdio.h>
+
+#pragma comment (lib, "Ws2_32.lib")
+#pragma comment (lib, "Mswsock.lib")
+#pragma comment (lib, "AdvApi32.lib")
+
+#define DEFAULT_BUFLEN 512
+#define DEFAULT_PORT "1986"
+
 #include "math.h"
 #include "windows.h"
 #include "winuser.h"
@@ -667,7 +682,7 @@ void DrawTPlaneClip(BOOL);
 void ClearVideoBuf();
 void DrawTrophyText(int, int);
 void DrawHMap();
-void RenderCharacter(int);
+void RenderCharacter(TCharacter*);
 void RenderShip();
 void RenderPlayer(int);
 void RenderSkyPlane();
@@ -693,8 +708,10 @@ void WaitRetrace();
 void Characters_AddSecondaryOne(int ctype);
 void AddDeadBody(TCharacter *cptr, int, bool);
 void PlaceCharacters();
+void PlaceMHunters(); //multiplayer
 void PlaceTrophy();
 void AnimateCharacters();
+void AnimateMHunters(); //multiplayer
 void MakeNoise(Vector3d, float);
 void CheckAfraid();
 void CreateChMorphedModel(TCharacter* cptr);
@@ -787,6 +804,8 @@ bool waterNear(float, float, float);
 
 void LoadResourcesScript();
 void InitEngine();
+void ShutDownServer();
+void ShutDownClient();
 void ShutDownEngine();
 void ProcessSyncro();
 void AddShipTask(int);
@@ -816,6 +835,22 @@ _EXTORNOT   int   UnderWaterT;
 _EXTORNOT   int   TotalC, TotalW, TotalMA, TotalTrophy, TotalRegion, TotalAvoid;
 
 
+//========== multiplayer =============//
+
+_EXTORNOT   char    ServerAddress[128];
+_EXTORNOT   WSADATA wsaData;
+_EXTORNOT   int iResult;
+_EXTORNOT   SOCKET ListenSocket;
+_EXTORNOT   SOCKET ClientSocket;
+_EXTORNOT   SOCKET ConnectSocket;
+
+_EXTORNOT   struct addrinfo *result;
+_EXTORNOT   struct addrinfo hints;
+
+_EXTORNOT   int iSendResult;
+
+
+
 //========== common ==================//
 _EXTORNOT   HWND    hwndMain;
 _EXTORNOT   HINSTANCE  hInst;
@@ -827,7 +862,7 @@ _EXTORNOT   int     KeyFlags, _shotcounter;
 
 _EXTORNOT   TMessageList MessageList;
 _EXTORNOT   char    ProjectName[128];
-_EXTORNOT   char    ServerAddress[128];
+
 _EXTORNOT   int     _GameState;
 _EXTORNOT   TSFX    fxCall[10][3], fxScream[4];
 _EXTORNOT   TSFX    fxUnderwater, fxWaterIn, fxWaterOut, fxJump, fxStep[3], fxStepW[3];
@@ -910,13 +945,16 @@ _EXTORNOT TCharacterInfo ShipModel;
 _EXTORNOT int AI_to_CIndex[64];
 _EXTORNOT int TrophyIndex[64];
 _EXTORNOT int ChCount, WCCount, ElCount,
-          ShotDino, TrophyBody;
+          ShotDino, TrophyBody, HunterCount; //HunterCount is for multiplayer, up to 3 others
 _EXTORNOT TCharacterInfo WindModel;
 _EXTORNOT TCharacterInfo PlayerInfo;
 _EXTORNOT TCharacterInfo ChInfo[64];
+_EXTORNOT TCharacterInfo MPlayerInfo[3]; //multiplayer
 _EXTORNOT TPack          Packs[256];
 _EXTORNOT int PackCount;
 _EXTORNOT TCharacter     Characters[256];
+_EXTORNOT TCharacter     MPlayers[3]; //multiplayer
+
 _EXTORNOT TWCircle       WCircles[128];
 _EXTORNOT TDemoPoint     DemoPoint;
 _EXTORNOT TCharacter     *killerDino;

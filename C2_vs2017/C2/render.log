@@ -3,6 +3,80 @@ Creating main window...Ok.
 Checking 3dfx:
 Voodoo card.
 Trophy Loaded.
-Starting Server...
-Waiting for client...
-ABNORMAL_HALT: Multiplayer Host: Waiting for client...
+Init Engine: Ok.
+
+DirectSound3D(native) audio driver (Beta 4) v1.2
+No Device Enumerating implemented.. 
+Using native DirectSound 3D (Software emulation mode)
+DSCAPS:
+ dwFreeHw3DAllBuffers 0 
+ dwFreeHw3DStaticBuffers 0 
+ dwFreeHw3DStreamingBuffers 0 
+ dwFreeHwMemBytes 0 
+ dwTotalHwMemBytes 0 
+ dwFreeHwMixingAllBuffers 0 
+ dwFreeHwMixingStaticBuffers 0 
+ dwFreeHwMixingStreamingBuffers 0 
+ dwMaxContigFreeHwMemBytes 0 
+ dwMinSecondarySampleRate 100 
+ dwMaxSecondarySampleRate 200000 
+ dwMaxHw3DAllBuffers 0 
+ dwMaxHw3DStaticBuffers 0 
+ dwMaxHw3DStreamingBuffers 0 
+ dwMaxHwMixingAllBuffers 1 
+ dwMaxHwMixingStaticBuffers 1 
+ dwMaxHwMixingStreamingBuffers 1 
+CreatePrimaryBuffer Ok
+Primary SetFormat() Ok
+Create audio thread #1..ok
+Create Listener3D()
+InitAudioSystem ok
+
+== Loading resources ==
+Loading common resources: Done.
+Loading textures: Done.
+Loading models: Done.
+Finishing with .res: Done.
+Loading .map: Done.
+Loading area: Done.
+Entering messages loop.
+Entered game
+ReInitGame();
+Placing...
+Loading: HUNTDAT\hunter1_brach.car
+Loading: HUNTDAT\mosh.car
+Loading: HUNTDAT\gall.car
+Loading: HUNTDAT\dimor2.car
+Loading: HUNTDAT\ptera.car
+Loading: HUNTDAT\dimet.car
+Loading: HUNTDAT\par2.car
+Loading: HUNTDAT\ankylo1.car
+Loading: HUNTDAT\stego.car
+Loading: HUNTDAT\chasmosa.car
+Loading: HUNTDAT\velo_iidc.car
+Loading: HUNTDAT\spino_s.car
+Loading: HUNTDAT\cerato1_s.car
+Loading: HUNTDAT\tirex.car
+Loading: HUNTDAT\dangerbrachikiller2.car
+Loading: HUNTDAT\WEAPONS\pistol.car
+Loading: HUNTDAT\WEAPONS\bullet1.tga
+Loading: HUNTDAT\WEAPONS\shotgun.car
+Loading: HUNTDAT\WEAPONS\bullet2.tga
+Loading: HUNTDAT\WEAPONS\dbsgun.car
+Loading: HUNTDAT\WEAPONS\bullet2.tga
+Loading: HUNTDAT\WEAPONS\x_bow.car
+Loading: HUNTDAT\WEAPONS\bullet4.tga
+Loading: HUNTDAT\WEAPONS\rifle.car
+Loading: HUNTDAT\WEAPONS\bullet3.tga
+Loading: HUNTDAT\WEAPONS\sniper.car
+Loading: HUNTDAT\WEAPONS\bullet3.tga
+Start Address: 0
+End   Address: 8388592
+Audio_UpdateGeometry: 324 faces uploaded
+Trophy Saved.
+  AudioStop ()
+ Releasing Listener3D
+ Releasing PrimaryBuffer
+ Releasing DirectSoundObject
+ Terminate thread 1
+ AudioShutdown()

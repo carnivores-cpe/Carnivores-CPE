@@ -6689,6 +6689,13 @@ TBEGIN:
 
 
 
+//multiplayer
+void AnimateMHunters() {
+
+	//loop through hunters
+
+}
+
 
 
 void AnimateCharacters()
@@ -7210,6 +7217,46 @@ replaceSMA:
 	ResetCharacter(&Characters[ChCount]);
 	ChCount++;
 
+
+}
+
+
+
+
+
+
+//multiplayer
+void PlaceMHunters() {
+
+	//1 player test
+	MPlayers[0].pos.x = PlayerX;
+	MPlayers[0].pos.z = PlayerZ;
+	MPlayers[0].pos.y = PlayerY;
+
+	MPlayers[0].pinfo = &MPlayerInfo[0];
+
+	MPlayers[0].alpha = 0;
+
+	MPlayers[0].State = 0;
+	MPlayers[0].StateF = 0;
+	MPlayers[0].Phase = 0;
+	MPlayers[0].FTime = 0;
+	MPlayers[0].PrevPhase = 0;
+	MPlayers[0].PrevPFTime = 0;
+	MPlayers[0].PPMorphTime = 0;
+	MPlayers[0].beta = 0;
+	MPlayers[0].gamma = 0;
+	MPlayers[0].tggamma = 0;
+	MPlayers[0].bend = 0;
+	MPlayers[0].rspeed = 0;
+	MPlayers[0].AfraidTime = 0;
+	MPlayers[0].BloodTTime = 0;
+	MPlayers[0].BloodTime = 0;
+	MPlayers[0].lookx = (float)cos(MPlayers[0].alpha);
+	MPlayers[0].lookz = (float)sin(MPlayers[0].alpha);
+	MPlayers[0].scale = 1;
+
+	HunterCount = 1;
 
 }
 

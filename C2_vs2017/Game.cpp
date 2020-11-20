@@ -11,6 +11,8 @@
 #include <stdlib.h>
 #include <stdio.h>
 
+#include <timeapi.h>
+
 #pragma comment (lib, "Ws2_32.lib")
 #pragma comment (lib, "Mswsock.lib")
 #pragma comment (lib, "AdvApi32.lib")
@@ -838,6 +840,38 @@ void InitGameInfo()
 }
 
 
+void ShutDownServer() {
+
+	//tell clients to shut down
+
+	// shutdown the connection since we're done
+	iResult = shutdown(ClientSocket, SD_SEND);
+	if (iResult == SOCKET_ERROR) {
+		PrintLog("shutdown failed\n");
+		closesocket(ClientSocket);
+		WSACleanup();
+		DoHalt2("Multiplayer Host: shutdown failed");
+	}
+
+	// cleanup
+	closesocket(ClientSocket);
+	WSACleanup();
+
+	//test
+	PrintLog("ShutDown multiplayer\n");
+	PrintLog("COMPLETE!\n");
+}
+
+void ShutDownClient() {
+	// cleanup
+	closesocket(ConnectSocket);
+	WSACleanup();
+
+	//test
+	PrintLog("Client connection closed!");
+	PrintLog("COMPLETE!");
+}
+
 
 
 void InitEngine()
@@ -872,6 +906,10 @@ void InitEngine()
 
   Multiplayer = FALSE;
   Host = FALSE;
+  ListenSocket = INVALID_SOCKET;
+  ClientSocket = INVALID_SOCKET;
+  ConnectSocket = INVALID_SOCKET;
+  result = NULL;
 
   fnt_BIG = CreateFont(
               23, 10, 0, 0,
@@ -967,26 +1005,18 @@ void InitEngine()
 
   ProcessCommandLine();
 
-
   //Multiplayer
   if (Multiplayer) {
 	  if (Host) {
 		  
+		  char recvbuf[DEFAULT_BUFLEN];
+		  int recvbuflen = DEFAULT_BUFLEN;
+
+		  //server
 
 		  PrintLog("Starting Server...\n");
 
-		  WSADATA wsaData;
-		  int iResult;
 
-		  SOCKET ListenSocket = INVALID_SOCKET;
-		  SOCKET ClientSocket = INVALID_SOCKET;
-
-		  struct addrinfo *result = NULL;
-		  struct addrinfo hints;
-
-		  int iSendResult;
-		  char recvbuf[DEFAULT_BUFLEN];
-		  int recvbuflen = DEFAULT_BUFLEN;
 
 		  // Initialize Winsock
 		  iResult = WSAStartup(MAKEWORD(2, 2), &wsaData);
@@ -1094,36 +1124,21 @@ void InitEngine()
 
 		  } while (iResult > 0);
 
-		  // shutdown the connection since we're done
-		  iResult = shutdown(ClientSocket, SD_SEND);
-		  if (iResult == SOCKET_ERROR) {
-			  PrintLog("shutdown failed\n");
-			  closesocket(ClientSocket);
-			  WSACleanup();
-			  DoHalt2("Multiplayer Host: shutdown failed");
-		  }
-
-		  // cleanup
-		  closesocket(ClientSocket);
-		  WSACleanup();
-
-		  //test
-		  PrintLog("COMPLETE!/n");
-
-
 	  } else {
 
 	  //CLIENT
 
 
-	  WSADATA wsaData;
-	  SOCKET ConnectSocket = INVALID_SOCKET;
-	  struct addrinfo *result = NULL,
-		  *ptr = NULL,
-		  hints;
+	  
+	  struct addrinfo
+//		  *result = NULL,
+		  *ptr = NULL
+//		  ,
+//		  hints
+		  ;
+		  
 	  const char *sendbuf = "this is a test";
 	  char recvbuf[DEFAULT_BUFLEN];
-	  int iResult;
 	  int recvbuflen = DEFAULT_BUFLEN;
 
 	  /*
@@ -1210,8 +1225,8 @@ void InitEngine()
 	  }
 
 	  // Receive until the peer closes the connection
+	  bool responded = FALSE;
 	  do {
-
 		  iResult = recv(ConnectSocket, recvbuf, recvbuflen, 0);
 		  if (iResult > 0)
 		  {
@@ -1221,6 +1236,7 @@ void InitEngine()
 			  _itoa(iResult, bytesSent, 10);
 			  PrintLog(bytesSent);
 			  PrintLog("\n");
+			  responded = TRUE;
 		  }
 		  else if (iResult == 0) {
 			  PrintLog("Connection closed\n");
@@ -1229,28 +1245,7 @@ void InitEngine()
 			  PrintLog("recv failed\n");
 		  }
 
-	  } while (iResult > 0);
-
-	  // cleanup
-	  closesocket(ConnectSocket);
-	  WSACleanup();
-
-	  //test
-	  PrintLog("COMPLETE!");
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+	  } while (!responded);
 
 	  //multiplayer test end
 

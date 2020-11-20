@@ -3528,7 +3528,7 @@ void RenderModelClipWater(TModel* _mptr, float x0, float y0, float z0, int light
 
 
 
-void RenderCharacter(int index)
+void RenderCharacter(TCharacter *cptr)
 {
 }
 
@@ -3863,6 +3863,39 @@ void Render3DHardwarePosts()
     if ( fabs(cptr->rpos.y) > -cptr->rpos.z + br ) continue;
 
     RenderCharacterPost(cptr);
+  }
+
+
+  //multiplayer
+  //test just the 1 other player
+  if (Multiplayer) {
+	for (int c = 0; c < 1; c++){// 1 player, not playercount
+	  cptr = &MPlayers[c];
+	  cptr->rpos.x = cptr->pos.x - CameraX;
+	  cptr->rpos.y = cptr->pos.y - CameraY;
+	  cptr->rpos.z = cptr->pos.z - CameraZ;
+
+
+	  float r = (float)max(fabs(cptr->rpos.x), fabs(cptr->rpos.z));
+	  int ri = -1 + (int)(r / 256.f + 0.5f);
+	  if (ri < 0) ri = 0;
+	  if (ri > ctViewR) continue;
+
+	  if (FOGON)
+	  {
+		  CalcFogLevel_Gradient(cptr->rpos);
+		  grFogColorValue(CurFogColor);
+	  }
+
+	  cptr->rpos = RotateVector(cptr->rpos);
+
+	  float br = BackViewR + DinoInfo[cptr->CType].Radius;
+	  if (cptr->rpos.z > br) continue;
+	  if (fabs(cptr->rpos.x) > -cptr->rpos.z + br) continue;
+	  if (fabs(cptr->rpos.y) > -cptr->rpos.z + br) continue;
+
+	  RenderCharacterPost(cptr);
+	}
   }
 
 

@@ -1,5 +1,6 @@
 #include "Hunt.h"
 #include "stdio.h"
+#include "timeapi.h"
 HANDLE hfile;
 DWORD  l;
 
@@ -1611,6 +1612,19 @@ void LoadCharacters()
         wsprintf(logt,"HUNTDAT\\SOUNDFX\\CALLS\\call%d_c.wav", (c-9));
         LoadWav(logt, fxCall[c-10][2]);
       }
+
+  //multiplayer hunter models
+  //test - 1 other player
+  //test - add custom models at some point?
+  if (Multiplayer) {
+	  wsprintf(logt, "MULTIPLAYER\\AVATARS\\Poacher.car");
+	  LoadCharacterInfo(MPlayerInfo[0], logt);
+	  PrintLog("Loading: ");
+	  PrintLog(logt);
+	  PrintLog("\n");
+  }
+
+
 }
 
 void ReInitGame()
@@ -1618,7 +1632,10 @@ void ReInitGame()
   PrintLog("ReInitGame();\n");
   PlaceHunter();
   if (TrophyMode)	PlaceTrophy();
-  else PlaceCharacters();
+  else {
+	  PlaceCharacters(); 
+	  if (Multiplayer) PlaceMHunters();
+  }
 
   LoadCharacters();
 

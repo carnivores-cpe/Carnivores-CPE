@@ -1,6 +1,7 @@
 #define INITGUID
 #include "Hunt.h"
 #include "stdio.h"
+#include "timeapi.h"
 
 typedef struct _TMenuSet
 {
@@ -72,6 +73,14 @@ void DoHalt(LPSTR Mess)
 {
   AudioStop();
   Audio_Shutdown();
+
+  if (Multiplayer) {
+	  if (Host) {
+		  ShutDownServer();
+	  } else {
+		  ShutDownClient();
+	  }
+  }
 
   ShutDown3DHardware();
   EnableWindow(hwndMain, FALSE);

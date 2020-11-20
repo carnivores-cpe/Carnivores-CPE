@@ -290,6 +290,53 @@ NOSHIP:
 
 
 
+
+
+  if (Multiplayer) {
+
+	  //============= Multiplayer ====================//
+
+	  // test - 1 other player
+
+	  TCharacter *cptr;
+	  for (int c = 0; c < 1; c++)// 1 player, not playercount
+	  {
+		  cptr = &MPlayers[0];
+		  cptr->rpos.x = cptr->pos.x - CameraX;
+		  cptr->rpos.y = cptr->pos.y - CameraY;
+		  cptr->rpos.z = cptr->pos.z - CameraZ;
+
+		  float r = (float)max(fabs(cptr->rpos.x), fabs(cptr->rpos.z));
+		  int ri = -1 + (int)(r / 256.f + 0.5f);
+		  if (ri < 0) ri = 0;
+		  if (ri > ctViewR) continue;
+
+		  cptr->rpos = RotateVector(cptr->rpos);
+
+		  float br = BackViewR + 256;//hunter radius 256?
+		  if (cptr->rpos.z > br) continue;
+		  if (fabs(cptr->rpos.x) > -cptr->rpos.z + br) continue;
+		  if (fabs(cptr->rpos.y) > -cptr->rpos.z + br) continue;
+
+		  /*
+				if (cptr->rpos.z > BackViewR + ) continue;
+				if ( fabs(cptr->rpos.x) > -cptr->rpos.z + BackViewR ) continue;
+		  */
+		  //      AddShadowCircle((int)cptr->pos.x+100, (int)cptr->pos.z+100, 360, 16);
+
+		  int i = ChRenderList[ri].ICount++;
+		  ChRenderList[ri].Items[i].CType = 4;
+		  ChRenderList[ri].Items[i].Index = 0; //increase for each extra player
+	  }
+
+
+  }
+
+
+
+
+
+
 }
 
 
@@ -298,12 +345,14 @@ void RenderChList(int r)
   if (HARD3D) return;
   for (int c=0; c<ChRenderList[r].ICount; c++)
   {
-    if (ChRenderList[r].Items[c].CType ==0) RenderCharacter(ChRenderList[r].Items[c].Index);
-    else if (ChRenderList[r].Items[c].CType ==3) RenderShip();
+	  if (ChRenderList[r].Items[c].CType == 0) {
+		  RenderCharacter(&Characters[ChRenderList[r].Items[c].Index]);
+	  } else if (ChRenderList[r].Items[c].CType == 4) {
+		  RenderCharacter(&MPlayers[ChRenderList[r].Items[c].Index]);
+	  } else if (ChRenderList[r].Items[c].CType == 3) RenderShip();
+	
   }
 }
-
-
 
 
 
@@ -2316,9 +2365,8 @@ LNEXT:
 
 
 
-void RenderCharacter(int index)
+void RenderCharacter(TCharacter *cptr)
 {
-  TCharacter *cptr = &Characters[index];
 
   float zs = (float)VectorLength( cptr->rpos );
   if (zs > ctViewR*256) return;

@@ -1821,6 +1821,9 @@ void ProcessGame()
     AudioSetCameraPos(CameraX, CameraY, CameraZ, CameraAlpha, CameraBeta);
     Audio_UploadGeometry();
     AnimateCharacters();
+	if (Multiplayer) {
+		AnimateMHunters();
+	}
     AnimateProcesses();
   }
 
