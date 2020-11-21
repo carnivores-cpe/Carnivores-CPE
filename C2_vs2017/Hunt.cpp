@@ -1801,6 +1801,56 @@ void ProcessGame()
     PrintLog("Entered game\n");
     ReInitGame();
     while (ShowCursor(FALSE)>=0);
+
+	if (Multiplayer) {
+		if (!_MultiplayerState) {
+
+			if (Host) {
+				StartupServerCommsThread();
+			} else {
+				StartupClientCommsThread();
+			}
+
+		}
+		_MultiplayerState = 1;
+	}
+
+
+
+//test
+	/*
+	long long_data = PlayerX;
+
+	char printable2[25];
+	_itoa(long_data, printable2, 10);
+	PrintLog("SENDINGVALUE:");
+	PrintLog(printable2);
+	PrintLog("\n");
+
+	byte tdata[4];
+	tdata[0] = (int)((long_data >> 24) & 0xFF);
+	tdata[1] = (int)((long_data >> 16) & 0xFF);
+	tdata[2] = (int)((long_data >> 8) & 0XFF);
+	tdata[3] = (int)((long_data & 0XFF));
+
+	const char *p = reinterpret_cast<const char*>(tdata);
+	const byte *tdata2 = reinterpret_cast<const byte*>(p);
+
+	long anotherLongInt = ((tdata2[0] << 24)
+		+ (tdata2[1] << 16)
+		+ (tdata2[2] << 8)
+		+ (tdata2[3]));
+
+	char printable[25];
+	_itoa(anotherLongInt, printable, 10);
+
+	PrintLog("SENTVALUE:");
+	PrintLog(printable);
+	PrintLog("\n");
+	*/
+
+
+
   }
 
   _GameState = 1;
@@ -1925,18 +1975,6 @@ int PASCAL WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 
   ProcessSyncro();
   blActive = TRUE;
-
-
-  //multiplayer
-  if (Multiplayer) {
-	  if (Host) {
-		  StartupServerCommsThread();
-	  }
-	  else {
-		  StartupClientCommsThread();
-	  }
-  }
-
 
   PrintLog("Entering messages loop.\n");
   for( ; ; ){

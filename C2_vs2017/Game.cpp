@@ -843,62 +843,61 @@ DWORD WINAPI ServerCommsThread(LPVOID lpParameter)
 {
 	while (HaltThread) {
 
+		//do {
 
-
-
-
-
-
-
-
-
-
-
-		do {
-
-			iResult = recv(ClientSocket, recvbuf, recvbuflen, 0);
+			iResult = recv(ClientSocket, recvbuf, 4, 0);
 			if (iResult > 0) {
+				
+				const byte *tdata2 = reinterpret_cast<const byte*>(recvbuf);
+				long anotherLongInt = ((tdata2[0] << 24)
+					+ (tdata2[1] << 16)
+					+ (tdata2[2] << 8)
+					+ (tdata2[3]));
+
+				//test - comment this out to reduce lag
+				char printable[25];
+				_itoa(anotherLongInt, printable, 10);
 				PrintLog("Bytes received: ");
-				char bytesRec[25];
-				_itoa(iResult, bytesRec, 10);
-				PrintLog(bytesRec);
+				PrintLog(printable);
 				PrintLog("\n");
 
+				Sleep(1000);//test
+
+				//char *sendbuf = "test"; 
+				long long_data = PlayerX;
+				byte tdata[4];
+				tdata[0] = (int)((long_data >> 24) & 0xFF);
+				tdata[1] = (int)((long_data >> 16) & 0xFF);
+				tdata[2] = (int)((long_data >> 8) & 0XFF);
+				tdata[3] = (int)((long_data & 0XFF));
+				const char *sendbuf = reinterpret_cast<const char*>(tdata);
 
 				// Echo the buffer back to the sender
-				iSendResult = send(ClientSocket, recvbuf, iResult, 0);
+				iSendResult = send(ClientSocket, sendbuf, 4, 0);
 				if (iSendResult == SOCKET_ERROR) {
 					PrintLog("send failed\n");
 					closesocket(ClientSocket);
 					WSACleanup();
 					DoHalt("Multiplayer Host: send failed");
 				}
+
+				//test - comment this out to reduce lag
+				char printable2[25];
+				_itoa(long_data, printable2, 10);
 				PrintLog("Bytes sent: ");
-				char bytesSent[25];
-				_itoa(iSendResult, bytesSent, 10);
-				PrintLog(bytesSent);
+				PrintLog(printable2);
 				PrintLog("\n");
+
+
 			}
-			else if (iResult == 0) {}
-			else {
+			else if (iResult != 0)  {
 				PrintLog("recv failed\n");
 				closesocket(ClientSocket);
 				WSACleanup();
 				DoHalt("Multiplayer Host: recv failed");
 			}
 
-		} while (iResult > 0);
-
-
-
-
-
-
-
-
-
-
-
+		//} while ();
 
 		// if laggy, add sleep statement to client
 	}
@@ -909,18 +908,21 @@ DWORD WINAPI ServerCommsThread(LPVOID lpParameter)
 DWORD WINAPI ClientCommsThread(LPVOID lpParameter)
 {
 
-	const char *sendbuf = "testing";//len=7
 	//recvbuf = "testing";
 
 	while (HaltThread) {
 
-
-
-
-
+		//char *sendbuf = "test";
+		long long_data = PlayerX;
+		byte tdata[4];
+		tdata[0] = (int)((long_data >> 24) & 0xFF);
+		tdata[1] = (int)((long_data >> 16) & 0xFF);
+		tdata[2] = (int)((long_data >> 8) & 0XFF);
+		tdata[3] = (int)((long_data & 0XFF));
+		const char *sendbuf = reinterpret_cast<const char*>(tdata);
 
 		// Send an initial buffer
-		iResult = send(ConnectSocket, sendbuf, (int)strlen(sendbuf), 0);
+		iResult = send(ConnectSocket, sendbuf, 4, 0);
 		if (iResult == SOCKET_ERROR) {
 			PrintLog("send failed");
 			closesocket(ConnectSocket);
@@ -928,11 +930,11 @@ DWORD WINAPI ClientCommsThread(LPVOID lpParameter)
 			DoHalt("Multiplayer Client: Send failed");
 		}
 
-		//PrintLog("Bytes Sent: %ld\n", iResult);
+		//test - comment this out to reduce lag
+		char printable2[25];
+		_itoa(long_data, printable2, 10);
 		PrintLog("Bytes sent: ");
-		char bytesSent[25];
-		_itoa(iResult, bytesSent, 10);
-		PrintLog(bytesSent);
+		PrintLog(printable2);
 		PrintLog("\n");
 
 		/*
@@ -948,28 +950,28 @@ DWORD WINAPI ClientCommsThread(LPVOID lpParameter)
 
 
 
-
-
-
-
 		// Receive until the peer closes the connection
 		bool responded = FALSE;
 		do {
-			iResult = recv(ConnectSocket, recvbuf, recvbuflen, 0);
+			iResult = recv(ConnectSocket, recvbuf, 4, 0);
 			if (iResult > 0)
 			{
-				//PrintLog("Bytes received: %d\n", iResult);
+				const byte *tdata2 = reinterpret_cast<const byte*>(recvbuf);
+				long anotherLongInt = ((tdata2[0] << 24)
+					+ (tdata2[1] << 16)
+					+ (tdata2[2] << 8)
+					+ (tdata2[3]));
+
+				//test - comment this out to reduce lag
+				char printable[25];
+				_itoa(anotherLongInt, printable, 10);
 				PrintLog("Bytes received: ");
-				char bytesSent[25];
-				_itoa(iResult, bytesSent, 10);
-				PrintLog(bytesSent);
+				PrintLog(printable);
 				PrintLog("\n");
+
 				responded = TRUE;
 			}
-			else if (iResult == 0) {
-				
-			}
-			else {
+			else if (iResult != 0) {
 				PrintLog("recv failed\n");
 			}
 
@@ -1323,6 +1325,7 @@ void InitEngine()
   MORPHA       = TRUE;
 
   _GameState = 0;
+  _MultiplayerState = 0;
 
   RadarMode    = FALSE;
 

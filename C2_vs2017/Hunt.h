@@ -875,7 +875,7 @@ _EXTORNOT   int     KeyFlags, _shotcounter;
 _EXTORNOT   TMessageList MessageList;
 _EXTORNOT   char    ProjectName[128];
 
-_EXTORNOT   int     _GameState;
+_EXTORNOT   int     _GameState, _MultiplayerState;//multiplayer
 _EXTORNOT   TSFX    fxCall[10][3], fxScream[4];
 _EXTORNOT   TSFX    fxUnderwater, fxWaterIn, fxWaterOut, fxJump, fxStep[3], fxStepW[3];
 //========== map =====================//
