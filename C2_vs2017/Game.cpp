@@ -839,41 +839,81 @@ void InitGameInfo()
   LoadResourcesScript();
 }
 
+
 DWORD WINAPI ServerCommsThread(LPVOID lpParameter)
 {
 	while (HaltThread) {
 
 		//do {
 
-			iResult = recv(ClientSocket, recvbuf, 4, 0);
+			iResult = recv(ClientSocket, recvbuf, 16, 0);
 			if (iResult > 0) {
 				
 				const byte *tdata2 = reinterpret_cast<const byte*>(recvbuf);
-				long anotherLongInt = ((tdata2[0] << 24)
+
+				Vector3d *posTemp = new Vector3d;
+				
+				posTemp->x = (float)((tdata2[0] << 24)
 					+ (tdata2[1] << 16)
 					+ (tdata2[2] << 8)
 					+ (tdata2[3]));
+				posTemp->y = (float)((tdata2[4] << 24)
+					+ (tdata2[5] << 16)
+					+ (tdata2[6] << 8)
+					+ (tdata2[7]));
+				posTemp->z = (float)((tdata2[8] << 24)
+					+ (tdata2[9] << 16)
+					+ (tdata2[10] << 8)
+					+ (tdata2[11]));
 
+				MPlayers[0].pos = *posTemp;
+
+				MPlayers[0].alpha = (float)((tdata2[12] << 24)
+					+ (tdata2[13] << 16)
+					+ (tdata2[14] << 8)
+					+ (tdata2[15]));
+
+
+				//MPlayers[0].alpha += 1.5 * pi;
+				//if (MPlayers[0].alpha > pi * 2) MPlayers[0].alpha -= 2 * pi;
+
+				/*
 				//test - comment this out to reduce lag
 				char printable[25];
 				_itoa(anotherLongInt, printable, 10);
 				PrintLog("Bytes received: ");
 				PrintLog(printable);
 				PrintLog("\n");
-
-				Sleep(1000);//test
-
+				*/
+				
 				//char *sendbuf = "test"; 
-				long long_data = PlayerX;
-				byte tdata[4];
-				tdata[0] = (int)((long_data >> 24) & 0xFF);
-				tdata[1] = (int)((long_data >> 16) & 0xFF);
-				tdata[2] = (int)((long_data >> 8) & 0XFF);
-				tdata[3] = (int)((long_data & 0XFF));
+				long px = PlayerX;
+				long py = PlayerY;
+				long pz = PlayerZ;
+				long pa = PlayerAlpha;
+				
+				byte tdata[16];
+				tdata[0] = (int)((px >> 24) & 0xFF);
+				tdata[1] = (int)((px >> 16) & 0xFF);
+				tdata[2] = (int)((px >> 8) & 0XFF);
+				tdata[3] = (int)((px & 0XFF));
+				tdata[4] = (int)((py >> 24) & 0xFF);
+				tdata[5] = (int)((py >> 16) & 0xFF);
+				tdata[6] = (int)((py >> 8) & 0XFF);
+				tdata[7] = (int)((py & 0XFF));
+				tdata[8] = (int)((pz >> 24) & 0xFF);
+				tdata[9] = (int)((pz >> 16) & 0xFF);
+				tdata[10] = (int)((pz >> 8) & 0XFF);
+				tdata[11] = (int)((pz & 0XFF));
+				tdata[12] = (int)((pa >> 24) & 0xFF);
+				tdata[13] = (int)((pa >> 16) & 0xFF);
+				tdata[14] = (int)((pa >> 8) & 0XFF);
+				tdata[15] = (int)((pa & 0XFF));
 				const char *sendbuf = reinterpret_cast<const char*>(tdata);
+				
 
 				// Echo the buffer back to the sender
-				iSendResult = send(ClientSocket, sendbuf, 4, 0);
+				iSendResult = send(ClientSocket, sendbuf, 16, 0);
 				if (iSendResult == SOCKET_ERROR) {
 					PrintLog("send failed\n");
 					closesocket(ClientSocket);
@@ -881,13 +921,14 @@ DWORD WINAPI ServerCommsThread(LPVOID lpParameter)
 					DoHalt("Multiplayer Host: send failed");
 				}
 
+				/*
 				//test - comment this out to reduce lag
 				char printable2[25];
 				_itoa(long_data, printable2, 10);
 				PrintLog("Bytes sent: ");
 				PrintLog(printable2);
 				PrintLog("\n");
-
+				*/
 
 			}
 			else if (iResult != 0)  {
@@ -913,29 +954,50 @@ DWORD WINAPI ClientCommsThread(LPVOID lpParameter)
 	while (HaltThread) {
 
 		//char *sendbuf = "test";
-		long long_data = PlayerX;
-		byte tdata[4];
-		tdata[0] = (int)((long_data >> 24) & 0xFF);
-		tdata[1] = (int)((long_data >> 16) & 0xFF);
-		tdata[2] = (int)((long_data >> 8) & 0XFF);
-		tdata[3] = (int)((long_data & 0XFF));
+		//long long_data = PlayerX;
+		long px = PlayerX;
+		long py = PlayerY;
+		long pz = PlayerZ;
+		long pa = PlayerAlpha;
+		byte tdata[16];
+
+		
+		
+		tdata[0] = (int)((px >> 24) & 0xFF);
+		tdata[1] = (int)((px >> 16) & 0xFF);
+		tdata[2] = (int)((px >> 8) & 0XFF);
+		tdata[3] = (int)((px & 0XFF));
+		tdata[4] = (int)((py >> 24) & 0xFF);
+		tdata[5] = (int)((py >> 16) & 0xFF);
+		tdata[6] = (int)((py >> 8) & 0XFF);
+		tdata[7] = (int)((py & 0XFF));
+		tdata[8] = (int)((pz >> 24) & 0xFF);
+		tdata[9] = (int)((pz >> 16) & 0xFF);
+		tdata[10] = (int)((pz >> 8) & 0XFF);
+		tdata[11] = (int)((pz & 0XFF));
+		tdata[12] = (int)((pa >> 24) & 0xFF);
+		tdata[13] = (int)((pa >> 16) & 0xFF);
+		tdata[14] = (int)((pa >> 8) & 0XFF);
+		tdata[15] = (int)((pa & 0XFF));
 		const char *sendbuf = reinterpret_cast<const char*>(tdata);
 
 		// Send an initial buffer
-		iResult = send(ConnectSocket, sendbuf, 4, 0);
+		iResult = send(ConnectSocket, sendbuf, 16, 0);
 		if (iResult == SOCKET_ERROR) {
 			PrintLog("send failed");
 			closesocket(ConnectSocket);
 			WSACleanup();
 			DoHalt("Multiplayer Client: Send failed");
 		}
-
+		
+		/*
 		//test - comment this out to reduce lag
 		char printable2[25];
 		_itoa(long_data, printable2, 10);
 		PrintLog("Bytes sent: ");
 		PrintLog(printable2);
 		PrintLog("\n");
+		*/
 
 		/*
 		// shutdown the connection since no more data will be sent
@@ -953,21 +1015,43 @@ DWORD WINAPI ClientCommsThread(LPVOID lpParameter)
 		// Receive until the peer closes the connection
 		bool responded = FALSE;
 		do {
-			iResult = recv(ConnectSocket, recvbuf, 4, 0);
+			iResult = recv(ConnectSocket, recvbuf, 16, 0);
 			if (iResult > 0)
 			{
 				const byte *tdata2 = reinterpret_cast<const byte*>(recvbuf);
-				long anotherLongInt = ((tdata2[0] << 24)
+
+				Vector3d *posTemp = new Vector3d;
+
+				posTemp->x = (float)((tdata2[0] << 24)
 					+ (tdata2[1] << 16)
 					+ (tdata2[2] << 8)
 					+ (tdata2[3]));
+				posTemp->y = (float)((tdata2[4] << 24)
+					+ (tdata2[5] << 16)
+					+ (tdata2[6] << 8)
+					+ (tdata2[7]));
+				posTemp->z = (float)((tdata2[8] << 24)
+					+ (tdata2[9] << 16)
+					+ (tdata2[10] << 8)
+					+ (tdata2[11]));
 
+				MPlayers[0].pos = *posTemp;
+
+				MPlayers[0].alpha = (float)((tdata2[12] << 24)
+					+ (tdata2[13] << 16)
+					+ (tdata2[14] << 8)
+					+ (tdata2[15]));
+				//MPlayers[0].alpha += 1.5 * pi;
+				//if (MPlayers[0].alpha > pi * 2) MPlayers[0].alpha -= 2 * pi;
+
+				/*
 				//test - comment this out to reduce lag
 				char printable[25];
 				_itoa(anotherLongInt, printable, 10);
 				PrintLog("Bytes received: ");
 				PrintLog(printable);
 				PrintLog("\n");
+				*/
 
 				responded = TRUE;
 			}
@@ -983,7 +1067,7 @@ DWORD WINAPI ClientCommsThread(LPVOID lpParameter)
 
 
 
-		Sleep(1000);//test
+		Sleep(100);//test
 		// if laggy, add sleep statement
 	}
 	PrintLog("Client Comms Thread Shutdown Successful!\n");
