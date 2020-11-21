@@ -842,8 +842,65 @@ void InitGameInfo()
 DWORD WINAPI ServerCommsThread(LPVOID lpParameter)
 {
 	while (HaltThread) {
-		Sleep(1000);//test
-		// if laggy, add sleep statement
+
+
+
+
+
+
+
+
+
+
+
+
+		do {
+
+			iResult = recv(ClientSocket, recvbuf, recvbuflen, 0);
+			if (iResult > 0) {
+				PrintLog("Bytes received: ");
+				char bytesRec[25];
+				_itoa(iResult, bytesRec, 10);
+				PrintLog(bytesRec);
+				PrintLog("\n");
+
+
+				// Echo the buffer back to the sender
+				iSendResult = send(ClientSocket, recvbuf, iResult, 0);
+				if (iSendResult == SOCKET_ERROR) {
+					PrintLog("send failed\n");
+					closesocket(ClientSocket);
+					WSACleanup();
+					DoHalt("Multiplayer Host: send failed");
+				}
+				PrintLog("Bytes sent: ");
+				char bytesSent[25];
+				_itoa(iSendResult, bytesSent, 10);
+				PrintLog(bytesSent);
+				PrintLog("\n");
+			}
+			else if (iResult == 0) {}
+			else {
+				PrintLog("recv failed\n");
+				closesocket(ClientSocket);
+				WSACleanup();
+				DoHalt("Multiplayer Host: recv failed");
+			}
+
+		} while (iResult > 0);
+
+
+
+
+
+
+
+
+
+
+
+
+		// if laggy, add sleep statement to client
 	}
 	PrintLog("Server Comms Thread Shutdown Successful!\n");
 	return 0;
@@ -851,7 +908,79 @@ DWORD WINAPI ServerCommsThread(LPVOID lpParameter)
 
 DWORD WINAPI ClientCommsThread(LPVOID lpParameter)
 {
+
+	const char *sendbuf = "testing";//len=7
+	//recvbuf = "testing";
+
 	while (HaltThread) {
+
+
+
+
+
+
+		// Send an initial buffer
+		iResult = send(ConnectSocket, sendbuf, (int)strlen(sendbuf), 0);
+		if (iResult == SOCKET_ERROR) {
+			PrintLog("send failed");
+			closesocket(ConnectSocket);
+			WSACleanup();
+			DoHalt("Multiplayer Client: Send failed");
+		}
+
+		//PrintLog("Bytes Sent: %ld\n", iResult);
+		PrintLog("Bytes sent: ");
+		char bytesSent[25];
+		_itoa(iResult, bytesSent, 10);
+		PrintLog(bytesSent);
+		PrintLog("\n");
+
+		/*
+		// shutdown the connection since no more data will be sent
+		iResult = shutdown(ConnectSocket, SD_SEND);
+		if (iResult == SOCKET_ERROR) {
+			PrintLog("shutdown failed");
+			closesocket(ConnectSocket);
+			WSACleanup();
+			DoHalt("Multiplayer Client: Shutdown failed");
+		}
+		*/
+
+
+
+
+
+
+
+		// Receive until the peer closes the connection
+		bool responded = FALSE;
+		do {
+			iResult = recv(ConnectSocket, recvbuf, recvbuflen, 0);
+			if (iResult > 0)
+			{
+				//PrintLog("Bytes received: %d\n", iResult);
+				PrintLog("Bytes received: ");
+				char bytesSent[25];
+				_itoa(iResult, bytesSent, 10);
+				PrintLog(bytesSent);
+				PrintLog("\n");
+				responded = TRUE;
+			}
+			else if (iResult == 0) {
+				
+			}
+			else {
+				PrintLog("recv failed\n");
+			}
+
+		} while (!responded);
+
+
+
+
+
+
+
 		Sleep(1000);//test
 		// if laggy, add sleep statement
 	}
@@ -892,6 +1021,15 @@ void ShutDownServer() {
 
 void ShutDownClient() {
 
+	// shutdown the connection since no more data will be sent
+	iResult = shutdown(ConnectSocket, SD_SEND);
+	if (iResult == SOCKET_ERROR) {
+		PrintLog("shutdown failed");
+		closesocket(ConnectSocket);
+		WSACleanup();
+		DoHalt2("Multiplayer Client: Shutdown failed");
+	}
+
 	//shutdown thread
 	PrintLog("Client Comms Thread Shutting Down...\n");
 	HaltThread = FALSE;
@@ -908,15 +1046,249 @@ void ShutDownClient() {
 }
 
 
+void _StartupServer() {
+	//server
+
+	PrintLog("Starting Server...\n");
+
+
+
+	// Initialize Winsock
+	iResult = WSAStartup(MAKEWORD(2, 2), &wsaData);
+	if (iResult != 0) {
+		PrintLog("WSAStartup failed\n");
+		DoHalt2("Multiplayer Host: WSAStartup failed");
+	}
+
+	ZeroMemory(&hints, sizeof(hints));
+	hints.ai_family = AF_INET;
+	hints.ai_socktype = SOCK_STREAM;
+	hints.ai_protocol = IPPROTO_TCP;
+	hints.ai_flags = AI_PASSIVE;
+
+	// Resolve the server address and port
+	iResult = getaddrinfo(NULL, DEFAULT_PORT, &hints, &result);
+	if (iResult != 0) {
+		PrintLog("getaddrinfo failed\n");
+		WSACleanup();
+		DoHalt2("Multiplayer Host: getaddrinfo failed");
+	}
+
+	// Create a SOCKET for connecting to server
+	ListenSocket = socket(result->ai_family, result->ai_socktype, result->ai_protocol);
+	if (ListenSocket == INVALID_SOCKET) {
+		PrintLog("socket failed\n");
+		freeaddrinfo(result);
+		WSACleanup();
+		DoHalt2("Multiplayer Host: socket failed");
+	}
+
+	// Setup the TCP listening socket
+	iResult = bind(ListenSocket, result->ai_addr, (int)result->ai_addrlen);
+	if (iResult == SOCKET_ERROR) {
+		PrintLog("bind failed\n");
+		freeaddrinfo(result);
+		closesocket(ListenSocket);
+		WSACleanup();
+		DoHalt2("Multiplayer Host: bind failed");
+	}
+
+	freeaddrinfo(result);
+
+	iResult = listen(ListenSocket, SOMAXCONN);
+	if (iResult == SOCKET_ERROR) {
+		PrintLog("listen failed\n");
+		closesocket(ListenSocket);
+		WSACleanup();
+		DoHalt2("Multiplayer Host: listen failed");
+	}
+
+	PrintLog("Waiting for client...\n");
+
+
+	//CLIENT CONNECTION - TEMPORARY, check for new clients for x amount of time each iteration? Shutdown on exit, kick clients first
+
+
+	// Accept a client socket
+	ClientSocket = accept(ListenSocket, NULL, NULL);
+	if (ClientSocket == INVALID_SOCKET) {
+		PrintLog("accept failed\n");
+		closesocket(ListenSocket);
+		WSACleanup();
+		DoHalt2("Multiplayer Host: accept failed");
+	}
+	else PrintLog("Client accepted!\n");
+
+	// No longer need server socket
+	closesocket(ListenSocket);
+
+	/*
+	// Receive until the peer shuts down the connection
+	do {
+
+		iResult = recv(ClientSocket, recvbuf, recvbuflen, 0);
+		if (iResult > 0) {
+			PrintLog("Bytes received: ");
+			char bytesRec[25];
+			_itoa(iResult, bytesRec, 10);
+			PrintLog(bytesRec);
+			PrintLog("\n");
+
+
+			// Echo the buffer back to the sender
+			iSendResult = send(ClientSocket, recvbuf, iResult, 0);
+			if (iSendResult == SOCKET_ERROR) {
+				PrintLog("send failed\n");
+				closesocket(ClientSocket);
+				WSACleanup();
+				DoHalt2("Multiplayer Host: send failed");
+			}
+			PrintLog("Bytes sent: ");
+			char bytesSent[25];
+			_itoa(iSendResult, bytesSent, 10);
+			PrintLog(bytesSent);
+			PrintLog("\n");
+		}
+		else if (iResult == 0) {}
+		else {
+			PrintLog("recv failed\n");
+			closesocket(ClientSocket);
+			WSACleanup();
+			DoHalt2("Multiplayer Host: recv failed");
+		}
+
+	} while (iResult > 0);
+	*/
+}
+
+void _StartupClient() {
+	//CLIENT
+
+
+
+	struct addrinfo
+		//		  *result = NULL,
+		*ptr = NULL
+		//		  ,
+		//		  hints
+		;
+
+	const char *sendbuf = "this is a test";
+
+	/*
+	// Validate the parameters
+	if (argc != 2) {
+		printf("usage: %s server-name\n", argv[0]);
+		return 1;
+	}
+	*/
+
+	// Initialize Winsock
+	iResult = WSAStartup(MAKEWORD(2, 2), &wsaData);
+	if (iResult != 0) {
+		PrintLog("WSAStartup failed");
+		DoHalt2("Multiplayer Client: WSAStartup failed");
+	}
+
+	ZeroMemory(&hints, sizeof(hints));
+	hints.ai_family = AF_UNSPEC;
+	hints.ai_socktype = SOCK_STREAM;
+	hints.ai_protocol = IPPROTO_TCP;
+
+	// Resolve the server address and port
+	iResult = getaddrinfo(static_cast<LPCTSTR>(ServerAddress), DEFAULT_PORT, &hints, &result);
+	if (iResult != 0) {
+		PrintLog("getaddrinfo failed");
+		WSACleanup();
+		DoHalt2("Multiplayer Client: getaddrinfo failed");
+	}
+
+	// Attempt to connect to an address until one succeeds
+	for (ptr = result; ptr != NULL; ptr = ptr->ai_next) {
+
+		// Create a SOCKET for connecting to server
+		ConnectSocket = socket(ptr->ai_family, ptr->ai_socktype,
+			ptr->ai_protocol);
+		if (ConnectSocket == INVALID_SOCKET) {
+			PrintLog("socket failed\n");
+			WSACleanup();
+			DoHalt2("Multiplayer Client: Socket failed");
+		}
+
+		// Connect to server.
+		iResult = connect(ConnectSocket, ptr->ai_addr, (int)ptr->ai_addrlen);
+		if (iResult == SOCKET_ERROR) {
+			closesocket(ConnectSocket);
+			ConnectSocket = INVALID_SOCKET;
+			continue;
+		}
+		break;
+	}
+
+	freeaddrinfo(result);
+
+	if (ConnectSocket == INVALID_SOCKET) {
+		PrintLog("Unable to connect to server!\n");
+		WSACleanup();
+		DoHalt2("Multiplayer Client: Unable to connect to server!");
+	}
+
+	/*
+	// Send an initial buffer
+	iResult = send(ConnectSocket, sendbuf, (int)strlen(sendbuf), 0);
+	if (iResult == SOCKET_ERROR) {
+		PrintLog("send failed");
+		closesocket(ConnectSocket);
+		WSACleanup();
+		DoHalt2("Multiplayer Client: Send failed");
+	}
+
+	//PrintLog("Bytes Sent: %ld\n", iResult);
+	PrintLog("Bytes sent: ");
+	char bytesSent[25];
+	_itoa(iResult, bytesSent, 10);
+	PrintLog(bytesSent);
+	PrintLog("\n");
+
+	// Receive until the peer closes the connection
+	bool responded = FALSE;
+	do {
+		iResult = recv(ConnectSocket, recvbuf, recvbuflen, 0);
+		if (iResult > 0)
+		{
+			//PrintLog("Bytes received: %d\n", iResult);
+			PrintLog("Bytes received: ");
+			char bytesSent[25];
+			_itoa(iResult, bytesSent, 10);
+			PrintLog(bytesSent);
+			PrintLog("\n");
+			responded = TRUE;
+		}
+		else if (iResult == 0) {
+			//PrintLog("Connection closed\n");
+		}
+		else {
+			PrintLog("recv failed\n");
+		}
+
+	} while (!responded);
+	*/
+
+	//multiplayer test end
+}
+
+
 
 void StartupServerCommsThread() {
 	PrintLog("Starting Server Comms...\n");
+	_StartupServer();
 	CommsThreadHandle = CreateThread(0, 0, ServerCommsThread, NULL, 0, CommsThreadID);
 	PrintLog("Server Comms Thread Started\n");
 }
 
 void StartupClientCommsThread() {
 	PrintLog("Starting Client Comms...\n");
+	_StartupClient();
 	CommsThreadHandle = CreateThread(0, 0, ClientCommsThread, NULL, 0, CommsThreadID);
 	PrintLog("Client Comms Thread Started\n");
 }
@@ -954,12 +1326,14 @@ void InitEngine()
 
   RadarMode    = FALSE;
 
+  //multiplayer
   Multiplayer = FALSE;
   HaltThread = TRUE;
   Host = FALSE;
   ListenSocket = INVALID_SOCKET;
   ClientSocket = INVALID_SOCKET;
   ConnectSocket = INVALID_SOCKET;
+  recvbuflen = DEFAULT_BUFLEN;
   result = NULL;
 
   fnt_BIG = CreateFont(
@@ -1056,257 +1430,24 @@ void InitEngine()
 
   ProcessCommandLine();
 
+  /*
   //Multiplayer
   if (Multiplayer) {
 	  if (Host) {
+
 		  
-		  char recvbuf[DEFAULT_BUFLEN];
-		  int recvbuflen = DEFAULT_BUFLEN;
-
-		  //server
-
-		  PrintLog("Starting Server...\n");
-
-
-
-		  // Initialize Winsock
-		  iResult = WSAStartup(MAKEWORD(2, 2), &wsaData);
-		  if (iResult != 0) {
-			  PrintLog("WSAStartup failed\n");
-			  DoHalt2("Multiplayer Host: WSAStartup failed");
-		  }
-
-		  ZeroMemory(&hints, sizeof(hints));
-		  hints.ai_family = AF_INET;
-		  hints.ai_socktype = SOCK_STREAM;
-		  hints.ai_protocol = IPPROTO_TCP;
-		  hints.ai_flags = AI_PASSIVE;
-
-		  // Resolve the server address and port
-		  iResult = getaddrinfo(NULL, DEFAULT_PORT, &hints, &result);
-		  if (iResult != 0) {
-			  PrintLog("getaddrinfo failed\n");
-			  WSACleanup();
-			  DoHalt2("Multiplayer Host: getaddrinfo failed");
-		  }
-
-		  // Create a SOCKET for connecting to server
-		  ListenSocket = socket(result->ai_family, result->ai_socktype, result->ai_protocol);
-		  if (ListenSocket == INVALID_SOCKET) {
-			  PrintLog("socket failed\n");
-			  freeaddrinfo(result);
-			  WSACleanup();
-			  DoHalt2("Multiplayer Host: socket failed");
-		  }
-
-		  // Setup the TCP listening socket
-		  iResult = bind(ListenSocket, result->ai_addr, (int)result->ai_addrlen);
-		  if (iResult == SOCKET_ERROR) {
-			  PrintLog("bind failed\n");
-			  freeaddrinfo(result);
-			  closesocket(ListenSocket);
-			  WSACleanup();
-			  DoHalt2("Multiplayer Host: bind failed");
-		  }
-
-		  freeaddrinfo(result);
-
-		  iResult = listen(ListenSocket, SOMAXCONN);
-		  if (iResult == SOCKET_ERROR) {
-			  PrintLog("listen failed\n");
-			  closesocket(ListenSocket);
-			  WSACleanup();
-			  DoHalt2("Multiplayer Host: listen failed");
-		  }
-
-		  PrintLog("Waiting for client...\n");
-
-
-		  //CLIENT CONNECTION - TEMPORARY, check for new clients for x amount of time each iteration? Shutdown on exit, kick clients first
-
-
-		  // Accept a client socket
-		  ClientSocket = accept(ListenSocket, NULL, NULL);
-		  if (ClientSocket == INVALID_SOCKET) {
-			  PrintLog("accept failed\n");
-			  closesocket(ListenSocket);
-			  WSACleanup();
-			  DoHalt2("Multiplayer Host: accept failed");
-		  }
-		  else PrintLog("Client accepted!\n");
-
-		  // No longer need server socket
-		  closesocket(ListenSocket);
-
-		  // Receive until the peer shuts down the connection
-		  do {
-
-			  iResult = recv(ClientSocket, recvbuf, recvbuflen, 0);
-			  if (iResult > 0) {
-				  PrintLog("Bytes received: ");
-				  char bytesRec[25];
-				  _itoa(iResult, bytesRec, 10);
-				  PrintLog(bytesRec);
-				  PrintLog("\n");
-
-
-				  // Echo the buffer back to the sender
-				  iSendResult = send(ClientSocket, recvbuf, iResult, 0);
-				  if (iSendResult == SOCKET_ERROR) {
-					  PrintLog("send failed\n");
-					  closesocket(ClientSocket);
-					  WSACleanup();
-					  DoHalt2("Multiplayer Host: send failed");
-				  }
-				  PrintLog("Bytes sent: ");
-				  char bytesSent[25];
-				  _itoa(iSendResult, bytesSent, 10);
-				  PrintLog(bytesSent);
-				  PrintLog("\n");
-			  }
-			  else if (iResult == 0)
-				  PrintLog("Connection closing...\n");
-			  else {
-				  PrintLog("recv failed\n");
-				  closesocket(ClientSocket);
-				  WSACleanup();
-				  DoHalt2("Multiplayer Host: recv failed");
-			  }
-
-		  } while (iResult > 0);
 
 		  //test end
 
 
 	  } else {
 
-	  //CLIENT
 
-
-	  
-	  struct addrinfo
-//		  *result = NULL,
-		  *ptr = NULL
-//		  ,
-//		  hints
-		  ;
-		  
-	  const char *sendbuf = "this is a test";
-	  char recvbuf[DEFAULT_BUFLEN];
-	  int recvbuflen = DEFAULT_BUFLEN;
-
-	  /*
-	  // Validate the parameters
-	  if (argc != 2) {
-		  printf("usage: %s server-name\n", argv[0]);
-		  return 1;
-	  }
-	  */
-
-	  // Initialize Winsock
-	  iResult = WSAStartup(MAKEWORD(2, 2), &wsaData);
-	  if (iResult != 0) {
-		  PrintLog("WSAStartup failed");
-		  DoHalt2("Multiplayer Client: WSAStartup failed");
-	  }
-
-	  ZeroMemory(&hints, sizeof(hints));
-	  hints.ai_family = AF_UNSPEC;
-	  hints.ai_socktype = SOCK_STREAM;
-	  hints.ai_protocol = IPPROTO_TCP;
-
-	  // Resolve the server address and port
-	  iResult = getaddrinfo(static_cast<LPCTSTR>(ServerAddress), DEFAULT_PORT, &hints, &result);
-	  if (iResult != 0) {
-		  PrintLog("getaddrinfo failed");
-		  WSACleanup();
-		  DoHalt2("Multiplayer Client: getaddrinfo failed");
-	  }
-
-	  // Attempt to connect to an address until one succeeds
-	  for (ptr = result; ptr != NULL; ptr = ptr->ai_next) {
-
-		  // Create a SOCKET for connecting to server
-		  ConnectSocket = socket(ptr->ai_family, ptr->ai_socktype,
-			  ptr->ai_protocol);
-		  if (ConnectSocket == INVALID_SOCKET) {
-			  PrintLog("socket failed\n");
-			  WSACleanup();
-			  DoHalt2("Multiplayer Client: Socket failed");
-		  }
-
-		  // Connect to server.
-		  iResult = connect(ConnectSocket, ptr->ai_addr, (int)ptr->ai_addrlen);
-		  if (iResult == SOCKET_ERROR) {
-			  closesocket(ConnectSocket);
-			  ConnectSocket = INVALID_SOCKET;
-			  continue;
-		  }
-		  break;
-	  }
-
-	  freeaddrinfo(result);
-
-	  if (ConnectSocket == INVALID_SOCKET) {
-		  PrintLog("Unable to connect to server!\n");
-		  WSACleanup();
-		  DoHalt2("Multiplayer Client: Unable to connect to server!");
-	  }
-
-	  // Send an initial buffer
-	  iResult = send(ConnectSocket, sendbuf, (int)strlen(sendbuf), 0);
-	  if (iResult == SOCKET_ERROR) {
-		  PrintLog("send failed");
-		  closesocket(ConnectSocket);
-		  WSACleanup();
-		  DoHalt2("Multiplayer Client: Send failed");
-	  }
-
-	  //PrintLog("Bytes Sent: %ld\n", iResult);
-	  PrintLog("Bytes sent: ");
-	  char bytesSent[25];
-	  _itoa(iResult, bytesSent, 10);
-	  PrintLog(bytesSent);
-	  PrintLog("\n");
-
-	  // shutdown the connection since no more data will be sent
-	  iResult = shutdown(ConnectSocket, SD_SEND);
-	  if (iResult == SOCKET_ERROR) {
-		  PrintLog("shutdown failed");
-		  closesocket(ConnectSocket);
-		  WSACleanup();
-		  DoHalt2("Multiplayer Client: Shutdown failed");
-	  }
-
-	  // Receive until the peer closes the connection
-	  bool responded = FALSE;
-	  do {
-		  iResult = recv(ConnectSocket, recvbuf, recvbuflen, 0);
-		  if (iResult > 0)
-		  {
-			  //PrintLog("Bytes received: %d\n", iResult);
-			  PrintLog("Bytes received: ");
-			  char bytesSent[25];
-			  _itoa(iResult, bytesSent, 10);
-			  PrintLog(bytesSent);
-			  PrintLog("\n");
-			  responded = TRUE;
-		  }
-		  else if (iResult == 0) {
-			  PrintLog("Connection closed\n");
-		  }
-		  else {
-			  PrintLog("recv failed\n");
-		  }
-
-	  } while (!responded);
-
-	  //multiplayer test end
 
 
 	  }
   }
-
+  */
 
 
 

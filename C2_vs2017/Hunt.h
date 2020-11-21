@@ -854,6 +854,9 @@ _EXTORNOT   LPDWORD CommsThreadID;
 _EXTORNOT   BOOL HaltThread;
 
 
+_EXTORNOT   char recvbuf[DEFAULT_BUFLEN];
+_EXTORNOT   int recvbuflen;
+
 void StartupServerCommsThread();
 void StartupClientCommsThread();
 
