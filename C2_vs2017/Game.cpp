@@ -856,26 +856,26 @@ DWORD WINAPI ServerCommsThread(LPVOID lpParameter)
 				posTemp->x = (float)((tdata2[0] << 24)
 					+ (tdata2[1] << 16)
 					+ (tdata2[2] << 8)
-					+ (tdata2[3]));
+					+ (tdata2[3])) / 10000.f;
 				posTemp->y = (float)((tdata2[4] << 24)
 					+ (tdata2[5] << 16)
 					+ (tdata2[6] << 8)
-					+ (tdata2[7]));
+					+ (tdata2[7])) / 10000.f;
 				posTemp->z = (float)((tdata2[8] << 24)
 					+ (tdata2[9] << 16)
 					+ (tdata2[10] << 8)
-					+ (tdata2[11]));
+					+ (tdata2[11])) / 10000.f;
 
 				MPlayers[0].pos = *posTemp;
 
 				MPlayers[0].alpha = (float)((tdata2[12] << 24)
 					+ (tdata2[13] << 16)
 					+ (tdata2[14] << 8)
-					+ (tdata2[15]));
+					+ (tdata2[15])) / 10000.f;
 
 
-				//MPlayers[0].alpha += 1.5 * pi;
-				//if (MPlayers[0].alpha > pi * 2) MPlayers[0].alpha -= 2 * pi;
+				MPlayers[0].alpha += 1.5 * pi;
+				if (MPlayers[0].alpha > pi * 2) MPlayers[0].alpha -= 2 * pi;
 
 				/*
 				//test - comment this out to reduce lag
@@ -887,10 +887,10 @@ DWORD WINAPI ServerCommsThread(LPVOID lpParameter)
 				*/
 				
 				//char *sendbuf = "test"; 
-				long px = PlayerX;
-				long py = PlayerY;
-				long pz = PlayerZ;
-				long pa = PlayerAlpha;
+				long px = PlayerX * 10000.f;
+				long py = PlayerY * 10000.f;
+				long pz = PlayerZ * 10000.f;
+				long pa = PlayerAlpha * 10000.f;
 				
 				byte tdata[16];
 				tdata[0] = (int)((px >> 24) & 0xFF);
@@ -955,10 +955,10 @@ DWORD WINAPI ClientCommsThread(LPVOID lpParameter)
 
 		//char *sendbuf = "test";
 		//long long_data = PlayerX;
-		long px = PlayerX;
-		long py = PlayerY;
-		long pz = PlayerZ;
-		long pa = PlayerAlpha;
+		long px = PlayerX*10000.f;
+		long py = PlayerY*10000.f;
+		long pz = PlayerZ*10000.f;
+		long pa = PlayerAlpha*10000.f;
 		byte tdata[16];
 
 		
@@ -1025,24 +1025,25 @@ DWORD WINAPI ClientCommsThread(LPVOID lpParameter)
 				posTemp->x = (float)((tdata2[0] << 24)
 					+ (tdata2[1] << 16)
 					+ (tdata2[2] << 8)
-					+ (tdata2[3]));
+					+ (tdata2[3])) / 10000.f;
 				posTemp->y = (float)((tdata2[4] << 24)
 					+ (tdata2[5] << 16)
 					+ (tdata2[6] << 8)
-					+ (tdata2[7]));
+					+ (tdata2[7])) / 10000.f;
 				posTemp->z = (float)((tdata2[8] << 24)
 					+ (tdata2[9] << 16)
 					+ (tdata2[10] << 8)
-					+ (tdata2[11]));
+					+ (tdata2[11])) / 10000.f;
 
 				MPlayers[0].pos = *posTemp;
 
 				MPlayers[0].alpha = (float)((tdata2[12] << 24)
 					+ (tdata2[13] << 16)
 					+ (tdata2[14] << 8)
-					+ (tdata2[15]));
-				//MPlayers[0].alpha += 1.5 * pi;
-				//if (MPlayers[0].alpha > pi * 2) MPlayers[0].alpha -= 2 * pi;
+					+ (tdata2[15]))/10000.f;
+
+				MPlayers[0].alpha += 1.5 * pi;
+				if (MPlayers[0].alpha > pi * 2) MPlayers[0].alpha -= 2 * pi;
 
 				/*
 				//test - comment this out to reduce lag
@@ -1067,7 +1068,7 @@ DWORD WINAPI ClientCommsThread(LPVOID lpParameter)
 
 
 
-		Sleep(100);//test
+		//Sleep(10);//test
 		// if laggy, add sleep statement
 	}
 	PrintLog("Client Comms Thread Shutdown Successful!\n");
