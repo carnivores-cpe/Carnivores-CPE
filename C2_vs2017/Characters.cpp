@@ -6694,6 +6694,18 @@ void AnimateMHunters() {
 
 	//loop through hunters
 
+	for (int c = 0; c < 1; c++) {//temp 1 player
+		if (mGunShot[c] != -1) {
+			int weapon = mGunShot[c];
+			mGunShot[c] = -1;
+			if (WeapInfo[weapon].MGSSound) {
+				TSFX *shotFx = &fxGunShot[WeapInfo[weapon].SFXIndex];
+				Vector3d *pos = &MPlayers[c].pos;
+				AddVoice3d(shotFx->length, shotFx->lpData, pos->x, pos->y, pos->z);
+			}
+		}
+	}
+	
 }
 
 

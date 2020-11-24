@@ -1599,6 +1599,14 @@ void LoadCharacters()
         PrintLog("\n");
       }
 
+	  if (Multiplayer) {
+		  if (WeapInfo[c].MGSSound) {
+			wsprintf(logt, "MULTIPLAYER\\GUNSHOTS\\%s", WeapInfo[c].SFXName);
+			LoadWav(logt, fxGunShot[c]);
+			WeapInfo[c].SFXIndex = c;
+		  } else WeapInfo[c].SFXIndex = -1;
+	  }
+
     }
 
   for (int c=10; c<20; c++)
@@ -1634,7 +1642,14 @@ void ReInitGame()
   if (TrophyMode)	PlaceTrophy();
   else {
 	  PlaceCharacters(); 
-	  if (Multiplayer) PlaceMHunters();
+	  if (Multiplayer) {
+		  sendGunShot = -1;
+		  for (int i = 0; i < 4; i++) {
+			  mGunShot[i] = -1;
+		  }
+		  HunterCount = 0;
+		  PlaceMHunters();//temp??
+	  }
   }
 
   LoadCharacters();
@@ -2047,12 +2062,21 @@ void ReadWeapons(FILE *stream)
           strcpy(WeapInfo[TotalW].Name, &value[1]);
         }
 
-        if (strstr(line, "file"))
+		if (strstr(line, "file"))
+		{
+			value = strstr(line, "'");
+			if (!value) DoHalt("Script loading error");
+			value[strlen(value) - 2] = 0;
+			strcpy(WeapInfo[TotalW].FName, &value[1]);
+		}
+
+        if (strstr(line, "gunshot"))
         {
           value = strstr(line, "'");
           if (!value) DoHalt("Script loading error");
           value[strlen(value)-2] = 0;
-          strcpy(WeapInfo[TotalW].FName, &value[1]);
+          strcpy(WeapInfo[TotalW].SFXName, &value[1]);
+		  WeapInfo[TotalW].MGSSound = TRUE;
         }
 
         if (strstr(line, "pic"))

@@ -840,13 +840,18 @@ void InitGameInfo()
 }
 
 
+DWORD WINAPI ServerMasterThread() {
+
+}
+
+
 DWORD WINAPI ServerCommsThread(LPVOID lpParameter)
 {
 	while (HaltThread) {
 
 		//do {
 
-			iResult = recv(ClientSocket, recvbuf, 16, 0);
+			iResult = recv(ClientSocket, recvbuf, 20, 0);
 			if (iResult > 0) {
 				
 				const byte *tdata2 = reinterpret_cast<const byte*>(recvbuf);
@@ -873,9 +878,16 @@ DWORD WINAPI ServerCommsThread(LPVOID lpParameter)
 					+ (tdata2[14] << 8)
 					+ (tdata2[15])) / 10000.f;
 
-
 				MPlayers[0].alpha += 1.5 * pi;
 				if (MPlayers[0].alpha > pi * 2) MPlayers[0].alpha -= 2 * pi;
+
+				mGunShot[0] = (int)((tdata2[16] << 24)
+					+ (tdata2[17] << 16)
+					+ (tdata2[18] << 8)
+					+ (tdata2[19])) - 1;
+
+
+
 
 				/*
 				//test - comment this out to reduce lag
@@ -891,8 +903,10 @@ DWORD WINAPI ServerCommsThread(LPVOID lpParameter)
 				long py = PlayerY * 10000.f;
 				long pz = PlayerZ * 10000.f;
 				long pa = PlayerAlpha * 10000.f;
+				long ps = sendGunShot + 1;
+				sendGunShot = -1;
 				
-				byte tdata[16];
+				byte tdata[20];
 				tdata[0] = (int)((px >> 24) & 0xFF);
 				tdata[1] = (int)((px >> 16) & 0xFF);
 				tdata[2] = (int)((px >> 8) & 0XFF);
@@ -909,11 +923,17 @@ DWORD WINAPI ServerCommsThread(LPVOID lpParameter)
 				tdata[13] = (int)((pa >> 16) & 0xFF);
 				tdata[14] = (int)((pa >> 8) & 0XFF);
 				tdata[15] = (int)((pa & 0XFF));
+				tdata[16] = (int)((ps >> 24) & 0xFF);
+				tdata[17] = (int)((ps >> 16) & 0xFF);
+				tdata[18] = (int)((ps >> 8) & 0XFF);
+				tdata[19] = (int)((ps & 0XFF));
+
+
 				const char *sendbuf = reinterpret_cast<const char*>(tdata);
 				
 
 				// Echo the buffer back to the sender
-				iSendResult = send(ClientSocket, sendbuf, 16, 0);
+				iSendResult = send(ClientSocket, sendbuf, 20, 0);
 				if (iSendResult == SOCKET_ERROR) {
 					PrintLog("send failed\n");
 					closesocket(ClientSocket);
@@ -959,7 +979,9 @@ DWORD WINAPI ClientCommsThread(LPVOID lpParameter)
 		long py = PlayerY*10000.f;
 		long pz = PlayerZ*10000.f;
 		long pa = PlayerAlpha*10000.f;
-		byte tdata[16];
+		long ps = sendGunShot + 1;
+		sendGunShot = -1;
+		byte tdata[20];
 
 		
 		
@@ -979,10 +1001,14 @@ DWORD WINAPI ClientCommsThread(LPVOID lpParameter)
 		tdata[13] = (int)((pa >> 16) & 0xFF);
 		tdata[14] = (int)((pa >> 8) & 0XFF);
 		tdata[15] = (int)((pa & 0XFF));
+		tdata[16] = (int)((ps >> 24) & 0xFF);
+		tdata[17] = (int)((ps >> 16) & 0xFF);
+		tdata[18] = (int)((ps >> 8) & 0XFF);
+		tdata[19] = (int)((ps & 0XFF));
 		const char *sendbuf = reinterpret_cast<const char*>(tdata);
 
 		// Send an initial buffer
-		iResult = send(ConnectSocket, sendbuf, 16, 0);
+		iResult = send(ConnectSocket, sendbuf, 20, 0);
 		if (iResult == SOCKET_ERROR) {
 			PrintLog("send failed");
 			closesocket(ConnectSocket);
@@ -1015,7 +1041,7 @@ DWORD WINAPI ClientCommsThread(LPVOID lpParameter)
 		// Receive until the peer closes the connection
 		bool responded = FALSE;
 		do {
-			iResult = recv(ConnectSocket, recvbuf, 16, 0);
+			iResult = recv(ConnectSocket, recvbuf, 20, 0);
 			if (iResult > 0)
 			{
 				const byte *tdata2 = reinterpret_cast<const byte*>(recvbuf);
@@ -1044,6 +1070,13 @@ DWORD WINAPI ClientCommsThread(LPVOID lpParameter)
 
 				MPlayers[0].alpha += 1.5 * pi;
 				if (MPlayers[0].alpha > pi * 2) MPlayers[0].alpha -= 2 * pi;
+
+				
+				mGunShot[0] = (int)((tdata2[16] << 24)
+					+ (tdata2[17] << 16)
+					+ (tdata2[18] << 8)
+					+ (tdata2[19])) - 1;
+					
 
 				/*
 				//test - comment this out to reduce lag

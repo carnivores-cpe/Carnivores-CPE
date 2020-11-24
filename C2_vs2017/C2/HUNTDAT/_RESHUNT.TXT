@@ -4,6 +4,7 @@ weapons {
  name  = 'Pistol'
  file  = 'pistol.car'
  pic   = 'bullet1.tga'
+ gunshot = 'pistol.wav'
  power = 2
  prec  = 0.8
  loud  = 0.8
@@ -15,6 +16,7 @@ weapons {
  name  = 'Shotgun'
  file  = 'shotgun.car'
  pic   = 'bullet2.tga'
+ gunshot = 'shotgun.wav'
  power = 1
  prec  = 0.3
  loud  = 1.5
@@ -28,6 +30,7 @@ weapons {
  name  = 'DB Shotgun'
  file  = 'dbsgun.car'
  pic   = 'bullet2.tga'
+ gunshot = 'dbsgun.wav'
  fall  = 1
  power = 1
  prec  = 0.2
@@ -54,6 +57,7 @@ weapons {
  name  = 'Rifle'
  file  = 'rifle.car'
  pic   = 'bullet3.tga'
+ gunshot = 'rifle.wav'
  power = 4
  prec  = 1.8
  loud  = 1.5
@@ -65,6 +69,7 @@ weapons {
  name  = 'Sniper rifle'
  file  = 'sniper.car'
  pic   = 'bullet3.tga'
+ gunshot = 'sniper.wav'
  power = 4
  optic = 1
  prec  = 2.0

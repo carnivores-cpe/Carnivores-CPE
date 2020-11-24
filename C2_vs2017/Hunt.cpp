@@ -1074,6 +1074,10 @@ void ProcessShoot()
                PlayerZ+nv.z * 256*ctViewR);
     }
 
+	//Multiplayer)
+	sendGunShot = CurrentWeapon;
+	
+
     Vector3d v;
     v.x = PlayerX;
     v.y = PlayerY;

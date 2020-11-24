@@ -72,6 +72,14 @@ void PrintText(LPSTR s, int x, int y, int rgb)
 void DoHalt(LPSTR Mess)
 {
 
+	if (strlen(Mess))
+	{
+		PrintLog("ABNORMAL_HALT: ");
+		PrintLog(Mess);
+		PrintLog("\n");
+		MessageBox(NULL, Mess, "Carnivores Termination", IDOK | MB_SYSTEMMODAL | MB_ICONEXCLAMATION);
+	}
+
 	if (Multiplayer) {
 		if (Host) {
 			ShutDownServer();
@@ -86,13 +94,6 @@ void DoHalt(LPSTR Mess)
 
   ShutDown3DHardware();
   EnableWindow(hwndMain, FALSE);
-  if (strlen(Mess))
-  {
-    PrintLog("ABNORMAL_HALT: ");
-    PrintLog(Mess);
-    PrintLog("\n");
-    MessageBox(NULL, Mess, "Carnivores Termination", IDOK | MB_SYSTEMMODAL | MB_ICONEXCLAMATION);
-  }
 
   CloseLog();
   TerminateProcess(GetCurrentProcess(), 0);

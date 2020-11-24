@@ -296,6 +296,7 @@ typedef struct _TWeapon
 {
   TCharacterInfo chinfo[10];
   TPicture       BulletPic[10];
+
   Vector3d       normals[1024];
   int state, FTime;
   float shakel;
@@ -573,9 +574,10 @@ typedef struct _TRegion
 
 typedef struct _TWeapInfo
 {
-  char Name[48], FName[48], BFName[48];
+  char Name[48], FName[48], BFName[48], SFXName[48];
+  bool MGSSound = FALSE;
   float Power, Prec, Loud, Rate;
-  int Shots, Optic, Fall, TraceC, Reload;
+  int Shots, Optic, Fall, TraceC, Reload, SFXIndex;
 } TWeapInfo;
 
 
@@ -877,6 +879,7 @@ _EXTORNOT   char    ProjectName[128];
 
 _EXTORNOT   int     _GameState, _MultiplayerState;//multiplayer
 _EXTORNOT   TSFX    fxCall[10][3], fxScream[4];
+_EXTORNOT   TSFX	fxGunShot[11];
 _EXTORNOT   TSFX    fxUnderwater, fxWaterIn, fxWaterOut, fxJump, fxStep[3], fxStepW[3];
 //========== map =====================//
 _EXTORNOT   byte HMap[ctMapSize][ctMapSize];
@@ -949,6 +952,8 @@ _EXTORNOT TCharacterInfo WCircleModel;
 _EXTORNOT TModel *CompasModel;
 _EXTORNOT TModel *Binocular;
 _EXTORNOT TDinoInfo DinoInfo[64];
+_EXTORNOT int sendGunShot;
+_EXTORNOT int mGunShot[4];
 _EXTORNOT TAIInfo AIInfo[64];
 _EXTORNOT TRegion Region[256];
 _EXTORNOT TRegion Avoid[256];
