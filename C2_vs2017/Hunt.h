@@ -954,6 +954,13 @@ _EXTORNOT TModel *Binocular;
 _EXTORNOT TDinoInfo DinoInfo[64];
 _EXTORNOT int sendGunShot;
 _EXTORNOT int mGunShot[4];
+_EXTORNOT int sendHunterCall;
+_EXTORNOT int sendHunterCallType;
+_EXTORNOT int mHunterCall[4];
+_EXTORNOT int mHunterCallType[4];
+//Add these after dino positions alligned
+//_EXTORNOT int sendDinoCall;
+//_EXTORNOT int mDinoCall[4];
 _EXTORNOT TAIInfo AIInfo[64];
 _EXTORNOT TRegion Region[256];
 _EXTORNOT TRegion Avoid[256];

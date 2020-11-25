@@ -1,10 +1,7 @@
-CarnivoresII Soft video driver. Build v2.04. Sep.24 1999.
+CarnivoresII 3DFX video driver. Build v2.04. Sep.24 1999.
 Creating main window...Ok.
-
-==Init Direct Draw==
-DirectDrawCreate: Ok
-Direct Draw activated.
-
+Checking 3dfx:
+Voodoo card.
 Trophy Loaded.
 Init Engine: Ok.
 
@@ -64,7 +61,85 @@ Loading: HUNTDAT\tirex.car
 Loading: HUNTDAT\dangerbrachikiller2.car
 Loading: HUNTDAT\WEAPONS\pistol.car
 Loading: HUNTDAT\WEAPONS\bullet1.tga
+Loading: HUNTDAT\WEAPONS\shotgun.car
+Loading: HUNTDAT\WEAPONS\bullet2.tga
+Loading: HUNTDAT\WEAPONS\dbsgun.car
+Loading: HUNTDAT\WEAPONS\bullet2.tga
+Loading: HUNTDAT\WEAPONS\x_bow.car
+Loading: HUNTDAT\WEAPONS\bullet4.tga
+Loading: HUNTDAT\WEAPONS\rifle.car
+Loading: HUNTDAT\WEAPONS\bullet3.tga
+Loading: HUNTDAT\WEAPONS\sniper.car
+Loading: HUNTDAT\WEAPONS\bullet3.tga
+Loading: MULTIPLAYER\AVATARS\Poacher.car
+Starting Server Comms...
+Starting Server...
+Waiting for client...
+Client accepted!
+Server Comms Thread Started
+Start Address: 0
+End   Address: 8388592
+Audio_UpdateGeometry: 324 faces uploaded
+Trophy Loaded.
+  AudioStop ()
+Entered game
+ReInitGame();
+Placing...
+Loading: MULTIPLAYER\AVATARS\Poacher.car
+Start Address: 0
+End   Address: 8388592
+GUNSHOT_0_VOLUME=307
+GUNSHOT_0_VOLUME=307
+GUNSHOT_0_VOLUME=307
+GUNSHOT_0_VOLUME=307
+GUNSHOT_0_VOLUME=307
+GUNSHOT_0_VOLUME=307
+GUNSHOT_0_VOLUME=307
+GUNSHOT_0_VOLUME=307
+GUNSHOT_0_VOLUME=307
+GUNSHOT_0_VOLUME=307
+GUNSHOT_0_VOLUME=307
+GUNSHOT_0_VOLUME=307
+GUNSHOT_0_VOLUME=307
+GUNSHOT_0_VOLUME=307
+GUNSHOT_0_VOLUME=307
+GUNSHOT_0_VOLUME=307
+GUNSHOT_0_VOLUME=307
+GUNSHOT_1_VOLUME=576
+GUNSHOT_1_VOLUME=576
+GUNSHOT_1_VOLUME=576
+GUNSHOT_1_VOLUME=576
+GUNSHOT_1_VOLUME=576
+GUNSHOT_1_VOLUME=576
+GUNSHOT_1_VOLUME=576
+GUNSHOT_1_VOLUME=576
+GUNSHOT_1_VOLUME=576
+GUNSHOT_1_VOLUME=576
+GUNSHOT_1_VOLUME=576
+GUNSHOT_1_VOLUME=576
+GUNSHOT_1_VOLUME=576
+GUNSHOT_1_VOLUME=576
+GUNSHOT_0_VOLUME=307
+GUNSHOT_0_VOLUME=307
+GUNSHOT_0_VOLUME=307
+GUNSHOT_0_VOLUME=307
+GUNSHOT_0_VOLUME=307
+GUNSHOT_0_VOLUME=307
+GUNSHOT_0_VOLUME=307
+GUNSHOT_0_VOLUME=307
+GUNSHOT_0_VOLUME=307
+GUNSHOT_0_VOLUME=307
+GUNSHOT_0_VOLUME=307
+GUNSHOT_1_VOLUME=576
+GUNSHOT_1_VOLUME=576
+Trophy Saved.
 Server Comms Thread Shutting Down...
-shutdown failed
-ABNORMAL_HALT: Multiplayer Host: shutdown failed
-
+Server Comms Thread Shutdown Successful!
+ShutDown multiplayer
+COMPLETE!
+  AudioStop ()
+ Releasing Listener3D
+ Releasing PrimaryBuffer
+ Releasing DirectSoundObject
+ Terminate thread 1
+ AudioShutdown()

@@ -159,7 +159,6 @@ void AddVoice3dv(int length, short int* lpdata, float cx, float cy, float cz, in
 
 
 
-
 void AddVoice3d(int length, short int* lpdata, float cx, float cy, float cz)
 {
   AddVoice3dv(length, lpdata, cx, cy, cz, 256);

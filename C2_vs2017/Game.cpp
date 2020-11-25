@@ -851,7 +851,7 @@ DWORD WINAPI ServerCommsThread(LPVOID lpParameter)
 
 		//do {
 
-			iResult = recv(ClientSocket, recvbuf, 20, 0);
+			iResult = recv(ClientSocket, recvbuf, 28, 0);
 			if (iResult > 0) {
 				
 				const byte *tdata2 = reinterpret_cast<const byte*>(recvbuf);
@@ -881,12 +881,23 @@ DWORD WINAPI ServerCommsThread(LPVOID lpParameter)
 				MPlayers[0].alpha += 1.5 * pi;
 				if (MPlayers[0].alpha > pi * 2) MPlayers[0].alpha -= 2 * pi;
 
-				mGunShot[0] = (int)((tdata2[16] << 24)
+				int t = (int)((tdata2[16] << 24)
 					+ (tdata2[17] << 16)
 					+ (tdata2[18] << 8)
 					+ (tdata2[19])) - 1;
+				if (t >= 0) mGunShot[0] = t;
 
+				t = (int)((tdata2[20] << 24)
+					+ (tdata2[21] << 16)
+					+ (tdata2[22] << 8)
+					+ (tdata2[23])) - 1;
+				if (t >= 0) mHunterCall[0] = t;
 
+				t = (int)((tdata2[24] << 24)
+					+ (tdata2[25] << 16)
+					+ (tdata2[26] << 8)
+					+ (tdata2[27])) - 1;
+				if (t >= 0) mHunterCallType[0] = t;
 
 
 				/*
@@ -903,10 +914,19 @@ DWORD WINAPI ServerCommsThread(LPVOID lpParameter)
 				long py = PlayerY * 10000.f;
 				long pz = PlayerZ * 10000.f;
 				long pa = PlayerAlpha * 10000.f;
+
 				long ps = sendGunShot + 1;
 				sendGunShot = -1;
-				
-				byte tdata[20];
+
+				long pc = sendHunterCall + 1;
+				sendHunterCall = -1;
+
+				long pct = sendHunterCallType + 1;
+				sendHunterCallType = -1;
+
+				byte tdata[28];
+
+
 				tdata[0] = (int)((px >> 24) & 0xFF);
 				tdata[1] = (int)((px >> 16) & 0xFF);
 				tdata[2] = (int)((px >> 8) & 0XFF);
@@ -927,13 +947,21 @@ DWORD WINAPI ServerCommsThread(LPVOID lpParameter)
 				tdata[17] = (int)((ps >> 16) & 0xFF);
 				tdata[18] = (int)((ps >> 8) & 0XFF);
 				tdata[19] = (int)((ps & 0XFF));
+				tdata[20] = (int)((pc >> 24) & 0xFF);
+				tdata[21] = (int)((pc >> 16) & 0xFF);
+				tdata[22] = (int)((pc >> 8) & 0XFF);
+				tdata[23] = (int)((pc & 0XFF));
+				tdata[24] = (int)((pct >> 24) & 0xFF);
+				tdata[25] = (int)((pct >> 16) & 0xFF);
+				tdata[26] = (int)((pct >> 8) & 0XFF);
+				tdata[27] = (int)((pct & 0XFF));
 
 
 				const char *sendbuf = reinterpret_cast<const char*>(tdata);
 				
 
 				// Echo the buffer back to the sender
-				iSendResult = send(ClientSocket, sendbuf, 20, 0);
+				iSendResult = send(ClientSocket, sendbuf, 28, 0);
 				if (iSendResult == SOCKET_ERROR) {
 					PrintLog("send failed\n");
 					closesocket(ClientSocket);
@@ -979,9 +1007,17 @@ DWORD WINAPI ClientCommsThread(LPVOID lpParameter)
 		long py = PlayerY*10000.f;
 		long pz = PlayerZ*10000.f;
 		long pa = PlayerAlpha*10000.f;
+
 		long ps = sendGunShot + 1;
 		sendGunShot = -1;
-		byte tdata[20];
+
+		long pc = sendHunterCall + 1;
+		sendHunterCall = -1;
+
+		long pct = sendHunterCallType + 1;
+		sendHunterCallType = -1;
+
+		byte tdata[28];
 
 		
 		
@@ -1005,10 +1041,18 @@ DWORD WINAPI ClientCommsThread(LPVOID lpParameter)
 		tdata[17] = (int)((ps >> 16) & 0xFF);
 		tdata[18] = (int)((ps >> 8) & 0XFF);
 		tdata[19] = (int)((ps & 0XFF));
+		tdata[20] = (int)((pc >> 24) & 0xFF);
+		tdata[21] = (int)((pc >> 16) & 0xFF);
+		tdata[22] = (int)((pc >> 8) & 0XFF);
+		tdata[23] = (int)((pc & 0XFF));
+		tdata[24] = (int)((pct >> 24) & 0xFF);
+		tdata[25] = (int)((pct >> 16) & 0xFF);
+		tdata[26] = (int)((pct >> 8) & 0XFF);
+		tdata[27] = (int)((pct & 0XFF));
 		const char *sendbuf = reinterpret_cast<const char*>(tdata);
 
 		// Send an initial buffer
-		iResult = send(ConnectSocket, sendbuf, 20, 0);
+		iResult = send(ConnectSocket, sendbuf, 28, 0);
 		if (iResult == SOCKET_ERROR) {
 			PrintLog("send failed");
 			closesocket(ConnectSocket);
@@ -1041,7 +1085,7 @@ DWORD WINAPI ClientCommsThread(LPVOID lpParameter)
 		// Receive until the peer closes the connection
 		bool responded = FALSE;
 		do {
-			iResult = recv(ConnectSocket, recvbuf, 20, 0);
+			iResult = recv(ConnectSocket, recvbuf, 28, 0);
 			if (iResult > 0)
 			{
 				const byte *tdata2 = reinterpret_cast<const byte*>(recvbuf);
@@ -1072,10 +1116,24 @@ DWORD WINAPI ClientCommsThread(LPVOID lpParameter)
 				if (MPlayers[0].alpha > pi * 2) MPlayers[0].alpha -= 2 * pi;
 
 				
-				mGunShot[0] = (int)((tdata2[16] << 24)
+				int t = (int)((tdata2[16] << 24)
 					+ (tdata2[17] << 16)
 					+ (tdata2[18] << 8)
 					+ (tdata2[19])) - 1;
+
+				if (t >= 0) mGunShot[0] = t;
+
+				t = (int)((tdata2[20] << 24)
+					+ (tdata2[21] << 16)
+					+ (tdata2[22] << 8)
+					+ (tdata2[23])) - 1;
+				if (t >= 0) mHunterCall[0] = t;
+
+				t = (int)((tdata2[24] << 24)
+					+ (tdata2[25] << 16)
+					+ (tdata2[26] << 8)
+					+ (tdata2[27])) - 1;
+				if (t >= 0) mHunterCallType[0] = t;
 					
 
 				/*
@@ -1663,6 +1721,10 @@ void MakeCall()
 
   AddVoicev(fxCall[TargetCall-10][NextCall].length,
             fxCall[TargetCall-10][NextCall].lpData, 256);
+
+  //multiplayer
+  sendHunterCall = TargetCall - 10;
+  sendHunterCallType = NextCall;
 
   float dmin = 512*256;
   int ai = -1;

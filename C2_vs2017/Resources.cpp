@@ -1644,8 +1644,12 @@ void ReInitGame()
 	  PlaceCharacters(); 
 	  if (Multiplayer) {
 		  sendGunShot = -1;
+		  sendHunterCall = -1;
+		  sendHunterCallType = -1;
 		  for (int i = 0; i < 4; i++) {
 			  mGunShot[i] = -1;
+			  mHunterCall[i] = -1;
+			  mHunterCallType[i] = -1;
 		  }
 		  HunterCount = 0;
 		  PlaceMHunters();//temp??
