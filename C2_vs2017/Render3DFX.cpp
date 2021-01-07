@@ -4054,7 +4054,7 @@ void DrawHMap()
 			if (Characters[c].AI == AI_HUNTDOG) {
 				DrawBox((WORD*)linfo.lfbPtr, lsw, xx, yy, 30 << 11);
 			} else {
-				DrawBox((WORD*)linfo.lfbPtr, lsw, xx, yy, 30 << 6);
+				DrawBox((WORD*)linfo.lfbPtr, lsw, xx, yy, 30 << 6); //RGB(0, 127, 0)
 			}
 
     }

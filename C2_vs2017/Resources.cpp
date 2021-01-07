@@ -2824,8 +2824,8 @@ void LoadResourcesScript()
   FILE *stream;
   char line[256];
 
-  stream = fopen("HUNTDAT\\_reshunt.txt", "r");
-  if (!stream) DoHalt("Can't open resources file _reshunt.txt");
+  stream = fopen("HUNTDAT\\_res.txt", "r");
+  if (!stream) DoHalt("Can't open resources file _res.txt");
 
   TotalC = 0;
   TotalMA = 0;
