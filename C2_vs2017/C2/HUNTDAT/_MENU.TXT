@@ -1,0 +1,172 @@
+
+weapons {
+{
+ name  = 'Pistol'
+ power = 2
+ prec  = 0.8
+ loud  = 0.8
+ rate  = 1.6
+}
+
+{
+ name  = 'Shotgun'
+ power = 1
+ prec  = 0.3
+ loud  = 1.5
+ rate  = 1.2
+} 
+
+
+{
+ name  = 'DB Shotgun'
+ power = 1
+ prec  = 0.2
+ loud  = 1.9
+ rate  = 1.2
+} 
+
+
+{
+ name  = 'X-Bow'
+ power = 6
+ prec  = 1.0
+ loud  = 0.4
+ rate  = 1.0
+}
+
+{
+ name  = 'Rifle'
+ power = 4
+ prec  = 1.8
+ loud  = 1.5
+ rate  = 1.0
+}
+
+{
+ name  = 'Sniper rifle'
+ power = 4
+ prec  = 2.0
+ loud  = 1.4
+ rate  = 1.0
+}
+
+
+
+}  //==== end of weapons =========//
+
+
+characters {
+
+{
+ name      = 'Parasaurolophus'
+ ai        = 10
+ mass      = 1.5
+ length    = 5.8
+ radius    = 320
+}
+
+{
+ name = 'Ankylosaurus'
+ ai        = 11
+ mass      = 0.8
+ length    = 4.5
+ radius    = 280
+}
+
+{
+ name = 'Stegosaurus'
+ ai        = 12
+ mass      = 7
+ length    = 7
+ radius    = 480
+}
+
+{
+ name = 'Allosaurus'
+ ai        = 13
+ mass      = 0.5
+ length    = 4.2
+ radius    = 256
+}
+
+{
+ name = 'Chasmosaurus'
+ ai        = 14
+ mass      = 3
+ length    = 5.0
+ radius    = 400
+}
+
+{
+ name = 'Velociraptor'
+ ai        = 15
+ mass      = 0.3
+ length    = 4.0
+ radius    = 256
+}
+
+{
+ name = 'Spinosaurus'
+ ai        = 16
+ mass      = 0.3
+ length    = 4.0
+ radius    = 256
+}
+
+
+
+
+{
+ name = 'Ceratosaurus'
+ ai        = 17
+ mass      = 0.3
+ length    = 4.0
+ radius    = 256
+}
+
+
+
+
+{
+ name = 'T-Rex'
+ ai        = 18
+ mass      = 6
+ length    = 12
+ radius    = 400
+}
+
+} //===== end of characters ==========//
+
+
+prices {
+ start = 10000
+ area = 20
+ area = 20
+ area = 100
+ area = 150
+ area = 200
+
+ dino = 10
+ dino = 15
+ dino = 20
+ dino = 30
+ dino = 50
+ dino = 100
+ dino = 250
+ dino = 300
+ dino = 500
+
+ weapon = 20
+ weapon = 100
+ weapon = 150
+ weapon = 50
+ weapon = 100
+ weapon = 200
+
+ acces  = 0
+ acces  = 0
+ acces  = 0
+ acces  = 0
+}
+
+.

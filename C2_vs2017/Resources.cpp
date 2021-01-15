@@ -2834,6 +2834,9 @@ void LoadResourcesScript()
   {
     if (line[0] == '.') break;
     if (strstr(line, "weapons") ) ReadWeapons(stream);
+	if (strstr(line, "hunterinfo")) ReadCharacters(stream, false);
+	if (strstr(line, "oldambients")) ReadCharacters(stream, false);
+	if (strstr(line, "corpseambients")) ReadCharacters(stream, false);
     if (strstr(line, "characters") ) ReadCharacters(stream, false);
 	if (strstr(line, "mapambients")) ReadCharacters(stream, true);
 
