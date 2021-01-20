@@ -5790,7 +5790,7 @@ SKIPROT:
 	
 	if (GetLandUpH(cptr->pos.x, cptr->pos.z) - GetLandH(cptr->pos.x, cptr->pos.z) > DinoInfo[cptr->CType].waterLevel * cptr->scale)
 	{
-		cptr->pos.y = GetLandUpH(cptr->pos.x, cptr->pos.z) - (DinoInfo[cptr->CType].waterLevel + 20) * cptr->scale;
+		cptr->pos.y = GetLandUpH(cptr->pos.x, cptr->pos.z) - (DinoInfo[cptr->CType].waterLevel * cptr->scale);
 		//cptr->pos.y = GetLandUpH(cptr->pos.x, cptr->pos.z) - 20;
 		cptr->beta /= 2;
 		cptr->tggamma = 0;
