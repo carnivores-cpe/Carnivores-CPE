@@ -5195,7 +5195,7 @@ TBEGIN:
 	float wy = GetLandUpH(cptr->pos.x,
 		cptr->pos.z) - GetLandH(cptr->pos.x,
 			cptr->pos.z);
-	float swimLevel = DinoInfo[cptr->CType].waterLevel;// 40;
+	float swimLevel = DinoInfo[cptr->CType].waterLevel * cptr->scale;// 40;
 
 	if (NewPhase)
 	{
@@ -5785,10 +5785,12 @@ SKIPROT:
 
 
 	//============ Y movement =================//
-	if ((wy >= swimLevel) && cptr->Phase != DinoInfo[cptr->CType].flyAnim && cptr->Phase != DinoInfo[cptr->CType].glideAnim
-		&& cptr->Phase != DinoInfo[cptr->CType].takeoffAnim && cptr->Phase != DinoInfo[cptr->CType].landAnim)
+	//if ((wy >= swimLevel) && cptr->Phase != DinoInfo[cptr->CType].flyAnim && cptr->Phase != DinoInfo[cptr->CType].glideAnim
+	//	&& cptr->Phase != DinoInfo[cptr->CType].takeoffAnim && cptr->Phase != DinoInfo[cptr->CType].landAnim)
+	
+	if (GetLandUpH(cptr->pos.x, cptr->pos.z) - GetLandH(cptr->pos.x, cptr->pos.z) > DinoInfo[cptr->CType].waterLevel * cptr->scale)
 	{
-		cptr->pos.y = GetLandUpH(cptr->pos.x, cptr->pos.z);
+		cptr->pos.y = GetLandUpH(cptr->pos.x, cptr->pos.z) - (DinoInfo[cptr->CType].waterLevel + 20) * cptr->scale;
 		//cptr->pos.y = GetLandUpH(cptr->pos.x, cptr->pos.z) - 20;
 		cptr->beta /= 2;
 		cptr->tggamma = 0;
