@@ -23,11 +23,11 @@ c:\users\ojm14\documents\github\carnivores-cpe\c2_vs2017\characters.cpp(4440): w
 c:\users\ojm14\documents\github\carnivores-cpe\c2_vs2017\characters.cpp(4494): warning C4102: 'ENDPSELECT': unreferenced label
 c:\users\ojm14\documents\github\carnivores-cpe\c2_vs2017\characters.cpp(4566): warning C4102: 'SKIPROT': unreferenced label
 c:\users\ojm14\documents\github\carnivores-cpe\c2_vs2017\characters.cpp(5509): warning C4102: 'ENDPSELECT': unreferenced label
-c:\users\ojm14\documents\github\carnivores-cpe\c2_vs2017\characters.cpp(5885): warning C4244: '-=': conversion from 'double' to 'float', possible loss of data
-c:\users\ojm14\documents\github\carnivores-cpe\c2_vs2017\characters.cpp(7117): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
-c:\users\ojm14\documents\github\carnivores-cpe\c2_vs2017\characters.cpp(7120): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
-c:\users\ojm14\documents\github\carnivores-cpe\c2_vs2017\characters.cpp(7138): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
-c:\users\ojm14\documents\github\carnivores-cpe\c2_vs2017\characters.cpp(7139): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+c:\users\ojm14\documents\github\carnivores-cpe\c2_vs2017\characters.cpp(5883): warning C4244: '-=': conversion from 'double' to 'float', possible loss of data
+c:\users\ojm14\documents\github\carnivores-cpe\c2_vs2017\characters.cpp(7115): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+c:\users\ojm14\documents\github\carnivores-cpe\c2_vs2017\characters.cpp(7118): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+c:\users\ojm14\documents\github\carnivores-cpe\c2_vs2017\characters.cpp(7136): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+c:\users\ojm14\documents\github\carnivores-cpe\c2_vs2017\characters.cpp(7137): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
   Generating code
   2 of 313 functions ( 0.6%) were compiled, the rest were copied from previous compilation.
     0 functions were new in current compilation
