@@ -979,7 +979,7 @@ _EXTORNOT int PackCount;
 _EXTORNOT TCharacter     Characters[256];
 _EXTORNOT TCharacter     MPlayers[3]; //multiplayer
 
-_EXTORNOT TWCircle       WCircles[128];
+_EXTORNOT TWCircle       WCircles[2096]; //increased
 _EXTORNOT TDemoPoint     DemoPoint;
 _EXTORNOT TCharacter     *killerDino;
 _EXTORNOT BOOL			 killedwater;
@@ -1114,6 +1114,7 @@ _EXTORNOT   struct _t
 #define AI_MOSA        -4
 #define AI_BRACHDANGER -5
 #define AI_LANDBRACH   -6
+#define AI_FISHDANGER  -7
 
 
 

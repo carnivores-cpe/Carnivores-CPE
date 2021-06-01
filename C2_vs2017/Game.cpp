@@ -1957,7 +1957,7 @@ ENDTRACE:
   {
     AddElements(bx, by, bz, partWater, 4 + WeapInfo[CurrentWeapon].Power*3);
     //AddElements(bx, GetLandH(bx, bz), bz, partBubble);
-    AddWCircle(bx, bz, 1.2);
+    //AddWCircle(bx, bz, 1.2);
     AddWCircle(bx, bz, 1.2);
   }
 

@@ -2528,7 +2528,8 @@ void ReadCharacters(FILE *stream, bool mapamb)
 		  }
           AI_to_CIndex[_ctype] = TotalC;
 		  if (DinoInfo[TotalC].Clone == AI_MOSA ||
-			  DinoInfo[TotalC].Clone == AI_FISH) {
+			  DinoInfo[TotalC].Clone == AI_FISH ||
+			  DinoInfo[TotalC].Clone == AI_FISHDANGER) {
 			  DinoInfo[TotalC].Aquatic = TRUE;
 		  } else {
 			  DinoInfo[TotalC].Aquatic = FALSE;

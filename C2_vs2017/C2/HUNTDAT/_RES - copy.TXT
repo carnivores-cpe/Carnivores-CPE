@@ -38,6 +38,7 @@ weapons {
  rate  = 1.2
  trace = 6
  shots = 6
+ reload= 2
 } 
 
 
@@ -812,7 +813,7 @@ styInRgn  = TRUE
 
 {
  name = 'Pink Parexus'
- file = 'parexusn4_pink_eater.car'
+ file = 'parexusn4_pink.car'
  clone  = -3
  mass      = 2.0
  length    = 9.0
@@ -843,47 +844,6 @@ styInRgn  = TRUE
    ymin = 94
   }
  }
-}
-
-{
- name = 'Mosasaurus'
- file = 'mosa5.car'
- clone  = -4
- aggress   = 2048
- radar = 2
- killdist  = 128
- mass      = 2.0
- length    = 9.0
- radius    = 256
- health    = 16
- basescore = 10
- scale0    = 1000
- scaleA    = 600
- smell     = 1.0
- hear      = 0.3
- look      = 0.5
- shipdelta = 0
- maxdepth = 10000
- mindepth = 2500
- spcdepth = 550
- wlkspd = 0.428
- runspd = 1.2
- runAnim = 1
- walkAnim = 0
- overwrite area1 {
-  spawninfo {
-  spawnrate = 0.5
-  spawnmax  = 4
-  spawnmin  = 2
-  }
- }
-killtype{
- hunterAnim = 0
- hunterOffset = 0
- hunterSync = TRUE
- dontloop = TRUE
- eatAnim = 2
-}
 }
 
 {
