@@ -458,6 +458,7 @@ typedef struct _TDinoKill
 	int anim;
 	int offset;
 	int hunteranim;
+	int hunterswimanim;
 	BOOL elevate;
 	BOOL dontloop;
 	BOOL scream;

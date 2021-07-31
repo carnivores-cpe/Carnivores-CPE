@@ -1567,6 +1567,16 @@ replace2:
 	//targetDepthTemp = siRand((int)(R/3));
 	tr++;
 
+	//PREVENT TOO MUCH TURNING/bending
+	if (tr < 1024) {
+		float tbeta = -atan((targetDepthTemp) / tdistTemp);
+		int dbeta = tbeta - cptr->beta;
+		if (dbeta < 0) dbeta *= -1;
+		if (dbeta > pi / 16) {
+			goto replace2;
+		}
+	}
+
 	/*
 	if (tr < 1024) {
 		if (fabs(targetDepthTemp) > tdistTemp) {
@@ -1657,7 +1667,19 @@ replace:
 replace2:
 	targetDepthTemp = siRand((int)(R / 3));
 	//targetDepthTemp = siRand((int)(R/3));
+
 	tr++;
+
+	//PREVENT TOO MUCH TURNING
+	if (tr < 1024) {
+		float tbeta = -atan((targetDepthTemp) / tdistTemp);
+		int dbeta = tbeta - cptr->beta;
+		if (dbeta < 0) dbeta *= -1;
+		if (dbeta > pi/8) {
+			goto replace2;
+		}
+	}
+	
 
 	if (tr < 1024) {
 		if (fabs(targetDepthTemp) > tdistTemp) {
@@ -1709,10 +1731,17 @@ void AnimateHuntDead(TCharacter *cptr)
 	BOOL NewPhase = FALSE;
 	bool loopDone = FALSE;
 
+	if (DinoInfo[killerDino->CType].killType[killerDino->killType].dontloop &&
+		DinoInfo[killerDino->CType].Aquatic) {
+		cptr->bend = killerDino->bend;
+		cptr->bdepth = killerDino->bdepth;
+	}
+
 	cptr->FTime += TimeDt;
 	if (cptr->FTime >= cptr->pinfo->Animation[cptr->Phase].AniTime)
 	{
-		if (DinoInfo[killerDino->CType].killType[killerDino->killType].dontloop) {
+		if (DinoInfo[killerDino->CType].killType[killerDino->killType].dontloop &&
+			cptr->Phase == DinoInfo[killerDino->CType].killType[killerDino->killType].hunteranim) {
 			loopDone = true;
 		}
 
@@ -1789,7 +1818,11 @@ void AnimateHuntDead(TCharacter *cptr)
 	}
 
 	if (loopDone) {
-		cptr->FTime = cptr->pinfo->Animation[cptr->Phase].AniTime - 1;
+		if (DinoInfo[killerDino->CType].Aquatic) {
+			cptr->Phase = DinoInfo[killerDino->CType].killType[killerDino->killType].hunterswimanim;
+		} else {
+			cptr->FTime = cptr->pinfo->Animation[cptr->Phase].AniTime - 1;
+		}
 	}
 
 }
@@ -4443,6 +4476,17 @@ TBEGIN:
 			cptr->tgz = PlayerZ;
 			cptr->tgtime = 0;
 			cptr->tdepth = PlayerY;
+
+
+			// Mosa Target Depth Failsafes
+			if (cptr->tdepth > GetLandUpH(cptr->pos.x, cptr->pos.z) - (DinoInfo[cptr->CType].spacingDepth / 2)) {
+				cptr->tdepth = GetLandUpH(cptr->pos.x, cptr->pos.z) - (DinoInfo[cptr->CType].spacingDepth / 2);
+			}
+			if (cptr->tdepth < GetLandH(cptr->pos.x, cptr->pos.z) + (DinoInfo[cptr->CType].spacingDepth / 2)) {
+				cptr->tdepth = GetLandH(cptr->pos.x, cptr->pos.z) + (DinoInfo[cptr->CType].spacingDepth / 2);
+			}
+
+
 			if (cptr->packId >= 0) {
 				Packs[cptr->packId].alert = true;
 			}
@@ -4478,6 +4522,7 @@ TBEGIN:
 						cptr->State = 1;
 						cptr->Phase = DinoInfo[cptr->CType].killType[cptr->killType].anim;
 						if (DinoInfo[cptr->CType].killType[cptr->killType].dontloop) cptr->FTime = 0;
+						//cptr->FTime = 0;
 						AddDeadBody(cptr,
 							DinoInfo[cptr->CType].killType[cptr->killType].hunteranim,
 							DinoInfo[cptr->CType].killType[cptr->killType].scream);
@@ -4590,11 +4635,13 @@ ENDPSELECT:
 		//if (MORPHP)
 		//	if (_Phase <= 3 && cptr->Phase <= 3)
 		
-		
-		cptr->FTime = _FTime * cptr->pinfo->Animation[cptr->Phase].AniTime / cptr->pinfo->Animation[_Phase].AniTime + 64;
-		
-
-		//	else if (!NewPhase) cptr->FTime = 0;
+		if ((_Phase == DinoInfo[cptr->CType].runAnim ||
+			_Phase == DinoInfo[cptr->CType].walkAnim) &&
+			(cptr->Phase == DinoInfo[cptr->CType].runAnim ||
+				cptr->Phase == DinoInfo[cptr->CType].walkAnim)) {
+			cptr->FTime = _FTime * cptr->pinfo->Animation[cptr->Phase].AniTime / cptr->pinfo->Animation[_Phase].AniTime + 64;
+		}
+		//else if (!NewPhase) cptr->FTime = 0;
 
 		if (cptr->PPMorphTime > 128)
 		{
@@ -4610,7 +4657,9 @@ ENDPSELECT:
 
 	//========== rotation to tgalpha ===================//
 
-	float rspd, currspeed, tgbend;
+	//OLD BACKUP
+	/*
+		float rspd, currspeed, tgbend;
 	float dalpha = (float)fabs(cptr->tgalpha - cptr->alpha);
 	float drspd = dalpha;
 	if (drspd > pi) drspd = 2 * pi - drspd;
@@ -4629,6 +4678,43 @@ ENDPSELECT:
 
 	if (cptr->AfraidTime) DeltaFunc(cptr->rspeed, currspeed, (float)TimeDt / 160.f);
 	else DeltaFunc(cptr->rspeed, currspeed, (float)TimeDt / 180.f);
+
+	tgbend = drspd / 2;
+	if (tgbend > pi / 5) tgbend = pi / 5;
+
+	tgbend *= SGN(currspeed);
+	if (fabs(tgbend) > fabs(cptr->bend)) DeltaFunc(cptr->bend, tgbend, (float)TimeDt / 800.f);
+	else DeltaFunc(cptr->bend, tgbend, (float)TimeDt / 600.f);
+
+
+	rspd = cptr->rspeed * TimeDt / 1024.f;
+	if (drspd < fabs(rspd)) cptr->alpha = cptr->tgalpha;
+	else cptr->alpha += rspd;
+
+
+	if (cptr->alpha > pi * 2) cptr->alpha -= pi * 2;
+	if (cptr->alpha < 0) cptr->alpha += pi * 2;
+	*/
+
+	float rspd, currspeed, tgbend;
+	float dalpha = (float)fabs(cptr->tgalpha - cptr->alpha);
+	float drspd = dalpha;
+	if (drspd > pi) drspd = 2 * pi - drspd;
+
+
+	if (cptr->Phase == DinoInfo[cptr->CType].killType[cptr->killType].anim && DinoInfo[cptr->CType].killTypeCount) goto SKIPROT;
+
+	if (drspd > 0.02)
+		if (cptr->tgalpha > cptr->alpha) currspeed = 0.6f + drspd * 1.2f;
+		else currspeed = -0.6f - drspd * 1.2f;
+	else currspeed = 0;
+	//if (cptr->AfraidTime) currspeed *= 2.5;
+
+	if (dalpha > pi) currspeed *= -1;
+	/*if ((cptr->StateF & csONWATER) || cptr->Phase == DinoInfo[cptr->CType].walkAnim) */currspeed /= 1.4f;
+
+	if (cptr->AfraidTime) DeltaFunc(cptr->rspeed, currspeed, (float)TimeDt / 250.f);
+	else DeltaFunc(cptr->rspeed, currspeed, (float)TimeDt / 460.f);
 
 	tgbend = drspd / 2;
 	if (tgbend > pi / 5) tgbend = pi / 5;
@@ -7709,14 +7795,14 @@ void CreateChMorphedModel(TCharacter *cptr)
 		zz = bz;
 		xx = bx;
 
-		if (DinoInfo[cptr->CType].Aquatic) {
+		//if (DinoInfo[cptr->CType].Aquatic) {	//Also hunter corpse when killed by aquatic creature
 			float bendcmosa = (float)cos(fiMosa);
 			float bendsmosa = (float)sin(fiMosa);
 			bz = bendcmosa * zz + bendsmosa * yy;
 			by = bendcmosa * yy + bendsmosa * zz;
 			yy = by;
 			zz = bz;
-		}
+		//}
 
 		cptr->pinfo->mptr->gVertex[v].x = xx * scale;
 		cptr->pinfo->mptr->gVertex[v].y = cb * yy - sb * zz;

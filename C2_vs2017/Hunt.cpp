@@ -1666,14 +1666,17 @@ SKIPYMOVE:
 
   if (UNDERWATER)
   {
-    CameraW = (float)VideoCX*(1.25f + (1.f+(float)cos(RealTime/180.f)) / 30  + (1.f - (float)sin(UnderWaterT/512.f*pi/2)) / 1.5f  );
-    CameraH = (float)VideoCX*(1.25f + (1.f+(float)sin(RealTime/180.f)) / 30  - (1.f - (float)sin(UnderWaterT/512.f*pi/2)) / 16.f  );
-    CameraH *=(WinH*1.3333f / WinW);
+	  if (MyHealth) {
+		CameraW = (float)VideoCX*(1.25f + (1.f + (float)cos(RealTime / 180.f)) / 30 + (1.f - (float)sin(UnderWaterT / 512.f*pi / 2)) / 1.5f);
+		CameraH = (float)VideoCX*(1.25f + (1.f + (float)sin(RealTime / 180.f)) / 30 - (1.f - (float)sin(UnderWaterT / 512.f*pi / 2)) / 16.f);
+		CameraH *= (WinH*1.3333f / WinW);
 
-    CameraAlpha+=(float)cos(RealTime/360.f) / 120;
-    CameraBeta +=(float)sin(RealTime/360.f) / 100;
-    CameraY-=(float)sin(RealTime/360.f) * 4;
-    int w = WMap[(((int)(CameraZ))>>8) ][ (((int)(CameraX))>>8) ];
+		CameraAlpha += (float)cos(RealTime / 360.f) / 120;
+		CameraBeta += (float)sin(RealTime / 360.f) / 100;
+		CameraY -= (float)sin(RealTime / 360.f) * 4;
+	  }
+
+	int w = WMap[(((int)(CameraZ))>>8) ][ (((int)(CameraX))>>8) ];
     FogsList[127].YBegin = (float)WaterList[w].wlevel;
     FogsList[127].fogRGB = WaterList[w].fogRGB;
   }
