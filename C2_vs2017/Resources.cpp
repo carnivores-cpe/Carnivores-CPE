@@ -2823,6 +2823,17 @@ void LoadResourcesScript()
 
 
 
+	AIInfo[AI_FISH].jumper = false;
+
+	AIInfo[AI_FISHDANGER].jumper = false;
+	AIInfo[AI_FISHDANGER].agressMulti = 8;
+
+	AIInfo[AI_MOSA].jumper = true;
+	AIInfo[AI_MOSA].agressMulti = 8;
+
+
+
+
   FILE *stream;
   char line[256];
 

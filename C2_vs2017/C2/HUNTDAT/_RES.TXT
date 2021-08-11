@@ -847,11 +847,11 @@ styInRgn  = TRUE
 
 {
  name = 'Mosasaurus'
- file = 'mosa9.car'
+ file = 'mosa19.car'
  clone  = -4
  aggress   = 2048
  radar = 2
- killdist  = 128
+ killdist  = 380
  mass      = 2.0
  length    = 9.0
  radius    = 256
@@ -866,10 +866,12 @@ styInRgn  = TRUE
  maxdepth = 10000
  mindepth = 2500
  spcdepth = 550
- wlkspd = 0.428
- runspd = 1.2
- runAnim = 1
  walkAnim = 0
+ wlkspd = 0.428
+ runAnim = 1
+ runspd = 1.2
+ jumpAnim = 3
+ jmpspd = 1.0
  overwrite area1 {
   spawninfo {
   spawnrate = 0.5

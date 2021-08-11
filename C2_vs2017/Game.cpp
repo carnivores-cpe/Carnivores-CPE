@@ -1795,9 +1795,15 @@ DWORD ColorSum(DWORD C1, DWORD C2)
 #define partGround  3
 #define partBubble  4
 
+
 void AddElements(float x, float y, float z, int etype, int cnt)
 {
-  if (ElCount > 30)
+	AddElementsA(x,y,z,etype,cnt,false,0);
+}
+
+void AddElementsA(float x, float y, float z, int etype, int cnt, bool angled, float alph)
+{
+  if (ElCount > 698)
   {
     memcpy(&Elements[0], &Elements[1], (ElCount-1) * sizeof(TElements));
     ElCount--;
@@ -1884,9 +1890,13 @@ void AddElements(float x, float y, float z, int etype, int cnt)
       Elements[ElCount].EList[e].speed.z =siRand(52)+ca*64;
       break;
     case partWater:
-      Elements[ElCount].EList[e].speed.x =siRand(32);
-      Elements[ElCount].EList[e].speed.y =rRand(80) + 400 +  e * 40;
-      Elements[ElCount].EList[e].speed.z =siRand(32);
+		Elements[ElCount].EList[e].speed.x = siRand(32);
+		Elements[ElCount].EList[e].speed.z = siRand(32);
+		Elements[ElCount].EList[e].speed.y =rRand(80) + 400 +  e * 40;
+		if (angled) {
+			Elements[ElCount].EList[e].speed.x = siRand(132) + ((float)cos(alph) * e * 40);
+			Elements[ElCount].EList[e].speed.z = siRand(132) + ((float)sin(alph) * e * 40);
+		}
       break;
     case partBubble:
       Elements[ElCount].EList[e].speed.x =siRand(40);

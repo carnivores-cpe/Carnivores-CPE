@@ -187,6 +187,7 @@ void ProcessPrevPhase(TCharacter *cptr)
 
 	cptr->PrevPFTime += TimeDt;
 	cptr->PrevPFTime %= cptr->pinfo->Animation[cptr->PrevPhase].AniTime;
+	cptr->PrevPFTime %= cptr->pinfo->Animation[cptr->PrevPhase].AniTime;
 }
 
 
@@ -1731,18 +1732,24 @@ void AnimateHuntDead(TCharacter *cptr)
 	BOOL NewPhase = FALSE;
 	bool loopDone = FALSE;
 
-	if (DinoInfo[killerDino->CType].killType[killerDino->killType].dontloop &&
-		DinoInfo[killerDino->CType].Aquatic) {
-		cptr->bend = killerDino->bend;
-		cptr->bdepth = killerDino->bdepth;
+	if (killerDino) {
+		if (DinoInfo[killerDino->CType].killType[killerDino->killType].dontloop &&
+			DinoInfo[killerDino->CType].Aquatic) {
+			cptr->bend = killerDino->bend;
+			cptr->bdepth = killerDino->bdepth;
+		}
 	}
+
+
 
 	cptr->FTime += TimeDt;
 	if (cptr->FTime >= cptr->pinfo->Animation[cptr->Phase].AniTime)
 	{
-		if (DinoInfo[killerDino->CType].killType[killerDino->killType].dontloop &&
-			cptr->Phase == DinoInfo[killerDino->CType].killType[killerDino->killType].hunteranim) {
-			loopDone = true;
+		if (killerDino) {
+			if (DinoInfo[killerDino->CType].killType[killerDino->killType].dontloop &&
+				cptr->Phase == DinoInfo[killerDino->CType].killType[killerDino->killType].hunteranim) {
+				loopDone = true;
+			}
 		}
 
 		NewPhase = TRUE;
@@ -1760,7 +1767,12 @@ void AnimateHuntDead(TCharacter *cptr)
 		ActivateCharacterFx(cptr);
 	}
 
-	if (!DinoInfo[killerDino->CType].Aquatic) {
+	bool notAq = false;
+	if (!killerDino) {
+		notAq = true;
+	} else if (!DinoInfo[killerDino->CType].Aquatic) notAq = true;
+
+	if (notAq) {
 		float h = GetLandH(cptr->pos.x, cptr->pos.z);
 		DeltaFunc(cptr->pos.y, h, TimeDt / 5.f);
 
@@ -1795,34 +1807,39 @@ void AnimateHuntDead(TCharacter *cptr)
 	}
 	
 
-//	if (!(GetLandUpH(killerDino->pos.x, killerDino->pos.z) - GetLandH(killerDino->pos.x, killerDino->pos.z) >
-//		DinoInfo[killerDino->CType].waterLevel * killerDino->scale))
-	if (!killedwater || DinoInfo[killerDino->CType].Aquatic) //make exception for aquatic dangerous creatures duh
-	{
-		if (DinoInfo[killerDino->CType].killTypeCount) {
-			if ((DinoInfo[killerDino->CType].killType[killerDino->killType].elevate &&
-				killerDino->Phase == DinoInfo[killerDino->CType].killType[killerDino->killType].anim) || DinoInfo[killerDino->CType].Aquatic) {
+	if (killerDino) {
 
-				cptr->pos = killerDino->pos;
-				cptr->FTime = killerDino->FTime;
-				cptr->beta = killerDino->beta;
-				cptr->gamma = killerDino->gamma;
-				cptr->scale = killerDino->scale;
-				cptr->alpha = killerDino->alpha;
-				killerDino->bend = 0;
+		//	if (!(GetLandUpH(killerDino->pos.x, killerDino->pos.z) - GetLandH(killerDino->pos.x, killerDino->pos.z) >
+		//		DinoInfo[killerDino->CType].waterLevel * killerDino->scale))
+		if (!killedwater || DinoInfo[killerDino->CType].Aquatic) //make exception for aquatic dangerous creatures duh
+		{
+			if (DinoInfo[killerDino->CType].killTypeCount) {
+				if ((DinoInfo[killerDino->CType].killType[killerDino->killType].elevate &&
+					killerDino->Phase == DinoInfo[killerDino->CType].killType[killerDino->killType].anim) || DinoInfo[killerDino->CType].Aquatic) {
+
+					cptr->pos = killerDino->pos;
+					cptr->FTime = killerDino->FTime;
+					cptr->beta = killerDino->beta;
+					cptr->gamma = killerDino->gamma;
+					cptr->scale = killerDino->scale;
+					cptr->alpha = killerDino->alpha;
+					killerDino->bend = 0;
+
+				}
 
 			}
 
 		}
 
-	}
-
-	if (loopDone) {
-		if (DinoInfo[killerDino->CType].Aquatic) {
-			cptr->Phase = DinoInfo[killerDino->CType].killType[killerDino->killType].hunterswimanim;
-		} else {
-			cptr->FTime = cptr->pinfo->Animation[cptr->Phase].AniTime - 1;
+		if (loopDone) {
+			if (DinoInfo[killerDino->CType].Aquatic) {
+				cptr->Phase = DinoInfo[killerDino->CType].killType[killerDino->killType].hunterswimanim;
+			}
+			else {
+				cptr->FTime = cptr->pinfo->Animation[cptr->Phase].AniTime - 1;
+			}
 		}
+
 	}
 
 }
@@ -2102,7 +2119,6 @@ TBEGIN:
 					if (AngleDifference(cptr->alpha, FindVectorAlpha(playerdx, playerdz)) < 0.2f)
 						cptr->Phase = DinoInfo[cptr->CType].jumpAnim;
 		}
-
 
 		if (pdist < DinoInfo[cptr->CType].killDist && DinoInfo[cptr->CType].killDist > 0) {
 			int killAlt = DinoInfo[cptr->CType].waterLevel;
@@ -4371,6 +4387,17 @@ TBEGIN:
 	}
 
 
+	//JUMP PARTICLES
+	if (AIInfo[cptr->Clone].jumper && cptr->Phase == DinoInfo[cptr->CType].jumpAnim && cptr->FTime > 200/25 && cptr->FTime < 1500/25) { //REPLACE 25 WITH CORRECT KPS
+		for (int i = 0; i < 20; i++) {
+			float xo = siRand(240)+ cptr->pos.x;
+			float zo = siRand(240) + cptr->pos.z;
+			AddElementsA(xo, GetLandUpH(xo, zo), zo, 2, 30 + (cptr->FTime - 200 / 25 )/1000, true, cptr->alpha); //REPLACE 25 WITH CORRECT KPS
+			AddWCircle(xo, zo, 1.2);
+		}
+	}
+	    
+
 
 	if (GetLandUpH(cptr->pos.x, cptr->pos.z) - GetLandH(cptr->pos.x, cptr->pos.z) > 180 * cptr->scale)
 		cptr->StateF |= csONWATER;
@@ -4388,7 +4415,7 @@ TBEGIN:
 	if (!cptr->State)
 	{
 
-		bool attackmode = pdist <= attackDist && playerInWater && !DinoInfo[cptr->CType].dontSwimAway
+		bool attackmode = pdist <= attackDist * 4 && playerInWater && !DinoInfo[cptr->CType].dontSwimAway
 			&& MyHealth && !ObservMode && !DEBUG;
 		if (attackmode)	cptr->AfraidTime = (int)(10.f) * 1024;
 		if (cptr->packId >= 0) {
@@ -4478,14 +4505,35 @@ TBEGIN:
 			cptr->tdepth = PlayerY;
 
 
-			// Mosa Target Depth Failsafes
-			if (cptr->tdepth > GetLandUpH(cptr->pos.x, cptr->pos.z) - (DinoInfo[cptr->CType].spacingDepth / 2)) {
-				cptr->tdepth = GetLandUpH(cptr->pos.x, cptr->pos.z) - (DinoInfo[cptr->CType].spacingDepth / 2);
-			}
-			if (cptr->tdepth < GetLandH(cptr->pos.x, cptr->pos.z) + (DinoInfo[cptr->CType].spacingDepth / 2)) {
-				cptr->tdepth = GetLandH(cptr->pos.x, cptr->pos.z) + (DinoInfo[cptr->CType].spacingDepth / 2);
-			}
+			/*
+				float targetx = cptr->tgx;
+	float tdx2 = targetx - cptr->pos.x;
+	float tdz2 = targetz - cptr->pos.z;
 
+	float tdist2 = (float)sqrt(targetdx * targetdx + targetdz * targetdz); //non-verticle
+	float tdist = (float)sqrt(tdist2 * tdist2 + targetdy * targetdy); //verticle
+			*/
+
+			// Mosa Target Depth Failsafes
+			if (cptr->tdepth > GetLandUpH(cptr->tgx, cptr->tgz) - (DinoInfo[cptr->CType].spacingDepth * 0.75)) {
+
+				cptr->tdepth = GetLandUpH(cptr->pos.x, cptr->pos.z) - (DinoInfo[cptr->CType].spacingDepth * 0.75);
+				
+				//Target slightly higher so it can reach jumping altitude before reaching player
+				if (cptr->tdepth < PlayerY) {
+					float tdx2 = cptr->tgx - cptr->pos.x;
+					float tdz2 = cptr->tgz - cptr->pos.z;
+					float td2 = (float)sqrt(tdx2 * tdx2 + tdz2 * tdz2);
+					cptr->tdepth += (td2 * 0.1);
+				}
+
+			}
+		
+			/*	is this really needed?
+			if (cptr->tdepth < GetLandH(cptr->pos.x, cptr->pos.z) + (DinoInfo[cptr->CType].spacingDepth * 0.75)) {
+				cptr->tdepth = GetLandH(cptr->pos.x, cptr->pos.z) + (DinoInfo[cptr->CType].spacingDepth * 0.75);
+			}
+			*/
 
 			if (cptr->packId >= 0) {
 				Packs[cptr->packId].alert = true;
@@ -4507,6 +4555,17 @@ TBEGIN:
 
 		cptr->tgtime = 0;
 
+		if (cptr->Phase != DinoInfo[cptr->CType].jumpAnim){
+			if (AIInfo[cptr->Clone].jumper) {
+				if (cptr->depth > GetLandUpH(cptr->pos.x, cptr->pos.z) - (DinoInfo[cptr->CType].spacingDepth * 0.95))
+					if (pdist < 1324 * cptr->scale && pdist>900 * cptr->scale)
+						if (AngleDifference(cptr->alpha, FindVectorAlpha(playerdx, playerdz)) < 0.2f) {
+							cptr->Phase = DinoInfo[cptr->CType].jumpAnim;
+							NewPhase = TRUE;
+							cptr->FTime = 0;
+						}
+			}
+		}
 
 		if (pdist < DinoInfo[cptr->CType].killDist && DinoInfo[cptr->CType].killDist > 0) {
 			int killAlt = DinoInfo[cptr->CType].waterLevel;
@@ -4547,7 +4606,7 @@ NOTHINK:
 	else
 	{
 		cptr->tgalpha = CorrectedAlpha(FindVectorAlpha(targetdx, targetdz), cptr->alpha);//FindVectorAlpha(targetdx, targetdz);
-		if (cptr->State && pdist > 1648)
+		if (cptr->State && pdist > 20000)
 		{
 			cptr->tgalpha += (float)sin(RealTime / 824.f) / 2.f;
 			if (cptr->tgalpha < 0) cptr->tgalpha += 2 * pi;
@@ -4576,7 +4635,7 @@ NOTHINK:
 
 
 	if (cptr->FTime >= cptr->pinfo->Animation[cptr->Phase].AniTime)
-	{
+	{	
 		cptr->FTime %= cptr->pinfo->Animation[cptr->Phase].AniTime;
 
 		if (cptr->Phase == DinoInfo[cptr->CType].killType[cptr->killType].anim && DinoInfo[cptr->CType].killTypeCount) {
@@ -4592,12 +4651,24 @@ NOTHINK:
 
 	if (cptr->Phase == DinoInfo[cptr->CType].killType[cptr->killType].anim && DinoInfo[cptr->CType].killTypeCount)  goto ENDPSELECT;
 
+	if (AIInfo[cptr->Clone].jumper) {
+		if (NewPhase && _Phase == DinoInfo[cptr->CType].jumpAnim)
+		{
+			cptr->Phase = DinoInfo[cptr->CType].runAnim;
+			goto ENDPSELECT;
+		}
+
+		if (cptr->Phase == DinoInfo[cptr->CType].jumpAnim) goto ENDPSELECT;
+	}
+
+	/*
 	if (cptr->FTime >= cptr->pinfo->Animation[cptr->Phase].AniTime)
 	{
 		cptr->FTime %= cptr->pinfo->Animation[cptr->Phase].AniTime;
 		NewPhase = TRUE;
 
 	}
+	*/
 
 	if (NewPhase)
 		if (!cptr->State) cptr->Phase = DinoInfo[cptr->CType].walkAnim;
@@ -4619,14 +4690,13 @@ ENDPSELECT:
 	if ((_Phase != cptr->Phase) || NewPhase)
 	{
 
-		// TODO - RE-ADD THIS FOR JUMP AND BLOWHOLE
+		// TODO - ADD BLOWHOLE
 
-//		if (cptr->Phase == DinoInfo[cptr->CType].walkAnim || cptr->Phase == DinoInfo[cptr->CType].runAnim) {
+		if (cptr->Phase == DinoInfo[cptr->CType].jumpAnim) {
+			ActivateCharacterFx(cptr);
+		} else {
 			ActivateCharacterFxAquatic(cptr);
-//		}
-//		else {
-//			ActivateCharacterFx(cptr);
-//		}
+		}
 	}
 
 	if (_Phase != cptr->Phase)
@@ -4701,6 +4771,9 @@ ENDPSELECT:
 	float drspd = dalpha;
 	if (drspd > pi) drspd = 2 * pi - drspd;
 
+	if (AIInfo[cptr->Clone].jumper) {
+		if (cptr->Phase == DinoInfo[cptr->CType].jumpAnim) goto SKIPROT;
+	}
 
 	if (cptr->Phase == DinoInfo[cptr->CType].killType[cptr->killType].anim && DinoInfo[cptr->CType].killTypeCount) goto SKIPROT;
 
@@ -4754,6 +4827,9 @@ SKIPROT:
 	float curspeed = 0;
 	if (cptr->Phase == DinoInfo[cptr->CType].runAnim) curspeed = cptr->speed_run;
 	if (cptr->Phase == DinoInfo[cptr->CType].walkAnim) curspeed = cptr->speed_walk;
+	if (AIInfo[cptr->Clone].jumper) {
+		if (cptr->Phase == DinoInfo[cptr->CType].jumpAnim) curspeed = cptr->speed_jump;
+	}
 
 	if (cptr->Phase == DinoInfo[cptr->CType].killType[cptr->killType].anim && DinoInfo[cptr->CType].killTypeCount) curspeed = 0.0f;
 
@@ -4769,6 +4845,10 @@ SKIPROT:
 	//========== process speed =============//
 
 	DeltaFunc(cptr->vspeed, curspeed, TimeDt / 500.f);
+
+	if (AIInfo[cptr->Clone].jumper) {
+		if (cptr->Phase == DinoInfo[cptr->CType].jumpAnim) cptr->vspeed = cptr->speed_jump;
+	}
 
 	MoveCharacterFish(cptr, cptr->lookx * cptr->vspeed * TimeDt * cptr->scale,
 		cptr->lookz * cptr->vspeed * TimeDt * cptr->scale);
@@ -4841,6 +4921,10 @@ SKIPROT:
 	//=== process to tggamma ===//
 	if (cptr->Phase == DinoInfo[cptr->CType].walkAnim) cptr->tggamma += cptr->rspeed / 10.0f;
 	else cptr->tggamma += cptr->rspeed / 8.0f;
+
+	if (AIInfo[cptr->Clone].jumper) {
+		if (cptr->Phase == DinoInfo[cptr->CType].jumpAnim) cptr->tggamma = 0;
+	}
 
 	DeltaFunc(cptr->gamma, cptr->tggamma, TimeDt / 1624.f);
 

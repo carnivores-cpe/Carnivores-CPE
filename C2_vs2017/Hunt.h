@@ -822,6 +822,7 @@ void MakeShot(float ax, float ay, float az,
 
 void AddBloodTrail(TCharacter *cptr);
 void AddElements(float, float, float, int, int);
+void AddElementsA(float, float, float, int, int, bool, float);
 void AddWCircle(float, float, float);
 void AnimateProcesses();
 void DoHalt(LPSTR);
@@ -1019,7 +1020,7 @@ _EXTORNOT   int   rTColor;
 _EXTORNOT   int   SKYMin, SKYDTime, GlassL, ctViewR, ctViewR1, ctViewRM,
             dFacesCount, ReverseOn, TDirection;
 _EXTORNOT   WORD  FadeTab[65][0x8000];
-_EXTORNOT   TElements Elements[32];
+_EXTORNOT   TElements Elements[700];
 _EXTORNOT   TBTrail   BloodTrail;
 
 _EXTORNOT   int     PrevTime, TimeDt, T, Takt, RealTime, StepTime, MyHealth, ExitTime,
