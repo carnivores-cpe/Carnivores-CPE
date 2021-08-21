@@ -2312,8 +2312,8 @@ void ReadCharacterLine(FILE *stream, char *_value, char line[256], bool &regionO
 	if (strstr(line, "shipdelta")) DinoInfo[TotalC].ShDelta = (float)atof(value);
 	if (strstr(line, "scale0")) DinoInfo[TotalC].Scale0 = atoi(value);
 	if (strstr(line, "scaleA")) DinoInfo[TotalC].ScaleA = atoi(value);
-	if (strstr(line, "fearCall")) DinoInfo[TotalC].fearCall[atoi(value)] = TRUE;
-	if (strstr(line, "dontFear")) DinoInfo[TotalC].fearCall[atoi(value)] = FALSE;
+	if (strstr(line, "fearCall")) DinoInfo[TotalC].fearCall[atoi(value)] = TRUE; //DIFFERANT TO STND BOOL!!!! e.g. fearcall = 1
+	if (strstr(line, "dontFear")) DinoInfo[TotalC].fearCall[atoi(value)] = FALSE; //DIFFERANT TO STND BOOL!!!!
 	if (strstr(line, "maxdepth")) DinoInfo[TotalC].maxDepth = atoi(value);
 	if (strstr(line, "mindepth")) DinoInfo[TotalC].minDepth = atoi(value);
 	if (strstr(line, "spcdepth")) DinoInfo[TotalC].spacingDepth = atoi(value);
@@ -2339,6 +2339,18 @@ void ReadCharacterLine(FILE *stream, char *_value, char line[256], bool &regionO
 
 
 	if (strstr(line, "canswim")) readBool(value, DinoInfo[TotalC].canSwim); //check animate subroutines for what this includes. LandBrach needs this attribute, but maybe rename to wade? (and default to off for landbrach ai? maybe?)
+
+	if (strstr(line, "jumpPartFrame1")) DinoInfo[TotalC].partFrame1[DinoInfo[TotalC].jumpAnim] = 100 * atoi(value); // x100
+	if (strstr(line, "jumpPartFrame2")) DinoInfo[TotalC].partFrame2[DinoInfo[TotalC].jumpAnim] = 100 * atoi(value); // x100
+	if (strstr(line, "jumpPartDist")) DinoInfo[TotalC].partDist[DinoInfo[TotalC].jumpAnim] = atoi(value);
+	if (strstr(line, "jumpPartMag")) DinoInfo[TotalC].partMag[DinoInfo[TotalC].jumpAnim] = atoi(value);
+	if (strstr(line, "jumpPartAngled")) readBool(value, DinoInfo[TotalC].partAngled[DinoInfo[TotalC].jumpAnim]);
+
+	if (strstr(line, "idlePartFrame1")) DinoInfo[TotalC].partFrame1[DinoInfo[TotalC].idleAnim[DinoInfo[TotalC].idleCount-1]] = atoi(value);
+	if (strstr(line, "idlePartFrame2")) DinoInfo[TotalC].partFrame2[DinoInfo[TotalC].idleAnim[DinoInfo[TotalC].idleCount-1]] = atoi(value);
+	if (strstr(line, "idlePartDist")) DinoInfo[TotalC].partDist[DinoInfo[TotalC].idleAnim[DinoInfo[TotalC].idleCount-1]] = atoi(value);
+	if (strstr(line, "idlePartMag")) DinoInfo[TotalC].partMag[DinoInfo[TotalC].idleAnim[DinoInfo[TotalC].idleCount-1]] = atoi(value);
+	if (strstr(line, "idlePartAngled")) readBool(value, DinoInfo[TotalC].partAngled[DinoInfo[TotalC].idleAnim[DinoInfo[TotalC].idleCount-1]]);
 
 	if (strstr(line, "runAnim")) DinoInfo[TotalC].runAnim = atoi(value);
 	if (strstr(line, "jumpAnim")) DinoInfo[TotalC].jumpAnim = atoi(value);
@@ -2824,12 +2836,15 @@ void LoadResourcesScript()
 
 
 	AIInfo[AI_FISH].jumper = false;
+	AIInfo[AI_FISH].idleStart = 126;
 
 	AIInfo[AI_FISHDANGER].jumper = false;
 	AIInfo[AI_FISHDANGER].agressMulti = 8;
+	AIInfo[AI_FISHDANGER].idleStart = 126;
 
 	AIInfo[AI_MOSA].jumper = true;
 	AIInfo[AI_MOSA].agressMulti = 8;
+	AIInfo[AI_MOSA].idleStart = 80; //SET THIS BACK TO 126
 
 
 

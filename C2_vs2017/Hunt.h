@@ -349,6 +349,8 @@ typedef struct _TCharacter
   float lastTBeta = 0;
   float turny = 0;
 
+  int spcDepth;
+
   float speed_run, speed_walk, speed_jump, speed_swim,
 	  speed_fly, speed_glide, speed_takeoff, speed_land;
 
@@ -365,6 +367,8 @@ typedef struct _TCharacter
   int dogPrey; // used by dog only. The dino currently being tracked
 
   bool awareHunter;
+
+  bool aquaticIdle;
 
 } TCharacter;
 
@@ -530,6 +534,9 @@ typedef struct _TDinoInfo
   BOOL dogSmell;
 
   bool trophySession;
+
+  int partFrame1[50], partFrame2[50], partDist[50], partMag[50];
+  bool partAngled[50];
 
 } TDinoInfo;
 

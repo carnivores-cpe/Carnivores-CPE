@@ -284,6 +284,11 @@ void ResetCharacter(TCharacter *cptr)
 	cptr->RType = DinoInfo[cptr->CType].RType0[0];
 
 	cptr->followLeader = false;
+
+	cptr->aquaticIdle = false;
+
+	cptr->spcDepth = (cptr->scale * 400) - DinoInfo[cptr->CType].spacingDepth;
+
 }
 
 
@@ -1550,6 +1555,12 @@ replace:
 	}
 
 	float targetDepthTemp;
+
+	if (cptr->aquaticIdle) {
+		targetDepthTemp = GetLandUpH(p.x, p.z) - (cptr->spcDepth * 0.75);
+		goto skipY;
+	}
+
 	float tdistTemp = fabs((float)sqrt(
 		((p.x - cptr->pos.x)*(p.x - cptr->pos.x)) +
 		((p.z - cptr->pos.z) * (p.z - cptr->pos.z))));
@@ -1592,22 +1603,24 @@ replace2:
 	*/
 
 	targetDepthTemp = cptr->depth + targetDepthTemp;
-	if (targetDepthTemp < GetLandH(p.x, p.z) + DinoInfo[cptr->CType].spacingDepth) {
+	if (targetDepthTemp < GetLandH(p.x, p.z) + cptr->spcDepth) {
 		if (tr < 3024) {
 			goto replace2;
 		}
 		else {
-			targetDepthTemp = GetLandH(p.x, p.z) + DinoInfo[cptr->CType].spacingDepth;
+			targetDepthTemp = GetLandH(p.x, p.z) + cptr->spcDepth;
 		}
 	}
-	if (targetDepthTemp > GetLandUpH(p.x, p.z) - DinoInfo[cptr->CType].spacingDepth) {
+	if (targetDepthTemp > GetLandUpH(p.x, p.z) - cptr->spcDepth) {
 		if (tr < 3024) {
 			goto replace2;
 		}
 		else {
-			targetDepthTemp = GetLandUpH(p.x, p.z) - DinoInfo[cptr->CType].spacingDepth;
+			targetDepthTemp = GetLandUpH(p.x, p.z) - cptr->spcDepth;
 		}
 	}
+
+skipY:
 
 	cptr->tgtime = 0;
 	cptr->tgx = p.x;
@@ -2010,7 +2023,6 @@ void AnimateDeadCommon(TCharacter *cptr)
 
 	DeltaFunc(cptr->gamma, cptr->tggamma, TimeDt / 1600.f);
 }
-
 
 
 
@@ -4386,17 +4398,31 @@ TBEGIN:
 	 case AI_MOSA: tv = 3024.f;
 	}
 
+	// JUMP & IDLE PARTICLES
+	/*
 
-	//JUMP PARTICLES
-	if (AIInfo[cptr->Clone].jumper && cptr->Phase == DinoInfo[cptr->CType].jumpAnim && cptr->FTime > 200/25 && cptr->FTime < 1500/25) { //REPLACE 25 WITH CORRECT KPS
-		for (int i = 0; i < 20; i++) {
-			float xo = siRand(240)+ cptr->pos.x;
-			float zo = siRand(240) + cptr->pos.z;
-			AddElementsA(xo, GetLandUpH(xo, zo), zo, 2, 30 + (cptr->FTime - 200 / 25 )/1000, true, cptr->alpha); //REPLACE 25 WITH CORRECT KPS
-			AddWCircle(xo, zo, 1.2);
+	if (AIInfo[cptr->Clone].jumper && cptr->Phase == DinoInfo[cptr->CType].jumpAnim &&
+		cptr->FTime > DinoInfo[cptr->CType].partFrame1[cptr->Phase] / cptr->pinfo->Animation[cptr->Phase].aniKPS
+		&& cptr->FTime < DinoInfo[cptr->CType].partFrame2[cptr->Phase] / cptr->pinfo->Animation[cptr->Phase].aniKPS) {
+
+	*/
+
+	if (DinoInfo[cptr->CType].partFrame2[cptr->Phase]) {
+		if (cptr->FTime > DinoInfo[cptr->CType].partFrame1[cptr->Phase] / cptr->pinfo->Animation[cptr->Phase].aniKPS
+			&& cptr->FTime < DinoInfo[cptr->CType].partFrame2[cptr->Phase] / cptr->pinfo->Animation[cptr->Phase].aniKPS) {
+			for (int i = 0; i < DinoInfo[cptr->CType].partMag[cptr->Phase]; i++) {
+				float xo = siRand(DinoInfo[cptr->CType].partDist[cptr->Phase])+ cptr->pos.x;
+				float zo = siRand(DinoInfo[cptr->CType].partDist[cptr->Phase]) + cptr->pos.z;
+				AddElementsA(xo,
+					GetLandUpH(xo, zo), zo,
+					2,
+					(DinoInfo[cptr->CType].partMag[cptr->Phase] * 1.5) + (cptr->FTime - DinoInfo[cptr->CType].partFrame1[cptr->Phase] / cptr->pinfo->Animation[cptr->Phase].aniKPS)/1000,
+					DinoInfo[cptr->CType].partAngled[cptr->Phase],
+					cptr->alpha);
+				AddWCircle(xo, zo, 1.2);
+			}
 		}
 	}
-	    
 
 
 	if (GetLandUpH(cptr->pos.x, cptr->pos.z) - GetLandH(cptr->pos.x, cptr->pos.z) > 180 * cptr->scale)
@@ -4515,9 +4541,9 @@ TBEGIN:
 			*/
 
 			// Mosa Target Depth Failsafes
-			if (cptr->tdepth > GetLandUpH(cptr->tgx, cptr->tgz) - (DinoInfo[cptr->CType].spacingDepth * 0.75)) {
+			if (cptr->tdepth > GetLandUpH(cptr->tgx, cptr->tgz) - (cptr->spcDepth * 0.75)) {
 
-				cptr->tdepth = GetLandUpH(cptr->pos.x, cptr->pos.z) - (DinoInfo[cptr->CType].spacingDepth * 0.75);
+				cptr->tdepth = GetLandUpH(cptr->pos.x, cptr->pos.z) - (cptr->spcDepth * 0.75);
 				
 				//Target slightly higher so it can reach jumping altitude before reaching player
 				if (cptr->tdepth < PlayerY) {
@@ -4557,12 +4583,14 @@ TBEGIN:
 
 		if (cptr->Phase != DinoInfo[cptr->CType].jumpAnim){
 			if (AIInfo[cptr->Clone].jumper) {
-				if (cptr->depth > GetLandUpH(cptr->pos.x, cptr->pos.z) - (DinoInfo[cptr->CType].spacingDepth * 0.95))
+				if (cptr->depth > GetLandUpH(cptr->pos.x, cptr->pos.z) - (cptr->spcDepth * 0.95))
 					if (pdist < 1324 * cptr->scale && pdist>900 * cptr->scale)
 						if (AngleDifference(cptr->alpha, FindVectorAlpha(playerdx, playerdz)) < 0.2f) {
 							cptr->Phase = DinoInfo[cptr->CType].jumpAnim;
 							NewPhase = TRUE;
 							cptr->FTime = 0;
+							cptr->bend = 0;
+							cptr->bdepth = 0;
 						}
 			}
 		}
@@ -4670,15 +4698,45 @@ NOTHINK:
 	}
 	*/
 
-	if (NewPhase)
-		if (!cptr->State) cptr->Phase = DinoInfo[cptr->CType].walkAnim;
-		else cptr->Phase = DinoInfo[cptr->CType].runAnim;
+	if (cptr->State) cptr->aquaticIdle = false;
+	else if (DinoInfo[cptr->CType].idleCount > 0) {
+		for (int i = 0; i < DinoInfo[cptr->CType].idleCount; i++) {
+			if (NewPhase && _Phase == DinoInfo[cptr->CType].idleAnim[i]) {
+				cptr->aquaticIdle = false;
+			}
+		}
+	}
 
+	if (NewPhase) {
+		if (!cptr->State) {
+			cptr->Phase = DinoInfo[cptr->CType].walkAnim;
+			if (DinoInfo[cptr->CType].idleCount){
+				if (!cptr->aquaticIdle && rRand(128) > AIInfo[cptr->Clone].idleStart) {
+					cptr->aquaticIdle = true;
+				}
+
+				if (cptr->aquaticIdle &&
+					cptr->depth > GetLandUpH(cptr->pos.x, cptr->pos.z) - (cptr->spcDepth * 0.8) &&
+					fabs(cptr->beta) < pi / 16 &&
+					fabs(cptr->gamma) < pi / 16 &&
+					fabs(cptr->bend) < pi / 16) {
+
+					cptr->Phase = DinoInfo[cptr->CType].idleAnim[rRand(DinoInfo[cptr->CType].idleCount - 1)];
+					goto ENDPSELECT;
+				}
+
+			}
+		} else cptr->Phase = DinoInfo[cptr->CType].runAnim;
+
+	}
+
+	/*
 	if (!cptr->State) cptr->Phase = DinoInfo[cptr->CType].walkAnim;
 	else if (fabs(cptr->tgalpha - cptr->alpha) < 1.0 ||
 		fabs(cptr->tgalpha - cptr->alpha) > 2 * pi - 1.0)
 		cptr->Phase = DinoInfo[cptr->CType].runAnim;
 	else cptr->Phase = DinoInfo[cptr->CType].walkAnim;
+	*/
 
 	//if (cptr->StateF & csONWATER) cptr->Phase = RAP_SWIM;
 	//if (cptr->Slide > 40) cptr->Phase = RAP_SLIDE;
@@ -4776,7 +4834,11 @@ ENDPSELECT:
 	}
 
 	if (cptr->Phase == DinoInfo[cptr->CType].killType[cptr->killType].anim && DinoInfo[cptr->CType].killTypeCount) goto SKIPROT;
-
+		
+	for (int i = 0; i < DinoInfo[cptr->CType].idleCount; i++) {
+		if (cptr->Phase == DinoInfo[cptr->CType].idleAnim[i]) goto SKIPROT;
+	}
+	
 	if (drspd > 0.02)
 		if (cptr->tgalpha > cptr->alpha) currspeed = 0.6f + drspd * 1.2f;
 		else currspeed = -0.6f - drspd * 1.2f;
@@ -4830,6 +4892,15 @@ SKIPROT:
 	if (AIInfo[cptr->Clone].jumper) {
 		if (cptr->Phase == DinoInfo[cptr->CType].jumpAnim) curspeed = cptr->speed_jump;
 	}
+
+	if (DinoInfo[cptr->CType].idleCount > 0) {
+		for (int i = 0; i < DinoInfo[cptr->CType].idleCount; i++) {
+			if (cptr->Phase == DinoInfo[cptr->CType].idleAnim[i]) {
+				curspeed = cptr->speed_walk;
+			}
+		}
+	}
+
 
 	if (cptr->Phase == DinoInfo[cptr->CType].killType[cptr->killType].anim && DinoInfo[cptr->CType].killTypeCount) curspeed = 0.0f;
 
@@ -4930,14 +5001,14 @@ SKIPROT:
 
 
 	// Mosa Depth Failsafes
-	if (cptr->depth > GetLandUpH(cptr->pos.x, cptr->pos.z) - (DinoInfo[cptr->CType].spacingDepth / 2)) {
-		cptr->depth = GetLandUpH(cptr->pos.x, cptr->pos.z) - (DinoInfo[cptr->CType].spacingDepth / 2);
+	if (cptr->depth > GetLandUpH(cptr->pos.x, cptr->pos.z) - (cptr->spcDepth / 2)) {
+		cptr->depth = GetLandUpH(cptr->pos.x, cptr->pos.z) - (cptr->spcDepth / 2);
 		cptr->tdepth = GetLandH(cptr->pos.x, cptr->pos.z) +
 			((GetLandUpH(cptr->pos.x, cptr->pos.z) - GetLandH(cptr->pos.x, cptr->pos.z)) / 2);
 		cptr->lastTBeta = cptr->beta;
 	}
-	if (cptr->depth < GetLandH(cptr->pos.x, cptr->pos.z) + (DinoInfo[cptr->CType].spacingDepth / 2)) {
-		cptr->depth = GetLandH(cptr->pos.x, cptr->pos.z) + (DinoInfo[cptr->CType].spacingDepth / 2);
+	if (cptr->depth < GetLandH(cptr->pos.x, cptr->pos.z) + (cptr->spcDepth / 2)) {
+		cptr->depth = GetLandH(cptr->pos.x, cptr->pos.z) + (cptr->spcDepth / 2);
 		cptr->tdepth = GetLandH(cptr->pos.x, cptr->pos.z) +
 			((GetLandUpH(cptr->pos.x, cptr->pos.z) - GetLandH(cptr->pos.x, cptr->pos.z)) / 2);
 		cptr->lastTBeta = cptr->beta;

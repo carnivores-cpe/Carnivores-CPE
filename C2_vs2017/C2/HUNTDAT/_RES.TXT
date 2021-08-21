@@ -750,7 +750,7 @@ deathtype{
  shipdelta = 0
  maxdepth = 10000
  mindepth = 2500
- spcdepth = 100
+ spcdepth = 300
  wlkspd = 0.25
  runspd = 0.55
  runAnim = 1
@@ -781,7 +781,7 @@ deathtype{
  shipdelta = 0
  maxdepth = 1000
  mindepth = 450
- spcdepth = 73
+ spcdepth = 327
  wlkspd = 0.25
  runspd = 0.55
  runAnim = 1
@@ -827,7 +827,7 @@ styInRgn  = TRUE
  shipdelta = 0
  maxdepth = 10000
  mindepth = 200
- spcdepth = 100
+ spcdepth = 300
  wlkspd = 0.25
  runspd = 0.55
  runAnim = 1
@@ -847,7 +847,7 @@ styInRgn  = TRUE
 
 {
  name = 'Mosasaurus'
- file = 'mosa19.car'
+ file = 'mosa30.car'
  clone  = -4
  aggress   = 2048
  radar = 2
@@ -865,13 +865,19 @@ styInRgn  = TRUE
  shipdelta = 0
  maxdepth = 10000
  mindepth = 2500
- spcdepth = 550
+ spcdepth = 0
  walkAnim = 0
  wlkspd = 0.428
  runAnim = 1
  runspd = 1.2
  jumpAnim = 3
  jmpspd = 1.0
+ jumpPartFrame1 = 2
+ jumpPartFrame2 = 15
+ jumpPartDist = 240
+ jumpPartMag = 20
+ jumpPartAngled = TRUE
+ idleAnim = 4
  overwrite area1 {
   spawninfo {
   spawnrate = 0.5
