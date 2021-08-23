@@ -287,7 +287,7 @@ void ResetCharacter(TCharacter *cptr)
 
 	cptr->aquaticIdle = false;
 
-	cptr->spcDepth = (cptr->scale * 400) - DinoInfo[cptr->CType].spacingDepth;
+	cptr->spcDepth = DinoInfo[cptr->CType].spacingDepth + (cptr->scale * 500) - 500;
 
 }
 
@@ -4717,9 +4717,9 @@ NOTHINK:
 
 				if (cptr->aquaticIdle &&
 					cptr->depth > GetLandUpH(cptr->pos.x, cptr->pos.z) - (cptr->spcDepth * 0.8) &&
-					fabs(cptr->beta) < pi / 16 &&
-					fabs(cptr->gamma) < pi / 16 &&
-					fabs(cptr->bend) < pi / 16) {
+					fabs(cptr->beta) < pi / 32 &&
+					fabs(cptr->gamma) < pi / 32 &&
+					fabs(cptr->bend) < pi / 32) {
 
 					cptr->Phase = DinoInfo[cptr->CType].idleAnim[rRand(DinoInfo[cptr->CType].idleCount - 1)];
 					goto ENDPSELECT;

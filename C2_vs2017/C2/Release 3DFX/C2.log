@@ -39,6 +39,6 @@ c:\users\ojm14\documents\github\carnivores-cpe\c2_vs2017\characters.cpp(7473): w
   Generating code
   1 of 312 functions ( 0.3%) were compiled, the rest were copied from previous compilation.
     0 functions were new in current compilation
-    7 functions had inline decision re-evaluated but remain unchanged
+    2 functions had inline decision re-evaluated but remain unchanged
   Finished generating code
   C2.vcxproj -> C:\Users\ojm14\Documents\GitHub\Carnivores-CPE\C2_vs2017\Release 3DFX\v_3dfx.ren
