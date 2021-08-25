@@ -535,8 +535,8 @@ typedef struct _TDinoInfo
 
   bool trophySession;
 
-  int partFrame1[50], partFrame2[50], partDist[50], partMag[50];
-  bool partAngled[50];
+  int partFrame1[50], partFrame2[50], partDist[50], partCnt[50], partMag[50], partOffset[50];
+  bool partAngled[50], partCircle[50];
 
 } TDinoInfo;
 
@@ -829,7 +829,7 @@ void MakeShot(float ax, float ay, float az,
 
 void AddBloodTrail(TCharacter *cptr);
 void AddElements(float, float, float, int, int);
-void AddElementsA(float, float, float, int, int, bool, float);
+void AddElementsA(float, float, float, int, int, int, bool, float);
 void AddWCircle(float, float, float);
 void AnimateProcesses();
 void DoHalt(LPSTR);

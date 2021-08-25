@@ -2340,17 +2340,23 @@ void ReadCharacterLine(FILE *stream, char *_value, char line[256], bool &regionO
 
 	if (strstr(line, "canswim")) readBool(value, DinoInfo[TotalC].canSwim); //check animate subroutines for what this includes. LandBrach needs this attribute, but maybe rename to wade? (and default to off for landbrach ai? maybe?)
 
-	if (strstr(line, "jumpPartFrame1")) DinoInfo[TotalC].partFrame1[DinoInfo[TotalC].jumpAnim] = 100 * atoi(value); // x100
-	if (strstr(line, "jumpPartFrame2")) DinoInfo[TotalC].partFrame2[DinoInfo[TotalC].jumpAnim] = 100 * atoi(value); // x100
+	if (strstr(line, "jumpPartFrame1")) DinoInfo[TotalC].partFrame1[DinoInfo[TotalC].jumpAnim] = 1000 * atoi(value); // x1000
+	if (strstr(line, "jumpPartFrame2")) DinoInfo[TotalC].partFrame2[DinoInfo[TotalC].jumpAnim] = 1000 * atoi(value); // x1000
 	if (strstr(line, "jumpPartDist")) DinoInfo[TotalC].partDist[DinoInfo[TotalC].jumpAnim] = atoi(value);
+	if (strstr(line, "jumpPartCnt")) DinoInfo[TotalC].partCnt[DinoInfo[TotalC].jumpAnim] = atoi(value);
 	if (strstr(line, "jumpPartMag")) DinoInfo[TotalC].partMag[DinoInfo[TotalC].jumpAnim] = atoi(value);
+	if (strstr(line, "jumpPartOffset")) DinoInfo[TotalC].partOffset[DinoInfo[TotalC].jumpAnim] = atoi(value);
 	if (strstr(line, "jumpPartAngled")) readBool(value, DinoInfo[TotalC].partAngled[DinoInfo[TotalC].jumpAnim]);
+	if (strstr(line, "jumpPartCircle")) readBool(value, DinoInfo[TotalC].partCircle[DinoInfo[TotalC].jumpAnim]);
 
-	if (strstr(line, "idlePartFrame1")) DinoInfo[TotalC].partFrame1[DinoInfo[TotalC].idleAnim[DinoInfo[TotalC].idleCount-1]] = atoi(value);
-	if (strstr(line, "idlePartFrame2")) DinoInfo[TotalC].partFrame2[DinoInfo[TotalC].idleAnim[DinoInfo[TotalC].idleCount-1]] = atoi(value);
+	if (strstr(line, "idlePartFrame1")) DinoInfo[TotalC].partFrame1[DinoInfo[TotalC].idleAnim[DinoInfo[TotalC].idleCount-1]] = 1000 * atoi(value); // x1000
+	if (strstr(line, "idlePartFrame2")) DinoInfo[TotalC].partFrame2[DinoInfo[TotalC].idleAnim[DinoInfo[TotalC].idleCount-1]] = 1000 * atoi(value); // x1000
 	if (strstr(line, "idlePartDist")) DinoInfo[TotalC].partDist[DinoInfo[TotalC].idleAnim[DinoInfo[TotalC].idleCount-1]] = atoi(value);
+	if (strstr(line, "idlePartCnt")) DinoInfo[TotalC].partCnt[DinoInfo[TotalC].idleAnim[DinoInfo[TotalC].idleCount - 1]] = atoi(value);
 	if (strstr(line, "idlePartMag")) DinoInfo[TotalC].partMag[DinoInfo[TotalC].idleAnim[DinoInfo[TotalC].idleCount-1]] = atoi(value);
+	if (strstr(line, "idlePartOffset")) DinoInfo[TotalC].partOffset[DinoInfo[TotalC].idleAnim[DinoInfo[TotalC].idleCount - 1]] = atoi(value);
 	if (strstr(line, "idlePartAngled")) readBool(value, DinoInfo[TotalC].partAngled[DinoInfo[TotalC].idleAnim[DinoInfo[TotalC].idleCount-1]]);
+	if (strstr(line, "idlePartCircle")) readBool(value, DinoInfo[TotalC].partCircle[DinoInfo[TotalC].idleAnim[DinoInfo[TotalC].idleCount - 1]]);
 
 	if (strstr(line, "runAnim")) DinoInfo[TotalC].runAnim = atoi(value);
 	if (strstr(line, "jumpAnim")) DinoInfo[TotalC].jumpAnim = atoi(value);

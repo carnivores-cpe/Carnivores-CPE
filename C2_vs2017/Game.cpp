@@ -1798,10 +1798,10 @@ DWORD ColorSum(DWORD C1, DWORD C2)
 
 void AddElements(float x, float y, float z, int etype, int cnt)
 {
-	AddElementsA(x,y,z,etype,cnt,false,0);
+	AddElementsA(x,y,z,etype,cnt,cnt,false,0);
 }
 
-void AddElementsA(float x, float y, float z, int etype, int cnt, bool angled, float alph)
+void AddElementsA(float x, float y, float z, int etype, int cnt, int mag, bool angled, float alph)
 {
   if (ElCount > 698)
   {
@@ -1876,26 +1876,28 @@ void AddElementsA(float x, float y, float z, int etype, int cnt, bool angled, fl
     Elements[ElCount].EList[e].Flags = 0;
     float v;
 
+	float velo = mag * rRand(20)/20;
+
     switch (etype)
     {
     case partBlood:
-      v = e * 6 + rRand(96) + 220;
+      v = velo * 6 + rRand(96) + 220;
       Elements[ElCount].EList[e].speed.x =ss*ca*v + siRand(32);
       Elements[ElCount].EList[e].speed.y =cc * (v * 3);
       Elements[ElCount].EList[e].speed.z =ss*sa*v + siRand(32);
       break;
     case partGround:
       Elements[ElCount].EList[e].speed.x =siRand(52)-sa*64;
-      Elements[ElCount].EList[e].speed.y =rRand(100) + 600 + e * 20;
+      Elements[ElCount].EList[e].speed.y =rRand(100) + 600 + velo * 20;
       Elements[ElCount].EList[e].speed.z =siRand(52)+ca*64;
       break;
     case partWater:
 		Elements[ElCount].EList[e].speed.x = siRand(32);
 		Elements[ElCount].EList[e].speed.z = siRand(32);
-		Elements[ElCount].EList[e].speed.y =rRand(80) + 400 +  e * 40;
+		Elements[ElCount].EList[e].speed.y =rRand(80) + 400 + velo * 40;
 		if (angled) {
-			Elements[ElCount].EList[e].speed.x = siRand(132) + ((float)cos(alph) * e * 40);
-			Elements[ElCount].EList[e].speed.z = siRand(132) + ((float)sin(alph) * e * 40);
+			Elements[ElCount].EList[e].speed.x = siRand(132) + ((float)cos(alph) * velo * 40);
+			Elements[ElCount].EList[e].speed.z = siRand(132) + ((float)sin(alph) * velo * 40);
 		}
       break;
     case partBubble:

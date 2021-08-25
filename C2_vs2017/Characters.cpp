@@ -4399,27 +4399,26 @@ TBEGIN:
 	}
 
 	// JUMP & IDLE PARTICLES
-	/*
 
-	if (AIInfo[cptr->Clone].jumper && cptr->Phase == DinoInfo[cptr->CType].jumpAnim &&
-		cptr->FTime > DinoInfo[cptr->CType].partFrame1[cptr->Phase] / cptr->pinfo->Animation[cptr->Phase].aniKPS
-		&& cptr->FTime < DinoInfo[cptr->CType].partFrame2[cptr->Phase] / cptr->pinfo->Animation[cptr->Phase].aniKPS) {
-
-	*/
-
-	if (DinoInfo[cptr->CType].partFrame2[cptr->Phase]) {
-		if (cptr->FTime > DinoInfo[cptr->CType].partFrame1[cptr->Phase] / cptr->pinfo->Animation[cptr->Phase].aniKPS
-			&& cptr->FTime < DinoInfo[cptr->CType].partFrame2[cptr->Phase] / cptr->pinfo->Animation[cptr->Phase].aniKPS) {
-			for (int i = 0; i < DinoInfo[cptr->CType].partMag[cptr->Phase]; i++) {
-				float xo = siRand(DinoInfo[cptr->CType].partDist[cptr->Phase])+ cptr->pos.x;
-				float zo = siRand(DinoInfo[cptr->CType].partDist[cptr->Phase]) + cptr->pos.z;
-				AddElementsA(xo,
-					GetLandUpH(xo, zo), zo,
-					2,
-					(DinoInfo[cptr->CType].partMag[cptr->Phase] * 1.5) + (cptr->FTime - DinoInfo[cptr->CType].partFrame1[cptr->Phase] / cptr->pinfo->Animation[cptr->Phase].aniKPS)/1000,
-					DinoInfo[cptr->CType].partAngled[cptr->Phase],
-					cptr->alpha);
-				AddWCircle(xo, zo, 1.2);
+	if (pdist < (ctViewR + 20) * 256) {	//Only create particles within player render distance
+		if (DinoInfo[cptr->CType].partCnt[cptr->Phase]) {
+			if (cptr->FTime > DinoInfo[cptr->CType].partFrame1[cptr->Phase] / cptr->pinfo->Animation[cptr->Phase].aniKPS
+				&& cptr->FTime < DinoInfo[cptr->CType].partFrame2[cptr->Phase] / cptr->pinfo->Animation[cptr->Phase].aniKPS) {
+				for (int i = 0; i < sqrt(DinoInfo[cptr->CType].partCnt[cptr->Phase]); i++) {
+					float xo = siRand(DinoInfo[cptr->CType].partDist[cptr->Phase]) + cptr->pos.x +
+						((cos(cptr->alpha) * DinoInfo[cptr->CType].partOffset[cptr->Phase]));
+					float zo = siRand(DinoInfo[cptr->CType].partDist[cptr->Phase]) + cptr->pos.z +
+						((sin(cptr->alpha) * DinoInfo[cptr->CType].partOffset[cptr->Phase]));
+					AddElementsA(xo,
+						GetLandUpH(xo, zo),
+						zo,
+						2,
+						5,
+						DinoInfo[cptr->CType].partMag[cptr->Phase],
+						DinoInfo[cptr->CType].partAngled[cptr->Phase],
+						cptr->alpha);
+					if (DinoInfo[cptr->CType].partCircle[cptr->Phase]) AddWCircle(xo, zo, 1.2);
+				}
 			}
 		}
 	}
@@ -4622,6 +4621,8 @@ TBEGIN:
 					cptr->State = 0;
 				}
 
+				cptr->aquaticIdle = false;
+
 			}
 		}
 		
@@ -4711,17 +4712,20 @@ NOTHINK:
 		if (!cptr->State) {
 			cptr->Phase = DinoInfo[cptr->CType].walkAnim;
 			if (DinoInfo[cptr->CType].idleCount){
-				if (!cptr->aquaticIdle && rRand(128) > AIInfo[cptr->Clone].idleStart) {
+				if (!cptr->aquaticIdle && rRand(128) > AIInfo[cptr->Clone].idleStart && MyHealth) { // Don't play idles when carrying hunters corpse
 					cptr->aquaticIdle = true;
 				}
 
 				if (cptr->aquaticIdle &&
+					MyHealth && // Don't play idles when carrying hunters corpse
 					cptr->depth > GetLandUpH(cptr->pos.x, cptr->pos.z) - (cptr->spcDepth * 0.8) &&
 					fabs(cptr->beta) < pi / 32 &&
 					fabs(cptr->gamma) < pi / 32 &&
 					fabs(cptr->bend) < pi / 32) {
 
 					cptr->Phase = DinoInfo[cptr->CType].idleAnim[rRand(DinoInfo[cptr->CType].idleCount - 1)];
+					NewPhase = TRUE;
+					cptr->FTime = 0;
 					goto ENDPSELECT;
 				}
 

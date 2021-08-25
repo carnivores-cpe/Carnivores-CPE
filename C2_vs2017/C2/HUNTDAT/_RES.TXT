@@ -872,12 +872,20 @@ styInRgn  = TRUE
  runspd = 1.2
  jumpAnim = 3
  jmpspd = 1.0
- jumpPartFrame1 = 2
- jumpPartFrame2 = 15
+ jumpPartFrame1 = 1
+ jumpPartFrame2 = 11
  jumpPartDist = 240
- jumpPartMag = 20
+ jumpPartCnt = 500
+ jumpPartMag = 40
  jumpPartAngled = TRUE
+ jumpPartCircle = TRUE
  idleAnim = 4
+ idlePartFrame1 = 13
+ idlePartFrame2 = 14
+ idlePartDist = 22
+ idlePartCnt = 3
+ idlePartMag = 20
+ idlePartOffset = 420
  overwrite area1 {
   spawninfo {
   spawnrate = 0.5
