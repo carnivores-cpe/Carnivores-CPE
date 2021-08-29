@@ -898,9 +898,8 @@ LONG APIENTRY MainWndProc( HWND hWnd, UINT message, UINT wParam, LONG lParam)
       if (CTRL) SwitchMode("Gour.Mapping",GOUR);
       break;
     case 'P':
-      if (CTRL) SwitchMode("Phong Mapping",PHONG);
-      else if (DEBUG) ChangeViewR(0, +2, 0);
-      break;
+		if (!CTRL) { if (DEBUG) ChangeViewR(0, +2, 0); } else  SwitchMode("Phong Mapping", PHONG);
+		break;
 
     case VK_TAB:
       if (!TrophyMode) ToggleMapMode();

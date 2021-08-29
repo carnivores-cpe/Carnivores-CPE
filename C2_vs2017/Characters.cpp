@@ -289,6 +289,7 @@ void ResetCharacter(TCharacter *cptr)
 
 	cptr->spcDepth = DinoInfo[cptr->CType].spacingDepth + (cptr->scale * 500) - 500;
 
+
 }
 
 
@@ -1556,10 +1557,12 @@ replace:
 
 	float targetDepthTemp;
 
+	/*
 	if (cptr->aquaticIdle) {
 		targetDepthTemp = GetLandUpH(p.x, p.z) - (cptr->spcDepth * 0.75);
 		goto skipY;
 	}
+	*/
 
 	float tdistTemp = fabs((float)sqrt(
 		((p.x - cptr->pos.x)*(p.x - cptr->pos.x)) +
@@ -1575,9 +1578,25 @@ replace:
 
 replace2:
 	//PrintLog("-");//TEST202004091129
-	targetDepthTemp = siRand((int)(tdistTemp));
 	//targetDepthTemp = siRand((int)(R/3));
+
+	if (cptr->aquaticIdle) {
+		targetDepthTemp = rRand((int)(GetLandUpH(p.x, p.z) - (cptr->spcDepth * 0.68) - cptr->depth)); //target slightly higher so it doesn't take forever - correct to 0.75 later
+	} else {
+		targetDepthTemp = siRand((int)(tdistTemp));
+	}
+
 	tr++;
+
+	/*
+	if (cptr->aquaticIdle) {
+		if (targetDepthTemp < 0) targetDepthTemp *= -1;
+		if (cptr->depth > GetLandUpH(p.x, p.z) - (cptr->spcDepth * 1.1)) {
+			targetDepthTemp = GetLandUpH(p.x, p.z) - (cptr->spcDepth * 0.75);
+			goto skipY;
+		}
+	}
+	*/
 
 	//PREVENT TOO MUCH TURNING/bending
 	if (tr < 1024) {
@@ -1603,24 +1622,28 @@ replace2:
 	*/
 
 	targetDepthTemp = cptr->depth + targetDepthTemp;
-	if (targetDepthTemp < GetLandH(p.x, p.z) + cptr->spcDepth) {
+	
+	int spcdm = 1;
+	if (cptr->aquaticIdle) spcdm = 0.75;
+
+	if (targetDepthTemp < GetLandH(p.x, p.z) + (cptr->spcDepth * spcdm)) {
 		if (tr < 3024) {
 			goto replace2;
 		}
 		else {
-			targetDepthTemp = GetLandH(p.x, p.z) + cptr->spcDepth;
+			targetDepthTemp = GetLandH(p.x, p.z) + (cptr->spcDepth * spcdm);
 		}
 	}
-	if (targetDepthTemp > GetLandUpH(p.x, p.z) - cptr->spcDepth) {
+	if (targetDepthTemp > GetLandUpH(p.x, p.z) - (cptr->spcDepth * spcdm)) {
 		if (tr < 3024) {
 			goto replace2;
 		}
 		else {
-			targetDepthTemp = GetLandUpH(p.x, p.z) - cptr->spcDepth;
+			targetDepthTemp = GetLandUpH(p.x, p.z) - (cptr->spcDepth * spcdm);
 		}
 	}
 
-skipY:
+//skipY:
 
 	cptr->tgtime = 0;
 	cptr->tgx = p.x;
@@ -4400,15 +4423,16 @@ TBEGIN:
 
 	// JUMP & IDLE PARTICLES
 
+	//int Scal = ((cptr->scale * 2) - 1);
 	if (pdist < (ctViewR + 20) * 256) {	//Only create particles within player render distance
 		if (DinoInfo[cptr->CType].partCnt[cptr->Phase]) {
 			if (cptr->FTime > DinoInfo[cptr->CType].partFrame1[cptr->Phase] / cptr->pinfo->Animation[cptr->Phase].aniKPS
 				&& cptr->FTime < DinoInfo[cptr->CType].partFrame2[cptr->Phase] / cptr->pinfo->Animation[cptr->Phase].aniKPS) {
-				for (int i = 0; i < sqrt(DinoInfo[cptr->CType].partCnt[cptr->Phase]); i++) {
-					float xo = siRand(DinoInfo[cptr->CType].partDist[cptr->Phase]) + cptr->pos.x +
-						((cos(cptr->alpha) * DinoInfo[cptr->CType].partOffset[cptr->Phase]));
-					float zo = siRand(DinoInfo[cptr->CType].partDist[cptr->Phase]) + cptr->pos.z +
-						((sin(cptr->alpha) * DinoInfo[cptr->CType].partOffset[cptr->Phase]));
+				for (int i = 0; i < (int)sqrt(DinoInfo[cptr->CType].partCnt[cptr->Phase]* ((cptr->scale * 3) - 2)); i++) {
+					float xo = (int)siRand((int)DinoInfo[cptr->CType].partDist[cptr->Phase]* cptr->scale) + cptr->pos.x +
+						((cos(cptr->alpha)  * ((cptr->scale * 1.5) - 0.5) * DinoInfo[cptr->CType].partOffset[cptr->Phase]));
+					float zo = (int)siRand((int)DinoInfo[cptr->CType].partDist[cptr->Phase] * cptr->scale) + cptr->pos.z +
+						((sin(cptr->alpha)  * ((cptr->scale * 1.5) - 0.5) * DinoInfo[cptr->CType].partOffset[cptr->Phase]));
 					AddElementsA(xo,
 						GetLandUpH(xo, zo),
 						zo,
@@ -4754,7 +4778,13 @@ ENDPSELECT:
 
 		// TODO - ADD BLOWHOLE
 
-		if (cptr->Phase == DinoInfo[cptr->CType].jumpAnim) {
+		bool idp = false;
+
+		for (int i = 0; i < DinoInfo[cptr->CType].idleCount; i++) {
+			if (cptr->Phase == DinoInfo[cptr->CType].idleAnim[i]) idp = true;
+		}
+
+		if (cptr->Phase == DinoInfo[cptr->CType].jumpAnim || idp) {
 			ActivateCharacterFx(cptr);
 		} else {
 			ActivateCharacterFxAquatic(cptr);

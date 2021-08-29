@@ -1633,9 +1633,23 @@ void InitEngine()
   //ctViewR  = 72;
   //ctViewR1 = 28;
   //ctViewRM = 24;
-  ctViewR  = 42 + (int)(OptViewR / 8)*2;
+
+  /*
+  ctViewR = 42 + (int)(OptViewR / 8) * 2;
   ctViewR1 = 28;
   ctViewRM = 24;
+  */
+
+  
+  //TEST VERSION - INTRODUCE QUAILTY SLIDER?
+  ctViewR  = 42 + (int)(OptViewR / 3.1875);
+  ctViewR1 = ctViewR - 10; // 28 + (int)(OptViewR / 1.175115207373272);
+  ctViewRM = 24; //leave as 24 default
+  if (ctViewR < 20) ctViewR = 20;
+  if (ctViewR > 122) ctViewR = 122;
+  //if (ctViewR1 < 12) ctViewR1 = 12;
+  //if (ctViewR1 > ctViewR - 10) ctViewR1 = ctViewR - 10;
+  
 
   Soft_Persp_K = 1.5f;
   HeadY = 220;

@@ -2850,7 +2850,7 @@ void LoadResourcesScript()
 
 	AIInfo[AI_MOSA].jumper = true;
 	AIInfo[AI_MOSA].agressMulti = 8;
-	AIInfo[AI_MOSA].idleStart = 80; //SET THIS BACK TO 126
+	AIInfo[AI_MOSA].idleStart = 126; //SET THIS BACK TO 126
 
 
 
