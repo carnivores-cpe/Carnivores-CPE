@@ -59,9 +59,10 @@ Loading: HUNTDAT\spino_s.car
 Loading: HUNTDAT\cerato1_s.car
 Loading: HUNTDAT\tirex.car
 Loading: HUNTDAT\dangerbrachikiller2.car
+Loading: HUNTDAT\pach.car
 Loading: HUNTDAT\climatius3.car
 Loading: HUNTDAT\parexusn4.car
-Loading: HUNTDAT\parexusn4_pink_eater.car
+Loading: HUNTDAT\parexusn4_pink.car
 Loading: HUNTDAT\mosa30.car
 Loading: HUNTDAT\teeth4-2-2-fly_flip-9-6.car
 Loading: HUNTDAT\WEAPONS\pistol.car
@@ -79,10 +80,3 @@ Loading: HUNTDAT\WEAPONS\bullet3.tga
 Start Address: 0
 End   Address: 8388592
 Audio_UpdateGeometry: 324 faces uploaded
-Trophy Saved.
-  AudioStop ()
- Releasing Listener3D
- Releasing PrimaryBuffer
- Releasing DirectSoundObject
- Terminate thread 1
- AudioShutdown()

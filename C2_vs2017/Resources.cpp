@@ -2358,6 +2358,8 @@ void ReadCharacterLine(FILE *stream, char *_value, char line[256], bool &regionO
 	if (strstr(line, "idlePartAngled")) readBool(value, DinoInfo[TotalC].partAngled[DinoInfo[TotalC].idleAnim[DinoInfo[TotalC].idleCount-1]]);
 	if (strstr(line, "idlePartCircle")) readBool(value, DinoInfo[TotalC].partCircle[DinoInfo[TotalC].idleAnim[DinoInfo[TotalC].idleCount - 1]]);
 
+	if (strstr(line, "DangerFish")) readBool(value, DinoInfo[TotalC].DangerFish);
+
 	if (strstr(line, "runAnim")) DinoInfo[TotalC].runAnim = atoi(value);
 	if (strstr(line, "jumpAnim")) DinoInfo[TotalC].jumpAnim = atoi(value);
 	if (strstr(line, "walkAnim")) DinoInfo[TotalC].walkAnim = atoi(value);
@@ -2547,8 +2549,7 @@ void ReadCharacters(FILE *stream, bool mapamb)
 		  }
           AI_to_CIndex[_ctype] = TotalC;
 		  if (DinoInfo[TotalC].Clone == AI_MOSA ||
-			  DinoInfo[TotalC].Clone == AI_FISH ||
-			  DinoInfo[TotalC].Clone == AI_FISHDANGER) {
+			  DinoInfo[TotalC].Clone == AI_FISH) {
 			  DinoInfo[TotalC].Aquatic = TRUE;
 		  } else {
 			  DinoInfo[TotalC].Aquatic = FALSE;
@@ -2842,14 +2843,11 @@ void LoadResourcesScript()
 
 
 	AIInfo[AI_FISH].jumper = false;
+	AIInfo[AI_FISH].agressMulti = 4;
 	AIInfo[AI_FISH].idleStart = 126;
 
-	AIInfo[AI_FISHDANGER].jumper = false;
-	AIInfo[AI_FISHDANGER].agressMulti = 8;
-	AIInfo[AI_FISHDANGER].idleStart = 126;
-
 	AIInfo[AI_MOSA].jumper = true;
-	AIInfo[AI_MOSA].agressMulti = 8;
+	AIInfo[AI_MOSA].agressMulti = 4;
 	AIInfo[AI_MOSA].idleStart = 126; //SET THIS BACK TO 126
 
 

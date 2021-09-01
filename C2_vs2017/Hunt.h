@@ -538,6 +538,8 @@ typedef struct _TDinoInfo
   int partFrame1[50], partFrame2[50], partDist[50], partCnt[50], partMag[50], partOffset[50];
   bool partAngled[50], partCircle[50];
 
+  bool DangerFish;
+
 } TDinoInfo;
 
 typedef struct _TPack
@@ -1123,7 +1125,6 @@ _EXTORNOT   struct _t
 #define AI_MOSA        -4
 #define AI_BRACHDANGER -5
 #define AI_LANDBRACH   -6
-#define AI_FISHDANGER  -7
 
 
 

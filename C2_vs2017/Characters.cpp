@@ -553,6 +553,8 @@ int CheckPlaceCollisionFish(TCharacter *cptr, Vector3d &v, float mosaDepth, int 
 		(GetLandUpH(v.x + 256, v.z - 256) - GetLandH(v.x + 256, v.z - 256)) > maxDepth ||
 		(GetLandUpH(v.x - 256, v.z + 256) - GetLandH(v.x - 256, v.z + 256)) > maxDepth) return 1;
 
+
+
 	// #C1 REMOVE THESE
 	//if (mosaDepth > GetLandUpH(v.x, v.z) - 700) return 1;
 	//if (mosaDepth < GetLandH(v.x, v.z) + 500) return 1;
@@ -967,7 +969,6 @@ int CheckPossiblePath(TCharacter *cptr, BOOL wc, BOOL mc)
 
 		}*/
 		else if (cptr->Clone == AI_FISH ||
-			cptr->Clone == AI_FISHDANGER ||
 			cptr->Clone == AI_MOSA) {
 			p.x += lookx * 64.f;
 			p.z += lookz * 64.f;
@@ -1541,6 +1542,10 @@ replace:
 	p.y = GetLandH(p.x, p.z);
 	float wy = GetLandUpH(p.x, p.z) - GetLandH(p.x, p.z);
 
+
+	int spcdm = 1;
+	if (cptr->aquaticIdle) spcdm = 0.75;
+
 	if (tr < 2024)
 	{
 
@@ -1549,6 +1554,10 @@ replace:
 			goto replace;
 		}
 		if (wy > DinoInfo[cptr->CType].maxDepth) {
+			if (stayRegion && outsideRegion && tr > 64) stayRegion = false;
+			goto replace;
+		}
+		if (wy < cptr->spcDepth * spcdm * 2) {
 			if (stayRegion && outsideRegion && tr > 64) stayRegion = false;
 			goto replace;
 		}
@@ -1623,8 +1632,6 @@ replace2:
 
 	targetDepthTemp = cptr->depth + targetDepthTemp;
 	
-	int spcdm = 1;
-	if (cptr->aquaticIdle) spcdm = 0.75;
 
 	if (targetDepthTemp < GetLandH(p.x, p.z) + (cptr->spcDepth * spcdm)) {
 		if (tr < 3024) {
@@ -2955,7 +2962,7 @@ void AnimateHerbivore(TCharacter *cptr)
 		if (!cptr->State && Packs[cptr->packId]._alert) alertInit = TRUE;
 	}
 
-	if (alertInit) {
+	if (alertInit && MyHealth) {
 		NewPhase = TRUE;
 		cptr->State = 1;
 	}
@@ -2987,6 +2994,8 @@ TBEGIN:
 	if (cptr->Phase == DinoInfo[cptr->CType].killType[cptr->killType].anim && DinoInfo[cptr->CType].killTypeCount) goto NOTHINK;
 
 	//=========== run away =================//
+
+	if (!MyHealth) cptr->State = 0;
 
 	if (cptr->State)
 	{
@@ -3729,7 +3738,8 @@ TBEGIN:
 	if (cptr->Phase == DinoInfo[cptr->CType].killType[cptr->killType].anim && DinoInfo[cptr->CType].killTypeCount) goto NOTHINK;
 
 	//============================================//
-	if (!MyHealth) cptr->State = 0;
+	//if (!MyHealth) cptr->State = 0; //TREX cannot return to state 0!!!
+
 	if (cptr->State)
 	{
 		cptr->tgx = PlayerX;
@@ -3769,7 +3779,7 @@ TBEGIN:
 
 
 
-		if (pdist < DinoInfo[cptr->CType].killDist && DinoInfo[cptr->CType].killDist > 0)
+		if (pdist < DinoInfo[cptr->CType].killDist && DinoInfo[cptr->CType].killDist > 0 && MyHealth)
 		{
 			int killAlt = DinoInfo[cptr->CType].waterLevel;
 			if (killAlt < 256) killAlt = 256;
@@ -4398,10 +4408,10 @@ TBEGIN:
 	float tdist2 = (float)sqrt(targetdx * targetdx + targetdz * targetdz); //non-verticle
 	float tdist = (float)sqrt(tdist2 * tdist2 + targetdy * targetdy); //verticle
 
-	float attackDist = 1024.f;
-	if (cptr->Clone == AI_FISHDANGER || cptr->Clone == AI_MOSA) {
-		attackDist = DinoInfo[cptr->CType].aggress;
-	}
+	//float attackDist = 1024.f;
+	//if (DinoInfo[cptr->CType].DangerFish) {
+	//	attackDist = DinoInfo[cptr->CType].aggress;
+	//}
 
 	float playerdx = PlayerX - cptr->pos.x - cptr->lookx * 100 * cptr->scale;
 	float playerdz = PlayerZ - cptr->pos.z - cptr->lookz * 100 * cptr->scale;
@@ -4417,7 +4427,6 @@ TBEGIN:
 	float tv;
 	switch (cptr->Clone) {
 	 case AI_FISH: tv = 1024.f;
-	 case AI_FISHDANGER: tv = 1024.f;
 	 case AI_MOSA: tv = 3024.f;
 	}
 
@@ -4461,13 +4470,16 @@ TBEGIN:
 	//============================================//
 	if (!MyHealth) cptr->State = 0;
 
+	int ao = 0;
+	if (DinoInfo[cptr->CType].DangerFish)ao = OptAgres;
+
 	if (!cptr->State)
 	{
 
-		bool attackmode = pdist <= attackDist * 4 && playerInWater && !DinoInfo[cptr->CType].dontSwimAway
+		bool attackmode = pdist <= ctViewR * DinoInfo[cptr->CType].aggress + ao / AIInfo[cptr->Clone].agressMulti && playerInWater && !DinoInfo[cptr->CType].dontSwimAway
 			&& MyHealth && !ObservMode && !DEBUG;
 		if (attackmode)	cptr->AfraidTime = (int)(10.f) * 1024;
-		if (cptr->packId >= 0) {
+		if (cptr->packId >= 0 && MyHealth) {
 			if (attackmode) Packs[cptr->packId].alert = TRUE;
 			if (Packs[cptr->packId]._alert) attackmode = TRUE;
 		}
@@ -4520,7 +4532,7 @@ TBEGIN:
 
 	if (cptr->State)
 	{
-		if (pdist > attackDist || !playerInWater)
+		if (pdist > ctViewR * DinoInfo[cptr->CType].aggress + ao / AIInfo[cptr->Clone].agressMulti || !playerInWater)
 		{
 			cptr->AfraidTime -= TimeDt;
 
@@ -4547,42 +4559,25 @@ TBEGIN:
 
 		}
 
-		if (cptr->Clone == AI_FISHDANGER || cptr->Clone == AI_MOSA) {
+		if (DinoInfo[cptr->CType].DangerFish) {
 			cptr->tgx = PlayerX;
 			cptr->tgz = PlayerZ;
 			cptr->tgtime = 0;
 			cptr->tdepth = PlayerY;
 
 
-			/*
-				float targetx = cptr->tgx;
-	float tdx2 = targetx - cptr->pos.x;
-	float tdz2 = targetz - cptr->pos.z;
-
-	float tdist2 = (float)sqrt(targetdx * targetdx + targetdz * targetdz); //non-verticle
-	float tdist = (float)sqrt(tdist2 * tdist2 + targetdy * targetdy); //verticle
-			*/
-
 			// Mosa Target Depth Failsafes
 			if (cptr->tdepth > GetLandUpH(cptr->tgx, cptr->tgz) - (cptr->spcDepth * 0.75)) {
-
 				cptr->tdepth = GetLandUpH(cptr->pos.x, cptr->pos.z) - (cptr->spcDepth * 0.75);
-				
-				//Target slightly higher so it can reach jumping altitude before reaching player
-				if (cptr->tdepth < PlayerY) {
-					float tdx2 = cptr->tgx - cptr->pos.x;
-					float tdz2 = cptr->tgz - cptr->pos.z;
-					float td2 = (float)sqrt(tdx2 * tdx2 + tdz2 * tdz2);
-					cptr->tdepth += (td2 * 0.1);
-				}
+			}
 
+			//Target above the player so it can get to jumping depth in time.
+			if (AIInfo[cptr->Clone].jumper) {
+				if (cptr->depth < cptr->tdepth) {
+					cptr->tdepth += ((cptr->tdepth - cptr->depth) * 3 *
+						((cptr->tdepth - GetLandH(cptr->tgx, cptr->tgz)) / (GetLandUpH(cptr->tgx, cptr->tgz) - GetLandH(cptr->tgx, cptr->tgz))));
+				}
 			}
-		
-			/*	is this really needed?
-			if (cptr->tdepth < GetLandH(cptr->pos.x, cptr->pos.z) + (DinoInfo[cptr->CType].spacingDepth * 0.75)) {
-				cptr->tdepth = GetLandH(cptr->pos.x, cptr->pos.z) + (DinoInfo[cptr->CType].spacingDepth * 0.75);
-			}
-			*/
 
 			if (cptr->packId >= 0) {
 				Packs[cptr->packId].alert = true;
@@ -4605,21 +4600,33 @@ TBEGIN:
 		cptr->tgtime = 0;
 
 		if (cptr->Phase != DinoInfo[cptr->CType].jumpAnim){
-			if (AIInfo[cptr->Clone].jumper) {
+			if (AIInfo[cptr->Clone].jumper && DinoInfo[cptr->CType].DangerFish) {
 				if (cptr->depth > GetLandUpH(cptr->pos.x, cptr->pos.z) - (cptr->spcDepth * 0.95))
 					if (pdist < 1324 * cptr->scale && pdist>900 * cptr->scale)
 						if (AngleDifference(cptr->alpha, FindVectorAlpha(playerdx, playerdz)) < 0.2f) {
-							cptr->Phase = DinoInfo[cptr->CType].jumpAnim;
-							NewPhase = TRUE;
-							cptr->FTime = 0;
-							cptr->bend = 0;
-							cptr->bdepth = 0;
+
+							Vector3d pv;
+							pv.x = PlayerX;
+							pv.z = PlayerZ;
+
+							if (!CheckPlaceCollisionFish(cptr, pv, cptr->depth,
+								DinoInfo[cptr->CType].maxDepth,
+								DinoInfo[cptr->CType].minDepth)) {
+
+								cptr->Phase = DinoInfo[cptr->CType].jumpAnim;
+								NewPhase = TRUE;
+								cptr->FTime = 0;
+								cptr->bend = 0;
+								cptr->bdepth = 0;
+
+							}
+
 						}
 			}
 		}
 
-		if (pdist < DinoInfo[cptr->CType].killDist && DinoInfo[cptr->CType].killDist > 0) {
-			int killAlt = DinoInfo[cptr->CType].waterLevel;
+		if (pdist < DinoInfo[cptr->CType].killDist * cptr->scale && DinoInfo[cptr->CType].killDist > 0) {
+			int killAlt = cptr->spcDepth;
 			if (killAlt < 256) killAlt = 256;
 			if (fabs(PlayerY - cptr->pos.y) < killAlt + 20)
 			{
@@ -7134,9 +7141,6 @@ void AnimateCharacters()
 				case AI_FISH:
 					SetNewTargetPlaceFish(cptr, 1024.f);
 					break;
-				case AI_FISHDANGER:
-					SetNewTargetPlaceFish(cptr, 1024.f);
-					break;
 				}
 
 			}
@@ -7189,9 +7193,6 @@ void AnimateCharacters()
 			AnimateFish(cptr);
 			break;
 		case AI_FISH:
-			AnimateFish(cptr);
-			break;
-		case AI_FISHDANGER:
 			AnimateFish(cptr);
 			break;
 		case AI_BRACH:
@@ -7564,7 +7565,6 @@ replaceSMA:
 	}
 
 	if (DinoInfo[DinoInfoIndex].Clone == AI_FISH ||
-		DinoInfo[DinoInfoIndex].Clone == AI_FISHDANGER ||
 		DinoInfo[DinoInfoIndex].Clone == AI_MOSA) {
 		if (wy < DinoInfo[DinoInfoIndex].minDepth) goto replaceSMA;
 		if (wy > DinoInfo[DinoInfoIndex].maxDepth) goto replaceSMA;
@@ -7604,7 +7604,6 @@ replaceSMA:
 	}
 
 	if (DinoInfo[DinoInfoIndex].Clone == AI_FISH ||
-		DinoInfo[DinoInfoIndex].Clone == AI_FISHDANGER ||
 		DinoInfo[DinoInfoIndex].Clone == AI_MOSA) {
 
 		Characters[ChCount].depth = GetLandH(Characters[ChCount].tgx, Characters[ChCount].tgz) +

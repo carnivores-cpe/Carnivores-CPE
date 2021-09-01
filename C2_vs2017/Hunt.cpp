@@ -1390,17 +1390,18 @@ void ProcessDemoMovement()
   DemoPoint.pos.y+=256;
 
   float base = 824;
-  if (killerDino->Clone == AI_TREX && !killedwater)
-  {
-	  DemoPoint.pos.y += 512;
-	  base = 1424;
+  if (killerDino) {
+	  if (killerDino->Clone == AI_TREX && !killedwater)
+	  {
+		  DemoPoint.pos.y += 512;
+		  base = 1424;
+	  }
+	  if (killerDino->Clone == AI_BRACHDANGER || killerDino->Clone == AI_LANDBRACH)
+	  {
+		  DemoPoint.pos.y += 850;
+		  base = 1424;
+	  }
   }
-  if (killerDino->Clone == AI_BRACHDANGER || killerDino->Clone == AI_LANDBRACH)
-  {
-	  DemoPoint.pos.y += 850;
-	  base = 1424;
-  }
-
   //if (Characters[DemoPoint.CIndex].Clone ==AI_TREX) DemoPoint.pos.y+=512;
 
 
