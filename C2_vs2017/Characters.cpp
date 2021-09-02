@@ -4601,8 +4601,11 @@ TBEGIN:
 
 		if (cptr->Phase != DinoInfo[cptr->CType].jumpAnim){
 			if (AIInfo[cptr->Clone].jumper && DinoInfo[cptr->CType].DangerFish) {
-				if (cptr->depth > GetLandUpH(cptr->pos.x, cptr->pos.z) - (cptr->spcDepth * 0.95))
-					if (pdist < 1324 * cptr->scale && pdist>900 * cptr->scale)
+				if (cptr->depth > GetLandUpH(cptr->pos.x, cptr->pos.z) - (cptr->spcDepth * 0.95)){
+					float pUp = PlayerY - GetLandUpH(PlayerX, PlayerZ); //jump later if the player is on a low bridge, not at all if too high
+					if (pUp < 0) pUp = 0;
+					float md = (1424 - (pUp * 1.3)) * cptr->scale;
+					if (pdist < md && pdist > md - 200)//1200
 						if (AngleDifference(cptr->alpha, FindVectorAlpha(playerdx, playerdz)) < 0.2f) {
 
 							Vector3d pv;
@@ -4622,30 +4625,27 @@ TBEGIN:
 							}
 
 						}
+				}
 			}
 		}
 
 		if (pdist < DinoInfo[cptr->CType].killDist * cptr->scale && DinoInfo[cptr->CType].killDist > 0) {
-			int killAlt = cptr->spcDepth;
+			float killAlt = cptr->spcDepth;
 			if (killAlt < 256) killAlt = 256;
-			if (fabs(PlayerY - cptr->pos.y) < killAlt + 20)
+			if (AIInfo[cptr->Clone].jumper && cptr->Phase == DinoInfo[cptr->CType].jumpAnim) killAlt += 80;
+			if (fabs(PlayerY - cptr->pos.y) < killAlt + 20 * cptr->scale)
 			{
 
 				if (DinoInfo[cptr->CType].killTypeCount > 0) {
 
-					//if (!(cptr->StateF & csONWATER))
-					//{
-						cptr->vspeed /= 8.0f;
-						cptr->State = 1;
-						cptr->Phase = DinoInfo[cptr->CType].killType[cptr->killType].anim;
-						if (DinoInfo[cptr->CType].killType[cptr->killType].dontloop) cptr->FTime = 0;
-						//cptr->FTime = 0;
-						AddDeadBody(cptr,
-							DinoInfo[cptr->CType].killType[cptr->killType].hunteranim,
-							DinoInfo[cptr->CType].killType[cptr->killType].scream);
-					//}
-					//else AddDeadBody(cptr, HUNT_EAT, TRUE);
-
+					cptr->vspeed /= 8.0f;
+					cptr->State = 1;
+					cptr->Phase = DinoInfo[cptr->CType].killType[cptr->killType].anim;
+					if (DinoInfo[cptr->CType].killType[cptr->killType].dontloop) cptr->FTime = 0;
+					//cptr->FTime = 0;
+					AddDeadBody(cptr,
+						DinoInfo[cptr->CType].killType[cptr->killType].hunteranim,
+						DinoInfo[cptr->CType].killType[cptr->killType].scream);
 				}
 				else {
 					AddDeadBody(cptr, HUNT_EAT, TRUE);
