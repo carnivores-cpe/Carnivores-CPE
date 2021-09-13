@@ -38,6 +38,7 @@ weapons {
  rate  = 1.2
  trace = 6
  shots = 6
+ reload = 2
 } 
 
 
@@ -460,9 +461,6 @@ killtype{
  eatAnim = 6
  scream = TRUE
 }
- packMax = 4
- packMin = 3
- packDensity = 25
 }
 
 {
@@ -610,7 +608,7 @@ mapambients {
 
 {
  name = 'Brachiosaurus'
- file = 'dangerbrachikiller2.car'
+ file = 'dangerbrachikiller9.car'
  clone  = -5
  canswim = TRUE
  waterLevel = 550
@@ -653,291 +651,11 @@ killtype{
 }
 }
 
-{
- name      = 'Pachycephalosaurus'
- file      = 'pach.car'
- clone  = 19
- mass      = 0.8
- length    = 4.5
- radius    = 280
- health    = 6
- basescore = 8
- smell     = 0.4 
- hear      = 0.8
- look      = 0.6
- shipdelta = 16
- fearCall = 13
- fearCall = 15
- fearCall = 16
- fearCall = 17
- fearCall = 18
- runspd = 1.6
- wlkspd = 0.40
- aggress = 0
- killdist = 0
- trophy  = TRUE
- runAnim = 1
- walkAnim = 0
- slideAnim = 2
- idleAnim = 4
- idleAnim = 5
-deathtype{
- dieAnim = 3
- sleepAnim = 6
-}
- waterLevel = 140
- spawninfo {
- spawnrate = 0.08
- spawnmax  = 3
- spawnmin  = 0
- }
-}
-
-{
- name = 'Triceratops'
- file = 'tricer.car'
- clone  = 14
- mass      = 3
- length    = 5.0
- radius    = 400
- health    = 8
- basescore = 9
- smell     = 0.6 
- hear      = 0.5
- look      = 0.4
- shipdelta = 108
- fearCall = 13
- fearCall = 15
- fearCall = 16
- fearCall = 17
- fearCall = 18
- runspd = 1.2
- wlkspd = 0.30
- aggress = 32
- killdist = 370
- trophy  = TRUE
- runAnim = 0
- walkAnim = 1
- idleAnim = 2
- idleAnim = 3
- idleAnim = 4
-deathtype{
- dieAnim = 5
- sleepAnim = 6
-}
- waterLevel = 120
- spawninfo {
- spawnrate = 0.05
- spawnmax  = 2
- spawnmin  = 0
- }
-}
-
-{
- name = 'Climatius'
- file = 'climatius3.car'
- clone  = -3
- aggress   = 7
- radius    = 256
- health    = 1
- scale0    = 1000
- scaleA    = 600
- shipdelta = 0
- maxdepth = 10000
- mindepth = 2500
- spcdepth = 100
- wlkspd = 0.25
- runspd = 0.55
- runAnim = 1
- walkAnim = 0
- overwrite area1 {
-  spawninfo {
-  spawnrate = 0.8
-  spawnmax  = 20
-  spawnmin  = 8
-  }
- }
-}
-
-{
- name = 'Parexus'
- file = 'parexusn4.car'
- clone  = -3
- aggress   = 7
- radius    = 256
- health    = 1
- scale0    = 1000
- scaleA    = 600
- shipdelta = 0
- maxdepth = 1000
- mindepth = 450
- spcdepth = 73
- wlkspd = 0.25
- runspd = 0.55
- runAnim = 1
- walkAnim = 0
- overwrite area1 {
-  spawninfo {
-  spawnrate = 0.6
-  spawnmax  = 8
-  spawnmin  = 3
-xmin = 322
-ymin = 277
-xmax = 493
-ymax = 411
-styInRgn  = TRUE
-  }
-  spawninfo {
-  spawnrate = 0.5
-  spawnmax  = 4
-  spawnmin  = 2
-xmin = 285
-ymin = 586
-xmax = 391
-ymax = 691
-styInRgn  = TRUE
-  }
- }
-}
-
-{
- name = 'Pink Parexus'
- file = 'parexusn4_pink.car'
- clone  = -3
- aggress   = 7
- mass      = 2.0
- health    = 1
- scale0    = 1000
- scaleA    = 600
- shipdelta = 0
- maxdepth = 10000
- mindepth = 200
- spcdepth = 100
- wlkspd = 0.25
- runspd = 0.55
- runAnim = 1
- walkAnim = 0
- overwrite area1 {
-  spawninfo {
-  spawnrate = 0.4
-  spawnmax  = 7
-  spawnmin  = 4
-   xmax = 757
-   xmin = 718
-   ymax = 133
-   ymin = 94
-  }
- }
-}
-
-{
- name = 'Mosasaurus'
- file = 'mosa30.car'
- clone  = -4
- DangerFish = TRUE
- aggress   = 200
- radar = 2
- killdist  = 380
- radius    = 256
- health    = 16
- scale0    = 1000
- scaleA    = 600
- shipdelta = 0
- maxdepth = 10000
- mindepth = 800
- spcdepth = 400
- walkAnim = 0
- wlkspd = 0.428
- runAnim = 1
- runspd = 1.2
- jumpAnim = 3
- jmpspd = 1.0
- jumpPartFrame1 = 1
- jumpPartFrame2 = 11
- jumpPartDist = 240
- jumpPartCnt = 500
- jumpPartMag = 40
- jumpPartAngled = TRUE
- jumpPartCircle = TRUE
- idleAnim = 4
- idlePartFrame1 = 12
- idlePartFrame2 = 13
- idlePartDist = 22
- idlePartCnt = 3
- idlePartMag = 20
- idlePartOffset = 320
- overwrite area1 {
-  spawninfo {
-  spawnrate = 0.5
-  spawnmax  = 4
-  spawnmin  = 2
-  }
- }
-killtype{
- hunterAnim = 5
- hSwimAnim = 6
- eatAnim = 2
- hunterOffset = 0
- hunterSync = TRUE
- dontloop = TRUE
-}
-}
-
-{
- name = 'Ichthyornis'
- file = 'teeth4-2-2-fly_flip-9-6.car'
- clone  = -2
- waterLevel = 110
- scale0    = 500
- scaleA    = 0
- mass      = 0.2
- length    = 0.5
- radius    = 256
- health    = 1
- shipdelta = 16
- fearCall = 13
- fearCall = 15
- fearCall = 16
- fearCall = 17
- fearCall = 18
- wlkspd = 0.20
- swmspd = 0.25
- flyspd = 2.00
- gldspd = 1.80
- lndspd = 0.30
- tkfspd = 1.50
- walkAnim = 0
- shakeLAnim = 9
- swimAnim = 1
- shakeWAnim = 10
- flyAnim = 2
- glideAnim = 3
- takeoffAnim = 4
- landAnim = 5
-deathtype{
- fallAnim = 6
- dieAnim = 7
- sleepAnim = 8
-}
- spawninfo {
-  spawnrate = 0.5
-  spawnmax  = 5
-  spawnmin  = 0
- }
- overwrite area5 {
-  spawninfo {
-   spawnrate = 0.8
-   spawnmax  = 25
-   spawnmin  = 5
-  }
- }
-}
-
 }//===== end of mapambients ==========//
 
 
 prices {
- start = 10000
+ start = 100
  area = 20
  area = 50
  area = 100

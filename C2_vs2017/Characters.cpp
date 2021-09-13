@@ -1503,8 +1503,17 @@ void SetNewTargetPlaceFish(TCharacter *cptr, float R)
 	//PrintLog("fTXZ");//TEST202004091129
 replace:
 	//PrintLog("-");//TEST202004091129
-	p.x = cptr->pos.x + siRand((int)R);
-	p.z = cptr->pos.z + siRand((int)R);
+
+	/*
+	p.x = cptr->pos.x + siRand((int)(R/3));
+	p.z = cptr->pos.z + siRand((int)(R/3));
+	if (p.x > cptr->pos.x) p.x += R * (2 / 3); else p.x -= R * (2 / 3);
+	if (p.z > cptr->pos.z) p.z += R * (2 / 3); else p.z -= R * (2 / 3);
+	*/
+
+	p.x = cptr->pos.x + siRand((int)(R));
+	p.z = cptr->pos.z + siRand((int)(R));
+
 	if (stayRegion) {
 		if (p.x < (Region[cptr->RType].XMin) * 256) p.x = Region[cptr->RType].XMin * 256;
 		if (p.x > (Region[cptr->RType].XMax) * 256) p.x = Region[cptr->RType].XMax * 256;
@@ -1518,7 +1527,7 @@ replace:
 
 	tr++;
 	if (tr < 128) {
-		if (fabs(p.x - cptr->pos.x) + fabs(p.z - cptr->pos.z) < R / 2.f) goto replace;
+		if (fabs(p.x - cptr->pos.x) + fabs(p.z - cptr->pos.z) < R * 0.7) goto replace;
 
 		if (DinoInfo[cptr->CType].AvoidCount)
 		{
@@ -4427,7 +4436,7 @@ TBEGIN:
 	float tv;
 	switch (cptr->Clone) {
 	 case AI_FISH: tv = 1024.f;
-	 case AI_MOSA: tv = 3024.f;
+	 case AI_MOSA: tv = 5024.f;
 	}
 
 	// JUMP & IDLE PARTICLES
@@ -4574,8 +4583,9 @@ TBEGIN:
 			//Target above the player so it can get to jumping depth in time.
 			if (AIInfo[cptr->Clone].jumper) {
 				if (cptr->depth < cptr->tdepth) {
-					cptr->tdepth += ((cptr->tdepth - cptr->depth) * 3 *
-						((cptr->tdepth - GetLandH(cptr->tgx, cptr->tgz)) / (GetLandUpH(cptr->tgx, cptr->tgz) - GetLandH(cptr->tgx, cptr->tgz))));
+					cptr->tdepth += (cptr->tdepth - cptr->depth) * 3;
+					//float haw = (GetLandUpH(cptr->tgx, cptr->tgz) - GetLandH(cptr->tgx, cptr->tgz));
+					//if (haw) cptr->tdepth *= (cptr->tdepth - GetLandH(cptr->tgx, cptr->tgz)) / haw;
 				}
 			}
 
@@ -4783,19 +4793,26 @@ ENDPSELECT:
 	if ((_Phase != cptr->Phase) || NewPhase)
 	{
 
-		// TODO - ADD BLOWHOLE
-
+		/*
 		bool idp = false;
 
 		for (int i = 0; i < DinoInfo[cptr->CType].idleCount; i++) {
 			if (cptr->Phase == DinoInfo[cptr->CType].idleAnim[i]) idp = true;
 		}
-
+		
 		if (cptr->Phase == DinoInfo[cptr->CType].jumpAnim || idp) {
 			ActivateCharacterFx(cptr);
 		} else {
 			ActivateCharacterFxAquatic(cptr);
 		}
+		*/
+		ActivateCharacterFxAquatic(cptr);
+		if (cptr->Phase != DinoInfo[cptr->CType].walkAnim && cptr->Phase != DinoInfo[cptr->CType].runAnim) {
+			ActivateCharacterFx(cptr);
+		}
+
+
+
 	}
 
 	if (_Phase != cptr->Phase)
@@ -4995,7 +5012,9 @@ SKIPROT:
 	}
 
 	if (cptr->Clone == AI_MOSA && cptr->Phase == DinoInfo[cptr->CType].walkAnim) {
-		cptr->depth -= cptr->beta * 10;
+		//cptr->depth -= cptr->beta * 10;
+		cptr->depth -= cptr->beta * 25 * curspeed;
+
 	} else {
 		cptr->depth -= cptr->beta * 35 * curspeed;
 	}
@@ -5007,16 +5026,18 @@ SKIPROT:
 	if (fabs(cptr->bdepth - newBend) > maxIt) {
 		if (newBend > cptr->bdepth) {
 			cptr->bdepth += maxIt;
-			if (cptr->bdepth > max) cptr->bdepth = max;
+			//if (cptr->bdepth > max) cptr->bdepth = max; - see below
 		}
 		else {
 			cptr->bdepth -= maxIt;
-			if (cptr->bdepth < -max) cptr->bdepth = -max;
+			//if (cptr->bdepth < -max) cptr->bdepth = -max; - see below
 		}
 	}
 	else {
 		cptr->bdepth = newBend;
 	}
+	if (cptr->bdepth > max) cptr->bdepth = max;
+	if (cptr->bdepth < -max) cptr->bdepth = -max;
 
 	/*
 	if (cptr->beta < 0) cptr->beta += 2 * pi;
@@ -5523,7 +5544,7 @@ TBEGIN:
 			if (leaderdist < DinoInfo[cptr->CType].packDensity * 128 * 0.6)
 			{
 				cptr->followLeader = false;
-				SetNewTargetPlace(cptr, 4048.f);
+				SetNewTargetPlace_Icth(cptr, 4048.f);
 				goto TBEGIN;
 			}
 		}
@@ -7136,7 +7157,7 @@ void AnimateCharacters()
 					SetNewTargetPlace_Brahi(cptr, 2048.f);
 					break;
 				case AI_MOSA:
-					SetNewTargetPlaceFish(cptr, 3048.f);
+					SetNewTargetPlaceFish(cptr, 5048.f);
 					break;
 				case AI_FISH:
 					SetNewTargetPlaceFish(cptr, 1024.f);
