@@ -2213,10 +2213,11 @@ void ReadKillTypeInfo(FILE *stream)
 		value++;
 
 		if (strstr(line, "hunterAnim")) DinoInfo[TotalC].killType[DinoInfo[TotalC].killTypeCount].hunteranim = atoi(value);
-		if(strstr(line, "hSwimAnim")) DinoInfo[TotalC].killType[DinoInfo[TotalC].killTypeCount].hunterswimanim = atoi(value);
+		if (strstr(line, "hunterCarryAnim")) DinoInfo[TotalC].killType[DinoInfo[TotalC].killTypeCount].hunterswimanim = atoi(value);
 		if (strstr(line, "hunterOffset")) DinoInfo[TotalC].killType[DinoInfo[TotalC].killTypeCount].offset = atoi(value);
 		if (strstr(line, "eatAnim")) DinoInfo[TotalC].killType[DinoInfo[TotalC].killTypeCount].anim = atoi(value);
 		if (strstr(line, "hunterSync")) readBool(value, DinoInfo[TotalC].killType[DinoInfo[TotalC].killTypeCount].elevate);
+		if (strstr(line, "carryCorpse")) readBool(value, DinoInfo[TotalC].killType[DinoInfo[TotalC].killTypeCount].carryCorpse);
 		if (strstr(line, "dontloop")) readBool(value, DinoInfo[TotalC].killType[DinoInfo[TotalC].killTypeCount].dontloop);
 		if (strstr(line, "scream")) readBool(value, DinoInfo[TotalC].killType[DinoInfo[TotalC].killTypeCount].scream);
 		
@@ -2329,6 +2330,7 @@ void ReadCharacterLine(FILE *stream, char *_value, char line[256], bool &regionO
 	if (strstr(line, "killdist")) DinoInfo[TotalC].killDist = atoi(value);
 	if (strstr(line, "radar")) DinoInfo[TotalC].onRadar = atoi(value);
 	if (strstr(line, "dontswimaway")) readBool(value, DinoInfo[TotalC].dontSwimAway);
+
 	if (strstr(line, "collisiondist")) DinoInfo[TotalC].maxGrad = atoi(value);
 	if (strstr(line, "runrotatespeed")) DinoInfo[TotalC].rotspdmulti = (float)atof(value);
 
@@ -2360,6 +2362,8 @@ void ReadCharacterLine(FILE *stream, char *_value, char line[256], bool &regionO
 
 	if (strstr(line, "DangerFish")) readBool(value, DinoInfo[TotalC].DangerFish);
 
+	if (strstr(line, "TRexObjCollide")) readBool(value, DinoInfo[TotalC].TRexObjCollide);
+
 	if (strstr(line, "runAnim")) DinoInfo[TotalC].runAnim = atoi(value);
 	if (strstr(line, "jumpAnim")) DinoInfo[TotalC].jumpAnim = atoi(value);
 	if (strstr(line, "walkAnim")) DinoInfo[TotalC].walkAnim = atoi(value);
@@ -2369,12 +2373,8 @@ void ReadCharacterLine(FILE *stream, char *_value, char line[256], bool &regionO
 	if (strstr(line, "takeoffAnim")) DinoInfo[TotalC].takeoffAnim = atoi(value);
 	if (strstr(line, "landAnim")) DinoInfo[TotalC].landAnim = atoi(value);
 	if (strstr(line, "slideAnim")) DinoInfo[TotalC].slideAnim = atoi(value);
-//	if (strstr(line, "sleepAnim")) DinoInfo[TotalC].sleepAnim = atoi(value);
-//	if (strstr(line, "dieAnim")) DinoInfo[TotalC].dieAnim = atoi(value);
 	if (strstr(line, "shakeLAnim")) DinoInfo[TotalC].shakeLandAnim = atoi(value);
 	if (strstr(line, "shakeWAnim")) DinoInfo[TotalC].shakeWaterAnim = atoi(value);
-	//if (strstr(line, "waterDAnim")) DinoInfo[TotalC].waterDieAnim = atoi(value);
-	//if (strstr(line, "roarAnim")) DinoInfo[TotalC].roarAnim = atoi(value);
 
 	if (strstr(line, "idleAnim") || strstr(line, "lookAnim")) {
 		if (idleOverwrite) {

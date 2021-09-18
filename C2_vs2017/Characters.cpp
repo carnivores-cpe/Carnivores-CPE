@@ -331,6 +331,22 @@ void AddDeadBody(TCharacter *cptr, int phase, bool scream)
 		Characters[ChCount].pos.x = cptr->pos.x + cptr->lookx * pl * cptr->scale;
 		Characters[ChCount].pos.z = cptr->pos.z + cptr->lookz * pl * cptr->scale;
 		Characters[ChCount].pos.y = GetLandQH(Characters[ChCount].pos.x, Characters[ChCount].pos.z);
+		/*
+		if (DinoInfo[cptr->CType].Aquatic) {
+			Characters[ChCount].pos.x = cptr->pos.x + cptr->lookx * pl * cptr->scale * (float)cos(cptr->beta);
+			Characters[ChCount].pos.z = cptr->pos.z + cptr->lookz * pl * cptr->scale * (float)cos(cptr->beta);
+			Characters[ChCount].pos.y = cptr->pos.y - (float)sin(cptr->beta) * pl * cptr->scale;
+			float ply = DinoInfo[cptr->CType].killType[cptr->killType].yoffset;
+			Characters[ChCount].pos.y += ply * (float)cos(cptr->beta);
+			ply *= (float)sin(cptr->beta);
+			Characters[ChCount].pos.z += ply * (float)sin(cptr->alpha);
+			Characters[ChCount].pos.x += ply * (float)cos(cptr->alpha);
+			Characters[ChCount].alpha = cptr->alpha;
+			Characters[ChCount].beta = cptr->beta;
+			Characters[ChCount].gamma = cptr->gamma;
+
+		}
+		*/
 	}
 	else
 	{
@@ -1785,7 +1801,7 @@ void AnimateHuntDead(TCharacter *cptr)
 	bool loopDone = FALSE;
 
 	if (killerDino) {
-		if (DinoInfo[killerDino->CType].killType[killerDino->killType].dontloop &&
+		if (DinoInfo[killerDino->CType].killType[killerDino->killType].carryCorpse &&
 			DinoInfo[killerDino->CType].Aquatic) {
 			cptr->bend = killerDino->bend;
 			cptr->bdepth = killerDino->bdepth;
@@ -1867,7 +1883,9 @@ void AnimateHuntDead(TCharacter *cptr)
 		{
 			if (DinoInfo[killerDino->CType].killTypeCount) {
 				if ((DinoInfo[killerDino->CType].killType[killerDino->killType].elevate &&
-					killerDino->Phase == DinoInfo[killerDino->CType].killType[killerDino->killType].anim) || DinoInfo[killerDino->CType].Aquatic) {
+					killerDino->Phase == DinoInfo[killerDino->CType].killType[killerDino->killType].anim)
+					|| DinoInfo[killerDino->CType].killType[killerDino->killType].carryCorpse
+					) {
 
 					cptr->pos = killerDino->pos;
 					cptr->FTime = killerDino->FTime;
@@ -1884,7 +1902,8 @@ void AnimateHuntDead(TCharacter *cptr)
 		}
 
 		if (loopDone) {
-			if (DinoInfo[killerDino->CType].Aquatic) {
+			if (DinoInfo[killerDino->CType].killType[killerDino->killType].carryCorpse
+				&& (!killedwater || DinoInfo[killerDino->CType].Aquatic)) {
 				cptr->Phase = DinoInfo[killerDino->CType].killType[killerDino->killType].hunterswimanim;
 			}
 			else {
@@ -2311,7 +2330,9 @@ NOTHINK:
 
 
 
-			if (DinoInfo[cptr->CType].idleCount) {
+			if (DinoInfo[cptr->CType].idleCount
+				&& (MyHealth || !DinoInfo[cptr->CType].killType[cptr->killType].carryCorpse)
+				&& !(cptr->StateF & csONWATER)) {
 
 				if (rRand(AIInfo[cptr->Clone].idleStartD) > 110) {
 					cptr->Phase = DinoInfo[cptr->CType].idleAnim[rRand(DinoInfo[cptr->CType].idleCount - 1)];
@@ -3179,7 +3200,9 @@ NOTHINK:
 	if (NewPhase)
 		if (!cptr->State)
 		{
-			if (DinoInfo[cptr->CType].idleCount) {
+			if (DinoInfo[cptr->CType].idleCount
+				&& (MyHealth || !DinoInfo[cptr->CType].killType[cptr->killType].carryCorpse)
+				&& !(cptr->StateF & csONWATER)) {
 
 				bool idlePhase = false;
 				for (int i = 0; i < DinoInfo[cptr->CType].idleCount; i++) {
@@ -3872,8 +3895,9 @@ NOTHINK:
 		}
 	}
 
-	//LookForAWay(cptr, !DinoInfo[cptr->CType].canSwim, !cptr->State);
-	LookForAWay(cptr, !DinoInfo[cptr->CType].canSwim, TRUE);
+	LookForAWay(cptr, !DinoInfo[cptr->CType].canSwim, !cptr->State || DinoInfo[cptr->CType].TRexObjCollide);
+	//LookForAWay(cptr, !DinoInfo[cptr->CType].canSwim, TRUE);
+	
 	if (cptr->NoWayCnt > 12)
 	{
 		cptr->NoWayCnt = 0;
@@ -3922,8 +3946,10 @@ NOTHINK:
 
 	if (!cptr->State)
 		if (NewPhase)
-			if (rRand(128) > 110)
-			{
+			if (rRand(128) > 110
+				&& (MyHealth || !DinoInfo[cptr->CType].killType[cptr->killType].carryCorpse)
+				&& !(cptr->StateF & csONWATER)
+				) {
 				if (rRand(128) > 64) {
 					if (DinoInfo[cptr->CType].idleCount) {
 						cptr->Phase = DinoInfo[cptr->CType].idleAnim[rRand(DinoInfo[cptr->CType].idleCount - 1)];
@@ -4753,7 +4779,9 @@ NOTHINK:
 		if (!cptr->State) {
 			cptr->Phase = DinoInfo[cptr->CType].walkAnim;
 			if (DinoInfo[cptr->CType].idleCount){
-				if (!cptr->aquaticIdle && rRand(128) > AIInfo[cptr->Clone].idleStart && MyHealth) { // Don't play idles when carrying hunters corpse
+				if (!cptr->aquaticIdle && rRand(128) > AIInfo[cptr->Clone].idleStart
+					&& (MyHealth || !DinoInfo[cptr->CType].killType[cptr->killType].carryCorpse)
+					) { // Don't play idles when carrying hunters corpse
 					cptr->aquaticIdle = true;
 				}
 
@@ -6578,7 +6606,9 @@ NOTHINK:
 					}
 					goto ENDPSELECT;
 				}
-				if (rRand(128) > 64)
+				if (rRand(128) > 0
+					&& (MyHealth || !DinoInfo[cptr->CType].killType[cptr->killType].carryCorpse)
+					)
 				{
 					cptr->Phase = DinoInfo[cptr->CType].idleAnim[0];
 				}

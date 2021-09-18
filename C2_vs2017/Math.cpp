@@ -92,6 +92,7 @@ float VectorLength(Vector3d v)
 
 int siRand(int R)
 {
+  if (R == RAND_MAX) return 0;
   return (rand() * (R * 2 +1)) / RAND_MAX - R;
 }
 

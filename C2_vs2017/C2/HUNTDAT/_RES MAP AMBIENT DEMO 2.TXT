@@ -875,11 +875,12 @@ styInRgn  = TRUE
  }
 killtype{
  hunterAnim = 5
- hSwimAnim = 6
+ hunterCarryAnim = 6
  eatAnim = 2
  hunterOffset = 0
  hunterSync = TRUE
  dontloop = TRUE
+ carryCorpse = TRUE
 }
 }
 

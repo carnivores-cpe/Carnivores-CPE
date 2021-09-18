@@ -463,7 +463,7 @@ typedef struct _TDinoKill
 	int offset;
 	int hunteranim;
 	int hunterswimanim;
-	BOOL elevate;
+	BOOL elevate, carryCorpse;
 	BOOL dontloop;
 	BOOL scream;
 } TDinoKill;
@@ -539,6 +539,7 @@ typedef struct _TDinoInfo
   bool partAngled[50], partCircle[50];
 
   bool DangerFish;
+  bool TRexObjCollide;
 
 } TDinoInfo;
 

@@ -503,7 +503,7 @@ SKIPWIND:
       wptr->state = 2;
 
 
-      if (WeapInfo[CurrentWeapon].Reload)
+      if (WeapInfo[CurrentWeapon].Reload && !DEBUG)
         if ( (ShotsLeft[CurrentWeapon] % WeapInfo[CurrentWeapon].Reload) == 0 )
           if ( (ShotsLeft[CurrentWeapon]>0) || (AmmoMag[CurrentWeapon]>0) )
           {
