@@ -571,6 +571,11 @@ typedef struct _TAIInfo {
 	int idleStartD;
 	bool jumper;
 
+	bool iceAge;
+	bool carnivore;
+
+	float rot1, rot2, weaveRange, pWMin;
+
 } TAIInfo;
 
 
@@ -1134,6 +1139,7 @@ _EXTORNOT   struct _t
 #define AI_DIMOR      3
 #define AI_PTERA      4
 #define AI_DIMET      5
+#define AI_PIG        6
 
 #define AI_HUNTDOG    9
 
@@ -1150,6 +1156,27 @@ _EXTORNOT   struct _t
 #define AI_FINAL	  19 //Last AI of max huntable roster (menu can only display 10)
 
 #define AI_PACH       19
+
+#define AI_BRONT      20
+#define AI_HOG        21
+#define AI_WOLF       22
+#define AI_RHINO      23
+#define AI_DEER       24
+#define AI_SMILO      25
+#define AI_MAMM       26
+#define AI_BEAR       27
+
+
+//#define AI_POACHER    22
+
+
+
+
+
+
+
+
+
 
 
 

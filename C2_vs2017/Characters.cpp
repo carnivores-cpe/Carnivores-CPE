@@ -2085,6 +2085,622 @@ void AnimateDeadCommon(TCharacter *cptr)
 
 
 
+
+
+
+
+
+
+
+void AnimateHuntable(TCharacter *cptr)
+{
+	NewPhase = FALSE;
+	int _Phase = cptr->Phase;
+	int _FTime = cptr->FTime;
+	float _tgalpha = cptr->tgalpha;
+	if ((!AIInfo[cptr->Clone].carnivore || AIInfo[cptr->Clone].iceAge) && cptr->AfraidTime) cptr->AfraidTime = MAX(0, cptr->AfraidTime - TimeDt);
+
+	bool alertInit = FALSE;
+	if (cptr->State == 2) alertInit = TRUE;
+	if (cptr->packId >= 0) {
+		if (!cptr->State && Packs[cptr->packId]._alert) alertInit = TRUE;
+	}
+
+	if (alertInit && (MyHealth || AIInfo[cptr->Clone].carnivore))
+	{
+		if (!AIInfo[cptr->Clone].carnivore) NewPhase = TRUE;
+
+		if (AIInfo[cptr->Clone].jumper) {
+			if (cptr->Phase != DinoInfo[cptr->CType].jumpAnim) NewPhase = TRUE;
+		}
+		cptr->State = 1;
+
+		if (cptr->Clone == AI_SPINO || cptr->Clone == AI_CERAT) cptr->Phase = DinoInfo[cptr->CType].runAnim;
+	}
+
+TBEGIN:
+	float targetx = cptr->tgx;
+	float targetz = cptr->tgz;
+	float targetdx = targetx - cptr->pos.x;
+	float targetdz = targetz - cptr->pos.z;
+
+	float tdist = (float)sqrt(targetdx * targetdx + targetdz * targetdz);
+
+	float playerdx, playerdz;
+	if (cptr->Clone == AI_ALLO) {
+		playerdx = PlayerX - cptr->pos.x - cptr->lookx * 100 * cptr->scale;
+		playerdz = PlayerZ - cptr->pos.z - cptr->lookz * 100 * cptr->scale;
+	} else if (cptr->Clone == AI_CHASM || cptr->Clone == AI_HOG || cptr->Clone == AI_BRONT || cptr->Clone == AI_BEAR ||
+		cptr->Clone == AI_WOLF || cptr->Clone == AI_RHINO || cptr->Clone == AI_SMILO) {
+		playerdx = PlayerX - cptr->pos.x - cptr->lookx * 300 * cptr->scale;
+		playerdz = PlayerZ - cptr->pos.z - cptr->lookz * 300 * cptr->scale;
+	} else if (AIInfo[cptr->Clone].carnivore) {
+		playerdx = PlayerX - cptr->pos.x - cptr->lookx * 108;
+		playerdz = PlayerZ - cptr->pos.z - cptr->lookz * 108;
+	} else {
+		playerdx = PlayerX - cptr->pos.x;
+		playerdz = PlayerZ - cptr->pos.z;
+	}
+
+	float pdist = (float)sqrt(playerdx * playerdx + playerdz * playerdz);
+
+	
+
+
+	if (GetLandUpH(cptr->pos.x, cptr->pos.z) - GetLandH(cptr->pos.x, cptr->pos.z) > DinoInfo[cptr->CType].waterLevel * cptr->scale)
+		cptr->StateF |= csONWATER;
+	else
+		cptr->StateF &= (!csONWATER);
+
+	if (cptr->Phase == DinoInfo[cptr->CType].killType[cptr->killType].anim && DinoInfo[cptr->CType].killTypeCount) goto NOTHINK;
+
+	//============================================//			// (run away)
+	if (!MyHealth) cptr->State = 0;
+	if (cptr->State)
+	{
+		float aDist;
+		if (AIInfo[cptr->Clone].carnivore && (!AIInfo[cptr->Clone].iceAge || cptr->Clone == AI_WOLF)) {
+			aDist = ctViewR * DinoInfo[cptr->CType].aggress + OptAgres / AIInfo[cptr->Clone].agressMulti;
+		} else {
+			aDist = AIInfo[cptr->Clone].agressMulti * DinoInfo[cptr->CType].aggress + OptAgres / 8;
+			if (pdist < 6000 && cptr->Clone != AI_DEER) cptr->AfraidTime = 8000;
+		}
+
+		bool fleeMode = FALSE;
+		if (pdist > aDist ||
+			DinoInfo[cptr->CType].aggress <= 0 || !cptr->awareHunter) {
+			fleeMode = TRUE;
+		}
+		else if (cptr->packId >= 0) Packs[cptr->packId].attack = TRUE;
+
+		if (cptr->packId >= 0) {
+			if (Packs[cptr->packId]._attack) fleeMode = FALSE;
+		}
+
+		if (fleeMode) {
+			nv.x = playerdx;
+			nv.z = playerdz;
+			nv.y = 0;
+			NormVector(nv, 2048.f);
+			cptr->tgx = cptr->pos.x - nv.x;
+			cptr->tgz = cptr->pos.z - nv.z;
+			cptr->tgtime = 0;
+			if (AIInfo[cptr->Clone].carnivore) cptr->AfraidTime -= TimeDt;
+
+			if (cptr->packId >= 0) {
+				if (cptr->AfraidTime <= 0)
+				{
+					if (!Packs[cptr->packId]._alert) {
+						if (AIInfo[cptr->Clone].carnivore)cptr->AfraidTime = 0;
+						else SetNewTargetPlace(cptr, AIInfo[cptr->Clone].targetDistance);
+						cptr->State = 0;
+					}
+				}
+				else Packs[cptr->packId].alert = true;
+			}
+			else if (cptr->AfraidTime <= 0) {
+				if (AIInfo[cptr->Clone].carnivore)cptr->AfraidTime = 0;
+				else SetNewTargetPlace(cptr, AIInfo[cptr->Clone].targetDistance);
+				cptr->State = 0;
+			}
+
+		}
+		else
+		{
+			cptr->tgx = PlayerX;
+			cptr->tgz = PlayerZ;
+			cptr->tgtime = 0;
+			if (cptr->packId >= 0 && AIInfo[cptr->Clone].carnivore) {
+				Packs[cptr->packId].alert = true;
+			}
+		}
+
+		if (AIInfo[cptr->Clone].jumper) {
+			if (!(cptr->StateF & csONWATER))
+				if (pdist < 1324 * cptr->scale && pdist>900 * cptr->scale)
+					if (AngleDifference(cptr->alpha, FindVectorAlpha(playerdx, playerdz)) < 0.2f)
+						cptr->Phase = DinoInfo[cptr->CType].jumpAnim;
+		}
+
+		if (pdist < DinoInfo[cptr->CType].killDist && DinoInfo[cptr->CType].killDist > 0) {
+			int killAlt = DinoInfo[cptr->CType].waterLevel;
+			if (killAlt < 256) killAlt = 256;
+			if (fabs(PlayerY - cptr->pos.y) < killAlt + 20)
+			{
+
+				if (DinoInfo[cptr->CType].killTypeCount > 0) {
+
+					if (!(cptr->StateF & csONWATER))
+					{
+						cptr->vspeed /= 8.0f;
+						cptr->State = 1;
+						cptr->Phase = DinoInfo[cptr->CType].killType[cptr->killType].anim;
+						if (DinoInfo[cptr->CType].killType[cptr->killType].dontloop) cptr->FTime = 0;
+						AddDeadBody(cptr,
+							DinoInfo[cptr->CType].killType[cptr->killType].hunteranim,
+							DinoInfo[cptr->CType].killType[cptr->killType].scream);
+					}
+					else AddDeadBody(cptr, HUNT_EAT, TRUE);
+
+				}
+				else {
+					AddDeadBody(cptr, HUNT_EAT, TRUE);
+					cptr->State = 0;
+				}
+
+			}
+		}
+
+
+	}
+
+	if (!cptr->State)
+	{
+		if (cptr->Clone == AI_VELO || cptr->Clone == AI_CERAT || !AIInfo[cptr->Clone].carnivore) cptr->AfraidTime = 0;
+
+		if (pdist < 1024.f && cptr->Clone == AI_DEER && !ObservMode && !DEBUG) {
+			cptr->State = 1;
+			cptr->AfraidTime = (6 + rRand(8)) * 1024;
+			cptr->Phase = cptr->Phase = DinoInfo[cptr->CType].runAnim;
+			goto TBEGIN;
+		}
+
+
+		if (cptr->packId >= 0) {
+			float leaderdx = Packs[cptr->packId].leader->pos.x - cptr->pos.x;
+			float leaderdz = Packs[cptr->packId].leader->pos.z - cptr->pos.z;
+			float leaderdist = (float)sqrt(leaderdx * leaderdx + leaderdz * leaderdz);
+
+			if (cptr->followLeader) {
+				if (leaderdist < DinoInfo[cptr->CType].packDensity * 128 * 0.6)
+				{
+					cptr->followLeader = false;
+					SetNewTargetPlace(cptr, AIInfo[cptr->Clone].targetDistance);
+					goto TBEGIN;
+				}
+			}
+			else {
+				if (leaderdist > DinoInfo[cptr->CType].packDensity * 128 * 1.3)
+				{
+					cptr->followLeader = true;
+				}
+			}
+
+		}
+
+		if (cptr->followLeader) {
+			cptr->tgx = Packs[cptr->packId].leader->pos.x;
+			cptr->tgz = Packs[cptr->packId].leader->pos.z;
+		}
+		else if (tdist < 456)
+		{
+			SetNewTargetPlace(cptr, AIInfo[cptr->Clone].targetDistance);
+			goto TBEGIN;
+		}
+
+
+
+	}
+
+NOTHINK:
+	if (pdist < AIInfo[cptr->Clone].pWMin && (AIInfo[cptr->Clone].carnivore || AIInfo[cptr->Clone].iceAge)) cptr->NoFindCnt = 0;
+	if (cptr->NoFindCnt) cptr->NoFindCnt--;
+	else
+	{
+		cptr->tgalpha = CorrectedAlpha(FindVectorAlpha(targetdx, targetdz), cptr->alpha);//FindVectorAlpha(targetdx, targetdz);
+
+		//bool weaveCondition = pdist > AIInfo[cptr->Clone].weaveRange;
+
+		/*
+		if (AIInfo[cptr->Clone].iceAge) {
+			weaveCondition = pdist > 3072 && cptr->AfraidTime; //12*256
+		} else {
+			if (AIInfo[cptr->Clone].carnivore) {
+				weaveCondition = cptr->State && pdist > 1648;
+			}
+			else {
+				weaveCondition = cptr->AfraidTime;
+			}
+		}
+		*/
+
+		//if (!AIInfo[cptr->Clone].carnivore || AIInfo[cptr->Clone].iceAge) weaveCondition = weaveCondition && cptr->AfraidTime;
+
+		if (cptr->State && pdist > AIInfo[cptr->Clone].weaveRange)
+		{
+			float rTD;
+			if (AIInfo[cptr->Clone].carnivore && !AIInfo[cptr->Clone].iceAge) {
+				rTD = 824.f;
+			} else {
+				rTD = 1024.f;
+			}
+			cptr->tgalpha += (float)sin(RealTime / rTD) / AIInfo[cptr->Clone].tGAIncrement;
+			if (cptr->tgalpha < 0) cptr->tgalpha += 2 * pi;
+			if (cptr->tgalpha > 2 * pi) cptr->tgalpha -= 2 * pi;
+		}
+	}
+
+	LookForAWay(cptr, !DinoInfo[cptr->CType].canSwim, TRUE);
+
+	if (cptr->NoWayCnt > AIInfo[cptr->Clone].noWayCntMin)
+	{
+		cptr->NoWayCnt = 0;
+		cptr->NoFindCnt = AIInfo[cptr->Clone].noFindWayMed + rRand(AIInfo[cptr->Clone].noFindWayRange);
+	}
+
+
+	if (cptr->tgalpha < 0) cptr->tgalpha += 2 * pi;
+	if (cptr->tgalpha > 2 * pi) cptr->tgalpha -= 2 * pi;
+
+	//===============================================//
+
+	ProcessPrevPhase(cptr);
+
+
+	//======== select new phase =======================//
+	cptr->FTime += TimeDt;
+
+	if (cptr->FTime >= cptr->pinfo->Animation[cptr->Phase].AniTime)
+	{
+		cptr->FTime %= cptr->pinfo->Animation[cptr->Phase].AniTime;
+
+		if (cptr->Phase == DinoInfo[cptr->CType].killType[cptr->killType].anim && DinoInfo[cptr->CType].killTypeCount) {
+			if (DinoInfo[cptr->CType].killType[cptr->killType].dontloop) {
+				cptr->Phase = DinoInfo[cptr->CType].walkAnim;
+				cptr->State = 0;
+			}
+		}
+
+
+		NewPhase = TRUE;
+	}
+
+	if (cptr->Phase == DinoInfo[cptr->CType].killType[cptr->killType].anim && DinoInfo[cptr->CType].killTypeCount)  goto ENDPSELECT;
+
+	if (AIInfo[cptr->Clone].jumper) {
+		if (NewPhase && _Phase == DinoInfo[cptr->CType].jumpAnim)
+		{
+			cptr->Phase = DinoInfo[cptr->CType].runAnim;
+			goto ENDPSELECT;
+		}
+
+		if (cptr->Phase == DinoInfo[cptr->CType].jumpAnim) goto ENDPSELECT;
+	}
+
+	if (NewPhase)
+		if (!cptr->State)
+		{
+
+
+
+
+			if (DinoInfo[cptr->CType].idleCount
+				&& (MyHealth || !DinoInfo[cptr->CType].killType[cptr->killType].carryCorpse)
+				&& !(cptr->StateF & csONWATER)) {
+
+				if (AIInfo[cptr->Clone].carnivore) {
+
+					if (AIInfo[cptr->Clone].iceAge) {
+
+
+						for (int i = 0; i < DinoInfo[cptr->CType].idleCount; i++) {
+							if (cptr->Phase == DinoInfo[cptr->CType].idleAnim[i]) {
+								
+								if (cptr->Clone == AI_WOLF) {
+									if (rRand(128) > 64) cptr->Phase = DinoInfo[cptr->CType].walkAnim;
+									else cptr->Phase = DinoInfo[cptr->CType].idleAnim[rRand(DinoInfo[cptr->CType].idleCount - 1)];//Wolf AI has this extra bit, don't feckin ask, I dunno
+								} else cptr->Phase = DinoInfo[cptr->CType].walkAnim;
+								
+								goto ENDPSELECT;
+							}
+						}
+
+						if (rRand(128) > AIInfo[cptr->Clone].idleStartD) {
+							cptr->Phase = DinoInfo[cptr->CType].idleAnim[rRand(DinoInfo[cptr->CType].idleCount - 1)]; //yeah, wolf has this bit too... I know
+						}
+
+
+					} else {
+
+						if (rRand(AIInfo[cptr->Clone].idleStartD) > 110) {
+							cptr->Phase = DinoInfo[cptr->CType].idleAnim[rRand(DinoInfo[cptr->CType].idleCount - 1)];
+							goto ENDPSELECT;
+						}
+						else {
+							cptr->Phase = DinoInfo[cptr->CType].walkAnim;
+						}
+
+
+
+					}
+
+
+
+				} else {
+
+					bool idlePhase = false;
+					for (int i = 0; i < DinoInfo[cptr->CType].idleCount; i++) {
+						if (cptr->Phase == DinoInfo[cptr->CType].idleAnim[i]) idlePhase = true;
+					}
+
+					if (idlePhase) {
+						if (rRand(128) > 64 && cptr->Phase == DinoInfo[cptr->CType].idleAnim[DinoInfo[cptr->CType].idleCount - 1])
+							cptr->Phase = DinoInfo[cptr->CType].walkAnim;
+						else cptr->Phase = DinoInfo[cptr->CType].idleAnim[rRand(DinoInfo[cptr->CType].idleCount - 1)];
+						goto ENDPSELECT;
+					}
+					if (rRand(128) > AIInfo[cptr->Clone].idleStart) cptr->Phase = DinoInfo[cptr->CType].idleAnim[0];
+					else cptr->Phase = DinoInfo[cptr->CType].walkAnim;
+
+				
+				}
+
+			}
+			else {
+				cptr->Phase = DinoInfo[cptr->CType].walkAnim;
+			}
+
+		}
+		else cptr->Phase = DinoInfo[cptr->CType].runAnim;
+
+	bool idlePhase = false;
+	for (int i = 0; i < DinoInfo[cptr->CType].idleCount; i++) {
+		if (cptr->Phase == DinoInfo[cptr->CType].idleAnim[i]) idlePhase = true;
+	}
+
+	if (!idlePhase && AIInfo[cptr->Clone].carnivore && !AIInfo[cptr->Clone].iceAge)
+		if (!cptr->State) cptr->Phase = DinoInfo[cptr->CType].walkAnim;
+		else if (fabs(cptr->tgalpha - cptr->alpha) < 1.0 ||
+			fabs(cptr->tgalpha - cptr->alpha) > 2 * pi - 1.0)
+			cptr->Phase = DinoInfo[cptr->CType].runAnim;
+		else cptr->Phase = DinoInfo[cptr->CType].walkAnim;
+
+	if (DinoInfo[cptr->CType].canSwim) {
+		if (cptr->StateF & csONWATER) cptr->Phase = DinoInfo[cptr->CType].swimAnim;
+	}
+
+	if (cptr->Clone != AI_CERAT && AIInfo[cptr->Clone].carnivore && !AIInfo[cptr->Clone].iceAge) {
+		if (cptr->Slide > 40) cptr->Phase = DinoInfo[cptr->CType].slideAnim;
+	}
+
+
+ENDPSELECT:
+
+	//====== process phase changing ===========//
+	if ((_Phase != cptr->Phase) || NewPhase)
+		ActivateCharacterFx(cptr);
+
+	if (_Phase != cptr->Phase)
+	{
+		//==== set proportional FTime for better morphing =//
+
+		if (MORPHP || !AIInfo[cptr->Clone].carnivore || AIInfo[cptr->Clone].iceAge) {
+			if ((_Phase == DinoInfo[cptr->CType].runAnim ||
+				_Phase == DinoInfo[cptr->CType].walkAnim) &&
+				(cptr->Phase == DinoInfo[cptr->CType].runAnim ||
+					cptr->Phase == DinoInfo[cptr->CType].walkAnim))
+				cptr->FTime = _FTime * cptr->pinfo->Animation[cptr->Phase].AniTime / cptr->pinfo->Animation[_Phase].AniTime + 64;
+			else if (!NewPhase) cptr->FTime = 0;
+		}
+
+		if (cptr->PPMorphTime > 128)
+		{
+			cptr->PrevPhase = _Phase;
+			cptr->PrevPFTime = _FTime;
+			cptr->PPMorphTime = 0;
+		}
+	}
+
+	cptr->FTime %= cptr->pinfo->Animation[cptr->Phase].AniTime;
+
+
+
+	//========== rotation to tgalpha ===================//
+
+	float rspd, currspeed, tgbend;
+	float dalpha = (float)fabs(cptr->tgalpha - cptr->alpha);
+	float drspd = dalpha;
+	if (drspd > pi) drspd = 2 * pi - drspd;
+
+	if (AIInfo[cptr->Clone].jumper) {
+		if (cptr->Phase == DinoInfo[cptr->CType].jumpAnim) goto SKIPROT;
+	}
+	if (cptr->Phase == DinoInfo[cptr->CType].killType[cptr->killType].anim && DinoInfo[cptr->CType].killTypeCount) goto SKIPROT;
+	for (int i = 0; i < DinoInfo[cptr->CType].idleCount; i++) {
+		if (cptr->Phase == DinoInfo[cptr->CType].idleAnim[i]) goto SKIPROT;
+	}
+
+
+	if (AIInfo[cptr->Clone].carnivore && !AIInfo[cptr->Clone].iceAge) {
+
+		if (drspd > 0.02)
+			if (cptr->tgalpha > cptr->alpha) currspeed = 0.6f + drspd * 1.2f;
+			else currspeed = -0.6f - drspd * 1.2f;
+		else currspeed = 0;
+		if (cptr->AfraidTime) currspeed *= 2.5;
+
+		if (dalpha > pi) currspeed *= -1;
+		if ((cptr->StateF & csONWATER) || cptr->Phase == DinoInfo[cptr->CType].walkAnim) currspeed /= 1.4f;
+
+		if (cptr->AfraidTime) DeltaFunc(cptr->rspeed, currspeed, (float)TimeDt / 160.f);
+		else DeltaFunc(cptr->rspeed, currspeed, (float)TimeDt / 180.f);
+
+		tgbend = drspd / AIInfo[cptr->Clone].targetBendRotSpd;
+		if (tgbend > pi / 5) tgbend = pi / 5;
+
+		tgbend *= SGN(currspeed);
+		if (fabs(tgbend) > fabs(cptr->bend)) DeltaFunc(cptr->bend, tgbend, (float)TimeDt / 800.f);
+		else DeltaFunc(cptr->bend, tgbend, (float)TimeDt / 600.f);
+
+
+		rspd = cptr->rspeed * TimeDt / 1024.f;
+
+	} else {
+
+		if (drspd > 0.02){
+			if (cptr->tgalpha > cptr->alpha) currspeed = AIInfo[cptr->Clone].rot1 + drspd * AIInfo[cptr->Clone].rot2;
+			else currspeed = -AIInfo[cptr->Clone].rot1 - drspd * AIInfo[cptr->Clone].rot2;
+		} else currspeed = 0;
+
+		if (cptr->AfraidTime) currspeed *= 1.5;
+		if (dalpha > pi) currspeed *= -1;
+		if ((cptr->State & csONWATER) || cptr->Phase == DinoInfo[cptr->CType].walkAnim) currspeed /= 1.4f;
+
+		DeltaFunc(cptr->rspeed, currspeed, (float)TimeDt / 400.f);
+
+		tgbend = drspd / AIInfo[cptr->Clone].targetBendRotSpd;
+		if (tgbend > pi / AIInfo[cptr->Clone].targetBendMin) tgbend = pi / AIInfo[cptr->Clone].targetBendMin;
+
+		tgbend *= SGN(currspeed);
+		if (fabs(tgbend) > fabs(cptr->bend)) DeltaFunc(cptr->bend, tgbend, (float)TimeDt / AIInfo[cptr->Clone].targetBendDelta1);
+		else DeltaFunc(cptr->bend, tgbend, (float)TimeDt / AIInfo[cptr->Clone].targetBendDelta2);
+
+
+		rspd = cptr->rspeed * TimeDt / 612.f;
+
+	}
+
+
+	if (drspd < fabs(rspd)) cptr->alpha = cptr->tgalpha;
+	else cptr->alpha += rspd;
+
+
+	if (cptr->alpha > pi * 2) cptr->alpha -= pi * 2;
+	if (cptr->alpha < 0) cptr->alpha += pi * 2;
+
+SKIPROT:
+
+	if (cptr->Clone != AI_CERAT && AIInfo[cptr->Clone].carnivore && !AIInfo[cptr->Clone].iceAge) {
+		//======= set slide mode ===========//
+		if (!cptr->Slide && cptr->vspeed > 0.6 && (cptr->Phase != DinoInfo[cptr->CType].jumpAnim || !AIInfo[cptr->Clone].jumper))
+			if (AngleDifference(cptr->tgalpha, cptr->alpha) > pi * 2 / 3.f)
+			{
+				cptr->Slide = (int)(cptr->vspeed*700.f);
+				cptr->slidex = cptr->lookx;
+				cptr->slidez = cptr->lookz;
+				cptr->vspeed = 0;
+			}
+	}
+
+	//========== movement ==============================//
+	cptr->lookx = (float)cos(cptr->alpha);
+	cptr->lookz = (float)sin(cptr->alpha);
+
+	float curspeed = 0;
+	if (cptr->Phase == DinoInfo[cptr->CType].runAnim) curspeed = cptr->speed_run;
+	if (cptr->Phase == DinoInfo[cptr->CType].walkAnim) curspeed = cptr->speed_walk;
+	if (DinoInfo[cptr->CType].canSwim) {
+		if (cptr->Phase == DinoInfo[cptr->CType].swimAnim) curspeed = cptr->speed_swim;
+	}
+	if (AIInfo[cptr->Clone].jumper) {
+		if (cptr->Phase == DinoInfo[cptr->CType].jumpAnim) curspeed = cptr->speed_jump;
+	}
+
+	if (cptr->Phase == DinoInfo[cptr->CType].killType[cptr->killType].anim && DinoInfo[cptr->CType].killTypeCount) curspeed = 0.0f;
+
+	if (cptr->Phase == DinoInfo[cptr->CType].runAnim && cptr->Slide && cptr->Clone != AI_CERAT && AIInfo[cptr->Clone].carnivore && !AIInfo[cptr->Clone].iceAge)
+	{
+		curspeed /= 8;
+		if (drspd > pi / 2.f) curspeed = 0;
+		else if (drspd > pi / 4.f) curspeed *= 2.f - 4.f*drspd / pi;
+	}
+	else if (drspd > pi / 2.f) curspeed *= 2.f - 2.f*drspd / pi;
+
+	//========== process speed =============//
+
+	if (AIInfo[cptr->Clone].carnivore && !AIInfo[cptr->Clone].iceAge) {
+
+		DeltaFunc(cptr->vspeed, curspeed, TimeDt / 500.f);
+
+		if (AIInfo[cptr->Clone].jumper) {
+			if (cptr->Phase == DinoInfo[cptr->CType].jumpAnim) cptr->vspeed = cptr->speed_jump;
+		}
+
+		MoveCharacter(cptr, cptr->lookx * cptr->vspeed * TimeDt * cptr->scale,
+			cptr->lookz * cptr->vspeed * TimeDt * cptr->scale, !DinoInfo[cptr->CType].canSwim, TRUE);
+
+		if (cptr->Clone != AI_CERAT) {
+			//========== slide ==============//
+			if (cptr->Slide)
+			{
+				MoveCharacter(cptr, cptr->slidex * cptr->Slide / 600.f * TimeDt * cptr->scale,
+					cptr->slidez * cptr->Slide / 600.f * TimeDt * cptr->scale, !DinoInfo[cptr->CType].canSwim, TRUE);
+
+				cptr->Slide -= TimeDt;
+				if (cptr->Slide < 0) cptr->Slide = 0;
+			}
+		}
+
+	} else {
+
+		curspeed *= cptr->scale;
+		if (curspeed > cptr->vspeed) DeltaFunc(cptr->vspeed, curspeed, TimeDt / 1024.f);
+		else DeltaFunc(cptr->vspeed, curspeed, TimeDt / 256.f);
+
+		MoveCharacter(cptr, cptr->lookx * cptr->vspeed * TimeDt,
+			cptr->lookz * cptr->vspeed * TimeDt, !DinoInfo[cptr->CType].canSwim, TRUE);
+
+	}
+
+
+	//============ Y movement =================//
+	if (cptr->StateF & csONWATER && DinoInfo[cptr->CType].canSwim)
+	{
+		cptr->pos.y = GetLandUpH(cptr->pos.x, cptr->pos.z) - (DinoInfo[cptr->CType].waterLevel + 20) * cptr->scale;
+		cptr->beta /= 2;
+		cptr->tggamma = 0;
+	}
+	else
+	{
+		ThinkY_Beta_Gamma(cptr,
+			AIInfo[cptr->Clone].yBetaGamma1,
+			AIInfo[cptr->Clone].yBetaGamma2,
+			AIInfo[cptr->Clone].yBetaGamma3,
+			AIInfo[cptr->Clone].yBetaGamma4);
+	}
+
+	//=== process to tggamma ===//
+	if (cptr->Phase == DinoInfo[cptr->CType].walkAnim) cptr->tggamma += cptr->rspeed / AIInfo[cptr->Clone].walkTargetGammaRot;
+	else cptr->tggamma += cptr->rspeed / AIInfo[cptr->Clone].targetGammaRot;
+	if (AIInfo[cptr->Clone].jumper) {
+		if (cptr->Phase == DinoInfo[cptr->CType].jumpAnim) cptr->tggamma = 0;
+	}
+
+	if (AIInfo[cptr->Clone].carnivore && !AIInfo[cptr->Clone].iceAge){
+		DeltaFunc(cptr->gamma, cptr->tggamma, TimeDt / 1624.f);
+	} else {
+		DeltaFunc(cptr->gamma, cptr->tggamma, TimeDt / 2048.f);
+	}
+
+	//==================================================//
+
+}
+
+
+
+
+//carn animate
+/*
 void AnimateCarnivore(TCharacter *cptr)
 {
 	NewPhase = FALSE;
@@ -2536,7 +3152,7 @@ SKIPROT:
 	//==================================================//
 
 }
-
+*/
 
 
 
@@ -2977,7 +3593,8 @@ SKIPROT:
 
 
 
-//universal animate proc
+//universal animate proc herbivore
+/*
 void AnimateHerbivore(TCharacter *cptr)
 {
 	NewPhase = FALSE;
@@ -3047,7 +3664,7 @@ TBEGIN:
 		}
 
 		bool fleeMode = FALSE;
-		if (pdist > 128 * DinoInfo[cptr->CType].aggress + OptAgres / 8 || DinoInfo[cptr->CType].aggress <= 0 || !cptr->awareHunter) {
+		if (pdist > AIInfo[cptr->Clone].agressMulti * DinoInfo[cptr->CType].aggress + OptAgres / 8 || DinoInfo[cptr->CType].aggress <= 0 || !cptr->awareHunter) {
 			fleeMode = TRUE;
 		} else if (cptr->packId >= 0) Packs[cptr->packId].attack = TRUE;
 
@@ -3153,7 +3770,7 @@ NOTHINK:
 	else
 	{
 		cptr->tgalpha = CorrectedAlpha(FindVectorAlpha(targetdx, targetdz), cptr->alpha);//FindVectorAlpha(targetdx, targetdz);
-		if (cptr->AfraidTime)
+		if (cptr->AfraidTime && (!AIInfo[cptr->Clone].iceAge || pdist > 12 * 256))
 		{
 			cptr->tgalpha += (float)sin(RealTime / 1024.f) / 3.f;
 			if (cptr->tgalpha < 0) cptr->tgalpha += 2 * pi;
@@ -3340,8 +3957,7 @@ SKIPROT:
 	else cptr->tggamma += cptr->rspeed / AIInfo[cptr->Clone].targetGammaRot;
 	DeltaFunc(cptr->gamma, cptr->tggamma, TimeDt / 2048.f);
 }
-
-
+*/
 
 /*
 void AnimateVeloPackOld(TCharacter *cptr)
@@ -4292,7 +4908,7 @@ TBEGIN:
 
 
 				if (idlePhase) {
-					if (rRand(128) > 76 && cptr->Phase == DinoInfo[cptr->CType].idleAnim[DinoInfo[cptr->CType].idleCount - 1])
+					if (rRand(128) > AIInfo[cptr->Clone].idleStart && cptr->Phase == DinoInfo[cptr->CType].idleAnim[DinoInfo[cptr->CType].idleCount - 1])
 						cptr->Phase = DinoInfo[cptr->CType].walkAnim;
 					else cptr->Phase = DinoInfo[cptr->CType].idleAnim[rRand(DinoInfo[cptr->CType].idleCount - 1)];
 					goto ENDPSELECT;
@@ -7241,8 +7857,6 @@ void AnimateCharacters()
 		switch (cptr->Clone)
 		{
 		case AI_MOSA:
-			AnimateFish(cptr);
-			break;
 		case AI_FISH:
 			AnimateFish(cptr);
 			break;
@@ -7251,9 +7865,6 @@ void AnimateCharacters()
 			else AnimateDeadCommon(cptr);
 			break;
 		case AI_BRACHDANGER:
-			if (cptr->Health) AnimateBrahi(cptr);
-			else AnimateDeadCommon(cptr);
-			break;
 		case AI_LANDBRACH:
 			if (cptr->Health) AnimateBrahi(cptr);
 			else AnimateDeadCommon(cptr);
@@ -7263,68 +7874,42 @@ void AnimateCharacters()
 			else AnimateIcthDead(cptr);
 			break;
 		case AI_MOSH:
+		case AI_PIG:
+		case AI_GALL:
+		case AI_DIMET:
 			if (cptr->Health) AnimateClassicAmbient(cptr);
 			else AnimateDeadCommon(cptr);
+			break;
+		case AI_DIMOR:
+		case AI_PTERA:
+			if (cptr->Health) AnimateDimor(cptr);
+			else AnimateIcthDead(cptr);
 			break;
 		case AI_HUNTDOG:
 			//	HUNTDOG TEMPP DISABLED
 			/* if (cptr->Health) AnimateHuntdog(cptr);
 			else AnimateDeadCommon(cptr);*/
 			break;
-		case AI_GALL:
-			if (cptr->Health) AnimateClassicAmbient(cptr);
-			else AnimateDeadCommon(cptr);
-			break;
-		case AI_DIMOR:
-			if (cptr->Health) AnimateDimor(cptr);
-			else AnimateIcthDead(cptr);
-			break;
-		case AI_PTERA:
-			if (cptr->Health) AnimateDimor(cptr);
-			else AnimateIcthDead(cptr);
-			break;
-		case AI_DIMET:
-			if (cptr->Health) AnimateClassicAmbient(cptr);
-			else AnimateDeadCommon(cptr);
-			break;
 
 
 		case AI_PARA:
-			if (cptr->Health) AnimateHerbivore(cptr);
-			else AnimateDeadCommon(cptr);
-			break;
 		case AI_ANKY:
-			if (cptr->Health) AnimateHerbivore(cptr);
-			else AnimateDeadCommon(cptr);
-			break;
 		case AI_PACH:
-			if (cptr->Health) AnimateHerbivore(cptr);
-			else AnimateDeadCommon(cptr);
-			break;
 		case AI_STEGO:
-			if (cptr->Health) AnimateHerbivore(cptr);
-			else AnimateDeadCommon(cptr);
-			break;
-
 		case AI_ALLO:
-			if (cptr->Health) AnimateCarnivore(cptr);
-			else AnimateDeadCommon(cptr);
-			break;
 		case AI_CHASM:
-			if (cptr->Health) AnimateHerbivore(cptr);
-			else AnimateDeadCommon(cptr);
-			break;
-
 		case AI_VELO:
-			if (cptr->Health) AnimateCarnivore(cptr);
-			else AnimateDeadCommon(cptr);
-			break;
 		case AI_SPINO:
-			if (cptr->Health) AnimateCarnivore(cptr);
-			else AnimateDeadCommon(cptr);
-			break;
 		case AI_CERAT:
-			if (cptr->Health) AnimateCarnivore(cptr);
+		case AI_BRONT:
+		case AI_HOG:
+		case AI_WOLF:
+		case AI_RHINO:
+		case AI_DEER:
+		case AI_SMILO:
+		case AI_MAMM:
+		case AI_BEAR:
+			if (cptr->Health) AnimateHuntable(cptr);
 			else AnimateDeadCommon(cptr);
 			break;
 		case AI_TREX:
