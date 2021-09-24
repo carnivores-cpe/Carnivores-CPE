@@ -569,6 +569,8 @@ void ProcessCommandLine()
     if (strstr(s,"-double"))  DoubleAmmo = TRUE;
 	if (strstr(s, "-huntdog"))  DogMode = TRUE;
     if (strstr(s,"-radar"))   RadarMode = TRUE;
+	if (strstr(s, "-scent"))   ScentMode = TRUE;
+	if (strstr(s, "-camo"))   CamoMode = TRUE;
 	if (strstr(s, "-multiplayer"))   Multiplayer = TRUE;
 	if (strstr(s, "-host"))   Host = TRUE;
     if (strstr(s,"-tranq")) Tranq = TRUE;
@@ -2541,11 +2543,12 @@ void LoadTrophy()
 
   ReadFile(hfile, &KeyMap, sizeof(KeyMap), &l, NULL);
   ReadFile(hfile, &REVERSEMS, 4, &l, NULL);
-
-  ReadFile(hfile, &ScentMode, 4, &l, NULL);
-  ReadFile(hfile, &CamoMode, 4, &l, NULL);
-  ReadFile(hfile, &RadarMode, 4, &l, NULL);
-  ReadFile(hfile, &Tranq, 4, &l, NULL);
+  //INGORE SAVEFILE SETTING FOR EQUIPMENT
+  boolean temp;
+  ReadFile(hfile, &temp, 4, &l, NULL);
+  ReadFile(hfile, &temp, 4, &l, NULL);
+  ReadFile(hfile, &temp, 4, &l, NULL);
+  ReadFile(hfile, &temp, 4, &l, NULL);
   ReadFile(hfile, &OPT_ALPHA_COLORKEY, 4, &l, NULL);
 
   ReadFile(hfile, &OptSys, 4, &l, NULL);

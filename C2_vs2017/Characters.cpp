@@ -8304,6 +8304,18 @@ void PlaceMHunters() {
 
 void PlaceCharacters()
 {
+
+	//TEST
+/*
+if (Tranq) MessageBox(NULL, "TRANQ", "Carnivores Termination", IDOK | MB_SYSTEMMODAL | MB_ICONEXCLAMATION);
+if (ObservMode) MessageBox(NULL, "OBSERV", "Carnivores Termination", IDOK | MB_SYSTEMMODAL | MB_ICONEXCLAMATION);
+if (ScentMode) MessageBox(NULL, "SCENT", "Carnivores Termination", IDOK | MB_SYSTEMMODAL | MB_ICONEXCLAMATION);
+if (CamoMode) MessageBox(NULL, "CAMO", "Carnivores Termination", IDOK | MB_SYSTEMMODAL | MB_ICONEXCLAMATION);
+if (DoubleAmmo) MessageBox(NULL, "DOUBLE", "Carnivores Termination", IDOK | MB_SYSTEMMODAL | MB_ICONEXCLAMATION);
+if (RadarMode) MessageBox(NULL, "RADAR", "Carnivores Termination", IDOK | MB_SYSTEMMODAL | MB_ICONEXCLAMATION);
+*/
+
+
 	int c, tr;
 	ChCount = 0;
 	PrintLog("Placing...");
