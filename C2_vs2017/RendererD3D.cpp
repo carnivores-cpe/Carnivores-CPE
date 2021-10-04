@@ -1757,15 +1757,14 @@ void DrawTrophyText(int x0, int y0)
   int x;
   SmallFont = TRUE;
   HFONT oldfont = (HFONT)SelectObject(hdcMain, fnt_Small);
-  int tc = TrophyBody;
 
-  int   dtype = TrophyIndex[TrophyRoom.Body[tc].ctype];;
-  int   time  = TrophyRoom.Body[tc].time;
-  int   date  = TrophyRoom.Body[tc].date;
-  int   wep   = TrophyRoom.Body[tc].weapon;
-  int   score = TrophyRoom.Body[tc].score;
-  float scale = TrophyRoom.Body[tc].scale;
-  float range = TrophyRoom.Body[tc].range;
+  int   dtype = TrophyIndex[TrophyDisplayBody.ctype];;
+  int   time  = TrophyDisplayBody.time;
+  int   date  = TrophyDisplayBody.date;
+  int   wep   = TrophyDisplayBody.weapon;
+  int   score = TrophyDisplayBody.score;
+  float scale = TrophyDisplayBody.scale;
+  float range = TrophyDisplayBody.range;
   char t[32];
 
   x0+=14;

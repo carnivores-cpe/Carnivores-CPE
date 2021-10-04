@@ -329,6 +329,7 @@ void CreateTMap()
         LandingList.list[LandingList.PCount].x = x;
         LandingList.list[LandingList.PCount].y = y;
         LandingList.PCount++;
+		//MessageBox(hwndMain, "FOUND A LANDER!", "Woah wee", IDOK);
         OMap[y][x]=255;
       }
 
@@ -345,13 +346,15 @@ void CreateTMap()
 
     }
 
-  if (!LandingList.PCount)
+  if (!LandingList.PCount && !TrophyMode)
   {
+	//MessageBox(hwndMain, "URRRR WHAT?", "Woah what the fuck", IDOK);
     LandingList.list[LandingList.PCount].x = 256;
     LandingList.list[LandingList.PCount].y = 256;
     LandingList.PCount=1;
   }
 
+  /*
   if (TrophyMode)
   {
     LandingList.PCount = 0;
@@ -383,6 +386,7 @@ void CreateTMap()
       LandingList.PCount++;
     }
   }
+  */
 
 
 }
@@ -2150,6 +2154,15 @@ void WipeKillTypes() {
 	DinoInfo[TotalC].killTypeCount = 0;
 }
 
+void WipeTrophyTypes() {
+	if (DinoInfo[TotalC].trophyTypeCount) {
+		for (int i = 0; i < DinoInfo[TotalC].trophyTypeCount; i++) {
+			DinoInfo[TotalC].trophyType[i] = {};
+		}
+	}
+	DinoInfo[TotalC].trophyTypeCount = 0;
+}
+
 void WipeDeathTypes() {
 	if (DinoInfo[TotalC].deathTypeCount) {
 		for (int i = 0; i < DinoInfo[TotalC].deathTypeCount; i++) {
@@ -2225,6 +2238,38 @@ void ReadKillTypeInfo(FILE *stream)
 	}
 }
 
+void ReadTrophyTypeInfo(FILE *stream)
+{
+	char *value;
+	char line[256];
+
+	while (fgets(line, 255, stream)) {
+		if (strstr(line, "}")) {
+			DinoInfo[TotalC].trophyTypeCount++;
+			break;
+		}
+		value = strstr(line, "=");
+		if (!value)
+			DoHalt("Script loading error");
+		value++;
+
+
+		if (strstr(line, "tropPos")) DinoInfo[TotalC].trophyType[DinoInfo[TotalC].trophyTypeCount].trophyPos = atoi(value);
+		if (strstr(line, "alpha")) DinoInfo[TotalC].trophyType[DinoInfo[TotalC].trophyTypeCount].alpha = atoi(value);
+		if (strstr(line, "beta")) DinoInfo[TotalC].trophyType[DinoInfo[TotalC].trophyTypeCount].beta = atoi(value);
+		if (strstr(line, "gamma")) DinoInfo[TotalC].trophyType[DinoInfo[TotalC].trophyTypeCount].gamma = atoi(value);
+		if (strstr(line, "xoffset")) DinoInfo[TotalC].trophyType[DinoInfo[TotalC].trophyTypeCount].xoffset = atoi(value);
+		if (strstr(line, "yoffset")) DinoInfo[TotalC].trophyType[DinoInfo[TotalC].trophyTypeCount].yoffset = atoi(value);
+		if (strstr(line, "zoffset")) DinoInfo[TotalC].trophyType[DinoInfo[TotalC].trophyTypeCount].zoffset = atoi(value);
+		if (strstr(line, "tropAnim")) DinoInfo[TotalC].trophyType[DinoInfo[TotalC].trophyTypeCount].anim = atoi(value);
+		if (strstr(line, "xdata")) DinoInfo[TotalC].trophyType[DinoInfo[TotalC].trophyTypeCount].xdata = atoi(value);
+		if (strstr(line, "ydata")) DinoInfo[TotalC].trophyType[DinoInfo[TotalC].trophyTypeCount].ydata = atoi(value);
+		if (strstr(line, "zdata")) DinoInfo[TotalC].trophyType[DinoInfo[TotalC].trophyTypeCount].zdata = atoi(value);
+
+
+	}
+}
+
 
 
 
@@ -2296,7 +2341,7 @@ void ReadAvoidInfo(FILE *stream)
 
 void ReadCharacterLine(FILE *stream, char *_value, char line[256], bool &regionOverwrite, bool &avoidOverwrite,
 	bool &idleOverwrite, bool &idle2Overwrite, bool &roarOverwrite, bool &killOverwrite, bool &waterDieOverwrite,
-	bool &deathTypeOverwrite) {
+	bool &deathTypeOverwrite, bool &trophyTypeOverwrite, int &nextTrophySlot) {
 
 	char *value = _value;
 //	bool overwrite = _overwrite;
@@ -2418,6 +2463,8 @@ void ReadCharacterLine(FILE *stream, char *_value, char line[256], bool &regionO
 	if (strstr(line, "packMin")) DinoInfo[TotalC].packMin = atoi(value);
 	if (strstr(line, "packDensity")) DinoInfo[TotalC].packDensity = (float)atof(value);
 
+
+
 	if (strstr(line, "trophy")) {
 		if (!DinoInfo[TotalC].trophyCode) {
 			bool temp = FALSE;
@@ -2431,6 +2478,18 @@ void ReadCharacterLine(FILE *stream, char *_value, char line[256], bool &regionO
 		readBool(value, DinoInfo[TotalC].trophySession);
 	}
 	
+
+	if (strstr(line, "tropinfo")) {
+
+		if (trophyTypeOverwrite) {
+			WipeTrophyTypes();
+			trophyTypeOverwrite = false;
+		}
+
+		ReadTrophyTypeInfo(stream);
+		nextTrophySlot++;
+	}
+
 
 	if (strstr(line, "name"))
 	{
@@ -2494,7 +2553,7 @@ void ReadCharacterLine(FILE *stream, char *_value, char line[256], bool &regionO
 }
 
 
-void ReadCharacters(FILE *stream, bool mapamb)
+void ReadCharacters(FILE *stream, bool mapamb, int &nextTrophySlot)
 {
 	//area
 	char tempProjectName[128];
@@ -2515,7 +2574,6 @@ void ReadCharacters(FILE *stream, bool mapamb)
 		LPSTR s = __argv[a];
 		if (strstr(s, "dtm=")) timeOfDay = atoi(&s[4]);
 	}
-
 
   char line[256], *value;
   while (fgets( line, 255, stream))
@@ -2566,14 +2624,15 @@ void ReadCharacters(FILE *stream, bool mapamb)
 				!strstr(line, "spawninfo") &&
 				!strstr(line, "killtype") &&
 				!strstr(line, "avoid") &&
+				!strstr(line, "tropinfo") &&
 				!strstr(line, "deathtype"))
 				DoHalt("Script loading error");
 			value++;
 
 			if (strstr(line, "ai")) DinoInfo[TotalC].AI = atoi(value);
 
-			bool temp, temp2, temp3, temp4, temp5, temp6, temp7, temp8;
-			ReadCharacterLine(stream, value, line, temp, temp2, temp3, temp4, temp5, temp6, temp7, temp8);
+			bool temp, temp2, temp3, temp4, temp5, temp6, temp7, temp8, temp9;
+			ReadCharacterLine(stream, value, line, temp, temp2, temp3, temp4, temp5, temp6, temp7, temp8, temp9, nextTrophySlot);
 
 			if (strstr(line, "overwrite") || strstr(line, "addition")) {
 
@@ -2650,6 +2709,7 @@ void ReadCharacters(FILE *stream, bool mapamb)
 					bool roarOverwrite = strstr(line, "overwrite");
 					bool waterDieOverwrite = strstr(line, "overwrite");
 					bool deathTypeOverwrite = strstr(line, "overwrite");
+					bool trophyTypeOverwrite = strstr(line, "overwrite");
 
 					while (fgets(line, 255, stream)) {
 						if (strstr(line, "}")) break;
@@ -2659,13 +2719,14 @@ void ReadCharacters(FILE *stream, bool mapamb)
 							&& !strstr(line, "spawninfo")
 							&& !strstr(line, "avoid")
 							&& !strstr(line, "deathtype")
+							&& !strstr(line, "tropinfo")
 							&& !strstr(line, "killtype"))
 							DoHalt("Script loading error");
 						value++;
 
 						ReadCharacterLine(stream, value, line, regionOverwrite, avoidOverwrite,
 							idleOverwrite, idle2Overwrite, roarOverwrite, killOverwrite,
-							waterDieOverwrite, deathTypeOverwrite);
+							waterDieOverwrite, deathTypeOverwrite, trophyTypeOverwrite, nextTrophySlot);
 
 					}
 
@@ -3137,6 +3198,8 @@ void LoadResourcesScript()
   FILE *stream;
   char line[256];
 
+  int nextTrophySlot = 0;
+
   stream = fopen("HUNTDAT\\_res.txt", "r");
   if (!stream) DoHalt("Can't open resources file _res.txt");
 
@@ -3147,11 +3210,11 @@ void LoadResourcesScript()
   {
     if (line[0] == '.') break;
     if (strstr(line, "weapons") ) ReadWeapons(stream);
-	if (strstr(line, "hunterinfo")) ReadCharacters(stream, false);
-	if (strstr(line, "oldambients")) ReadCharacters(stream, false);
-	if (strstr(line, "corpseambients")) ReadCharacters(stream, false);
-    if (strstr(line, "characters") ) ReadCharacters(stream, false);
-	if (strstr(line, "mapambients")) ReadCharacters(stream, true);
+	if (strstr(line, "hunterinfo")) ReadCharacters(stream, false, nextTrophySlot);
+	if (strstr(line, "oldambients")) ReadCharacters(stream, false, nextTrophySlot);
+	if (strstr(line, "corpseambients")) ReadCharacters(stream, false, nextTrophySlot);
+    if (strstr(line, "characters") ) ReadCharacters(stream, false, nextTrophySlot);
+	if (strstr(line, "mapambients")) ReadCharacters(stream, true, nextTrophySlot);
 
   }
 

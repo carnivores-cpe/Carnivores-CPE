@@ -614,6 +614,8 @@ void AddShipTask(int cindex)
   for (t=0; t<23; t++)
     if (!TrophyRoom.Body[t].ctype) break;
 
+  //t += DinoInfo[Characters[cindex].CType].trophyFirstSlot;
+
   float score = (float)DinoInfo[Characters[cindex].CType].BaseScore;
 
   if (TrophyRoom.Last.success>1)
@@ -630,19 +632,33 @@ void AddShipTask(int cindex)
 
   if (!Tranq)
   {
-    TrophyTime = 20 * 1000;
-    TrophyBody = t;
-    TrophyRoom.Body[t].ctype  = DinoInfo[Characters[cindex].CType].trophyCode; //0 is blank trophy
-    TrophyRoom.Body[t].scale  = Characters[cindex].scale;
-    TrophyRoom.Body[t].weapon = CurrentWeapon;
-    TrophyRoom.Body[t].score  = (int)score;
-    TrophyRoom.Body[t].phase  = (RealTime & 3);
-    TrophyRoom.Body[t].time = (st.wHour<<10) + st.wMinute;
-    TrophyRoom.Body[t].date = (st.wYear<<20) + (st.wMonth<<10) + st.wDay;
-    TrophyRoom.Body[t].range = VectorLength( SubVectors(Characters[cindex].pos, PlayerPos) ) / 64.f;
-    PrintLog("Trophy added: ");
-    PrintLog(DinoInfo[Characters[cindex].CType].Name);
-    PrintLog("\n");
+
+	  TrophyDisplayBody.ctype = Characters[cindex].CType; //0 is blank trophy
+	  TrophyDisplayBody.scale = Characters[cindex].scale;
+	  TrophyDisplayBody.weapon = CurrentWeapon;
+	  TrophyDisplayBody.score = (int)score;
+	  TrophyDisplayBody.phase = (RealTime & 3);
+	  TrophyDisplayBody.time = (st.wHour << 10) + st.wMinute;
+	  TrophyDisplayBody.date = (st.wYear << 20) + (st.wMonth << 10) + st.wDay;
+	  TrophyDisplayBody.range = VectorLength(SubVectors(Characters[cindex].pos, PlayerPos)) / 64.f;
+	  TrophyDisplay = true;
+
+	  TrophyTime = 20 * 1000;
+	  if (DinoInfo[Characters[cindex].CType].trophyLocTotal2 < DinoInfo[Characters[cindex].CType].trophyTypeCount) {
+		  DinoInfo[Characters[cindex].CType].trophyLocTotal2++;
+		  TrophyBody = t;
+		  TrophyRoom.Body[t].ctype = DinoInfo[Characters[cindex].CType].trophyCode; //0 is blank trophy
+		  TrophyRoom.Body[t].scale = Characters[cindex].scale;
+		  TrophyRoom.Body[t].weapon = CurrentWeapon;
+		  TrophyRoom.Body[t].score = (int)score;
+		  TrophyRoom.Body[t].phase = (RealTime & 3);
+		  TrophyRoom.Body[t].time = (st.wHour << 10) + st.wMinute;
+		  TrophyRoom.Body[t].date = (st.wYear << 20) + (st.wMonth << 10) + st.wDay;
+		  TrophyRoom.Body[t].range = VectorLength(SubVectors(Characters[cindex].pos, PlayerPos)) / 64.f;
+		  PrintLog("Trophy added: ");
+		  PrintLog(DinoInfo[Characters[cindex].CType].Name);
+		  PrintLog("\n");
+	  }
   }
 }
 
@@ -2268,12 +2284,26 @@ void ProcessTrophy()
 
   for (int c=0; c<ChCount; c++)
   {
-    Vector3d p = Characters[c].pos;
-    p.x+=Characters[c].lookx * 256*2.5f;
-    p.z+=Characters[c].lookz * 256*2.5f;
+	  Vector3d p = Characters[c].pos;
+    //p.x+=Characters[c].lookx * 256*2.5f;
+    //p.z+=Characters[c].lookz * 256*2.5f;
+	  p.x += Characters[c].xdata;
+	  p.z += Characters[c].zdata;
+	  p.y = GetLandH(p.x, p.z) + Characters[c].ydata;
 
-    if (VectorLength( SubVectors(p, PlayerPos) ) < 148)
+	//Characters[c].Phase = 1;
+
+	if (VectorLength(SubVectors(p, PlayerPos)) < 148) {
       TrophyBody = c;
+	  TrophyDisplayBody.ctype = TrophyIndex[TrophyRoom.Body[c].ctype];
+	  TrophyDisplayBody.scale = TrophyRoom.Body[c].scale;
+	  TrophyDisplayBody.weapon = TrophyRoom.Body[c].weapon;
+	  TrophyDisplayBody.score = TrophyRoom.Body[c].score;
+	  TrophyDisplayBody.phase = TrophyRoom.Body[c].phase;
+ 	  TrophyDisplayBody.time = TrophyRoom.Body[c].time;
+	  TrophyDisplayBody.date = TrophyRoom.Body[c].date;
+	  TrophyDisplayBody.range = TrophyRoom.Body[c].range;
+	}
   }
 
   if (TrophyBody==-1) return;
@@ -2560,6 +2590,7 @@ void LoadTrophy()
 
   CloseHandle(hfile);
   TrophyRoom.RegNumber = rn;
+
   PrintLog("Trophy Loaded.\n");
 //	TrophyRoom.Score = 299;
 }

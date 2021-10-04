@@ -370,6 +370,10 @@ typedef struct _TCharacter
 
   bool aquaticIdle;
 
+  int tropAnim;
+
+  int xdata, zdata, ydata;
+
 } TCharacter;
 
 
@@ -468,6 +472,15 @@ typedef struct _TDinoKill
 	BOOL scream;
 } TDinoKill;
 
+typedef struct _TTrophyType
+{
+	int xoffset, yoffset, zoffset;
+	int xdata, ydata, zdata;
+	int alpha, beta, gamma; //degrees
+	int anim;
+	int trophyPos;
+} TTrophyType;
+
 typedef struct _TDinoDeathType
 {
 	int die;
@@ -497,7 +510,7 @@ typedef struct _TDinoInfo
 
   //int hunterDeathAnim, hunterDeathOffset;
   int aggress, killDist;
-  int trophyCode;
+
   int onRadar;
   float runspd, jmpspd, wlkspd, swmspd, flyspd, gldspd, tkfspd, lndspd;
 
@@ -515,6 +528,15 @@ typedef struct _TDinoInfo
 
   TDinoKill killType[32];
   int killTypeCount;
+
+  int tCounter;
+  int trophyCode;
+  int trophyLocTotal1;//CURRENTLY IN SAVE FILE
+  int trophyLocTotal2;//CURRENTLY IN SESSION - REPLACE WITH tlt1 UPON RESTART
+  
+  TTrophyType trophyType[32];
+  int trophyTypeCount;
+//  int tCounter; // used to count off trophy locs
 
   int waterDieAnim[32];
   int waterDieCount;
@@ -987,6 +1009,8 @@ _EXTORNOT int AI_to_CIndex[64];
 _EXTORNOT int TrophyIndex[64];
 _EXTORNOT int ChCount, WCCount, ElCount,
           ShotDino, TrophyBody, HunterCount; //HunterCount is for multiplayer, up to 3 others
+_EXTORNOT bool TrophyDisplay;
+_EXTORNOT TTrophyItem TrophyDisplayBody;
 _EXTORNOT TCharacterInfo WindModel;
 _EXTORNOT TCharacterInfo PlayerInfo;
 _EXTORNOT TCharacterInfo ChInfo[64];

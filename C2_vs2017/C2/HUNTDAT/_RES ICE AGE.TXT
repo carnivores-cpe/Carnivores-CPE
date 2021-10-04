@@ -240,6 +240,22 @@ characters {
  killdist = 300
  radar = 1
  trophy  = TRUE
+ tropinfo{
+ tropPos = 4
+  alpha = 0
+  tropAnim = 0
+  xoffset = 0
+  zoffset = 0
+  xdata = 1650
+ }
+ tropinfo{
+ tropPos = 4
+  alpha = 0
+  tropAnim = 0
+  xoffset = 0
+  zoffset = 500
+  xdata = 1650
+ }
  runAnim = 1
  walkAnim = 0
  idleAnim = 2
@@ -285,6 +301,22 @@ killtype{
  killdist = 300
  radar = 1
  trophy  = TRUE
+ tropinfo{
+ tropPos = 0
+  alpha = 90
+  tropAnim = 0
+  xoffset = -250
+  zoffset = 0
+  zdata = 1200
+ }
+ tropinfo{
+ tropPos = 0
+  alpha = 90
+  tropAnim = 0
+  xoffset = 250
+  zoffset = 0
+  zdata = 1200
+ }
  runAnim = 1
  walkAnim = 0
  idleAnim = 2
@@ -329,6 +361,22 @@ killtype{
  killdist = 300
  radar = 1
  trophy  = TRUE
+ tropinfo{
+ tropPos = 0
+  alpha = 90
+  tropAnim = 0
+  xoffset = -250
+  zoffset = 0
+  zdata = 1200
+ }
+ tropinfo{
+ tropPos = 0
+  alpha = 90
+  tropAnim = 0
+  xoffset = 250
+  zoffset = 0
+  zdata = 1200
+ }
  runAnim = 1
  walkAnim = 0
  idleAnim = 2
@@ -374,6 +422,22 @@ killtype{
  killdist = 300
  radar = 1
  trophy  = TRUE
+ tropinfo{
+ tropPos = 5
+  alpha = 180
+  tropAnim = 0
+  xoffset = 0
+  zoffset = 0
+  xdata = -1650
+ }
+ tropinfo{
+ tropPos = 5
+  alpha = 180
+  tropAnim = 0
+  xoffset = 0
+  zoffset = 500
+  xdata = -1650
+ }
  runAnim = 1
  walkAnim = 0
 deathtype{
@@ -418,6 +482,22 @@ killtype{
  killdist = 300
  radar = 1
  trophy  = TRUE
+ tropinfo{
+ tropPos = 3
+  alpha = 90
+  tropAnim = 0
+  xoffset = -250
+  zoffset = 0
+  zdata = 1200
+ }
+ tropinfo{
+ tropPos = 3
+  alpha = 90
+  tropAnim = 0
+  xoffset = 250
+  zoffset = 0
+  zdata = 1200
+ }
  canswim = TRUE
  runAnim = 1
  walkAnim = 0
@@ -465,6 +545,22 @@ killtype{
  killdist = 300
  radar = 1
  trophy  = TRUE
+ tropinfo{
+ tropPos = 6
+  alpha = 0
+  tropAnim = 0
+  xoffset = 0
+  zoffset = 0
+  xdata = 1650
+ }
+ tropinfo{
+ tropPos = 6
+  alpha = 0
+  tropAnim = 0
+  xoffset = 0
+  zoffset = 500
+  xdata = 1650
+ }
  runAnim = 1
  walkAnim = 0
 deathtype{
@@ -506,6 +602,22 @@ killtype{
  killdist = 300
  radar = 1
  trophy  = TRUE
+ tropinfo{
+ tropPos = 8
+  alpha = 180
+  tropAnim = 0
+  xoffset = 0
+  zoffset = 0
+  xdata = -1650
+ }
+ tropinfo{
+ tropPos = 8
+  alpha = 180
+  tropAnim = 0
+  xoffset = 0
+  zoffset = 500
+  xdata = -1650
+ }
  runAnim = 1
  walkAnim = 0
  jumpAnim = 7
@@ -592,6 +704,22 @@ killtype{
  aggress = 20
  radar = 1
  trophy  = TRUE
+ tropinfo{
+ tropPos = 9
+  alpha = 0
+  tropAnim = 0
+  xoffset = 0
+  zoffset = 0
+  xdata = 1650
+ }
+ tropinfo{
+ tropPos = 9
+  alpha = 0
+  tropAnim = 0
+  xoffset = 0
+  zoffset = 500
+  xdata = 1650
+ }
  runAnim = 1
  walkAnim = 0
  idleAnim = 2
@@ -618,6 +746,7 @@ killtype{
  file = 'bigfoot.car'
  ai        = 19
  clone  = 27
+ hide = TRUE
  dogSmell  = TRUE
  mass      = 1.5
  length    = 4.5
@@ -634,6 +763,22 @@ killtype{
  aggress = 35
  radar = 1
  trophy  = TRUE
+ tropinfo{
+ tropPos = 10
+  alpha = 180
+  tropAnim = 0
+  xoffset = 0
+  zoffset = 0
+  xdata = -1650
+ }
+ tropinfo{
+ tropPos = 10
+  alpha = 180
+  tropAnim = 0
+  xoffset = 0
+  zoffset = 500
+  xdata = -1650
+ }
  runAnim = 1
  walkAnim = 0
  idleAnim = 2

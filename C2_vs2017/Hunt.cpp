@@ -648,7 +648,7 @@ SKIPWEAPON:
     DrawPicture( (WinW - PausePic.W) / 2, (WinH - PausePic.H) / 2, PausePic);
 
   if (TrophyMode || TrophyTime)
-    if (TrophyBody!=-1)
+    if (TrophyBody!=-1 || TrophyDisplay)
     {
       int x0 = WinW - TrophyPic.W - 16;
       int y0 = WinH - TrophyPic.H - 12;
@@ -665,6 +665,7 @@ SKIPWEAPON:
         {
           TrophyTime=0;
           TrophyBody = -1;
+		  TrophyDisplay = false;
         }
       }
     }
@@ -1801,10 +1802,22 @@ void ProcessGame()
     ShutDown3DHardware();
     AudioStop();
     NeedRVM = TRUE;
+
   }
 
   if (!_GameState)
   {
+
+
+	  for (int di = 0; di < 64; di++) {
+		  DinoInfo[di].trophyLocTotal1 = 0;
+		  DinoInfo[di].trophyLocTotal2 = 0;
+	  }
+	  for (int c = 0; c < 24; c++) {
+		  DinoInfo[TrophyIndex[TrophyRoom.Body[c].ctype]].trophyLocTotal1++;
+		  DinoInfo[TrophyIndex[TrophyRoom.Body[c].ctype]].trophyLocTotal2++;
+	  }
+
     PrintLog("Entered game\n");
     ReInitGame();
     while (ShowCursor(FALSE)>=0);
@@ -1864,10 +1877,11 @@ void ProcessGame()
 
   if (NeedRVM)
   {
-    SetWindowPos(hwndMain, HWND_TOP, 0,0,0,0,  SWP_SHOWWINDOW);
-    SetFocus(hwndMain);
-    Activate3DHardware();
-    NeedRVM = FALSE;
+    
+	SetWindowPos(hwndMain, HWND_TOP, 0,0,0,0,  SWP_SHOWWINDOW);
+	SetFocus(hwndMain);
+	Activate3DHardware();
+	NeedRVM = FALSE;
   }
 
   ProcessSyncro();

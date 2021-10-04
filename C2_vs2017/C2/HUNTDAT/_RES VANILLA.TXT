@@ -243,6 +243,26 @@ characters {
  killdist = 0
  radar = 1
  trophy  = TRUE
+ tropinfo{
+ tropPos = 4
+  alpha = 300
+  tropAnim = 4
+  xoffset = 0
+  zoffset = 400
+  yoffset = -25
+  xdata = 1650
+  beta = 10
+ }
+ tropinfo{
+ tropPos = 4
+  alpha = 40
+  tropAnim = 2
+  xoffset = 150
+  zoffset = -400
+  yoffset = -20
+  xdata = 1500
+  gamma = -14
+ }
  runAnim = 1
  walkAnim = 0
  idleAnim = 2
@@ -282,6 +302,22 @@ deathtype{
  killdist = 0
  radar = 1
  trophy  = TRUE
+ tropinfo{
+ tropPos = 2
+  alpha = 90
+  tropAnim = 0
+  xoffset = -250
+  zoffset = 0
+  zdata = 1200
+ }
+ tropinfo{
+ tropPos = 2
+  alpha = 90
+  tropAnim = 0
+  xoffset = 250
+  zoffset = 0
+  zdata = 1200
+ }
  runAnim = 0
  walkAnim = 1
  idleAnim = 2
@@ -319,6 +355,22 @@ deathtype{
  killdist = 0
  radar = 1
  trophy  = TRUE
+ tropinfo{
+ tropPos = 5
+  alpha = 180
+  tropAnim = 0
+  xoffset = 0
+  zoffset = 0
+  xdata = -1650
+ }
+ tropinfo{
+ tropPos = 5
+  alpha = 180
+  tropAnim = 0
+  xoffset = 0
+  zoffset = 500
+  xdata = -1650
+ }
  runAnim = 0
  walkAnim = 1
  idleAnim = 3
@@ -357,6 +409,22 @@ deathtype{
  killdist = 256
  radar = 1
  trophy  = TRUE
+ tropinfo{
+ tropPos = 0
+  alpha = 90
+  tropAnim = 0
+  xoffset = -250
+  zoffset = 0
+  zdata = 1200
+ }
+ tropinfo{
+ tropPos = 0
+  alpha = 90
+  tropAnim = 0
+  xoffset = 250
+  zoffset = 0
+  zdata = 1200
+ }
  canswim = TRUE
  runAnim = 0
  walkAnim = 1
@@ -404,6 +472,22 @@ killtype{
  killdist = 300
  radar = 1
  trophy  = TRUE
+ tropinfo{
+ tropPos = 6
+  alpha = 0
+  tropAnim = 0
+  xoffset = 0
+  zoffset = 0
+  xdata = 1650
+ }
+ tropinfo{
+ tropPos = 6
+  alpha = 0
+  tropAnim = 0
+  xoffset = 0
+  zoffset = 500
+  xdata = 1650
+ }
  runAnim = 0
  walkAnim = 1
  idleAnim = 2
@@ -418,7 +502,7 @@ deathtype{
 
 {
  name = 'Velociraptor'
- file = 'velo_iidc.car'
+ file = 'velo_iidct2.car'
  ai        = 15
  clone  = 15
  dogSmell  = TRUE
@@ -442,6 +526,23 @@ deathtype{
  killdist = 256
  radar = 1
  trophy  = TRUE
+ tropinfo{
+ tropPos = 1
+  alpha = 150
+  tropAnim = 12
+  xoffset = -400
+  zoffset = 0
+  yoffset = 130
+  zdata = 1200
+ }
+ tropinfo{
+ tropPos = 1
+  alpha = 50
+  tropAnim = 13
+  xoffset = 100
+  zoffset = 70
+  zdata = 1130
+ }
  canswim = TRUE
  runAnim = 0
  walkAnim = 1
@@ -488,6 +589,22 @@ killtype{
  killdist = 300
  radar = 1
  trophy  = TRUE
+ tropinfo{
+ tropPos = 8
+  alpha = 180
+  tropAnim = 0
+  xoffset = 0
+  zoffset = 0
+  xdata = -1650
+ }
+ tropinfo{
+ tropPos = 8
+  alpha = 180
+  tropAnim = 0
+  xoffset = 0
+  zoffset = 500
+  xdata = -1650
+ }
  canswim = TRUE
  runAnim = 0
  walkAnim = 1
@@ -535,6 +652,22 @@ killtype{
  killdist = 350
  radar = 1
  trophy  = TRUE
+ tropinfo{
+ tropPos = 9
+  alpha = 0
+  tropAnim = 0
+  xoffset = 0
+  zoffset = 0
+  xdata = 1650
+ }
+ tropinfo{
+ tropPos = 9
+  alpha = 0
+  tropAnim = 0
+  xoffset = 0
+  zoffset = 500
+  xdata = 1650
+ }
  canswim = TRUE
  runAnim = 1
  walkAnim = 0
@@ -579,6 +712,20 @@ killtype{
  killdist = 380
  radar = 1
  trophy  = TRUE
+ tropinfo{
+ tropPos = 7
+  alpha = 270
+  tropAnim = 0
+  xoffset = 0
+  zoffset = 0
+ }
+ tropinfo{
+ tropPos = 7
+  alpha = 270
+  tropAnim = 0
+  xoffset = 1000
+  zoffset = 0
+ }
  canswim = TRUE
  runAnim = 0
  walkAnim = 1

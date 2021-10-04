@@ -8075,27 +8075,65 @@ void PlaceTrophy()
 {
 	ChCount = 0;
 
+
 	for (int c = 0; c < 24; c++)
 	{
+
+		//MessageBox(hwndMain, c.tostring(), "boring", IDOK);
+
 		if (!TrophyRoom.Body[c].ctype) continue;
-		//Characters[ChCount].CType = TrophyRoom.Body[c].ctype;
+
+			//do this in addshiptask too
+
 		Characters[ChCount].CType = TrophyIndex[TrophyRoom.Body[c].ctype];
 
+		if (DinoInfo[Characters[ChCount].CType].tCounter >=
+			DinoInfo[TrophyIndex[TrophyRoom.Body[c].ctype]].trophyTypeCount) continue;
+		
+
+		//Characters[ChCount].CType = TrophyRoom.Body[c].ctype;
+
+		/*
 		if (c < 6) Characters[ChCount].alpha = pi / 2;
 		else if (c < 12) Characters[ChCount].alpha = pi;
 		else if (c < 18) Characters[ChCount].alpha = pi * 3 / 2;
-		else
-			Characters[ChCount].alpha = 0;
+		else			*/
+
+
 
 		ResetCharacter(&Characters[ChCount]);
 
+		
 		Characters[ChCount].State = c;
 		Characters[ChCount].scale = TrophyRoom.Body[c].scale;
-		Characters[ChCount].pos.x = LandingList.list[c].x * 256.f + 128.f;
-		Characters[ChCount].pos.z = LandingList.list[c].y * 256.f + 128.f;
+		
+
+		Characters[ChCount].pos.x = LandingList.list[DinoInfo[Characters[ChCount].CType].trophyType[DinoInfo[Characters[ChCount].CType].tCounter].trophyPos].x
+			* 256+128 + DinoInfo[Characters[ChCount].CType].trophyType[DinoInfo[Characters[ChCount].CType].tCounter].xoffset;
+		Characters[ChCount].pos.z = LandingList.list[DinoInfo[Characters[ChCount].CType].trophyType[DinoInfo[Characters[ChCount].CType].tCounter].trophyPos].y
+			* 256+128 + DinoInfo[Characters[ChCount].CType].trophyType[DinoInfo[Characters[ChCount].CType].tCounter].zoffset;
+
+		Characters[ChCount].Phase = DinoInfo[Characters[ChCount].CType].trophyType[DinoInfo[Characters[ChCount].CType].tCounter].anim;
+		Characters[ChCount].PrevPhase = Characters[ChCount].Phase;
+
 
 		Characters[ChCount].pos.y = GetLandH(Characters[ChCount].pos.x,
 			Characters[ChCount].pos.z);
+
+		Characters[ChCount].pos.y += DinoInfo[Characters[ChCount].CType].trophyType[DinoInfo[Characters[ChCount].CType].tCounter].yoffset;
+		
+		float a = (float)DinoInfo[Characters[ChCount].CType].trophyType[DinoInfo[Characters[ChCount].CType].tCounter].alpha;
+		float b = (float)DinoInfo[Characters[ChCount].CType].trophyType[DinoInfo[Characters[ChCount].CType].tCounter].beta;
+		float g = (float)DinoInfo[Characters[ChCount].CType].trophyType[DinoInfo[Characters[ChCount].CType].tCounter].gamma;
+		Characters[ChCount].alpha = pi * 2 * a / 360.f;
+		Characters[ChCount].beta = pi * 2 * b / 360.f;
+		Characters[ChCount].gamma = pi * 2 * g / 360.f;
+
+		Characters[ChCount].xdata = DinoInfo[Characters[ChCount].CType].trophyType[DinoInfo[Characters[ChCount].CType].tCounter].xdata;
+		Characters[ChCount].ydata = DinoInfo[Characters[ChCount].CType].trophyType[DinoInfo[Characters[ChCount].CType].tCounter].ydata;
+		Characters[ChCount].zdata = DinoInfo[Characters[ChCount].CType].trophyType[DinoInfo[Characters[ChCount].CType].tCounter].zdata;
+
+		DinoInfo[Characters[ChCount].CType].tCounter++;
 		ChCount++;
 	}
 }
@@ -8526,6 +8564,7 @@ if (RadarMode) MessageBox(NULL, "RADAR", "Carnivores Termination", IDOK | MB_SYS
 
 void CreateChMorphedModel(TCharacter *cptr)
 {
+
 	TAni *aptr = &cptr->pinfo->Animation[cptr->Phase];
 	TAni *paptr = &cptr->pinfo->Animation[cptr->PrevPhase];
 
