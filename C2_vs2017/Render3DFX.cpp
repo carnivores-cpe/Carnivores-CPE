@@ -150,27 +150,33 @@ void Activate3DHardware()
   }
 
 
+  // grSstWinOpen below is crashing for Ophie :(
 
 RESET:
-  if (!grSstWinOpen( (unsigned int) hwndMain, fxmode, GR_REFRESH_NONE, GR_COLORFORMAT_ABGR, GR_ORIGIN_UPPER_LEFT, 2, 1 ) )
-    if (!grSstWinOpen( (unsigned int) hwndMain, fxmode, GR_REFRESH_60Hz, GR_COLORFORMAT_ABGR, GR_ORIGIN_UPPER_LEFT, 2, 1 ) )
-    {
-      if (fxmode!=GR_RESOLUTION_640x480)
-      {
-        PrintLog("Voodoo: Can't set selected video mode\n");
-        fxmode = GR_RESOLUTION_640x480;
-        OptRes = 3;
-        SetVideoMode(640,480);
-        goto RESET;
-      }
-      else
-        DoHalt("Voodoo: Can't set video mode");
-    }
+  PrintLog("Voodoo: Can't set selected video mode\n");
+  if (!grSstWinOpen((unsigned int)hwndMain, fxmode, GR_REFRESH_NONE, GR_COLORFORMAT_ABGR, GR_ORIGIN_UPPER_LEFT, 2, 1))
+  {
+	  if (!grSstWinOpen((unsigned int)hwndMain, fxmode, GR_REFRESH_60Hz, GR_COLORFORMAT_ABGR, GR_ORIGIN_UPPER_LEFT, 2, 1))
+	  {
+		  if (fxmode != GR_RESOLUTION_640x480)
+		  {
+			  PrintLog("Voodoo: Can't set selected video mode\n");
+			  fxmode = GR_RESOLUTION_640x480;
+			  OptRes = 3;
+			  SetVideoMode(640, 480);
+			  goto RESET;
+		  }
+		  else
+			  DoHalt("Voodoo: Can't set video mode");
+	  }
+  }
+	
 
 
   grHints(GR_HINT_STWHINT, 0);
   grHints(GR_HINT_FPUPRECISION, 0);
   grHints(GR_HINT_ALLOW_MIPMAP_DITHER, 0);
+
 
 
   FXConstTstartAddress = grTexMinAddress(GR_TMU0);
@@ -4082,8 +4088,12 @@ void RenderSun(float x, float y, float z)
   if (d>812.f) d = 812.f;
   d = (2048.f + d) / 3048.f;
   d+=(1.f-SkyTraceK)/2.f;
-  if (OptDayNight==2) d=1.5;
-  RenderModelSun(SunModel,  x*d, y*d, z*d, (int)(200.f*SkyTraceK));
+  if (OptDayNight == 2) {
+	  d = 1.5;
+	  RenderModelSun(SunModel, x*d, y*d, z*d, (int)(200.f));
+  } else {
+	  RenderModelSun(SunModel, x*d, y*d, z*d, (int)((100.f*SkyTraceK) + 100.f));
+  }
 }
 
 

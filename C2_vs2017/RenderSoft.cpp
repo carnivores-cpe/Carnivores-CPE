@@ -2641,7 +2641,7 @@ void DrawTrophyText(int x0, int y0)
   	int wep  = TrophyRoom.Body[tc].weapon;
   	int score = TrophyRoom.Body[tc].score;
   	float scale = Characters[TrophyBody].scale;*/
-  int   dtype = TrophyIndex[TrophyDisplayBody.ctype];
+  int   dtype = TrophyDisplayBody.ctype;
   int   time  = TrophyDisplayBody.time;
   int   date  = TrophyDisplayBody.date;
   int   wep   = TrophyDisplayBody.weapon;

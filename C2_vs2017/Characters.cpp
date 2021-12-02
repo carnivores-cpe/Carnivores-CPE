@@ -8074,7 +8074,7 @@ void CheckAfraid()
 void PlaceTrophy()
 {
 	ChCount = 0;
-
+	PrintLog("Placing Trophies...");
 
 	for (int c = 0; c < 24; c++)
 	{

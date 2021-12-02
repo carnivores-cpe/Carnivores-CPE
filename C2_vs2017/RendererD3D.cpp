@@ -1758,7 +1758,7 @@ void DrawTrophyText(int x0, int y0)
   SmallFont = TRUE;
   HFONT oldfont = (HFONT)SelectObject(hdcMain, fnt_Small);
 
-  int   dtype = TrophyIndex[TrophyDisplayBody.ctype];;
+  int   dtype = TrophyDisplayBody.ctype;
   int   time  = TrophyDisplayBody.time;
   int   date  = TrophyDisplayBody.date;
   int   wep   = TrophyDisplayBody.weapon;

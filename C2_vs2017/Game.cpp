@@ -857,11 +857,11 @@ void InitGameInfo()
   LoadResourcesScript();
 }
 
-
+/*
 DWORD WINAPI ServerMasterThread() {
 
 }
-
+*/
 
 DWORD WINAPI ServerCommsThread(LPVOID lpParameter)
 {
@@ -1547,8 +1547,11 @@ void InitEngine()
 
 
   fnt_Small = CreateFont(
-                14, 5, 0, 0,
-                100, 0,0,0,
+                16, 7, 0, 0,
+				100, 0,0,0,
+	  
+	  //14, 5, 0, 0,
+	  //100, 0, 0, 0,
 #ifdef __rus
                 RUSSIAN_CHARSET,
 #else
@@ -1558,8 +1561,8 @@ void InitEngine()
 
 
   fnt_Midd  = CreateFont(
-                16, 7, 0, 0,
-                550, 0,0,0,
+			    16, 7, 0, 0,
+	            550, 0, 0, 0,
 #ifdef __rus
                 RUSSIAN_CHARSET,
 #else

@@ -740,6 +740,13 @@ void ToggleRunMode()
   else AddMessage("Run mode is OFF");
 }
 
+void ToggleCrouchMode()
+{
+	CrouchMode = !CrouchMode;
+	if (CrouchMode) AddMessage("Crouch mode is ON");
+	else AddMessage("Crouch mode is OFF");
+}
+
 
 void ToggleMapMode()
 {
@@ -788,6 +795,7 @@ LONG APIENTRY MainWndProc( HWND hWnd, UINT message, UINT wParam, LONG lParam)
     if ((int)wParam == KeyMap.fkBinoc) ToggleBinocular();
     if ((int)wParam == KeyMap.fkCCall) ChangeCall();
     if ((int)wParam == KeyMap.fkRun  ) ToggleRunMode();
+	if ((int)wParam == KeyMap.fkCrouch) ToggleCrouchMode();
     if ((int)wParam == cheatcode[cheati])
     {
       cheati++;
@@ -1459,7 +1467,7 @@ void ProcessControls()
 
   if (KeyboardState [KeyMap.fkForward ] & 128) KeyFlags+=kfForward;
   if (KeyboardState [KeyMap.fkBackward] & 128) KeyFlags+=kfBackward;
-  if (KeyboardState [KeyMap.fkCrouch  ] & 128) KeyFlags+=kfDown;
+  //if (KeyboardState[KeyMap.fkCrouch] & 128) KeyFlags += kfDown;
 
   if (KeyboardState [KeyMap.fkUp   ] & 128)  KeyFlags+=kfLookUp;
   if (KeyboardState [KeyMap.fkDown ] & 128)  KeyFlags+=kfLookDn;
@@ -1503,7 +1511,7 @@ void ProcessControls()
     }
   }
 
-  if ((KeyFlags & kfDown) | (UNDERWATER) )
+  if ((CrouchMode) | (UNDERWATER) )
   {
     if (HeadY<110.f) HeadY = 110.f;
     HeadY-=DeltaT*(60 + (HeadY-110)*5);
@@ -1836,7 +1844,6 @@ void ProcessGame()
 	}
 
 
-
 //test
 	/*
 	long long_data = PlayerX;
@@ -1877,7 +1884,6 @@ void ProcessGame()
 
   if (NeedRVM)
   {
-    
 	SetWindowPos(hwndMain, HWND_TOP, 0,0,0,0,  SWP_SHOWWINDOW);
 	SetFocus(hwndMain);
 	Activate3DHardware();
@@ -1885,7 +1891,6 @@ void ProcessGame()
   }
 
   ProcessSyncro();
-
 
   if (!PAUSE || !MyHealth)
   {

@@ -1209,7 +1209,7 @@ _EXTORNOT BOOL WATERANI,Clouds,SKY,GOURAUD,
           NOCLIP,CLIP3D,NODARKBACK,CORRECTION, LOWRESTX,
           FOGENABLE, FOGON, CAMERAINFOG,
           WATERREVERSE,waterclip,UNDERWATER, ONWATER, NeedWater,
-          SWIM, FLY, PAUSE, OPTICMODE, BINMODE, EXITMODE, MapMode, RunMode;
+          SWIM, FLY, PAUSE, OPTICMODE, BINMODE, EXITMODE, MapMode, RunMode, CrouchMode;
 _EXTORNOT int  CameraFogI;
 _EXTORNOT int OptDayNight, OptAgres, OptDens, OptSens, OptRes, OptViewR,
           OptMsSens, OptBrightness, OptSound, OptRender,

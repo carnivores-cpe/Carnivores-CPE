@@ -42,7 +42,7 @@ Loading area: Done.
 Entering messages loop.
 Entered game
 ReInitGame();
-Loading: HUNTDAT\par2.car
+Placing Trophies...Loading: HUNTDAT\par2.car
 Loading: HUNTDAT\ankylo1.car
 Loading: HUNTDAT\stego.car
 Loading: HUNTDAT\allo_ii.car
@@ -51,7 +51,6 @@ Loading: HUNTDAT\velo_iidct2.car
 Loading: HUNTDAT\spino_s.car
 Loading: HUNTDAT\cerato1_s.car
 Loading: HUNTDAT\tirex.car
-Loading: HUNTDAT\tricer.car
 Loading: HUNTDAT\WEAPONS\pistol.car
 Loading: HUNTDAT\WEAPONS\bullet1.tga
 Loading: HUNTDAT\WEAPONS\shotgun.car
@@ -64,6 +63,7 @@ Loading: HUNTDAT\WEAPONS\rifle.car
 Loading: HUNTDAT\WEAPONS\bullet3.tga
 Loading: HUNTDAT\WEAPONS\sniper.car
 Loading: HUNTDAT\WEAPONS\bullet3.tga
+Voodoo: Can't set selected video mode
 Start Address: 0
 End   Address: 8388592
 Audio_UpdateGeometry: 324 faces uploaded
