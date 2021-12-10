@@ -374,6 +374,8 @@ typedef struct _TCharacter
 
   int xdata, zdata, ydata;
 
+  bool animateTrophy;
+
 } TCharacter;
 
 
@@ -479,6 +481,7 @@ typedef struct _TTrophyType
 	int alpha, beta, gamma; //degrees
 	int anim;
 	int trophyPos;
+	bool playAnim;
 } TTrophyType;
 
 typedef struct _TDinoDeathType
@@ -562,6 +565,8 @@ typedef struct _TDinoInfo
 
   bool DangerFish;
   bool TRexObjCollide;
+
+  float camDemoPoint, camBase, camDemoPointWater, camBaseWater;
 
 } TDinoInfo;
 

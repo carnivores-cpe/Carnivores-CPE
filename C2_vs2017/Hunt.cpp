@@ -1395,6 +1395,7 @@ void ProcessDemoMovement()
 
   VSpeed = 0.f;
 
+  /*
   DemoPoint.pos = Characters[DemoPoint.CIndex].pos;
   DemoPoint.pos.y+=256;
 
@@ -1410,7 +1411,20 @@ void ProcessDemoMovement()
 		  DemoPoint.pos.y += 850;
 		  base = 1424;
 	  }
+
   }
+  */
+
+  DemoPoint.pos = Characters[DemoPoint.CIndex].pos;
+  float base = DinoInfo[killerDino->CType].camBase;
+  if (killedwater) {
+	  base = DinoInfo[killerDino->CType].camBaseWater;
+	  DemoPoint.pos.y += DinoInfo[killerDino->CType].camDemoPointWater;
+  } else {
+	  DemoPoint.pos.y += DinoInfo[killerDino->CType].camDemoPoint;
+  }
+
+
   //if (Characters[DemoPoint.CIndex].Clone ==AI_TREX) DemoPoint.pos.y+=512;
 
 

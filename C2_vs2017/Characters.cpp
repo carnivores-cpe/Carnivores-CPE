@@ -2468,12 +2468,19 @@ NOTHINK:
 		if (cptr->Phase == DinoInfo[cptr->CType].idleAnim[i]) idlePhase = true;
 	}
 
-	if (!idlePhase && AIInfo[cptr->Clone].carnivore && !AIInfo[cptr->Clone].iceAge)
+	if (!idlePhase){
+	if (AIInfo[cptr->Clone].carnivore && !AIInfo[cptr->Clone].iceAge) {
 		if (!cptr->State) cptr->Phase = DinoInfo[cptr->CType].walkAnim;
 		else if (fabs(cptr->tgalpha - cptr->alpha) < 1.0 ||
 			fabs(cptr->tgalpha - cptr->alpha) > 2 * pi - 1.0)
 			cptr->Phase = DinoInfo[cptr->CType].runAnim;
 		else cptr->Phase = DinoInfo[cptr->CType].walkAnim;
+	} else {
+		//NEEDED FOR SWIMMING STUFF
+		if (!cptr->State) cptr->Phase = DinoInfo[cptr->CType].walkAnim;
+		else cptr->Phase = DinoInfo[cptr->CType].runAnim;
+	}
+	}
 
 	if (DinoInfo[cptr->CType].canSwim) {
 		if (cptr->StateF & csONWATER) cptr->Phase = DinoInfo[cptr->CType].swimAnim;
@@ -2518,7 +2525,7 @@ ENDPSELECT:
 	//========== rotation to tgalpha ===================//
 
 	float rspd, currspeed, tgbend;
-	float dalpha = (float)fabs(cptr->tgalpha - cptr->alpha);
+    float dalpha = fabs(cptr->tgalpha - cptr->alpha);
 	float drspd = dalpha;
 	if (drspd > pi) drspd = 2 * pi - drspd;
 
@@ -7764,7 +7771,26 @@ void AnimateCharacters()
 {
 	//if (!RunMode) return;
 	TCharacter *cptr;
-	if (TrophyMode) return;
+	if (TrophyMode) {
+
+		for (CurDino = 0; CurDino < ChCount; CurDino++)
+		{
+
+			//LandingList.list[DinoInfo[Characters[ChCount].CType].trophyType[DinoInfo[Characters[ChCount].CType].tCounter].trophyPos].x
+
+			cptr = &Characters[CurDino];
+
+			if (cptr->animateTrophy) {
+				cptr->FTime += TimeDt;
+				if (cptr->FTime >= cptr->pinfo->Animation[cptr->Phase].AniTime)
+				{
+					cptr->FTime %= cptr->pinfo->Animation[cptr->Phase].AniTime;
+				}
+			}
+		}
+
+		return;
+	}
 
 	//packs
 	for (int packN = 0; packN < PackCount; packN++) {
@@ -8132,6 +8158,8 @@ void PlaceTrophy()
 		Characters[ChCount].xdata = DinoInfo[Characters[ChCount].CType].trophyType[DinoInfo[Characters[ChCount].CType].tCounter].xdata;
 		Characters[ChCount].ydata = DinoInfo[Characters[ChCount].CType].trophyType[DinoInfo[Characters[ChCount].CType].tCounter].ydata;
 		Characters[ChCount].zdata = DinoInfo[Characters[ChCount].CType].trophyType[DinoInfo[Characters[ChCount].CType].tCounter].zdata;
+
+		Characters[ChCount].animateTrophy = DinoInfo[Characters[ChCount].CType].trophyType[DinoInfo[Characters[ChCount].CType].tCounter].playAnim;
 
 		DinoInfo[Characters[ChCount].CType].tCounter++;
 		ChCount++;

@@ -272,6 +272,10 @@ deathtype{
  sleepAnim = 5
 }
  waterLevel = 160
+ CamYLand = 256
+ CamYWater = 256
+ CamBaseLand = 824
+ CamBaseWater = 824
 }
 
 {
@@ -327,6 +331,10 @@ deathtype{
  sleepAnim = 5
 }
  waterLevel = 60
+ CamYLand = 256
+ CamYWater = 256
+ CamBaseLand = 824
+ CamBaseWater = 824
 }
 
 {
@@ -380,11 +388,15 @@ deathtype{
  sleepAnim = 5
 }
  waterLevel = 160
+ CamYLand = 256
+ CamYWater = 256
+ CamBaseLand = 824
+ CamBaseWater = 824
 }
 
 {
  name = 'Allosaurus'
- file = 'allo_ii.car'
+ file = 'allonewidlessounded9-testtrophy.car'
  ai        = 13
  clone  = 13
  dogSmell  = TRUE
@@ -411,16 +423,18 @@ deathtype{
  trophy  = TRUE
  tropinfo{
  tropPos = 0
+playAnim = TRUE
   alpha = 90
-  tropAnim = 0
+  tropAnim = 10
   xoffset = -250
   zoffset = 0
   zdata = 1200
  }
  tropinfo{
  tropPos = 0
+playAnim = TRUE
   alpha = 90
-  tropAnim = 0
+  tropAnim = 10
   xoffset = 250
   zoffset = 0
   zdata = 1200
@@ -444,6 +458,10 @@ killtype{
  eatAnim = 6
  scream = TRUE
 }
+ CamYLand = 256
+ CamYWater = 256
+ CamBaseLand = 2024
+ CamBaseWater = 824
 }
 
 {
@@ -498,6 +516,10 @@ deathtype{
  sleepAnim = 6
 }
  waterLevel = 120
+ CamYLand = 256
+ CamYWater = 256
+ CamBaseLand = 824
+ CamBaseWater = 824
 }
 
 {
@@ -565,6 +587,10 @@ killtype{
  packMax = 4
  packMin = 3
  packDensity = 25
+ CamYLand = 256
+ CamYWater = 256
+ CamBaseLand = 824
+ CamBaseWater = 824
 }
 
 {
@@ -627,6 +653,10 @@ killtype{
  eatAnim = 7
  scream = TRUE
 }
+ CamYLand = 256
+ CamYWater = 256
+ CamBaseLand = 824
+ CamBaseWater = 824
 }
 
 
@@ -689,6 +719,10 @@ killtype{
  eatAnim = 7
  scream = TRUE
 }
+ CamYLand = 256
+ CamYWater = 256
+ CamBaseLand = 824
+ CamBaseWater = 824
 }
 
 
@@ -721,6 +755,7 @@ killtype{
   tropAnim = 0
   xoffset = 0
   zoffset = 0
+  zdata = -4000
  }
  tropinfo{
  tropPos = 7
@@ -728,6 +763,7 @@ killtype{
   tropAnim = 0
   xoffset = 1000
   zoffset = 0
+  zdata = -4000
  }
  canswim = TRUE
  runAnim = 0
@@ -749,6 +785,10 @@ killtype{
  hunterSync = TRUE
  scream = TRUE
 }
+ CamYLand = 768
+ CamYWater = 256
+ CamBaseLand = 1424
+ CamBaseWater = 824
 }
 
 
@@ -799,6 +839,10 @@ killtype{
  hunterSync = TRUE
  dontloop = TRUE
 }
+ CamYLand = 1106
+ CamYWater = 1106
+ CamBaseLand = 1424
+ CamBaseWater = 1424
 }
 
 {
@@ -855,6 +899,10 @@ deathtype{
  spawnmax  = 3
  spawnmin  = 0
  }
+ CamYLand = 256
+ CamYWater = 256
+ CamBaseLand = 824
+ CamBaseWater = 824
 }
 
 {
@@ -911,6 +959,10 @@ deathtype{
  spawnmax  = 2
  spawnmin  = 0
  }
+ CamYLand = 256
+ CamYWater = 256
+ CamBaseLand = 824
+ CamBaseWater = 824
 }
 
 {
@@ -1061,6 +1113,10 @@ killtype{
  dontloop = TRUE
  carryCorpse = TRUE
 }
+ CamYLand = 256
+ CamYWater = 256
+ CamBaseLand = 824
+ CamBaseWater = 824
 }
 
 {

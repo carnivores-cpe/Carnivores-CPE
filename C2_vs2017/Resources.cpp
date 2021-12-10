@@ -2265,6 +2265,8 @@ void ReadTrophyTypeInfo(FILE *stream)
 		if (strstr(line, "xdata")) DinoInfo[TotalC].trophyType[DinoInfo[TotalC].trophyTypeCount].xdata = atoi(value);
 		if (strstr(line, "ydata")) DinoInfo[TotalC].trophyType[DinoInfo[TotalC].trophyTypeCount].ydata = atoi(value);
 		if (strstr(line, "zdata")) DinoInfo[TotalC].trophyType[DinoInfo[TotalC].trophyTypeCount].zdata = atoi(value);
+		if (strstr(line, "playAnim")) readBool(value, DinoInfo[TotalC].trophyType[DinoInfo[TotalC].trophyTypeCount].playAnim);
+		
 
 
 	}
@@ -2380,6 +2382,12 @@ void ReadCharacterLine(FILE *stream, char *_value, char line[256], bool &regionO
 	if (strstr(line, "runrotatespeed")) DinoInfo[TotalC].rotspdmulti = (float)atof(value);
 
 	if (strstr(line, "waterLevel")) DinoInfo[TotalC].waterLevel = atoi(value);
+
+
+	if (strstr(line, "CamYLand")) DinoInfo[TotalC].camDemoPoint = (float)atof(value);
+	if (strstr(line, "CamYWater")) DinoInfo[TotalC].camDemoPointWater = (float)atof(value);
+	if (strstr(line, "CamBaseLand")) DinoInfo[TotalC].camBase = (float)atof(value);
+	if (strstr(line, "CamBaseWater")) DinoInfo[TotalC].camBaseWater = (float)atof(value);
 
 
 	if (strstr(line, "dogSmell")) readBool(value, DinoInfo[TotalC].dogSmell);

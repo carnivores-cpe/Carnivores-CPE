@@ -272,6 +272,10 @@ deathtype{
  sleepAnim = 5
 }
  waterLevel = 160
+ CamYLand = 256
+ CamYWater = 256
+ CamBaseLand = 824
+ CamBaseWater = 824
 }
 
 {
@@ -327,6 +331,10 @@ deathtype{
  sleepAnim = 5
 }
  waterLevel = 60
+ CamYLand = 256
+ CamYWater = 256
+ CamBaseLand = 824
+ CamBaseWater = 824
 }
 
 {
@@ -380,6 +388,10 @@ deathtype{
  sleepAnim = 5
 }
  waterLevel = 160
+ CamYLand = 256
+ CamYWater = 256
+ CamBaseLand = 824
+ CamBaseWater = 824
 }
 
 {
@@ -444,6 +456,10 @@ killtype{
  eatAnim = 6
  scream = TRUE
 }
+ CamYLand = 256
+ CamYWater = 256
+ CamBaseLand = 2024
+ CamBaseWater = 824
 }
 
 {
@@ -498,6 +514,10 @@ deathtype{
  sleepAnim = 6
 }
  waterLevel = 120
+ CamYLand = 256
+ CamYWater = 256
+ CamBaseLand = 824
+ CamBaseWater = 824
 }
 
 {
@@ -562,6 +582,10 @@ killtype{
  eatAnim = 6
  scream = TRUE
 }
+ CamYLand = 256
+ CamYWater = 256
+ CamBaseLand = 824
+ CamBaseWater = 824
 }
 
 {
@@ -624,6 +648,10 @@ killtype{
  eatAnim = 7
  scream = TRUE
 }
+ CamYLand = 256
+ CamYWater = 256
+ CamBaseLand = 824
+ CamBaseWater = 824
 }
 
 
@@ -686,6 +714,10 @@ killtype{
  eatAnim = 7
  scream = TRUE
 }
+ CamYLand = 256
+ CamYWater = 256
+ CamBaseLand = 824
+ CamBaseWater = 824
 }
 
 
@@ -718,6 +750,7 @@ killtype{
   tropAnim = 0
   xoffset = 0
   zoffset = 0
+  zdata = -4000
  }
  tropinfo{
  tropPos = 7
@@ -725,6 +758,7 @@ killtype{
   tropAnim = 0
   xoffset = 1000
   zoffset = 0
+  zdata = -4000
  }
  canswim = TRUE
  runAnim = 0
@@ -746,6 +780,10 @@ killtype{
  hunterSync = TRUE
  scream = TRUE
 }
+ CamYLand = 768
+ CamYWater = 256
+ CamBaseLand = 1424
+ CamBaseWater = 824
 }
 
 
@@ -796,6 +834,10 @@ killtype{
  hunterSync = TRUE
  dontloop = TRUE
 }
+ CamYLand = 1106
+ CamYWater = 1106
+ CamBaseLand = 1424
+ CamBaseWater = 1424
 }
 
 }//===== end of mapambients ==========//
