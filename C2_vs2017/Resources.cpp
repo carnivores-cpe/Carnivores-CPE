@@ -715,7 +715,22 @@ void CorrectModel(TModel *mptr)
 
 
 
-  memcpy( mptr->gFace, tface, sizeof(tface) );
+  memcpy( mptr->gFace, tface, mptr->FCount << 6 );
+}
+
+void AllocateMemoryForModel(TModel* mptr) {
+	mptr->gVertex = (TPoint3d*)_HeapAlloc(Heap, 0, mptr->VCount << 4);
+	mptr->gFace = (TFace*)_HeapAlloc(Heap, 0, mptr->FCount << 6);
+	
+#ifdef _d3d
+	int *lightBuffer = (int*)_HeapAlloc(Heap, 0, mptr->VCount * 4 * sizeof(int));
+#else
+	float *lightBuffer = (float*)_HeapAlloc(Heap, 0, mptr->VCount * 4 * sizeof(float));
+#endif
+	mptr->VLight[0] = lightBuffer;
+	mptr->VLight[1] = lightBuffer + mptr->VCount;
+	mptr->VLight[2] = lightBuffer + mptr->VCount * 2;
+	mptr->VLight[3] = lightBuffer + mptr->VCount * 3;
 }
 
 void LoadModel(TModel* &mptr)
@@ -726,6 +741,9 @@ void LoadModel(TModel* &mptr)
   ReadFile( hfile, &mptr->FCount,      4,         &l, NULL );
   ReadFile( hfile, &OCount,            4,         &l, NULL );
   ReadFile( hfile, &mptr->TextureSize, 4,         &l, NULL );
+
+  AllocateMemoryForModel(mptr);
+
   ReadFile( hfile, mptr->gFace,        mptr->FCount<<6, &l, NULL );
   ReadFile( hfile, mptr->gVertex,      mptr->VCount<<4, &l, NULL );
   ReadFile( hfile, gObj,               OCount*48, &l, NULL );
@@ -798,6 +816,9 @@ void LoadModelEx(TModel* &mptr, char* FName)
   ReadFile( hfile, &mptr->FCount,      4,         &l, NULL );
   ReadFile( hfile, &OCount,            4,         &l, NULL );
   ReadFile( hfile, &mptr->TextureSize, 4,         &l, NULL );
+
+  AllocateMemoryForModel(mptr);
+
   ReadFile( hfile, mptr->gFace,        mptr->FCount<<6, &l, NULL );
   ReadFile( hfile, mptr->gVertex,      mptr->VCount<<4, &l, NULL );
   ReadFile( hfile, gObj,               OCount*48, &l, NULL );
@@ -1772,6 +1793,9 @@ void LoadCharacterInfo(TCharacterInfo &chinfo, char* FName)
   ReadFile( hfile, &chinfo.mptr->VCount,      4,         &l, NULL );
   ReadFile( hfile, &chinfo.mptr->FCount,      4,         &l, NULL );
   ReadFile( hfile, &chinfo.mptr->TextureSize, 4,         &l, NULL );
+
+  AllocateMemoryForModel(chinfo.mptr);
+
   ReadFile( hfile, chinfo.mptr->gFace,        chinfo.mptr->FCount<<6, &l, NULL );
   ReadFile( hfile, chinfo.mptr->gVertex,      chinfo.mptr->VCount<<4, &l, NULL );
 

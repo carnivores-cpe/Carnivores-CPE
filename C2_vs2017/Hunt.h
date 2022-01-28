@@ -229,17 +229,17 @@ typedef struct _Obj
 typedef struct TagMODEL
 {
   int VCount, FCount, TextureSize, TextureHeight;
-  TPoint3d gVertex[1024];
+  TPoint3d *gVertex;
   union
   {
-    TFace    gFace  [1024];
-    TFacef   gFacef [1024];
+    TFace    *gFace;
+    TFacef   *gFacef;
   };
   WORD     *lpTexture, *lpTexture2, *lpTexture3;
 #ifdef _d3d
-  int      VLight[4][1024];
+  int*      VLight[4];
 #else
-  float    VLight[4][1024];
+  float*    VLight[4];
 #endif
 } TModel;
 

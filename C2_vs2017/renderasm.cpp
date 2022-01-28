@@ -3757,8 +3757,8 @@ LBEGIN:
 
     mov      edi, Current
     shl      edi, 6
-    add      edi, mptr
-    add      edi, 0x4010
+    mov      eax, mptr
+    add      edi, [eax+0x14]
     mov      eax, [edi+0x2C]
     mov      Current, eax
 
