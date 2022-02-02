@@ -1397,7 +1397,12 @@ void LoadResources()
     LoadBMPModel(MObjects[mm]);
 
     if (MObjects[mm].info.flags & ofNOLIGHT)
-      FillMemory(MObjects[mm].model->VLight, 4*1024*4, 0);
+    {
+        FillMemory(MObjects[mm].model->VLight[0], 4 * MObjects[mm].model->VCount, 0);
+        FillMemory(MObjects[mm].model->VLight[1], 4 * MObjects[mm].model->VCount, 0);
+        FillMemory(MObjects[mm].model->VLight[2], 4 * MObjects[mm].model->VCount, 0);
+        FillMemory(MObjects[mm].model->VLight[3], 4 * MObjects[mm].model->VCount, 0);
+    }
 
     if (MObjects[mm].info.flags & ofANIMATED)
       LoadAnimation(MObjects[mm].vtl);
