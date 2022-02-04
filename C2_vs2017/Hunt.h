@@ -1264,7 +1264,7 @@ void Render3DHardwarePosts();
 void CopyBackToDIB();
 void CopyHARDToDIB();
 void Hardware_ZBuffer(BOOL zb);
-
+void AllocateRenderTables(void);
 
 //=========== loading =============
 void StartLoading();
