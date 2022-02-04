@@ -721,7 +721,10 @@ void CorrectModel(TModel *mptr)
 void AllocateMemoryForModel(TModel* mptr) {
 	mptr->gVertex = (TPoint3d*)_HeapAlloc(Heap, 0, mptr->VCount << 4);
 	mptr->gFace = (TFace*)_HeapAlloc(Heap, 0, mptr->FCount << 6);
-	
+
+	// Keep track of maximum VCount value
+	MaxObjectVCount = MAX(MaxObjectVCount, mptr->VCount);
+
 #ifdef _d3d
 	int *lightBuffer = (int*)_HeapAlloc(Heap, 0, mptr->VCount * 4 * sizeof(int));
 #else
@@ -1746,6 +1749,11 @@ void ReInitGame()
   TrophyTime=0;
   answtime = 0;
   ExitTime = 0;
+
+  // Allocate (vertex count based) buffers for renderers
+  rVertex = (Vector3d*)_HeapAlloc(Heap, 0, sizeof(Vector3d) * MaxObjectVCount);
+  gScrp = (Vector2di*)_HeapAlloc(Heap, 0, sizeof(Vector2di) * MaxObjectVCount);
+  PhongMapping = (Vector2df*)_HeapAlloc(Heap, 0, sizeof(Vector2df) * MaxObjectVCount);
 }
 
 
