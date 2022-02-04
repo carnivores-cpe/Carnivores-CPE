@@ -1606,6 +1606,8 @@ void LoadCharacters()
       }
 
 
+  // Keep track of max VCount for the weapons available
+  int maxWeaponVCount = 0;
   for (int c=0; c<TotalW; c++)
     if (WeaponPres & (1<<c))
     {
@@ -1613,6 +1615,7 @@ void LoadCharacters()
       {
         wsprintf(logt, "HUNTDAT\\WEAPONS\\%s", WeapInfo[c].FName);
         LoadCharacterInfo(Weapon.chinfo[c], logt);
+        maxWeaponVCount = MAX(Weapon.chinfo[c].mptr->VCount, maxWeaponVCount);
         PrintLog("Loading: ");
         PrintLog(logt);
         PrintLog("\n");
@@ -1638,6 +1641,9 @@ void LoadCharacters()
 	  }
 
     }
+
+  // Allocate space for normals fitting all available weapons
+  Weapon.normals = (Vector3d*)_HeapAlloc(Heap, 0, sizeof(Vector3d) * maxWeaponVCount);
 
   for (int c=10; c<20; c++)
     if (TargetDino & (1<<c))
