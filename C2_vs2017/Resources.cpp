@@ -667,7 +667,10 @@ void fp_conv(LPVOID d)
 
 void CorrectModel(TModel *mptr)
 {
-  TFace tface[1024];
+	// Allocating for 2x the faces here, since the code below could potentially
+	// result in duplicated faces when sfOpacity & sfTransparent is set for the same
+	// face.
+	TFace *tface = (TFace*)_HeapAlloc(Heap, 0, sizeof(TFace) * mptr->FCount * 2);
 
   for (int f=0; f<mptr->FCount; f++)
   {
@@ -716,6 +719,7 @@ void CorrectModel(TModel *mptr)
 
 
   memcpy( mptr->gFace, tface, mptr->FCount << 6 );
+  _HeapFree(Heap, 0, tface);
 }
 
 void AllocateMemoryForModel(TModel* mptr) {
