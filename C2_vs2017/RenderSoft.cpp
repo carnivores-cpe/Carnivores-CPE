@@ -65,6 +65,9 @@ float k;
 BOOL LockWater;
 int OpacityMode;
 
+void AllocateRenderTables(void) {
+  // nothing to do yet for the software renderer
+}
 
 void STTextOut(int x, int y, LPSTR t, int color)
 {

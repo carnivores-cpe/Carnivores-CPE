@@ -24,8 +24,8 @@ float TraceK,SkyTraceK,FogYGrad,FogYBase;
 int SunScrX, SunScrY;
 int SkySumR, SkySumG, SkySumB;
 int LowHardMemory;
-float vFogT[1024];
-float vLight[1024];
+float* vFogT;
+float* vLight;
 GrLfbInfo_t linfo;
 int lsw;
 BOOL SmallFont;
@@ -50,6 +50,11 @@ typedef struct _fxmemmap
 
 #define fxmemmapsize 128
 Tfxmemmap FxMemMap[fxmemmapsize+2];
+
+void AllocateRenderTables(void) {
+  vFogT = (float*)_HeapAlloc(Heap, 0, sizeof(float) * MaxObjectVCount);
+  vLight = (float*)_HeapAlloc(Heap, 0, sizeof(float) * MaxObjectVCount);
+}
 
 void CalcFogLevel_Gradient(Vector3d v)
 {

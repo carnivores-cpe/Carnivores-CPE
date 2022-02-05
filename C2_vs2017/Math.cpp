@@ -702,7 +702,7 @@ void CalcLights(TModel* mptr)
   int FCount = mptr->FCount;
   int FUsed;
   float c;
-  Vector3d norms[1024];
+  Vector3d* norms = (Vector3d*)_HeapAlloc(Heap, 0, sizeof(Vector3d) * FCount);
   Vector3d a, b, nv, rv;
   Vector3d slight;
   slight.x =-Sun3dPos.x;
@@ -763,6 +763,8 @@ void CalcLights(TModel* mptr)
       }
     }
   }
+
+  _HeapFree(Heap, 0, norms);
 }
 
 

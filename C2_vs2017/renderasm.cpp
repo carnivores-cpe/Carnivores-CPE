@@ -3757,8 +3757,8 @@ LBEGIN:
 
     mov      edi, Current
     shl      edi, 6
-    add      edi, mptr
-    add      edi, 0x4010
+    mov      eax, mptr
+    add      edi, [eax+0x14]
     mov      eax, [edi+0x2C]
     mov      Current, eax
 
@@ -3776,13 +3776,16 @@ LBEGIN:
 
 
     mov      eax, [edi+0]
-    mov      ebx, dword ptr[offset gScrp + 4 + eax*8]
+	mov      ebx, gScrp
+    mov      ebx, dword ptr[ebx + 4 + eax*8]
 
     mov      eax, [edi+4]
-    mov      ecx, [offset gScrp + 4 + eax*8]
+	mov      ecx, gScrp
+    mov      ecx, [ecx + 4 + eax*8]
 
     mov      eax, [edi+8]
-    mov      edx, [offset gScrp + 4 + eax*8]
+	mov      edx, gScrp
+	mov      edx, [edx + 4 + eax*8]
 
     cmp      ebx,ecx
     jge L20   // == if BX<CX then ==}
@@ -3876,9 +3879,11 @@ L39:
     mov      ebx,[edi + ebx*4]
     shl      ebx,3
 
-    mov      eax,dword ptr[offset gScrp + ebx]
+	mov      eax, gScrp
+    mov      eax,dword ptr[eax + ebx]
     mov      x1,eax
-    mov      eax,dword ptr[offset gScrp + 4 + ebx]
+	mov      eax, gScrp
+    mov      eax,dword ptr[eax + 4 + ebx]
     mov      Y1,eax
 
 
@@ -3892,9 +3897,11 @@ L39:
 
     mov      ebx,[edi + ebx*4]
     shl      ebx,3
-    mov      eax,dword ptr[offset gScrp + ebx]
+	mov      eax, gScrp
+    mov      eax,dword ptr[eax + ebx]
     mov      x2,eax
-    mov      eax,dword ptr[offset gScrp + 4 + ebx]
+	mov      eax, gScrp
+	mov      eax,dword ptr[eax + 4 + ebx]
     mov      y2,eax
 
 
@@ -3907,9 +3914,11 @@ L39:
 
     mov      ebx,[edi + ebx*4]
     shl      ebx,3
-    mov      eax,dword ptr[offset gScrp + ebx]
+	mov      eax, gScrp
+	mov      eax,dword ptr[eax + ebx]
     mov      x3,eax
-    mov      eax,dword ptr[offset gScrp + 4 + ebx]
+	mov      eax, gScrp
+	mov      eax,dword ptr[eax + 4 + ebx]
     mov      y3,eax
 
 

@@ -667,7 +667,10 @@ void fp_conv(LPVOID d)
 
 void CorrectModel(TModel *mptr)
 {
-  TFace tface[1024];
+	// Allocating for 2x the faces here, since the code below could potentially
+	// result in duplicated faces when sfOpacity & sfTransparent is set for the same
+	// face.
+	TFace *tface = (TFace*)_HeapAlloc(Heap, 0, sizeof(TFace) * mptr->FCount * 2);
 
   for (int f=0; f<mptr->FCount; f++)
   {
@@ -715,7 +718,26 @@ void CorrectModel(TModel *mptr)
 
 
 
-  memcpy( mptr->gFace, tface, sizeof(tface) );
+  memcpy( mptr->gFace, tface, mptr->FCount << 6 );
+  _HeapFree(Heap, 0, tface);
+}
+
+void AllocateMemoryForModel(TModel* mptr) {
+	mptr->gVertex = (TPoint3d*)_HeapAlloc(Heap, 0, mptr->VCount << 4);
+	mptr->gFace = (TFace*)_HeapAlloc(Heap, 0, mptr->FCount << 6);
+
+	// Keep track of maximum VCount value
+	MaxObjectVCount = MAX(MaxObjectVCount, mptr->VCount);
+
+#ifdef _d3d
+	int *lightBuffer = (int*)_HeapAlloc(Heap, 0, mptr->VCount * 4 * sizeof(int));
+#else
+	float *lightBuffer = (float*)_HeapAlloc(Heap, 0, mptr->VCount * 4 * sizeof(float));
+#endif
+	mptr->VLight[0] = lightBuffer;
+	mptr->VLight[1] = lightBuffer + mptr->VCount;
+	mptr->VLight[2] = lightBuffer + mptr->VCount * 2;
+	mptr->VLight[3] = lightBuffer + mptr->VCount * 3;
 }
 
 void LoadModel(TModel* &mptr)
@@ -726,6 +748,9 @@ void LoadModel(TModel* &mptr)
   ReadFile( hfile, &mptr->FCount,      4,         &l, NULL );
   ReadFile( hfile, &OCount,            4,         &l, NULL );
   ReadFile( hfile, &mptr->TextureSize, 4,         &l, NULL );
+
+  AllocateMemoryForModel(mptr);
+
   ReadFile( hfile, mptr->gFace,        mptr->FCount<<6, &l, NULL );
   ReadFile( hfile, mptr->gVertex,      mptr->VCount<<4, &l, NULL );
   ReadFile( hfile, gObj,               OCount*48, &l, NULL );
@@ -798,6 +823,9 @@ void LoadModelEx(TModel* &mptr, char* FName)
   ReadFile( hfile, &mptr->FCount,      4,         &l, NULL );
   ReadFile( hfile, &OCount,            4,         &l, NULL );
   ReadFile( hfile, &mptr->TextureSize, 4,         &l, NULL );
+
+  AllocateMemoryForModel(mptr);
+
   ReadFile( hfile, mptr->gFace,        mptr->FCount<<6, &l, NULL );
   ReadFile( hfile, mptr->gVertex,      mptr->VCount<<4, &l, NULL );
   ReadFile( hfile, gObj,               OCount*48, &l, NULL );
@@ -1376,7 +1404,12 @@ void LoadResources()
     LoadBMPModel(MObjects[mm]);
 
     if (MObjects[mm].info.flags & ofNOLIGHT)
-      FillMemory(MObjects[mm].model->VLight, 4*1024*4, 0);
+    {
+        FillMemory(MObjects[mm].model->VLight[0], 4 * MObjects[mm].model->VCount, 0);
+        FillMemory(MObjects[mm].model->VLight[1], 4 * MObjects[mm].model->VCount, 0);
+        FillMemory(MObjects[mm].model->VLight[2], 4 * MObjects[mm].model->VCount, 0);
+        FillMemory(MObjects[mm].model->VLight[3], 4 * MObjects[mm].model->VCount, 0);
+    }
 
     if (MObjects[mm].info.flags & ofANIMATED)
       LoadAnimation(MObjects[mm].vtl);
@@ -1580,6 +1613,8 @@ void LoadCharacters()
       }
 
 
+  // Keep track of max VCount for the weapons available
+  int maxWeaponVCount = 0;
   for (int c=0; c<TotalW; c++)
     if (WeaponPres & (1<<c))
     {
@@ -1587,6 +1622,7 @@ void LoadCharacters()
       {
         wsprintf(logt, "HUNTDAT\\WEAPONS\\%s", WeapInfo[c].FName);
         LoadCharacterInfo(Weapon.chinfo[c], logt);
+        maxWeaponVCount = MAX(Weapon.chinfo[c].mptr->VCount, maxWeaponVCount);
         PrintLog("Loading: ");
         PrintLog(logt);
         PrintLog("\n");
@@ -1612,6 +1648,9 @@ void LoadCharacters()
 	  }
 
     }
+
+  // Allocate space for normals fitting all available weapons
+  Weapon.normals = (Vector3d*)_HeapAlloc(Heap, 0, sizeof(Vector3d) * maxWeaponVCount);
 
   for (int c=10; c<20; c++)
     if (TargetDino & (1<<c))
@@ -1714,6 +1753,12 @@ void ReInitGame()
   TrophyTime=0;
   answtime = 0;
   ExitTime = 0;
+
+  // Allocate (vertex count based) buffers for renderers
+  rVertex = (Vector3d*)_HeapAlloc(Heap, 0, sizeof(Vector3d) * MaxObjectVCount);
+  gScrp = (Vector2di*)_HeapAlloc(Heap, 0, sizeof(Vector2di) * MaxObjectVCount);
+  PhongMapping = (Vector2df*)_HeapAlloc(Heap, 0, sizeof(Vector2df) * MaxObjectVCount);
+  AllocateRenderTables();
 }
 
 
@@ -1772,6 +1817,9 @@ void LoadCharacterInfo(TCharacterInfo &chinfo, char* FName)
   ReadFile( hfile, &chinfo.mptr->VCount,      4,         &l, NULL );
   ReadFile( hfile, &chinfo.mptr->FCount,      4,         &l, NULL );
   ReadFile( hfile, &chinfo.mptr->TextureSize, 4,         &l, NULL );
+
+  AllocateMemoryForModel(chinfo.mptr);
+
   ReadFile( hfile, chinfo.mptr->gFace,        chinfo.mptr->FCount<<6, &l, NULL );
   ReadFile( hfile, chinfo.mptr->gVertex,      chinfo.mptr->VCount<<4, &l, NULL );
 

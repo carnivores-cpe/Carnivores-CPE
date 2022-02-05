@@ -229,17 +229,17 @@ typedef struct _Obj
 typedef struct TagMODEL
 {
   int VCount, FCount, TextureSize, TextureHeight;
-  TPoint3d gVertex[1024];
+  TPoint3d *gVertex;
   union
   {
-    TFace    gFace  [1024];
-    TFacef   gFacef [1024];
+    TFace    *gFace;
+    TFacef   *gFacef;
   };
   WORD     *lpTexture, *lpTexture2, *lpTexture3;
 #ifdef _d3d
-  int      VLight[4][1024];
+  int*      VLight[4];
 #else
-  float    VLight[4][1024];
+  float*    VLight[4];
 #endif
 } TModel;
 
@@ -297,7 +297,7 @@ typedef struct _TWeapon
   TCharacterInfo chinfo[10];
   TPicture       BulletPic[10];
 
-  Vector3d       normals[1024];
+  Vector3d*       normals;
   int state, FTime;
   float shakel;
 } TWeapon;
@@ -948,7 +948,7 @@ _EXTORNOT   int SkyR, SkyG, SkyB, WaterR, WaterG, WaterB, WaterA,
             SkyTR,SkyTG,SkyTB, CurFogColor;
 _EXTORNOT   int RandomMap[32][32];
 
-_EXTORNOT   Vector2df PhongMapping[1024];
+_EXTORNOT   Vector2df *PhongMapping;
 _EXTORNOT   TPicture TFX_SPECULAR, TFX_ENVMAP;
 _EXTORNOT   WORD SkyPic[256*256];
 _EXTORNOT   WORD SkyFade[9][128*128];
@@ -985,9 +985,11 @@ _EXTORNOT TWeapon Weapon;
 
 
 _EXTORNOT int   OCount, iModelFade, iModelBaseFade, Current;
-_EXTORNOT Vector3d  rVertex[1024];
+_EXTORNOT Vector3d  *rVertex;
 _EXTORNOT TObj      gObj[1024];
-_EXTORNOT Vector2di gScrp[1024];
+_EXTORNOT Vector2di *gScrp;
+
+_EXTORNOT int MaxObjectVCount; // Maximum VCount of any (loaded) object
 
 //============= Characters ==============//
 _EXTORNOT TPicture  PausePic, ExitPic, TrophyExit, TrophyPic;
@@ -1262,7 +1264,7 @@ void Render3DHardwarePosts();
 void CopyBackToDIB();
 void CopyHARDToDIB();
 void Hardware_ZBuffer(BOOL zb);
-
+void AllocateRenderTables(void);
 
 //=========== loading =============
 void StartLoading();

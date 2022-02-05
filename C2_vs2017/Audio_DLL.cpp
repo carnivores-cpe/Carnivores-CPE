@@ -1,4 +1,3 @@
-#include <windows.h>
 #include "hunt.h"
 
 #define req_versionH 0x0001

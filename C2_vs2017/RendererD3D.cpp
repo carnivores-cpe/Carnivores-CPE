@@ -81,7 +81,7 @@ int SunScrX, SunScrY;
 int SkySumR, SkySumG, SkySumB;
 int LowHardMemory;
 int lsw;
-int vFogT[1024];
+int *vFogT;
 BOOL SmallFont;
 
 
@@ -96,6 +96,9 @@ typedef struct _d3dmemmap
 #define d3dmemmapsize 128
 Td3dmemmap d3dMemMap[d3dmemmapsize+2];
 
+void AllocateRenderTables(void) {
+  vFogT = (int*)_HeapAlloc(Heap, 0, sizeof(int) * MaxObjectVCount);
+}
 
 WORD conv_555(WORD c)
 {
