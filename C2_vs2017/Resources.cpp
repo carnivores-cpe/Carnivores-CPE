@@ -2402,9 +2402,9 @@ void ReadCharacterLine(FILE *stream, char *_value, char line[256], bool &regionO
 	if (strstr(line, "health")) DinoInfo[TotalC].Health0 = atoi(value);
 	if (strstr(line, "basescore")) DinoInfo[TotalC].BaseScore = atoi(value);
 	if (strstr(line, "clone")) DinoInfo[TotalC].Clone = atoi(value);
-	if (strstr(line, "smell")) DinoInfo[TotalC].SmellK = (float)atof(value);
-	if (strstr(line, "hear")) DinoInfo[TotalC].HearK = (float)atof(value);
-	if (strstr(line, "look")) DinoInfo[TotalC].LookK = (float)atof(value);
+	if (strstr(line, "smellK")) DinoInfo[TotalC].SmellK = (float)atof(value);
+	if (strstr(line, "hearK")) DinoInfo[TotalC].HearK = (float)atof(value);
+	if (strstr(line, "lookK")) DinoInfo[TotalC].LookK = (float)atof(value);
 	if (strstr(line, "shipdelta")) DinoInfo[TotalC].ShDelta = (float)atof(value);
 	if (strstr(line, "scale0")) DinoInfo[TotalC].Scale0 = atoi(value);
 	if (strstr(line, "scaleA")) DinoInfo[TotalC].ScaleA = atoi(value);

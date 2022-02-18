@@ -4406,29 +4406,30 @@ TBEGIN:
 				if (cptr->State == 2) {
 					if (DinoInfo[cptr->CType].idleCount) {
 						cptr->Phase = DinoInfo[cptr->CType].idleAnim[rRand(DinoInfo[cptr->CType].idleCount - 1)];
-						cptr->State = 1;
-						cptr->rspeed = 0;
-					} else if (DinoInfo[cptr->CType].idle2Count) {
-						cptr->Phase = DinoInfo[cptr->CType].idle2Anim[rRand(DinoInfo[cptr->CType].idle2Count - 1)];
-						cptr->State = 1;
 						cptr->rspeed = 0;
 					}
 					else if (DinoInfo[cptr->CType].roarCount) {
 						cptr->Phase = cptr->roarAnim;
-						cptr->State = 1;
 						cptr->rspeed = 0;
 					} else {
 						cptr->Phase = DinoInfo[cptr->CType].runAnim;
-						cptr->State = 1;
 					}
+					
 				}
 				else {
 					if (DinoInfo[cptr->CType].idle2Count) {
 						cptr->Phase = DinoInfo[cptr->CType].idle2Anim[rRand(DinoInfo[cptr->CType].idle2Count - 1)];
-						cptr->State = 1;
 						cptr->rspeed = 0;
 					}
+					else if (DinoInfo[cptr->CType].roarCount) {
+						cptr->Phase = cptr->roarAnim;
+						cptr->rspeed = 0;
+					} else {
+						cptr->Phase = DinoInfo[cptr->CType].runAnim;
+					}
+
 				}
+				cptr->State = 1;
 			}
 
 
@@ -4537,6 +4538,8 @@ NOTHINK:
 
 
 	//======== select new phase =======================//
+
+	
 	for (int i = 0; i < DinoInfo[cptr->CType].idleCount; i++) {
 		if (cptr->Phase == DinoInfo[cptr->CType].idleAnim[i]) LookMode = TRUE;
 	}
@@ -4544,6 +4547,7 @@ NOTHINK:
 	for (int i = 0; i < DinoInfo[cptr->CType].idle2Count; i++) {
 		if (cptr->Phase == DinoInfo[cptr->CType].idle2Anim[i]) LookMode = TRUE;
 	}
+	
 
 	cptr->FTime += TimeDt;
 
@@ -4566,7 +4570,7 @@ NOTHINK:
 
 	if (!NewPhase)
 		if (DinoInfo[cptr->CType].roarCount > 0 && cptr->Phase == cptr->roarAnim) goto ENDPSELECT;
-
+		
 	if (!cptr->State)
 		if (NewPhase)
 			if (rRand(128) > 110
@@ -4585,6 +4589,7 @@ NOTHINK:
 				}
 				goto ENDPSELECT;
 			}
+			
 
 
 	if (!NewPhase) if (LookMode) goto ENDPSELECT;
