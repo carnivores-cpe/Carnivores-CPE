@@ -5158,7 +5158,9 @@ TBEGIN:
 			if (cptr->packId >= 0) {
 				float leaderdx = Packs[cptr->packId].leader->pos.x - cptr->pos.x;
 				float leaderdz = Packs[cptr->packId].leader->pos.z - cptr->pos.z;
+				float leaderdy = Packs[cptr->packId].leader->pos.y - cptr->depth;
 				float leaderdist = (float)sqrt(leaderdx * leaderdx + leaderdz * leaderdz);
+				float leaderdisty = (float)sqrt(leaderdist * leaderdist + leaderdy * leaderdy);
 
 
 				if (cptr->followLeader) {
