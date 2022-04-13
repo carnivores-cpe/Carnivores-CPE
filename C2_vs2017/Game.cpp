@@ -611,7 +611,7 @@ void AddShipTask(int cindex)
   SYSTEMTIME st;
   GetLocalTime(&st);
   int t=0;
-  for (t=0; t<23; t++)
+  for (t=0; t< TROPHY_COUNT-1; t++)
     if (!TrophyRoom.Body[t].ctype) break;
 
   //t += DinoInfo[Characters[cindex].CType].trophyFirstSlot;

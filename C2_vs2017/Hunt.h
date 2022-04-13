@@ -34,6 +34,8 @@
 #define TCMIN ((000<<16)+62024)
 
 
+#define TROPHY_COUNT	48
+
 #ifdef _MAIN_
 #define _EXTORNOT
 #else
@@ -459,7 +461,7 @@ typedef struct _TTrophyRoom
 
   TStats Last, Total;
 
-  TTrophyItem Body[24];
+  TTrophyItem Body[TROPHY_COUNT];
 } TTrophyRoom;
 
 
@@ -537,7 +539,7 @@ typedef struct _TDinoInfo
   int trophyLocTotal1;//CURRENTLY IN SAVE FILE
   int trophyLocTotal2;//CURRENTLY IN SESSION - REPLACE WITH tlt1 UPON RESTART
   
-  TTrophyType trophyType[32];
+  TTrophyType trophyType[TROPHY_COUNT];
   int trophyTypeCount;
 //  int tCounter; // used to count off trophy locs
 

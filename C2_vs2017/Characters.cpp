@@ -8109,7 +8109,7 @@ void PlaceTrophy()
 	ChCount = 0;
 	PrintLog("Placing Trophies...");
 
-	for (int c = 0; c < 24; c++)
+	for (int c = 0; c < TROPHY_COUNT; c++)
 	{
 
 		//MessageBox(hwndMain, c.tostring(), "boring", IDOK);
