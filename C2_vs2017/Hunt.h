@@ -34,7 +34,8 @@
 #define TCMIN ((000<<16)+62024)
 
 
-#define TROPHY_COUNT	48
+#define DINOINFO_MAX	128
+#define TROPHY_COUNT	128
 
 #ifdef _MAIN_
 #define _EXTORNOT
@@ -999,7 +1000,7 @@ _EXTORNOT TModel *SunModel;
 _EXTORNOT TCharacterInfo WCircleModel;
 _EXTORNOT TModel *CompasModel;
 _EXTORNOT TModel *Binocular;
-_EXTORNOT TDinoInfo DinoInfo[64];
+_EXTORNOT TDinoInfo DinoInfo[DINOINFO_MAX];
 _EXTORNOT int sendGunShot;
 _EXTORNOT int mGunShot[4];
 _EXTORNOT int sendHunterCall;
@@ -1009,20 +1010,20 @@ _EXTORNOT int mHunterCallType[4];
 //Add these after dino positions alligned
 //_EXTORNOT int sendDinoCall;
 //_EXTORNOT int mDinoCall[4];
-_EXTORNOT TAIInfo AIInfo[64];
+_EXTORNOT TAIInfo AIInfo[DINOINFO_MAX];
 _EXTORNOT TRegion Region[256];
 _EXTORNOT TRegion Avoid[256];
 _EXTORNOT TWeapInfo WeapInfo[10];
 _EXTORNOT TCharacterInfo ShipModel;
-_EXTORNOT int AI_to_CIndex[64];
-_EXTORNOT int TrophyIndex[64];
+_EXTORNOT int AI_to_CIndex[DINOINFO_MAX];
+_EXTORNOT int TrophyIndex[DINOINFO_MAX];
 _EXTORNOT int ChCount, WCCount, ElCount,
           ShotDino, TrophyBody, HunterCount; //HunterCount is for multiplayer, up to 3 others
 _EXTORNOT bool TrophyDisplay;
 _EXTORNOT TTrophyItem TrophyDisplayBody;
 _EXTORNOT TCharacterInfo WindModel;
 _EXTORNOT TCharacterInfo PlayerInfo;
-_EXTORNOT TCharacterInfo ChInfo[64];
+_EXTORNOT TCharacterInfo ChInfo[DINOINFO_MAX];
 _EXTORNOT TCharacterInfo MPlayerInfo[3]; //multiplayer
 _EXTORNOT TPack          Packs[256];
 _EXTORNOT int PackCount;

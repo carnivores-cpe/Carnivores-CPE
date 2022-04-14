@@ -726,7 +726,7 @@ void HideWeapon()
 
 void InitGameInfo()
 {
-  for (int c=0; c<64; c++)
+  for (int c=0; c< DINOINFO_MAX; c++)
   {
     DinoInfo[c].Scale0 = 800;
     DinoInfo[c].ScaleA = 600;

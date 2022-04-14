@@ -1583,7 +1583,7 @@ void LoadResources()
 
 void LoadCharacters()
 {
-  BOOL pres[64];
+  BOOL pres[DINOINFO_MAX];
   FillMemory(pres, sizeof(pres), 0);
   pres[0]=TRUE;
   for (int c=0; c<ChCount; c++)
