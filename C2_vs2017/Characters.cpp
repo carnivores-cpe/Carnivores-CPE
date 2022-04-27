@@ -8140,11 +8140,19 @@ void PlaceTrophy()
 		Characters[ChCount].State = c;
 		Characters[ChCount].scale = TrophyRoom.Body[c].scale;
 		
+		float scaleDif = Characters[ChCount].scale - (DinoInfo[Characters[ChCount].CType].Scale0 / 1000.f);
+		if (scaleDif != 0) {
+			if (DinoInfo[Characters[ChCount].CType].ScaleA != 0) scaleDif /= (DinoInfo[Characters[ChCount].CType].ScaleA / 1000.f);
+			else scaleDif = 0;
+		}
+		int scaleDifx= (int)(scaleDif * DinoInfo[Characters[ChCount].CType].trophyType[DinoInfo[Characters[ChCount].CType].tCounter].xoffsetScale);
+		int scaleDifz= (int)(scaleDif * DinoInfo[Characters[ChCount].CType].trophyType[DinoInfo[Characters[ChCount].CType].tCounter].zoffsetScale);
+		int scaleDify = (int)(scaleDif * DinoInfo[Characters[ChCount].CType].trophyType[DinoInfo[Characters[ChCount].CType].tCounter].yoffsetScale);
 
 		Characters[ChCount].pos.x = LandingList.list[DinoInfo[Characters[ChCount].CType].trophyType[DinoInfo[Characters[ChCount].CType].tCounter].trophyPos].x
-			* 256+128 + DinoInfo[Characters[ChCount].CType].trophyType[DinoInfo[Characters[ChCount].CType].tCounter].xoffset;
+			* 256 + 128 + DinoInfo[Characters[ChCount].CType].trophyType[DinoInfo[Characters[ChCount].CType].tCounter].xoffset +scaleDifx;
 		Characters[ChCount].pos.z = LandingList.list[DinoInfo[Characters[ChCount].CType].trophyType[DinoInfo[Characters[ChCount].CType].tCounter].trophyPos].y
-			* 256+128 + DinoInfo[Characters[ChCount].CType].trophyType[DinoInfo[Characters[ChCount].CType].tCounter].zoffset;
+			* 256 + 128 + DinoInfo[Characters[ChCount].CType].trophyType[DinoInfo[Characters[ChCount].CType].tCounter].zoffset +scaleDifz;
 
 		Characters[ChCount].Phase = DinoInfo[Characters[ChCount].CType].trophyType[DinoInfo[Characters[ChCount].CType].tCounter].anim;
 		Characters[ChCount].PrevPhase = Characters[ChCount].Phase;
@@ -8153,7 +8161,7 @@ void PlaceTrophy()
 		Characters[ChCount].pos.y = GetLandH(Characters[ChCount].pos.x,
 			Characters[ChCount].pos.z);
 
-		Characters[ChCount].pos.y += DinoInfo[Characters[ChCount].CType].trophyType[DinoInfo[Characters[ChCount].CType].tCounter].yoffset;
+		Characters[ChCount].pos.y += DinoInfo[Characters[ChCount].CType].trophyType[DinoInfo[Characters[ChCount].CType].tCounter].yoffset +scaleDify;
 		
 		float a = (float)DinoInfo[Characters[ChCount].CType].trophyType[DinoInfo[Characters[ChCount].CType].tCounter].alpha;
 		float b = (float)DinoInfo[Characters[ChCount].CType].trophyType[DinoInfo[Characters[ChCount].CType].tCounter].beta;
@@ -8162,9 +8170,11 @@ void PlaceTrophy()
 		Characters[ChCount].beta = pi * 2 * b / 360.f;
 		Characters[ChCount].gamma = pi * 2 * g / 360.f;
 
-		Characters[ChCount].xdata = DinoInfo[Characters[ChCount].CType].trophyType[DinoInfo[Characters[ChCount].CType].tCounter].xdata;
+		Characters[ChCount].xdata = (int)(LandingList.list[DinoInfo[Characters[ChCount].CType].trophyType[DinoInfo[Characters[ChCount].CType].tCounter].trophyPos].x
+			* 256 + 128 + DinoInfo[Characters[ChCount].CType].trophyType[DinoInfo[Characters[ChCount].CType].tCounter].xdata);
+		Characters[ChCount].zdata = (int)(LandingList.list[DinoInfo[Characters[ChCount].CType].trophyType[DinoInfo[Characters[ChCount].CType].tCounter].trophyPos].y
+			* 256 + 128 + DinoInfo[Characters[ChCount].CType].trophyType[DinoInfo[Characters[ChCount].CType].tCounter].zdata);
 		Characters[ChCount].ydata = DinoInfo[Characters[ChCount].CType].trophyType[DinoInfo[Characters[ChCount].CType].tCounter].ydata;
-		Characters[ChCount].zdata = DinoInfo[Characters[ChCount].CType].trophyType[DinoInfo[Characters[ChCount].CType].tCounter].zdata;
 
 		Characters[ChCount].animateTrophy = DinoInfo[Characters[ChCount].CType].trophyType[DinoInfo[Characters[ChCount].CType].tCounter].playAnim;
 

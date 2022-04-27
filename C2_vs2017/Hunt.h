@@ -480,6 +480,7 @@ typedef struct _TDinoKill
 typedef struct _TTrophyType
 {
 	int xoffset, yoffset, zoffset;
+	int xoffsetScale, yoffsetScale, zoffsetScale;
 	int xdata, ydata, zdata;
 	int alpha, beta, gamma; //degrees
 	int anim;

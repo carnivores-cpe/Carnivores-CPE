@@ -2287,11 +2287,12 @@ void ProcessTrophy()
 
   for (int c=0; c<ChCount; c++)
   {
-	  Vector3d p = Characters[c].pos;
+	  //Vector3d p = Characters[c].pos;
+	  Vector3d p;
     //p.x+=Characters[c].lookx * 256*2.5f;
     //p.z+=Characters[c].lookz * 256*2.5f;
-	  p.x += Characters[c].xdata;
-	  p.z += Characters[c].zdata;
+	  p.x = Characters[c].xdata;
+	  p.z = Characters[c].zdata;
 	  p.y = GetLandH(p.x, p.z) + Characters[c].ydata;
 
 	//Characters[c].Phase = 1;

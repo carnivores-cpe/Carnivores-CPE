@@ -2309,6 +2309,9 @@ void ReadTrophyTypeInfo(FILE *stream)
 		if (strstr(line, "xoffset")) DinoInfo[TotalC].trophyType[DinoInfo[TotalC].trophyTypeCount].xoffset = atoi(value);
 		if (strstr(line, "yoffset")) DinoInfo[TotalC].trophyType[DinoInfo[TotalC].trophyTypeCount].yoffset = atoi(value);
 		if (strstr(line, "zoffset")) DinoInfo[TotalC].trophyType[DinoInfo[TotalC].trophyTypeCount].zoffset = atoi(value);
+		if (strstr(line, "xscale")) DinoInfo[TotalC].trophyType[DinoInfo[TotalC].trophyTypeCount].xoffsetScale = atoi(value);
+		if (strstr(line, "yscale")) DinoInfo[TotalC].trophyType[DinoInfo[TotalC].trophyTypeCount].yoffsetScale = atoi(value);
+		if (strstr(line, "zscale")) DinoInfo[TotalC].trophyType[DinoInfo[TotalC].trophyTypeCount].zoffsetScale = atoi(value);
 		if (strstr(line, "tropAnim")) DinoInfo[TotalC].trophyType[DinoInfo[TotalC].trophyTypeCount].anim = atoi(value);
 		if (strstr(line, "xdata")) DinoInfo[TotalC].trophyType[DinoInfo[TotalC].trophyTypeCount].xdata = atoi(value);
 		if (strstr(line, "ydata")) DinoInfo[TotalC].trophyType[DinoInfo[TotalC].trophyTypeCount].ydata = atoi(value);
