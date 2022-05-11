@@ -527,6 +527,8 @@ typedef struct _TDinoInfo
   int packMax, packMin;
   float packDensity;
 
+  int jumpRange;
+
   int runAnim, jumpAnim, walkAnim, swimAnim, flyAnim, glideAnim, takeoffAnim, landAnim,
 	  slideAnim, shakeLandAnim, shakeWaterAnim;
 

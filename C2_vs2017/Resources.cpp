@@ -2468,6 +2468,8 @@ void ReadCharacterLine(FILE *stream, char *_value, char line[256], bool &regionO
 
 	if (strstr(line, "TRexObjCollide")) readBool(value, DinoInfo[TotalC].TRexObjCollide);
 
+	if (strstr(line, "JumpRange")) DinoInfo[TotalC].jumpRange = atoi(value);
+
 	if (strstr(line, "runAnim")) DinoInfo[TotalC].runAnim = atoi(value);
 	if (strstr(line, "jumpAnim")) DinoInfo[TotalC].jumpAnim = atoi(value);
 	if (strstr(line, "walkAnim")) DinoInfo[TotalC].walkAnim = atoi(value);

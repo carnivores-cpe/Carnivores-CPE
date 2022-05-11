@@ -5076,8 +5076,8 @@ TBEGIN:
 	//	attackDist = DinoInfo[cptr->CType].aggress;
 	//}
 
-	float playerdx = PlayerX - cptr->pos.x - cptr->lookx * 100 * cptr->scale;
-	float playerdz = PlayerZ - cptr->pos.z - cptr->lookz * 100 * cptr->scale;
+	float playerdx = PlayerX - cptr->pos.x - cptr->lookx * 100 *cptr->scale;
+	float playerdz = PlayerZ - cptr->pos.z - cptr->lookz * 100 *cptr->scale;
 	float pdist = (float)sqrt(playerdx * playerdx + playerdz * playerdz);
 
 	//REMOVED - turny !!!
@@ -5270,7 +5270,7 @@ TBEGIN:
 				if (cptr->depth > GetLandUpH(cptr->pos.x, cptr->pos.z) - (cptr->spcDepth * 0.95)){
 					float pUp = PlayerY - GetLandUpH(PlayerX, PlayerZ); //jump later if the player is on a low bridge, not at all if too high
 					if (pUp < 0) pUp = 0;
-					float md = (1424 - (pUp * 1.3)) * cptr->scale;
+					float md = ((DinoInfo[cptr->CType].jumpRange * cptr->speed_jump) - (pUp * 1.3)) * cptr->scale;
 					if (pdist < md && pdist > md - 200)//1200
 						if (AngleDifference(cptr->alpha, FindVectorAlpha(playerdx, playerdz)) < 0.2f) {
 
