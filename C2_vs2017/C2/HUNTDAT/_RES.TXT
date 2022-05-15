@@ -219,7 +219,7 @@ characters {
 
 {
  name      = 'Parasaurolophus'
- file      = 'par2.car'
+ file      = 'par9.car'
  ai        = 10
  clone  = 10
  dogSmell  = TRUE
@@ -243,25 +243,26 @@ characters {
  killdist = 0
  radar = 1
  trophy  = TRUE
- tropinfo{
- tropPos = 4
-  alpha = 300
-  tropAnim = 4
-  xoffset = 0
-  zoffset = 400
-  yoffset = -25
-  xdata = 1650
-  beta = 10
+tropinfo{
+ tropPos = 0
+  alpha = 340
+  tropAnim = 6
+  xoffset = -250
+  xscale = -165
+  zoffset = -180
+  zscale = 60
+  xdata = -500
+  zdata = 1250
  }
  tropinfo{
- tropPos = 4
-  alpha = 40
-  tropAnim = 2
-  xoffset = 150
-  zoffset = -400
-  yoffset = -20
-  xdata = 1500
-  gamma = -14
+ tropPos = 0
+  alpha = 150
+  tropAnim = 7
+  xoffset = 180
+  xscale = 100
+  zoffset = 50
+  xdata = 250
+  zdata = 1250
  }
  runAnim = 1
  walkAnim = 0
@@ -396,7 +397,7 @@ deathtype{
 
 {
  name = 'Allosaurus'
- file = 'allonewidlessounded9-testtrophy.car'
+ file = 'allo_ii.car'
  ai        = 13
  clone  = 13
  dogSmell  = TRUE
@@ -422,19 +423,17 @@ deathtype{
  radar = 1
  trophy  = TRUE
  tropinfo{
- tropPos = 0
-playAnim = TRUE
+ tropPos = 4
   alpha = 90
-  tropAnim = 10
+  tropAnim = 0
   xoffset = -250
   zoffset = 0
   zdata = 1200
  }
  tropinfo{
- tropPos = 0
-playAnim = TRUE
+ tropPos = 4
   alpha = 90
-  tropAnim = 10
+  tropAnim = 0
   xoffset = 250
   zoffset = 0
   zdata = 1200
@@ -1081,6 +1080,7 @@ styInRgn  = TRUE
  wlkspd = 0.428
  runAnim = 1
  runspd = 1.2
+ JumpRange = 1424
  jumpAnim = 3
  jmpspd = 1.0
  jumpPartFrame1 = 1
