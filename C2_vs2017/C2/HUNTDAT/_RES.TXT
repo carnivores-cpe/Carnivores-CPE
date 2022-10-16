@@ -241,7 +241,7 @@ characters {
  wlkspd = 0.40
  aggress = 0
  killdist = 0
- radar = 1
+ radar = 0
  trophy  = TRUE
 tropinfo{
  tropPos = 0
@@ -1162,6 +1162,76 @@ deathtype{
   spawnrate = 0.5
   spawnmax  = 5
   spawnmin  = 0
+ }
+}
+
+
+{
+ name = 'Titanopteryx'
+ file = 'titanopteryx_flier-placeholder.car'
+ clone  = 28
+ radar = 2
+ dogSmell  = TRUE
+ mass      = 1.4
+ length    = 7.1
+ radius    = 256
+ health    = 16
+ basescore = 20
+ scale0    = 1000
+ scaleA    = 550
+ smellK     = 1.8
+ hearK     = 0.9
+ lookK     = 2.0
+ shipdelta = 96
+ flyspd = 1.5
+ gldspd = 1.3
+ divspd = 1.8
+ tkfspd = 1.0
+ runspd = 1.1
+ wlkspd = 0.35
+ swmspd = 0.75
+ aggress = 240
+ flydist = 50
+ killdist = 350
+ trophy  = TRUE
+ tropinfo{
+ tropPos = 12
+  alpha = 180
+  tropAnim = 0
+  xoffset = 0
+  zoffset = 0
+  zdata = -1200
+ }
+ runAnim = 1
+ walkAnim = 0
+ flyAnim = 8
+ glideAnim = 9
+ takeoffAnim = 11
+ diveAnim = 12
+ slideAnim = 13
+deathtype{
+ dieAnim = 5
+ fallAnim = 10
+ sleepAnim = 6
+}
+ idleAnim = 2
+ idleAnim = 3
+ idleAnim = 4
+ waterLevel = 140
+killtype{
+ hunterAnim = 0
+ hunterOffset = 320
+ eatAnim = 7
+ scream = TRUE
+}
+ CamYLand = 256
+ CamYWater = 256
+ CamBaseLand = 824
+ CamBaseWater = 824
+ spawninfo {
+ spawnrate = 1
+ spawnmax  = 1
+ spawnmin  = 0
  }
 }
 

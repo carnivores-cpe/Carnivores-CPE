@@ -2424,7 +2424,9 @@ void ReadCharacterLine(FILE *stream, char *_value, char line[256], bool &regionO
 	if (strstr(line, "gldspd")) DinoInfo[TotalC].gldspd = (float)atof(value);
 	if (strstr(line, "tkfspd")) DinoInfo[TotalC].tkfspd = (float)atof(value);
 	if (strstr(line, "lndspd")) DinoInfo[TotalC].lndspd = (float)atof(value);
+	if (strstr(line, "divspd")) DinoInfo[TotalC].divspd = (float)atof(value);
 	if (strstr(line, "aggress")) DinoInfo[TotalC].aggress = atoi(value);
+	if (strstr(line, "flydist")) DinoInfo[TotalC].flyDist = atoi(value);
 	if (strstr(line, "killdist")) DinoInfo[TotalC].killDist = atoi(value);
 	if (strstr(line, "radar")) DinoInfo[TotalC].onRadar = atoi(value);
 	if (strstr(line, "dontswimaway")) readBool(value, DinoInfo[TotalC].dontSwimAway);
@@ -2475,6 +2477,7 @@ void ReadCharacterLine(FILE *stream, char *_value, char line[256], bool &regionO
 	if (strstr(line, "walkAnim")) DinoInfo[TotalC].walkAnim = atoi(value);
 	if (strstr(line, "swimAnim")) DinoInfo[TotalC].swimAnim = atoi(value);
 	if (strstr(line, "flyAnim")) DinoInfo[TotalC].flyAnim = atoi(value);
+	if (strstr(line, "diveAnim")) DinoInfo[TotalC].diveAnim = atoi(value);
 	if (strstr(line, "glideAnim")) DinoInfo[TotalC].glideAnim = atoi(value);
 	if (strstr(line, "takeoffAnim")) DinoInfo[TotalC].takeoffAnim = atoi(value);
 	if (strstr(line, "landAnim")) DinoInfo[TotalC].landAnim = atoi(value);
@@ -3234,6 +3237,27 @@ void LoadResourcesScript()
 	AIInfo[AI_CERAT].targetDistance = 8048.f;
 	AIInfo[AI_CERAT].weaveRange = 1648;
 	AIInfo[AI_CERAT].pWMin = 2048;
+
+
+	AIInfo[AI_TITAN].jumper = false;
+	AIInfo[AI_TITAN].agressMulti = 8;
+	//AIInfo[AI_TITAN].waterLevel = 140;
+	AIInfo[AI_TITAN].tGAIncrement = 4.f;
+	AIInfo[AI_TITAN].idleStartD = 128;
+	AIInfo[AI_TITAN].targetBendRotSpd = 3;
+	AIInfo[AI_TITAN].yBetaGamma1 = 348;
+	AIInfo[AI_TITAN].yBetaGamma2 = 324;
+	AIInfo[AI_TITAN].yBetaGamma3 = 0.5f;
+	AIInfo[AI_TITAN].yBetaGamma4 = 0.4f;
+	AIInfo[AI_TITAN].walkTargetGammaRot = 9.0f;
+	AIInfo[AI_TITAN].targetGammaRot = 6.0f;
+	AIInfo[AI_TITAN].carnivore = true;
+	AIInfo[AI_TITAN].noWayCntMin = 12;
+	AIInfo[AI_TITAN].noFindWayMed = 16;
+	AIInfo[AI_TITAN].noFindWayRange = 20;
+	AIInfo[AI_TITAN].targetDistance = 8048.f;
+	AIInfo[AI_TITAN].weaveRange = 1648;
+	AIInfo[AI_TITAN].pWMin = 2048;
 
 	//AIInfo[AI_TREX].waterLevel = 560;
 

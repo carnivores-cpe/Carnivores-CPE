@@ -268,6 +268,7 @@ void ResetCharacter(TCharacter *cptr)
 	cptr->speed_glide = DinoInfo[cptr->CType].gldspd;
 	cptr->speed_takeoff = DinoInfo[cptr->CType].tkfspd;
 	cptr->speed_land = DinoInfo[cptr->CType].lndspd;
+	cptr->speed_dive = DinoInfo[cptr->CType].divspd;
 
 	cptr->lastTBeta = 0;
 	cptr->turny = 0;
@@ -2086,11 +2087,520 @@ void AnimateDeadCommon(TCharacter *cptr)
 
 
 
+void AnimateTitan(TCharacter *cptr)
+{
+	NewPhase = FALSE;
+	int _Phase = cptr->Phase;
+	int _FTime = cptr->FTime;
+	float _tgalpha = cptr->tgalpha;
+
+	bool alertInit = FALSE;
+	if (cptr->State == 2) alertInit = TRUE;
+	if (cptr->packId >= 0) {
+		if (!cptr->State && Packs[cptr->packId]._alert) alertInit = TRUE;
+	}
+
+
+
+	if (alertInit)
+	{
+		cptr->State = 1;
+		if (cptr->gliding) cptr->Phase = DinoInfo[cptr->CType].flyAnim;
+		else cptr->Phase = DinoInfo[cptr->CType].runAnim;
+	}
+
+TBEGIN:
+	float targetx = cptr->tgx;
+	float targetz = cptr->tgz;
+	float targetdx = targetx - cptr->pos.x;
+	float targetdz = targetz - cptr->pos.z;
+
+	float tdist = (float)sqrt(targetdx * targetdx + targetdz * targetdz);
+
+	float playerdx, playerdz;
+	playerdx = PlayerX - cptr->pos.x - cptr->lookx * 108;
+	playerdz = PlayerZ - cptr->pos.z - cptr->lookz * 108;
+	float pdist = (float)sqrt(playerdx * playerdx + playerdz * playerdz);
+
+
+
+
+	if (GetLandUpH(cptr->pos.x, cptr->pos.z) - GetLandH(cptr->pos.x, cptr->pos.z) > DinoInfo[cptr->CType].waterLevel * cptr->scale)
+		cptr->StateF |= csONWATER;
+	else
+		cptr->StateF &= (!csONWATER);
+
+	if (cptr->Phase == DinoInfo[cptr->CType].killType[cptr->killType].anim && DinoInfo[cptr->CType].killTypeCount) goto NOTHINK;
+
+	//============================================//			// (run away)
+	if (!MyHealth) cptr->State = 0;
+	bool fleeMode = FALSE;
+	if (cptr->State)
+	{
+		float aDist;
+		aDist = ctViewR * DinoInfo[cptr->CType].aggress + OptAgres / AIInfo[cptr->Clone].agressMulti;
+
+
+		if (pdist > aDist || ((PlayerY - cptr->pos.y > pdist) && cptr->gliding)  ||
+			DinoInfo[cptr->CType].aggress <= 0 || !cptr->awareHunter) {
+			fleeMode = TRUE;
+		}
+		else if (cptr->packId >= 0) Packs[cptr->packId].attack = TRUE;
+
+		if (cptr->packId >= 0) {
+			if (Packs[cptr->packId]._attack) fleeMode = FALSE;
+		}
+
+		if (fleeMode) {
+			nv.x = playerdx;
+			nv.z = playerdz;
+			nv.y = 0;
+			NormVector(nv, 2048.f);
+			cptr->tgx = cptr->pos.x - nv.x;
+			cptr->tgz = cptr->pos.z - nv.z;
+			cptr->tgtime = 0;
+			cptr->AfraidTime -= TimeDt;
+
+			if (cptr->packId >= 0) {
+				if (cptr->AfraidTime <= 0)
+				{
+					if (!Packs[cptr->packId]._alert) {
+						cptr->AfraidTime = 0;
+						cptr->State = 0;
+					}
+				}
+				else Packs[cptr->packId].alert = true;
+			}
+			else if (cptr->AfraidTime <= 0) {
+				cptr->AfraidTime = 0;
+				cptr->State = 0;
+			}
+
+		}
+		else
+		{
+			cptr->tgx = PlayerX;
+			cptr->tgz = PlayerZ;
+			cptr->tgtime = 0;
+			if (cptr->packId >= 0) {
+				Packs[cptr->packId].alert = true;
+			}
+		}
+
+		if (pdist < DinoInfo[cptr->CType].killDist && DinoInfo[cptr->CType].killDist > 0) {
+			int killAlt = DinoInfo[cptr->CType].waterLevel;
+			if (killAlt < 256) killAlt = 256;
+			if (fabs(PlayerY - cptr->pos.y) < killAlt + 20)
+			{
+
+				if (DinoInfo[cptr->CType].killTypeCount > 0) {
+
+					if (!(cptr->StateF & csONWATER))
+					{
+						cptr->vspeed /= 8.0f;
+						cptr->State = 1;
+						cptr->Phase = DinoInfo[cptr->CType].killType[cptr->killType].anim;
+						if (DinoInfo[cptr->CType].killType[cptr->killType].dontloop) cptr->FTime = 0;
+						AddDeadBody(cptr,
+							DinoInfo[cptr->CType].killType[cptr->killType].hunteranim,
+							DinoInfo[cptr->CType].killType[cptr->killType].scream);
+					}
+					else AddDeadBody(cptr, HUNT_EAT, TRUE);
+
+				}
+				else {
+					AddDeadBody(cptr, HUNT_EAT, TRUE);
+					cptr->State = 0;
+				}
+
+			}
+		}
+
+
+	}
+
+	if (!cptr->State)
+	{
+		cptr->AfraidTime = 0;
+
+		if (cptr->packId >= 0) {
+			float leaderdx = Packs[cptr->packId].leader->pos.x - cptr->pos.x;
+			float leaderdz = Packs[cptr->packId].leader->pos.z - cptr->pos.z;
+			float leaderdist = (float)sqrt(leaderdx * leaderdx + leaderdz * leaderdz);
+
+			if (cptr->followLeader) {
+				if (leaderdist < DinoInfo[cptr->CType].packDensity * 128 * 0.6)
+				{
+					cptr->followLeader = false;
+					SetNewTargetPlace(cptr, AIInfo[cptr->Clone].targetDistance);
+					goto TBEGIN;
+				}
+			} else {
+				if (leaderdist > DinoInfo[cptr->CType].packDensity * 128 * 1.3)
+				{
+					cptr->followLeader = true;
+				}
+			}
+
+		}
+
+		float tdst = 456;
+		if (cptr->gliding) tdst = 1024;
+
+		if (cptr->followLeader) {
+			cptr->tgx = Packs[cptr->packId].leader->pos.x;
+			cptr->tgz = Packs[cptr->packId].leader->pos.z;
+		}
+		else if (tdist < tdst)
+		{
+			SetNewTargetPlace(cptr, AIInfo[cptr->Clone].targetDistance);
+			goto TBEGIN;
+		}
+
+
+
+	}
+
+NOTHINK:
+	if (pdist < AIInfo[cptr->Clone].pWMin && !cptr->gliding) cptr->NoFindCnt = 0;
+	if (cptr->NoFindCnt && !cptr->gliding) cptr->NoFindCnt--;
+	else
+	{
+		cptr->tgalpha = CorrectedAlpha(FindVectorAlpha(targetdx, targetdz), cptr->alpha);//FindVectorAlpha(targetdx, targetdz);
+
+		if (cptr->State && pdist > AIInfo[cptr->Clone].weaveRange)
+		{
+			float rTD;
+			rTD = 824.f;
+
+			cptr->tgalpha += (float)sin(RealTime / rTD) / AIInfo[cptr->Clone].tGAIncrement;
+			if (cptr->tgalpha < 0) cptr->tgalpha += 2 * pi;
+			if (cptr->tgalpha > 2 * pi) cptr->tgalpha -= 2 * pi;
+		}
+	}
+
+	if (!cptr->gliding) {
+
+		LookForAWay(cptr, !DinoInfo[cptr->CType].canSwim, TRUE);
+
+		if (cptr->NoWayCnt > AIInfo[cptr->Clone].noWayCntMin)
+		{
+			cptr->NoWayCnt = 0;
+			cptr->NoFindCnt = AIInfo[cptr->Clone].noFindWayMed + rRand(AIInfo[cptr->Clone].noFindWayRange);
+		}
+	}
+
+	if (cptr->tgalpha < 0) cptr->tgalpha += 2 * pi;
+	if (cptr->tgalpha > 2 * pi) cptr->tgalpha -= 2 * pi;
+
+	//===============================================//
+
+	ProcessPrevPhase(cptr);
+
+
+	//======== select new phase =======================//
+	cptr->FTime += TimeDt;
+
+	if (cptr->FTime >= cptr->pinfo->Animation[cptr->Phase].AniTime)
+	{
+		cptr->FTime %= cptr->pinfo->Animation[cptr->Phase].AniTime;
+
+		if (cptr->Phase == DinoInfo[cptr->CType].killType[cptr->killType].anim && DinoInfo[cptr->CType].killTypeCount) {
+			if (DinoInfo[cptr->CType].killType[cptr->killType].dontloop) {
+				cptr->Phase = DinoInfo[cptr->CType].walkAnim;
+				cptr->State = 0;
+			}
+		}
+
+
+		NewPhase = TRUE;
+	}
+
+	if (cptr->Phase == DinoInfo[cptr->CType].killType[cptr->killType].anim && DinoInfo[cptr->CType].killTypeCount)  goto ENDPSELECT;
+
+	float FlDst = ctViewR * DinoInfo[cptr->CType].flyDist + OptAgres / AIInfo[cptr->Clone].agressMulti;
+	if (!alertInit) FlDst *= 1.5;
+	if (cptr->State && pdist > FlDst) cptr->gliding = true;
+
+	if (NewPhase){
+
+		if (!cptr->State && rRand(50) == 2) cptr->gliding = true;
+
+		if (cptr->gliding) {
+
+			if (!cptr->State || fleeMode) {
+				//WANDER/FLEE
+
+				if (cptr->Phase == DinoInfo[cptr->CType].flyAnim) {
+					if (cptr->pos.y > GetLandUpH(cptr->pos.x, cptr->pos.z) + 5800) {
+						cptr->Phase = DinoInfo[cptr->CType].glideAnim;
+					}
+				}
+				else if (cptr->Phase == DinoInfo[cptr->CType].glideAnim) {
+					if (cptr->pos.y < GetLandUpH(cptr->pos.x, cptr->pos.z) + 3800) {
+						cptr->Phase = DinoInfo[cptr->CType].flyAnim;
+					}
+				}
+				else if (cptr->Phase == DinoInfo[cptr->CType].takeoffAnim) {
+					if (cptr->pos.y > GetLandUpH(cptr->pos.x, cptr->pos.z) + 1024) {
+						cptr->Phase = DinoInfo[cptr->CType].flyAnim;
+					}
+				}
+				else {
+					cptr->beta = 0;
+					cptr->gamma = 0;
+					cptr->Phase = DinoInfo[cptr->CType].takeoffAnim;
+				}
+				
+			} else {
+				if (cptr->Phase != DinoInfo[cptr->CType].takeoffAnim &&
+					cptr->Phase != DinoInfo[cptr->CType].glideAnim &&
+					cptr->Phase != DinoInfo[cptr->CType].flyAnim) {
+					cptr->beta = 0;
+					cptr->gamma = 0;
+					cptr->Phase = DinoInfo[cptr->CType].takeoffAnim;
+				} else {
+					float dalph = cptr->alpha - cptr->tgalpha;
+					if (dalph < 0) dalph *= -1;
+					if (dalph > pi) dalph -= pi;
+					if (dalph > pi/2) {
+						if(cptr->pos.y - PlayerY < pdist / 2) cptr->Phase = DinoInfo[cptr->CType].takeoffAnim;
+						else if (cptr->pos.y > PlayerY + 600) cptr->Phase = DinoInfo[cptr->CType].glideAnim;
+						else cptr->Phase = DinoInfo[cptr->CType].flyAnim;
+					} else {
+						if (cptr->pos.y < PlayerY + 256 && pdist > 2048) cptr->Phase = DinoInfo[cptr->CType].takeoffAnim;
+						else if (cptr->pos.y - PlayerY > pdist / 2)cptr->Phase = DinoInfo[cptr->CType].diveAnim;
+						else if (cptr->pos.y > PlayerY + 600) cptr->Phase = DinoInfo[cptr->CType].glideAnim;
+						else cptr->Phase = DinoInfo[cptr->CType].flyAnim;
+					}
+
+					/*
+					if (256 + cptr->pos.y - PlayerY < pdist/2) {
+						cptr->Phase = DinoInfo[cptr->CType].takeoffAnim;
+					} else if (cptr->pos.y - PlayerY > pdist / 2) {
+						cptr->Phase = DinoInfo[cptr->CType].diveAnim;
+					} else if (cptr->pos.y > PlayerY + 600) {
+						cptr->Phase = DinoInfo[cptr->CType].glideAnim;
+					} else cptr->Phase = DinoInfo[cptr->CType].flyAnim;
+					*/
+				}
+				
+			}
+			
+		} else {
+
+			if (!cptr->State) {
+
+				if (DinoInfo[cptr->CType].idleCount
+					&& (MyHealth || !DinoInfo[cptr->CType].killType[cptr->killType].carryCorpse)
+					&& !(cptr->StateF & csONWATER)) {
+
+					if (rRand(AIInfo[cptr->Clone].idleStartD) > 110) {
+						cptr->Phase = DinoInfo[cptr->CType].idleAnim[rRand(DinoInfo[cptr->CType].idleCount - 1)];
+						goto ENDPSELECT;
+					}
+					else {
+						cptr->Phase = DinoInfo[cptr->CType].walkAnim;
+					}
+
+				} else {
+					cptr->Phase = DinoInfo[cptr->CType].walkAnim;
+				}
+
+			}
+			else cptr->Phase = DinoInfo[cptr->CType].runAnim;
+
+		}
+	}
+
+	bool idlePhase = false;
+	for (int i = 0; i < DinoInfo[cptr->CType].idleCount; i++) {
+		if (cptr->Phase == DinoInfo[cptr->CType].idleAnim[i]) idlePhase = true;
+	}
+
+	if (!idlePhase && !cptr->gliding) {
+		if (!cptr->State) cptr->Phase = DinoInfo[cptr->CType].walkAnim;
+		else if (fabs(cptr->tgalpha - cptr->alpha) < 1.0 ||
+			fabs(cptr->tgalpha - cptr->alpha) > 2 * pi - 1.0)
+			cptr->Phase = DinoInfo[cptr->CType].runAnim;
+		else cptr->Phase = DinoInfo[cptr->CType].walkAnim;
+
+	}
+
+	if (DinoInfo[cptr->CType].canSwim) {
+		if (cptr->StateF & csONWATER) cptr->Phase = DinoInfo[cptr->CType].swimAnim;
+	}
+
+
+ENDPSELECT:
+
+	//====== process phase changing ===========//
+	if ((_Phase != cptr->Phase) || NewPhase)
+		ActivateCharacterFx(cptr);
+
+	if (_Phase != cptr->Phase)
+	{
+		//==== set proportional FTime for better morphing =//
+
+		if (cptr->gliding) {
+			if (!NewPhase) cptr->FTime = 0;
+		} else if (MORPHP) {
+			if ((_Phase == DinoInfo[cptr->CType].runAnim ||
+				_Phase == DinoInfo[cptr->CType].walkAnim) &&
+				(cptr->Phase == DinoInfo[cptr->CType].runAnim ||
+					cptr->Phase == DinoInfo[cptr->CType].walkAnim))
+				cptr->FTime = _FTime * cptr->pinfo->Animation[cptr->Phase].AniTime / cptr->pinfo->Animation[_Phase].AniTime + 64;
+			else if (!NewPhase) cptr->FTime = 0;
+		}
+
+		if (cptr->PPMorphTime > 128)
+		{
+			cptr->PrevPhase = _Phase;
+			cptr->PrevPFTime = _FTime;
+			cptr->PPMorphTime = 0;
+		}
+	}
+
+	cptr->FTime %= cptr->pinfo->Animation[cptr->Phase].AniTime;
+
+
+
+	//========== rotation to tgalpha ===================//
+
+	float rspd, currspeed, tgbend;
+	float dalpha = fabs(cptr->tgalpha - cptr->alpha);
+	float drspd = dalpha;
+	if (drspd > pi) drspd = 2 * pi - drspd;
+	if (cptr->Phase == DinoInfo[cptr->CType].killType[cptr->killType].anim && DinoInfo[cptr->CType].killTypeCount) goto SKIPROT;
+	for (int i = 0; i < DinoInfo[cptr->CType].idleCount; i++) {
+		if (cptr->Phase == DinoInfo[cptr->CType].idleAnim[i]) goto SKIPROT;
+	}
+
+
+
+
+	if (drspd > 0.02)
+		if (cptr->tgalpha > cptr->alpha) currspeed = 0.6f + drspd * 1.2f;
+		else currspeed = -0.6f - drspd * 1.2f;
+	else currspeed = 0;
+	if (cptr->AfraidTime && !cptr->gliding) currspeed *= 2.5;
+	if (cptr->gliding) currspeed /= 2;
+
+	if (dalpha > pi) currspeed *= -1;
+	if (((cptr->StateF & csONWATER) || cptr->Phase == DinoInfo[cptr->CType].walkAnim ) && !cptr->gliding) currspeed /= 1.4f;
+
+	if (cptr->gliding) DeltaFunc(cptr->rspeed, currspeed, (float)TimeDt / 460.f);
+	else if (cptr->AfraidTime) DeltaFunc(cptr->rspeed, currspeed, (float)TimeDt / 160.f);
+	else DeltaFunc(cptr->rspeed, currspeed, (float)TimeDt / 180.f);
+
+	if (cptr->gliding) {
+		tgbend = drspd / 2.f;
+		if (tgbend > pi / 10) tgbend = pi / 10;
+	} else {
+		tgbend = drspd / AIInfo[cptr->Clone].targetBendRotSpd;
+		if (tgbend > pi / 5) tgbend = pi / 5;
+	}
+
+	tgbend *= SGN(currspeed);
+	if (fabs(tgbend) > fabs(cptr->bend)) DeltaFunc(cptr->bend, tgbend, (float)TimeDt / 800.f);
+	else if (cptr->gliding) DeltaFunc(cptr->bend, tgbend, (float)TimeDt / 400.f); 
+	else DeltaFunc(cptr->bend, tgbend, (float)TimeDt / 600.f);
+
+
+	rspd = cptr->rspeed * TimeDt / 1024.f;
+
+
+
+
+	if (drspd < fabs(rspd)) cptr->alpha = cptr->tgalpha;
+	else cptr->alpha += rspd;
+
+
+	if (cptr->alpha > pi * 2) cptr->alpha -= pi * 2;
+	if (cptr->alpha < 0) cptr->alpha += pi * 2;
+
+SKIPROT:
+
+
+	//========== movement ==============================//
+	cptr->lookx = (float)cos(cptr->alpha);
+	cptr->lookz = (float)sin(cptr->alpha);
+
+	float curspeed = 0;
+	if (cptr->Phase == DinoInfo[cptr->CType].runAnim) curspeed = cptr->speed_run;
+	if (cptr->Phase == DinoInfo[cptr->CType].walkAnim) curspeed = cptr->speed_walk;
+	if (cptr->Phase == DinoInfo[cptr->CType].flyAnim) curspeed = cptr->speed_fly;
+	if (cptr->Phase == DinoInfo[cptr->CType].glideAnim) curspeed = cptr->speed_glide;
+	if (cptr->Phase == DinoInfo[cptr->CType].takeoffAnim) curspeed = cptr->speed_takeoff;
+	if (cptr->Phase == DinoInfo[cptr->CType].diveAnim) curspeed = cptr->speed_dive;
+	if (DinoInfo[cptr->CType].canSwim) {
+		if (cptr->Phase == DinoInfo[cptr->CType].swimAnim) curspeed = cptr->speed_swim;
+	}
+
+	if (cptr->Phase == DinoInfo[cptr->CType].killType[cptr->killType].anim && DinoInfo[cptr->CType].killTypeCount) curspeed = 0.0f;
+
+	if (drspd > pi / 2.f) curspeed *= 2.f - 2.f*drspd / pi;
+
+	if (cptr->Phase == DinoInfo[cptr->CType].flyAnim) cptr->pos.y += TimeDt / 5.f;
+	if (cptr->Phase == DinoInfo[cptr->CType].takeoffAnim) cptr->pos.y += TimeDt / 4.f;
+	if (cptr->Phase == DinoInfo[cptr->CType].glideAnim) cptr->pos.y -= TimeDt / 10.f;
+	if (cptr->Phase == DinoInfo[cptr->CType].diveAnim) cptr->pos.y -= TimeDt;
+
+	//if (cptr->pos.y < GetLandH(cptr->pos.x, cptr->pos.z) + 236) cptr->pos.y = GetLandH(cptr->pos.x, cptr->pos.z) + 256;
+
+	//========== process speed =============//
+
+	if (cptr->gliding) {
+		curspeed *= cptr->scale;
+		DeltaFunc(cptr->vspeed, curspeed, TimeDt / 2024.f);
+
+		cptr->pos.x += cptr->lookx * cptr->vspeed * TimeDt;
+		cptr->pos.z += cptr->lookz * cptr->vspeed * TimeDt;
+
+		cptr->tggamma = cptr->rspeed / 1.5f;
+		if (cptr->tggamma > pi / 3.f) cptr->tggamma = pi / 3.f;
+		if (cptr->tggamma < -pi / 3.f) cptr->tggamma = -pi / 3.f;
+		DeltaFunc(cptr->gamma, cptr->tggamma, TimeDt / 3048.f);
+
+	} else {
+
+		DeltaFunc(cptr->vspeed, curspeed, TimeDt / 500.f);
+
+		MoveCharacter(cptr, cptr->lookx * cptr->vspeed * TimeDt * cptr->scale,
+			cptr->lookz * cptr->vspeed * TimeDt * cptr->scale, !DinoInfo[cptr->CType].canSwim, TRUE);
 
 
 
 
 
+		//============ Y movement =================//
+		if (cptr->StateF & csONWATER && DinoInfo[cptr->CType].canSwim)
+		{
+			cptr->pos.y = GetLandUpH(cptr->pos.x, cptr->pos.z) - (DinoInfo[cptr->CType].waterLevel + 20) * cptr->scale;
+			cptr->beta /= 2;
+			cptr->tggamma = 0;
+		}
+		else
+		{
+			ThinkY_Beta_Gamma(cptr,
+				AIInfo[cptr->Clone].yBetaGamma1,
+				AIInfo[cptr->Clone].yBetaGamma2,
+				AIInfo[cptr->Clone].yBetaGamma3,
+				AIInfo[cptr->Clone].yBetaGamma4);
+		}
+
+		//=== process to tggamma ===//
+		if (cptr->Phase == DinoInfo[cptr->CType].walkAnim) cptr->tggamma += cptr->rspeed / AIInfo[cptr->Clone].walkTargetGammaRot;
+		else cptr->tggamma += cptr->rspeed / AIInfo[cptr->Clone].targetGammaRot;
+
+		DeltaFunc(cptr->gamma, cptr->tggamma, TimeDt / 1624.f);
+
+		//==================================================//
+
+
+	}
+
+}
 
 void AnimateHuntable(TCharacter *cptr)
 {
@@ -7949,7 +8459,10 @@ void AnimateCharacters()
 			if (cptr->Health) AnimateTRex(cptr);
 			else AnimateTRexDead(cptr);
 			break;
-
+		case AI_TITAN:
+			if (cptr->Health) AnimateTitan(cptr);
+			else AnimateIcthDead(cptr);
+			break;
 		case 0:
 			AnimateHuntDead(cptr);
 			break;

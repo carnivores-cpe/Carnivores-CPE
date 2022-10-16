@@ -355,7 +355,7 @@ typedef struct _TCharacter
   int spcDepth;
 
   float speed_run, speed_walk, speed_jump, speed_swim,
-	  speed_fly, speed_glide, speed_takeoff, speed_land;
+	  speed_fly, speed_glide, speed_takeoff, speed_land, speed_dive;
 
   int RType;
 
@@ -516,10 +516,10 @@ typedef struct _TDinoInfo
   BOOL dontSwimAway;
 
   //int hunterDeathAnim, hunterDeathOffset;
-  int aggress, killDist;
+  int aggress, killDist, flyDist;
 
   int onRadar;
-  float runspd, jmpspd, wlkspd, swmspd, flyspd, gldspd, tkfspd, lndspd;
+  float runspd, jmpspd, wlkspd, swmspd, flyspd, gldspd, tkfspd, lndspd, divspd;
 
   int maxGrad;
   float rotspdmulti;
@@ -529,7 +529,7 @@ typedef struct _TDinoInfo
 
   int jumpRange;
 
-  int runAnim, jumpAnim, walkAnim, swimAnim, flyAnim, glideAnim, takeoffAnim, landAnim,
+  int runAnim, jumpAnim, walkAnim, swimAnim, flyAnim, diveAnim, glideAnim, takeoffAnim, landAnim,
 	  slideAnim, shakeLandAnim, shakeWaterAnim;
 
   TDinoDeathType deathType[32];
@@ -1202,6 +1202,8 @@ _EXTORNOT   struct _t
 #define AI_SMILO      25
 #define AI_MAMM       26
 #define AI_BEAR       27
+
+#define AI_TITAN      28
 
 
 //#define AI_POACHER    22
