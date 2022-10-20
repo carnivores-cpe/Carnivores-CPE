@@ -2349,6 +2349,7 @@ NOTHINK:
 				else {
 					cptr->beta = 0;
 					cptr->gamma = 0;
+					cptr->Slide = 0;
 					cptr->Phase = DinoInfo[cptr->CType].takeoffAnim;
 				}
 				
@@ -2358,6 +2359,7 @@ NOTHINK:
 					cptr->Phase != DinoInfo[cptr->CType].flyAnim) {
 					cptr->beta = 0;
 					cptr->gamma = 0;
+					cptr->Slide = 0;
 					cptr->Phase = DinoInfo[cptr->CType].takeoffAnim;
 				} else {
 					float dalph = cptr->alpha - cptr->tgalpha;
@@ -2429,6 +2431,10 @@ NOTHINK:
 
 	if (DinoInfo[cptr->CType].canSwim) {
 		if (cptr->StateF & csONWATER) cptr->Phase = DinoInfo[cptr->CType].swimAnim;
+	}
+
+	if (cptr->gliding) {
+		if (cptr->Slide > 40) cptr->Phase = DinoInfo[cptr->CType].slideAnim;
 	}
 
 
@@ -2522,6 +2528,19 @@ ENDPSELECT:
 SKIPROT:
 
 
+	if (cptr->gliding) {
+		//======= set slide mode ===========//
+		if (!cptr->Slide && cptr->vspeed > 0.6)
+			if (AngleDifference(cptr->tgalpha, cptr->alpha) > pi * 2 / 3.f)
+			{
+				cptr->Slide = (int)(cptr->vspeed*700.f);
+				cptr->slidex = cptr->lookx;
+				cptr->slidez = cptr->lookz;
+				cptr->vspeed = 0;
+			}
+	}
+
+
 	//========== movement ==============================//
 	cptr->lookx = (float)cos(cptr->alpha);
 	cptr->lookz = (float)sin(cptr->alpha);
@@ -2539,7 +2558,13 @@ SKIPROT:
 
 	if (cptr->Phase == DinoInfo[cptr->CType].killType[cptr->killType].anim && DinoInfo[cptr->CType].killTypeCount) curspeed = 0.0f;
 
-	if (drspd > pi / 2.f) curspeed *= 2.f - 2.f*drspd / pi;
+	if (cptr->gliding && cptr->Slide)
+	{
+		curspeed /= 8;
+		if (drspd > pi / 2.f) curspeed = 0;
+		else if (drspd > pi / 4.f) curspeed *= 2.f - 4.f*drspd / pi;
+	}
+	else if (drspd > pi / 2.f) curspeed *= 2.f - 2.f*drspd / pi;
 
 	if (cptr->Phase == DinoInfo[cptr->CType].flyAnim) cptr->pos.y += TimeDt / 5.f;
 	if (cptr->Phase == DinoInfo[cptr->CType].takeoffAnim) cptr->pos.y += TimeDt / 4.f;
@@ -2569,7 +2594,15 @@ SKIPROT:
 		MoveCharacter(cptr, cptr->lookx * cptr->vspeed * TimeDt * cptr->scale,
 			cptr->lookz * cptr->vspeed * TimeDt * cptr->scale, !DinoInfo[cptr->CType].canSwim, TRUE);
 
+		//========== slide ==============//
+		if (cptr->Slide && cptr->gliding)
+		{
+			MoveCharacter(cptr, cptr->slidex * cptr->Slide / 600.f * TimeDt * cptr->scale,
+				cptr->slidez * cptr->Slide / 600.f * TimeDt * cptr->scale, !DinoInfo[cptr->CType].canSwim, TRUE);
 
+			cptr->Slide -= TimeDt;
+			if (cptr->Slide < 0) cptr->Slide = 0;
+		}
 
 
 
