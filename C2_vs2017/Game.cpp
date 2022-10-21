@@ -36,6 +36,9 @@ AudioQuad data[8192];
   HMap[1024][1024];
 */
 
+
+const int bufSize = 19;
+
 bool ShowFaces = true;
 
 void UploadGeometry()
@@ -857,156 +860,121 @@ void InitGameInfo()
   LoadResourcesScript();
 }
 
-/*
-DWORD WINAPI ServerMasterThread() {
 
+// MULTIPLAYER ===================================================
+
+bool RecvPacket(SOCKET *socket){
+	iResult = recv(*socket, recvbuf, bufSize, 0);
+	if (iResult > 0) {
+
+		const byte *tdata2 = reinterpret_cast<const byte*>(recvbuf);
+
+		Vector3d *posTemp = new Vector3d;
+
+		posTemp->x = (float)((tdata2[0] << 24)
+			+ (tdata2[1] << 16)
+			+ (tdata2[2] << 8)
+			+ (tdata2[3])) / 10000.f;
+		posTemp->y = (float)((tdata2[4] << 24)
+			+ (tdata2[5] << 16)
+			+ (tdata2[6] << 8)
+			+ (tdata2[7])) / 10000.f;
+		posTemp->z = (float)((tdata2[8] << 24)
+			+ (tdata2[9] << 16)
+			+ (tdata2[10] << 8)
+			+ (tdata2[11])) / 10000.f;
+
+		MPlayers[0].pos = *posTemp;
+
+		MPlayers[0].alpha = (float)((tdata2[12] << 24)
+			+ (tdata2[13] << 16)
+			+ (tdata2[14] << 8)
+			+ (tdata2[15])) / 10000.f;
+
+		MPlayers[0].alpha += 1.5 * pi;
+		if (MPlayers[0].alpha > pi * 2) MPlayers[0].alpha -= 2 * pi;
+
+		int t = (int)(tdata2[16]) - 1;
+		if (t >= 0) mGunShot[0] = t;
+
+		t = (int)(tdata2[17]) - 1;
+		if (t >= 0) mHunterCall[0] = t;
+
+		t = (int)(tdata2[18]) - 1;
+		if (t >= 0) mHunterCallType[0] = t;
+
+		return TRUE;
+	}
+	else return FALSE;
 }
-*/
+
+void SendPacket(SOCKET *socket) {
+	long px = PlayerX * 10000.f;
+	long py = PlayerY * 10000.f;
+	long pz = PlayerZ * 10000.f;
+	long pa = PlayerAlpha * 10000.f;
+
+	long ps = sendGunShot + 1;
+	sendGunShot = -1;
+
+	long pc = sendHunterCall + 1;
+	sendHunterCall = -1;
+
+	long pct = sendHunterCallType + 1;
+	sendHunterCallType = -1;
+
+	byte tdata[bufSize];
+
+	tdata[0] = (int)((px >> 24) & 0xFF);
+	tdata[1] = (int)((px >> 16) & 0xFF);
+	tdata[2] = (int)((px >> 8) & 0XFF);
+	tdata[3] = (int)((px & 0XFF));
+
+	tdata[4] = (int)((py >> 24) & 0xFF);
+	tdata[5] = (int)((py >> 16) & 0xFF);
+	tdata[6] = (int)((py >> 8) & 0XFF);
+	tdata[7] = (int)((py & 0XFF));
+
+	tdata[8] = (int)((pz >> 24) & 0xFF);
+	tdata[9] = (int)((pz >> 16) & 0xFF);
+	tdata[10] = (int)((pz >> 8) & 0XFF);
+	tdata[11] = (int)((pz & 0XFF));
+
+	tdata[12] = (int)((pa >> 24) & 0xFF);
+	tdata[13] = (int)((pa >> 16) & 0xFF);
+	tdata[14] = (int)((pa >> 8) & 0XFF);
+	tdata[15] = (int)((pa & 0XFF));
+
+	tdata[16] = (int)((ps & 0XFF));
+
+	tdata[17] = (int)((pc & 0XFF));
+
+	tdata[18] = (int)((pct & 0XFF));
+
+	const char *sendbuf = reinterpret_cast<const char*>(tdata);
+
+	iSendResult = send(*socket, sendbuf, bufSize, 0);
+	if (iSendResult == SOCKET_ERROR) {
+		PrintLog("send failed");
+		closesocket(*socket);
+		WSACleanup();
+		DoHalt("Multiplayer: Send failed");
+	}
+}
 
 DWORD WINAPI ServerCommsThread(LPVOID lpParameter)
 {
 	while (HaltThread) {
 
-		//do {
-
-			iResult = recv(ClientSocket, recvbuf, 28, 0);
-			if (iResult > 0) {
-				
-				const byte *tdata2 = reinterpret_cast<const byte*>(recvbuf);
-
-				Vector3d *posTemp = new Vector3d;
-				
-				posTemp->x = (float)((tdata2[0] << 24)
-					+ (tdata2[1] << 16)
-					+ (tdata2[2] << 8)
-					+ (tdata2[3])) / 10000.f;
-				posTemp->y = (float)((tdata2[4] << 24)
-					+ (tdata2[5] << 16)
-					+ (tdata2[6] << 8)
-					+ (tdata2[7])) / 10000.f;
-				posTemp->z = (float)((tdata2[8] << 24)
-					+ (tdata2[9] << 16)
-					+ (tdata2[10] << 8)
-					+ (tdata2[11])) / 10000.f;
-
-				MPlayers[0].pos = *posTemp;
-
-				MPlayers[0].alpha = (float)((tdata2[12] << 24)
-					+ (tdata2[13] << 16)
-					+ (tdata2[14] << 8)
-					+ (tdata2[15])) / 10000.f;
-
-				MPlayers[0].alpha += 1.5 * pi;
-				if (MPlayers[0].alpha > pi * 2) MPlayers[0].alpha -= 2 * pi;
-
-				int t = (int)((tdata2[16] << 24)
-					+ (tdata2[17] << 16)
-					+ (tdata2[18] << 8)
-					+ (tdata2[19])) - 1;
-				if (t >= 0) mGunShot[0] = t;
-
-				t = (int)((tdata2[20] << 24)
-					+ (tdata2[21] << 16)
-					+ (tdata2[22] << 8)
-					+ (tdata2[23])) - 1;
-				if (t >= 0) mHunterCall[0] = t;
-
-				t = (int)((tdata2[24] << 24)
-					+ (tdata2[25] << 16)
-					+ (tdata2[26] << 8)
-					+ (tdata2[27])) - 1;
-				if (t >= 0) mHunterCallType[0] = t;
-
-
-				/*
-				//test - comment this out to reduce lag
-				char printable[25];
-				_itoa(anotherLongInt, printable, 10);
-				PrintLog("Bytes received: ");
-				PrintLog(printable);
-				PrintLog("\n");
-				*/
-				
-				//char *sendbuf = "test"; 
-				long px = PlayerX * 10000.f;
-				long py = PlayerY * 10000.f;
-				long pz = PlayerZ * 10000.f;
-				long pa = PlayerAlpha * 10000.f;
-
-				long ps = sendGunShot + 1;
-				sendGunShot = -1;
-
-				long pc = sendHunterCall + 1;
-				sendHunterCall = -1;
-
-				long pct = sendHunterCallType + 1;
-				sendHunterCallType = -1;
-
-				byte tdata[28];
-
-
-				tdata[0] = (int)((px >> 24) & 0xFF);
-				tdata[1] = (int)((px >> 16) & 0xFF);
-				tdata[2] = (int)((px >> 8) & 0XFF);
-				tdata[3] = (int)((px & 0XFF));
-				tdata[4] = (int)((py >> 24) & 0xFF);
-				tdata[5] = (int)((py >> 16) & 0xFF);
-				tdata[6] = (int)((py >> 8) & 0XFF);
-				tdata[7] = (int)((py & 0XFF));
-				tdata[8] = (int)((pz >> 24) & 0xFF);
-				tdata[9] = (int)((pz >> 16) & 0xFF);
-				tdata[10] = (int)((pz >> 8) & 0XFF);
-				tdata[11] = (int)((pz & 0XFF));
-				tdata[12] = (int)((pa >> 24) & 0xFF);
-				tdata[13] = (int)((pa >> 16) & 0xFF);
-				tdata[14] = (int)((pa >> 8) & 0XFF);
-				tdata[15] = (int)((pa & 0XFF));
-				tdata[16] = (int)((ps >> 24) & 0xFF);
-				tdata[17] = (int)((ps >> 16) & 0xFF);
-				tdata[18] = (int)((ps >> 8) & 0XFF);
-				tdata[19] = (int)((ps & 0XFF));
-				tdata[20] = (int)((pc >> 24) & 0xFF);
-				tdata[21] = (int)((pc >> 16) & 0xFF);
-				tdata[22] = (int)((pc >> 8) & 0XFF);
-				tdata[23] = (int)((pc & 0XFF));
-				tdata[24] = (int)((pct >> 24) & 0xFF);
-				tdata[25] = (int)((pct >> 16) & 0xFF);
-				tdata[26] = (int)((pct >> 8) & 0XFF);
-				tdata[27] = (int)((pct & 0XFF));
-
-
-				const char *sendbuf = reinterpret_cast<const char*>(tdata);
-				
-
-				// Echo the buffer back to the sender
-				iSendResult = send(ClientSocket, sendbuf, 28, 0);
-				if (iSendResult == SOCKET_ERROR) {
-					PrintLog("send failed\n");
-					closesocket(ClientSocket);
-					WSACleanup();
-					DoHalt("Multiplayer Host: send failed");
-				}
-
-				/*
-				//test - comment this out to reduce lag
-				char printable2[25];
-				_itoa(long_data, printable2, 10);
-				PrintLog("Bytes sent: ");
-				PrintLog(printable2);
-				PrintLog("\n");
-				*/
-
-			}
-			else if (iResult != 0)  {
-				PrintLog("recv failed\n");
-				closesocket(ClientSocket);
-				WSACleanup();
-				DoHalt("Multiplayer Host: recv failed");
-			}
-
-		//} while ();
-
-		// if laggy, add sleep statement to client
+		bool result = RecvPacket(&ClientSocket);
+		if (result) {
+			SendPacket(&ClientSocket);
+		} else if (iResult != 0) {
+			PrintLog("recv failed\n");
+			closesocket(ClientSocket);
+			WSACleanup();
+			DoHalt("Multiplayer Host: recv failed");
+		}
 	}
 	PrintLog("Server Comms Thread Shutdown Successful!\n");
 	return 0;
@@ -1014,168 +982,20 @@ DWORD WINAPI ServerCommsThread(LPVOID lpParameter)
 
 DWORD WINAPI ClientCommsThread(LPVOID lpParameter)
 {
-
-	//recvbuf = "testing";
-
 	while (HaltThread) {
 
-		//char *sendbuf = "test";
-		//long long_data = PlayerX;
-		long px = PlayerX*10000.f;
-		long py = PlayerY*10000.f;
-		long pz = PlayerZ*10000.f;
-		long pa = PlayerAlpha*10000.f;
-
-		long ps = sendGunShot + 1;
-		sendGunShot = -1;
-
-		long pc = sendHunterCall + 1;
-		sendHunterCall = -1;
-
-		long pct = sendHunterCallType + 1;
-		sendHunterCallType = -1;
-
-		byte tdata[28];
-
-		
-		
-		tdata[0] = (int)((px >> 24) & 0xFF);
-		tdata[1] = (int)((px >> 16) & 0xFF);
-		tdata[2] = (int)((px >> 8) & 0XFF);
-		tdata[3] = (int)((px & 0XFF));
-		tdata[4] = (int)((py >> 24) & 0xFF);
-		tdata[5] = (int)((py >> 16) & 0xFF);
-		tdata[6] = (int)((py >> 8) & 0XFF);
-		tdata[7] = (int)((py & 0XFF));
-		tdata[8] = (int)((pz >> 24) & 0xFF);
-		tdata[9] = (int)((pz >> 16) & 0xFF);
-		tdata[10] = (int)((pz >> 8) & 0XFF);
-		tdata[11] = (int)((pz & 0XFF));
-		tdata[12] = (int)((pa >> 24) & 0xFF);
-		tdata[13] = (int)((pa >> 16) & 0xFF);
-		tdata[14] = (int)((pa >> 8) & 0XFF);
-		tdata[15] = (int)((pa & 0XFF));
-		tdata[16] = (int)((ps >> 24) & 0xFF);
-		tdata[17] = (int)((ps >> 16) & 0xFF);
-		tdata[18] = (int)((ps >> 8) & 0XFF);
-		tdata[19] = (int)((ps & 0XFF));
-		tdata[20] = (int)((pc >> 24) & 0xFF);
-		tdata[21] = (int)((pc >> 16) & 0xFF);
-		tdata[22] = (int)((pc >> 8) & 0XFF);
-		tdata[23] = (int)((pc & 0XFF));
-		tdata[24] = (int)((pct >> 24) & 0xFF);
-		tdata[25] = (int)((pct >> 16) & 0xFF);
-		tdata[26] = (int)((pct >> 8) & 0XFF);
-		tdata[27] = (int)((pct & 0XFF));
-		const char *sendbuf = reinterpret_cast<const char*>(tdata);
-
-		// Send an initial buffer
-		iResult = send(ConnectSocket, sendbuf, 28, 0);
-		if (iResult == SOCKET_ERROR) {
-			PrintLog("send failed");
-			closesocket(ConnectSocket);
-			WSACleanup();
-			DoHalt("Multiplayer Client: Send failed");
-		}
-		
-		/*
-		//test - comment this out to reduce lag
-		char printable2[25];
-		_itoa(long_data, printable2, 10);
-		PrintLog("Bytes sent: ");
-		PrintLog(printable2);
-		PrintLog("\n");
-		*/
-
-		/*
-		// shutdown the connection since no more data will be sent
-		iResult = shutdown(ConnectSocket, SD_SEND);
-		if (iResult == SOCKET_ERROR) {
-			PrintLog("shutdown failed");
-			closesocket(ConnectSocket);
-			WSACleanup();
-			DoHalt("Multiplayer Client: Shutdown failed");
-		}
-		*/
-
-
+		SendPacket(&ConnectSocket);
 
 		// Receive until the peer closes the connection
 		bool responded = FALSE;
 		do {
-			iResult = recv(ConnectSocket, recvbuf, 28, 0);
-			if (iResult > 0)
-			{
-				const byte *tdata2 = reinterpret_cast<const byte*>(recvbuf);
 
-				Vector3d *posTemp = new Vector3d;
-
-				posTemp->x = (float)((tdata2[0] << 24)
-					+ (tdata2[1] << 16)
-					+ (tdata2[2] << 8)
-					+ (tdata2[3])) / 10000.f;
-				posTemp->y = (float)((tdata2[4] << 24)
-					+ (tdata2[5] << 16)
-					+ (tdata2[6] << 8)
-					+ (tdata2[7])) / 10000.f;
-				posTemp->z = (float)((tdata2[8] << 24)
-					+ (tdata2[9] << 16)
-					+ (tdata2[10] << 8)
-					+ (tdata2[11])) / 10000.f;
-
-				MPlayers[0].pos = *posTemp;
-
-				MPlayers[0].alpha = (float)((tdata2[12] << 24)
-					+ (tdata2[13] << 16)
-					+ (tdata2[14] << 8)
-					+ (tdata2[15]))/10000.f;
-
-				MPlayers[0].alpha += 1.5 * pi;
-				if (MPlayers[0].alpha > pi * 2) MPlayers[0].alpha -= 2 * pi;
-
-				
-				int t = (int)((tdata2[16] << 24)
-					+ (tdata2[17] << 16)
-					+ (tdata2[18] << 8)
-					+ (tdata2[19])) - 1;
-
-				if (t >= 0) mGunShot[0] = t;
-
-				t = (int)((tdata2[20] << 24)
-					+ (tdata2[21] << 16)
-					+ (tdata2[22] << 8)
-					+ (tdata2[23])) - 1;
-				if (t >= 0) mHunterCall[0] = t;
-
-				t = (int)((tdata2[24] << 24)
-					+ (tdata2[25] << 16)
-					+ (tdata2[26] << 8)
-					+ (tdata2[27])) - 1;
-				if (t >= 0) mHunterCallType[0] = t;
-					
-
-				/*
-				//test - comment this out to reduce lag
-				char printable[25];
-				_itoa(anotherLongInt, printable, 10);
-				PrintLog("Bytes received: ");
-				PrintLog(printable);
-				PrintLog("\n");
-				*/
-
-				responded = TRUE;
-			}
-			else if (iResult != 0) {
+			responded = RecvPacket(&ConnectSocket);
+			if (!responded && iResult != 0) {
 				PrintLog("recv failed\n");
 			}
 
 		} while (!responded);
-
-
-
-
-
-
 
 		//Sleep(10);//test
 		// if laggy, add sleep statement
@@ -1213,8 +1033,6 @@ void ShutDownServer() {
 	PrintLog("COMPLETE!\n");
 }
 
-
-
 void ShutDownClient() {
 
 	// shutdown the connection since no more data will be sent
@@ -1240,7 +1058,6 @@ void ShutDownClient() {
 	PrintLog("Client connection closed!\n");
 	PrintLog("COMPLETE!\n");
 }
-
 
 void _StartupServer() {
 	//server
@@ -1472,8 +1289,6 @@ void _StartupClient() {
 
 	//multiplayer test end
 }
-
-
 
 void StartupServerCommsThread() {
 	PrintLog("Starting Server Comms...\n");

@@ -8342,6 +8342,14 @@ void AnimateCharacters()
 		return;
 	}
 
+	if (Multiplayer && !Host) {
+		//for (CurDino = 0; CurDino < ChCount; CurDino++)
+		//{
+		//
+		//}
+		return;
+	}
+
 	//packs
 	for (int packN = 0; packN < PackCount; packN++) {
 
