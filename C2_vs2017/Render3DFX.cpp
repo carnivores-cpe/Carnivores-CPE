@@ -4048,12 +4048,13 @@ void DrawHMap()
     {
       
 		//if (Characters[c].AI<10) continue;
+
 		if (DinoInfo[Characters[c].CType].onRadar > 0) {
 			if (Characters[c].AI >= 10 && DinoInfo[Characters[c].CType].onRadar == 1) {
 				if (!(TargetDino & (1 << Characters[c].AI))) continue;
 			}
 		}
-		else continue;
+		else if (c != 0) continue; //TEST
 
 			if (!Characters[c].Health) continue;
 			if (!RadarMode && Characters[c].AI != AI_HUNTDOG) continue;

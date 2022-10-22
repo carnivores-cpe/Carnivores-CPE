@@ -37,7 +37,10 @@ AudioQuad data[8192];
 */
 
 
-const int bufSize = 19;
+const int bufSizeMax = 48;
+const int bufSizeHostInit = 48;
+const int bufSizeHost = 44;
+const int bufSizeClient = 19;
 
 bool ShowFaces = true;
 
@@ -863,93 +866,127 @@ void InitGameInfo()
 
 // MULTIPLAYER ===================================================
 
-bool RecvPacket(SOCKET *socket){
+void putInt(byte data[], int *pos, long in) {
+	data[*pos] = (int)((in & 0XFF));
+	*pos += 1;
+}
+
+void putFloat(byte data[], int *pos, long in) {
+	data[*pos]   = (int)((in >> 24) & 0xFF);
+	data[*pos+1] = (int)((in >> 16) & 0xFF);
+	data[*pos+2] = (int)((in >> 8) & 0XFF);
+	data[*pos+3] = (int)((in & 0XFF));
+	*pos += 4;
+}
+
+int readInt(const byte data[], int *pos) {
+	int pos2 = *pos;
+	*pos += 1;
+	return (int)((data[pos2]));
+}
+
+float readFloat(const byte data[], int *pos) {
+	int pos2 = *pos;
+	*pos += 4;
+	return (float)((data[pos2] << 24)
+		+ (data[pos2 + 1] << 16)
+		+ (data[pos2 + 2] << 8)
+		+ (data[pos2 + 3]));
+}
+
+bool RecvPacket(SOCKET *socket, int bufSize, bool init){
 	iResult = recv(*socket, recvbuf, bufSize, 0);
 	if (iResult > 0) {
 
 		const byte *tdata2 = reinterpret_cast<const byte*>(recvbuf);
+		int pos = 0;
 
 		Vector3d *posTemp = new Vector3d;
-
-		posTemp->x = (float)((tdata2[0] << 24)
-			+ (tdata2[1] << 16)
-			+ (tdata2[2] << 8)
-			+ (tdata2[3])) / 10000.f;
-		posTemp->y = (float)((tdata2[4] << 24)
-			+ (tdata2[5] << 16)
-			+ (tdata2[6] << 8)
-			+ (tdata2[7])) / 10000.f;
-		posTemp->z = (float)((tdata2[8] << 24)
-			+ (tdata2[9] << 16)
-			+ (tdata2[10] << 8)
-			+ (tdata2[11])) / 10000.f;
-
+		posTemp->x = readFloat(tdata2, &pos) / 10000.f;
+		posTemp->y = readFloat(tdata2, &pos) / 10000.f;
+		posTemp->z = readFloat(tdata2, &pos) / 10000.f;
 		MPlayers[0].pos = *posTemp;
 
-		MPlayers[0].alpha = (float)((tdata2[12] << 24)
-			+ (tdata2[13] << 16)
-			+ (tdata2[14] << 8)
-			+ (tdata2[15])) / 10000.f;
+		MPlayers[0].alpha = readFloat(tdata2, &pos) / 10000.f;
 
 		MPlayers[0].alpha += 1.5 * pi;
 		if (MPlayers[0].alpha > pi * 2) MPlayers[0].alpha -= 2 * pi;
 
-		int t = (int)(tdata2[16]) - 1;
+		int t = readInt(tdata2, &pos) - 1;
 		if (t >= 0) mGunShot[0] = t;
 
-		t = (int)(tdata2[17]) - 1;
+		t = readInt(tdata2, &pos) - 1;
 		if (t >= 0) mHunterCall[0] = t;
 
-		t = (int)(tdata2[18]) - 1;
+		t = readInt(tdata2, &pos) - 1;
 		if (t >= 0) mHunterCallType[0] = t;
+
+		if (!Host) {
+
+			Wind.alpha = readFloat(tdata2, &pos) / 10000.f;
+			Wind.speed = readFloat(tdata2, &pos) / 10000.f;
+
+			Characters[0].pos.x = readFloat(tdata2, &pos) / 10000.f;
+			Characters[0].pos.z = readFloat(tdata2, &pos) / 10000.f;
+			Characters[0].alpha = readFloat(tdata2, &pos) / 10000.f;
+			Characters[0].bend = readFloat(tdata2, &pos) / 10000.f;
+			Characters[0].Phase = readInt(tdata2, &pos);
+			if (init) Characters[0].scale = readFloat(tdata2, &pos) / 10000.f;
+		}
 
 		return TRUE;
 	}
 	else return FALSE;
 }
 
-void SendPacket(SOCKET *socket) {
+void SendPacket(SOCKET *socket, int bufSize, bool init) {
+
+	int pos = 0;
+	byte tdata[bufSizeMax];
+
 	long px = PlayerX * 10000.f;
 	long py = PlayerY * 10000.f;
 	long pz = PlayerZ * 10000.f;
 	long pa = PlayerAlpha * 10000.f;
+	putFloat(tdata, &pos, px);
+	putFloat(tdata, &pos, py);
+	putFloat(tdata, &pos, pz);
+	putFloat(tdata, &pos, pa);
 
 	long ps = sendGunShot + 1;
 	sendGunShot = -1;
+	putInt(tdata, &pos, ps);
 
 	long pc = sendHunterCall + 1;
 	sendHunterCall = -1;
+	putInt(tdata, &pos, pc);
 
 	long pct = sendHunterCallType + 1;
 	sendHunterCallType = -1;
+	putInt(tdata, &pos, pct);
 
-	byte tdata[bufSize];
+	if (Host) {
+		long wa = Wind.alpha * 10000.;
+		long ws = Wind.speed * 10000.;
+		putFloat(tdata, &pos, wa);
+		putFloat(tdata, &pos, ws);
 
-	tdata[0] = (int)((px >> 24) & 0xFF);
-	tdata[1] = (int)((px >> 16) & 0xFF);
-	tdata[2] = (int)((px >> 8) & 0XFF);
-	tdata[3] = (int)((px & 0XFF));
 
-	tdata[4] = (int)((py >> 24) & 0xFF);
-	tdata[5] = (int)((py >> 16) & 0xFF);
-	tdata[6] = (int)((py >> 8) & 0XFF);
-	tdata[7] = (int)((py & 0XFF));
-
-	tdata[8] = (int)((pz >> 24) & 0xFF);
-	tdata[9] = (int)((pz >> 16) & 0xFF);
-	tdata[10] = (int)((pz >> 8) & 0XFF);
-	tdata[11] = (int)((pz & 0XFF));
-
-	tdata[12] = (int)((pa >> 24) & 0xFF);
-	tdata[13] = (int)((pa >> 16) & 0xFF);
-	tdata[14] = (int)((pa >> 8) & 0XFF);
-	tdata[15] = (int)((pa & 0XFF));
-
-	tdata[16] = (int)((ps & 0XFF));
-
-	tdata[17] = (int)((pc & 0XFF));
-
-	tdata[18] = (int)((pct & 0XFF));
+		long charX = Characters[0].pos.x * 10000.f;
+		long charZ = Characters[0].pos.z * 10000.f;
+		long charA = Characters[0].alpha * 10000.f;
+		long charB = Characters[0].bend * 10000.f;
+		long charPh = Characters[0].Phase;
+		putFloat(tdata, &pos, charX);
+		putFloat(tdata, &pos, charZ);
+		putFloat(tdata, &pos, charA);
+		putFloat(tdata, &pos, charB);
+		putInt(tdata, &pos, charPh);
+		if (init) {
+			long charScale = Characters[0].scale * 10000.f;
+			putFloat(tdata, &pos, charScale);
+		}
+	}
 
 	const char *sendbuf = reinterpret_cast<const char*>(tdata);
 
@@ -964,11 +1001,19 @@ void SendPacket(SOCKET *socket) {
 
 DWORD WINAPI ServerCommsThread(LPVOID lpParameter)
 {
+	bool init = TRUE;
+
 	while (HaltThread) {
 
-		bool result = RecvPacket(&ClientSocket);
+		bool result = RecvPacket(&ClientSocket, bufSizeClient, FALSE);
 		if (result) {
-			SendPacket(&ClientSocket);
+
+			if (init) {
+				SendPacket(&ClientSocket, bufSizeHostInit, TRUE);
+				init = FALSE;
+				PrintLog("INIT_PACKET_SENT\n");//TEST
+			} else SendPacket(&ClientSocket, bufSizeHost, FALSE);
+
 		} else if (iResult != 0) {
 			PrintLog("recv failed\n");
 			closesocket(ClientSocket);
@@ -982,20 +1027,29 @@ DWORD WINAPI ServerCommsThread(LPVOID lpParameter)
 
 DWORD WINAPI ClientCommsThread(LPVOID lpParameter)
 {
+	bool init = TRUE;
+
 	while (HaltThread) {
 
-		SendPacket(&ConnectSocket);
+		SendPacket(&ConnectSocket,bufSizeClient, FALSE);
 
 		// Receive until the peer closes the connection
 		bool responded = FALSE;
 		do {
 
-			responded = RecvPacket(&ConnectSocket);
+			if (init) {
+				responded = RecvPacket(&ConnectSocket, bufSizeHostInit, TRUE);
+			}
+			else responded = RecvPacket(&ConnectSocket, bufSizeHost, FALSE);
+
 			if (!responded && iResult != 0) {
 				PrintLog("recv failed\n");
 			}
 
 		} while (!responded);
+
+		if (init) PrintLog("INIT_PACKET_RECV\n");//TEST
+		init = FALSE;
 
 		//Sleep(10);//test
 		// if laggy, add sleep statement
@@ -2256,19 +2310,19 @@ void AnimateProcesses()
       AddElements(xx, GetLandH(xx,zz), zz, 4, 6 + rRand(6));
   }
 
-  if (Takt & 1)
-  {
-    Wind.alpha+=siRand(16) / 4096.f;
-    Wind.speed+=siRand(400) / 6400.f;
+  if (!Multiplayer || Host) {
+	  if (Takt & 1)
+	  {
+		  Wind.alpha += siRand(16) / 4096.f;
+		  Wind.speed += siRand(400) / 6400.f;
+	  }
+
+	  if (Wind.speed < 4.f) Wind.speed = 4.f;
+	  if (Wind.speed > 18.f) Wind.speed = 18.f;
   }
-
-  if (Wind.speed< 4.f) Wind.speed=4.f;
-  if (Wind.speed>18.f) Wind.speed=18.f;
-
-  Wind.nv.x = (float) sin(Wind.alpha);
+  Wind.nv.x = (float)sin(Wind.alpha);
   Wind.nv.z = (float)-cos(Wind.alpha);
   Wind.nv.y = 0.f;
-
 
   if (answtime)
   {

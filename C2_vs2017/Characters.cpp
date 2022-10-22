@@ -5273,6 +5273,68 @@ SKIPROT:
 
 }
 
+//multiplayer
+void AnimateMClientCharacter(TCharacter *cptr)
+{
+	NewPhase = FALSE;
+	int _Phase = cptr->Phase;
+	int _FTime = cptr->FTime;
+
+	ProcessPrevPhase(cptr);
+
+	//======== select new phase =======================//
+	cptr->FTime += TimeDt;
+
+	if (cptr->FTime >= cptr->pinfo->Animation[cptr->Phase].AniTime)
+	{
+		cptr->FTime %= cptr->pinfo->Animation[cptr->Phase].AniTime;
+		NewPhase = TRUE;
+	}
+
+	//====== process phase changing ===========//
+	if ((_Phase != cptr->Phase) || NewPhase)
+		ActivateCharacterFx(cptr);
+
+	if (_Phase != cptr->Phase)
+	{
+		if ((_Phase == DinoInfo[cptr->CType].runAnim ||
+			_Phase == DinoInfo[cptr->CType].walkAnim) &&
+			(cptr->Phase == DinoInfo[cptr->CType].runAnim ||
+				cptr->Phase == DinoInfo[cptr->CType].walkAnim))
+			cptr->FTime = _FTime * cptr->pinfo->Animation[cptr->Phase].AniTime / cptr->pinfo->Animation[_Phase].AniTime + 64;
+		else if (!NewPhase) cptr->FTime = 0;
+
+		if (cptr->PPMorphTime > 128)
+		{
+			cptr->PrevPhase = _Phase;
+			cptr->PrevPFTime = _FTime;
+			cptr->PPMorphTime = 0;
+		}
+	}
+
+	cptr->FTime %= cptr->pinfo->Animation[cptr->Phase].AniTime;
+
+	//========== rotation to tgalpha ===================//
+
+	//========== movement ==============================//
+	cptr->lookx = (float)cos(cptr->alpha);
+	cptr->lookz = (float)sin(cptr->alpha);
+
+	//============ Y movement =================//
+	if (cptr->StateF & csONWATER && DinoInfo[cptr->CType].canSwim)
+	{
+		cptr->pos.y = GetLandUpH(cptr->pos.x, cptr->pos.z) - (DinoInfo[cptr->CType].waterLevel + 20) * cptr->scale;
+		cptr->beta /= 2;
+		cptr->tggamma = 0;
+	}
+	else {
+		ThinkY_Beta_Gamma(cptr, 64, 32, 0.7f, 0.4f);
+	}
+
+	//if (cptr->Phase == DinoInfo[cptr->CType].walkAnim) cptr->tggamma += cptr->rspeed / 12.0f;
+	//else cptr->tggamma += cptr->rspeed / 8.0f;
+	DeltaFunc(cptr->gamma, cptr->tggamma, TimeDt / 2048.f);
+}
 
 
 
@@ -8343,10 +8405,19 @@ void AnimateCharacters()
 	}
 
 	if (Multiplayer && !Host) {
-		//for (CurDino = 0; CurDino < ChCount; CurDino++)
-		//{
-		//
-		//}
+
+		cptr = &Characters[0];
+		AnimateMClientCharacter(cptr);
+
+		/*
+		for (CurDino = 0; CurDino < ChCount; CurDino++)
+		{
+			cptr = &Characters[CurDino];
+
+			AnimateMClientCharacter(cptr);
+		}
+		*/
+
 		return;
 	}
 
