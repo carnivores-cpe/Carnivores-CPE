@@ -379,6 +379,8 @@ typedef struct _TCharacter
 
   bool animateTrophy;
 
+  int _PhaseM;
+
 } TCharacter;
 
 

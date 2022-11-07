@@ -37,9 +37,9 @@ AudioQuad data[8192];
 */
 
 
-const int bufSizeMax = 48;
-const int bufSizeHostInit = 48;
-const int bufSizeHost = 44;
+const int bufSizeMax = 189;
+const int bufSizeHostInit = 189;
+const int bufSizeHost = 153;
 const int bufSizeClient = 19;
 
 bool ShowFaces = true;
@@ -926,12 +926,19 @@ bool RecvPacket(SOCKET *socket, int bufSize, bool init){
 			Wind.alpha = readFloat(tdata2, &pos) / 10000.f;
 			Wind.speed = readFloat(tdata2, &pos) / 10000.f;
 
-			Characters[0].pos.x = readFloat(tdata2, &pos) / 10000.f;
-			Characters[0].pos.z = readFloat(tdata2, &pos) / 10000.f;
-			Characters[0].alpha = readFloat(tdata2, &pos) / 10000.f;
-			Characters[0].bend = readFloat(tdata2, &pos) / 10000.f;
-			Characters[0].Phase = readInt(tdata2, &pos);
-			if (init) Characters[0].scale = readFloat(tdata2, &pos) / 10000.f;
+			for (int c = 0; c < 6; c++) {
+				Characters[c].pos.x = readFloat(tdata2, &pos) / 10000.f;
+				Characters[c].pos.z = readFloat(tdata2, &pos) / 10000.f;
+				if (Characters[c].Clone == AI_DIMOR || Characters[c].Clone == AI_PTERA) Characters[c].pos.y = readFloat(tdata2, &pos) / 10000.f; //potentially all 6 ambs
+				Characters[c].alpha = readFloat(tdata2, &pos) / 10000.f;
+				Characters[c].bend = readFloat(tdata2, &pos) / 10000.f;
+				Characters[c].Phase = readInt(tdata2, &pos);
+				if (init) {
+					Characters[c].scale = readFloat(tdata2, &pos) / 10000.f;
+					Characters[c].deathType = readInt(tdata2, &pos);
+					Characters[c].waterDieAnim = readInt(tdata2, &pos);
+				}
+			}
 		}
 
 		return TRUE;
@@ -939,7 +946,7 @@ bool RecvPacket(SOCKET *socket, int bufSize, bool init){
 	else return FALSE;
 }
 
-void SendPacket(SOCKET *socket, int bufSize, bool init) {
+void SendPacket(SOCKET *socket, const int bufSize, bool init) {
 
 	int pos = 0;
 	byte tdata[bufSizeMax];
@@ -971,21 +978,35 @@ void SendPacket(SOCKET *socket, int bufSize, bool init) {
 		putFloat(tdata, &pos, wa);
 		putFloat(tdata, &pos, ws);
 
-
-		long charX = Characters[0].pos.x * 10000.f;
-		long charZ = Characters[0].pos.z * 10000.f;
-		long charA = Characters[0].alpha * 10000.f;
-		long charB = Characters[0].bend * 10000.f;
-		long charPh = Characters[0].Phase;
-		putFloat(tdata, &pos, charX);
-		putFloat(tdata, &pos, charZ);
-		putFloat(tdata, &pos, charA);
-		putFloat(tdata, &pos, charB);
-		putInt(tdata, &pos, charPh);
-		if (init) {
-			long charScale = Characters[0].scale * 10000.f;
-			putFloat(tdata, &pos, charScale);
+		for (int c = 0; c < 6; c++) {
+			long charX = Characters[c].pos.x * 10000.f;
+			putFloat(tdata, &pos, charX);
+			long charZ = Characters[c].pos.z * 10000.f;
+			putFloat(tdata, &pos, charZ);
+			if (Characters[c].Clone == AI_DIMOR || Characters[c].Clone == AI_PTERA) { //potentially all 6 ambs
+				long charY = Characters[c].pos.y * 10000.f;
+				putFloat(tdata, &pos, charY);
+			}
+			long charA = Characters[c].alpha * 10000.f;
+			putFloat(tdata, &pos, charA);
+			long charB = Characters[c].bend * 10000.f;
+			putFloat(tdata, &pos, charB);
+			long charPh = Characters[c].Phase;
+			putInt(tdata, &pos, charPh);
+			if (init) {
+				long charScale = Characters[c].scale * 10000.f;
+				putFloat(tdata, &pos, charScale);
+				//long charKill = Characters[c].killType;	// not for classic ambients
+				//putInt(tdata, &pos, charKill);
+				long charDeath = Characters[c].deathType;
+				putInt(tdata, &pos, charDeath);
+				long charWDeath = Characters[c].waterDieAnim;
+				putInt(tdata, &pos, charWDeath);
+				//long charRoar = Characters[c].roarAnim;	// not for classic ambients
+				//putInt(tdata, &pos, charRoar);
+			}
 		}
+
 	}
 
 	const char *sendbuf = reinterpret_cast<const char*>(tdata);
@@ -2434,6 +2455,8 @@ void LoadTrophy()
   ReadFile(hfile, &OptAgres, 4, &l, NULL);
   ReadFile(hfile, &OptDens, 4, &l, NULL);
   ReadFile(hfile, &OptSens, 4, &l, NULL);
+
+  if (Multiplayer) OptDens = 128;
 
   ReadFile(hfile, &OptRes, 4, &l, NULL);
   ReadFile(hfile, &FOGENABLE, 4, &l, NULL);

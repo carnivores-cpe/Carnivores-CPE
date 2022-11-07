@@ -5277,7 +5277,6 @@ SKIPROT:
 void AnimateMClientCharacter(TCharacter *cptr)
 {
 	NewPhase = FALSE;
-	int _Phase = cptr->Phase;
 	int _FTime = cptr->FTime;
 
 	ProcessPrevPhase(cptr);
@@ -5287,32 +5286,44 @@ void AnimateMClientCharacter(TCharacter *cptr)
 
 	if (cptr->FTime >= cptr->pinfo->Animation[cptr->Phase].AniTime)
 	{
-		cptr->FTime %= cptr->pinfo->Animation[cptr->Phase].AniTime;
-		NewPhase = TRUE;
-	}
-
-	//====== process phase changing ===========//
-	if ((_Phase != cptr->Phase) || NewPhase)
-		ActivateCharacterFx(cptr);
-
-	if (_Phase != cptr->Phase)
-	{
-		if ((_Phase == DinoInfo[cptr->CType].runAnim ||
-			_Phase == DinoInfo[cptr->CType].walkAnim) &&
-			(cptr->Phase == DinoInfo[cptr->CType].runAnim ||
-				cptr->Phase == DinoInfo[cptr->CType].walkAnim))
-			cptr->FTime = _FTime * cptr->pinfo->Animation[cptr->Phase].AniTime / cptr->pinfo->Animation[_Phase].AniTime + 64;
-		else if (!NewPhase) cptr->FTime = 0;
-
-		if (cptr->PPMorphTime > 128)
-		{
-			cptr->PrevPhase = _Phase;
-			cptr->PrevPFTime = _FTime;
-			cptr->PPMorphTime = 0;
+		if (cptr->Phase == DinoInfo[cptr->CType].deathType[cptr->deathType].die) cptr->FTime = cptr->pinfo->Animation[cptr->Phase].AniTime - 1;
+		else {
+			cptr->FTime %= cptr->pinfo->Animation[cptr->Phase].AniTime;
+			NewPhase = TRUE;
 		}
 	}
 
-	cptr->FTime %= cptr->pinfo->Animation[cptr->Phase].AniTime;
+	//====== process phase changing ===========//
+	if ((cptr->_PhaseM != cptr->Phase) || NewPhase) {
+		if (cptr->Clone == AI_DIMOR || cptr->Clone == AI_PTERA) {
+			if (cptr->Phase == DinoInfo[cptr->CType].flyAnim || cptr->Phase == DinoInfo[cptr->CType].glideAnim) {
+				if ((rand() & 1023) > 980) ActivateCharacterFx(cptr);
+			} else if (!NewPhase) ActivateCharacterFx(cptr);
+		} else ActivateCharacterFx(cptr);
+	}
+
+	if (cptr->Phase != DinoInfo[cptr->CType].deathType[cptr->deathType].die) {
+
+		if (cptr->_PhaseM != cptr->Phase)
+		{
+			if ((cptr->_PhaseM == DinoInfo[cptr->CType].runAnim ||
+				cptr->_PhaseM == DinoInfo[cptr->CType].walkAnim) &&
+				(cptr->Phase == DinoInfo[cptr->CType].runAnim ||
+					cptr->Phase == DinoInfo[cptr->CType].walkAnim))
+				cptr->FTime = _FTime * cptr->pinfo->Animation[cptr->Phase].AniTime / cptr->pinfo->Animation[cptr->_PhaseM].AniTime + 64;
+			else if (!NewPhase) cptr->FTime = 0;
+
+			if (cptr->PPMorphTime > 128)
+			{
+				cptr->PrevPhase = cptr->_PhaseM;
+				cptr->PrevPFTime = _FTime;
+				cptr->PPMorphTime = 0;
+			}
+		}
+
+		cptr->FTime %= cptr->pinfo->Animation[cptr->Phase].AniTime;
+
+	}
 
 	//========== rotation to tgalpha ===================//
 
@@ -5321,19 +5332,24 @@ void AnimateMClientCharacter(TCharacter *cptr)
 	cptr->lookz = (float)sin(cptr->alpha);
 
 	//============ Y movement =================//
-	if (cptr->StateF & csONWATER && DinoInfo[cptr->CType].canSwim)
-	{
-		cptr->pos.y = GetLandUpH(cptr->pos.x, cptr->pos.z) - (DinoInfo[cptr->CType].waterLevel + 20) * cptr->scale;
-		cptr->beta /= 2;
-		cptr->tggamma = 0;
-	}
-	else {
-		ThinkY_Beta_Gamma(cptr, 64, 32, 0.7f, 0.4f);
-	}
+	if (cptr->Clone != AI_DIMOR && cptr->Clone != AI_PTERA) {
+		if (cptr->StateF & csONWATER && DinoInfo[cptr->CType].canSwim)
+		{
+			cptr->pos.y = GetLandUpH(cptr->pos.x, cptr->pos.z) - (DinoInfo[cptr->CType].waterLevel + 20) * cptr->scale;
+			cptr->beta /= 2;
+			cptr->tggamma = 0;
+		}
+		else {
+			ThinkY_Beta_Gamma(cptr, 64, 32, 0.7f, 0.4f);
+		}
 
-	//if (cptr->Phase == DinoInfo[cptr->CType].walkAnim) cptr->tggamma += cptr->rspeed / 12.0f;
-	//else cptr->tggamma += cptr->rspeed / 8.0f;
-	DeltaFunc(cptr->gamma, cptr->tggamma, TimeDt / 2048.f);
+		//if (cptr->Phase == DinoInfo[cptr->CType].walkAnim) cptr->tggamma += cptr->rspeed / 12.0f;
+		//else cptr->tggamma += cptr->rspeed / 8.0f;
+		DeltaFunc(cptr->gamma, cptr->tggamma, TimeDt / 2048.f);
+	} else cptr->gamma = cptr->bend;
+
+	cptr->_PhaseM = cptr->Phase;
+
 }
 
 
@@ -5375,9 +5391,22 @@ TBEGIN:
 
 	float tdist = (float)sqrt(targetdx * targetdx + targetdz * targetdz);
 
-	float playerdx = PlayerX - cptr->pos.x;
-	float playerdz = PlayerZ - cptr->pos.z;
-	float pdist = (float)sqrt(playerdx * playerdx + playerdz * playerdz);
+	bool pdistMulti = FALSE;
+	int pCh = 1;
+	float pdist[4];
+	float playerdx[4];
+	float playerdz[4];
+	playerdx[0] = PlayerX - cptr->pos.x;
+	playerdz[0] = PlayerZ - cptr->pos.z;
+	pdist[0] = (float)sqrt(playerdx[0] * playerdx[0] + playerdz[0] * playerdz[0]);
+	if (Multiplayer) {
+		//for loop 1 to hunter count
+		playerdx[pCh] = MPlayers[pCh].pos.x - cptr->pos.x;
+		playerdz[pCh] = MPlayers[pCh].pos.z - cptr->pos.z;
+		pdist[pCh] = (float)sqrt(playerdx[pCh] * playerdx[pCh] + playerdz[pCh] * playerdz[pCh]);
+		pCh += 1;
+		//
+	}
 
 	if (GetLandUpH(cptr->pos.x, cptr->pos.z) - GetLandH(cptr->pos.x, cptr->pos.z) > DinoInfo[cptr->CType].waterLevel * cptr->scale)
 		cptr->StateF |= csONWATER;
@@ -5394,7 +5423,11 @@ TBEGIN:
 
 		if (!cptr->AfraidTime)
 		{
-			if (pdist < 2048.f) {
+			pdistMulti = FALSE;
+			for (int pNo = 0; pNo < pCh; pNo++) {
+				if (pdist[pNo] < 2048.f) pdistMulti = TRUE;
+			}
+			if (pdistMulti) {
 				if (cptr->Clone == AI_GALL) cptr->State = 1;
 				cptr->AfraidTime = (5 + rRand(5)) * 1024;
 				if (cptr->packId >= 0) {
@@ -5402,7 +5435,11 @@ TBEGIN:
 				}
 			}
 
-			if (pdist > 4096.f)
+			pdistMulti = TRUE;
+			for (int pNo = 0; pNo < pCh; pNo++) {
+				if (!(pdist[pNo] > 4096.f)) pdistMulti = FALSE;
+			}
+			if (pdistMulti)
 			{
 				if (cptr->packId >= 0) {
 					if (!Packs[cptr->packId]._alert) {
@@ -5419,8 +5456,8 @@ TBEGIN:
 		} else if (cptr->packId >= 0) Packs[cptr->packId].alert = TRUE;
 
 
-		nv.x = playerdx;
-		nv.z = playerdz;
+		nv.x = playerdx[0];
+		nv.z = playerdz[0];
 		nv.y = 0;
 		NormVector(nv, 2048.f);
 		cptr->tgx = cptr->pos.x - nv.x;
@@ -5428,7 +5465,7 @@ TBEGIN:
 		cptr->tgtime = 0;
 	}
 
-	if (pdist > (ctViewR + 20) * 256 && cptr->AI > 0)
+	if (pdist[0] > (ctViewR + 20) * 256 && cptr->AI > 0)
 		if (ReplaceCharacterForward(cptr)) goto TBEGIN;
 
 
@@ -5436,7 +5473,11 @@ TBEGIN:
 	if (!cptr->State)
 	{
 		cptr->AfraidTime = 0;
-		if (pdist < 812.f)
+		pdistMulti = FALSE;
+		for (int pNo = 0; pNo < pCh; pNo++) {
+			if (pdist[pNo] < 812.f) pdistMulti = TRUE;
+		}
+		if (pdistMulti)
 		{
 			cptr->State = 1;
 			cptr->AfraidTime = (5 + rRand(5)) * 1024;
@@ -8405,18 +8446,14 @@ void AnimateCharacters()
 	}
 
 	if (Multiplayer && !Host) {
-
-		cptr = &Characters[0];
-		AnimateMClientCharacter(cptr);
-
-		/*
-		for (CurDino = 0; CurDino < ChCount; CurDino++)
+		
+		for (CurDino = 0; CurDino < 6/*ChCount*/; CurDino++)
 		{
 			cptr = &Characters[CurDino];
 
 			AnimateMClientCharacter(cptr);
 		}
-		*/
+		
 
 		return;
 	}

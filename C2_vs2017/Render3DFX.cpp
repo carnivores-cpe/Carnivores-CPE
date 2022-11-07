@@ -4043,6 +4043,13 @@ void DrawHMap()
   _CRCOLOR = 18<<6;
   DrawCircle(xx, yy, (ctViewR/4));
 
+
+  if (Multiplayer) {
+	  xx = VideoCX - 128 + (int)MPlayers[0].pos.x / 1024;
+	  yy = VideoCY - 128 + (int)MPlayers[0].pos.z / 1024;
+	  DrawBox((WORD*)linfo.lfbPtr, lsw, xx + 1, yy + 1, 8 << 11);
+	  DrawBox((WORD*)linfo.lfbPtr, lsw, xx, yy, 30 << 11);
+  }
   
     for (c=0; c<ChCount; c++)
     {
@@ -4054,7 +4061,7 @@ void DrawHMap()
 				if (!(TargetDino & (1 << Characters[c].AI))) continue;
 			}
 		}
-		else if (c != 0) continue; //TEST
+		else if (Characters[c].Clone < 1 || Characters[c].Clone > 9) continue; //TEST
 
 			if (!Characters[c].Health) continue;
 			if (!RadarMode && Characters[c].AI != AI_HUNTDOG) continue;
