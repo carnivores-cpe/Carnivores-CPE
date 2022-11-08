@@ -8407,6 +8407,7 @@ void AnimateMHunters() {
 				TSFX *shotFx = &fxGunShot[WeapInfo[weapon].SFXIndex];
 				AddVoice3d(shotFx->length, shotFx->lpData, pos->x, pos->y, pos->z);
 			}
+			MakeNoise(*pos, ctViewR * 200 * WeapInfo[weapon].Loud);
 		}
 
 		if (mHunterCall[c] != -1) {
