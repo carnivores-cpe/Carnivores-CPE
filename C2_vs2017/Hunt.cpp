@@ -1265,6 +1265,16 @@ void ProcessPlayerMovement()
 
   if (KeyboardState [KeyMap.fkFire] & 128) ProcessShoot();
 
+  if (Multiplayer && Host) {
+	  for (int c = 0; c < 6; c++) {
+		  if (mDamage[0][c]) {
+			  Characters[c].Health -= mDamage[0][c];
+			  mDamage[0][c] = 0;
+			  if (Characters[c].Health < 0) Characters[c].Health = 0;
+			  registerDamage(c);
+		  }
+	  }
+  }
 
   if (KeyboardState [KeyMap.fkShow] & 128) HideWeapon();
 

@@ -40,7 +40,7 @@ AudioQuad data[8192];
 const int bufSizeMax = 189;
 const int bufSizeHostInit = 189;
 const int bufSizeHost = 153;
-const int bufSizeClient = 19;
+const int bufSizeClient = 31;
 
 bool ShowFaces = true;
 
@@ -600,6 +600,7 @@ void AddWCircle(float x, float z, float scale)
 
 void AddShipTask(int cindex)
 {
+
   TCharacter *cptr = &Characters[cindex];
 
   BOOL TROPHYON  = (GetLandUpH(cptr->pos.x, cptr->pos.z) - GetLandH(cptr->pos.x, cptr->pos.z) < 100) &&
@@ -871,6 +872,12 @@ void putInt(byte data[], int *pos, long in) {
 	*pos += 1;
 }
 
+void putInt2(byte data[], int *pos, long in) {
+	data[*pos] = (int)((in >> 8) & 0XFF);
+	data[*pos + 1] = (int)((in & 0XFF));
+	*pos += 2;
+}
+
 void putFloat(byte data[], int *pos, long in) {
 	data[*pos]   = (int)((in >> 24) & 0xFF);
 	data[*pos+1] = (int)((in >> 16) & 0xFF);
@@ -883,6 +890,13 @@ int readInt(const byte data[], int *pos) {
 	int pos2 = *pos;
 	*pos += 1;
 	return (int)((data[pos2]));
+}
+
+int readInt2(const byte data[], int *pos) {
+	int pos2 = *pos;
+	*pos += 2;
+	return (int)((data[pos2] << 8)
+		+ (data[pos2 + 1]));
 }
 
 float readFloat(const byte data[], int *pos) {
@@ -938,6 +952,10 @@ bool RecvPacket(SOCKET *socket, int bufSize, bool init){
 					Characters[c].deathType = readInt(tdata2, &pos);
 					Characters[c].waterDieAnim = readInt(tdata2, &pos);
 				}
+			}
+		} else {
+			for (int c = 0; c < 6; c++) {
+				mDamage[0][c] += readInt2(tdata2, &pos);
 			}
 		}
 
@@ -1007,6 +1025,12 @@ void SendPacket(SOCKET *socket, const int bufSize, bool init) {
 			}
 		}
 
+	} else {
+		for (int c = 0; c < 6; c++) {
+			long Damage = sendDamage[c];
+			sendDamage[c] = 0;
+			putInt2(tdata, &pos, Damage);
+		}
 	}
 
 	const char *sendbuf = reinterpret_cast<const char*>(tdata);
@@ -1905,42 +1929,53 @@ ENDTRACE:
 
 //======= character damage =========//
 
-
-  if (mort) Characters[ShotDino].Health = 0;
-  else Characters[ShotDino].Health-=WeapInfo[CurrentWeapon].Power;
-  if (Characters[ShotDino].Health<0) Characters[ShotDino].Health=0;
-
-
-  if (!Characters[ShotDino].Health)
-  {
-    if (DinoInfo[Characters[ShotDino].CType].trophySession)
-    {
-      TrophyRoom.Last.success++;
-      AddShipTask(ShotDino);
-    }
-
-    if (Characters[ShotDino].AI > 0 && Characters[ShotDino].AI < 6)
-      Characters_AddSecondaryOne(Characters[ShotDino].CType);
-
+  if (Multiplayer && !Host) {
+	  if (mort) sendDamage[ShotDino] = Characters[ShotDino].Health;
+	  else sendDamage[ShotDino] += WeapInfo[CurrentWeapon].Power;
+  } else {
+	  if (mort) Characters[ShotDino].Health = 0;
+	  else Characters[ShotDino].Health -= WeapInfo[CurrentWeapon].Power;
+	  if (Characters[ShotDino].Health < 0) Characters[ShotDino].Health = 0;
+	  registerDamage(ShotDino);
   }
-  else
-  {
-	Characters[ShotDino].awareHunter = TRUE;
-    Characters[ShotDino].AfraidTime = 60*1000;
-    if (Characters[ShotDino].Clone!=AI_TREX || Characters[ShotDino].State==0)
-      Characters[ShotDino].State = 2;
-
-    //if (Characters[ShotDino].AI != AI_BRACH) // I removed this :)
-      Characters[ShotDino].BloodTTime+=90000;
-
-  }
-
-  if (Characters[ShotDino].Clone==AI_TREX)
-    if (Characters[ShotDino].State)
-      Characters[ShotDino].State = 5;
-    else
-      Characters[ShotDino].State = 1;
+  
 }
+
+
+void registerDamage(int Dino) {
+
+	if (!Characters[Dino].Health)
+	{
+		if (DinoInfo[Characters[Dino].CType].trophySession && !Multiplayer) //No trophies in multiplayer for now - update this at later date?
+		{
+			TrophyRoom.Last.success++;
+			AddShipTask(Dino);
+		}
+
+		if (Characters[Dino].AI > 0 && Characters[Dino].AI < 6 && !Multiplayer) //No amb respawn in multiplayer for now - update this at later date?
+			Characters_AddSecondaryOne(Characters[Dino].CType);
+
+	}
+	else
+	{
+		Characters[Dino].awareHunter = TRUE;
+		Characters[Dino].AfraidTime = 60 * 1000;
+		if (Characters[Dino].Clone != AI_TREX || Characters[Dino].State == 0)
+			Characters[Dino].State = 2;
+
+		//if (Characters[Dino].AI != AI_BRACH) // I removed this :)
+		Characters[Dino].BloodTTime += 90000;
+
+	}
+
+	if (Characters[Dino].Clone == AI_TREX)
+		if (Characters[Dino].State)
+			Characters[Dino].State = 5;
+		else
+			Characters[Dino].State = 1;
+
+}
+
 
 
 void RemoveCharacter(int index)

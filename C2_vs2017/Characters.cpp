@@ -5279,6 +5279,8 @@ void AnimateMClientCharacter(TCharacter *cptr)
 	NewPhase = FALSE;
 	int _FTime = cptr->FTime;
 
+	if (cptr->_PhaseM != cptr->Phase) cptr->FTime = 0;
+
 	ProcessPrevPhase(cptr);
 
 	//======== select new phase =======================//
@@ -5349,7 +5351,11 @@ void AnimateMClientCharacter(TCharacter *cptr)
 	} else cptr->gamma = cptr->bend;
 
 	cptr->_PhaseM = cptr->Phase;
-
+	if (cptr->Phase == DinoInfo[cptr->CType].deathType[cptr->deathType].die) cptr->Health = 0;
+	if (cptr->Clone == AI_DIMOR || cptr->Clone == AI_PTERA)
+		if (cptr->Phase == DinoInfo[cptr->CType].deathType[cptr->deathType].fall) cptr->Health = 0;
+	if (DinoInfo[cptr->CType].waterDieCount > 0)
+		if (cptr->Phase == cptr->waterDieAnim) cptr->Health = 0;
 }
 
 
@@ -5418,8 +5424,6 @@ TBEGIN:
 
 	if (cptr->State)
 	{
-
-
 
 		if (!cptr->AfraidTime)
 		{

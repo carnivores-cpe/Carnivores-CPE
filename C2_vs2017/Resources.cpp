@@ -1689,10 +1689,16 @@ void ReInitGame()
 		  sendGunShot = -1;
 		  sendHunterCall = -1;
 		  sendHunterCallType = -1;
+		  for (int c = 0; c < ChCount; c++) {
+			  sendDamage[c] = 0;
+		  }
 		  for (int i = 0; i < 4; i++) {
 			  mGunShot[i] = -1;
 			  mHunterCall[i] = -1;
 			  mHunterCallType[i] = -1;
+			  for (int c = 0; c < ChCount; c++) {
+				  mDamage[i][c] = 0;
+			  }
 		  }
 		  HunterCount = 0;
 		  PlaceMHunters();//temp??

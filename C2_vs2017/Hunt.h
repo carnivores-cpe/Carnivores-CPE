@@ -869,6 +869,7 @@ void RemoveCurrentTrophy();
 void MakeCall();
 void MakeShot(float ax, float ay, float az,
               float bx, float by, float bz);
+void registerDamage(int);
 
 void AddBloodTrail(TCharacter *cptr);
 void AddElements(float, float, float, int, int);
@@ -1011,6 +1012,8 @@ _EXTORNOT int sendHunterCall;
 _EXTORNOT int sendHunterCallType;
 _EXTORNOT int mHunterCall[4];
 _EXTORNOT int mHunterCallType[4];
+_EXTORNOT int sendDamage[DINOINFO_MAX];
+_EXTORNOT int mDamage[4][DINOINFO_MAX];
 //Add these after dino positions alligned
 //_EXTORNOT int sendDinoCall;
 //_EXTORNOT int mDinoCall[4];
