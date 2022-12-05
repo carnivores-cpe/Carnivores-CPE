@@ -1208,7 +1208,6 @@ deathtype{
  glideAnim = 9
  takeoffAnim = 11
  diveAnim = 12
- slideAnim = 13
 deathtype{
  dieAnim = 5
  fallAnim = 10

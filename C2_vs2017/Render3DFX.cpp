@@ -4061,7 +4061,8 @@ void DrawHMap()
 				if (!(TargetDino & (1 << Characters[c].AI))) continue;
 			}
 		}
-		else if (Characters[c].Clone < 1 || Characters[c].Clone > 9) continue; //TEST
+		else continue;
+		//else if (Characters[c].Clone < 1 || Characters[c].Clone > 9) continue; //TEST
 
 			if (!Characters[c].Health) continue;
 			if (!RadarMode && Characters[c].AI != AI_HUNTDOG) continue;

@@ -2320,7 +2320,11 @@ NOTHINK:
 
 	float FlDst = ctViewR * DinoInfo[cptr->CType].flyDist + OptAgres / AIInfo[cptr->Clone].agressMulti;
 	if (!alertInit) FlDst *= 1.5;
-	if (cptr->State && pdist > FlDst) cptr->gliding = true;
+	if (!cptr->gliding && cptr->State && pdist > FlDst) cptr->gliding = true;
+    else if (cptr->pos.y < GetLandUpH(cptr->pos.x, cptr->pos.z) + 50
+		&& cptr->Phase != DinoInfo[cptr->CType].takeoffAnim) {
+		cptr->gliding = false;
+	}
 
 	if (NewPhase){
 
@@ -2349,17 +2353,18 @@ NOTHINK:
 				else {
 					cptr->beta = 0;
 					cptr->gamma = 0;
-					cptr->Slide = 0;
+					//	//TITAN_SLIDE	cptr->Slide = 0;
 					cptr->Phase = DinoInfo[cptr->CType].takeoffAnim;
 				}
 				
 			} else {
 				if (cptr->Phase != DinoInfo[cptr->CType].takeoffAnim &&
 					cptr->Phase != DinoInfo[cptr->CType].glideAnim &&
-					cptr->Phase != DinoInfo[cptr->CType].flyAnim) {
+					cptr->Phase != DinoInfo[cptr->CType].flyAnim &&
+					cptr->Phase != DinoInfo[cptr->CType].diveAnim) {
 					cptr->beta = 0;
 					cptr->gamma = 0;
-					cptr->Slide = 0;
+					//	//TITAN_SLIDE	cptr->Slide = 0;
 					cptr->Phase = DinoInfo[cptr->CType].takeoffAnim;
 				} else {
 					float dalph = cptr->alpha - cptr->tgalpha;
@@ -2409,8 +2414,17 @@ NOTHINK:
 					cptr->Phase = DinoInfo[cptr->CType].walkAnim;
 				}
 
+			} else {
+				cptr->Phase = DinoInfo[cptr->CType].runAnim;
+
+				if (fabs(cptr->pos.y - PlayerY) > pdist / 2) {
+					cptr->beta = 0;
+					cptr->gamma = 0;
+					cptr->gliding = TRUE;
+					cptr->Phase = DinoInfo[cptr->CType].takeoffAnim;
+				}
+
 			}
-			else cptr->Phase = DinoInfo[cptr->CType].runAnim;
 
 		}
 	}
@@ -2433,10 +2447,11 @@ NOTHINK:
 		if (cptr->StateF & csONWATER) cptr->Phase = DinoInfo[cptr->CType].swimAnim;
 	}
 
+	/*	//TITAN_SLIDE
 	if (cptr->gliding) {
 		if (cptr->Slide > 40) cptr->Phase = DinoInfo[cptr->CType].slideAnim;
 	}
-
+	*/
 
 ENDPSELECT:
 
@@ -2527,7 +2542,7 @@ ENDPSELECT:
 
 SKIPROT:
 
-
+	/*	//TITAN_SLIDE
 	if (cptr->gliding) {
 		//======= set slide mode ===========//
 		if (!cptr->Slide && cptr->vspeed > 0.6)
@@ -2539,6 +2554,7 @@ SKIPROT:
 				cptr->vspeed = 0;
 			}
 	}
+	*/
 
 
 	//========== movement ==============================//
@@ -2558,13 +2574,15 @@ SKIPROT:
 
 	if (cptr->Phase == DinoInfo[cptr->CType].killType[cptr->killType].anim && DinoInfo[cptr->CType].killTypeCount) curspeed = 0.0f;
 
+	/*	//TITAN_SLIDE
 	if (cptr->gliding && cptr->Slide)
 	{
 		curspeed /= 8;
 		if (drspd > pi / 2.f) curspeed = 0;
 		else if (drspd > pi / 4.f) curspeed *= 2.f - 4.f*drspd / pi;
 	}
-	else if (drspd > pi / 2.f) curspeed *= 2.f - 2.f*drspd / pi;
+	else */
+	if (drspd > pi / 2.f) curspeed *= 2.f - 2.f*drspd / pi;
 
 	if (cptr->Phase == DinoInfo[cptr->CType].flyAnim) cptr->pos.y += TimeDt / 5.f;
 	if (cptr->Phase == DinoInfo[cptr->CType].takeoffAnim) cptr->pos.y += TimeDt / 4.f;
@@ -2594,6 +2612,7 @@ SKIPROT:
 		MoveCharacter(cptr, cptr->lookx * cptr->vspeed * TimeDt * cptr->scale,
 			cptr->lookz * cptr->vspeed * TimeDt * cptr->scale, !DinoInfo[cptr->CType].canSwim, TRUE);
 
+		/*	//TITAN_SLIDE
 		//========== slide ==============//
 		if (cptr->Slide && cptr->gliding)
 		{
@@ -2603,10 +2622,13 @@ SKIPROT:
 			cptr->Slide -= TimeDt;
 			if (cptr->Slide < 0) cptr->Slide = 0;
 		}
-
+		*/
 
 
 		//============ Y movement =================//
+
+		if (cptr->pos.y < GetLandH(cptr->pos.x, cptr->pos.z)) cptr->pos.y = GetLandH(cptr->pos.x, cptr->pos.z);
+
 		if (cptr->StateF & csONWATER && DinoInfo[cptr->CType].canSwim)
 		{
 			cptr->pos.y = GetLandUpH(cptr->pos.x, cptr->pos.z) - (DinoInfo[cptr->CType].waterLevel + 20) * cptr->scale;

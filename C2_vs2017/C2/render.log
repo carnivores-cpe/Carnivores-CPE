@@ -50,9 +50,11 @@ Loading: HUNTDAT\dimor2.car
 Loading: HUNTDAT\ptera.car
 Loading: HUNTDAT\dimet.car
 Loading: HUNTDAT\par9.car
-Loading: HUNTDAT\ankylo1.car
+Loading: HUNTDAT\stego.car
 Loading: HUNTDAT\allo_ii.car
+Loading: HUNTDAT\chasmosa.car
 Loading: HUNTDAT\dangerbrachikiller9.car
+Loading: HUNTDAT\pach.car
 Loading: HUNTDAT\climatius3.car
 Loading: HUNTDAT\parexusn4.car
 Loading: HUNTDAT\parexusn4_pink.car
@@ -67,10 +69,12 @@ Voodoo: Can't set selected video mode
 Start Address: 0
 End   Address: 8388592
 Audio_UpdateGeometry: 324 faces uploaded
-Trophy Saved.
+Trophy Loaded.
   AudioStop ()
- Releasing Listener3D
- Releasing PrimaryBuffer
- Releasing DirectSoundObject
- Terminate thread 1
- AudioShutdown()
+Entered game
+ReInitGame();
+Placing...
+Loading: HUNTDAT\ankylo1.car
+Voodoo: Can't set selected video mode
+Start Address: 0
+End   Address: 8388592
