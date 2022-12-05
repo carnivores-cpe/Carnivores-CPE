@@ -1187,6 +1187,7 @@ deathtype{
  gldspd = 1.3
  divspd = 1.8
  tkfspd = 1.0
+ lndspd = 0.3
  runspd = 1.1
  wlkspd = 0.35
  swmspd = 0.75
@@ -1207,7 +1208,8 @@ deathtype{
  flyAnim = 8
  glideAnim = 9
  takeoffAnim = 11
- diveAnim = 12
+ diveAnim = 12	
+ landAnim = 13
 deathtype{
  dieAnim = 5
  fallAnim = 10

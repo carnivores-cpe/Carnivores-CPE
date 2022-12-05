@@ -3262,7 +3262,7 @@ void LoadResourcesScript()
 	AIInfo[AI_TITAN].noFindWayMed = 16;
 	AIInfo[AI_TITAN].noFindWayRange = 20;
 	AIInfo[AI_TITAN].targetDistance = 8048.f;
-	AIInfo[AI_TITAN].weaveRange = 1648;
+	AIInfo[AI_TITAN].weaveRange = 6592;
 	AIInfo[AI_TITAN].pWMin = 2048;
 
 	//AIInfo[AI_TREX].waterLevel = 560;

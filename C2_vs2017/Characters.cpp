@@ -2139,7 +2139,7 @@ TBEGIN:
 	{
 		float aDist;
 		aDist = ctViewR * DinoInfo[cptr->CType].aggress + OptAgres / AIInfo[cptr->Clone].agressMulti;
-
+		if (cptr->gliding) aDist *= 2;
 
 		if (pdist > aDist || ((PlayerY - cptr->pos.y > pdist) && cptr->gliding)  ||
 			DinoInfo[cptr->CType].aggress <= 0 || !cptr->awareHunter) {
@@ -2251,7 +2251,7 @@ TBEGIN:
 			cptr->tgx = Packs[cptr->packId].leader->pos.x;
 			cptr->tgz = Packs[cptr->packId].leader->pos.z;
 		}
-		else if (tdist < tdst)
+		else if (tdist < tdst) 
 		{
 			SetNewTargetPlace(cptr, AIInfo[cptr->Clone].targetDistance);
 			goto TBEGIN;
@@ -2322,18 +2322,20 @@ NOTHINK:
 	if (!alertInit) FlDst *= 1.5;
 	if (!cptr->gliding && cptr->State && pdist > FlDst) cptr->gliding = true;
     else if (cptr->pos.y < GetLandUpH(cptr->pos.x, cptr->pos.z) + 50
-		&& cptr->Phase != DinoInfo[cptr->CType].takeoffAnim) {
+		&& cptr->Phase != DinoInfo[cptr->CType].takeoffAnim
+		&& !(GetLandUpH(cptr->pos.x, cptr->pos.z) > GetLandH(cptr->pos.x, cptr->pos.z))) {
 		cptr->gliding = false;
 	}
 
 	if (NewPhase){
 
 		if (!cptr->State && rRand(50) == 2) cptr->gliding = true;
-
+		
 		if (cptr->gliding) {
 
 			if (!cptr->State || fleeMode) {
 				//WANDER/FLEE
+				if (!cptr->State && cptr->shakeTime) cptr->shakeTime -= 1;
 
 				if (cptr->Phase == DinoInfo[cptr->CType].flyAnim) {
 					if (cptr->pos.y > GetLandUpH(cptr->pos.x, cptr->pos.z) + 5800) {
@@ -2341,23 +2343,39 @@ NOTHINK:
 					}
 				}
 				else if (cptr->Phase == DinoInfo[cptr->CType].glideAnim) {
-					if (cptr->pos.y < GetLandUpH(cptr->pos.x, cptr->pos.z) + 3800) {
-						cptr->Phase = DinoInfo[cptr->CType].flyAnim;
+					
+					if (!cptr->shakeTime) {
+						if (cptr->pos.y < GetLandUpH(cptr->pos.x, cptr->pos.z) + 1200) {
+
+							//lander
+							if (GetLandUpH(cptr->pos.x, cptr->pos.z) > GetLandH(cptr->pos.x, cptr->pos.z)) cptr->Phase = DinoInfo[cptr->CType].flyAnim;
+							else cptr->Phase = DinoInfo[cptr->CType].landAnim;
+						}
+					} else {
+						if (cptr->pos.y < GetLandUpH(cptr->pos.x, cptr->pos.z) + 3800) {
+							cptr->Phase = DinoInfo[cptr->CType].flyAnim;
+						}
 					}
+
 				}
 				else if (cptr->Phase == DinoInfo[cptr->CType].takeoffAnim) {
 					if (cptr->pos.y > GetLandUpH(cptr->pos.x, cptr->pos.z) + 1024) {
 						cptr->Phase = DinoInfo[cptr->CType].flyAnim;
 					}
 				}
-				else {
+				else if (cptr->Phase != DinoInfo[cptr->CType].landAnim){
 					cptr->beta = 0;
 					cptr->gamma = 0;
 					//	//TITAN_SLIDE	cptr->Slide = 0;
 					cptr->Phase = DinoInfo[cptr->CType].takeoffAnim;
+
+					cptr->shakeTime = 25 + rRand(150);//lander
 				}
 				
 			} else {
+
+				cptr->shakeTime = 0;//lander
+
 				if (cptr->Phase != DinoInfo[cptr->CType].takeoffAnim &&
 					cptr->Phase != DinoInfo[cptr->CType].glideAnim &&
 					cptr->Phase != DinoInfo[cptr->CType].flyAnim &&
@@ -2376,7 +2394,7 @@ NOTHINK:
 						else cptr->Phase = DinoInfo[cptr->CType].flyAnim;
 					} else {
 						if (cptr->pos.y < PlayerY + 256 && pdist > 2048) cptr->Phase = DinoInfo[cptr->CType].takeoffAnim;
-						else if (cptr->pos.y - PlayerY > pdist / 2)cptr->Phase = DinoInfo[cptr->CType].diveAnim;
+						else if (cptr->pos.y - PlayerY > pdist / (1.3 * DinoInfo[cptr->CType].divspd)) cptr->Phase = DinoInfo[cptr->CType].diveAnim;
 						else if (cptr->pos.y > PlayerY + 600) cptr->Phase = DinoInfo[cptr->CType].glideAnim;
 						else cptr->Phase = DinoInfo[cptr->CType].flyAnim;
 					}
@@ -2395,6 +2413,8 @@ NOTHINK:
 			}
 			
 		} else {
+
+			cptr->shakeTime = 0;//lander
 
 			if (!cptr->State) {
 
@@ -2568,6 +2588,7 @@ SKIPROT:
 	if (cptr->Phase == DinoInfo[cptr->CType].glideAnim) curspeed = cptr->speed_glide;
 	if (cptr->Phase == DinoInfo[cptr->CType].takeoffAnim) curspeed = cptr->speed_takeoff;
 	if (cptr->Phase == DinoInfo[cptr->CType].diveAnim) curspeed = cptr->speed_dive;
+	if (cptr->Phase == DinoInfo[cptr->CType].landAnim) curspeed = cptr->speed_land;
 	if (DinoInfo[cptr->CType].canSwim) {
 		if (cptr->Phase == DinoInfo[cptr->CType].swimAnim) curspeed = cptr->speed_swim;
 	}
@@ -2587,6 +2608,7 @@ SKIPROT:
 	if (cptr->Phase == DinoInfo[cptr->CType].flyAnim) cptr->pos.y += TimeDt / 5.f;
 	if (cptr->Phase == DinoInfo[cptr->CType].takeoffAnim) cptr->pos.y += TimeDt / 4.f;
 	if (cptr->Phase == DinoInfo[cptr->CType].glideAnim) cptr->pos.y -= TimeDt / 10.f;
+	if (cptr->Phase == DinoInfo[cptr->CType].landAnim) cptr->pos.y -= TimeDt;
 	if (cptr->Phase == DinoInfo[cptr->CType].diveAnim) cptr->pos.y -= TimeDt;
 
 	//if (cptr->pos.y < GetLandH(cptr->pos.x, cptr->pos.z) + 236) cptr->pos.y = GetLandH(cptr->pos.x, cptr->pos.z) + 256;
