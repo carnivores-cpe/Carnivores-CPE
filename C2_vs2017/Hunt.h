@@ -354,9 +354,6 @@ typedef struct _TCharacter
 
   int spcDepth;
 
-  float speed_run, speed_walk, speed_jump, speed_swim,
-	  speed_fly, speed_glide, speed_takeoff, speed_land, speed_dive;
-
   int RType;
 
   int packId;
@@ -380,6 +377,10 @@ typedef struct _TCharacter
   bool animateTrophy;
 
   int _PhaseM;
+
+  Vector3d climbable;
+  float climbY;
+  BOOL gottaClimb;
 
 } TCharacter;
 
@@ -532,7 +533,7 @@ typedef struct _TDinoInfo
   int jumpRange;
 
   int runAnim, jumpAnim, walkAnim, swimAnim, flyAnim, diveAnim, glideAnim, takeoffAnim, landAnim,
-	  slideAnim, shakeLandAnim, shakeWaterAnim;
+	  slideAnim, shakeLandAnim, shakeWaterAnim, climbAnim;
 
   TDinoDeathType deathType[32];
   int deathTypeCount;
@@ -575,6 +576,8 @@ typedef struct _TDinoInfo
   bool TRexObjCollide;
 
   float camDemoPoint, camBase, camDemoPointWater, camBaseWater;
+
+  float climbDist;
 
 } TDinoInfo;
 
@@ -887,7 +890,7 @@ void CloseLog();
 _EXTORNOT   float BackViewR;
 _EXTORNOT   int   BackViewRR;
 _EXTORNOT   int   UnderWaterT;
-_EXTORNOT   int   TotalC, TotalW, TotalMA, TotalTrophy, TotalRegion, TotalAvoid;
+_EXTORNOT   int   TotalTreeTable, TotalC, TotalW, TotalMA, TotalTrophy, TotalRegion, TotalAvoid;
 
 
 //========== multiplayer =============//
@@ -1017,6 +1020,7 @@ _EXTORNOT int mDamage[4][DINOINFO_MAX];
 //Add these after dino positions alligned
 //_EXTORNOT int sendDinoCall;
 //_EXTORNOT int mDinoCall[4];
+_EXTORNOT bool TreeTable[255];
 _EXTORNOT TAIInfo AIInfo[DINOINFO_MAX];
 _EXTORNOT TRegion Region[256];
 _EXTORNOT TRegion Avoid[256];
@@ -1208,6 +1212,7 @@ _EXTORNOT   struct _t
 #define AI_BEAR       27
 
 #define AI_TITAN      28
+#define AI_MICRO      29
 
 
 //#define AI_POACHER    22

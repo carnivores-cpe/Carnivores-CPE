@@ -2086,6 +2086,86 @@ void SaveScreenShot()
 
 
 //===============================================================================================
+
+void ReadTreeTable(FILE *stream)
+{
+
+	char tempProjectName[128];
+	for (int a = 0; a < __argc; a++)
+	{
+		LPSTR s = __argv[a];
+		if (strstr(s, "prj="))
+		{
+			strcpy(tempProjectName, (s + 4));
+			break;
+		}
+	}
+
+	int areaNumber = -1;
+	switch((char)tempProjectName[18]) {
+						case '1':
+							if (tempProjectName[19]) areaNumber = 9;
+							else areaNumber = 0;
+							break;
+						case '2':
+							areaNumber = 1;
+							break;
+						case '3':
+							areaNumber = 2;
+							break;
+						case '4':
+							areaNumber = 3;
+							break;
+						case '5':
+							areaNumber = 4;
+							break;
+						case '6':
+							areaNumber = 5;
+							break;
+						case '7':
+							areaNumber = 6;
+							break;
+						case '8':
+							areaNumber = 7;
+							break;
+						case '9':
+							areaNumber = 8;
+							break;
+	}
+
+
+	for (int o = 0; o < 255; o++) {
+		TreeTable[o] = FALSE;
+	}
+
+	TotalTreeTable = 0;
+	char line[256], *value;
+	while (fgets(line, 255, stream))
+	{
+		if (strstr(line, "}")) break;
+		if (strstr(line, "{"))
+			while (fgets(line, 255, stream))
+			{
+				if (strstr(line, "}"))
+				{
+					TotalTreeTable++;
+					break;
+				}
+				value = strstr(line, "=");
+				if (!value) DoHalt("Script loading error");
+				value++;
+
+				if (strstr(line, "tree"))
+					if (TotalTreeTable == areaNumber)
+						TreeTable[atoi(value)] = TRUE;
+
+			}
+
+	}
+
+}
+
+
 void ReadWeapons(FILE *stream)
 {
   TotalW = 0;
@@ -2451,6 +2531,7 @@ void ReadCharacterLine(FILE *stream, char *_value, char line[256], bool &regionO
 
 	if (strstr(line, "dogSmell")) readBool(value, DinoInfo[TotalC].dogSmell);
 
+	if (strstr(line, "climbDist")) DinoInfo[TotalC].climbDist = (float)atof(value);
 
 	if (strstr(line, "canswim")) readBool(value, DinoInfo[TotalC].canSwim); //check animate subroutines for what this includes. LandBrach needs this attribute, but maybe rename to wade? (and default to off for landbrach ai? maybe?)
 
@@ -2490,6 +2571,7 @@ void ReadCharacterLine(FILE *stream, char *_value, char line[256], bool &regionO
 	if (strstr(line, "slideAnim")) DinoInfo[TotalC].slideAnim = atoi(value);
 	if (strstr(line, "shakeLAnim")) DinoInfo[TotalC].shakeLandAnim = atoi(value);
 	if (strstr(line, "shakeWAnim")) DinoInfo[TotalC].shakeWaterAnim = atoi(value);
+	if (strstr(line, "climbAnim")) DinoInfo[TotalC].climbAnim = atoi(value);
 
 	if (strstr(line, "idleAnim") || strstr(line, "lookAnim")) {
 		if (idleOverwrite) {
@@ -3265,6 +3347,26 @@ void LoadResourcesScript()
 	AIInfo[AI_TITAN].weaveRange = 6592;
 	AIInfo[AI_TITAN].pWMin = 2048;
 
+	AIInfo[AI_MICRO].agressMulti = 8;
+	AIInfo[AI_MICRO].targetBendRotSpd = 3;
+	//AIInfo[AI_MICRO].waterLevel = 140;
+	AIInfo[AI_MICRO].yBetaGamma1 = 48;
+	AIInfo[AI_MICRO].yBetaGamma2 = 24;
+	AIInfo[AI_MICRO].yBetaGamma3 = 0.5f;
+	AIInfo[AI_MICRO].yBetaGamma4 = 0.4f;
+	AIInfo[AI_MICRO].walkTargetGammaRot = 7.0f;
+	AIInfo[AI_MICRO].targetGammaRot = 5.0f;
+	AIInfo[AI_MICRO].tGAIncrement = 2.f;
+	AIInfo[AI_MICRO].idleStartD = 118;
+	//AIInfo[AI_MICRO].jumper = true;
+	AIInfo[AI_MICRO].carnivore = true;
+	AIInfo[AI_MICRO].noWayCntMin = 12;
+	AIInfo[AI_MICRO].noFindWayMed = 16;
+	AIInfo[AI_MICRO].noFindWayRange = 20;
+	AIInfo[AI_MICRO].targetDistance = 8048.f;
+	AIInfo[AI_MICRO].weaveRange = 1648;
+	AIInfo[AI_MICRO].pWMin = 2048;
+
 	//AIInfo[AI_TREX].waterLevel = 560;
 
 
@@ -3300,6 +3402,7 @@ void LoadResourcesScript()
   while (fgets( line, 255, stream))
   {
     if (line[0] == '.') break;
+	if (strstr(line, "treetable")) ReadTreeTable(stream);
     if (strstr(line, "weapons") ) ReadWeapons(stream);
 	if (strstr(line, "hunterinfo")) ReadCharacters(stream, false, nextTrophySlot);
 	if (strstr(line, "oldambients")) ReadCharacters(stream, false, nextTrophySlot);

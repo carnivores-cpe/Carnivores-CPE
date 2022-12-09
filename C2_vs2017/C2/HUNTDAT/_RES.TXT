@@ -1,4 +1,50 @@
 
+treetable {
+{
+ tree = 7
+ tree = 8
+ tree = 11
+ tree = 12
+ tree = 14
+}
+
+{
+ tree = 6
+ tree = 11
+ tree = 12
+ tree = 13
+ tree = 14
+ tree = 15
+ tree = 16
+ tree = 17
+}
+
+{
+ tree = 10
+ tree = 18
+}
+
+{
+ tree = 4
+ tree = 5
+ tree = 6
+ tree = 12
+ tree = 13
+ tree = 14
+ tree = 15
+}
+
+{
+ tree = 9
+ tree = 10
+ tree = 11
+ tree = 23
+}
+
+
+} //==== end of treetable =========//
+
+
 weapons {
 {
  name  = 'Pistol'
@@ -1234,6 +1280,79 @@ killtype{
  spawnmax  = 1
  spawnmin  = 0
  }
+}
+
+{
+ name = 'Hesperonychus'
+ file = 'testhesp3.car'
+ clone  = 29
+ dogSmell  = TRUE
+ climbDist = 181
+ mass      = 0.3
+ length    = 4.0
+ radius    = 256
+ health    = 6
+ basescore = 12
+ scaleA    = 400
+ smellK     = 1.3
+ hearK     = 0.7
+ lookK     = 0.5
+ shipdelta = -32
+ fearCall = 17
+ fearCall = 18
+ runspd = 1.2
+ wlkspd = 0.428
+ gldspd = 1.80
+ aggress = 160
+ killdist = 256
+ radar = 2
+ trophy  = TRUE
+ tropinfo{
+ tropPos = 1
+  alpha = 150
+  tropAnim = 12
+  xoffset = -400
+  zoffset = 0
+  yoffset = 130
+  zdata = 1200
+ }
+ tropinfo{
+ tropPos = 1
+  alpha = 50
+  tropAnim = 13
+  xoffset = 100
+  zoffset = 70
+  zdata = 1130
+ }
+ runAnim = 0
+ walkAnim = 1
+ slideAnim = 2
+ climbAnim = 3
+ glideAnim = 4
+deathtype{
+ dieAnim = 6
+ sleepAnim = 7
+ fallAnim = 8
+}
+ waterLevel = 140
+killtype{
+ hunterAnim = 0
+ hunterOffset = 170
+ eatAnim = 5
+ scream = TRUE
+}
+ spawninfo {
+ spawnrate = 1
+ spawnmax  = 1
+ spawnmin  = 0
+ }
+ packMax = 4
+ packMin = 3
+ packDensity = 25
+ CamYLand = 256
+ CamYWater = 256
+ CamBaseLand = 824
+ CamBaseWater = 824
 }
 
 }//===== end of mapambients ==========//

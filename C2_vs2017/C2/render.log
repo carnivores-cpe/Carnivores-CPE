@@ -50,8 +50,8 @@ Loading: HUNTDAT\dimor2.car
 Loading: HUNTDAT\ptera.car
 Loading: HUNTDAT\dimet.car
 Loading: HUNTDAT\par9.car
+Loading: HUNTDAT\ankylo1.car
 Loading: HUNTDAT\allo_ii.car
-Loading: HUNTDAT\chasmosa.car
 Loading: HUNTDAT\dangerbrachikiller9.car
 Loading: HUNTDAT\climatius3.car
 Loading: HUNTDAT\parexusn4.car
@@ -59,6 +59,9 @@ Loading: HUNTDAT\parexusn4_pink.car
 Loading: HUNTDAT\mosa30ss.car
 Loading: HUNTDAT\ichthburian6.car
 Loading: HUNTDAT\titanopteryx_flier-placeholder.car
+Loading: HUNTDAT\testhesp3.car
+Loading: HUNTDAT\WEAPONS\pistol.car
+Loading: HUNTDAT\WEAPONS\bullet1.tga
 Loading: HUNTDAT\WEAPONS\shotgun.car
 Loading: HUNTDAT\WEAPONS\bullet2.tga
 Loading: HUNTDAT\WEAPONS\dbsgun.car
@@ -67,7 +70,7 @@ Voodoo: Can't set selected video mode
 Start Address: 0
 End   Address: 8388592
 Audio_UpdateGeometry: 324 faces uploaded
-Trophy Loaded.
+Trophy Saved.
   AudioStop ()
  Releasing Listener3D
  Releasing PrimaryBuffer
