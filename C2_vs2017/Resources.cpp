@@ -1622,12 +1622,12 @@ void LoadCharacters()
       {
         wsprintf(logt, "HUNTDAT\\WEAPONS\\%s", WeapInfo[c].FName);
         LoadCharacterInfo(Weapon.chinfo[c], logt);
-        maxWeaponVCount = MAX(Weapon.chinfo[c].mptr->VCount, maxWeaponVCount);
         PrintLog("Loading: ");
         PrintLog(logt);
         PrintLog("\n");
       }
 
+	  maxWeaponVCount = MAX(Weapon.chinfo[c].mptr->VCount, maxWeaponVCount);
 
       if (!Weapon.BulletPic[c].lpImage)
       {
