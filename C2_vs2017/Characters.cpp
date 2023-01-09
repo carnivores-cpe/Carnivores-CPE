@@ -1118,8 +1118,8 @@ BOOL ReplaceCharacterForward(TCharacter *cptr)
 	//cptr->tgz = cptr->pos.z + siRand(2048);
 	SetNewTargetPlace(cptr, 2048);
 
-	if (cptr->Clone == AI_DIMOR) //===== dimor ========//
-		cptr->pos.y += 1048.f;
+	if (cptr->Clone == AI_DIMOR || cptr->Clone == AI_PTERA) //===== dimor ========//
+		cptr->pos.y += DinoInfo[cptr->CType].minDepth;
 	return TRUE;
 }
 
@@ -3276,7 +3276,7 @@ SKIPROT:
 		DeltaFunc(cptr->vspeed, curspeed, TimeDt / 500.f);
 
 		if (AIInfo[cptr->Clone].jumper) {
-			if (cptr->Phase == DinoInfo[cptr->CType].jumpAnim) cptr->vspeed = DinoInfo[cptr->CType].swmspd;
+			if (cptr->Phase == DinoInfo[cptr->CType].jumpAnim) cptr->vspeed = DinoInfo[cptr->CType].jmpspd;
 		}
 
 		MoveCharacter(cptr, cptr->lookx * cptr->vspeed * TimeDt * cptr->scale,
@@ -7440,11 +7440,11 @@ TBEGIN:
 	if (NewPhase)
 	{
 		if (cptr->Phase == DinoInfo[cptr->CType].flyAnim)
-			if (cptr->pos.y > GetLandH(cptr->pos.x, cptr->pos.z) + 2800)
+			if (cptr->pos.y > GetLandH(cptr->pos.x, cptr->pos.z) + DinoInfo[cptr->CType].maxDepth)
 				cptr->Phase = DinoInfo[cptr->CType].glideAnim;
 			else;
 		else if (cptr->Phase == DinoInfo[cptr->CType].glideAnim)
-			if (cptr->pos.y < GetLandH(cptr->pos.x, cptr->pos.z) + 1800)
+			if (cptr->pos.y < GetLandH(cptr->pos.x, cptr->pos.z) + DinoInfo[cptr->CType].minDepth)
 				cptr->Phase = DinoInfo[cptr->CType].flyAnim;
 	}
 
@@ -7514,7 +7514,7 @@ TBEGIN:
 	if (drspd > pi / 2.f) curspeed *= 2.f - 2.f*drspd / pi;
 
 	if (cptr->Phase == DinoInfo[cptr->CType].flyAnim)
-		DeltaFunc(cptr->pos.y, GetLandH(cptr->pos.x, cptr->pos.z) + 4048, TimeDt / 6.f);
+		DeltaFunc(cptr->pos.y, GetLandH(cptr->pos.x, cptr->pos.z) + (DinoInfo[cptr->CType].maxDepth * 1.5), TimeDt / 6.f);
 	else
 		DeltaFunc(cptr->pos.y, GetLandH(cptr->pos.x, cptr->pos.z), TimeDt / 16.f);
 
@@ -8254,9 +8254,9 @@ if (RadarMode) MessageBox(NULL, "RADAR", "Carnivores Termination", IDOK | MB_SYS
 		Characters[ChCount].packId = -1;
 		ResetCharacter(&Characters[ChCount]);
 
-		if (Characters[ChCount].Clone == AI_DIMET ||
+		if (Characters[ChCount].Clone == AI_DIMOR ||
 			Characters[ChCount].Clone == AI_PTERA)
-			Characters[ChCount].pos.y += 2048.f;
+			Characters[ChCount].pos.y += DinoInfo[Characters[ChCount].CType].minDepth;
 
 		Characters[ChCount].tgx = Characters[ChCount].pos.x;
 		Characters[ChCount].tgz = Characters[ChCount].pos.z;

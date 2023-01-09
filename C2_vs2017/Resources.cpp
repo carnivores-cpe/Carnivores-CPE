@@ -2500,7 +2500,9 @@ void ReadCharacterLine(FILE *stream, char *_value, char line[256], bool &regionO
 	if (strstr(line, "fearCall")) DinoInfo[TotalC].fearCall[atoi(value)] = TRUE; //DIFFERANT TO STND BOOL!!!! e.g. fearcall = 1
 	if (strstr(line, "dontFear")) DinoInfo[TotalC].fearCall[atoi(value)] = FALSE; //DIFFERANT TO STND BOOL!!!!
 	if (strstr(line, "maxdepth")) DinoInfo[TotalC].maxDepth = atoi(value);
+	if (strstr(line, "maxalt")) DinoInfo[TotalC].maxDepth = atoi(value);
 	if (strstr(line, "mindepth")) DinoInfo[TotalC].minDepth = atoi(value);
+	if (strstr(line, "minalt")) DinoInfo[TotalC].minDepth = atoi(value);
 	if (strstr(line, "spcdepth")) DinoInfo[TotalC].spacingDepth = atoi(value);
 	if (strstr(line, "runspd")) DinoInfo[TotalC].runspd = (float)atof(value);
 	if (strstr(line, "jmpspd")) DinoInfo[TotalC].jmpspd = (float)atof(value);

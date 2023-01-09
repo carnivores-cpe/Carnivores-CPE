@@ -198,6 +198,8 @@ deathtype{
  file   = 'dimor2.car'
  ai     = 3
  clone  = 3
+ maxalt = 2800
+ minalt = 1800
  waterLevel = 40
  health = 1
  mass   = 0.05
@@ -216,6 +218,8 @@ deathtype{
  file   = 'ptera.car'
  ai     = 4
  clone  = 4
+ maxalt = 2800
+ minalt = 1800
  waterLevel = 40
  health = 1
  mass   = 0.25
@@ -1284,7 +1288,7 @@ killtype{
 
 {
  name = 'Hesperonychus'
- file = 'testhesp3.car'
+ file = 'hesper12_3_10-test.car'
  clone  = 29
  dogSmell  = TRUE
  climbDist = 181

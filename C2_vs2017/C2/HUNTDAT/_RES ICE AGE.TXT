@@ -151,6 +151,8 @@ deathtype{
  file   = 'Archeo.car'
  ai     = 3
  clone  = 3
+ maxalt = 2800
+ minalt = 1800
  waterLevel = 40
  health = 1
  mass   = 0.05
@@ -169,6 +171,8 @@ deathtype{
  file   = 'Archeo.car'
  ai     = 4
  clone  = 4
+ maxalt = 2800
+ minalt = 1800
  waterLevel = 40
  health = 1
  mass   = 0.25
