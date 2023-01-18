@@ -316,7 +316,6 @@ typedef struct _TWCircle
 
 
 
-
 typedef struct _TCharacter
 {
   int CType, AI, Clone;
@@ -381,6 +380,9 @@ typedef struct _TCharacter
   Vector3d climbable;
   float climbY;
   BOOL gottaClimb;
+
+  Vector3d sonar;
+  BOOL showSonar;
 
 } TCharacter;
 
@@ -574,6 +576,7 @@ typedef struct _TDinoInfo
 
   bool DangerFish;
   bool TRexObjCollide;
+  bool Mystery;
 
   float camDemoPoint, camBase, camDemoPointWater, camBaseWater;
 
@@ -933,6 +936,7 @@ _EXTORNOT   TMessageList MessageList;
 _EXTORNOT   char    ProjectName[128];
 
 _EXTORNOT   int     _GameState, _MultiplayerState;//multiplayer
+_EXTORNOT   TSFX    fxBlip;
 _EXTORNOT   TSFX    fxCall[10][3], fxScream[4];
 _EXTORNOT   TSFX	fxGunShot[11];
 _EXTORNOT   TSFX    fxUnderwater, fxWaterIn, fxWaterOut, fxJump, fxStep[3], fxStepW[3];
@@ -980,8 +984,11 @@ _EXTORNOT int answtime, answcall;
 _EXTORNOT BOOL ScentMode, CamoMode,
           RadarMode, LockLanding,
           TrophyMode, DoubleAmmo,
-	      DogMode, Multiplayer,
-		  Host;
+          DogMode, Multiplayer,
+          Host, CiskMode, SonarMode,
+          ScannerMode;
+
+_EXTORNOT float sonarPos;
 
 _EXTORNOT TTrophyRoom TrophyRoom;
 //_EXTORNOT TPlayerR PlayerR[16];

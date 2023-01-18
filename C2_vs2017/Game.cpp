@@ -575,10 +575,13 @@ void ProcessCommandLine()
     if (strstr(s,"-double"))  DoubleAmmo = TRUE;
 	if (strstr(s, "-huntdog"))  DogMode = TRUE;
     if (strstr(s,"-radar"))   RadarMode = TRUE;
+	if (strstr(s, "-sonar"))   SonarMode = TRUE;
+	if (strstr(s, "-scanner"))   ScannerMode = TRUE;
 	if (strstr(s, "-scent"))   ScentMode = TRUE;
 	if (strstr(s, "-camo"))   CamoMode = TRUE;
 	if (strstr(s, "-multiplayer"))   Multiplayer = TRUE;
 	if (strstr(s, "-host"))   Host = TRUE;
+	if (strstr(s, "-cisk"))   CiskMode = TRUE;
     if (strstr(s,"-tranq")) Tranq = TRUE;
     if (strstr(s,"-observ")) ObservMode = TRUE;
 

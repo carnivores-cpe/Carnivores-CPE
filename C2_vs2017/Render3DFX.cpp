@@ -3831,7 +3831,7 @@ void RenderElements()
 
     float sx = VideoCX - (int)(CameraW * rpos.x / rpos.z * 16) / 16.f;
     float sy = VideoCY + (int)(CameraH * rpos.y / rpos.z * 16) / 16.f;
-    RenderCircle(sx, sy, rpos.z, -12*CameraW*0.64 / rpos.z, (A1<<24)+conv_xGx(0x000070), (A2<<24)+conv_xGx(0x000030));
+    if (!CiskMode) RenderCircle(sx, sy, rpos.z, -12*CameraW*0.64 / rpos.z, (A1<<24)+conv_xGx(0x000070), (A2<<24)+conv_xGx(0x000030));
   }
 
   guAlphaSource(GR_ALPHASOURCE_CC_ALPHA);
@@ -3971,6 +3971,66 @@ void Put8pix(int X,int Y)
   PutPixel(CircleCX - Y, CircleCY - X);
 }
 
+void DrawLine(int x1, int y1, int R, float D)
+{
+	int dx = sin(D)*R;
+	int dy = cos(D)*R;
+
+	if (!dx) {
+		for (int y=0; y < dy; y++) {
+			PutPixel(x1, y1 + y);
+		}
+		return;
+	}
+	if (!dy) {
+		for (int x=0; x < dx; x++) {
+			PutPixel(x1 + x, y1);
+		}
+		return;
+	}
+
+	float d1 = abs(dx) / abs(dy);
+	float d2 = abs(dy) / abs(dx);
+	
+	int dx1 = 1;
+	if (dx < 0) dx1 = -1;
+	int dy1 = 1;
+	if (dy < 0) dy1 = -1;
+
+	if (d1 > d2) {
+
+		float dd = d1;
+		int xt = 0;
+		int yt = 0;
+		while (abs(yt) < abs(dy)) {
+			while (dd >= 1) {
+				PutPixel(x1 + xt, y1 + yt);
+				xt+= dx1;
+				dd-=1;
+			}
+			dd += d1;
+			yt+= dy1;
+		}
+
+		} else {
+	
+		float dd = d2;
+		int xt = 0;
+		int yt = 0;
+		while (abs(xt) < abs(dx)) {
+			while (dd >= 1) {
+				PutPixel(x1 + xt, y1 + yt);
+				yt+= dy1;
+				dd-=1;
+			}
+			dd += d2;
+			xt+= dx1;
+		}
+
+	}
+
+}
+
 void DrawCircle(int cx, int cy, int R)
 {
   int d = 3 - (2 * R);
@@ -3995,7 +4055,24 @@ void DrawCircle(int cx, int cy, int R)
 
 
 
-
+void DrawBoxMystery(WORD *lfbPtr, int lsw, int xx, int yy, WORD c)
+{
+	yy = yy * lsw + xx;
+	*(lfbPtr + yy + 1) = c;
+	*(lfbPtr + yy + 2) = c;
+	yy += lsw;
+	*(lfbPtr + yy + 1) = c;
+	yy += lsw * 2;
+	*(lfbPtr + yy + 1) = c;
+	yy -= lsw*4;
+	*(lfbPtr + yy + 3) = c;
+	yy -= lsw;
+	*(lfbPtr + yy) = c;
+	*(lfbPtr + yy + 3) = c;
+	yy -= lsw;
+	*(lfbPtr + yy + 1) = c;
+	*(lfbPtr + yy + 2) = c;
+}
 
 
 
@@ -4011,6 +4088,8 @@ void DrawBox( WORD *lfbPtr, int lsw, int xx, int yy, WORD c)
 
 void DrawHMap()
 {
+	if (CiskMode && !DEBUG) return;
+
   int c;
 
   DrawPicture(VideoCX-MapPic.W/2, VideoCY - MapPic.H/2-6, MapPic);
@@ -4031,6 +4110,8 @@ void DrawHMap()
   int xx = VideoCX - 128 + (CCX>>2);
   int yy = VideoCY - 128 + (CCY>>2);
 
+  int px = xx;
+  int py = yy;
 
   if (yy<0 || yy>=WinH) goto endmap;
   if (xx<0 || xx>=WinW) goto endmap;
@@ -4038,10 +4119,35 @@ void DrawHMap()
   DrawBox( (WORD*)linfo.lfbPtr, lsw, xx+1, yy+1, 8<<11);
   DrawBox( (WORD*)linfo.lfbPtr, lsw, xx, yy, 30<<11);
 
-  _CRCOLOR =  4<<6;
-  DrawCircle(xx+1, yy+1, (ctViewR/4));
-  _CRCOLOR = 18<<6;
-  DrawCircle(xx, yy, (ctViewR/4));
+
+  float _sonarPos;
+  if (SonarMode) {
+	  _sonarPos = sonarPos;
+	  sonarPos += TimeDt * 0.02 * cos((pi/2)*(sonarPos/41));
+	  if (sonarPos > 38) sonarPos = 1;
+	  _CRCOLOR = 4 << 6;
+	  DrawCircle(xx + 1, yy + 1, sonarPos);
+	  _CRCOLOR = 30 << 6;
+	  DrawCircle(xx, yy, sonarPos);
+  }
+  if (ScannerMode) {
+	  _sonarPos = sonarPos;
+	  sonarPos += TimeDt * 0.0002;
+	  if (sonarPos > 2 * pi) sonarPos -= 2 * pi;
+	  _CRCOLOR = 4 << 6;
+	  DrawCircle(xx + 1, yy + 1, 38);
+	  DrawLine(xx+1, yy+1, 38, sonarPos);
+	  _CRCOLOR = 30 << 6;
+	  DrawCircle(xx, yy, 38);
+	  DrawLine(xx, yy, 38, sonarPos);
+  }
+  
+
+  _CRCOLOR = 4 << 6;
+  DrawCircle(xx + 1, yy + 1, (ctViewR / 4));
+  _CRCOLOR = 18 << 6;
+  if (SonarMode || ScannerMode) _CRCOLOR = 14 << 6;
+  DrawCircle(xx, yy, (ctViewR / 4));
 
 
   if (Multiplayer) {
@@ -4065,17 +4171,60 @@ void DrawHMap()
 		//else if (Characters[c].Clone < 1 || Characters[c].Clone > 9) continue; //TEST
 
 			if (!Characters[c].Health) continue;
-			if (!RadarMode && Characters[c].AI != AI_HUNTDOG) continue;
-			xx = VideoCX - 128 + (int)Characters[c].pos.x / 1024;
-			yy = VideoCY - 128 + (int)Characters[c].pos.z / 1024;
-			if (yy <= 0 || yy >= WinH) goto endmap;
-			if (xx <= 0 || xx >= WinW) goto endmap;
-
+			
 			if (Characters[c].AI == AI_HUNTDOG) {
+
+				xx = VideoCX - 128 + (int)Characters[c].pos.x / 1024;
+				yy = VideoCY - 128 + (int)Characters[c].pos.z / 1024;
+				if (yy <= 0 || yy >= WinH) goto endmap;
+				if (xx <= 0 || xx >= WinW) goto endmap;
 				DrawBox((WORD*)linfo.lfbPtr, lsw, xx, yy, 30 << 11);
-			} else {
-				DrawBox((WORD*)linfo.lfbPtr, lsw, xx, yy, 30 << 6); //RGB(0, 127, 0)
+
 			}
+			else {
+				
+				if (RadarMode) {
+
+				xx = VideoCX - 128 + (int)Characters[c].pos.x / 1024;
+				yy = VideoCY - 128 + (int)Characters[c].pos.z / 1024;
+				if (yy <= 0 || yy >= WinH) goto endmap;
+				if (xx <= 0 || xx >= WinW) goto endmap;
+
+				if (DinoInfo[Characters[c].CType].Mystery) DrawBoxMystery((WORD*)linfo.lfbPtr, lsw, xx, yy, 30 << 6);
+				else DrawBox((WORD*)linfo.lfbPtr, lsw, xx, yy, 30 << 6); //RGB(0, 127, 0) //30 << 6
+
+				}
+				
+				if (SonarMode) {
+
+					xx = VideoCX - 128 + (int)Characters[c].pos.x / 1024;
+					yy = VideoCY - 128 + (int)Characters[c].pos.z / 1024;
+					if (yy <= 0 || yy >= WinH) goto endmap;
+					if (xx <= 0 || xx >= WinW) goto endmap;
+					int dx, dz;
+					dx = px - xx;
+					dz = py - yy;
+					int pd = (int) sqrt(dx * dx + dz * dz);
+
+
+					if (pd < 38) {
+						if (pd >= _sonarPos && pd <= sonarPos) {
+							Characters[c].showSonar = TRUE;
+							Characters[c].sonar.x = xx;
+							Characters[c].sonar.y = yy;
+							AddVoicev(fxBlip.length, fxBlip.lpData, 256);
+						}
+					} else Characters[c].showSonar = FALSE;
+
+					if (Characters[c].showSonar) {
+						if (DinoInfo[Characters[c].CType].Mystery) DrawBoxMystery((WORD*)linfo.lfbPtr, lsw, Characters[c].sonar.x, Characters[c].sonar.y, 30 << 6);
+						else DrawBox((WORD*)linfo.lfbPtr, lsw, Characters[c].sonar.x, Characters[c].sonar.y, 30 << 6);
+					}
+
+				}
+
+			}
+
 
     }
 

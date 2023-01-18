@@ -1985,6 +1985,8 @@ int PASCAL WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 
   LoadWav("HUNTDAT\\SOUNDFX\\a_underw.wav",  fxUnderwater);
 
+  LoadWav("HUNTDAT\\SOUNDFX\\blip.wav", fxBlip);
+
   LoadWav("HUNTDAT\\SOUNDFX\\STEPS\\hwalk1.wav",  fxStep[0]);
   LoadWav("HUNTDAT\\SOUNDFX\\STEPS\\hwalk2.wav",  fxStep[1]);
   LoadWav("HUNTDAT\\SOUNDFX\\STEPS\\hwalk3.wav",  fxStep[2]);

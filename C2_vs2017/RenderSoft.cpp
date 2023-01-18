@@ -2570,6 +2570,34 @@ void DrawCircle(int cx, int cy, int R)
   Put8pix(x,y);
 }
 
+void DrawBoxMystery(WORD *lfbPtr, int xx, int yy, WORD c)
+{
+	*((WORD*)lpVideoBuf + yy * 1024 + xx + 1) = c;
+	*((WORD*)lpVideoBuf + yy * 1024 + xx + 2) = c;
+	yy++;
+	*((WORD*)lpVideoBuf + yy * 1024 + xx + 1) = c;
+	yy+=2;
+	*((WORD*)lpVideoBuf + yy * 1024 + xx + 1) = c;
+	yy -= 4;
+	*((WORD*)lpVideoBuf + yy * 1024 + xx + 3) = c;
+	yy --;
+	*((WORD*)lpVideoBuf + yy * 1024 + xx) = c;
+	*((WORD*)lpVideoBuf + yy * 1024 + xx + 3) = c;
+	yy--;
+	*((WORD*)lpVideoBuf + yy * 1024 + xx + 1) = c;
+	*((WORD*)lpVideoBuf + yy * 1024 + xx + 2) = c;
+}
+
+
+
+void DrawBox(WORD *lfbPtr, int xx, int yy, WORD c)
+{
+	*((WORD*)lpVideoBuf + yy * 1024 + xx) = c;
+	*((WORD*)lpVideoBuf + yy * 1024 + xx + 1) = c;
+	yy++;
+	*((WORD*)lpVideoBuf + yy * 1024 + xx) = c;
+	*((WORD*)lpVideoBuf + yy * 1024 + xx + 1) = c;
+}
 
 void DrawHMap()
 {
@@ -2581,11 +2609,7 @@ void DrawHMap()
   if (yy>0 || yy<WinH)
   {
     DrawCircle(xx, yy, 17);
-    *((WORD*)lpVideoBuf + yy*1024 + xx) = 31<<10;
-    *((WORD*)lpVideoBuf + yy*1024 + xx+1) = 31<<10;
-    yy++;
-    *((WORD*)lpVideoBuf + yy*1024 + xx) = 31<<10;
-    *((WORD*)lpVideoBuf + yy*1024 + xx+1) = 31<<10;
+	DrawBox((WORD*)lpVideoBuf, xx, yy, 31 << 10);
   }
 
   
@@ -2611,18 +2635,11 @@ void DrawHMap()
 			if (xx <= 0 || xx >= WinW) continue;
 
 			if (Characters[c].AI == AI_HUNTDOG) {
-				*((WORD*)lpVideoBuf + yy * 1024 + xx) = 31 << 10;
-				*((WORD*)lpVideoBuf + yy * 1024 + xx + 1) = 31 << 10;
-				yy++;
-				*((WORD*)lpVideoBuf + yy * 1024 + xx) = 31 << 10;
-				*((WORD*)lpVideoBuf + yy * 1024 + xx + 1) = 31 << 10;
+				DrawBox((WORD*)lpVideoBuf, xx, yy, 31 << 10);
 			}
 			else {
-				*((WORD*)lpVideoBuf + yy * 1024 + xx) = 30 << 5;
-				*((WORD*)lpVideoBuf + yy * 1024 + xx + 1) = 30 << 5;
-				yy++;
-				*((WORD*)lpVideoBuf + yy * 1024 + xx) = 30 << 5;
-				*((WORD*)lpVideoBuf + yy * 1024 + xx + 1) = 30 << 5;
+				if (DinoInfo[Characters[c].CType].Mystery) DrawBoxMystery((WORD*)lpVideoBuf, xx, yy, 30 << 5);
+				else DrawBox((WORD*)lpVideoBuf, xx, yy, 30 << 5);
 			}
 
     }

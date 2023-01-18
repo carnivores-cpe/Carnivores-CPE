@@ -280,6 +280,7 @@ void ResetCharacter(TCharacter *cptr)
 
 	cptr->spcDepth = DinoInfo[cptr->CType].spacingDepth + (cptr->scale * 500) - 500;
 
+	cptr->showSonar = FALSE;
 
 }
 
@@ -8217,7 +8218,6 @@ if (DoubleAmmo) MessageBox(NULL, "DOUBLE", "Carnivores Termination", IDOK | MB_S
 if (RadarMode) MessageBox(NULL, "RADAR", "Carnivores Termination", IDOK | MB_SYSTEMMODAL | MB_ICONEXCLAMATION);
 */
 
-
 	int c, tr;
 	ChCount = 0;
 	PrintLog("Placing...");
@@ -8300,10 +8300,31 @@ if (RadarMode) MessageBox(NULL, "RADAR", "Carnivores Termination", IDOK | MB_SYS
 
 			int RegionNo = DinoInfo[DinoInfoIndex].RType0[r];
 
+
 			//spawn count
+			int SpwnMax = Region[RegionNo].SpawnMax;
+			if ( CiskMode && DinoInfo[DinoInfoIndex].Clone > 0) {
+				if (Region[RegionNo].SpawnRate * 1000 > rRand(10000)){
+				SpwnMax *= 10;
+				char buff[100];
+				sprintf_s(buff, "Influx:%s", DinoInfo[DinoInfoIndex].Name);
+				MessageBox(hwndMain, buff, "TEST", IDOK);
+				}
+				else if (Region[RegionNo].SpawnRate * 1000 > rRand(100000)) {
+					SpwnMax *= 50;
+					char buff[100];
+					sprintf_s(buff, "Unprecidented Influx:%s", DinoInfo[DinoInfoIndex].Name);
+					MessageBox(hwndMain, buff, "TEST", IDOK);
+				}
+			}
 			int spawnNo = Region[RegionNo].SpawnMin;
-			for (int i = 0; i < Region[RegionNo].SpawnMax - Region[RegionNo].SpawnMin; i++) {
+			for (int i = 0; i < SpwnMax - Region[RegionNo].SpawnMin; i++) {
 				if (Region[RegionNo].SpawnRate * 1000 > rRand(1000)) spawnNo++;
+				if (CiskMode && DinoInfo[DinoInfoIndex].Clone > 0 && Region[RegionNo].SpawnRate * 1000 > rRand(4000)) {//fake
+					char buff[100];
+					sprintf_s(buff, "Sighting:%s", DinoInfo[DinoInfoIndex].Name);
+					MessageBox(hwndMain, buff, "TEST", IDOK);
+				}
 			}
 
 			tr = 0;
@@ -8313,6 +8334,12 @@ if (RadarMode) MessageBox(NULL, "RADAR", "Carnivores Termination", IDOK | MB_SYS
 				int leaderIndex = ChCount;
 				// pack leaders
 				spawnMapAmbient(DinoInfoIndex, RegionNo, tr, -1);
+
+				if (CiskMode && DinoInfo[DinoInfoIndex].Clone > 0 && rRand(3) == 1) {//real
+					char buff[100];
+					sprintf_s(buff, "Sighting:%s", DinoInfo[DinoInfoIndex].Name);
+					MessageBox(hwndMain, buff, "TEST", IDOK);
+				}
 
 				//pack size
 				int packNo = 1;

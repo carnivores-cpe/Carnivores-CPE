@@ -5043,6 +5043,25 @@ void DrawCircle(int cx, int cy, int R)
   Put8pix(x,y);
 }
 
+void DrawBoxMystery(WORD *lfbPtr, int lsw, int xx, int yy, WORD c)
+{
+	yy = yy * lsw + xx;
+	*(lfbPtr + yy + 1) = c;
+	*(lfbPtr + yy + 2) = c;
+	yy += lsw;
+	*(lfbPtr + yy + 1) = c;
+	yy += lsw * 2;
+	*(lfbPtr + yy + 1) = c;
+	yy -= lsw * 4;
+	*(lfbPtr + yy + 3) = c;
+	yy -= lsw;
+	*(lfbPtr + yy) = c;
+	*(lfbPtr + yy + 3) = c;
+	yy -= lsw;
+	*(lfbPtr + yy + 1) = c;
+	*(lfbPtr + yy + 2) = c;
+}
+
 void DrawBox( WORD *lfbPtr, int lsw, int xx, int yy, WORD c)
 {
   yy = yy * lsw + xx;
@@ -5122,7 +5141,8 @@ void DrawHMap()
 		  DrawBox((WORD*)ddsd.lpSurface, lsw, xx, yy, 30 << RShift);
 	  }
 	  else {
-		  DrawBox((WORD*)ddsd.lpSurface, lsw, xx, yy, 30 << GShift);
+		  if (DinoInfo[Characters[c].CType].Mystery) DrawBoxMystery((WORD*)ddsd.lpSurface, lsw, xx, yy, 30 << GShift);
+		  else DrawBox((WORD*)ddsd.lpSurface, lsw, xx, yy, 30 << GShift);
 	  }
 
 
