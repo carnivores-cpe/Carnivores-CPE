@@ -35,7 +35,8 @@
 
 
 #define DINOINFO_MAX	128
-#define TROPHY_COUNT	128
+#define TROPHY_COUNT	24
+#define TROPHY2_COUNT	128
 
 #ifdef _MAIN_
 #define _EXTORNOT
@@ -471,6 +472,24 @@ typedef struct _TTrophyRoom
 } TTrophyRoom;
 
 
+
+typedef struct _TTrophyItem2 //Add neccesary stuff here! (later, not now)
+{
+	int ctype, weapon, phase,
+		height, weight, score,
+		date, time;
+	float scale, range;
+	int r1, r2, r3, r4;
+} TTrophyItem2;
+
+
+
+typedef struct _TTrophyRoom2
+{
+	TTrophyItem2 Body[TROPHY2_COUNT];
+} TTrophyRoom2;
+
+
 typedef struct _TDinoKill
 {
 	int anim;
@@ -548,7 +567,7 @@ typedef struct _TDinoInfo
   int trophyLocTotal1;//CURRENTLY IN SAVE FILE
   int trophyLocTotal2;//CURRENTLY IN SESSION - REPLACE WITH tlt1 UPON RESTART
   
-  TTrophyType trophyType[TROPHY_COUNT];
+  TTrophyType trophyType[TROPHY2_COUNT];// big waste of memory! move out of the struct and replace this with a pointer array
   int trophyTypeCount;
 //  int tCounter; // used to count off trophy locs
 
@@ -991,6 +1010,7 @@ _EXTORNOT BOOL ScentMode, CamoMode,
 _EXTORNOT float sonarPos;
 
 _EXTORNOT TTrophyRoom TrophyRoom;
+_EXTORNOT TTrophyRoom2 TrophyRoom2;
 //_EXTORNOT TPlayerR PlayerR[16];
 _EXTORNOT TPicture LandPic,DinoPic,DinoPicM, MapPic, WepPic;
 _EXTORNOT HFONT fnt_BIG, fnt_Small, fnt_Midd;

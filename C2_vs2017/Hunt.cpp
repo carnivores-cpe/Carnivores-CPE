@@ -1845,9 +1845,9 @@ void ProcessGame()
 		  DinoInfo[di].trophyLocTotal1 = 0;
 		  DinoInfo[di].trophyLocTotal2 = 0;
 	  }
-	  for (int c = 0; c < TROPHY_COUNT; c++) {
-		  DinoInfo[TrophyIndex[TrophyRoom.Body[c].ctype]].trophyLocTotal1++;
-		  DinoInfo[TrophyIndex[TrophyRoom.Body[c].ctype]].trophyLocTotal2++;
+	  for (int c = 0; c < TROPHY2_COUNT; c++) {
+		  DinoInfo[TrophyIndex[TrophyRoom2.Body[c].ctype]].trophyLocTotal1++;
+		  DinoInfo[TrophyIndex[TrophyRoom2.Body[c].ctype]].trophyLocTotal2++;
 	  }
 
     PrintLog("Entered game\n");

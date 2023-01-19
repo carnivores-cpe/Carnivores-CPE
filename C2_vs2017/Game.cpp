@@ -621,8 +621,8 @@ void AddShipTask(int cindex)
   SYSTEMTIME st;
   GetLocalTime(&st);
   int t=0;
-  for (t=0; t< TROPHY_COUNT-1; t++)
-    if (!TrophyRoom.Body[t].ctype) break;
+  for (t=0; t< TROPHY2_COUNT-1; t++)
+    if (!TrophyRoom2.Body[t].ctype) break;
 
   //t += DinoInfo[Characters[cindex].CType].trophyFirstSlot;
 
@@ -657,14 +657,14 @@ void AddShipTask(int cindex)
 	  if (DinoInfo[Characters[cindex].CType].trophyLocTotal2 < DinoInfo[Characters[cindex].CType].trophyTypeCount) {
 		  DinoInfo[Characters[cindex].CType].trophyLocTotal2++;
 		  TrophyBody = t;
-		  TrophyRoom.Body[t].ctype = DinoInfo[Characters[cindex].CType].trophyCode; //0 is blank trophy
-		  TrophyRoom.Body[t].scale = Characters[cindex].scale;
-		  TrophyRoom.Body[t].weapon = CurrentWeapon;
-		  TrophyRoom.Body[t].score = (int)score;
-		  TrophyRoom.Body[t].phase = (RealTime & 3);
-		  TrophyRoom.Body[t].time = (st.wHour << 10) + st.wMinute;
-		  TrophyRoom.Body[t].date = (st.wYear << 20) + (st.wMonth << 10) + st.wDay;
-		  TrophyRoom.Body[t].range = VectorLength(SubVectors(Characters[cindex].pos, PlayerPos)) / 64.f;
+		  TrophyRoom2.Body[t].ctype = DinoInfo[Characters[cindex].CType].trophyCode; //0 is blank trophy
+		  TrophyRoom2.Body[t].scale = Characters[cindex].scale;
+		  TrophyRoom2.Body[t].weapon = CurrentWeapon;
+		  TrophyRoom2.Body[t].score = (int)score;
+		  TrophyRoom2.Body[t].phase = (RealTime & 3);
+		  TrophyRoom2.Body[t].time = (st.wHour << 10) + st.wMinute;
+		  TrophyRoom2.Body[t].date = (st.wYear << 20) + (st.wMonth << 10) + st.wDay;
+		  TrophyRoom2.Body[t].range = VectorLength(SubVectors(Characters[cindex].pos, PlayerPos)) / 64.f;
 		  PrintLog("Trophy added: ");
 		  PrintLog(DinoInfo[Characters[cindex].CType].Name);
 		  PrintLog("\n");
@@ -2227,14 +2227,14 @@ void ProcessTrophy()
 
 	if (VectorLength(SubVectors(p, PlayerPos)) < 148) {
       TrophyBody = c;
-	  TrophyDisplayBody.ctype = TrophyIndex[TrophyRoom.Body[c].ctype];
-	  TrophyDisplayBody.scale = TrophyRoom.Body[c].scale;
-	  TrophyDisplayBody.weapon = TrophyRoom.Body[c].weapon;
-	  TrophyDisplayBody.score = TrophyRoom.Body[c].score;
-	  TrophyDisplayBody.phase = TrophyRoom.Body[c].phase;
- 	  TrophyDisplayBody.time = TrophyRoom.Body[c].time;
-	  TrophyDisplayBody.date = TrophyRoom.Body[c].date;
-	  TrophyDisplayBody.range = TrophyRoom.Body[c].range;
+	  TrophyDisplayBody.ctype = TrophyIndex[TrophyRoom2.Body[c].ctype];
+	  TrophyDisplayBody.scale = TrophyRoom2.Body[c].scale;
+	  TrophyDisplayBody.weapon = TrophyRoom2.Body[c].weapon;
+	  TrophyDisplayBody.score = TrophyRoom2.Body[c].score;
+	  TrophyDisplayBody.phase = TrophyRoom2.Body[c].phase;
+ 	  TrophyDisplayBody.time = TrophyRoom2.Body[c].time;
+	  TrophyDisplayBody.date = TrophyRoom2.Body[c].date;
+	  TrophyDisplayBody.range = TrophyRoom2.Body[c].range;
 	}
   }
 
@@ -2447,18 +2447,18 @@ void RemoveCurrentTrophy()
 {
   int p = 0;
   if (!TrophyMode) return;
-  if (!TrophyRoom.Body[TrophyBody].ctype) return;
+  if (!TrophyRoom2.Body[TrophyBody].ctype) return;
 
   PrintLog("Trophy removed: ");
   //PrintLog(DinoInfo[TrophyRoom.Body[TrophyBody].ctype].Name);
-  PrintLog(DinoInfo[TrophyIndex[TrophyRoom.Body[TrophyBody].ctype]].Name);
+  PrintLog(DinoInfo[TrophyIndex[TrophyRoom2.Body[TrophyBody].ctype]].Name);
   PrintLog("\n");
 
   for (int c=0; c<TrophyBody; c++)
-    if (TrophyRoom.Body[c].ctype) p++;
+    if (TrophyRoom2.Body[c].ctype) p++;
 
 
-  TrophyRoom.Body[TrophyBody].ctype = 0;
+  TrophyRoom2.Body[TrophyBody].ctype = 0;
 
   if (TrophyMode)
   {
@@ -2472,6 +2472,25 @@ void RemoveCurrentTrophy()
   TrophyBody = -1;
 }
 
+
+void LoadTrophy2(int RegNumber) {
+
+	FillMemory(&TrophyRoom2, sizeof(TrophyRoom2), 0);
+	DWORD l;
+	char fname2[128];
+	wsprintf(fname2, "trophy0%db.sab", RegNumber);
+	HANDLE hfile2 = CreateFile(fname2, GENERIC_READ, FILE_SHARE_READ, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
+	if (hfile2 == INVALID_HANDLE_VALUE)
+	{
+		PrintLog("===> Error loading trophyB!\n");
+		return;
+	}
+	ReadFile(hfile2, &TrophyRoom2, sizeof(TrophyRoom2), &l, NULL);
+
+	CloseHandle(hfile2);
+
+	PrintLog("TrophyB Loaded.\n");
+}
 
 void LoadTrophy()
 {
@@ -2526,11 +2545,28 @@ void LoadTrophy()
   TrophyRoom.RegNumber = rn;
 
   PrintLog("Trophy Loaded.\n");
+
+  LoadTrophy2(TrophyRoom.RegNumber);
+
 //	TrophyRoom.Score = 299;
 }
 
 
+void SaveTrophy2(int RegNumber) {
+	DWORD l2;
+	char fname2[128];
+	wsprintf(fname2, "trophy0%db.sab", RegNumber);
 
+	HANDLE hfile2 = CreateFile(fname2, GENERIC_WRITE, FILE_SHARE_READ, NULL, CREATE_ALWAYS, FILE_ATTRIBUTE_NORMAL, NULL);
+	if (hfile2 == INVALID_HANDLE_VALUE)
+	{
+		PrintLog("==>> Error saving trophy!\n");
+		return;
+	}
+	WriteFile(hfile2, &TrophyRoom2, sizeof(TrophyRoom2), &l2, NULL);
+	CloseHandle(hfile2);
+	PrintLog("TrophyB Saved.\n");
+}
 
 void SaveTrophy()
 {
@@ -2578,5 +2614,8 @@ void SaveTrophy()
   WriteFile(hfile, &OptRender, 4, &l, NULL);
   CloseHandle(hfile);
   PrintLog("Trophy Saved.\n");
+
+  SaveTrophy2(TrophyRoom.RegNumber);
+
 }
 

@@ -7929,19 +7929,19 @@ void PlaceTrophy()
 	ChCount = 0;
 	PrintLog("Placing Trophies...");
 
-	for (int c = 0; c < TROPHY_COUNT; c++)
+	for (int c = 0; c < TROPHY2_COUNT; c++)
 	{
 
 		//MessageBox(hwndMain, c.tostring(), "boring", IDOK);
 
-		if (!TrophyRoom.Body[c].ctype) continue;
+		if (!TrophyRoom2.Body[c].ctype) continue;
 
 			//do this in addshiptask too
 
-		Characters[ChCount].CType = TrophyIndex[TrophyRoom.Body[c].ctype];
+		Characters[ChCount].CType = TrophyIndex[TrophyRoom2.Body[c].ctype];
 
 		if (DinoInfo[Characters[ChCount].CType].tCounter >=
-			DinoInfo[TrophyIndex[TrophyRoom.Body[c].ctype]].trophyTypeCount) continue;
+			DinoInfo[TrophyIndex[TrophyRoom2.Body[c].ctype]].trophyTypeCount) continue;
 		
 
 		//Characters[ChCount].CType = TrophyRoom.Body[c].ctype;
@@ -7958,7 +7958,7 @@ void PlaceTrophy()
 
 		
 		Characters[ChCount].State = c;
-		Characters[ChCount].scale = TrophyRoom.Body[c].scale;
+		Characters[ChCount].scale = TrophyRoom2.Body[c].scale;
 		
 		float scaleDif = Characters[ChCount].scale - (DinoInfo[Characters[ChCount].CType].Scale0 / 1000.f);
 		if (scaleDif != 0) {

@@ -1244,15 +1244,6 @@ deathtype{
  aggress = 240
  flydist = 50
  killdist = 350
- trophy  = TRUE
- tropinfo{
- tropPos = 12
-  alpha = 180
-  tropAnim = 0
-  xoffset = 0
-  zoffset = 0
-  zdata = -1200
- }
  runAnim = 1
  walkAnim = 0
  flyAnim = 8
@@ -1310,24 +1301,6 @@ killtype{
  aggress = 160
  killdist = 256
  radar = 2
- trophy  = TRUE
- tropinfo{
- tropPos = 1
-  alpha = 150
-  tropAnim = 12
-  xoffset = -400
-  zoffset = 0
-  yoffset = 130
-  zdata = 1200
- }
- tropinfo{
- tropPos = 1
-  alpha = 50
-  tropAnim = 13
-  xoffset = 100
-  zoffset = 70
-  zdata = 1130
- }
  runAnim = 0
  walkAnim = 1
  slideAnim = 2
