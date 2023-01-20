@@ -867,6 +867,7 @@ prices {
  dino = 250
  dino = 300
  dino = 500
+ dino = 1000
 
  weapon = 20
  weapon = 100

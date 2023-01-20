@@ -7763,12 +7763,14 @@ void AnimateCharacters()
 			else AnimateTRexDead(cptr);
 			break;
 		case AI_TITAN:
-			if (cptr->Health) AnimateTitan(cptr);
-			else AnimateIcthDead(cptr);
+			//TEMP DISABLED
+			//if (cptr->Health) AnimateTitan(cptr);
+			//else AnimateIcthDead(cptr);
 			break;
 		case AI_MICRO:
-			if (cptr->Health) AnimateMicro(cptr);
-			else AnimateIcthDead(cptr);
+			//TEMP DISABLED
+			//if (cptr->Health) AnimateMicro(cptr);
+			//else AnimateIcthDead(cptr);
 			break;
 		case 0:
 			AnimateHuntDead(cptr);
