@@ -2478,7 +2478,7 @@ void LoadTrophy2(int RegNumber) {
 	FillMemory(&TrophyRoom2, sizeof(TrophyRoom2), 0);
 	DWORD l;
 	char fname2[128];
-	wsprintf(fname2, "trophy0%db.sab", RegNumber);
+	wsprintf(fname2, "trophy0%d.sab", RegNumber);
 	HANDLE hfile2 = CreateFile(fname2, GENERIC_READ, FILE_SHARE_READ, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
 	if (hfile2 == INVALID_HANDLE_VALUE)
 	{
@@ -2488,6 +2488,8 @@ void LoadTrophy2(int RegNumber) {
 	ReadFile(hfile2, &TrophyRoom2, sizeof(TrophyRoom2), &l, NULL);
 
 	CloseHandle(hfile2);
+
+	TrophyRoom2.versionID = MODDERS_EDITION_VERSION_ID;
 
 	PrintLog("TrophyB Loaded.\n");
 }
@@ -2555,7 +2557,7 @@ void LoadTrophy()
 void SaveTrophy2(int RegNumber) {
 	DWORD l2;
 	char fname2[128];
-	wsprintf(fname2, "trophy0%db.sab", RegNumber);
+	wsprintf(fname2, "trophy0%d.sab", RegNumber);
 
 	HANDLE hfile2 = CreateFile(fname2, GENERIC_WRITE, FILE_SHARE_READ, NULL, CREATE_ALWAYS, FILE_ATTRIBUTE_NORMAL, NULL);
 	if (hfile2 == INVALID_HANDLE_VALUE)
