@@ -402,6 +402,7 @@ void ScanLifeForms()
   {
     TCharacter *cptr = &Characters[c];
 	if (DinoInfo[cptr->CType].Aquatic) continue;
+	if (DinoInfo[cptr->CType].HideBinoc) continue;
     if (!cptr->Health) continue;
     if (cptr->rpos.z > -512) continue;
     float d = (float)sqrt( cptr->rpos.x*cptr->rpos.x + cptr->rpos.y*cptr->rpos.y + cptr->rpos.z*cptr->rpos.z );

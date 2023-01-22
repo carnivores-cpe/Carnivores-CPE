@@ -598,6 +598,7 @@ typedef struct _TDinoInfo
   bool DangerFish;
   bool TRexObjCollide;
   bool Mystery;
+  bool HideBinoc;
 
   float camDemoPoint, camBase, camDemoPointWater, camBaseWater;
 
