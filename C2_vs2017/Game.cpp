@@ -2548,7 +2548,8 @@ void LoadTrophy()
 
   PrintLog("Trophy Loaded.\n");
 
-  LoadTrophy2(TrophyRoom.RegNumber);
+  if (TrophyRoom.Body[0].ctype) LoadTrophy2(TrophyRoom.RegNumber);
+  else TrophyRoom.Body[0].ctype = 1;
 
 //	TrophyRoom.Score = 299;
 }
