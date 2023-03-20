@@ -8204,6 +8204,166 @@ void PlaceMHunters() {
 
 
 
+void dispSighting(int dii, int xx, int zz) {
+
+	char buff[100];
+	char loc[100];
+	bool lob = false;
+
+	int ccx = xx;
+	int ccz = zz;
+
+	int ccxd = rRand(8) ^ 3;
+	int cczd = rRand(8) ^ 3;
+	if ((rand() % 2)) ccxd *= -1;
+	if ((rand() % 2)) cczd *= -1;
+
+	bool foundLoc = false;
+	if (rRand(4) != 1) {
+
+		if (ccz > 400 &&
+			ccx < 350) {
+			sprintf(loc, "on the western approaches");
+			foundLoc = true;
+		}
+		else if (ccz > 800 &&
+			ccz < 850 &&
+			ccx > 660 &&
+			ccx < 820) {
+			sprintf(loc, "in Fort Ciskin");
+			foundLoc = true;
+		}
+		else if (ccz > 330 &&
+			ccz < 430 &&
+			ccx > 550 &&
+			ccx < 650) {
+			sprintf(loc, "in the desert");
+			foundLoc = true;
+		}
+		else if (ccz > 180 &&
+			ccz < 330 &&
+			ccx > 450 &&
+			ccx < 600) {
+			sprintf(loc, "near the lake");
+			foundLoc = true;
+		}
+		else if (ccz > 100 &&
+			ccz < 160 &&
+			ccx > 450 &&
+			ccx < 570) {
+			sprintf(loc, "in the gultch");
+			foundLoc = true;
+		}
+		else if (ccz > 220 &&
+			ccz < 300 &&
+			ccx > 570 &&
+			ccx < 820) {
+			sprintf(loc, "in the Catacombs");
+			foundLoc = true;
+		}
+		else if (ccz > 320 &&
+			ccz < 340 &&
+			ccx > 900) {
+			sprintf(loc, "at the stone circle");
+			foundLoc = true;
+		}
+		else if (ccz > 600 &&
+			ccz < 680 &&
+			ccx > 800) {
+			sprintf(loc, "near Feltcher's Bog");
+			foundLoc = true;
+		}
+		else if (ccz > 280 &&
+			ccz < 350 &&
+			ccx > 350 &&
+			ccx < 550) {
+			sprintf(loc, "along the twin cliffs");
+			foundLoc = true;
+		}
+		else if (ccz > 200 &&
+			ccz < 300 &&
+			ccx > 250 &&
+			ccx < 350) {
+			sprintf(loc, "along the twin cliffs");
+			foundLoc = true;
+		}
+		else if (ccz > 100 &&
+			ccz < 250 &&
+			ccx > 200 &&
+			ccx < 450) {
+			sprintf(loc, "along the estuary");
+			foundLoc = true;
+		}
+		else if (ccz > 750 &&
+			ccz < 830 &&
+			ccx > 300 &&
+			ccx < 650) {
+			sprintf(loc, "along the river valley");
+			foundLoc = true;
+		}
+		else if (ccz > 600 &&
+			ccz < 700 &&
+			ccx > 500 &&
+			ccx < 700) {
+			sprintf(loc, "near the Great Swamp");
+			foundLoc = true;
+		}
+	}
+
+
+	if (!foundLoc) {
+		int locc;
+		if (ccz > 683) {
+			locc = 0;
+		}
+		else if (ccz < 341) {
+			locc = 3;
+		}
+		else {
+			locc = 6;
+		}
+		if (ccz > 683) {
+			locc += 1;
+		}
+		else if (ccz < 341) {
+			locc += 2;
+		}
+		switch (locc) {
+		case 0:
+			sprintf(loc, "in the South");
+			break;
+		case 1:
+			sprintf(loc, "in the Southeast");
+			break;
+		case 2:
+			sprintf(loc, "in the Southwest");
+			break;
+		case 3:
+			sprintf(loc, "in the North");
+			break;
+		case 4:
+			sprintf(loc, "in the Northeast");
+			break;
+		case 5:
+			sprintf(loc, "in the Northwest");
+			break;
+		case 6:
+			sprintf(loc, "in the Centre of the Island");
+			break;
+		case 7:
+			sprintf(loc, "in the East");
+			break;
+		case 8:
+			sprintf(loc, "in the West");
+			break;
+		}
+	}
+
+	sprintf(buff, "Sighting:\n%s", DinoInfo[dii].Name);
+	sprintf(buff + strlen(buff), " %s", loc);
+	MessageBox(hwndMain, buff, "TEST", IDOK);
+
+}
 
 
 
@@ -8320,12 +8480,13 @@ if (RadarMode) MessageBox(NULL, "RADAR", "Carnivores Termination", IDOK | MB_SYS
 				}
 			}
 			int spawnNo = Region[RegionNo].SpawnMin;
-			for (int i = 0; i < SpwnMax - Region[RegionNo].SpawnMin; i++) {
+			for (int i = 0; i < SpwnMax - Region[RegionNo].SpawnMin; i++) { 
 				if (Region[RegionNo].SpawnRate * 1000 > rRand(1000)) spawnNo++;
+			}
+
+			if (!spawnNo) {
 				if (CiskMode && DinoInfo[DinoInfoIndex].Clone > 0 && Region[RegionNo].SpawnRate * 1000 > rRand(4000)) {//fake
-					char buff[100];
-					sprintf_s(buff, "Sighting:%s", DinoInfo[DinoInfoIndex].Name);
-					MessageBox(hwndMain, buff, "TEST", IDOK);
+					dispSighting(DinoInfoIndex, rRand(944) + 40, rRand(944) + 40);
 				}
 			}
 
@@ -8338,9 +8499,7 @@ if (RadarMode) MessageBox(NULL, "RADAR", "Carnivores Termination", IDOK | MB_SYS
 				spawnMapAmbient(DinoInfoIndex, RegionNo, tr, -1);
 
 				if (CiskMode && DinoInfo[DinoInfoIndex].Clone > 0 && rRand(3) == 1) {//real
-					char buff[100];
-					sprintf_s(buff, "Sighting:%s", DinoInfo[DinoInfoIndex].Name);
-					MessageBox(hwndMain, buff, "TEST", IDOK);
+					dispSighting(DinoInfoIndex, (int)Characters[ChCount - 1].pos.x / 256, (int)Characters[ChCount - 1].pos.z / 256);
 				}
 
 				//pack size
