@@ -8466,13 +8466,13 @@ if (RadarMode) MessageBox(NULL, "RADAR", "Carnivores Termination", IDOK | MB_SYS
 			//spawn count
 			int SpwnMax = Region[RegionNo].SpawnMax;
 			if ( CiskMode && DinoInfo[DinoInfoIndex].Clone > 0) {
-				if (Region[RegionNo].SpawnRate * 1000 > rRand(10000)){
+				if (Region[RegionNo].SpawnRate * 1000000 > rRand(100000000)){
 				SpwnMax *= 10;
 				char buff[100];
 				sprintf_s(buff, "Influx:%s", DinoInfo[DinoInfoIndex].Name);
 				MessageBox(hwndMain, buff, "TEST", IDOK);
 				}
-				else if (Region[RegionNo].SpawnRate * 1000 > rRand(100000)) {
+				else if (Region[RegionNo].SpawnRate * 1000000 > rRand(1000000000)) { 
 					SpwnMax *= 50;
 					char buff[100];
 					sprintf_s(buff, "Unprecidented Influx:%s", DinoInfo[DinoInfoIndex].Name);
@@ -8481,7 +8481,7 @@ if (RadarMode) MessageBox(NULL, "RADAR", "Carnivores Termination", IDOK | MB_SYS
 			}
 			int spawnNo = Region[RegionNo].SpawnMin;
 			for (int i = 0; i < SpwnMax - Region[RegionNo].SpawnMin; i++) { 
-				if (Region[RegionNo].SpawnRate * 1000 > rRand(1000)) spawnNo++;
+				if (Region[RegionNo].SpawnRate * 1000000 > rRand(1000000)) spawnNo++;
 			}
 
 			if (!spawnNo) {
