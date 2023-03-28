@@ -159,6 +159,6 @@ c:\users\ojm14\documents\github\carnivores-cpe\c2_vs2017\rendererd3d.cpp(5306): 
 c:\users\ojm14\documents\github\carnivores-cpe\c2_vs2017\resources.cpp(562): warning C4018: '<': signed/unsigned mismatch
 c:\users\ojm14\documents\github\carnivores-cpe\c2_vs2017\resources.cpp(2239): warning C4101: 'value': unreferenced local variable
   Generating code
-  All 350 functions were compiled because no usable IPDB/IOBJ from previous compilation was found.
+  All 349 functions were compiled because no usable IPDB/IOBJ from previous compilation was found.
   Finished generating code
   C2.vcxproj -> C:\Users\ojm14\Documents\GitHub\Carnivores-CPE\C2_vs2017\Release D3D\v_d3d.ren
