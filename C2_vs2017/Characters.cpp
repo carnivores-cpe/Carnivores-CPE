@@ -8322,10 +8322,10 @@ void dispSighting(int dii, int xx, int zz) {
 		else {
 			locc = 6;
 		}
-		if (ccz > 683) {
+		if (ccx > 683) {
 			locc += 1;
 		}
-		else if (ccz < 341) {
+		else if (ccx < 341) {
 			locc += 2;
 		}
 		switch (locc) {
