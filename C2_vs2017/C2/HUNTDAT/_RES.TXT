@@ -1115,6 +1115,7 @@ styInRgn  = TRUE
  name = 'Mosasaurus'
  file = 'mosa30ss.car'
  clone  = -4
+ radar = 2
  DangerFish = TRUE
  aggress   = 200
  killdist  = 380

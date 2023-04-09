@@ -1228,7 +1228,6 @@ _EXTORNOT   struct _t
 #define AI_CERAT      17
 #define AI_TREX       18
 
-#define AI_FINAL	  19 //Last AI of max huntable roster (menu can only display 10)
 
 #define AI_PACH       19
 
@@ -1244,6 +1243,7 @@ _EXTORNOT   struct _t
 #define AI_TITAN      28
 #define AI_MICRO      29
 
+#define AI_FINAL	  29 //Last AI of max huntable roster (menu can only display 10)
 
 //#define AI_POACHER    22
 

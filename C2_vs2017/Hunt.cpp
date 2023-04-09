@@ -1427,14 +1427,18 @@ void ProcessDemoMovement()
   */
 
   DemoPoint.pos = Characters[DemoPoint.CIndex].pos;
-  float base = DinoInfo[killerDino->CType].camBase;
-  if (killedwater) {
-	  base = DinoInfo[killerDino->CType].camBaseWater;
-	  DemoPoint.pos.y += DinoInfo[killerDino->CType].camDemoPointWater;
-  } else {
-	  DemoPoint.pos.y += DinoInfo[killerDino->CType].camDemoPoint;
-  }
-
+  float base;
+  if (killerDino) {
+	  base = DinoInfo[killerDino->CType].camBase;
+	  if (killedwater) {
+		  base = DinoInfo[killerDino->CType].camBaseWater;
+		  DemoPoint.pos.y += DinoInfo[killerDino->CType].camDemoPointWater;
+	  }
+	  else {
+		  DemoPoint.pos.y += DinoInfo[killerDino->CType].camDemoPoint;
+	  }
+  } else base = 824; //for drowning/poison fog
+  
 
   //if (Characters[DemoPoint.CIndex].Clone ==AI_TREX) DemoPoint.pos.y+=512;
 
