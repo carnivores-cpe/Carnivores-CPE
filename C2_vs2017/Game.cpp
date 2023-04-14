@@ -1520,7 +1520,6 @@ void InitEngine()
 
   ProcessCommandLine();
 
-
   switch (OptDayNight)
   {
   case 0:
@@ -2260,6 +2259,16 @@ void ProcessTrophy()
   TrophyBody = Characters[TrophyBody].State;
 }
 
+void RespawnSnow(int s, BOOL rand)
+{
+	Snow[s].pos.x = PlayerX + siRand(12 * 256);
+	Snow[s].pos.z = PlayerZ + siRand(12 * 256);
+	Snow[s].hl = GetLandUpH(Snow[s].pos.x, Snow[s].pos.z);
+	Snow[s].ftime = 0;
+	if (rand) Snow[s].pos.y = Snow[s].hl + 256 + rRand(12 * 256);
+	else Snow[s].pos.y = Snow[s].hl + (8 + rRand(5)) * 256;
+}
+
 
 
 void AnimateElements()
@@ -2304,7 +2313,6 @@ void AnimateElements()
 			if (a1 == 0 && a2==0) Elements[eg].ECount = 0;
 		  }
 		  
-
 
 //====== remove finished process =========//
     if (!Elements[eg].ECount)
@@ -2368,6 +2376,51 @@ void AnimateElements()
       b--;
     }
   }
+
+
+  if (!SNOW) return;
+  while (SnCount < 2000) {
+	  RespawnSnow(SnCount, TRUE);
+	  SnCount++;
+  }
+
+  nv = Wind.nv;
+  NormVector(nv, (4 + Wind.speed) * 4 * TimeDt / 1000);
+
+  for (int s = 0; s < SnCount; s++) {
+
+	  if ((fabs(Snow[s].pos.x - PlayerX) > 14 * 256) ||
+		  (fabs(Snow[s].pos.z - PlayerZ) > 14 * 256)) {
+		  Snow[s].pos.x = PlayerX + siRand(12 * 256);
+		  Snow[s].pos.z = PlayerZ + siRand(12 * 256);
+		  Snow[s].pos.y = Snow[s].pos.y - Snow[s].hl;
+		  Snow[s].hl = GetLandUpH(Snow[s].pos.x, Snow[s].pos.z);
+		  Snow[s].pos.y += Snow[s].hl;
+	  }
+
+	  if (!Snow[s].ftime) {
+		  float v = (((RealTime + s * 23) % 800) - 400) * TimeDt / 16000;
+		  Snow[s].pos.x += ca * v;
+		  Snow[s].pos.z += sa * v;
+
+		  Snow[s].pos = AddVectors(Snow[s].pos, nv);
+		  Snow[s].hl = GetLandUpH(Snow[s].pos.x, Snow[s].pos.z);
+		  Snow[s].pos.y -= TimeDt * 192 / 1000.f;
+		  if (Snow[s].pos.y < Snow[s].hl + 8) {
+			  Snow[s].pos.y = Snow[s].hl + 8;
+			  Snow[s].ftime = 1;
+		  }
+	  }
+	  else {
+		  Snow[s].ftime += TimeDt;
+		  Snow[s].pos.y -= TimeDt * 3 / 1000.f;
+		  if (Snow[s].ftime > 2000)  RespawnSnow(s, FALSE);
+	  }
+
+  }
+
+  //do not place anything after SNOW in this procedure - there's a return
+
 }
 
 

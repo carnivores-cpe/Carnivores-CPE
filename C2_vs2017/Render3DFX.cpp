@@ -3847,6 +3847,35 @@ void RenderElements()
 	);
   }
 
+  if (SNOW)
+	  for (int s = 0; s < SnCount; s++) {
+		  Vector3d rpos = Snow[s].pos;
+
+
+		  rpos.x = rpos.x - CameraX;
+		  rpos.y = rpos.y - CameraY;
+		  rpos.z = rpos.z - CameraZ;
+
+
+		  rpos = RotateVector(rpos);
+		  if (rpos.z > -64) continue;
+		  if (fabs(rpos.x) > -rpos.z) continue;
+		  if (fabs(rpos.y) > -rpos.z) continue;
+
+		  float sx = VideoCX - (int)(CameraW * rpos.x / rpos.z * 16) / 16.f;
+		  float sy = VideoCY + (int)(CameraH * rpos.y / rpos.z * 16) / 16.f;
+
+		  DWORD A1 = 0xFF;
+		  DWORD A2 = 0x30;
+		  if (Snow[s].ftime) {
+			  A1 = A1 * (2000 - Snow[s].ftime) / 2000;
+			  A2 = A2 * (2000 - Snow[s].ftime) / 2000;
+		  }
+
+		  RenderCircle(sx, sy, rpos.z, -8 * CameraW*0.64 / rpos.z, (A1 << 24) + conv_xGx(0xF0F0F0), (A2 << 24) + conv_xGx(0xB0B0B0));
+	  }
+
+
   guAlphaSource(GR_ALPHASOURCE_CC_ALPHA);
   guColorCombineFunction( GR_COLORCOMBINE_TEXTURE_TIMES_ITRGB );
   if (FOGON) grFogMode(GR_FOG_WITH_ITERATED_ALPHA);

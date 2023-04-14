@@ -2087,52 +2087,50 @@ void SaveScreenShot()
 
 //===============================================================================================
 
-void ReadTreeTable(FILE *stream)
+
+void readBool(char *value, BOOL &out) {
+	if (strstr(value, "TRUE")) out = TRUE;
+	if (strstr(value, "FALSE")) out = FALSE;
+}
+
+void readBool(char *value, bool &out) {
+	if (strstr(value, "TRUE")) out = TRUE;
+	if (strstr(value, "FALSE")) out = FALSE;
+}
+
+
+void ReadAreaTable (FILE *stream, int areaNumber)
 {
+	SNOW = FALSE;
 
-	char tempProjectName[128];
-	for (int a = 0; a < __argc; a++)
+	TotalAreaInfo = 0;
+	char line[256], *value;
+	while (fgets(line, 255, stream))
 	{
-		LPSTR s = __argv[a];
-		if (strstr(s, "prj="))
-		{
-			strcpy(tempProjectName, (s + 4));
-			break;
-		}
-	}
+		if (strstr(line, "}")) break;
+		if (strstr(line, "{"))
+			while (fgets(line, 255, stream))
+			{
+				if (strstr(line, "}"))
+				{
+					TotalAreaInfo++;
+					break;
+				}
+				value = strstr(line, "=");
+				if (!value) DoHalt("Script loading error");
+				value++;
 
-	int areaNumber = -1;
-	switch((char)tempProjectName[18]) {
-						case '1':
-							if (tempProjectName[19]) areaNumber = 9;
-							else areaNumber = 0;
-							break;
-						case '2':
-							areaNumber = 1;
-							break;
-						case '3':
-							areaNumber = 2;
-							break;
-						case '4':
-							areaNumber = 3;
-							break;
-						case '5':
-							areaNumber = 4;
-							break;
-						case '6':
-							areaNumber = 5;
-							break;
-						case '7':
-							areaNumber = 6;
-							break;
-						case '8':
-							areaNumber = 7;
-							break;
-						case '9':
-							areaNumber = 8;
-							break;
-	}
+				if (TotalAreaInfo == areaNumber) {
+					if (strstr(line, "snow"))  readBool(value, SNOW);
+				}
 
+			}
+
+	}
+}
+
+void ReadTreeTable(FILE *stream, int areaNumber)
+{
 
 	for (int o = 0; o < 255; o++) {
 		TreeTable[o] = FALSE;
@@ -2156,7 +2154,7 @@ void ReadTreeTable(FILE *stream)
 				value++;
 
 				if (strstr(line, "tree"))
-					if (TotalTreeTable == areaNumber)
+					if (TotalAreaInfo == areaNumber)
 						TreeTable[atoi(value)] = TRUE;
 
 			}
@@ -2268,15 +2266,6 @@ void WipeRegions() {
 
 	}
 
-}
-
-void readBool(char *value, BOOL &out) {
-	if (strstr(value, "TRUE")) out = TRUE;
-	if (strstr(value, "FALSE")) out = FALSE;
-}
-void readBool(char *value, bool &out) {
-	if (strstr(value, "TRUE")) out = TRUE;
-	if (strstr(value, "FALSE")) out = FALSE;
 }
 
 void WipeKillTypes() {
@@ -3416,10 +3405,54 @@ void LoadResourcesScript()
   TotalC = 0;
   TotalMA = 0;
 
+  char tempProjectName[128];
+  for (int a = 0; a < __argc; a++)
+  {
+	  LPSTR s = __argv[a];
+	  if (strstr(s, "prj="))
+	  {
+		  strcpy(tempProjectName, (s + 4));
+		  break;
+	  }
+  }
+
+  int areaNumber = -1;
+  switch ((char)tempProjectName[18]) {
+  case '1':
+	  if (tempProjectName[19]) areaNumber = 9;
+	  else areaNumber = 0;
+	  break;
+  case '2':
+	  areaNumber = 1;
+	  break;
+  case '3':
+	  areaNumber = 2;
+	  break;
+  case '4':
+	  areaNumber = 3;
+	  break;
+  case '5':
+	  areaNumber = 4;
+	  break;
+  case '6':
+	  areaNumber = 5;
+	  break;
+  case '7':
+	  areaNumber = 6;
+	  break;
+  case '8':
+	  areaNumber = 7;
+	  break;
+  case '9':
+	  areaNumber = 8;
+	  break;
+  }
+
   while (fgets( line, 255, stream))
   {
     if (line[0] == '.') break;
-	if (strstr(line, "treetable")) ReadTreeTable(stream);
+	if (strstr(line, "areatable")) ReadAreaTable(stream, areaNumber);
+	if (strstr(line, "treetable")) ReadTreeTable(stream, areaNumber);
     if (strstr(line, "weapons") ) ReadWeapons(stream);
 	if (strstr(line, "hunterinfo")) ReadCharacters(stream, false, nextTrophySlot);
 	if (strstr(line, "oldambients")) ReadCharacters(stream, false, nextTrophySlot);

@@ -318,6 +318,13 @@ typedef struct _TWCircle
 
 
 
+
+typedef struct _TSnowElement {
+	Vector3d pos;
+	float hl, ftime;
+} TSnowElement;
+
+
 typedef struct _TCharacter
 {
   int CType, AI, Clone;
@@ -645,7 +652,6 @@ typedef struct _TAIInfo {
 
 } TAIInfo;
 
-
 typedef struct _TRegion
 {
 	int SpawnMax, SpawnMin;
@@ -920,7 +926,7 @@ void CloseLog();
 _EXTORNOT   float BackViewR;
 _EXTORNOT   int   BackViewRR;
 _EXTORNOT   int   UnderWaterT;
-_EXTORNOT   int   TotalTreeTable, TotalC, TotalW, TotalMA, TotalTrophy, TotalRegion, TotalAvoid;
+_EXTORNOT   int   TotalTreeTable, TotalAreaInfo, TotalC, TotalW, TotalMA, TotalTrophy, TotalRegion, TotalAvoid;
 
 
 //========== multiplayer =============//
@@ -1000,6 +1006,10 @@ _EXTORNOT   TEXTURE* Textures[1024];
 _EXTORNOT   TAmbient Ambient[256];
 _EXTORNOT   TSFX     RandSound[256];
 
+//========= WEATHER =================//
+
+_EXTORNOT BOOL SNOW;
+
 //========= GAME ====================//
 _EXTORNOT int TargetDino, TargetArea, TargetWeapon, WeaponPres, TargetCall,
           TrophyTime, ObservMode, Tranq, ObjectsOnLook,
@@ -1063,7 +1073,7 @@ _EXTORNOT TWeapInfo WeapInfo[10];
 _EXTORNOT TCharacterInfo ShipModel;
 _EXTORNOT int AI_to_CIndex[DINOINFO_MAX];
 _EXTORNOT int TrophyIndex[DINOINFO_MAX];
-_EXTORNOT int ChCount, WCCount, ElCount,
+_EXTORNOT int ChCount, WCCount, ElCount, SnCount,
           ShotDino, TrophyBody, HunterCount; //HunterCount is for multiplayer, up to 3 others
 _EXTORNOT bool TrophyDisplay;
 _EXTORNOT TTrophyItem TrophyDisplayBody;
@@ -1077,6 +1087,9 @@ _EXTORNOT TCharacter     Characters[256];
 _EXTORNOT TCharacter     MPlayers[3]; //multiplayer
 
 _EXTORNOT TWCircle       WCircles[2096]; //increased
+
+_EXTORNOT TSnowElement   Snow[8024];
+
 _EXTORNOT TDemoPoint     DemoPoint;
 _EXTORNOT TCharacter     *killerDino;
 _EXTORNOT BOOL			 killedwater;

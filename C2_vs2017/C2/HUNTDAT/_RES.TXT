@@ -1,4 +1,29 @@
 
+areatable {
+{
+ snow = FALSE
+}
+
+{
+ snow = FALSE
+}
+
+{
+ snow = FALSE
+}
+
+{
+ snow = FALSE
+}
+
+{
+ snow = FALSE
+}
+
+
+} //==== end of areatable =========//
+
+
 treetable {
 {
  tree = 7
