@@ -2519,6 +2519,14 @@ void ReadCharacterLine(FILE *stream, char *_value, char line[256], bool &regionO
 	if (strstr(line, "radar")) DinoInfo[TotalC].onRadar = atoi(value);
 	if (strstr(line, "dontswimaway")) readBool(value, DinoInfo[TotalC].dontSwimAway);
 
+	if (strstr(line, "radR")) DinoInfo[TotalC].radarRed = atoi(value);
+	if (strstr(line, "radG")) DinoInfo[TotalC].radarGreen = atoi(value);
+	if (strstr(line, "radB")) DinoInfo[TotalC].radarBlue = atoi(value);
+	
+	if (strstr(line, "bloR")) DinoInfo[TotalC].bloodRed = atoi(value);
+	if (strstr(line, "bloG")) DinoInfo[TotalC].bloodGreen = atoi(value);
+	if (strstr(line, "bloB")) DinoInfo[TotalC].bloodBlue = atoi(value);
+
 	if (strstr(line, "collisiondist")) DinoInfo[TotalC].maxGrad = atoi(value);
 	if (strstr(line, "runrotatespeed")) DinoInfo[TotalC].rotspdmulti = (float)atof(value);
 
@@ -2769,6 +2777,10 @@ void ReadCharacters(FILE *stream, bool mapamb, int &nextTrophySlot)
 		  } else {
 			  DinoInfo[TotalC].Aquatic = FALSE;
 		  }
+	
+		  DinoInfo[TotalC].radarColour565 = ((DinoInfo[TotalC].radarRed>>3) << 11) | ((DinoInfo[TotalC].radarGreen>>2) << 5) | (DinoInfo[TotalC].radarBlue>>3);
+		  DinoInfo[TotalC].radarColour555 = ((DinoInfo[TotalC].radarRed >> 3) << 10) | ((DinoInfo[TotalC].radarGreen >> 3) << 5) | (DinoInfo[TotalC].radarBlue >> 3);
+		  
 		  TotalC++;
           break;
 

@@ -1645,6 +1645,7 @@ void AddBloodTrail(TCharacter *cptr)
     memcpy(&BloodTrail.Trail[0], &BloodTrail.Trail[1], 510*sizeof(TBloodP));
     BloodTrail.Count--;
   }
+  BloodTrail.Trail[BloodTrail.Count].Owner = cptr->CType;
   BloodTrail.Trail[BloodTrail.Count].LTime = 210000;
   BloodTrail.Trail[BloodTrail.Count].pos = cptr->pos;
   BloodTrail.Trail[BloodTrail.Count].pos.x+=siRand(32);
@@ -1750,7 +1751,7 @@ DWORD ColorSum(DWORD C1, DWORD C2)
 
 void AddElements(float x, float y, float z, int etype, int cnt)
 {
-	AddElementsA(x,y,z,etype,cnt,cnt,false,0);
+	AddElementsA(x, y, z, etype, cnt, cnt, false, 0);
 }
 
 void AddElementsA(float x, float y, float z, int etype, int cnt, int mag, bool angled, float alph)
@@ -1770,11 +1771,27 @@ void AddElementsA(float x, float y, float z, int etype, int cnt, int mag, bool a
   {
   case partBlood:
 #ifdef _d3d
-    Elements[ElCount].RGBA = 0xE0600000;
-    Elements[ElCount].RGBA2= 0x20300000;
+    //Elements[ElCount].RGBA = 0xE0600000;
+    //Elements[ElCount].RGBA2= 0x20300000;
+	  Elements[ElCount].RGBA = 0xE0000000 +
+		  (DinoInfo[Characters[ShotDino].CType].bloodRed << 16) +
+		  (DinoInfo[Characters[ShotDino].CType].bloodGreen << 8) +
+		  DinoInfo[Characters[ShotDino].CType].bloodBlue;
+	  Elements[ElCount].RGBA2 = 0x20000000 +
+		  (DinoInfo[Characters[ShotDino].CType].bloodRed / 2 << 16) +
+		  (DinoInfo[Characters[ShotDino].CType].bloodGreen / 2 << 8) +
+		  DinoInfo[Characters[ShotDino].CType].bloodBlue / 2;
 #else
-    Elements[ElCount].RGBA = 0xE0000060;
-    Elements[ElCount].RGBA2= 0x20000030;
+  //Elements[ElCount].RGBA = 0xE0000060;
+  //Elements[ElCount].RGBA2= 0x20000030;
+	Elements[ElCount].RGBA = 0xE0000000 +
+		(DinoInfo[Characters[ShotDino].CType].bloodBlue << 16) +
+		(DinoInfo[Characters[ShotDino].CType].bloodGreen << 8) +
+		DinoInfo[Characters[ShotDino].CType].bloodRed;
+	Elements[ElCount].RGBA2= 0x20000000 +
+		(DinoInfo[Characters[ShotDino].CType].bloodBlue/2 << 16) +
+		(DinoInfo[Characters[ShotDino].CType].bloodGreen/2 << 8) +
+		DinoInfo[Characters[ShotDino].CType].bloodRed/2;
 #endif
     break;
 
@@ -2271,21 +2288,22 @@ void AnimateElements()
       if (Elements[eg].EDone == Elements[eg].ECount)
         Elements[eg].ECount = 0;
 
-    if  (Elements[eg].Type == partBlood)
-      if ((Takt & 3)==0)
-        if (Elements[eg].EDone == Elements[eg].ECount)
-        {
-          int a1 = Elements[eg].RGBA >> 24;
-          a1--;
-          if (a1<0) a1=0;
-          Elements[eg].RGBA = (Elements[eg].RGBA  & 0x00FFFFFF) + (a1<<24);
-          int a2 = Elements[eg].RGBA2>> 24;
-          a2--;
-          if (a2<0) a2=0;
-          Elements[eg].RGBA2= (Elements[eg].RGBA2 & 0x00FFFFFF) + (a2<<24);
-          if (a1 == 0 && a2==0) Elements[eg].ECount = 0;
-        }
-
+	if (Elements[eg].Type == partBlood)
+		if ((Takt & 3) == 0)
+			
+		  if (Elements[eg].EDone == Elements[eg].ECount)
+		  {
+			int a1 = Elements[eg].RGBA >> 24;
+			a1--;
+			if (a1<0) a1=0;
+			Elements[eg].RGBA = (Elements[eg].RGBA  & 0x00FFFFFF) + (a1<<24);
+			int a2 = Elements[eg].RGBA2>> 24;
+			a2--;
+			if (a2<0) a2=0;
+			Elements[eg].RGBA2= (Elements[eg].RGBA2 & 0x00FFFFFF) + (a2<<24);
+			if (a1 == 0 && a2==0) Elements[eg].ECount = 0;
+		  }
+		  
 
 
 //====== remove finished process =========//

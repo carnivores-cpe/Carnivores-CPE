@@ -51,7 +51,7 @@ weapons {
  file  = 'pistol.car'
  pic   = 'bullet1.tga'
  gunshot = 'pistol.wav'
- power = 2
+ power = 0
  prec  = 0.8
  loud  = 0.8
  rate  = 1.6
@@ -165,6 +165,9 @@ deathtype{
  idleAnim = 3
  idleAnim = 4
  waterLevel = 50
+ bloR = 0
+ bloG = 0
+ bloB = 224
 }
 
 {
@@ -191,6 +194,9 @@ deathtype{
  idleAnim = 4
  idleAnim = 5
  waterLevel = 100
+ bloR = 112
+ bloG = 0
+ bloB = 0
 }
 
 {
@@ -210,6 +216,9 @@ deathtype{
 deathtype{
  fallAnim = 2
  dieAnim = 3
+ bloR = 112
+ bloG = 0
+ bloB = 0
 }
 }
 
@@ -230,6 +239,9 @@ deathtype{
 deathtype{
  fallAnim = 2
  dieAnim = 3
+ bloR = 112
+ bloG = 0
+ bloB = 0
 }
 }
 
@@ -256,6 +268,9 @@ deathtype{
  idleAnim = 2
  idleAnim = 3
  waterLevel = 50
+ bloR = 112
+ bloG = 0
+ bloB = 0
 }
 
 }
@@ -287,11 +302,14 @@ characters {
  fearCall = 16
  fearCall = 17
  fearCall = 18
- runspd = 1.6
+ runspd = 0.1
  wlkspd = 0.40
  aggress = 0
  killdist = 0
- radar = 0
+ radar = 1
+ radR = 181
+ radG = 125
+ radB = 11
  trophy  = TRUE
 tropinfo{
  tropPos = 0
@@ -327,6 +345,9 @@ deathtype{
  CamYWater = 256
  CamBaseLand = 824
  CamBaseWater = 824
+ bloR = 219
+ bloG = 255
+ bloB = 145
 }
 
 {
@@ -356,6 +377,9 @@ deathtype{
  aggress = 0
  killdist = 0
  radar = 1
+ radR = 0
+ radG = 240
+ radB = 0
  trophy  = TRUE
  tropinfo{
  tropPos = 2
@@ -386,6 +410,9 @@ deathtype{
  CamYWater = 256
  CamBaseLand = 824
  CamBaseWater = 824
+ bloR = 112
+ bloG = 0
+ bloB = 0
 }
 
 {
@@ -413,6 +440,9 @@ deathtype{
  aggress = 0
  killdist = 0
  radar = 1
+ radR = 0
+ radG = 240
+ radB = 0
  trophy  = TRUE
  tropinfo{
  tropPos = 5
@@ -443,6 +473,9 @@ deathtype{
  CamYWater = 256
  CamBaseLand = 824
  CamBaseWater = 824
+ bloR = 112
+ bloG = 0
+ bloB = 0
 }
 
 {
@@ -471,6 +504,9 @@ deathtype{
  aggress = 128
  killdist = 256
  radar = 1
+ radR = 0
+ radG = 240
+ radB = 0
  trophy  = TRUE
  tropinfo{
  tropPos = 4
@@ -511,6 +547,9 @@ killtype{
  CamYWater = 256
  CamBaseLand = 2024
  CamBaseWater = 824
+ bloR = 112
+ bloG = 0
+ bloB = 0
 }
 
 {
@@ -538,6 +577,9 @@ killtype{
  aggress = 32
  killdist = 300
  radar = 1
+ radR = 0
+ radG = 240
+ radB = 0
  trophy  = TRUE
  tropinfo{
  tropPos = 6
@@ -569,6 +611,9 @@ deathtype{
  CamYWater = 256
  CamBaseLand = 824
  CamBaseWater = 824
+ bloR = 112
+ bloG = 0
+ bloB = 0
 }
 
 {
@@ -596,6 +641,9 @@ deathtype{
  aggress = 160
  killdist = 256
  radar = 1
+ radR = 0
+ radG = 240
+ radB = 0
  trophy  = TRUE
  tropinfo{
  tropPos = 1
@@ -640,6 +688,9 @@ killtype{
  CamYWater = 256
  CamBaseLand = 824
  CamBaseWater = 824
+ bloR = 112
+ bloG = 0
+ bloB = 0
 }
 
 {
@@ -666,6 +717,9 @@ killtype{
  aggress = 140
  killdist = 300
  radar = 1
+ radR = 0
+ radG = 240
+ radB = 0
  trophy  = TRUE
  tropinfo{
  tropPos = 8
@@ -706,6 +760,9 @@ killtype{
  CamYWater = 256
  CamBaseLand = 824
  CamBaseWater = 824
+ bloR = 112
+ bloG = 0
+ bloB = 0
 }
 
 
@@ -733,6 +790,9 @@ killtype{
  aggress = 200
  killdist = 350
  radar = 1
+ radR = 0
+ radG = 240
+ radB = 0
  trophy  = TRUE
  tropinfo{
  tropPos = 9
@@ -772,6 +832,9 @@ killtype{
  CamYWater = 256
  CamBaseLand = 824
  CamBaseWater = 824
+ bloR = 112
+ bloG = 0
+ bloB = 0
 }
 
 
@@ -797,6 +860,9 @@ killtype{
  swmspd = 0.70
  killdist = 380
  radar = 1
+ radR = 0
+ radG = 240
+ radB = 0
  trophy  = TRUE
  tropinfo{
  tropPos = 7
@@ -838,6 +904,9 @@ killtype{
  CamYWater = 256
  CamBaseLand = 1424
  CamBaseWater = 824
+ bloR = 112
+ bloG = 0
+ bloB = 0
 }
 
 
@@ -892,6 +961,9 @@ killtype{
  CamYWater = 1106
  CamBaseLand = 1424
  CamBaseWater = 1424
+ bloR = 112
+ bloG = 0
+ bloB = 0
 }
 
 {
@@ -952,6 +1024,9 @@ deathtype{
  CamYWater = 256
  CamBaseLand = 824
  CamBaseWater = 824
+ bloR = 112
+ bloG = 0
+ bloB = 0
 }
 
 {
@@ -1012,6 +1087,9 @@ deathtype{
  CamYWater = 256
  CamBaseLand = 824
  CamBaseWater = 824
+ bloR = 112
+ bloG = 0
+ bloB = 0
 }
 
 {
@@ -1038,6 +1116,9 @@ deathtype{
   spawnmin  = 8
   }
  }
+ bloR = 112
+ bloG = 0
+ bloB = 0
 }
 
 {
@@ -1079,6 +1160,9 @@ ymax = 691
 styInRgn  = TRUE
   }
  }
+ bloR = 112
+ bloG = 0
+ bloB = 0
 }
 
 {
@@ -1109,6 +1193,9 @@ styInRgn  = TRUE
    ymin = 94
   }
  }
+ bloR = 112
+ bloG = 0
+ bloB = 0
 }
 
 {
@@ -1116,6 +1203,9 @@ styInRgn  = TRUE
  file = 'mosa30ss.car'
  clone  = -4
  radar = 2
+ radR = 0
+ radG = 240
+ radB = 0
  DangerFish = TRUE
  aggress   = 200
  killdist  = 380
@@ -1168,6 +1258,9 @@ killtype{
  CamYWater = 256
  CamBaseLand = 824
  CamBaseWater = 824
+ bloR = 112
+ bloG = 0
+ bloB = 0
 }
 
 {
@@ -1214,6 +1307,9 @@ deathtype{
   spawnmax  = 5
   spawnmin  = 0
  }
+ bloR = 112
+ bloG = 0
+ bloB = 0
 }
 
 
@@ -1222,6 +1318,9 @@ deathtype{
  file = 'titanopteryx_flier-placeholder.car'
  clone  = 28
  radar = 2
+ radR = 0
+ radG = 240
+ radB = 0
  dogSmell  = TRUE
  mass      = 1.4
  length    = 7.1
@@ -1276,6 +1375,9 @@ killtype{
  spawnmax  = 1
  spawnmin  = 0
  }
+ bloR = 112
+ bloG = 0
+ bloB = 0
 }
 
 {
@@ -1302,6 +1404,9 @@ killtype{
  aggress = 160
  killdist = 256
  radar = 2
+ radR = 0
+ radG = 240
+ radB = 0
  runAnim = 0
  walkAnim = 1
  slideAnim = 2
@@ -1331,6 +1436,9 @@ killtype{
  CamYWater = 256
  CamBaseLand = 824
  CamBaseWater = 824
+ bloR = 112
+ bloG = 0
+ bloB = 0
 }
 
 }//===== end of mapambients ==========//

@@ -604,6 +604,10 @@ typedef struct _TDinoInfo
 
   float climbDist;
 
+  byte radarRed, radarGreen, radarBlue, bloodRed, bloodGreen, bloodBlue;
+  WORD radarColour565, radarColour555;
+
+
 } TDinoInfo;
 
 typedef struct _TPack
@@ -708,6 +712,7 @@ typedef struct _TBloodP
 {
   int LTime;
   Vector3d pos;
+  int Owner;
 } TBloodP;
 
 typedef struct _TBTrail

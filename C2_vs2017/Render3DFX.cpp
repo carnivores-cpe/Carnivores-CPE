@@ -3816,11 +3816,12 @@ void RenderElements()
   for (int b=0; b<BloodTrail.Count; b++)
   {
     Vector3d rpos = BloodTrail.Trail[b].pos;
-    DWORD A1 = (0xE0 * BloodTrail.Trail[b].LTime / 20000);
-    if (A1>0xE0) A1=0xE0;
-    DWORD A2 = (0x20 * BloodTrail.Trail[b].LTime / 20000);
-    if (A2>0x20) A2=0x20;
-    rpos.x = rpos.x - CameraX;
+    DWORD A1 = (0xE0 * BloodTrail.Trail[b].LTime / 20000); //<<24
+	if (A1 > 0xE0) A1 = 0xE0;
+    DWORD A2 = (0x20 * BloodTrail.Trail[b].LTime / 20000); //<<24
+	if (A2 > 0x20) A2 = 0x20;
+
+	rpos.x = rpos.x - CameraX;
     rpos.y = rpos.y - CameraY;
     rpos.z = rpos.z - CameraZ;
 
@@ -3831,7 +3832,19 @@ void RenderElements()
 
     float sx = VideoCX - (int)(CameraW * rpos.x / rpos.z * 16) / 16.f;
     float sy = VideoCY + (int)(CameraH * rpos.y / rpos.z * 16) / 16.f;
-    if (!CiskMode) RenderCircle(sx, sy, rpos.z, -12*CameraW*0.64 / rpos.z, (A1<<24)+conv_xGx(0x000070), (A2<<24)+conv_xGx(0x000030));
+    if (!CiskMode) RenderCircle(sx, sy, rpos.z, -12*CameraW*0.64 / rpos.z,
+		(A1 << 24) +
+		conv_xGx(0x000000 |
+		(DinoInfo[BloodTrail.Trail[b].Owner].bloodBlue << 16) |
+		(DinoInfo[BloodTrail.Trail[b].Owner].bloodGreen << 8) |
+		DinoInfo[BloodTrail.Trail[b].Owner].bloodRed)
+		,
+		(A2 << 24) +
+		conv_xGx(0x000000 |
+		(DinoInfo[BloodTrail.Trail[b].Owner].bloodBlue /2 << 16) |
+		(DinoInfo[BloodTrail.Trail[b].Owner].bloodGreen /2 << 8) |
+		DinoInfo[BloodTrail.Trail[b].Owner].bloodRed /2)
+	);
   }
 
   guAlphaSource(GR_ALPHASOURCE_CC_ALPHA);
@@ -4178,7 +4191,7 @@ void DrawHMap()
 				yy = VideoCY - 128 + (int)Characters[c].pos.z / 1024;
 				if (yy <= 0 || yy >= WinH) goto endmap;
 				if (xx <= 0 || xx >= WinW) goto endmap;
-				DrawBox((WORD*)linfo.lfbPtr, lsw, xx, yy, 30 << 11);
+				DrawBox((WORD*)linfo.lfbPtr, lsw, xx, yy, DinoInfo[Characters[c].CType].radarColour565);// 30 << 11
 
 			}
 			else {
@@ -4190,8 +4203,9 @@ void DrawHMap()
 				if (yy <= 0 || yy >= WinH) goto endmap;
 				if (xx <= 0 || xx >= WinW) goto endmap;
 
-				if (DinoInfo[Characters[c].CType].Mystery) DrawBoxMystery((WORD*)linfo.lfbPtr, lsw, xx, yy, 30 << 6);
-				else DrawBox((WORD*)linfo.lfbPtr, lsw, xx, yy, 30 << 6); //RGB(0, 127, 0) //30 << 6
+
+				if (DinoInfo[Characters[c].CType].Mystery) DrawBoxMystery((WORD*)linfo.lfbPtr, lsw, xx, yy, DinoInfo[Characters[c].CType].radarColour565);
+				else DrawBox((WORD*)linfo.lfbPtr, lsw, xx, yy, DinoInfo[Characters[c].CType].radarColour565); //RGB(0, 127, 0) //30 << 6
 
 				}
 				
@@ -4217,8 +4231,8 @@ void DrawHMap()
 					} else Characters[c].showSonar = FALSE;
 
 					if (Characters[c].showSonar) {
-						if (DinoInfo[Characters[c].CType].Mystery) DrawBoxMystery((WORD*)linfo.lfbPtr, lsw, Characters[c].sonar.x, Characters[c].sonar.y, 30 << 6);
-						else DrawBox((WORD*)linfo.lfbPtr, lsw, Characters[c].sonar.x, Characters[c].sonar.y, 30 << 6);
+						if (DinoInfo[Characters[c].CType].Mystery) DrawBoxMystery((WORD*)linfo.lfbPtr, lsw, Characters[c].sonar.x, Characters[c].sonar.y, DinoInfo[Characters[c].CType].radarColour565);
+						else DrawBox((WORD*)linfo.lfbPtr, lsw, Characters[c].sonar.x, Characters[c].sonar.y, DinoInfo[Characters[c].CType].radarColour565);
 					}
 
 				}

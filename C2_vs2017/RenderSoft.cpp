@@ -2606,12 +2606,22 @@ void DrawHMap()
   int xx = VideoCX - 128 + (CCX>>2);
   int yy = VideoCY - 128 + (CCY>>2)+6;
 
+  int px = xx;
+  int py = yy;
+
   if (yy>0 || yy<WinH)
   {
     DrawCircle(xx, yy, 17);
 	DrawBox((WORD*)lpVideoBuf, xx, yy, 31 << 10);
   }
 
+  float _sonarPos;
+  if (SonarMode) {
+	  _sonarPos = sonarPos;
+	  sonarPos += TimeDt * 0.02 * cos((pi / 2)*(sonarPos / 41));
+	  if (sonarPos > 38) sonarPos = 1;
+	  DrawCircle(xx, yy, sonarPos);
+  }
   
     for (int c=0; c<ChCount; c++)
     {
@@ -2635,11 +2645,37 @@ void DrawHMap()
 			if (xx <= 0 || xx >= WinW) continue;
 
 			if (Characters[c].AI == AI_HUNTDOG) {
-				DrawBox((WORD*)lpVideoBuf, xx, yy, 31 << 10);
+				DrawBox((WORD*)lpVideoBuf, xx, yy, DinoInfo[Characters[c].CType].radarColour555);//31<<10
 			}
 			else {
-				if (DinoInfo[Characters[c].CType].Mystery) DrawBoxMystery((WORD*)lpVideoBuf, xx, yy, 30 << 5);
-				else DrawBox((WORD*)lpVideoBuf, xx, yy, 30 << 5);
+				if (RadarMode) {
+					if (DinoInfo[Characters[c].CType].Mystery) DrawBoxMystery((WORD*)lpVideoBuf, xx, yy, DinoInfo[Characters[c].CType].radarColour555);
+					else DrawBox((WORD*)lpVideoBuf, xx, yy, DinoInfo[Characters[c].CType].radarColour555); //30<<5
+				}
+
+				if (SonarMode) {
+					int dx, dz;
+					dx = px - xx;
+					dz = py - yy;
+					int pd = (int)sqrt(dx * dx + dz * dz);
+
+
+					if (pd < 38) {
+						if (pd >= _sonarPos && pd <= sonarPos) {
+							Characters[c].showSonar = TRUE;
+							Characters[c].sonar.x = xx;
+							Characters[c].sonar.y = yy;
+							AddVoicev(fxBlip.length, fxBlip.lpData, 256);
+						}
+					}
+					else Characters[c].showSonar = FALSE;
+
+					if (Characters[c].showSonar) {
+						if (DinoInfo[Characters[c].CType].Mystery) DrawBoxMystery((WORD*)lpVideoBuf, Characters[c].sonar.x, Characters[c].sonar.y, DinoInfo[Characters[c].CType].radarColour555);
+						else DrawBox((WORD*)lpVideoBuf, Characters[c].sonar.x, Characters[c].sonar.y, DinoInfo[Characters[c].CType].radarColour555);
+					}
+				}
+
 			}
 
     }
