@@ -1,23 +1,69 @@
 
 areatable {
 {
- snow = FALSE
+ snow1 = TRUE
+ hSpd = 4
+ vSpd = 192
+ dens = 2000
+ red1 = 240
+ gre1 = 240
+ blu1 = 240
+ alp1 = 255
+ rad1 = 1
 }
 
 {
- snow = FALSE
+ snow1 = TRUE
+ hSpd = 200
+ vSpd = 1092
+ dens = 16000
+ red1 = 240
+ gre1 = 240
+ blu1 = 240
+ alp1 = 255
+ rad1 = 1
 }
 
 {
- snow = FALSE
+ snow1 = TRUE
+ snow2 = TRUE
+ hSpd = 200
+ vSpd = 5000
+ dens = 16000
+ red1 = 179
+ gre1 = 211
+ blu1 = 211
+ alp1 = 136
+ rad1 = 0.5
+ red2 = 179
+ gre2 = 211
+ blu2 = 211
+ alp2 = 5
+ rad2 = 20
 }
 
 {
- snow = FALSE
+ snow1 = FALSE
+ hSpd = 4
+ vSpd = 192
+ dens = 2000
+ red1 = 240
+ gre1 = 240
+ blu1 = 240
+ alp1 = 255
+ rad1 = 1
 }
 
 {
- snow = FALSE
+ snow1 = TRUE
+ hSpd = 200
+ vSpd = 192
+ dens = 2000
+ red1 = 168
+ gre1 = 132
+ blu1 = 97
+ alp1 = 25
+ rad1 = 200
 }
 
 

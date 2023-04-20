@@ -2121,12 +2121,32 @@ void ReadAreaTable (FILE *stream, int areaNumber)
 				value++;
 
 				if (TotalAreaInfo == areaNumber) {
-					if (strstr(line, "snow"))  readBool(value, SNOW);
+					if (strstr(line, "vSpd"))  snow_vSpd = atoi(value);
+					if (strstr(line, "hSpd"))  snow_hSpd = atoi(value);
+					if (strstr(line, "dens"))  snow_dens = atoi(value);
+
+					if (strstr(line, "snow1"))  readBool(value, SNOW);
+					if (strstr(line, "red1"))  snow1_r = atoi(value);
+					if (strstr(line, "gre1"))  snow1_g = atoi(value);
+					if (strstr(line, "blu1"))  snow1_b = atoi(value);
+					if (strstr(line, "alp1"))  snow1_a = atoi(value);
+					if (strstr(line, "rad1"))  snow1_rad = atof(value);
+
+					if (strstr(line, "snow2"))  readBool(value, SNOW2);
+					if (strstr(line, "red2"))  snow2_r = atoi(value);
+					if (strstr(line, "gre2"))  snow2_g = atoi(value);
+					if (strstr(line, "blu2"))  snow2_b = atoi(value);
+					if (strstr(line, "alp2"))  snow2_a = atoi(value);
+					if (strstr(line, "rad2"))  snow2_rad = atof(value);
+
 				}
 
 			}
 
 	}
+
+	if (snow_dens > 16000) DoHalt("snow density cannot exceed 16000");
+
 }
 
 void ReadTreeTable(FILE *stream, int areaNumber)

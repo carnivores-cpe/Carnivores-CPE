@@ -2261,8 +2261,8 @@ void ProcessTrophy()
 
 void RespawnSnow(int s, BOOL rand)
 {
-	Snow[s].pos.x = PlayerX + siRand(12 * 256);
-	Snow[s].pos.z = PlayerZ + siRand(12 * 256);
+	Snow[s].pos.x = PlayerX + nv.x + siRand(12 * 256);//12
+	Snow[s].pos.z = PlayerZ + nv.z + siRand(12 * 256);//12
 	Snow[s].hl = GetLandUpH(Snow[s].pos.x, Snow[s].pos.z);
 	Snow[s].ftime = 0;
 	if (rand) Snow[s].pos.y = Snow[s].hl + 256 + rRand(12 * 256);
@@ -2378,14 +2378,14 @@ void AnimateElements()
   }
 
 
+  nv = Wind.nv;
+  NormVector(nv, (4 + Wind.speed) * snow_hSpd * TimeDt / 1000);//4
+
   if (!SNOW) return;
-  while (SnCount < 2000) {
+  while (SnCount < snow_dens) {//2000
 	  RespawnSnow(SnCount, TRUE);
 	  SnCount++;
   }
-
-  nv = Wind.nv;
-  NormVector(nv, (4 + Wind.speed) * 4 * TimeDt / 1000);
 
   for (int s = 0; s < SnCount; s++) {
 
@@ -2405,7 +2405,7 @@ void AnimateElements()
 
 		  Snow[s].pos = AddVectors(Snow[s].pos, nv);
 		  Snow[s].hl = GetLandUpH(Snow[s].pos.x, Snow[s].pos.z);
-		  Snow[s].pos.y -= TimeDt * 192 / 1000.f;
+		  Snow[s].pos.y -= TimeDt * snow_vSpd / 1000.f; //192
 		  if (Snow[s].pos.y < Snow[s].hl + 8) {
 			  Snow[s].pos.y = Snow[s].hl + 8;
 			  Snow[s].ftime = 1;
@@ -2413,8 +2413,8 @@ void AnimateElements()
 	  }
 	  else {
 		  Snow[s].ftime += TimeDt;
-		  Snow[s].pos.y -= TimeDt * 3 / 1000.f;
-		  if (Snow[s].ftime > 2000)  RespawnSnow(s, FALSE);
+		  Snow[s].pos.y -= TimeDt * (snow_vSpd / 64) / 1000.f; //3
+		  if (Snow[s].ftime > (2000/(snow_vSpd/192)))  RespawnSnow(s, FALSE); //2000
 	  }
 
   }

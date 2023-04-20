@@ -1009,6 +1009,16 @@ _EXTORNOT   TSFX     RandSound[256];
 //========= WEATHER =================//
 
 _EXTORNOT BOOL SNOW;
+_EXTORNOT int snow_vSpd;//vertical
+_EXTORNOT int snow_hSpd;//horizontal
+_EXTORNOT int snow_dens;//density
+
+_EXTORNOT byte snow1_r, snow1_g, snow1_b, snow1_a;//density
+_EXTORNOT float snow1_rad;//radius
+
+_EXTORNOT BOOL SNOW2;
+_EXTORNOT byte snow2_r, snow2_g, snow2_b, snow2_a;//density
+_EXTORNOT float snow2_rad;//radius
 
 //========= GAME ====================//
 _EXTORNOT int TargetDino, TargetArea, TargetWeapon, WeaponPres, TargetCall,
@@ -1088,7 +1098,7 @@ _EXTORNOT TCharacter     MPlayers[3]; //multiplayer
 
 _EXTORNOT TWCircle       WCircles[2096]; //increased
 
-_EXTORNOT TSnowElement   Snow[8024];
+_EXTORNOT TSnowElement   Snow[16048];
 
 _EXTORNOT TDemoPoint     DemoPoint;
 _EXTORNOT TCharacter     *killerDino;
