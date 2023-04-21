@@ -3867,7 +3867,6 @@ void RenderElements()
 
 		  DWORD A11 = snow1_a;
 		  DWORD A12 = snow2_a;
-		  DWORD A2 = 0x00;
 		  if (Snow[s].ftime) {
 			  A11 = A11 * (2000 - Snow[s].ftime) / 2000;
 			  A12 = A12 * (2000 - Snow[s].ftime) / 2000;
@@ -3880,7 +3879,7 @@ void RenderElements()
 			(snow1_g << 8) |
 			snow1_r)
 			,
-			(A2 << 24) +
+			((A11/7) << 24) +
 			conv_xGx(0x000000 |
 			(snow1_b / 2 << 16) |
 			(snow1_g / 2 << 8) |
@@ -3893,7 +3892,7 @@ void RenderElements()
 				  (snow2_g << 8) |
 				  snow2_r)
 			  ,
-			  (A2 << 24) +
+			  ((A12/7) << 24) +
 			  conv_xGx(0x000000 |
 			  (snow2_b / 2 << 16) |
 				  (snow2_g / 2 << 8) |

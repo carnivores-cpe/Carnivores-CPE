@@ -4825,6 +4825,67 @@ void RenderElements()
     }
   }
 
+
+
+  if (SNOW)
+	  for (int s = 0; s < SnCount; s++) {
+		  Vector3d rpos = Snow[s].pos;
+
+
+		  rpos.x = rpos.x - CameraX;
+		  rpos.y = rpos.y - CameraY;
+		  rpos.z = rpos.z - CameraZ;
+
+
+		  rpos = RotateVector(rpos);
+		  if (rpos.z > -64) continue;
+		  if (fabs(rpos.x) > -rpos.z) continue;
+		  if (fabs(rpos.y) > -rpos.z) continue;
+
+		  float sx = VideoCX - (int)(CameraW * rpos.x / rpos.z * 16) / 16.f;
+		  float sy = VideoCY + (int)(CameraH * rpos.y / rpos.z * 16) / 16.f;
+
+		  DWORD A11 = snow1_a;
+		  DWORD A12 = snow2_a;
+		  if (Snow[s].ftime) {
+			  A11 = A11 * (2000 - Snow[s].ftime) / 2000;
+			  A12 = A12 * (2000 - Snow[s].ftime) / 2000;
+		  }
+
+		  RenderCircle(sx, sy, rpos.z, -8 * CameraW*0.64 / rpos.z * snow1_rad, //1 
+			  (A11 << 24) +
+			  conv_xGx(0x000000 |
+			  (snow1_r << 16) |
+				  (snow1_g << 8) |
+				  snow1_b)
+			  ,
+			  ((A11 / 7) << 24) +
+			  conv_xGx(0x000000 |
+			  (snow1_r / 2 << 16) |
+				  (snow1_g / 2 << 8) |
+				  snow1_b / 2)
+		  );
+		  RenderCircle(sx, sy, rpos.z, -8 * CameraW*0.64 / rpos.z * snow2_rad, //1 
+			  (A12 << 24) +
+			  conv_xGx(0x000000 |
+			  (snow2_r << 16) |
+				  (snow2_g << 8) |
+				  snow2_b)
+			  ,
+			  ((A12 / 7) << 24) +
+			  conv_xGx(0x000000 |
+			  (snow2_r / 2 << 16) |
+				  (snow2_g / 2 << 8) |
+				  snow2_b / 2)
+		  );
+
+
+
+	  }
+
+
+
+
   if (fproc1) d3dFlushBuffer(fproc1, 0);
 
   GlassL = 0;
