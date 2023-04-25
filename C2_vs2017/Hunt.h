@@ -548,6 +548,11 @@ typedef struct _TDinoInfo
   int maxDepth, minDepth, spacingDepth;
   BOOL dontSwimAway;
 
+  BOOL dontBend;
+  //float bendOffset;
+
+  //BOOL noMoveNoRot;
+
   //int hunterDeathAnim, hunterDeathOffset;
   int aggress, killDist, flyDist;
 

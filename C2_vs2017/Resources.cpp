@@ -2528,6 +2528,12 @@ void ReadCharacterLine(FILE *stream, char *_value, char line[256], bool &regionO
 	if (strstr(line, "radar")) DinoInfo[TotalC].onRadar = atoi(value);
 	if (strstr(line, "dontswimaway")) readBool(value, DinoInfo[TotalC].dontSwimAway);
 
+
+	if (strstr(line, "dontBend")) readBool(value, DinoInfo[TotalC].dontBend);
+	//if (strstr(line, "bendOffset")) DinoInfo[TotalC].bendOffset = atof(value);
+
+	//if (strstr(line, "noMoveNoRotate")) readBool(value, DinoInfo[TotalC].noMoveNoRot);
+
 	if (strstr(line, "radR")) DinoInfo[TotalC].radarRed = atoi(value);
 	if (strstr(line, "radG")) DinoInfo[TotalC].radarGreen = atoi(value);
 	if (strstr(line, "radB")) DinoInfo[TotalC].radarBlue = atoi(value);

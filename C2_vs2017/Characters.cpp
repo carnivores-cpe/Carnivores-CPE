@@ -8673,6 +8673,9 @@ void CreateChMorphedModel(TCharacter *cptr)
 
 	for (int v = 0; v < VCount; v++)
 	{
+
+		
+
 		float x = *(adptr + v * 3 + 0) * k1 + *(adptr + (v + VCount) * 3 + 0) * k2;
 		float y = *(adptr + v * 3 + 1) * k1 + *(adptr + (v + VCount) * 3 + 1) * k2;
 		float z = -(*(adptr + v * 3 + 2) * k1 + *(adptr + (v + VCount) * 3 + 2) * k2);
@@ -8709,31 +8712,37 @@ void CreateChMorphedModel(TCharacter *cptr)
 
 		float fiMosa = fi * cptr->bdepth;
 		fi *= cptr->bend;
+		if (!DinoInfo[cptr->CType].dontBend) {
 
-		float bendc = (float)cos(fi);
-		float bends = (float)sin(fi);
+			float bendc = (float)cos(fi);
+			float bends = (float)sin(fi);
 
-		float bx;
-		float bz;
-		float by;
+			float bx;
+			float bz;
+			float by;
 
-		bx = bendc * xx - bends * zz;
-		bz = bendc * zz + bends * xx;
-		zz = bz;
-		xx = bx;
+			bx = bendc * xx - bends * zz;
+			bz = bendc * zz + bends * xx;
+			zz = bz;
+			xx = bx;
 
-		//if (DinoInfo[cptr->CType].Aquatic) {	//Also hunter corpse when killed by aquatic creature
+			//if (DinoInfo[cptr->CType].Aquatic) {	//Also hunter corpse when killed by aquatic creature
 			float bendcmosa = (float)cos(fiMosa);
 			float bendsmosa = (float)sin(fiMosa);
 			bz = bendcmosa * zz + bendsmosa * yy;
 			by = bendcmosa * yy + bendsmosa * zz;
 			yy = by;
 			zz = bz;
-		//}
+			//}
+
+		}
+
 
 		cptr->pinfo->mptr->gVertex[v].x = xx * scale;
 		cptr->pinfo->mptr->gVertex[v].y = cb * yy - sb * zz;
 		cptr->pinfo->mptr->gVertex[v].z = cb * zz + sb * yy;
+
+
 	}
 }
 

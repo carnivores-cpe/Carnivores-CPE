@@ -287,10 +287,10 @@ deathtype{
 deathtype{
  fallAnim = 2
  dieAnim = 3
+}
  bloR = 112
  bloG = 0
  bloB = 0
-}
 }
 
 {
@@ -310,10 +310,10 @@ deathtype{
 deathtype{
  fallAnim = 2
  dieAnim = 3
+}
  bloR = 112
  bloG = 0
  bloB = 0
-}
 }
 
 {
