@@ -243,6 +243,7 @@ void ResetCharacter(TCharacter *cptr)
 	cptr->BloodTime = 0;
 
 	cptr->awareHunter = FALSE;
+	cptr->heardShot = FALSE;
 
 	if (DinoInfo[cptr->CType].killTypeCount > 1) {
 		cptr->killType = rRand(DinoInfo[cptr->CType].killTypeCount - 1);
@@ -2194,6 +2195,8 @@ TBEGIN:
 			fleeMode = TRUE;
 		}
 		else if (DinoInfo[cptr->CType].defensive && cptr->Health == DinoInfo[cptr->CType].Health0) fleeMode = TRUE;
+		else if (DinoInfo[cptr->CType].fearShot && cptr->Health < DinoInfo[cptr->CType].Health0) fleeMode = TRUE;
+		else if (DinoInfo[cptr->CType].fearHearShot && cptr->heardShot) fleeMode = TRUE;
 		else if (cptr->packId >= 0) Packs[cptr->packId].attack = TRUE;
 
 		if (cptr->packId >= 0) {
@@ -2810,6 +2813,8 @@ TBEGIN:
 			fleeMode = TRUE;
 		}
 		else if (DinoInfo[cptr->CType].defensive && cptr->Health == DinoInfo[cptr->CType].Health0) fleeMode = TRUE;
+		else if (DinoInfo[cptr->CType].fearShot && cptr->Health < DinoInfo[cptr->CType].Health0) fleeMode = TRUE;
+		else if (DinoInfo[cptr->CType].fearHearShot && cptr->heardShot) fleeMode = TRUE;
 		else if (cptr->packId >= 0) Packs[cptr->packId].attack = TRUE;
 
 		if (cptr->packId >= 0) {
@@ -3488,6 +3493,8 @@ TBEGIN:
 			fleeMode = TRUE;
 		}
 		else if (DinoInfo[cptr->CType].defensive && cptr->Health == DinoInfo[cptr->CType].Health0) fleeMode = TRUE;
+		else if (DinoInfo[cptr->CType].fearShot && cptr->Health < DinoInfo[cptr->CType].Health0) fleeMode = TRUE;
+		else if (DinoInfo[cptr->CType].fearHearShot && cptr->heardShot) fleeMode = TRUE;
 		else if (cptr->packId >= 0) Packs[cptr->packId].attack = TRUE;
 
 		if (cptr->packId >= 0) {
@@ -6863,6 +6870,8 @@ TBEGIN:
 			fleeMode = TRUE;
 		}
 		else if (DinoInfo[cptr->CType].defensive && cptr->Health == DinoInfo[cptr->CType].Health0) fleeMode = TRUE;
+		else if (DinoInfo[cptr->CType].fearShot && cptr->Health < DinoInfo[cptr->CType].Health0) fleeMode = TRUE;
+		else if (DinoInfo[cptr->CType].fearHearShot && cptr->heardShot) fleeMode = TRUE;
 		else if (cptr->packId >= 0) Packs[cptr->packId].attack = TRUE;
 
 		if (cptr->packId >= 0) {
@@ -7714,7 +7723,10 @@ void AnimateCharacters()
 				}
 			}
 
-		if (cptr->AfraidTime <= 0) { cptr->awareHunter = FALSE; }
+		if (cptr->AfraidTime <= 0) {
+			cptr->awareHunter = FALSE;
+			cptr->heardShot = FALSE;
+		}
 
 		switch (cptr->Clone)
 		{
@@ -7813,6 +7825,7 @@ void MakeNoise(Vector3d pos, float range)
 			if (!cptr->State) {
 				cptr->State = 2;
 				cptr->awareHunter = TRUE;
+				cptr->heardShot = TRUE;
 			}
 		}
 
@@ -7825,6 +7838,7 @@ void MakeNoise(Vector3d pos, float range)
 			cptr->NoFindCnt = 0;
 
 			cptr->awareHunter = TRUE;
+			cptr->heardShot = TRUE;
 		}
 	}
 }

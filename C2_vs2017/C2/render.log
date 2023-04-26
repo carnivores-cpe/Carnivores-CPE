@@ -50,7 +50,8 @@ Loading: HUNTDAT\gall.car
 Loading: HUNTDAT\dimor2.car
 Loading: HUNTDAT\ptera.car
 Loading: HUNTDAT\dimet.car
-Loading: HUNTDAT\par9.car
+Loading: HUNTDAT\ankylo1.car
+Loading: HUNTDAT\stego.car
 Loading: HUNTDAT\chasmosa.car
 Loading: HUNTDAT\cerato1_s.car
 Loading: HUNTDAT\dangerbrachikiller9.car
@@ -77,8 +78,7 @@ TrophyB Loaded.
 Entered game
 ReInitGame();
 Placing...
-Loading: HUNTDAT\allo_ii.car
-Loading: HUNTDAT\spino_s.car
+Loading: HUNTDAT\par9.car
 Voodoo: Can't set selected video mode
 Start Address: 0
 End   Address: 8388592

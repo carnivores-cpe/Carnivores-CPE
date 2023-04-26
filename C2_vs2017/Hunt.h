@@ -375,6 +375,7 @@ typedef struct _TCharacter
   int dogPrey; // used by dog only. The dino currently being tracked
 
   bool awareHunter;
+  bool heardShot;
 
   bool aquaticIdle;
 
@@ -555,6 +556,8 @@ typedef struct _TDinoInfo
   BOOL dontWeave;
 
   BOOL defensive;
+  BOOL fearShot;
+  BOOL fearHearShot;
 
   //BOOL noMoveNoRot;
 
