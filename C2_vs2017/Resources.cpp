@@ -2532,6 +2532,8 @@ void ReadCharacterLine(FILE *stream, char *_value, char line[256], bool &regionO
 	if (strstr(line, "dontBend")) readBool(value, DinoInfo[TotalC].dontBend);
 	//if (strstr(line, "bendOffset")) DinoInfo[TotalC].bendOffset = atof(value);
 
+	if (strstr(line, "defensive")) readBool(value, DinoInfo[TotalC].defensive);
+
 	if (strstr(line, "weaveRange")) DinoInfo[TotalC].weaveRange = (float)atof(value);
 	if (strstr(line, "dontWeave")) readBool(value, DinoInfo[TotalC].dontWeave);
 

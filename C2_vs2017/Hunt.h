@@ -554,6 +554,8 @@ typedef struct _TDinoInfo
   float weaveRange;
   BOOL dontWeave;
 
+  BOOL defensive;
+
   //BOOL noMoveNoRot;
 
   //int hunterDeathAnim, hunterDeathOffset;

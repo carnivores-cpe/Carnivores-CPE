@@ -2193,6 +2193,7 @@ TBEGIN:
 			DinoInfo[cptr->CType].aggress <= 0 || !cptr->awareHunter) {
 			fleeMode = TRUE;
 		}
+		else if (DinoInfo[cptr->CType].defensive && cptr->Health == DinoInfo[cptr->CType].Health0) fleeMode = TRUE;
 		else if (cptr->packId >= 0) Packs[cptr->packId].attack = TRUE;
 
 		if (cptr->packId >= 0) {
@@ -2808,6 +2809,7 @@ TBEGIN:
 			DinoInfo[cptr->CType].aggress <= 0 || !cptr->awareHunter) {
 			fleeMode = TRUE;
 		}
+		else if (DinoInfo[cptr->CType].defensive && cptr->Health == DinoInfo[cptr->CType].Health0) fleeMode = TRUE;
 		else if (cptr->packId >= 0) Packs[cptr->packId].attack = TRUE;
 
 		if (cptr->packId >= 0) {
@@ -3485,6 +3487,7 @@ TBEGIN:
 			DinoInfo[cptr->CType].aggress <= 0 || !cptr->awareHunter) {
 			fleeMode = TRUE;
 		}
+		else if (DinoInfo[cptr->CType].defensive && cptr->Health == DinoInfo[cptr->CType].Health0) fleeMode = TRUE;
 		else if (cptr->packId >= 0) Packs[cptr->packId].attack = TRUE;
 
 		if (cptr->packId >= 0) {
@@ -6859,6 +6862,7 @@ TBEGIN:
 		if (pdist > attackDist || !playerAttackable || DinoInfo[cptr->CType].aggress <= 0 || !cptr->awareHunter) {
 			fleeMode = TRUE;
 		}
+		else if (DinoInfo[cptr->CType].defensive && cptr->Health == DinoInfo[cptr->CType].Health0) fleeMode = TRUE;
 		else if (cptr->packId >= 0) Packs[cptr->packId].attack = TRUE;
 
 		if (cptr->packId >= 0) {
