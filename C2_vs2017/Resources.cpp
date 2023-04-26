@@ -2532,6 +2532,9 @@ void ReadCharacterLine(FILE *stream, char *_value, char line[256], bool &regionO
 	if (strstr(line, "dontBend")) readBool(value, DinoInfo[TotalC].dontBend);
 	//if (strstr(line, "bendOffset")) DinoInfo[TotalC].bendOffset = atof(value);
 
+	if (strstr(line, "weaveRange")) DinoInfo[TotalC].weaveRange = (float)atof(value);
+	if (strstr(line, "dontWeave")) readBool(value, DinoInfo[TotalC].dontWeave);
+
 	//if (strstr(line, "noMoveNoRotate")) readBool(value, DinoInfo[TotalC].noMoveNoRot);
 
 	if (strstr(line, "radR")) DinoInfo[TotalC].radarRed = atoi(value);
@@ -2980,7 +2983,7 @@ void LoadResourcesScript()
 	AIInfo[AI_PARA].tGAIncrement = 3.f;
 	AIInfo[AI_PARA].rot1 = 0.2f;
 	AIInfo[AI_PARA].rot2 = 1.0f;
-	AIInfo[AI_PARA].weaveRange = 0;
+	//AIInfo[AI_PARA].weaveRange = 0;
 	AIInfo[AI_PARA].pWMin = 2048;
 	//waterLevel = 160;
 
@@ -3005,7 +3008,7 @@ void LoadResourcesScript()
 	AIInfo[AI_BRONT].tGAIncrement = 3.f;
 	AIInfo[AI_BRONT].rot1 = 0.2f;
 	AIInfo[AI_BRONT].rot2 = 1.0f;
-	AIInfo[AI_BRONT].weaveRange = 3072;
+	//AIInfo[AI_BRONT].weaveRange = 3072;
 	AIInfo[AI_BRONT].pWMin = 2048;
 
 	AIInfo[AI_HOG].iceAge = true;
@@ -3028,7 +3031,7 @@ void LoadResourcesScript()
 	AIInfo[AI_HOG].tGAIncrement = 3.f;
 	AIInfo[AI_HOG].rot1 = 0.3f;
 	AIInfo[AI_HOG].rot2 = 1.4f;
-	AIInfo[AI_HOG].weaveRange = 3072;
+	//AIInfo[AI_HOG].weaveRange = 3072;
 	AIInfo[AI_HOG].pWMin = 2048;
 
 
@@ -3052,7 +3055,7 @@ void LoadResourcesScript()
 	AIInfo[AI_BEAR].tGAIncrement = 3.f;
 	AIInfo[AI_BEAR].rot1 = 0.2f;
 	AIInfo[AI_BEAR].rot2 = 1.0f;
-	AIInfo[AI_BEAR].weaveRange = 0;
+	//AIInfo[AI_BEAR].weaveRange = 0;
 	AIInfo[AI_BEAR].pWMin = 2048;
 	//AIInfo[AI_BEAR].carnivore = true; //Bear has more in common with herbivore ai
 
@@ -3076,7 +3079,7 @@ void LoadResourcesScript()
 	AIInfo[AI_RHINO].tGAIncrement = 3.f;
 	AIInfo[AI_RHINO].rot1 = 0.3f;
 	AIInfo[AI_RHINO].rot2 = 1.2f;
-	AIInfo[AI_RHINO].weaveRange = 3072;
+	//AIInfo[AI_RHINO].weaveRange = 3072;
 	AIInfo[AI_RHINO].pWMin = 2048;
 
 
@@ -3100,7 +3103,7 @@ void LoadResourcesScript()
 	AIInfo[AI_DEER].tGAIncrement = 3.f;
 	AIInfo[AI_DEER].rot1 = 0.2f;
 	AIInfo[AI_DEER].rot2 = 1.0f;
-	AIInfo[AI_DEER].weaveRange = 0;
+	//AIInfo[AI_DEER].weaveRange = 0;
 	AIInfo[AI_DEER].pWMin = 2048;
 
 	AIInfo[AI_MAMM].iceAge = true;
@@ -3123,7 +3126,7 @@ void LoadResourcesScript()
 	AIInfo[AI_MAMM].tGAIncrement = 3.f;
 	AIInfo[AI_MAMM].rot1 = 0.2f;
 	AIInfo[AI_MAMM].rot2 = 1.0f;
-	AIInfo[AI_MAMM].weaveRange = 0;
+	//AIInfo[AI_MAMM].weaveRange = 0;
 	AIInfo[AI_MAMM].pWMin = 3048;
 
 
@@ -3150,7 +3153,7 @@ void LoadResourcesScript()
 	AIInfo[AI_SMILO].tGAIncrement = 3.f;
 	AIInfo[AI_SMILO].rot1 = 0.3f;
 	AIInfo[AI_SMILO].rot2 = 1.5f;
-	AIInfo[AI_SMILO].weaveRange = 3072;
+	//AIInfo[AI_SMILO].weaveRange = 3072;
 	AIInfo[AI_SMILO].pWMin = 2048;
 	AIInfo[AI_SMILO].jumper = TRUE;
 
@@ -3178,7 +3181,7 @@ void LoadResourcesScript()
 	AIInfo[AI_WOLF].tGAIncrement = 3.f;
 	AIInfo[AI_WOLF].rot1 = 0.4f;
 	AIInfo[AI_WOLF].rot2 = 1.5f;
-	AIInfo[AI_WOLF].weaveRange = 3072;
+	//AIInfo[AI_WOLF].weaveRange = 3072;
 	AIInfo[AI_WOLF].pWMin = 2048;
 	AIInfo[AI_WOLF].jumper = TRUE;
 
@@ -3205,7 +3208,7 @@ void LoadResourcesScript()
 	AIInfo[AI_ANKY].tGAIncrement = 3.f;
 	AIInfo[AI_ANKY].rot1 = 0.2f;
 	AIInfo[AI_ANKY].rot2 = 1.0f;
-	AIInfo[AI_ANKY].weaveRange = 0;
+	//AIInfo[AI_ANKY].weaveRange = 0;
 	AIInfo[AI_ANKY].pWMin = 2048;
 	//waterLevel = 60;
 
@@ -3228,7 +3231,7 @@ void LoadResourcesScript()
 	AIInfo[AI_PACH].tGAIncrement = 3.f;
 	AIInfo[AI_PACH].rot1 = 0.2f;
 	AIInfo[AI_PACH].rot2 = 1.0f;
-	AIInfo[AI_PACH].weaveRange = 0;
+	//AIInfo[AI_PACH].weaveRange = 0;
 	AIInfo[AI_PACH].pWMin = 2048;
 	//waterLevel = 140;
 
@@ -3251,7 +3254,7 @@ void LoadResourcesScript()
 	AIInfo[AI_STEGO].tGAIncrement = 3.f;
 	AIInfo[AI_STEGO].rot1 = 0.2f;
 	AIInfo[AI_STEGO].rot2 = 1.0f;
-	AIInfo[AI_STEGO].weaveRange = 0;
+	//AIInfo[AI_STEGO].weaveRange = 0;
 	AIInfo[AI_STEGO].pWMin = 2048;
 	//waterLevel = 160;
 
@@ -3274,7 +3277,7 @@ void LoadResourcesScript()
 	AIInfo[AI_CHASM].tGAIncrement = 3.f;
 	AIInfo[AI_CHASM].rot1 = 0.2f;
 	AIInfo[AI_CHASM].rot2 = 1.0f;
-	AIInfo[AI_CHASM].weaveRange = 0;
+	//AIInfo[AI_CHASM].weaveRange = 0;
 	AIInfo[AI_CHASM].pWMin = 2048;
 	//waterLevel = 120;
 
@@ -3295,7 +3298,7 @@ void LoadResourcesScript()
 	AIInfo[AI_ALLO].noFindWayMed = 16;
 	AIInfo[AI_ALLO].noFindWayRange = 20;
 	AIInfo[AI_ALLO].targetDistance = 8048.f;
-	AIInfo[AI_ALLO].weaveRange = 1648;
+	//AIInfo[AI_ALLO].weaveRange = 1648;
 	AIInfo[AI_ALLO].pWMin = 2048;
 
 	AIInfo[AI_VELO].agressMulti = 8;
@@ -3315,7 +3318,7 @@ void LoadResourcesScript()
 	AIInfo[AI_VELO].noFindWayMed = 16;
 	AIInfo[AI_VELO].noFindWayRange = 20;
 	AIInfo[AI_VELO].targetDistance = 8048.f;
-	AIInfo[AI_VELO].weaveRange = 1648;
+	//AIInfo[AI_VELO].weaveRange = 1648;
 	AIInfo[AI_VELO].pWMin = 2048;
 
 	AIInfo[AI_SPINO].agressMulti = 8;
@@ -3335,7 +3338,7 @@ void LoadResourcesScript()
 	AIInfo[AI_SPINO].noFindWayMed = 16;
 	AIInfo[AI_SPINO].noFindWayRange = 20;
 	AIInfo[AI_SPINO].targetDistance = 8048.f;
-	AIInfo[AI_SPINO].weaveRange = 1648;
+	//AIInfo[AI_SPINO].weaveRange = 1648;
 	AIInfo[AI_SPINO].pWMin = 2048;
 
 	AIInfo[AI_CERAT].jumper = false;
@@ -3355,7 +3358,7 @@ void LoadResourcesScript()
 	AIInfo[AI_CERAT].noFindWayMed = 16;
 	AIInfo[AI_CERAT].noFindWayRange = 20;
 	AIInfo[AI_CERAT].targetDistance = 8048.f;
-	AIInfo[AI_CERAT].weaveRange = 1648;
+	//AIInfo[AI_CERAT].weaveRange = 1648;
 	AIInfo[AI_CERAT].pWMin = 2048;
 
 
@@ -3376,7 +3379,7 @@ void LoadResourcesScript()
 	AIInfo[AI_TITAN].noFindWayMed = 16;
 	AIInfo[AI_TITAN].noFindWayRange = 20;
 	AIInfo[AI_TITAN].targetDistance = 8048.f;
-	AIInfo[AI_TITAN].weaveRange = 6592;
+	//AIInfo[AI_TITAN].weaveRange = 6592;
 	AIInfo[AI_TITAN].pWMin = 2048;
 
 	AIInfo[AI_MICRO].agressMulti = 8;
@@ -3396,7 +3399,7 @@ void LoadResourcesScript()
 	AIInfo[AI_MICRO].noFindWayMed = 16;
 	AIInfo[AI_MICRO].noFindWayRange = 20;
 	AIInfo[AI_MICRO].targetDistance = 8048.f;
-	AIInfo[AI_MICRO].weaveRange = 1648;
+	//AIInfo[AI_MICRO].weaveRange = 1648;
 	AIInfo[AI_MICRO].pWMin = 2048;
 
 	//AIInfo[AI_TREX].waterLevel = 560;

@@ -2316,7 +2316,7 @@ NOTHINK:
 	{
 		cptr->tgalpha = CorrectedAlpha(FindVectorAlpha(targetdx, targetdz), cptr->alpha);//FindVectorAlpha(targetdx, targetdz);
 
-		if (cptr->State && pdist > AIInfo[cptr->Clone].weaveRange)
+		if (cptr->State && pdist > DinoInfo[cptr->CType].weaveRange && !DinoInfo[cptr->CType].dontWeave)
 		{
 			float rTD;
 			rTD = 824.f;
@@ -2963,7 +2963,7 @@ NOTHINK:
 
 		//if (!AIInfo[cptr->Clone].carnivore || AIInfo[cptr->Clone].iceAge) weaveCondition = weaveCondition && cptr->AfraidTime;
 
-		if (cptr->State && pdist > AIInfo[cptr->Clone].weaveRange)
+		if (cptr->State && pdist > DinoInfo[cptr->CType].weaveRange && !DinoInfo[cptr->CType].dontWeave)
 		{
 			float rTD;
 			if (AIInfo[cptr->Clone].carnivore && !AIInfo[cptr->Clone].iceAge) {
@@ -3627,7 +3627,7 @@ NOTHINK:
 	{
 		cptr->tgalpha = CorrectedAlpha(FindVectorAlpha(targetdx, targetdz), cptr->alpha);//FindVectorAlpha(targetdx, targetdz);
 
-		if (cptr->State && (pdist > AIInfo[cptr->Clone].weaveRange || !cptr->gottaClimb))
+		if (cptr->State && (pdist > DinoInfo[cptr->CType].weaveRange || !cptr->gottaClimb) && !DinoInfo[cptr->CType].dontWeave)
 		{
 			float rTD;
 			rTD = 824.f;
@@ -4554,7 +4554,8 @@ NOTHINK:
 	else
 	{
 		cptr->tgalpha = CorrectedAlpha(FindVectorAlpha(targetdx, targetdz), cptr->alpha);//FindVectorAlpha(targetdx, targetdz);
-		if (cptr->State && pdist > 5648)
+
+		if (cptr->State && pdist > DinoInfo[cptr->CType].weaveRange && !DinoInfo[cptr->CType].dontWeave)
 		{
 			cptr->tgalpha += (float)sin(RealTime / 824.f) / 6.f;
 			if (cptr->tgalpha < 0) cptr->tgalpha += 2 * pi;
@@ -5026,7 +5027,18 @@ TBEGIN:
 	//============================================//
 
 	if (cptr->NoFindCnt) cptr->NoFindCnt--;
-	else cptr->tgalpha = CorrectedAlpha(FindVectorAlpha(targetdx, targetdz), cptr->alpha);//FindVectorAlpha(targetdx, targetdz);
+	else
+	{
+		cptr->tgalpha = CorrectedAlpha(FindVectorAlpha(targetdx, targetdz), cptr->alpha);//FindVectorAlpha(targetdx, targetdz);
+
+		if (cptr->State && pdist[0] > DinoInfo[cptr->CType].weaveRange && !DinoInfo[cptr->CType].dontWeave)
+		{
+			cptr->tgalpha += (float)sin(RealTime / 824.f) / 2.f;
+			if (cptr->tgalpha < 0) cptr->tgalpha += 2 * pi;
+			if (cptr->tgalpha > 2 * pi) cptr->tgalpha -= 2 * pi;
+		}
+	}
+	
 	LookForAWay(cptr, !DinoInfo[cptr->CType].canSwim, TRUE);
 	if (cptr->NoWayCnt > 8)
 	{
@@ -5482,7 +5494,8 @@ NOTHINK:
 	else
 	{
 		cptr->tgalpha = CorrectedAlpha(FindVectorAlpha(targetdx, targetdz), cptr->alpha);//FindVectorAlpha(targetdx, targetdz);
-		if (cptr->State && pdist > 20000)
+		
+		if (cptr->State && pdist > DinoInfo[cptr->CType].weaveRange && !DinoInfo[cptr->CType].dontWeave)
 		{
 			cptr->tgalpha += (float)sin(RealTime / 824.f) / 2.f;
 			if (cptr->tgalpha < 0) cptr->tgalpha += 2 * pi;
@@ -6966,14 +6979,13 @@ NOTHINK:
 	{
 		cptr->tgalpha = CorrectedAlpha(FindVectorAlpha(targetdx, targetdz), cptr->alpha);//FindVectorAlpha(targetdx, targetdz);
 
-		/*
-		if (cptr->State && pdist > 1648)
+		if (cptr->State && pdist > DinoInfo[cptr->CType].weaveRange && !DinoInfo[cptr->CType].dontWeave)
 		{
 			cptr->tgalpha += (float)sin(RealTime / 824.f) / 4.f;
 			if (cptr->tgalpha < 0) cptr->tgalpha += 2 * pi;
 			if (cptr->tgalpha > 2 * pi) cptr->tgalpha -= 2 * pi;
 		}
-		*/
+		
 
 	}
 

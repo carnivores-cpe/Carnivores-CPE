@@ -551,6 +551,9 @@ typedef struct _TDinoInfo
   BOOL dontBend;
   //float bendOffset;
 
+  float weaveRange;
+  BOOL dontWeave;
+
   //BOOL noMoveNoRot;
 
   //int hunterDeathAnim, hunterDeathOffset;
@@ -653,7 +656,7 @@ typedef struct _TAIInfo {
 	bool iceAge;
 	bool carnivore;
 
-	float rot1, rot2, weaveRange, pWMin;
+	float rot1, rot2, pWMin; //weaveRange
 
 } TAIInfo;
 
