@@ -334,6 +334,8 @@ typedef struct _TCharacter
   int NoWayCnt, NoFindCnt, AfraidTime, tgtime;
   int PPMorphTime, PrevPhase,PrevPFTime, Phase, FTime;
 
+  int currentIdleGroup;
+
   float vspeed, rspeed, bend, scale;
   int Slide;
   float slidex, slidez;
@@ -529,6 +531,17 @@ typedef struct _TDinoDeathType
 	int fall;
 } TDinoDeathType;
 
+typedef struct _TDinoIdleType
+{
+	int anim[32];
+	int count;
+	float start;
+	float end;
+	bool endOnAny;
+	bool startOnAny;
+	bool instantRepeat;
+} TDinoIdleType;
+
 typedef struct _TDinoInfo
 {
   char Name[48], FName[48], PName[48];
@@ -595,6 +608,9 @@ typedef struct _TDinoInfo
 
   int waterDieAnim[32];
   int waterDieCount;
+
+  TDinoIdleType idleGroup[32];
+  int idleGroupCount;
 
   int idleAnim[32];//trex look
   int idleCount;

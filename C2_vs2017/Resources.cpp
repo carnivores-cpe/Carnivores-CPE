@@ -2315,6 +2315,15 @@ void WipeDeathTypes() {
 	DinoInfo[TotalC].deathTypeCount = 0;
 }
 
+void WipeIdleGroups() {
+	if (DinoInfo[TotalC].idleGroupCount) {
+		for (int i = 0; i < DinoInfo[TotalC].idleGroupCount; i++) {
+			DinoInfo[TotalC].idleGroup[i] = {};
+		}
+	}
+	DinoInfo[TotalC].idleGroupCount = 0;
+}
+
 void WipeAvoidances() {
 
 	if (DinoInfo[TotalC].AvoidCount) {
@@ -2328,6 +2337,40 @@ void WipeAvoidances() {
 
 	}
 
+}
+
+
+void ReadIdleGroupInfo(FILE *stream)
+{
+	char *value;
+	char line[256];
+
+	while (fgets(line, 255, stream)) {
+		if (strstr(line, "}")) {
+			DinoInfo[TotalC].idleGroupCount++;
+			break;
+		}
+		value = strstr(line, "=");
+		if (!value)
+			DoHalt("Script loading error");
+		value++;
+
+		if (strstr(line, "startChance")) DinoInfo[TotalC].idleGroup[DinoInfo[TotalC].idleGroupCount].start = atof(value);
+		if (strstr(line, "endChance")) DinoInfo[TotalC].idleGroup[DinoInfo[TotalC].idleGroupCount].end = atof(value);
+		if (strstr(line, "randomStarting")) readBool(value, DinoInfo[TotalC].idleGroup[DinoInfo[TotalC].idleGroupCount].startOnAny);
+		if (strstr(line, "randomEnding")) readBool(value, DinoInfo[TotalC].idleGroup[DinoInfo[TotalC].idleGroupCount].endOnAny);
+		if (strstr(line, "instantRepeat")) readBool(value, DinoInfo[TotalC].idleGroup[DinoInfo[TotalC].idleGroupCount].instantRepeat);
+
+		if (strstr(line, "anim")) {
+			//if (idleOverwrite) {
+			//	DinoInfo[TotalC].idleCount = 0;
+			//	idleOverwrite = false;
+			//}
+			DinoInfo[TotalC].idleGroup[DinoInfo[TotalC].idleGroupCount].anim[DinoInfo[TotalC].idleGroup[DinoInfo[TotalC].idleGroupCount].count] = atoi(value);
+			DinoInfo[TotalC].idleGroup[DinoInfo[TotalC].idleGroupCount].count++;
+		}
+
+	}
 }
 
 
@@ -2489,7 +2532,7 @@ void ReadAvoidInfo(FILE *stream)
 
 void ReadCharacterLine(FILE *stream, char *_value, char line[256], bool &regionOverwrite, bool &avoidOverwrite,
 	bool &idleOverwrite, bool &idle2Overwrite, bool &roarOverwrite, bool &killOverwrite, bool &waterDieOverwrite,
-	bool &deathTypeOverwrite, bool &trophyTypeOverwrite, int &nextTrophySlot) {
+	bool &deathTypeOverwrite, bool &trophyTypeOverwrite, int &nextTrophySlot, bool &idleGroupOverwrite) {
 
 	char *value = _value;
 //	bool overwrite = _overwrite;
@@ -2715,6 +2758,16 @@ void ReadCharacterLine(FILE *stream, char *_value, char line[256], bool &regionO
 		ReadDeathTypeInfo(stream);
 	}
 
+	if (strstr(line, "idlegroup")) {
+
+		if (idleGroupOverwrite) {
+			WipeIdleGroups();
+			idleGroupOverwrite = false;
+		}
+
+		ReadIdleGroupInfo(stream);
+	}
+
 	if (strstr(line, "spawninfo")){
 
 		if (regionOverwrite) {
@@ -2816,14 +2869,15 @@ void ReadCharacters(FILE *stream, bool mapamb, int &nextTrophySlot)
 				!strstr(line, "killtype") &&
 				!strstr(line, "avoid") &&
 				!strstr(line, "tropinfo") &&
-				!strstr(line, "deathtype"))
+				!strstr(line, "deathtype") &&
+				!strstr(line, "idlegroup"))
 				DoHalt("Script loading error");
 			value++;
 
 			if (strstr(line, "ai")) DinoInfo[TotalC].AI = atoi(value);
 
-			bool temp, temp2, temp3, temp4, temp5, temp6, temp7, temp8, temp9;
-			ReadCharacterLine(stream, value, line, temp, temp2, temp3, temp4, temp5, temp6, temp7, temp8, temp9, nextTrophySlot);
+			bool temp, temp2, temp3, temp4, temp5, temp6, temp7, temp8, temp9, temp10;
+			ReadCharacterLine(stream, value, line, temp, temp2, temp3, temp4, temp5, temp6, temp7, temp8, temp9, nextTrophySlot, temp10);
 
 			if (strstr(line, "overwrite") || strstr(line, "addition")) {
 
@@ -2901,6 +2955,7 @@ void ReadCharacters(FILE *stream, bool mapamb, int &nextTrophySlot)
 					bool waterDieOverwrite = strstr(line, "overwrite");
 					bool deathTypeOverwrite = strstr(line, "overwrite");
 					bool trophyTypeOverwrite = strstr(line, "overwrite");
+					bool idleGroupOverwrite = strstr(line, "overwrite");
 
 					while (fgets(line, 255, stream)) {
 						if (strstr(line, "}")) break;
@@ -2910,6 +2965,7 @@ void ReadCharacters(FILE *stream, bool mapamb, int &nextTrophySlot)
 							&& !strstr(line, "spawninfo")
 							&& !strstr(line, "avoid")
 							&& !strstr(line, "deathtype")
+							&& !strstr(line, "idlegroup")
 							&& !strstr(line, "tropinfo")
 							&& !strstr(line, "killtype"))
 							DoHalt("Script loading error");
@@ -2917,7 +2973,7 @@ void ReadCharacters(FILE *stream, bool mapamb, int &nextTrophySlot)
 
 						ReadCharacterLine(stream, value, line, regionOverwrite, avoidOverwrite,
 							idleOverwrite, idle2Overwrite, roarOverwrite, killOverwrite,
-							waterDieOverwrite, deathTypeOverwrite, trophyTypeOverwrite, nextTrophySlot);
+							waterDieOverwrite, deathTypeOverwrite, trophyTypeOverwrite, nextTrophySlot, idleGroupOverwrite);
 
 					}
 

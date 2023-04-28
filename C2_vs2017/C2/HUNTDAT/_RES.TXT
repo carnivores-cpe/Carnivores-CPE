@@ -408,8 +408,12 @@ tropinfo{
  }
  runAnim = 1
  walkAnim = 0
- idleAnim = 2
- idleAnim = 3
+idlegroup{
+ anim = 2
+ anim = 3
+ startChance = 0.0625
+ endChance = 0.5
+}
 deathtype{
  dieAnim = 4
  sleepAnim = 5
@@ -474,8 +478,12 @@ deathtype{
  }
  runAnim = 0
  walkAnim = 1
- idleAnim = 2
- idleAnim = 3
+idlegroup{
+ anim = 2
+ anim = 3
+ startChance = 0.0625
+ endChance = 0.5
+}
 deathtype{
  dieAnim = 4
  sleepAnim = 5
@@ -538,8 +546,12 @@ deathtype{
  }
  runAnim = 0
  walkAnim = 1
- idleAnim = 3
- idleAnim = 4
+idlegroup{
+ anim = 3
+ anim = 4
+ startChance = 0.0625
+ endChance = 0.5
+}
 deathtype{
  dieAnim = 2
  sleepAnim = 5
@@ -557,7 +569,7 @@ deathtype{
 
 {
  name = 'Allosaurus'
- file = 'allo_ii.car'
+ file = 'ALLOt_iictt.car'
  ai        = 13
  clone  = 13
  dogSmell  = TRUE
@@ -611,8 +623,24 @@ deathtype{
  dieAnim = 5
  sleepAnim = 7
 }
- idleAnim = 8
- idleAnim = 9
+idlegroup{
+ anim = 8
+ startChance = 0.02905569
+ endChance = 1
+ instantRepeat = TRUE
+}
+idlegroup{
+ anim = 9
+ startChance = 0.02905569
+ endChance = 1
+ instantRepeat = TRUE
+}
+idlegroup{
+ anim = 10
+ startChance = 0.00968523
+ endChance = 1
+ instantRepeat = TRUE
+}
  waterLevel = 180
 killtype{
  hunterAnim = 0
@@ -622,7 +650,7 @@ killtype{
 }
  CamYLand = 256
  CamYWater = 256
- CamBaseLand = 2024
+ CamBaseLand = 824
  CamBaseWater = 824
  bloR = 112
  bloG = 0
@@ -677,9 +705,13 @@ killtype{
  }
  runAnim = 0
  walkAnim = 1
- idleAnim = 2
- idleAnim = 3
- idleAnim = 4
+idlegroup{
+ anim = 2
+ anim = 3
+ anim = 4
+ startChance = 0.03125
+ endChance = 0.5
+}
 deathtype{
  dieAnim = 5
  sleepAnim = 6
@@ -751,8 +783,18 @@ deathtype{
  dieAnim = 5
  sleepAnim = 7
 }
- idleAnim = 8
- idleAnim = 9
+idlegroup{
+ anim = 8
+ startChance = 0.033898305
+ endChance = 1
+ instantRepeat = TRUE
+}
+idlegroup{
+ anim = 9
+ startChance = 0.033898305
+ endChance = 1
+ instantRepeat = TRUE
+}
  waterLevel = 140
 killtype{
  hunterAnim = 0
@@ -827,8 +869,18 @@ deathtype{
  dieAnim = 6
  sleepAnim = 8
 }
- idleAnim = 3
- idleAnim = 4
+idlegroup{
+ anim = 3
+ startChance = 0.0703125
+ endChance = 1
+ instantRepeat = TRUE
+}
+idlegroup{
+ anim = 4
+ startChance = 0.0703125
+ endChance = 1
+ instantRepeat = TRUE
+}
  waterLevel = 140
 killtype{
  hunterAnim = 0
@@ -899,9 +951,24 @@ deathtype{
  dieAnim = 5
  sleepAnim = 6
 }
- idleAnim = 2
- idleAnim = 3
- idleAnim = 4
+idlegroup{
+ anim = 2
+ startChance = 0.046875
+ endChance = 1
+ instantRepeat = TRUE
+}
+idlegroup{
+ anim = 3
+ startChance = 0.046875
+ endChance = 1
+ instantRepeat = TRUE
+}
+idlegroup{
+ anim = 4
+ startChance = 0.046875
+ endChance = 1
+ instantRepeat = TRUE
+}
  waterLevel = 140
 killtype{
  hunterAnim = 0
@@ -1092,8 +1159,12 @@ killtype{
  runAnim = 1
  walkAnim = 0
  slideAnim = 2
- idleAnim = 4
- idleAnim = 5
+idlegroup{
+ anim = 4
+ anim = 5
+ startChance = 0.0625
+ endChance = 0.5
+}
 deathtype{
  dieAnim = 3
  sleepAnim = 6
@@ -1112,6 +1183,11 @@ deathtype{
  bloG = 0
  bloB = 0
  weaveRange = 0
+ radar = 2
+ radR = 0
+ radG = 240
+ radB = 0
+ Mystery = TRUE
 }
 
 {
@@ -1155,9 +1231,13 @@ deathtype{
  }
  runAnim = 0
  walkAnim = 1
- idleAnim = 2
- idleAnim = 3
- idleAnim = 4
+idlegroup{
+ anim = 2
+ anim = 3
+ anim = 4
+ startChance = 0.03125
+ endChance = 0.5
+}
 deathtype{
  dieAnim = 5
  sleepAnim = 6
@@ -1176,6 +1256,11 @@ deathtype{
  bloG = 0
  bloB = 0
  weaveRange = 0
+ radar = 2
+ radR = 0
+ radG = 240
+ radB = 0
+ Mystery = TRUE
 }
 
 {

@@ -242,6 +242,8 @@ void ResetCharacter(TCharacter *cptr)
 	cptr->BloodTTime = 0;
 	cptr->BloodTime = 0;
 
+	cptr->currentIdleGroup = -1;
+
 	cptr->awareHunter = FALSE;
 	cptr->heardShot = FALSE;
 
@@ -2799,6 +2801,8 @@ TBEGIN:
 	if (!MyHealth) cptr->State = 0;
 	if (cptr->State)
 	{
+		cptr->currentIdleGroup = -1;
+
 		float aDist;
 		if (AIInfo[cptr->Clone].carnivore && (!AIInfo[cptr->Clone].iceAge || cptr->Clone == AI_WOLF)) {
 			aDist = ctViewR * DinoInfo[cptr->CType].aggress + OptAgres / AIInfo[cptr->Clone].agressMulti;
@@ -3038,9 +3042,43 @@ NOTHINK:
 
 
 
-			if (DinoInfo[cptr->CType].idleCount
+			if (DinoInfo[cptr->CType].idleGroupCount
 				&& (MyHealth || !DinoInfo[cptr->CType].killType[cptr->killType].carryCorpse)
 				&& !(cptr->StateF & csONWATER)) {
+
+
+					if (cptr->currentIdleGroup >= 0) {
+						if (rRand(127) + 1 > (1 - DinoInfo[cptr->CType].idleGroup[cptr->currentIdleGroup].end) * 128
+							&& (DinoInfo[cptr->CType].idleGroup[cptr->currentIdleGroup].endOnAny
+							|| cptr->Phase == DinoInfo[cptr->CType].idleGroup[cptr->currentIdleGroup].anim[DinoInfo[cptr->CType].idleGroup[cptr->currentIdleGroup].count - 1])) {
+							cptr->Phase = DinoInfo[cptr->CType].walkAnim;
+							if (DinoInfo[cptr->CType].idleGroup[cptr->currentIdleGroup].instantRepeat){
+								cptr->currentIdleGroup = -1; //this must be done inside the if statement
+							} else {
+								cptr->currentIdleGroup = -1; //this must be done inside the if statement
+								goto ENDPSELECT;
+							}
+						} else {
+							cptr->Phase = DinoInfo[cptr->CType].idleGroup[cptr->currentIdleGroup].anim[rRand(DinoInfo[cptr->CType].idleGroup[cptr->currentIdleGroup].count - 1)];
+							goto ENDPSELECT;
+						}
+					}
+
+					for (int idleGroupNo = 0; idleGroupNo < DinoInfo[cptr->CType].idleGroupCount; idleGroupNo++) {
+						if (rRand(127) + 1 > (1 - DinoInfo[cptr->CType].idleGroup[idleGroupNo].start) * 128) cptr->currentIdleGroup = idleGroupNo;
+					}
+					if (cptr->currentIdleGroup >= 0) {
+						if (DinoInfo[cptr->CType].idleGroup[cptr->currentIdleGroup].startOnAny)
+							cptr->Phase = DinoInfo[cptr->CType].idleGroup[cptr->currentIdleGroup].anim[rRand(DinoInfo[cptr->CType].idleGroup[cptr->currentIdleGroup].count - 1)];
+						else
+							cptr->Phase = DinoInfo[cptr->CType].idleGroup[cptr->currentIdleGroup].anim[0];
+						goto ENDPSELECT;
+					} else cptr->Phase = DinoInfo[cptr->CType].walkAnim;
+					
+
+					/*
+				
+
 
 				if (AIInfo[cptr->Clone].carnivore) {
 
@@ -3080,7 +3118,8 @@ NOTHINK:
 
 
 
-				} else {
+				}
+				else {
 
 					bool idlePhase = false;
 					for (int i = 0; i < DinoInfo[cptr->CType].idleCount; i++) {
@@ -3098,7 +3137,7 @@ NOTHINK:
 
 				
 				}
-
+				*/
 			}
 			else {
 				cptr->Phase = DinoInfo[cptr->CType].walkAnim;
@@ -3107,12 +3146,7 @@ NOTHINK:
 		}
 		else cptr->Phase = DinoInfo[cptr->CType].runAnim;
 
-	bool idlePhase = false;
-	for (int i = 0; i < DinoInfo[cptr->CType].idleCount; i++) {
-		if (cptr->Phase == DinoInfo[cptr->CType].idleAnim[i]) idlePhase = true;
-	}
-
-	if (!idlePhase){
+	if (cptr->currentIdleGroup == -1){
 	if (AIInfo[cptr->Clone].carnivore && !AIInfo[cptr->Clone].iceAge) {
 		if (!cptr->State) cptr->Phase = DinoInfo[cptr->CType].walkAnim;
 		else if (fabs(cptr->tgalpha - cptr->alpha) < 1.0 ||
@@ -3177,9 +3211,7 @@ ENDPSELECT:
 		if (cptr->Phase == DinoInfo[cptr->CType].jumpAnim) goto SKIPROT;
 	}
 	if (cptr->Phase == DinoInfo[cptr->CType].killType[cptr->killType].anim && DinoInfo[cptr->CType].killTypeCount) goto SKIPROT;
-	for (int i = 0; i < DinoInfo[cptr->CType].idleCount; i++) {
-		if (cptr->Phase == DinoInfo[cptr->CType].idleAnim[i]) goto SKIPROT;
-	}
+	if (cptr->currentIdleGroup >= 0) goto SKIPROT;
 
 
 	if (AIInfo[cptr->Clone].carnivore && !AIInfo[cptr->Clone].iceAge) {
