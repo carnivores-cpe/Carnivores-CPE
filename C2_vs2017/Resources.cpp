@@ -3196,9 +3196,9 @@ void LoadResourcesScript()
 	AIInfo[AI_SMILO].carnivore = true;
 	AIInfo[AI_SMILO].targetDistance = 8048.f;
 	AIInfo[AI_SMILO].agressMulti = 256;
-	AIInfo[AI_RHINO].noWayCntMin = 8;
-	AIInfo[AI_RHINO].noFindWayMed = 48;
-	AIInfo[AI_RHINO].noFindWayRange = 80;
+	AIInfo[AI_SMILO].noWayCntMin = 8;
+	AIInfo[AI_SMILO].noFindWayMed = 48;
+	AIInfo[AI_SMILO].noFindWayRange = 80;
 	AIInfo[AI_SMILO].targetBendRotSpd = 3.5f;
 	AIInfo[AI_SMILO].targetBendMin = 3.f;
 	AIInfo[AI_SMILO].targetBendDelta1 = 1600.f;

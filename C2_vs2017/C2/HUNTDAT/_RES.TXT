@@ -233,8 +233,12 @@ deathtype{
  dieAnim = 2
  sleepAnim = 5
 }
- idleAnim = 3
- idleAnim = 4
+idlegroup{
+ anim = 3
+ anim = 4
+ startChance = 0.0625
+ endChance = 0.40625
+}
  waterLevel = 50
  bloR = 0
  bloG = 0
@@ -263,8 +267,12 @@ deathtype{
  dieAnim = 3
  sleepAnim = 6
 }
- idleAnim = 4
- idleAnim = 5
+idlegroup{
+ anim = 4
+ anim = 5
+ startChance = 0.0625
+ endChance = 0.40625
+}
  waterLevel = 100
  bloR = 112
  bloG = 0
@@ -338,8 +346,12 @@ deathtype{
  dieAnim = 4
  sleepAnim = 5
 }
- idleAnim = 2
- idleAnim = 3
+idlegroup{
+ anim = 2
+ anim = 3
+ startChance = 0.0625
+ endChance = 0.40625
+}
  waterLevel = 50
  bloR = 112
  bloG = 0
