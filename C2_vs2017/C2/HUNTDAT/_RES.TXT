@@ -1050,6 +1050,30 @@ killtype{
  lookAnim = 5
  smellAnim = 6
  smellAnim = 7
+idlegroup{
+ anim = 4
+ startChance = 0.03515625
+ endChance = 1
+ instantRepeat = TRUE
+}
+idlegroup{
+ anim = 5
+ startChance = 0.03515625
+ endChance = 1
+ instantRepeat = TRUE
+}
+idlegroup{
+ anim = 6
+ startChance = 0.03515625
+ endChance = 1
+ instantRepeat = TRUE
+}
+idlegroup{
+ anim = 7
+ startChance = 0.03515625
+ endChance = 1
+ instantRepeat = TRUE
+}
 deathtype{
  dieAnim = 8
 }

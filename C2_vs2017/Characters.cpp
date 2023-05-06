@@ -4481,6 +4481,9 @@ TBEGIN:
 
 	if (cptr->State)
 	{
+
+		cptr->currentIdleGroup = -1;
+
 		cptr->tgx = PlayerX;
 		cptr->tgz = PlayerZ;
 		cptr->tgtime = 0;
@@ -4658,6 +4661,7 @@ NOTHINK:
 		
 	if (!cptr->State)
 		if (NewPhase)
+			/*
 			if (rRand(128) > 110
 				&& (MyHealth || !DinoInfo[cptr->CType].killType[cptr->killType].carryCorpse)
 				&& !(cptr->StateF & csONWATER)
@@ -4674,10 +4678,52 @@ NOTHINK:
 				}
 				goto ENDPSELECT;
 			}
-			
+			*/
+
+			if (DinoInfo[cptr->CType].idleGroupCount
+				&& (MyHealth || !DinoInfo[cptr->CType].killType[cptr->killType].carryCorpse)
+				&& !(cptr->StateF & csONWATER)) {
+
+				if (cptr->currentIdleGroup >= 0) {
+					if (rRand(127) + 1 > (1 - DinoInfo[cptr->CType].idleGroup[cptr->currentIdleGroup].end) * 128
+						&& (DinoInfo[cptr->CType].idleGroup[cptr->currentIdleGroup].endOnAny
+							|| cptr->Phase == DinoInfo[cptr->CType].idleGroup[cptr->currentIdleGroup].anim[DinoInfo[cptr->CType].idleGroup[cptr->currentIdleGroup].count - 1])) {
+						cptr->Phase = DinoInfo[cptr->CType].walkAnim;
+						if (DinoInfo[cptr->CType].idleGroup[cptr->currentIdleGroup].instantRepeat) {
+							cptr->currentIdleGroup = -1; //this must be done inside the if statement
+						}
+						else {
+							cptr->currentIdleGroup = -1; //this must be done inside the if statement
+							goto ENDPSELECT;
+						}
+					}
+					else {
+						cptr->Phase = DinoInfo[cptr->CType].idleGroup[cptr->currentIdleGroup].anim[rRand(DinoInfo[cptr->CType].idleGroup[cptr->currentIdleGroup].count - 1)];
+						goto ENDPSELECT;
+					}
+				}
+
+				for (int idleGroupNo = 0; idleGroupNo < DinoInfo[cptr->CType].idleGroupCount; idleGroupNo++) {
+					if (rRand(127) + 1 > (1 - DinoInfo[cptr->CType].idleGroup[idleGroupNo].start) * 128) cptr->currentIdleGroup = idleGroupNo;
+				}
+				if (cptr->currentIdleGroup >= 0) {
+					if (DinoInfo[cptr->CType].idleGroup[cptr->currentIdleGroup].startOnAny)
+						cptr->Phase = DinoInfo[cptr->CType].idleGroup[cptr->currentIdleGroup].anim[rRand(DinoInfo[cptr->CType].idleGroup[cptr->currentIdleGroup].count - 1)];
+					else
+						cptr->Phase = DinoInfo[cptr->CType].idleGroup[cptr->currentIdleGroup].anim[0];
+					goto ENDPSELECT;
+				}
+				else cptr->Phase = DinoInfo[cptr->CType].walkAnim;
+			}
+			else {
+				cptr->Phase = DinoInfo[cptr->CType].walkAnim;
+			}
 
 
-	if (!NewPhase) if (LookMode) goto ENDPSELECT;
+	if (!NewPhase) {
+		if (LookMode) goto ENDPSELECT;
+		if (cptr->currentIdleGroup >= 0) goto ENDPSELECT;
+	}
 
 	if (cptr->State)
 		if (NewPhase && LookMode)
@@ -4739,6 +4785,7 @@ ENDPSELECT:
 	if (DinoInfo[cptr->CType].roarCount > 0 && cptr->Phase == cptr->roarAnim) goto SKIPROT;
 	if (cptr->Phase == DinoInfo[cptr->CType].killType[cptr->killType].anim && DinoInfo[cptr->CType].killTypeCount) goto SKIPROT;
 	if (LookMode) goto SKIPROT;
+	if (cptr->currentIdleGroup >= 0) goto SKIPROT;
 
 	if (drspd > 0.02)
 		if (cptr->tgalpha > cptr->alpha) currspeed = 0.7f + drspd * 1.4f;
@@ -6877,7 +6924,7 @@ void AnimateIcthDead(TCharacter *cptr)
 
 
 
-
+ 
 //NEW BRAHI
 void AnimateBrahi(TCharacter *cptr)
 {
