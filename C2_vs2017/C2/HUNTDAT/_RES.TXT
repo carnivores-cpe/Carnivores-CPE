@@ -1,4 +1,10 @@
 
+common {
+ survivalArea = 5
+ survivalWeapon = 3
+ survivalDTM = 0
+}
+
 areatable {
 {
  snow1 = FALSE

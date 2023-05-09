@@ -8298,8 +8298,13 @@ replaceSMA:
 	if (tr > 10240) return;
 
 
+	int mindist = 40;
+	if (SurvivalMode) {
+		mindist = ctViewR + 1;
+	}
+
 	if (fabs(Characters[ChCount].pos.x - PlayerX) +
-		fabs(Characters[ChCount].pos.z - PlayerZ) < 256 * 40)
+		fabs(Characters[ChCount].pos.z - PlayerZ) < 256 * mindist)
 		goto replaceSMA;
 
 	if (DinoInfo[DinoInfoIndex].Clone == AI_BRACH ||

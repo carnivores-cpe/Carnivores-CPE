@@ -567,9 +567,9 @@ void ProcessCommandLine()
     if (strstr(s,"reg=")) TrophyRoom.RegNumber = atoi(&s[4]);
     if (strstr(s,"prj=")) strcpy(ProjectName, (s+4));
     if (strstr(s,"din=")) TargetDino = (atoi(&s[4])*1024);
-    if (strstr(s,"wep=")) WeaponPres = atoi(&s[4]);
-    if (strstr(s,"dtm=")) OptDayNight  = atoi(&s[4]);
-	if (strstr(s, "server=")) strcpy(ServerAddress, (s + 7));
+	if (strstr(s, "wep=")) WeaponPres = atoi(&s[4]);
+	if (strstr(s, "dtm=")) OptDayNight = atoi(&s[4]);
+    if (strstr(s, "server=")) strcpy(ServerAddress, (s + 7));
 
     if (strstr(s,"-debug"))   DEBUG = TRUE;
     if (strstr(s,"-double"))  DoubleAmmo = TRUE;

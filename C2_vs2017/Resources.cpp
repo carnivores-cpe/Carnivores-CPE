@@ -1738,11 +1738,6 @@ void ReInitGame()
   PlayerAlpha = 0;
   PlayerBeta  = 0;
 
-  if (SurvivalMode) {
-	  PlayerAlpha = pi * 2 * SurvivalSpawnA / 360.f;
-	  Weapon.state = 2;
-  }
-
   WCCount = 0;
   ElCount = 0;
   BloodTrail.Count = 0;
@@ -1750,6 +1745,12 @@ void ReInitGame()
   OPTICMODE = FALSE;
   EXITMODE = FALSE;
   PAUSE = FALSE;
+
+  if (SurvivalMode) {
+	  PlayerAlpha = pi * 2 * SurvivalSpawnA / 360.f;
+	  Weapon.state = 2;
+	  if (WeapInfo[CurrentWeapon].Optic) OPTICMODE = TRUE;
+  }
 
   Ship.pos.x = PlayerX;
   Ship.pos.z = PlayerZ;
@@ -2112,7 +2113,6 @@ void readBool(char *value, bool &out) {
 	if (strstr(value, "TRUE")) out = TRUE;
 	if (strstr(value, "FALSE")) out = FALSE;
 }
-
 
 void ReadAreaTable (FILE *stream, int areaNumber)
 {
