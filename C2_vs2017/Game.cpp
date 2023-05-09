@@ -575,6 +575,7 @@ void ProcessCommandLine()
     if (strstr(s,"-double"))  DoubleAmmo = TRUE;
 	if (strstr(s, "-huntdog"))  DogMode = TRUE;
     if (strstr(s,"-radar"))   RadarMode = TRUE;
+	if (strstr(s, "-survival"))   SurvivalMode = TRUE;
 	if (strstr(s, "-sonar"))   SonarMode = TRUE;
 	if (strstr(s, "-scanner"))   ScannerMode = TRUE;
 	if (strstr(s, "-scent"))   ScentMode = TRUE;
@@ -703,6 +704,7 @@ void HideWeapon()
   TWeapon *wptr = &Weapon;
   if (UNDERWATER && !wptr->state) return;
   if (ObservMode || TrophyMode) return;
+  if (SurvivalMode) return;
 
   if (wptr->state == 0)
   {
@@ -1571,7 +1573,8 @@ void InitEngine()
   //ctViewR1 = 28;
   //ctViewRM = 24;
 
-  
+  if (SurvivalMode) OptViewR = 127;
+
   ctViewR = 42 + (int)(OptViewR / 8) * 2;
   ctViewR1 = 28;
   ctViewRM = 24;
@@ -1965,7 +1968,7 @@ void registerDamage(int Dino) {
 
 	if (!Characters[Dino].Health)
 	{
-		if (DinoInfo[Characters[Dino].CType].trophySession && !Multiplayer) //No trophies in multiplayer for now - update this at later date?
+		if (DinoInfo[Characters[Dino].CType].trophySession && !Multiplayer && !SurvivalMode) //No trophies in multiplayer for now - update this at later date?
 		{
 			TrophyRoom.Last.success++;
 			AddShipTask(Dino);
@@ -2644,6 +2647,9 @@ void SaveTrophy2(int RegNumber) {
 
 void SaveTrophy()
 {
+
+	if (SurvivalMode) return;
+
   DWORD l;
   char fname[128];
   wsprintf(fname, "trophy0%d.sav", TrophyRoom.RegNumber);

@@ -1,7 +1,7 @@
 
 areatable {
 {
- snow1 = TRUE
+ snow1 = FALSE
  hSpd = 4
  vSpd = 192
  dens = 2000
@@ -10,18 +10,31 @@ areatable {
  blu1 = 240
  alp1 = 255
  rad1 = 1
+ tree = 7
+ tree = 8
+ tree = 11
+ tree = 12
+ tree = 14
 }
 
 {
  snow1 = TRUE
  hSpd = 200
- vSpd = 1092
- dens = 16000
- red1 = 240
- gre1 = 240
- blu1 = 240
- alp1 = 255
- rad1 = 1
+ vSpd = 192
+ dens = 2000
+ red1 = 168
+ gre1 = 132
+ blu1 = 97
+ alp1 = 25
+ rad1 = 200
+ tree = 6
+ tree = 11
+ tree = 12
+ tree = 13
+ tree = 14
+ tree = 15
+ tree = 16
+ tree = 17
 }
 
 {
@@ -40,6 +53,8 @@ areatable {
  blu2 = 211
  alp2 = 5
  rad2 = 20
+ tree = 10
+ tree = 18
 }
 
 {
@@ -52,50 +67,6 @@ areatable {
  blu1 = 240
  alp1 = 255
  rad1 = 1
-}
-
-{
- snow1 = TRUE
- hSpd = 200
- vSpd = 192
- dens = 2000
- red1 = 168
- gre1 = 132
- blu1 = 97
- alp1 = 25
- rad1 = 200
-}
-
-
-} //==== end of areatable =========//
-
-
-treetable {
-{
- tree = 7
- tree = 8
- tree = 11
- tree = 12
- tree = 14
-}
-
-{
- tree = 6
- tree = 11
- tree = 12
- tree = 13
- tree = 14
- tree = 15
- tree = 16
- tree = 17
-}
-
-{
- tree = 10
- tree = 18
-}
-
-{
  tree = 4
  tree = 5
  tree = 6
@@ -106,14 +77,30 @@ treetable {
 }
 
 {
+ snow1 = FALSE
+ hSpd = 4
+ vSpd = 192
+ dens = 2000
+ red1 = 240
+ gre1 = 240
+ blu1 = 240
+ alp1 = 255
+ rad1 = 1
  tree = 9
  tree = 10
  tree = 11
  tree = 23
+ survivalPlayerX = 345
+ survivalPlayerY = 245
+ survivalPlayerA = 345
+ survivalDinoXMin = 318
+ survivalDinoXMax = 336
+ survivalDinoYMin = 170
+ survivalDinoYMax = 180
 }
 
 
-} //==== end of treetable =========//
+} //==== end of areatable =========//
 
 
 weapons {
@@ -668,6 +655,7 @@ killtype{
  bloG = 0
  bloB = 0
  weaveRange = 1648
+ survivalIndex = 1
 }
 
 {
@@ -825,6 +813,7 @@ killtype{
  bloG = 0
  bloB = 0
  weaveRange = 1648
+ survivalIndex = 2
 }
 
 {
@@ -908,6 +897,7 @@ killtype{
  bloG = 0
  bloB = 0
  weaveRange = 1648
+ survivalIndex = 3
 }
 
 
@@ -996,6 +986,7 @@ killtype{
  bloG = 0
  bloB = 0
  weaveRange = 1648
+ survivalIndex = 4
 }
 
 
@@ -1093,6 +1084,7 @@ killtype{
  bloG = 0
  bloB = 0
  weaveRange = 5648
+ survivalIndex = 5
 }
 
 

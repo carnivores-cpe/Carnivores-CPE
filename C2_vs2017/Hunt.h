@@ -562,6 +562,8 @@ typedef struct _TDinoInfo
   int maxDepth, minDepth, spacingDepth;
   BOOL dontSwimAway;
 
+  BOOL survivalDino;
+
   BOOL dontBend;
   //float bendOffset;
 
@@ -829,6 +831,7 @@ void WaitRetrace();
 void Characters_AddSecondaryOne(int ctype);
 void AddDeadBody(TCharacter *cptr, int, bool);
 void PlaceCharacters();
+void PlaceCharactersSurvival();
 void PlaceMHunters(); //multiplayer
 void PlaceTrophy();
 void AnimateCharacters();
@@ -1062,7 +1065,7 @@ _EXTORNOT BOOL ScentMode, CamoMode,
           TrophyMode, DoubleAmmo,
           DogMode, Multiplayer,
           Host, CiskMode, SonarMode,
-          ScannerMode;
+          ScannerMode, SurvivalMode;
 
 _EXTORNOT float sonarPos;
 
@@ -1124,6 +1127,16 @@ _EXTORNOT TPack          Packs[256];
 _EXTORNOT int PackCount;
 _EXTORNOT TCharacter     Characters[256];
 _EXTORNOT TCharacter     MPlayers[3]; //multiplayer
+
+_EXTORNOT int SurvivalSpawnX; //survival
+_EXTORNOT int SurvivalSpawnZ;
+_EXTORNOT float SurvivalSpawnA;
+_EXTORNOT TRegion SurvivalDinoSpawn; //dino spawn zone
+_EXTORNOT int SurvivalWave;
+_EXTORNOT int SurvivalIndex[128];
+_EXTORNOT int SurvivalIndexCh;
+
+
 
 _EXTORNOT TWCircle       WCircles[2096]; //increased
 

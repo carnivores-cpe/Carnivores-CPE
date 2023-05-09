@@ -43,30 +43,13 @@ Loading area: Done.
 Entering messages loop.
 Entered game
 ReInitGame();
-Placing...
 Loading: HUNTDAT\hunter1_brach_mosa12.car
-Loading: HUNTDAT\mosh.car
-Loading: HUNTDAT\gall.car
-Loading: HUNTDAT\dimor2.car
-Loading: HUNTDAT\ptera.car
-Loading: HUNTDAT\dimet.car
-Loading: HUNTDAT\par9.car
-Loading: HUNTDAT\ankylo1.car
-Loading: HUNTDAT\chasmosa.car
+Loading: HUNTDAT\ALLOt_iictt.car
+Loading: HUNTDAT\velo_iidct2.car
+Loading: HUNTDAT\spino_s.car
+Loading: HUNTDAT\cerato1_s.car
 Loading: HUNTDAT\tirex.car
-Loading: HUNTDAT\dangerbrachikiller9.car
-Loading: HUNTDAT\climatius3.car
-Loading: HUNTDAT\parexusn4.car
-Loading: HUNTDAT\parexusn4_pink.car
-Loading: HUNTDAT\mosa30ss.car
-Loading: HUNTDAT\ichthburian6.car
-Loading: HUNTDAT\titanopteryx_flier-placeholder.car
-Loading: HUNTDAT\hesper12_3_10-test.car
-Loading: HUNTDAT\WEAPONS\pistol.car
-Loading: HUNTDAT\WEAPONS\bullet1.tga
 Loading: HUNTDAT\WEAPONS\shotgun.car
-Loading: HUNTDAT\WEAPONS\bullet2.tga
-Loading: HUNTDAT\WEAPONS\dbsgun.car
 Loading: HUNTDAT\WEAPONS\bullet2.tga
 Voodoo: Can't set selected video mode
 Start Address: 0
@@ -74,28 +57,6 @@ End   Address: 8388592
 Audio_UpdateGeometry: 324 faces uploaded
 Trophy Loaded.
 TrophyB Loaded.
-  AudioStop ()
-Entered game
-ReInitGame();
-Placing...
-Loading: HUNTDAT\velo_iidct2.car
-Loading: HUNTDAT\spino_s.car
-Loading: HUNTDAT\pach.car
-Voodoo: Can't set selected video mode
-Start Address: 0
-End   Address: 8388592
-Trophy Loaded.
-TrophyB Loaded.
-  AudioStop ()
-Entered game
-ReInitGame();
-Placing...
-Loading: HUNTDAT\stego.car
-Voodoo: Can't set selected video mode
-Start Address: 0
-End   Address: 8388592
-Trophy Saved.
-TrophyB Saved.
   AudioStop ()
  Releasing Listener3D
  Releasing PrimaryBuffer

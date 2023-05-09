@@ -2601,6 +2601,10 @@ void DrawBox(WORD *lfbPtr, int xx, int yy, WORD c)
 
 void DrawHMap()
 {
+
+
+	if (SurvivalMode) return;
+
   //if (WinH < 280) return;
   DrawPicture(VideoCX-MapPic.W/2, VideoCY - MapPic.H/2, MapPic);
   int xx = VideoCX - 128 + (CCX>>2);

@@ -2160,6 +2160,7 @@ void AnimateTitan(TCharacter *cptr)
 		else cptr->Phase = DinoInfo[cptr->CType].runAnim;
 	}
 
+
 TBEGIN:
 	float targetx = cptr->tgx;
 	float targetz = cptr->tgz;
@@ -2192,14 +2193,16 @@ TBEGIN:
 		aDist = ctViewR * DinoInfo[cptr->CType].aggress + OptAgres / AIInfo[cptr->Clone].agressMulti;
 		if (cptr->gliding) aDist *= 2;
 
-		if (pdist > aDist || ((PlayerY - cptr->pos.y > pdist) && cptr->gliding)  ||
-			DinoInfo[cptr->CType].aggress <= 0 || !cptr->awareHunter) {
-			fleeMode = TRUE;
+		if (!SurvivalMode) {
+			if (pdist > aDist || ((PlayerY - cptr->pos.y > pdist) && cptr->gliding) ||
+				DinoInfo[cptr->CType].aggress <= 0 || !cptr->awareHunter) {
+				fleeMode = TRUE;
+			}
+			else if (DinoInfo[cptr->CType].defensive && cptr->Health == DinoInfo[cptr->CType].Health0) fleeMode = TRUE;
+			else if (DinoInfo[cptr->CType].fearShot && cptr->Health < DinoInfo[cptr->CType].Health0) fleeMode = TRUE;
+			else if (DinoInfo[cptr->CType].fearHearShot && cptr->heardShot) fleeMode = TRUE;
+			else if (cptr->packId >= 0) Packs[cptr->packId].attack = TRUE;
 		}
-		else if (DinoInfo[cptr->CType].defensive && cptr->Health == DinoInfo[cptr->CType].Health0) fleeMode = TRUE;
-		else if (DinoInfo[cptr->CType].fearShot && cptr->Health < DinoInfo[cptr->CType].Health0) fleeMode = TRUE;
-		else if (DinoInfo[cptr->CType].fearHearShot && cptr->heardShot) fleeMode = TRUE;
-		else if (cptr->packId >= 0) Packs[cptr->packId].attack = TRUE;
 
 		if (cptr->packId >= 0) {
 			if (Packs[cptr->packId]._attack) fleeMode = FALSE;
@@ -2812,14 +2815,16 @@ TBEGIN:
 		}
 
 		bool fleeMode = FALSE;
-		if (pdist > aDist ||
-			DinoInfo[cptr->CType].aggress <= 0 || !cptr->awareHunter) {
-			fleeMode = TRUE;
+		if (!SurvivalMode) {
+			if (pdist > aDist ||
+				DinoInfo[cptr->CType].aggress <= 0 || !cptr->awareHunter) {
+				fleeMode = TRUE;
+			}
+			else if (DinoInfo[cptr->CType].defensive && cptr->Health == DinoInfo[cptr->CType].Health0) fleeMode = TRUE;
+			else if (DinoInfo[cptr->CType].fearShot && cptr->Health < DinoInfo[cptr->CType].Health0) fleeMode = TRUE;
+			else if (DinoInfo[cptr->CType].fearHearShot && cptr->heardShot) fleeMode = TRUE;
+			else if (cptr->packId >= 0) Packs[cptr->packId].attack = TRUE;
 		}
-		else if (DinoInfo[cptr->CType].defensive && cptr->Health == DinoInfo[cptr->CType].Health0) fleeMode = TRUE;
-		else if (DinoInfo[cptr->CType].fearShot && cptr->Health < DinoInfo[cptr->CType].Health0) fleeMode = TRUE;
-		else if (DinoInfo[cptr->CType].fearHearShot && cptr->heardShot) fleeMode = TRUE;
-		else if (cptr->packId >= 0) Packs[cptr->packId].attack = TRUE;
 
 		if (cptr->packId >= 0) {
 			if (Packs[cptr->packId]._attack) fleeMode = FALSE;
@@ -3519,14 +3524,16 @@ TBEGIN:
 		if (cptr->gliding) aDist *= 2;
 
 		bool fleeMode = FALSE;
-		if (pdist > aDist ||
-			DinoInfo[cptr->CType].aggress <= 0 || !cptr->awareHunter) {
-			fleeMode = TRUE;
+		if (!SurvivalMode) {
+			if (pdist > aDist ||
+				DinoInfo[cptr->CType].aggress <= 0 || !cptr->awareHunter) {
+				fleeMode = TRUE;
+			}
+			else if (DinoInfo[cptr->CType].defensive && cptr->Health == DinoInfo[cptr->CType].Health0) fleeMode = TRUE;
+			else if (DinoInfo[cptr->CType].fearShot && cptr->Health < DinoInfo[cptr->CType].Health0) fleeMode = TRUE;
+			else if (DinoInfo[cptr->CType].fearHearShot && cptr->heardShot) fleeMode = TRUE;
+			else if (cptr->packId >= 0) Packs[cptr->packId].attack = TRUE;
 		}
-		else if (DinoInfo[cptr->CType].defensive && cptr->Health == DinoInfo[cptr->CType].Health0) fleeMode = TRUE;
-		else if (DinoInfo[cptr->CType].fearShot && cptr->Health < DinoInfo[cptr->CType].Health0) fleeMode = TRUE;
-		else if (DinoInfo[cptr->CType].fearHearShot && cptr->heardShot) fleeMode = TRUE;
-		else if (cptr->packId >= 0) Packs[cptr->packId].attack = TRUE;
 
 		if (cptr->packId >= 0) {
 			if (Packs[cptr->packId]._attack) fleeMode = FALSE;
@@ -5422,6 +5429,7 @@ TBEGIN:
 
 		bool attackmode = pdist <= ctViewR * DinoInfo[cptr->CType].aggress + ao / AIInfo[cptr->Clone].agressMulti && playerInWater && !DinoInfo[cptr->CType].dontSwimAway
 			&& MyHealth && !ObservMode && !DEBUG;
+		if (SurvivalMode) attackmode = TRUE;
 		if (attackmode)	cptr->AfraidTime = (int)(10.f) * 1024;
 		if (cptr->packId >= 0 && MyHealth) {
 			if (attackmode) Packs[cptr->packId].alert = TRUE;
@@ -5505,7 +5513,7 @@ TBEGIN:
 
 		}
 
-		if (DinoInfo[cptr->CType].DangerFish) {
+		if (DinoInfo[cptr->CType].DangerFish || SurvivalMode) {
 			cptr->tgx = PlayerX;
 			cptr->tgz = PlayerZ;
 			cptr->tgtime = 0;
@@ -6977,13 +6985,15 @@ TBEGIN:
 		cptr->currentIdleGroup = -1;
 
 		bool fleeMode = FALSE;
-		if (pdist > attackDist || !playerAttackable || DinoInfo[cptr->CType].aggress <= 0 || !cptr->awareHunter) {
-			fleeMode = TRUE;
+		if (!SurvivalMode) {
+			if (pdist > attackDist || !playerAttackable || DinoInfo[cptr->CType].aggress <= 0 || !cptr->awareHunter) {
+				fleeMode = TRUE;
+			}
+			else if (DinoInfo[cptr->CType].defensive && cptr->Health == DinoInfo[cptr->CType].Health0) fleeMode = TRUE;
+			else if (DinoInfo[cptr->CType].fearShot && cptr->Health < DinoInfo[cptr->CType].Health0) fleeMode = TRUE;
+			else if (DinoInfo[cptr->CType].fearHearShot && cptr->heardShot) fleeMode = TRUE;
+			else if (cptr->packId >= 0) Packs[cptr->packId].attack = TRUE;
 		}
-		else if (DinoInfo[cptr->CType].defensive && cptr->Health == DinoInfo[cptr->CType].Health0) fleeMode = TRUE;
-		else if (DinoInfo[cptr->CType].fearShot && cptr->Health < DinoInfo[cptr->CType].Health0) fleeMode = TRUE;
-		else if (DinoInfo[cptr->CType].fearHearShot && cptr->heardShot) fleeMode = TRUE;
-		else if (cptr->packId >= 0) Packs[cptr->packId].attack = TRUE;
 
 		if (cptr->packId >= 0) {
 			if (Packs[cptr->packId]._attack) fleeMode = FALSE;
@@ -7786,6 +7796,20 @@ void AnimateCharacters()
 		return;
 	}
 
+	if (SurvivalMode) {
+		bool waveOver = true;
+		for (CurDino = 0; CurDino < ChCount; CurDino++) {
+			if (Characters[CurDino].Health) waveOver = false;
+		}
+		if (waveOver) {
+			char t[128];
+			sprintf(t, "Waves Survived: %i", SurvivalWave);
+			AddMessage(t);
+			PlaceCharactersSurvival();
+		}
+	}
+
+
 	//packs
 	for (int packN = 0; packN < PackCount; packN++) {
 
@@ -7806,8 +7830,6 @@ void AnimateCharacters()
 		if (cptr->Health && cptr->packId >= 0) {
 			if (!Packs[cptr->packId].leader->Health) Packs[cptr->packId].leader = cptr;
 		}
-
-
 
 		if (cptr->tgtime > 30 * 1000) {
 			if (cptr->Clone < 0) {
@@ -8027,6 +8049,8 @@ void CheckAfraid()
 
 		if (cptr->Clone == AI_TREX && (cptr->AfraidTime || cptr->State == 1)) continue; //here to check if hunter detected once it starts running from fear call, trex doesn't like it tho
 
+		if (SurvivalMode) goto isAfraid;
+
 		rlook = SubVectors(ppos, cptr->pos);
 		kR = VectorLength(rlook) / 256.f / (32.f + ctViewR / 2);
 		NormVector(rlook, 1.0f);
@@ -8078,6 +8102,9 @@ void CheckAfraid()
 
 		if (kRes < 1.0)
 		{
+
+			isAfraid:
+
 			//MessageBeep(0xFFFFFFFF);
 			char t[128];
 			if (kALook < kASmell)
@@ -8201,12 +8228,12 @@ void PlaceTrophy()
 
 
 
-void spawnPositionPackLeader(int RegionNo) {
-	Characters[ChCount].pos.x = Region[RegionNo].XMin * 256
-		+ abs(rRand(Region[RegionNo].XMax - Region[RegionNo].XMin) * 256);
+void spawnPositionPackLeader(TRegion &Region) {
+	Characters[ChCount].pos.x = Region.XMin * 256
+		+ abs(rRand(Region.XMax - Region.XMin) * 256);
 
-	Characters[ChCount].pos.z = Region[RegionNo].YMin * 256
-		+ abs(rRand(Region[RegionNo].YMax - Region[RegionNo].YMin) * 256);
+	Characters[ChCount].pos.z = Region.YMin * 256
+		+ abs(rRand(Region.YMax - Region.YMin) * 256);
 }
 
 
@@ -8250,7 +8277,7 @@ replace2:
 }
 
 
-void spawnMapAmbient(int DinoInfoIndex, int RegionNo, int &tr, int leader) {
+void spawnMapAmbient(int DinoInfoIndex, TRegion &Region, int &tr, int leader, int RegionNo) {
 
 
 	Characters[ChCount].CType = DinoInfoIndex; //i9 + 1];
@@ -8260,7 +8287,7 @@ replaceSMA:
 		spawnPositionPackFollower(leader);
 	}
 	else {
-		spawnPositionPackLeader(RegionNo);
+		spawnPositionPackLeader(Region);
 	}
 
 	Characters[ChCount].pos.y = GetLandH(Characters[ChCount].pos.x,
@@ -8544,20 +8571,50 @@ void dispSighting(int dii, int xx, int zz) {
 
 }
 
-
+void PlaceCharactersSurvival()
+{
+	SurvivalWave++;
+	int tr = 0;
+	int waveTotal = 1;
+	int dinoCost = 1;
+	for (int w = 0; w < SurvivalWave; w++) waveTotal *= 2;
+	for (int d = 0; d < SurvivalIndexCh - 1; d++) dinoCost *= 3;
+	int dinoIndex = SurvivalIndexCh;
+	
+	//char buff[100];
+	//sprintf(buff, "SurvivalIndexCh %i", SurvivalIndexCh);
+	//MessageBox(hwndMain, buff, "TEST", IDOK);
+	//sprintf(buff, "SurvivalWave    %i", SurvivalWave);
+	//MessageBox(hwndMain, buff, "TEST", IDOK);
+	//sprintf(buff, "START-waveTotal %i", waveTotal);
+	//MessageBox(hwndMain, buff, "TEST", IDOK);
+	//sprintf(buff, "START-dinoCost  %i", dinoCost);
+	//MessageBox(hwndMain, buff, "TEST", IDOK);
+	//sprintf(buff, "START-dinoIndex %i", dinoIndex);
+	//MessageBox(hwndMain, buff, "TEST", IDOK);
+	while (waveTotal < dinoCost) {
+		dinoCost /= 3;
+		dinoIndex --;
+	}
+	while (dinoIndex > 0) {
+		while (waveTotal >= dinoCost) {
+			spawnMapAmbient(AI_to_CIndex[DinoInfo[SurvivalIndex[dinoIndex]].AI], SurvivalDinoSpawn, tr, -1, -1);
+			Characters[ChCount - 1].packId = -1;
+			Characters[ChCount - 1].State = 2;
+			waveTotal -= dinoCost;
+			if (tr > 10500) return;
+			if (ChCount > 254) return;
+		}
+		dinoCost /= 3;
+		dinoIndex--;
+	}
+	
+}
 
 void PlaceCharacters()
 {
 
-	//TEST
-/*
-if (Tranq) MessageBox(NULL, "TRANQ", "Carnivores Termination", IDOK | MB_SYSTEMMODAL | MB_ICONEXCLAMATION);
-if (ObservMode) MessageBox(NULL, "OBSERV", "Carnivores Termination", IDOK | MB_SYSTEMMODAL | MB_ICONEXCLAMATION);
-if (ScentMode) MessageBox(NULL, "SCENT", "Carnivores Termination", IDOK | MB_SYSTEMMODAL | MB_ICONEXCLAMATION);
-if (CamoMode) MessageBox(NULL, "CAMO", "Carnivores Termination", IDOK | MB_SYSTEMMODAL | MB_ICONEXCLAMATION);
-if (DoubleAmmo) MessageBox(NULL, "DOUBLE", "Carnivores Termination", IDOK | MB_SYSTEMMODAL | MB_ICONEXCLAMATION);
-if (RadarMode) MessageBox(NULL, "RADAR", "Carnivores Termination", IDOK | MB_SYSTEMMODAL | MB_ICONEXCLAMATION);
-*/
+
 
 	int c, tr;
 	ChCount = 0;
@@ -8675,7 +8732,7 @@ if (RadarMode) MessageBox(NULL, "RADAR", "Carnivores Termination", IDOK | MB_SYS
 
 				int leaderIndex = ChCount;
 				// pack leaders
-				spawnMapAmbient(DinoInfoIndex, RegionNo, tr, -1);
+				spawnMapAmbient(DinoInfoIndex, Region[RegionNo], tr, -1, RegionNo);
 
 				if (CiskMode && DinoInfo[DinoInfoIndex].Clone > 0 && rRand(3) == 1) {//real
 					dispSighting(DinoInfoIndex, (int)Characters[ChCount - 1].pos.x / 256, (int)Characters[ChCount - 1].pos.z / 256);
@@ -8702,7 +8759,7 @@ if (RadarMode) MessageBox(NULL, "RADAR", "Carnivores Termination", IDOK | MB_SYS
 					Characters[leaderIndex].packId = PackCount;
 					for (int packN = 0; packN < packNo - 1; packN++) {
 						Characters[ChCount].packId = PackCount;
-						spawnMapAmbient(DinoInfoIndex, RegionNo, tr, leaderIndex);
+						spawnMapAmbient(DinoInfoIndex, Region[RegionNo], tr, leaderIndex, RegionNo);
 					}
 					PackCount++;
 				}

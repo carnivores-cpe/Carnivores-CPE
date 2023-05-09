@@ -445,7 +445,7 @@ void DrawPostObjects()
   //goto SKIPWIND;
   if (BINMODE || OPTICMODE) goto SKIPWIND;
 
-  if (!TrophyMode)
+  if (!TrophyMode && !SurvivalMode)
     if (!KeyboardState[VK_CAPITAL] & 1)
     {
       BOOL lr = LOWRESTX;
@@ -472,8 +472,10 @@ SKIPWIND:
 
   MapMode = FALSE;
 
-  wptr->shakel+= TimeDt / 10000.f;
-  if (wptr->shakel > 4.0f) wptr->shakel = 4.0f;
+  if (!SurvivalMode) {
+	wptr->shakel+= TimeDt / 10000.f;
+	if (wptr->shakel > 4.0f) wptr->shakel = 4.0f;
+  }
 
   if (wptr->state == 1)
   {
@@ -634,6 +636,7 @@ SKIPWEAPON:
       y0+=Weapon.BulletPic[CurrentWeapon].H+4;
     }
 
+	if (!SurvivalMode)
     for (int bl=0; bl<ShotsLeft[CurrentWeapon]; bl++)
       DrawPicture(6 + bl*Weapon.BulletPic[CurrentWeapon].W, y0, Weapon.BulletPic[CurrentWeapon]);
   }
@@ -791,7 +794,7 @@ LONG APIENTRY MainWndProc( HWND hWnd, UINT message, UINT wParam, LONG lParam)
 
   }
 
-  if (message == WM_KEYDOWN)
+  if (message == WM_KEYDOWN && !SurvivalMode)
   {
     if ((int)wParam == KeyMap.fkBinoc) ToggleBinocular();
     if ((int)wParam == KeyMap.fkCCall) ChangeCall();
@@ -832,6 +835,7 @@ LONG APIENTRY MainWndProc( HWND hWnd, UINT message, UINT wParam, LONG lParam)
     case '8':
     case '9':
     {
+		if (SurvivalMode) break;
       if (Weapon.FTime) break;
       int w;
       if (wParam == '0')
@@ -916,17 +920,19 @@ LONG APIENTRY MainWndProc( HWND hWnd, UINT message, UINT wParam, LONG lParam)
       break;
 
     case VK_PAUSE:
+		if (!SurvivalMode) {
       PAUSE = !PAUSE;
       EXITMODE = FALSE;
       ResetMousePos();
       break;
+		}
 
     case 'N':
       if (EXITMODE) EXITMODE = FALSE;
       break;
 
     case VK_ESCAPE:
-      if (TrophyMode)
+      if (TrophyMode || SurvivalMode)
       {
         SaveTrophy();
         ExitTime = 1;
@@ -944,13 +950,14 @@ LONG APIENTRY MainWndProc( HWND hWnd, UINT message, UINT wParam, LONG lParam)
     case VK_RETURN:
       if (EXITMODE )
       {
-        if (MyHealth) ExitTime = 4000;
+        if (MyHealth && !SurvivalMode) ExitTime = 4000;
         else ExitTime = 1;
         EXITMODE = FALSE;
       }
       break;
 
     case 'R':
+		if (SurvivalMode) break;
       if (TrophyBody!=-1) RemoveCurrentTrophy();
       if (EXITMODE)
       {
@@ -1092,7 +1099,7 @@ void ProcessShoot()
     v.y = PlayerY;
     v.z = PlayerZ;
     MakeNoise(v, ctViewR*200 * WeapInfo[CurrentWeapon].Loud);
-    ShotsLeft[CurrentWeapon]--;
+    if (!SurvivalMode) ShotsLeft[CurrentWeapon]--;
   }
 }
 
@@ -1307,7 +1314,6 @@ void ProcessPlayerMovement()
   if (KeyFlags & kfLookUp) PlayerBeta-=DeltaT;
   if (KeyFlags & kfLookDn) PlayerBeta+=DeltaT;
 
-
 //========= movement ==========//
 
   ca = (float)cos(PlayerAlpha);
@@ -1491,15 +1497,16 @@ void ProcessControls()
   KeyFlags = 0;
   GetKeyboardState(KeyboardState);
 
+  if (KeyboardState[KeyMap.fkUp] & 128)  KeyFlags += kfLookUp;
+  if (KeyboardState[KeyMap.fkDown] & 128)  KeyFlags += kfLookDn;
 
+  if (!SurvivalMode) {
   if (KeyboardState [KeyMap.fkStrafe] & 128) KeyFlags+=kfStrafe;
 
-  if (KeyboardState [KeyMap.fkForward ] & 128) KeyFlags+=kfForward;
-  if (KeyboardState [KeyMap.fkBackward] & 128) KeyFlags+=kfBackward;
-  //if (KeyboardState[KeyMap.fkCrouch] & 128) KeyFlags += kfDown;
+	if (KeyboardState [KeyMap.fkForward ] & 128) KeyFlags+=kfForward;
+	if (KeyboardState [KeyMap.fkBackward] & 128) KeyFlags+=kfBackward;
+	//if (KeyboardState[KeyMap.fkCrouch] & 128) KeyFlags += kfDown;
 
-  if (KeyboardState [KeyMap.fkUp   ] & 128)  KeyFlags+=kfLookUp;
-  if (KeyboardState [KeyMap.fkDown ] & 128)  KeyFlags+=kfLookDn;
 
   if (KeyFlags & kfStrafe)
   {
@@ -1520,6 +1527,8 @@ void ProcessControls()
 
   if (KeyboardState [KeyMap.fkCall] & 128)
     if (!(_KeyFlags & kfCall)) KeyFlags+=kfCall;
+
+  }
 
   DeltaT = (float)TimeDt / 1000.f;
 
@@ -2032,6 +2041,7 @@ int PASCAL WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 
   ProcessSyncro();
   blActive = TRUE;
+
 
   PrintLog("Entering messages loop.\n");
   for( ; ; ){

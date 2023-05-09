@@ -60,6 +60,13 @@ void PlaceHunter()
     return;
   }
 
+  if (SurvivalMode) {
+	  PlayerX = SurvivalSpawnX * 256 + 128;
+	  PlayerZ = SurvivalSpawnZ * 256 + 128;
+	  PlayerY = GetLandQH(PlayerX, PlayerZ);
+	  return;
+  }
+
   int p = (timeGetTime() % LandingList.PCount);
   PlayerX = (float)LandingList.list[p].x * 256+128;
   PlayerZ = (float)LandingList.list[p].y * 256+128;
@@ -1591,7 +1598,7 @@ void LoadCharacters()
     pres[Characters[c].CType] = TRUE;
   }
 
-  for (int c=0; c<TotalC; c++) if (pres[c])
+  for (int c=0; c<TotalC; c++) if (pres[c] || (SurvivalMode && DinoInfo[c].survivalDino))
     {
       if (!ChInfo[c].mptr)
       {
@@ -1683,7 +1690,10 @@ void ReInitGame()
   PrintLog("ReInitGame();\n");
   PlaceHunter();
   if (TrophyMode)	PlaceTrophy();
-  else {
+  else if (SurvivalMode) {
+	  SurvivalWave = 0;
+	  PlaceCharactersSurvival();
+  } else {
 	  PlaceCharacters(); 
 	  if (Multiplayer) {
 		  sendGunShot = -1;
@@ -1727,6 +1737,11 @@ void ReInitGame()
   Weapon.FTime = 0;
   PlayerAlpha = 0;
   PlayerBeta  = 0;
+
+  if (SurvivalMode) {
+	  PlayerAlpha = pi * 2 * SurvivalSpawnA / 360.f;
+	  Weapon.state = 2;
+  }
 
   WCCount = 0;
   ElCount = 0;
@@ -2139,6 +2154,16 @@ void ReadAreaTable (FILE *stream, int areaNumber)
 					if (strstr(line, "alp2"))  snow2_a = atoi(value);
 					if (strstr(line, "rad2"))  snow2_rad = atof(value);
 
+					if (strstr(line, "tree")) TreeTable[atoi(value)] = TRUE;
+
+					if (strstr(line, "survivalPlayerX")) SurvivalSpawnX = atoi(value);
+					if (strstr(line, "survivalPlayerY")) SurvivalSpawnZ = atoi(value);
+					if (strstr(line, "survivalPlayerA")) SurvivalSpawnA = atof(value);
+					if (strstr(line, "survivalDinoXMax")) SurvivalDinoSpawn.XMax = atoi(value);
+					if (strstr(line, "survivalDinoYMax")) SurvivalDinoSpawn.YMax = atoi(value);
+					if (strstr(line, "survivalDinoXMin")) SurvivalDinoSpawn.XMin = atoi(value);
+					if (strstr(line, "survivalDinoYMin")) SurvivalDinoSpawn.YMin = atoi(value);
+
 				}
 
 			}
@@ -2146,40 +2171,6 @@ void ReadAreaTable (FILE *stream, int areaNumber)
 	}
 
 	if (snow_dens > 16000) DoHalt("snow density cannot exceed 16000");
-
-}
-
-void ReadTreeTable(FILE *stream, int areaNumber)
-{
-
-	for (int o = 0; o < 255; o++) {
-		TreeTable[o] = FALSE;
-	}
-
-	TotalTreeTable = 0;
-	char line[256], *value;
-	while (fgets(line, 255, stream))
-	{
-		if (strstr(line, "}")) break;
-		if (strstr(line, "{"))
-			while (fgets(line, 255, stream))
-			{
-				if (strstr(line, "}"))
-				{
-					TotalTreeTable++;
-					break;
-				}
-				value = strstr(line, "=");
-				if (!value) DoHalt("Script loading error");
-				value++;
-
-				if (strstr(line, "tree"))
-					if (TotalAreaInfo == areaNumber)
-						TreeTable[atoi(value)] = TRUE;
-
-			}
-
-	}
 
 }
 
@@ -2570,6 +2561,13 @@ void ReadCharacterLine(FILE *stream, char *_value, char line[256], bool &regionO
 	if (strstr(line, "killdist")) DinoInfo[TotalC].killDist = atoi(value);
 	if (strstr(line, "radar")) DinoInfo[TotalC].onRadar = atoi(value);
 	if (strstr(line, "dontswimaway")) readBool(value, DinoInfo[TotalC].dontSwimAway);
+
+
+	if (strstr(line, "survivalIndex")) {
+		DinoInfo[TotalC].survivalDino = TRUE;
+		SurvivalIndex[atoi(value)] = TotalC;
+		SurvivalIndexCh++;
+	}
 
 
 	if (strstr(line, "dontBend")) readBool(value, DinoInfo[TotalC].dontBend);
@@ -3005,6 +3003,7 @@ void ReadCharacters(FILE *stream, bool mapamb, int &nextTrophySlot)
 void LoadResourcesScript()
 {
 
+	SurvivalIndexCh = 0;
 
 	//mosh/dimet waterlevel 50
 	//gall waterlevel 100
@@ -3541,7 +3540,6 @@ void LoadResourcesScript()
   {
     if (line[0] == '.') break;
 	if (strstr(line, "areatable")) ReadAreaTable(stream, areaNumber);
-	if (strstr(line, "treetable")) ReadTreeTable(stream, areaNumber);
     if (strstr(line, "weapons") ) ReadWeapons(stream);
 	if (strstr(line, "hunterinfo")) ReadCharacters(stream, false, nextTrophySlot);
 	if (strstr(line, "oldambients")) ReadCharacters(stream, false, nextTrophySlot);

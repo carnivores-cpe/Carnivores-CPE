@@ -4160,6 +4160,7 @@ void DrawBox( WORD *lfbPtr, int lsw, int xx, int yy, WORD c)
 void DrawHMap()
 {
 	if (CiskMode && !DEBUG) return;
+	if (SurvivalMode) return;
 
   int c;
 
