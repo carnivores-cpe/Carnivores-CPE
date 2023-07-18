@@ -1758,7 +1758,7 @@ void AddElements(float x, float y, float z, int etype, int cnt)
 
 void AddElementsA(float x, float y, float z, int etype, int cnt, int mag, bool angled, float alph)
 {
-  if (ElCount > 698)
+  if (ElCount > 697)
   {
     memcpy(&Elements[0], &Elements[1], (ElCount-1) * sizeof(TElements));
     ElCount--;
@@ -1930,15 +1930,18 @@ ENDTRACE:
   int mort = (sres & 0xFF00) && (Characters[ShotDino].Health);
   sres &= 0xFF;
 
+  int powerL = WeapInfo[CurrentWeapon].Power;
+  if (powerL > 100) powerL = 100;
+
   if (sres == tresGround)
-    AddElements(bx, by, bz, partGround, 6 + WeapInfo[CurrentWeapon].Power*4);
+    AddElements(bx, by, bz, partGround, 6 + powerL *4);
   if (sres == tresModel)
-    AddElements(bx, by, bz, partGround, 6 + WeapInfo[CurrentWeapon].Power*4);
+    AddElements(bx, by, bz, partGround, 6 + powerL *4);
 
 
   if (sres == tresWater)
   {
-    AddElements(bx, by, bz, partWater, 4 + WeapInfo[CurrentWeapon].Power*3);
+    AddElements(bx, by, bz, partWater, 4 + powerL *3);
     //AddElements(bx, GetLandH(bx, bz), bz, partBubble);
     //AddWCircle(bx, bz, 1.2);
     AddWCircle(bx, bz, 1.2);
@@ -1946,7 +1949,7 @@ ENDTRACE:
 
 
   if (sres!=tresChar) return;
-  AddElements(bx, by, bz, partBlood, 4 + WeapInfo[CurrentWeapon].Power*4);
+  AddElements(bx, by, bz, partBlood, 4 + powerL *4);
   if (!Characters[ShotDino].Health) return;
 
 //======= character damage =========//

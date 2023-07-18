@@ -957,12 +957,16 @@ LONG APIENTRY MainWndProc( HWND hWnd, UINT message, UINT wParam, LONG lParam)
       break;
 
     case 'R':
-		if (SurvivalMode) break;
-      if (TrophyBody!=-1) RemoveCurrentTrophy();
+	if (TrophyBody!=-1) RemoveCurrentTrophy();
       if (EXITMODE)
       {
-        LoadTrophy();
+		  if (SurvivalMode) {
+			  SurvivalWave = 0;
+			  ChCount = 0;
+		  }
+		  else LoadTrophy();
         RestartMode = TRUE;
+		
         _GameState = 0;
         //DoHalt("");
       }
@@ -1100,6 +1104,10 @@ void ProcessShoot()
     v.z = PlayerZ;
     MakeNoise(v, ctViewR*200 * WeapInfo[CurrentWeapon].Loud);
     if (!SurvivalMode) ShotsLeft[CurrentWeapon]--;
+	else if (WeapInfo[CurrentWeapon].Reload) {
+		ShotsLeft[CurrentWeapon]--;
+		if (!ShotsLeft[CurrentWeapon]) ShotsLeft[CurrentWeapon] = WeapInfo[CurrentWeapon].Shots;
+	}
   }
 }
 
