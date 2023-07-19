@@ -1755,6 +1755,11 @@ void ddTextOut(int x, int y, LPSTR t, int color)
 }
 
 
+void DrawSurvivalText(int x0, int y0)
+{
+}
+
+
 void DrawTrophyText(int x0, int y0)
 {
   int x;

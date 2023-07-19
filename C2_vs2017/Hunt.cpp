@@ -645,8 +645,15 @@ SKIPWEAPON:
   if (TrophyMode)
     DrawPicture( VideoCX - TrophyExit.W / 2, 2, TrophyExit);
 
-  if (EXITMODE)
-    DrawPicture( (WinW - ExitPic.W) / 2, (WinH - ExitPic.H) / 2, ExitPic);
+  if (EXITMODE) {
+	  DrawPicture((WinW - ExitPic.W) / 2, (WinH - ExitPic.H) / 2, ExitPic);
+	  if (SurvivalMode) {
+		  DrawSurvivalText(
+			  (WinW - ExitPic.W) / 2,
+			  (WinH - ExitPic.H) / 2
+		  );
+	  }
+  }
 
   if (PAUSE)
     DrawPicture( (WinW - PausePic.W) / 2, (WinH - PausePic.H) / 2, PausePic);
@@ -947,6 +954,14 @@ LONG APIENTRY MainWndProc( HWND hWnd, UINT message, UINT wParam, LONG lParam)
       break;
 
     case 'Y':
+		if (EXITMODE && !SurvivalMode)
+		{
+			if (MyHealth) ExitTime = 4000;
+			else ExitTime = 1;
+			EXITMODE = FALSE;
+		}
+		break;
+
     case VK_RETURN:
       if (EXITMODE )
       {
@@ -955,6 +970,14 @@ LONG APIENTRY MainWndProc( HWND hWnd, UINT message, UINT wParam, LONG lParam)
         EXITMODE = FALSE;
       }
       break;
+
+	case 'Q':
+		if (EXITMODE && SurvivalMode)
+		{
+			ExitTime = 1;
+			EXITMODE = FALSE;
+		}
+		break;
 
     case 'R':
 	if (TrophyBody!=-1) RemoveCurrentTrophy();
@@ -2024,7 +2047,8 @@ int PASCAL WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 
   LoadPictureTGA(PausePic,   "HUNTDAT\\MENU\\pause.tga");
   conv_pic(PausePic);
-  LoadPictureTGA(ExitPic,    "HUNTDAT\\MENU\\exit.tga");
+  if (SurvivalMode) LoadPictureTGA(ExitPic, "HUNTDAT\\MENU\\exit_s.tga");
+  else LoadPictureTGA(ExitPic,    "HUNTDAT\\MENU\\exit.tga");
   conv_pic(ExitPic);
   LoadPictureTGA(TrophyExit, "HUNTDAT\\MENU\\trophy_e.tga");
   conv_pic(TrophyExit);

@@ -614,6 +614,9 @@ typedef struct _TDinoInfo
   TDinoIdleType idleGroup[32];
   int idleGroupCount;
 
+  TDinoIdleType idle2Group[32];
+  int idle2GroupCount;
+
   int idleAnim[32];//trex look
   int idleCount;
   
@@ -804,6 +807,7 @@ void DrawTPlane(BOOL);
 void DrawTPlaneClip(BOOL);
 void ClearVideoBuf();
 void DrawTrophyText(int, int);
+void DrawSurvivalText(int, int);
 void DrawHMap();
 void RenderCharacter(TCharacter*);
 void RenderShip();

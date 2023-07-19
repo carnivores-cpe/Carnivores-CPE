@@ -843,6 +843,20 @@ void FXTextOut(int x, int y, LPSTR t, int color)
 
 }
 
+void DrawSurvivalText(int x0, int y0)
+{
+	int x = x0;
+	FXTextOut(40 + x0, 98+ y0, "Waves Survived: ", 0x00BFBFBF);
+	x += GetTextW(hdcMain, "Waves Survived: ");
+	char t[32];
+	wsprintf(t, "%i", SurvivalWave-1);
+	FXTextOut(40 + x, 98+ y0, t, 0x0000BFBF);
+	x = x0;
+	FXTextOut(40 + x0, 124 + y0, "High Score: ", 0x00BFBFBF);
+	x += GetTextW(hdcMain, "High Score: ");
+	wsprintf(t, "%i", SurvivalWave-1);
+	FXTextOut(40 + x, 124 + y0, t, 0x0000BFBF);
+}
 
 void DrawTrophyText(int x0, int y0)
 {
