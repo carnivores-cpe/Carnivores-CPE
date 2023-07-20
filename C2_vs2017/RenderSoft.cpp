@@ -110,6 +110,13 @@ void ShowControlElements()
     STTextOut(VideoCX - GetTextW(hdcMain, buf)/2, y + 18, buf, 0x0060C0D0);
   }
 
+  if (WaveNoteTime)
+  {
+	  int y = WinH / 3;
+	  wsprintf(buf, "Waves Survived: %i", SurvivalWave - 1);
+	  STTextOut(VideoCX - GetTextW(hdcCMain, buf) / 2, y, buf, 0x0060C0D0);
+  }
+
   SelectObject(hdcCMain, hbmpOld);
 
 }

@@ -1188,7 +1188,7 @@ _EXTORNOT   WORD  FadeTab[65][0x8000];
 _EXTORNOT   TElements Elements[700];
 _EXTORNOT   TBTrail   BloodTrail;
 
-_EXTORNOT   int     PrevTime, TimeDt, T, Takt, RealTime, StepTime, MyHealth, ExitTime,
+_EXTORNOT   int     PrevTime, TimeDt, T, Takt, RealTime, StepTime, MyHealth, ExitTime, WaveNoteTime,
             ChCallTime, CallLockTime, NextCall;
 _EXTORNOT   float   DeltaT;
 _EXTORNOT   float   CameraX, CameraY, CameraZ, CameraAlpha, CameraBeta;

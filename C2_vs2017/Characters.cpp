@@ -7802,9 +7802,7 @@ void AnimateCharacters()
 			if (Characters[CurDino].Health) waveOver = false;
 		}
 		if (waveOver) {
-			char t[128];
-			sprintf(t, "Waves Survived: %i", SurvivalWave);
-			AddMessage(t);
+			WaveNoteTime = 2000;
 			PlaceCharactersSurvival();
 		}
 	}

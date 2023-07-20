@@ -1051,6 +1051,13 @@ void ShowControlElements()
     FXTextOut(VideoCX - GetTextW(hdcCMain, buf)/2, y + 18, buf, 0x0060C0D0);
   }
 
+  if (WaveNoteTime)
+  {
+	  int y = WinH / 3;
+	  wsprintf(buf, "Waves Survived: %i", SurvivalWave-1);
+	  FXTextOut(VideoCX - GetTextW(hdcCMain, buf) / 2, y, buf, 0x0060C0D0);
+  }
+
 }
 
 

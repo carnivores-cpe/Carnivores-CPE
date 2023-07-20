@@ -2499,7 +2499,10 @@ void AnimateProcesses()
     }
   }
 
-
+  if (WaveNoteTime) {
+	  WaveNoteTime -= TimeDt;
+	  if (WaveNoteTime <= 0) WaveNoteTime = 0;
+  }
 
   if (ExitTime)
   {

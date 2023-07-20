@@ -1919,6 +1919,14 @@ void ShowControlElements()
     wsprintf(buf,"%d seconds left.", 1 + ExitTime / 1000);
     ddTextOut(VideoCX - GetTextW(hdcCMain, buf)/2, y + 18, buf, 0x0060C0D0);
   }
+
+  if (WaveNoteTime)
+  {
+	  int y = WinH / 3;
+	  wsprintf(buf, "Waves Survived: %i", SurvivalWave - 1);
+	  ddTextOut(VideoCX - GetTextW(hdcCMain, buf) / 2, y, buf, 0x0060C0D0);
+  }
+
 }
 
 
