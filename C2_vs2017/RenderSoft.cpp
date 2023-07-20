@@ -2696,6 +2696,10 @@ void DrawHMap()
 
 void DrawSurvivalText(int x0, int y0)
 {
+
+	HBITMAP hbmpOld = (HBITMAP)SelectObject(hdcCMain, hbmpVideoBuf);
+	HFONT oldfont = (HFONT)SelectObject(hdcCMain, fnt_Small);
+
 	int x = x0;
 	STTextOut(40 + x0, 98 + y0, "Waves Survived: ", 0x00BFBFBF);
 	x += GetTextW(hdcMain, "Waves Survived: ");
@@ -2705,8 +2709,11 @@ void DrawSurvivalText(int x0, int y0)
 	x = x0;
 	STTextOut(40 + x0, 124 + y0, "High Score: ", 0x00BFBFBF);
 	x += GetTextW(hdcMain, "High Score: ");
-	wsprintf(t, "%i", SurvivalWave - 1);
+	wsprintf(t, "%i", TrophyRoom2.survivalHighScore);
 	STTextOut(40 + x, 124 + y0, t, 0x0000BFBF);
+
+	SelectObject(hdcCMain, oldfont);
+	SelectObject(hdcCMain, hbmpOld);
 }
 
 

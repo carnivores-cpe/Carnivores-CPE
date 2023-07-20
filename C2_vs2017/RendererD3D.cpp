@@ -1757,6 +1757,24 @@ void ddTextOut(int x, int y, LPSTR t, int color)
 
 void DrawSurvivalText(int x0, int y0)
 {
+	SmallFont = TRUE;
+	HFONT oldfont = (HFONT)SelectObject(hdcMain, fnt_Small);
+
+	int x = x0;
+	ddTextOut(40 + x0, 98 + y0, "Waves Survived: ", 0x00BFBFBF);
+	x += GetTextW(hdcMain, "Waves Survived: ");
+	char t[32];
+	wsprintf(t, "%i", SurvivalWave - 1);
+	ddTextOut(40 + x, 98 + y0, t, 0x0000BFBF);
+	x = x0;
+	ddTextOut(40 + x0, 124 + y0, "High Score: ", 0x00BFBFBF);
+	x += GetTextW(hdcMain, "High Score: ");
+	wsprintf(t, "%i", TrophyRoom2.survivalHighScore);
+	ddTextOut(40 + x, 124 + y0, t, 0x0000BFBF);
+
+	SmallFont = FALSE;
+
+	SelectObject(hdcMain, oldfont);
 }
 
 
