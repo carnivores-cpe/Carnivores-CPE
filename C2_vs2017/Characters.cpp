@@ -8578,6 +8578,8 @@ void dispSighting(int dii, int xx, int zz) {
 
 void PlaceCharactersSurvival()
 {
+	if (SurvivalWave > TrophyRoom2.survivalHighScore) TrophyRoom2.survivalHighScore = SurvivalWave;
+	SaveTrophy();
 	SurvivalWave++;
 	int tr = 0;
 	int waveTotal = 1;
@@ -8618,8 +8620,6 @@ void PlaceCharactersSurvival()
 
 void PlaceCharacters()
 {
-
-
 
 	int c, tr;
 	ChCount = 0;

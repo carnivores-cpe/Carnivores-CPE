@@ -965,7 +965,7 @@ LONG APIENTRY MainWndProc( HWND hWnd, UINT message, UINT wParam, LONG lParam)
     case VK_RETURN:
       if (EXITMODE )
       {
-        if (MyHealth && !SurvivalMode) ExitTime = 4000;
+		if (MyHealth && !SurvivalMode) ExitTime = 4000;
         else ExitTime = 1;
         EXITMODE = FALSE;
       }

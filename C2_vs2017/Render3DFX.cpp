@@ -854,7 +854,7 @@ void DrawSurvivalText(int x0, int y0)
 	x = x0;
 	FXTextOut(40 + x0, 124 + y0, "High Score: ", 0x00BFBFBF);
 	x += GetTextW(hdcMain, "High Score: ");
-	wsprintf(t, "%i", SurvivalWave-1);
+	wsprintf(t, "%i", TrophyRoom2.survivalHighScore);
 	FXTextOut(40 + x, 124 + y0, t, 0x0000BFBF);
 }
 

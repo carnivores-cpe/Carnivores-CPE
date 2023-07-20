@@ -2651,7 +2651,7 @@ void SaveTrophy2(int RegNumber) {
 void SaveTrophy()
 {
 
-	if (SurvivalMode) return;
+	//if (SurvivalMode) return;
 
   DWORD l;
   char fname[128];

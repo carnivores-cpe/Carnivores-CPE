@@ -10,7 +10,7 @@
 #pragma comment (lib, "Mswsock.lib")
 #pragma comment (lib, "AdvApi32.lib")
 
-#define MODDERS_EDITION_VERSION_ID	3
+#define MODDERS_EDITION_VERSION_ID	4
 
 #define DEFAULT_BUFLEN 512
 #define DEFAULT_PORT "1986"
@@ -498,6 +498,7 @@ typedef struct _TTrophyItem2 //Add neccesary stuff here! (later, not now)
 typedef struct _TTrophyRoom2
 {
 	int versionID;
+	int survivalHighScore;
 	TTrophyItem2 Body[TROPHY2_COUNT];
 } TTrophyRoom2;
 
