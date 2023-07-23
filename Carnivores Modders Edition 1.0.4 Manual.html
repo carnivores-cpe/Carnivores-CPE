@@ -259,8 +259,9 @@ function expand(n) {
 			
 			
 			<ul>
+				<li>Customisable survival mode</li>
 				<li>Customisable snow/weather settings for each map</li>
-				<li>32 Idle animation groups per creature</li>
+				<li>32 custom idle groups per creature</li>
 				<li>Set radar colour for creatures</li>
 				<li>Set blood colour for creatures</li>
 				<li>Option to disable bending for creatures</li>
@@ -279,13 +280,16 @@ function expand(n) {
 			<b>Note: The new carnivores menu should NOT be set to compatibility mode</b>
 			</p>-->
 			
-			<!--<p>
-			<b>Note: Save files from previous versions of modders edition or vanilla Carnivores are no longer compatible</b>
-			</p>-->
+			
+			<b>Note: An account must be created with the Carn2 menu before you can run survival mode.</b>
 			
 			<p>
-			<b>Note: smell, hear and look in the RES have been renamed to smellK, hearK and lookK</b>
+			<b>Note: Save files from previous versions of Modders Edition (including 1.0.3) or vanilla Carnivores 2 are no longer compatible.</b>
 			</p>
+			
+			
+			<b>Note: smell, hear and look in the RES have been renamed to smellK, hearK and lookK</b>
+			
 			
 			
 			<h3>Bug Fixes v1.0.4</h3>
@@ -335,7 +339,7 @@ function expand(n) {
 				<li>Aggression patch</li>
 				<li>Unlimited triangle count on Creature and Weapon models</li>
 				<li>Changeable animation order for all AI</li>
-				<li>Up to 32 Idle animation groups per creature</li>
+				<li>32 custom idle groups per creature</li>
 				<li>Up to 32 Idle animation per idle group</li>
 				<li>Up to 32 custom kill animations / hunter death animations per creature</li>
 				<li>Up to 32 death animations per creature</li>
@@ -378,6 +382,7 @@ function expand(n) {
 				<li>Jump range for mosasaurus ai</li>
 				<li>Toggle crouch.</li>
 				<li>Customisable snow/weather settings for each map</li>
+				<li>Customisable survival mode</li>
 			</ul>
 									
 			<h3>Credits</h3>
@@ -638,6 +643,127 @@ function expand(n) {
 		
 		<!-- AI END><-->
 		
+		</div>
+	</div>
+</p>
+		
+		
+<p style="margin-top:4%;">
+	<h2 id="arrow_142" unselectable="on" onclick="expand(142)"
+		style="float:left;margin-left:18%;margin-top:0;cursor:pointer;
+		-moz-user-select:none;
+		user-select:none;
+		-webkit-user-select: none;
+		-ms-user-select: none;"
+		>></h2>
+	<div class = "conbase">
+		<h2 onclick="expand(142)" style="cursor:pointer;">Creating a custom survival mode</h2>
+		<div id="content_142" style="display: none">
+		
+		See below for a list of res values to create a custom survival mode:
+		<p>
+		See subsequent sections of the manual for more detail.
+		</p>
+		
+		<ul>
+		<li>
+		You can set area, weapon and time of day in the common section of the res.
+		</li><li>
+		You can set the hunters position and the spawn location of creature waves in the areatable section of the res. These values must be in the corresponding area res entry.
+		</li><li>
+		You can set which creatures spawn and in which order by assigning a survivalIndex to the creatures res entry. The first creature must be indexed 1, then 2 etc. Survival mode can handle up to 128 creature varieties but you cannot skip indexes.
+		</li>
+		</ul>
+		
+		</div>
+	</div>
+</p>
+		
+		
+<p style="margin-top:4%;">
+	<h2 id="arrow_134" unselectable="on" onclick="expand(134)"
+		style="float:left;margin-left:18%;margin-top:0;cursor:pointer;
+		-moz-user-select:none;
+		user-select:none;
+		-webkit-user-select: none;
+		-ms-user-select: none;"
+		>></h2>
+	<div class = "conbase">
+		<h2 onclick="expand(134)" style="cursor:pointer;">_RES Editing - common</h2>
+		<div id="content_134" style="display: none">
+		
+		
+		This res section is for universal game settings.
+
+
+<p style="margin-top:4%;">
+	<h2 id="arrow_135" unselectable="on" onclick="expand(135)"
+		style="float:left;margin-top:0;cursor:pointer;
+		-moz-user-select:none;
+		user-select:none;
+		-webkit-user-select: none;
+		-ms-user-select: none;"
+		>></h2>
+	<div class = "con" style="margin-left:8%">
+		<h2 onclick="expand(135)" style="cursor:pointer;">_RES value: survivalArea</h2>
+		<div id="content_135" style="display: none">
+		
+			<p><b>Data type: Whole Number</b></p>
+			<p>
+			Sets the area for survival mode.
+			</p>
+		
+		</div>
+	</div>
+</p>		
+		
+
+
+<p style="margin-top:4%;">
+	<h2 id="arrow_136" unselectable="on" onclick="expand(136)"
+		style="float:left;margin-top:0;cursor:pointer;
+		-moz-user-select:none;
+		user-select:none;
+		-webkit-user-select: none;
+		-ms-user-select: none;"
+		>></h2>
+	<div class = "con" style="margin-left:8%">
+		<h2 onclick="expand(136)" style="cursor:pointer;">_RES value: survivalWeapon</h2>
+		<div id="content_136" style="display: none">
+		
+			<p><b>Data type: Whole Number</b></p>
+			<p>
+			Sets the weapon for survival mode.
+			</p>
+		
+		</div>
+	</div>
+</p>		
+		
+
+
+<p style="margin-top:4%;">
+	<h2 id="arrow_137" unselectable="on" onclick="expand(137)"
+		style="float:left;margin-top:0;cursor:pointer;
+		-moz-user-select:none;
+		user-select:none;
+		-webkit-user-select: none;
+		-ms-user-select: none;"
+		>></h2>
+	<div class = "con" style="margin-left:8%">
+		<h2 onclick="expand(137)" style="cursor:pointer;">_RES value: survivalDTM</h2>
+		<div id="content_137" style="display: none">
+		
+			<p><b>Data type: Whole Number</b></p>
+			<p>
+			Sets the time of day for survival mode (0 = dawn, 1 = day, 2 = night).
+			</p>
+		
+		</div>
+	</div>
+</p>		
+		
+		
 		
 		</div>
 	</div>
@@ -653,18 +779,20 @@ function expand(n) {
 		-ms-user-select: none;"
 		>></h2>
 	<div class = "conbase">
-		<h2 onclick="expand(107)" style="cursor:pointer;">_RES Editing - Area Information</h2>
+		<h2 onclick="expand(107)" style="cursor:pointer;">_RES Editing - areatable</h2>
 		<div id="content_107" style="display: none">
 
 		
 		
 		
-			Each entry in the areatable section of the _RES sets the weather for the respective area. Below are the values that can be used to set weather as well as some presets to demonstrate the types of effect that can be achieved.
-			
-			<p>
-			Note: Weather particles are not rendered in software mode.
-		    </p>
+			Each entry in the areatable section of the _RES sets the weather and survival location for the respective area (an entry is required for every area).
 
+			<p>
+			Below are the values that can be used to set weather as well as some presets to demonstrate the types of effect that can be achieved.
+			</p>
+
+			Note: Weather particles are not rendered in software mode.
+		    
 		
 <p style="margin-top:4%;">
 	<h2 id="arrow_109" unselectable="on" onclick="expand(109)"
@@ -930,7 +1058,116 @@ function expand(n) {
 
 
 		
+<p style="margin-top:4%;">
+	<h2 id="arrow_138" unselectable="on" onclick="expand(138)"
+		style="float:left;margin-top:0;cursor:pointer;
+		-moz-user-select:none;
+		user-select:none;
+		-webkit-user-select: none;
+		-ms-user-select: none;"
+		>></h2>
+	<div class = "con" style="margin-left:4%">
+		<h2 onclick="expand(138)" style="cursor:pointer;">_RES value: survivalPlayerX survivalPlayerY</h2>
+		<div id="content_138" style="display: none">
 		
+			<p><b>Data type: Whole Number</b></p>
+			<p>
+			The xy position of the player in survival mode.
+
+			</p>
+			<p>
+			Note: It's recommended to open the map in Alt Editor 2, and use the mouse cursor to find the coordinates for these values.
+			</p>
+			
+			
+						<div class="grid-container">
+				<div class="grid-item"><b></b></div>
+				<div class="grid-item"><b>Vanilla Value (Mount Ravan)</b></div>
+				<div class="grid-item">survivalPlayerX</div>
+				<div class="grid-item">345</div>
+				<div class="grid-item">survivalPlayerY</div>
+				<div class="grid-item">245</div>
+			</div>
+		
+		</div>
+	</div>
+</p>
+
+
+		
+<p style="margin-top:4%;">
+	<h2 id="arrow_140" unselectable="on" onclick="expand(140)"
+		style="float:left;margin-top:0;cursor:pointer;
+		-moz-user-select:none;
+		user-select:none;
+		-webkit-user-select: none;
+		-ms-user-select: none;"
+		>></h2>
+	<div class = "con" style="margin-left:4%">
+		<h2 onclick="expand(140)" style="cursor:pointer;">_RES value: survivalPlayerA</h2>
+		<div id="content_140" style="display: none">
+		
+			<p><b>Data type: Whole Number</b></p>
+			<p>
+			
+			The initial rotation of the player in survival mode (in degrees).
+			
+
+			</p>
+			
+						<div class="grid-container">
+				<div class="grid-item"><b></b></div>
+				<div class="grid-item"><b>Vanilla Value (Mount Ravan)</b></div>
+				<div class="grid-item">survivalPlayerA</div>
+				<div class="grid-item">345</div>
+			</div>
+
+		</div>
+	</div>
+</p>
+
+
+		
+<p style="margin-top:4%;">
+	<h2 id="arrow_139" unselectable="on" onclick="expand(139)"
+		style="float:left;margin-top:0;cursor:pointer;
+		-moz-user-select:none;
+		user-select:none;
+		-webkit-user-select: none;
+		-ms-user-select: none;"
+		>></h2>
+	<div class = "con" style="margin-left:4%">
+		<h2 onclick="expand(139)" style="cursor:pointer;">_RES value:  survivalDinoXMin survivalDinoXMax survivalDinoYMin survivalDinoYMax</h2>
+		<div id="content_139" style="display: none">
+		
+			<p><b>Data type: Whole Number</b></p>
+			<p>
+			The region where waves of creatures spawn in survival mode.
+			
+			<br>
+			These four values control the four corners of the spawn region (xmin,ymin is the top left corner, xmax,ymax is the bottom right corner).
+			
+			</p>
+			<p>
+			Note: It's recommended to open the map in Alt Editor 2, and use the mouse cursor to find the coordinates for these values.
+			</p>
+			
+			<div class="grid-container">
+				<div class="grid-item"><b></b></div>
+				<div class="grid-item"><b>Vanilla Value (Mount Ravan)</b></div>
+				<div class="grid-item">survivalDinoXMin</div>
+				<div class="grid-item">318</div>
+				<div class="grid-item">survivalDinoXMax</div>
+				<div class="grid-item">336</div>
+				<div class="grid-item">survivalDinoYMin</div>
+				<div class="grid-item">170</div>
+				<div class="grid-item">survivalDinoYMax</div>
+				<div class="grid-item">180</div>
+			</div>
+		
+		</div>
+	</div>
+</p>
 		
 		
 		
@@ -2190,7 +2427,33 @@ function expand(n) {
 
 
 
+		
+<p style="margin-top:4%;">
+	<h2 id="arrow_141" unselectable="on" onclick="expand(141)"
+		style="float:left;margin-top:0;cursor:pointer;
+		-moz-user-select:none;
+		user-select:none;
+		-webkit-user-select: none;
+		-ms-user-select: none;"
+		>></h2>
+	<div class = "con" style="margin-left:4%">
+		<h2 onclick="expand(141)" style="cursor:pointer;">_RES value: survivalIndex</h2>
+		<div id="content_141" style="display: none">
+		
+			<p><b>Data type: Whole Number</b></p>
+			<p>
+			
+			Creatures with a survival index will spawn in survival mode.
+			<br>
+			The first creature to spawn should have a survival index of 1, the second 2 etc. Survival mode can have between 1 and 128 types of creature.
+			</p><p>
+			<b>Note:</b> No numbers should be skipped over.
+			</p>
+			
 
+		</div>
+	</div>
+</p>
 
 		
 		
@@ -4314,6 +4577,8 @@ idlegroup{
 			Each idlegroup can have up to 32 animations. These will be played in a random sequence.
 			</p>
 			
+
+			
 		
 		</div>
 	</div>
@@ -4436,10 +4701,37 @@ idlegroup{
 		
 		
 		
+<p style="margin-top:4%;">
+	<h2 id="arrow_133" unselectable="on" onclick="expand(133)"
+		style="float:left;margin-top:0;cursor:pointer;
+		-moz-user-select:none;
+		user-select:none;
+		-webkit-user-select: none;
+		-ms-user-select: none;"
+		>></h2>
+	<div class = "con" style="margin-left:4%;">
+		<h2 onclick="expand(133)" style="cursor:pointer;">_RES Subsection: waterIgroup</h2>
+		<div id="content_133" style="display: none">
 		
 		
+		<p>
+		Note: Icthyornis AI only
+		</p>
+		<p>
+		Defines a group of water idle animations that will play in a random sequence.
+		</p>
+		<p>
+		This subsection can be defined multiple times. Each creature can have up to 32 water idle groups. Each water idle group can contain up to 32 animations or just a single animation.		
+		</p>
+		<p>
 		
-		
+		</p>
+
+		</div>
+	</div>
+</p>
+
+
 
 		</div>
 	</div>
