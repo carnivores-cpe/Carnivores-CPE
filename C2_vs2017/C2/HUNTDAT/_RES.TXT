@@ -1443,7 +1443,7 @@ styInRgn  = TRUE
  jumpPartMag = 40
  jumpPartAngled = TRUE
  jumpPartCircle = TRUE
- idleAnim = 4
+ fishIdleAnim = 4
  idlePartFrame1 = 12
  idlePartFrame2 = 13
  idlePartDist = 22
@@ -1474,15 +1474,16 @@ killtype{
  bloG = 0
  bloB = 0
  dontWeave = TRUE
+ radar = 2
+ radR = 0
+ radG = 240
+ radB = 240
 }
 
 {
  name = 'Ichthyornis'
- file = 'ichthburian6.car'
+ file = 'burianicth_2023_3.car'
  clone  = -2
- packMax = 7
- packMin = 5
- packDensity = 25
  waterLevel = 110
  scale0    = 500
  scaleA    = 0
@@ -1510,6 +1511,24 @@ killtype{
  glideAnim = 3
  takeoffAnim = 4
  landAnim = 5
+idlegroup{
+ anim = 11
+ startChance = 0.0703125
+ endChance = 1
+ instantRepeat = TRUE
+}
+idlegroup{
+ anim = 12
+ startChance = 0.0703125
+ endChance = 1
+ instantRepeat = TRUE
+}
+waterIgroup{
+ anim = 13
+ startChance = 0.140625
+ endChance = 1 
+ instantRepeat = TRUE
+}
 deathtype{
  fallAnim = 6
  dieAnim = 7
@@ -1569,9 +1588,24 @@ deathtype{
  fallAnim = 10
  sleepAnim = 6
 }
- idleAnim = 2
- idleAnim = 3
- idleAnim = 4
+idlegroup{
+ anim = 2
+ startChance = 0.046875
+ endChance = 1
+ instantRepeat = TRUE
+}
+idlegroup{
+ anim = 3
+ startChance = 0.046875
+ endChance = 1
+ instantRepeat = TRUE
+}
+idlegroup{
+ anim = 4
+ startChance = 0.046875
+ endChance = 1
+ instantRepeat = TRUE
+}
  waterLevel = 140
 killtype{
  hunterAnim = 0

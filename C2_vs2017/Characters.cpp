@@ -243,6 +243,7 @@ void ResetCharacter(TCharacter *cptr)
 	cptr->BloodTime = 0;
 
 	cptr->currentIdleGroup = -1;
+	cptr->currentIdle2Group = -1;
 
 	cptr->awareHunter = FALSE;
 	cptr->heardShot = FALSE;
@@ -2189,6 +2190,9 @@ TBEGIN:
 	bool fleeMode = FALSE;
 	if (cptr->State)
 	{
+
+		cptr->currentIdleGroup = -1;
+
 		float aDist;
 		aDist = ctViewR * DinoInfo[cptr->CType].aggress + OptAgres / AIInfo[cptr->Clone].agressMulti;
 		if (cptr->gliding) aDist *= 2;
@@ -2475,17 +2479,40 @@ NOTHINK:
 
 			if (!cptr->State) {
 
-				if (DinoInfo[cptr->CType].idleCount
+				if (DinoInfo[cptr->CType].idleGroupCount
 					&& (MyHealth || !DinoInfo[cptr->CType].killType[cptr->killType].carryCorpse)
 					&& !(cptr->StateF & csONWATER)) {
 
-					if (rRand(AIInfo[cptr->Clone].idleStartD) > 110) {
-						cptr->Phase = DinoInfo[cptr->CType].idleAnim[rRand(DinoInfo[cptr->CType].idleCount - 1)];
+					if (cptr->currentIdleGroup >= 0) {
+						if (rRand(127) + 1 > (1 - DinoInfo[cptr->CType].idleGroup[cptr->currentIdleGroup].end) * 128
+							&& (DinoInfo[cptr->CType].idleGroup[cptr->currentIdleGroup].endOnAny
+								|| cptr->Phase == DinoInfo[cptr->CType].idleGroup[cptr->currentIdleGroup].anim[DinoInfo[cptr->CType].idleGroup[cptr->currentIdleGroup].count - 1])) {
+							cptr->Phase = DinoInfo[cptr->CType].walkAnim;
+							if (DinoInfo[cptr->CType].idleGroup[cptr->currentIdleGroup].instantRepeat) {
+								cptr->currentIdleGroup = -1; //this must be done inside the if statement
+							}
+							else {
+								cptr->currentIdleGroup = -1; //this must be done inside the if statement
+								goto ENDPSELECT;
+							}
+						}
+						else {
+							cptr->Phase = DinoInfo[cptr->CType].idleGroup[cptr->currentIdleGroup].anim[rRand(DinoInfo[cptr->CType].idleGroup[cptr->currentIdleGroup].count - 1)];
+							goto ENDPSELECT;
+						}
+					}
+
+					for (int idleGroupNo = 0; idleGroupNo < DinoInfo[cptr->CType].idleGroupCount; idleGroupNo++) {
+						if (rRand(127) + 1 > (1 - DinoInfo[cptr->CType].idleGroup[idleGroupNo].start) * 128) cptr->currentIdleGroup = idleGroupNo;
+					}
+					if (cptr->currentIdleGroup >= 0) {
+						if (DinoInfo[cptr->CType].idleGroup[cptr->currentIdleGroup].startOnAny)
+							cptr->Phase = DinoInfo[cptr->CType].idleGroup[cptr->currentIdleGroup].anim[rRand(DinoInfo[cptr->CType].idleGroup[cptr->currentIdleGroup].count - 1)];
+						else
+							cptr->Phase = DinoInfo[cptr->CType].idleGroup[cptr->currentIdleGroup].anim[0];
 						goto ENDPSELECT;
 					}
-					else {
-						cptr->Phase = DinoInfo[cptr->CType].walkAnim;
-					}
+					else cptr->Phase = DinoInfo[cptr->CType].walkAnim;
 
 				} else {
 					cptr->Phase = DinoInfo[cptr->CType].walkAnim;
@@ -2506,12 +2533,7 @@ NOTHINK:
 		}
 	}
 
-	bool idlePhase = false;
-	for (int i = 0; i < DinoInfo[cptr->CType].idleCount; i++) {
-		if (cptr->Phase == DinoInfo[cptr->CType].idleAnim[i]) idlePhase = true;
-	}
-
-	if (!idlePhase && !cptr->gliding) {
+	if (cptr->currentIdleGroup == -1 && !cptr->gliding) {
 		if (!cptr->State) cptr->Phase = DinoInfo[cptr->CType].walkAnim;
 		else if (fabs(cptr->tgalpha - cptr->alpha) < 1.0 ||
 			fabs(cptr->tgalpha - cptr->alpha) > 2 * pi - 1.0)
@@ -2570,9 +2592,7 @@ ENDPSELECT:
 	float drspd = dalpha;
 	if (drspd > pi) drspd = 2 * pi - drspd;
 	if (cptr->Phase == DinoInfo[cptr->CType].killType[cptr->killType].anim && DinoInfo[cptr->CType].killTypeCount) goto SKIPROT;
-	for (int i = 0; i < DinoInfo[cptr->CType].idleCount; i++) {
-		if (cptr->Phase == DinoInfo[cptr->CType].idleAnim[i]) goto SKIPROT;
-	}
+	if (cptr->currentIdleGroup >= 0) goto SKIPROT;
 
 
 
@@ -3080,68 +3100,6 @@ NOTHINK:
 					} else cptr->Phase = DinoInfo[cptr->CType].walkAnim;
 					
 
-					/*
-				
-
-
-				if (AIInfo[cptr->Clone].carnivore) {
-
-					if (AIInfo[cptr->Clone].iceAge) {
-
-
-						for (int i = 0; i < DinoInfo[cptr->CType].idleCount; i++) {
-							if (cptr->Phase == DinoInfo[cptr->CType].idleAnim[i]) {
-								
-								if (cptr->Clone == AI_WOLF) {
-									if (rRand(128) > 64) cptr->Phase = DinoInfo[cptr->CType].walkAnim;
-									else cptr->Phase = DinoInfo[cptr->CType].idleAnim[rRand(DinoInfo[cptr->CType].idleCount - 1)];//Wolf AI has this extra bit, don't feckin ask, I dunno
-								} else cptr->Phase = DinoInfo[cptr->CType].walkAnim;
-								
-								goto ENDPSELECT;
-							}
-						}
-
-						if (rRand(128) > AIInfo[cptr->Clone].idleStartD) {
-							cptr->Phase = DinoInfo[cptr->CType].idleAnim[rRand(DinoInfo[cptr->CType].idleCount - 1)]; //yeah, wolf has this bit too... I know
-						}
-
-
-					} else {
-
-						if (rRand(AIInfo[cptr->Clone].idleStartD) > 110) {
-							cptr->Phase = DinoInfo[cptr->CType].idleAnim[rRand(DinoInfo[cptr->CType].idleCount - 1)];
-							goto ENDPSELECT;
-						}
-						else {
-							cptr->Phase = DinoInfo[cptr->CType].walkAnim;
-						}
-
-
-
-					}
-
-
-
-				}
-				else {
-
-					bool idlePhase = false;
-					for (int i = 0; i < DinoInfo[cptr->CType].idleCount; i++) {
-						if (cptr->Phase == DinoInfo[cptr->CType].idleAnim[i]) idlePhase = true;
-					}
-
-					if (idlePhase) {
-						if (rRand(128) > 64 && cptr->Phase == DinoInfo[cptr->CType].idleAnim[DinoInfo[cptr->CType].idleCount - 1])
-							cptr->Phase = DinoInfo[cptr->CType].walkAnim;
-						else cptr->Phase = DinoInfo[cptr->CType].idleAnim[rRand(DinoInfo[cptr->CType].idleCount - 1)];
-						goto ENDPSELECT;
-					}
-					if (rRand(128) > AIInfo[cptr->Clone].idleStart) cptr->Phase = DinoInfo[cptr->CType].idleAnim[0];
-					else cptr->Phase = DinoInfo[cptr->CType].walkAnim;
-
-				
-				}
-				*/
 			}
 			else {
 				cptr->Phase = DinoInfo[cptr->CType].walkAnim;
@@ -3519,6 +3477,9 @@ TBEGIN:
 	if (!MyHealth) cptr->State = 0;
 	if (cptr->State)
 	{
+
+		cptr->currentIdleGroup = -1;
+
 		float aDist;
 		aDist = ctViewR * DinoInfo[cptr->CType].aggress + OptAgres / AIInfo[cptr->Clone].agressMulti;
 		if (cptr->gliding) aDist *= 2;
@@ -3755,19 +3716,40 @@ NOTHINK:
 		if (!cptr->State)
 		{
 
-			if (DinoInfo[cptr->CType].idleCount
+			if (DinoInfo[cptr->CType].idleGroupCount
 				&& (MyHealth || !DinoInfo[cptr->CType].killType[cptr->killType].carryCorpse)
 				&& !(cptr->StateF & csONWATER)) {
 
+				if (cptr->currentIdleGroup >= 0) {
+					if (rRand(127) + 1 > (1 - DinoInfo[cptr->CType].idleGroup[cptr->currentIdleGroup].end) * 128
+						&& (DinoInfo[cptr->CType].idleGroup[cptr->currentIdleGroup].endOnAny
+							|| cptr->Phase == DinoInfo[cptr->CType].idleGroup[cptr->currentIdleGroup].anim[DinoInfo[cptr->CType].idleGroup[cptr->currentIdleGroup].count - 1])) {
+						cptr->Phase = DinoInfo[cptr->CType].walkAnim;
+						if (DinoInfo[cptr->CType].idleGroup[cptr->currentIdleGroup].instantRepeat) {
+							cptr->currentIdleGroup = -1; //this must be done inside the if statement
+						}
+						else {
+							cptr->currentIdleGroup = -1; //this must be done inside the if statement
+							goto ENDPSELECT;
+						}
+					}
+					else {
+						cptr->Phase = DinoInfo[cptr->CType].idleGroup[cptr->currentIdleGroup].anim[rRand(DinoInfo[cptr->CType].idleGroup[cptr->currentIdleGroup].count - 1)];
+						goto ENDPSELECT;
+					}
+				}
 
-				if (rRand(AIInfo[cptr->Clone].idleStartD) > 110) {
-					cptr->Phase = DinoInfo[cptr->CType].idleAnim[rRand(DinoInfo[cptr->CType].idleCount - 1)];
+				for (int idleGroupNo = 0; idleGroupNo < DinoInfo[cptr->CType].idleGroupCount; idleGroupNo++) {
+					if (rRand(127) + 1 > (1 - DinoInfo[cptr->CType].idleGroup[idleGroupNo].start) * 128) cptr->currentIdleGroup = idleGroupNo;
+				}
+				if (cptr->currentIdleGroup >= 0) {
+					if (DinoInfo[cptr->CType].idleGroup[cptr->currentIdleGroup].startOnAny)
+						cptr->Phase = DinoInfo[cptr->CType].idleGroup[cptr->currentIdleGroup].anim[rRand(DinoInfo[cptr->CType].idleGroup[cptr->currentIdleGroup].count - 1)];
+					else
+						cptr->Phase = DinoInfo[cptr->CType].idleGroup[cptr->currentIdleGroup].anim[0];
 					goto ENDPSELECT;
-
 				}
-				else {
-					cptr->Phase = DinoInfo[cptr->CType].walkAnim;
-				}
+				else cptr->Phase = DinoInfo[cptr->CType].walkAnim;
 
 			}
 			else {
@@ -3777,12 +3759,7 @@ NOTHINK:
 		}
 		else cptr->Phase = DinoInfo[cptr->CType].runAnim;
 
-	bool idlePhase = false;
-	for (int i = 0; i < DinoInfo[cptr->CType].idleCount; i++) {
-		if (cptr->Phase == DinoInfo[cptr->CType].idleAnim[i]) idlePhase = true;
-	}
-
-	if (!idlePhase) {
+	if (cptr->currentIdleGroup == -1) {
 		if (!cptr->State) cptr->Phase = DinoInfo[cptr->CType].walkAnim;
 		else if (fabs(cptr->tgalpha - cptr->alpha) < 1.0 ||
 			fabs(cptr->tgalpha - cptr->alpha) > 2 * pi - 1.0)
@@ -3840,9 +3817,7 @@ ENDPSELECT:
 	float drspd = dalpha;
 	if (drspd > pi) drspd = 2 * pi - drspd;
 	if (cptr->Phase == DinoInfo[cptr->CType].killType[cptr->killType].anim && DinoInfo[cptr->CType].killTypeCount) goto SKIPROT;
-	for (int i = 0; i < DinoInfo[cptr->CType].idleCount; i++) {
-		if (cptr->Phase == DinoInfo[cptr->CType].idleAnim[i]) goto SKIPROT;
-	}
+	if (cptr->currentIdleGroup >= 0) goto SKIPROT;
 
 	if (cptr->Phase == DinoInfo[cptr->CType].climbAnim) {
 		cptr->pos.x = cptr->climbable.x - (cptr->lookx * DinoInfo[cptr->CType].climbDist);
@@ -4256,8 +4231,8 @@ NOTHINK:
 	//even if not newphase...
 	if (cptr->Phase == 2 && _Phase != 2) {
 
-		if (DinoInfo[cptr->CType].idle2Count > 0) {
-			cptr->Phase = DinoInfo[cptr->CType].idle2Anim[rRand(DinoInfo[cptr->CType].idle2Count - 1)];
+		if (DinoInfo[cptr->CType].smellCount > 0) {
+			cptr->Phase = DinoInfo[cptr->CType].smellAnim[rRand(DinoInfo[cptr->CType].smellCount - 1)];
 		}
 
 		//cptr->Phase == cptr->roarAnim;
@@ -4271,10 +4246,10 @@ NOTHINK:
 			cptr->Phase = DinoInfo[cptr->CType].runAnim;
 		
 		} else if (cptr->State == 0){
-			if (DinoInfo[cptr->CType].idleCount) {
+			if (DinoInfo[cptr->CType].lookCount) {
 
 				if (rRand(AIInfo[cptr->Clone].idleStartD) > 110) {
-					cptr->Phase = DinoInfo[cptr->CType].idleAnim[rRand(DinoInfo[cptr->CType].idleCount - 1)];
+					cptr->Phase = DinoInfo[cptr->CType].lookAnim[rRand(DinoInfo[cptr->CType].lookCount - 1)];
 					goto ENDPSELECT;
 				}
 				else {
@@ -4290,8 +4265,8 @@ NOTHINK:
 
 			if (rRand(AIInfo[cptr->Clone].idleStartD) > 120) {
 
-				if (DinoInfo[cptr->CType].idle2Count > 0) {
-					cptr->Phase = DinoInfo[cptr->CType].idle2Anim[rRand(DinoInfo[cptr->CType].idle2Count - 1)];
+				if (DinoInfo[cptr->CType].smellCount > 0) {
+					cptr->Phase = DinoInfo[cptr->CType].smellAnim[rRand(DinoInfo[cptr->CType].smellCount - 1)];
 				}
 
 				//cptr->Phase = cptr->roarAnim;
@@ -4349,12 +4324,12 @@ ENDPSELECT:
 
 	//if (cptr->Phase == cptr->roarAnim) goto SKIPROT;
 
-	for (int i = 0; i < DinoInfo[cptr->CType].idle2Count; i++) {
-		if (cptr->Phase == DinoInfo[cptr->CType].idle2Anim[i]) goto SKIPROT;
+	for (int i = 0; i < DinoInfo[cptr->CType].smellCount; i++) {
+		if (cptr->Phase == DinoInfo[cptr->CType].smellAnim[i]) goto SKIPROT;
 	}
 
-	for (int i = 0; i < DinoInfo[cptr->CType].idleCount; i++) {
-		if (cptr->Phase == DinoInfo[cptr->CType].idleAnim[i]) goto SKIPROT;
+	for (int i = 0; i < DinoInfo[cptr->CType].lookCount; i++) {
+		if (cptr->Phase == DinoInfo[cptr->CType].lookAnim[i]) goto SKIPROT;
 	}
 
 	if (drspd > 0.02)
@@ -4498,8 +4473,8 @@ TBEGIN:
 			if (AngleDifference(cptr->alpha, palpha) < 0.4f)
 			{
 				if (cptr->State == 2) {
-					if (DinoInfo[cptr->CType].idleCount) {
-						cptr->Phase = DinoInfo[cptr->CType].idleAnim[rRand(DinoInfo[cptr->CType].idleCount - 1)];
+					if (DinoInfo[cptr->CType].lookCount) {
+						cptr->Phase = DinoInfo[cptr->CType].lookAnim[rRand(DinoInfo[cptr->CType].lookCount - 1)];
 						cptr->rspeed = 0;
 					}
 					else if (DinoInfo[cptr->CType].roarCount) {
@@ -4511,8 +4486,8 @@ TBEGIN:
 					
 				}
 				else {
-					if (DinoInfo[cptr->CType].idle2Count) {
-						cptr->Phase = DinoInfo[cptr->CType].idle2Anim[rRand(DinoInfo[cptr->CType].idle2Count - 1)];
+					if (DinoInfo[cptr->CType].smellCount) {
+						cptr->Phase = DinoInfo[cptr->CType].smellAnim[rRand(DinoInfo[cptr->CType].smellCount - 1)];
 						cptr->rspeed = 0;
 					}
 					else if (DinoInfo[cptr->CType].roarCount) {
@@ -4635,12 +4610,12 @@ NOTHINK:
 	//======== select new phase =======================//
 
 	
-	for (int i = 0; i < DinoInfo[cptr->CType].idleCount; i++) {
-		if (cptr->Phase == DinoInfo[cptr->CType].idleAnim[i]) LookMode = TRUE;
+	for (int i = 0; i < DinoInfo[cptr->CType].lookCount; i++) {
+		if (cptr->Phase == DinoInfo[cptr->CType].lookAnim[i]) LookMode = TRUE;
 	}
 
-	for (int i = 0; i < DinoInfo[cptr->CType].idle2Count; i++) {
-		if (cptr->Phase == DinoInfo[cptr->CType].idle2Anim[i]) LookMode = TRUE;
+	for (int i = 0; i < DinoInfo[cptr->CType].smellCount; i++) {
+		if (cptr->Phase == DinoInfo[cptr->CType].smellAnim[i]) LookMode = TRUE;
 	}
 	
 
@@ -5687,9 +5662,9 @@ NOTHINK:
 	*/
 
 	if (cptr->State) cptr->aquaticIdle = false;
-	else if (DinoInfo[cptr->CType].idleCount > 0) {
-		for (int i = 0; i < DinoInfo[cptr->CType].idleCount; i++) {
-			if (NewPhase && _Phase == DinoInfo[cptr->CType].idleAnim[i]) {
+	else if (DinoInfo[cptr->CType].lookCount > 0) {
+		for (int i = 0; i < DinoInfo[cptr->CType].lookCount; i++) {
+			if (NewPhase && _Phase == DinoInfo[cptr->CType].lookAnim[i]) {
 				cptr->aquaticIdle = false;
 			}
 		}
@@ -5698,7 +5673,7 @@ NOTHINK:
 	if (NewPhase) {
 		if (!cptr->State) {
 			cptr->Phase = DinoInfo[cptr->CType].walkAnim;
-			if (DinoInfo[cptr->CType].idleCount){
+			if (DinoInfo[cptr->CType].lookCount){
 				if (!cptr->aquaticIdle && rRand(128) > AIInfo[cptr->Clone].idleStart
 					&& (MyHealth || !DinoInfo[cptr->CType].killType[cptr->killType].carryCorpse)
 					) { // Don't play idles when carrying hunters corpse
@@ -5712,7 +5687,7 @@ NOTHINK:
 					fabs(cptr->gamma) < pi / 32 &&
 					fabs(cptr->bend) < pi / 32) {
 
-					cptr->Phase = DinoInfo[cptr->CType].idleAnim[rRand(DinoInfo[cptr->CType].idleCount - 1)];
+					cptr->Phase = DinoInfo[cptr->CType].lookAnim[rRand(DinoInfo[cptr->CType].lookCount - 1)];
 					NewPhase = TRUE;
 					cptr->FTime = 0;
 					goto ENDPSELECT;
@@ -5841,8 +5816,8 @@ ENDPSELECT:
 
 	if (cptr->Phase == DinoInfo[cptr->CType].killType[cptr->killType].anim && DinoInfo[cptr->CType].killTypeCount) goto SKIPROT;
 		
-	for (int i = 0; i < DinoInfo[cptr->CType].idleCount; i++) {
-		if (cptr->Phase == DinoInfo[cptr->CType].idleAnim[i]) goto SKIPROT;
+	for (int i = 0; i < DinoInfo[cptr->CType].lookCount; i++) {
+		if (cptr->Phase == DinoInfo[cptr->CType].lookAnim[i]) goto SKIPROT;
 	}
 	
 	if (drspd > 0.02)
@@ -5899,9 +5874,9 @@ SKIPROT:
 		if (cptr->Phase == DinoInfo[cptr->CType].jumpAnim) curspeed = DinoInfo[cptr->CType].jmpspd;
 	}
 
-	if (DinoInfo[cptr->CType].idleCount > 0) {
-		for (int i = 0; i < DinoInfo[cptr->CType].idleCount; i++) {
-			if (cptr->Phase == DinoInfo[cptr->CType].idleAnim[i]) {
+	if (DinoInfo[cptr->CType].lookCount > 0) {
+		for (int i = 0; i < DinoInfo[cptr->CType].lookCount; i++) {
+			if (cptr->Phase == DinoInfo[cptr->CType].lookAnim[i]) {
 				curspeed = DinoInfo[cptr->CType].wlkspd;
 			}
 		}
@@ -6082,6 +6057,9 @@ TBEGIN:
 	if (cptr->State)
 	{
 
+		cptr->currentIdleGroup = -1;
+		cptr->currentIdle2Group = -1;
+
 		bool relax = FALSE;
 		if (cptr->packId >= 0) {
 			if (!cptr->AfraidTime) {
@@ -6198,25 +6176,89 @@ TBEGIN:
 			else if (cptr->Phase != DinoInfo[cptr->CType].landAnim)
 			{
 				if (wy >= swimLevel) {
-					cptr->Phase = DinoInfo[cptr->CType].swimAnim;
-					if (rRand(128) > 110) {
+					
 
-						if (DinoInfo[cptr->CType].idle2Count > 0) {
-							cptr->Phase = DinoInfo[cptr->CType].idle2Anim[rRand(DinoInfo[cptr->CType].idle2Count - 1)];
+					if (DinoInfo[cptr->CType].idle2GroupCount) {
+
+						if (cptr->currentIdle2Group >= 0) {
+							if (rRand(127) + 1 > (1 - DinoInfo[cptr->CType].idle2Group[cptr->currentIdle2Group].end) * 128
+								&& (DinoInfo[cptr->CType].idle2Group[cptr->currentIdle2Group].endOnAny
+									|| cptr->Phase == DinoInfo[cptr->CType].idle2Group[cptr->currentIdle2Group].anim[DinoInfo[cptr->CType].idle2Group[cptr->currentIdle2Group].count - 1])) {
+								cptr->Phase = DinoInfo[cptr->CType].swimAnim;
+								if (DinoInfo[cptr->CType].idle2Group[cptr->currentIdle2Group].instantRepeat) {
+									cptr->currentIdle2Group = -1; //this must be done inside the if statement
+								}
+								else {
+									cptr->currentIdle2Group = -1; //this must be done inside the if statement
+									goto ENDPSELECT;
+								}
+							}
+							else {
+								cptr->Phase = DinoInfo[cptr->CType].idle2Group[cptr->currentIdle2Group].anim[rRand(DinoInfo[cptr->CType].idle2Group[cptr->currentIdle2Group].count - 1)];
+								goto ENDPSELECT;
+							}
 						}
 
+						for (int idle2GroupNo = 0; idle2GroupNo < DinoInfo[cptr->CType].idle2GroupCount; idle2GroupNo++) {
+							if (rRand(127) + 1 > (1 - DinoInfo[cptr->CType].idle2Group[idle2GroupNo].start) * 128) cptr->currentIdle2Group = idle2GroupNo;
+						}
+						if (cptr->currentIdle2Group >= 0) {
+							if (DinoInfo[cptr->CType].idle2Group[cptr->currentIdle2Group].startOnAny)
+								cptr->Phase = DinoInfo[cptr->CType].idle2Group[cptr->currentIdle2Group].anim[rRand(DinoInfo[cptr->CType].idle2Group[cptr->currentIdle2Group].count - 1)];
+							else
+								cptr->Phase = DinoInfo[cptr->CType].idle2Group[cptr->currentIdle2Group].anim[0];
+							goto ENDPSELECT;
+						}
+						else cptr->Phase = DinoInfo[cptr->CType].swimAnim;
+
 					}
+					else cptr->Phase = DinoInfo[cptr->CType].swimAnim;
+
+
 				}
 				else
 				{
-					cptr->Phase = DinoInfo[cptr->CType].walkAnim;
-					if (rRand(128) > 110) {
-						
-						if (DinoInfo[cptr->CType].idleCount > 0) {
-							cptr->Phase = DinoInfo[cptr->CType].idleAnim[rRand(DinoInfo[cptr->CType].idleCount - 1)];
+					
+
+					if (DinoInfo[cptr->CType].idleGroupCount) {
+
+						if (cptr->currentIdleGroup >= 0) {
+							if (rRand(127) + 1 > (1 - DinoInfo[cptr->CType].idleGroup[cptr->currentIdleGroup].end) * 128
+								&& (DinoInfo[cptr->CType].idleGroup[cptr->currentIdleGroup].endOnAny
+									|| cptr->Phase == DinoInfo[cptr->CType].idleGroup[cptr->currentIdleGroup].anim[DinoInfo[cptr->CType].idleGroup[cptr->currentIdleGroup].count - 1])) {
+								cptr->Phase = DinoInfo[cptr->CType].walkAnim;
+								if (DinoInfo[cptr->CType].idleGroup[cptr->currentIdleGroup].instantRepeat) {
+									cptr->currentIdleGroup = -1; //this must be done inside the if statement
+								}
+								else {
+									cptr->currentIdleGroup = -1; //this must be done inside the if statement
+									goto ENDPSELECT;
+								}
+							}
+							else {
+								cptr->Phase = DinoInfo[cptr->CType].idleGroup[cptr->currentIdleGroup].anim[rRand(DinoInfo[cptr->CType].idleGroup[cptr->currentIdleGroup].count - 1)];
+								goto ENDPSELECT;
+							}
 						}
 
+						for (int idleGroupNo = 0; idleGroupNo < DinoInfo[cptr->CType].idleGroupCount; idleGroupNo++) {
+							if (rRand(127) + 1 > (1 - DinoInfo[cptr->CType].idleGroup[idleGroupNo].start) * 128) cptr->currentIdleGroup = idleGroupNo;
+						}
+						if (cptr->currentIdleGroup >= 0) {
+							if (DinoInfo[cptr->CType].idleGroup[cptr->currentIdleGroup].startOnAny)
+								cptr->Phase = DinoInfo[cptr->CType].idleGroup[cptr->currentIdleGroup].anim[rRand(DinoInfo[cptr->CType].idleGroup[cptr->currentIdleGroup].count - 1)];
+							else
+								cptr->Phase = DinoInfo[cptr->CType].idleGroup[cptr->currentIdleGroup].anim[0];
+							goto ENDPSELECT;
+						}
+						else cptr->Phase = DinoInfo[cptr->CType].walkAnim;
+
+
 					}
+					else {
+						cptr->Phase = DinoInfo[cptr->CType].walkAnim;
+					}
+					
 				}
 			}
 
@@ -6283,34 +6325,13 @@ TBEGIN:
 				}
 				else if (cptr->Phase != DinoInfo[cptr->CType].landAnim)
 				{
-					if (wy >= swimLevel) {
-						cptr->Phase = DinoInfo[cptr->CType].swimAnim;
-						if (rRand(128) > 110) {
+					if (wy >= swimLevel) cptr->Phase = DinoInfo[cptr->CType].swimAnim;
+					else cptr->Phase = DinoInfo[cptr->CType].walkAnim;
 
-							if (DinoInfo[cptr->CType].idle2Count > 0) {
-								cptr->Phase = DinoInfo[cptr->CType].idle2Anim[rRand(DinoInfo[cptr->CType].idle2Count - 1)];
-							}
-
-						}
-					}
-					else
-					{
-						cptr->Phase = DinoInfo[cptr->CType].walkAnim;
-						if (rRand(128) > 110) {
-
-							if (DinoInfo[cptr->CType].idleCount > 0) {
-								cptr->Phase = DinoInfo[cptr->CType].idleAnim[rRand(DinoInfo[cptr->CType].idleCount - 1)];
-							}
-
-						}
-					}
 				}
 			}
 
-			if (DinoInfo[cptr->CType].idleCount > 0) {
-				for (int i = 0; i < DinoInfo[cptr->CType].idleCount; i++) {
-					if (cptr->Phase == DinoInfo[cptr->CType].idleAnim[i]) {
-
+			if (cptr->currentIdleGroup >= 0 || cptr->currentIdle2Group >= 0) {
 						if (rRand(24) > 23)
 						{
 							cptr->State = 1;
@@ -6320,34 +6341,7 @@ TBEGIN:
 							NewPhase = true;
 							goto TBEGIN;
 						}
-
-					}
-				}
 			}
-
-			if (DinoInfo[cptr->CType].idle2Count > 0) {
-				for (int i = 0; i < DinoInfo[cptr->CType].idle2Count; i++) {
-					if (cptr->Phase == DinoInfo[cptr->CType].idle2Anim[i]) {
-
-						if (rRand(24) > 23)
-						{
-							cptr->State = 1;
-							SetNewTargetPlace_Icth(cptr, 2048.f);
-							cptr->AfraidTime = (50 + rRand(8)) * 1024;
-							cptr->notFlushed = true;
-							NewPhase = true;
-							goto TBEGIN;
-						}
-
-					}
-				}
-			}
-
-
-
-
-
-
 
 		}
 
@@ -6386,8 +6380,7 @@ TBEGIN:
 		}
 	}
 
-
-
+	
 	if (wy >= swimLevel)
 	{
 		if (cptr->Phase == DinoInfo[cptr->CType].walkAnim) {
@@ -6395,13 +6388,10 @@ TBEGIN:
 			goto TBEGIN;
 		}
 
-		if (DinoInfo[cptr->CType].idleCount > 0) {
-			for (int i = 0; i < DinoInfo[cptr->CType].idleCount; i++) {
-				if (cptr->Phase == DinoInfo[cptr->CType].idleAnim[i]) {
+		if (cptr->currentIdleGroup >= 0) {
 					NewPhase = true;
+					cptr->currentIdleGroup = -1;
 					goto TBEGIN;
-				}
-			}
 		}
 	}
 
@@ -6413,16 +6403,13 @@ TBEGIN:
 			goto TBEGIN;
 		}
 
-		if (DinoInfo[cptr->CType].idle2Count > 0) {
-			for (int i = 0; i < DinoInfo[cptr->CType].idle2Count; i++) {
-				if (cptr->Phase == DinoInfo[cptr->CType].idle2Anim[i]) {
+		if (cptr->currentIdle2Group >= 0) {
 					NewPhase = true;
+					cptr->currentIdle2Group = -1;
 					goto TBEGIN;
-				}
-			}
 		}
 	}
-
+	
 
 
 	//LAST
@@ -6431,17 +6418,7 @@ TBEGIN:
 	if (NewPhase)
 	{
 
-		bool idleWalk = false;
-
-		if (DinoInfo[cptr->CType].idleCount > 0) {
-			for (int i = 0; i < DinoInfo[cptr->CType].idleCount; i++) {
-				if (cptr->Phase == DinoInfo[cptr->CType].idleAnim[i]) {
-					idleWalk = true;
-				}
-			}
-		}
-
-		if (cptr->Phase == DinoInfo[cptr->CType].walkAnim || idleWalk)
+		if (cptr->Phase == DinoInfo[cptr->CType].walkAnim || cptr->currentIdleGroup >= 0)
 		{
 			if (cptr->shakeTime < 9)
 			{
@@ -6547,12 +6524,8 @@ ENDPSELECT:
 	float drspd = dalpha;
 	if (drspd > pi) drspd = 2 * pi - drspd;
 
-	if (DinoInfo[cptr->CType].idleCount > 0) {
-		for (int i = 0; i < DinoInfo[cptr->CType].idleCount; i++) {
-			if (cptr->Phase == DinoInfo[cptr->CType].idleAnim[i]) {
+	if (cptr->currentIdleGroup >= 0) {
 				goto SKIPROT;
-			}
-		}
 	}
 
 	if (cptr->Phase == DinoInfo[cptr->CType].shakeLandAnim) goto SKIPROT;
@@ -6575,12 +6548,8 @@ ENDPSELECT:
 	if (dalpha > pi) currspeed *= -1;
 
 
-	if (DinoInfo[cptr->CType].idle2Count > 0) {
-		for (int i = 0; i < DinoInfo[cptr->CType].idle2Count; i++) {
-			if (cptr->Phase == DinoInfo[cptr->CType].idle2Anim[i]) {
+	if (cptr->currentIdle2Group >= 0) {
 				currspeed /= 1.4f;
-			}
-		}
 	}
 
 	if (cptr->Phase == DinoInfo[cptr->CType].swimAnim || cptr->Phase == DinoInfo[cptr->CType].shakeWaterAnim) currspeed /= 1.4f;
@@ -6655,12 +6624,8 @@ SKIPROT:
 	if (cptr->Phase == DinoInfo[cptr->CType].swimAnim) curspeed = DinoInfo[cptr->CType].swmspd;
 	if (cptr->Phase == DinoInfo[cptr->CType].shakeWaterAnim) curspeed = DinoInfo[cptr->CType].swmspd;
 
-	if (DinoInfo[cptr->CType].idle2Count > 0) {
-		for (int i = 0; i < DinoInfo[cptr->CType].idle2Count; i++) {
-			if (cptr->Phase == DinoInfo[cptr->CType].idle2Anim[i]) {
+	if (cptr->currentIdle2Group >= 0) {
 				curspeed = DinoInfo[cptr->CType].swmspd;
-			}
-		}
 	}
 
 	if (drspd > pi / 2.f) curspeed *= 2.f - 2.f*drspd / pi;
@@ -6713,12 +6678,8 @@ SKIPROT:
 
 	bool swimmingAnim = FALSE;
 	if (cptr->Phase == DinoInfo[cptr->CType].swimAnim || DinoInfo[cptr->CType].shakeWaterAnim) swimmingAnim = TRUE;
-	if (DinoInfo[cptr->CType].idle2Count > 0) {
-		for (int i = 0; i < DinoInfo[cptr->CType].idle2Count; i++) {
-			if (cptr->Phase == DinoInfo[cptr->CType].idle2Anim[i]) {
+	if (cptr->currentIdle2Group >= 0) {
 				swimmingAnim = TRUE;
-			}
-		}
 	}
 
 	curspeed *= cptr->scale;
@@ -6897,17 +6858,8 @@ void AnimateIcthDead(TCharacter *cptr)
 			ActivateCharacterFx(cptr);
 		}
 
-		bool walkingidle = false;
-		if (DinoInfo[cptr->CType].idleCount > 0) {
-			for (int i = 0; i < DinoInfo[cptr->CType].idleCount; i++) {
-				if (cptr->deathPhase == DinoInfo[cptr->CType].idleAnim[i]) {
-					walkingidle = TRUE;
-				}
-			}
-		}
-
 		cptr->canSleep = (Tranq && !OnWaterQ && cptr->Clone == AI_ICTH &&
-			(cptr->deathPhase == DinoInfo[cptr->CType].walkAnim || cptr->deathPhase == DinoInfo[cptr->CType].shakeLandAnim || walkingidle));
+			(cptr->deathPhase == DinoInfo[cptr->CType].walkAnim || cptr->deathPhase == DinoInfo[cptr->CType].shakeLandAnim || cptr->currentIdleGroup >= 0));
 
 	}
 	else

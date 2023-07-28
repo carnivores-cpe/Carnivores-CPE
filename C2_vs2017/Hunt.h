@@ -335,6 +335,7 @@ typedef struct _TCharacter
   int PPMorphTime, PrevPhase,PrevPFTime, Phase, FTime;
 
   int currentIdleGroup;
+  int currentIdle2Group;
 
   float vspeed, rspeed, bend, scale;
   int Slide;
@@ -618,11 +619,13 @@ typedef struct _TDinoInfo
   TDinoIdleType idle2Group[32];
   int idle2GroupCount;
 
-  int idleAnim[32];//trex look
-  int idleCount;
   
-  int idle2Anim[32]; //icth wateridle   trex smell
-  int idle2Count;
+  int lookAnim[32];//trex look
+  int lookCount;
+  
+  int smellAnim[32]; //icth wateridle   trex smell
+  int smellCount;
+  
 
   int roarAnim[32];
   int roarCount;

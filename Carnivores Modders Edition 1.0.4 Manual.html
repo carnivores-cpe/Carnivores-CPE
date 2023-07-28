@@ -339,8 +339,9 @@ function expand(n) {
 				<li>Aggression patch</li>
 				<li>Unlimited triangle count on Creature and Weapon models</li>
 				<li>Changeable animation order for all AI</li>
-				<li>32 custom idle groups per creature</li>
-				<li>Up to 32 Idle animation per idle group</li>
+				<li>Up to 32 Idle animations for fish/mosasaurus ai creatures</li>
+				<li>32 custom idle groups per creature (except fish/mosasaurus ai)</li>
+				<li>Up to 32 Idle animations per idle group</li>
 				<li>Up to 32 custom kill animations / hunter death animations per creature</li>
 				<li>Up to 32 death animations per creature</li>
 				<li>Up to 32 roar animations per creature (t-rex AI creatures only)</li>
@@ -1056,6 +1057,7 @@ function expand(n) {
 	</div>
 </p>
 
+<br>
 
 		
 <p style="margin-top:4%;">
@@ -3876,21 +3878,15 @@ function expand(n) {
 		-ms-user-select: none;"
 		>></h2>
 	<div class = "con" style="margin-left:4%">
-		<h2 onclick="expand(24)" style="cursor:pointer;">_RES value: idleAnim</h2>
+		<h2 onclick="expand(24)" style="cursor:pointer;">_RES value: fishIdleAnim</h2>
 		<div id="content_24" style="display: none">
 		
 			<p><b>Data type: Whole Number</b></p>
 			<p>
-			(Optional) Position of an idle animation in the CAR file (starting from 0) (for t-rex AI use lookAnim and smellAnim).
+			(Optional) Position of an idle animation in the CAR file (starting from 0). Creature will swim to the surface before playing idle animations (see particle effects section) (Fish/Mosasaurus AI only).
 			</p>
 			<p>
 			This _RES value can be added multiple times, or not added for no idle animations. Each creature can have up to 32 idle animations.
-			</p>
-			<p>
-			Note: Ichthyornis AI creatures will play idle animations when on land. See also waterIAnim.
-			</p>
-			<p>
-			Note: Fish and mosasaurus AI creatures will swim to the surface before playing idle animations (see particle effects section).
 			</p>
 			<!--
 			<div class="grid-container">
@@ -4040,7 +4036,7 @@ function expand(n) {
 	</div>
 </p>
 
-
+<!--
 <p style="margin-top:4%;">
 	<h2 id="arrow_30" unselectable="on" onclick="expand(30)"
 		style="float:left;margin-top:0;cursor:pointer;
@@ -4060,18 +4056,10 @@ function expand(n) {
 			<p>
 			This _RES value can be added multiple times, or not added for no water idle animations. Each creature can have up to 32 water idle animations.
 			</p>
-			<!--
-			<div class="grid-container">
-				<div class="grid-item"><b>AI</b></div>
-				<div class="grid-item"><b>Vanilla Value</b></div>
-				<div class="grid-item">Ichthyornis</div>
-				<div class="grid-item">To be added in the next update.</div>
-			</div>
-			-->
 		</div>
 	</div>
 </p>
-
+-->
 
 <p style="margin-top:4%;">
 	<h2 id="arrow_31" unselectable="on" onclick="expand(31)"
@@ -4283,9 +4271,30 @@ idlegroup{
 <br> endChance = 0.296875
 <br>}
 				</div>
+				<div class="grid-item">Ichthyornis</div>
+				<div class="grid-item" style="text-align: left">
+idlegroup{
+<br>  anim = 11
+<br>  startChance = 0.0703125
+<br>  endChance = 1
+<br>  instantRepeat = TRUE
+<br> }
+<br> idlegroup{
+<br>  anim = 12
+<br>  startChance = 0.0703125
+<br>  endChance = 1
+<br>  instantRepeat = TRUE
+<br> }
+<br> waterIgroup{
+<br>  anim = 13
+<br>  startChance = 0.140625
+<br>  endChance = 1 
+<br>  instantRepeat = TRUE
+<br> }
+				</div>
 				<div class="grid-item">Mosasaurus</div>
 				<div class="grid-item" style="text-align: left">
-				
+ fishIdleAnim = 4
 				</div>
 				
 				<div class="grid-item">Parasaurolophus</div>
@@ -4701,6 +4710,14 @@ idlegroup{
 		
 		
 		
+
+
+
+
+		</div>
+	</div>
+</p>
+
 <p style="margin-top:4%;">
 	<h2 id="arrow_133" unselectable="on" onclick="expand(133)"
 		style="float:left;margin-top:0;cursor:pointer;
@@ -4718,20 +4735,15 @@ idlegroup{
 		Note: Icthyornis AI only
 		</p>
 		<p>
-		Defines a group of water idle animations that will play in a random sequence.
+		Defines a group of swimming idle animations that will play in a random sequence.
 		</p>
 		<p>
-		This subsection can be defined multiple times. Each creature can have up to 32 water idle groups. Each water idle group can contain up to 32 animations or just a single animation.		
+		This subsection can be defined multiple times. Each creature can have up to 32 water idle groups. Each water idle group can contain up to 32 animations or just a single animation.
+		See Idle Group (above) for res values that can be defined inside this subsection.
 		</p>
 		<p>
 		
 		</p>
-
-		</div>
-	</div>
-</p>
-
-
 
 		</div>
 	</div>
@@ -5781,13 +5793,40 @@ idlegroup{
 		<h2 onclick="expand(61)" style="cursor:pointer;">Water Particle Effects</h2>
 		<div id="content_61" style="display: none">
 		
+		
+		
 			<p>
 			Fish/mosasaurus AI only. Water particle effects are used to make splashes when a mosasaurus AI creature jumps from the water, or when a fish or mosasaurus comes to the surface to play an idle animation.
-			The particle values for the animation should be defined directly after an idleAnim or jumpAnim value. See the below example for the mosasaurus jumping and idle animation values.
+			The particle values for the animation should be defined directly after a fishIdleAnim or jumpAnim value. See the below example for the mosasaurus jumping and idle animation values.
 			
 		    </p>
 	
-			<img width=35% height=auto alt="" src=" data:image/png;base64,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"/>
+				<div class="grid-container">
+				<div class="grid-item"><b></b></div>
+				<div class="grid-item"><b>Vanilla Values</b></div>
+				<div class="grid-item">Jump</div>
+				<div class="grid-item" style="text-align: left">
+jumpAnim = 3
+<br>jmpspd = 1.0
+<br>jumpPartFrame1 = 1
+<br>jumpPartFrame2 = 11
+<br>jumpPartDist = 240
+<br>jumpPartCnt = 500
+<br>jumpPartMag = 40
+<br>jumpPartAngled = TRUE
+<br>jumpPartCircle = TRUE
+				</div>
+				<div class="grid-item">Idle</div>
+				<div class="grid-item" style="text-align: left">
+fishIdleAnim = 4
+<br>idlePartFrame1 = 12
+<br>idlePartFrame2 = 13
+<br>idlePartDist = 22
+<br>idlePartCnt = 3
+<br>idlePartMag = 20
+<br>idlePartOffset = 320
+				</div>
+				</div>
 			
 			
 			<p>These values set how particles are generated for each frame of the animation.</p>
