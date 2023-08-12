@@ -1612,11 +1612,11 @@ void LoadCharacters()
 
   for (int c=10; c<20; c++)
     if (TargetDino & (1<<c))
-      if (!DinoInfo[AI_to_CIndex[c]].CallIcon.lpImage)
+      if (!MenuDinoInfo[c-10].CallIcon.lpImage)
       {
         wsprintf(logt, "HUNTDAT\\MENU\\PICS\\call%d.tga", c-9);
-        LoadPictureTGA(DinoInfo[AI_to_CIndex[c]].CallIcon, logt);
-        conv_pic(DinoInfo[AI_to_CIndex[c]].CallIcon);
+        LoadPictureTGA(MenuDinoInfo[c - 10].CallIcon, logt);
+        conv_pic(MenuDinoInfo[c - 10].CallIcon);
       }
 
 
@@ -2175,6 +2175,88 @@ void ReadAreaTable (FILE *stream, int areaNumber)
 }
 
 
+
+void ReadSpawnTable(FILE *stream)
+{
+	TotalSpawnGroup = 0;
+	char line[256], *value;
+	while (fgets(line, 255, stream))
+	{
+		if (strstr(line, "}")) break;
+
+		if (strstr(line, "spawngroup"))
+			while (fgets(line, 255, stream))
+			{
+				if (strstr(line, "}"))
+				{
+					TotalSpawnGroup++;
+					break;
+				}
+				value = strstr(line, "=");
+				if (!value) DoHalt("Script loading error");
+				value++;
+
+				if (strstr(line, "spawnrate")) spawnGroup[TotalSpawnGroup].SpawnRate = (float)atof(value);
+				if (strstr(line, "spawnmax")) spawnGroup[TotalSpawnGroup].SpawnMax = atoi(value);
+				if (strstr(line, "spawnmin")) spawnGroup[TotalSpawnGroup].SpawnMin = atoi(value);
+
+				if (strstr(line, "densityMulti")) spawnGroup[TotalSpawnGroup].densityMulti = atoi(value);
+				if (strstr(line, "moveForward")) readBool(value, spawnGroup[TotalSpawnGroup].moveForward);
+				if (strstr(line, "randomise")) readBool(value, spawnGroup[TotalSpawnGroup].Randomised);
+				if (strstr(line, "onlyActiveNearby")) readBool(value, spawnGroup[TotalSpawnGroup].OnlyActiveNearby);
+
+
+				if (strstr(line, "region"))
+					while (fgets(line, 255, stream)) {
+						if (strstr(line, "}")) {
+							spawnGroup[TotalSpawnGroup].spawnRegionCh++;
+							break;
+						}
+						if (strstr(line, "xmax")) spawnGroup[TotalSpawnGroup].spawnRegion[spawnGroup[TotalSpawnGroup].spawnRegionCh].XMax = atoi(value);
+						if (strstr(line, "xmin")) spawnGroup[TotalSpawnGroup].spawnRegion[spawnGroup[TotalSpawnGroup].spawnRegionCh].XMin = atoi(value);
+						if (strstr(line, "ymax")) spawnGroup[TotalSpawnGroup].spawnRegion[spawnGroup[TotalSpawnGroup].spawnRegionCh].YMax = atoi(value);
+						if (strstr(line, "ymin")) spawnGroup[TotalSpawnGroup].spawnRegion[spawnGroup[TotalSpawnGroup].spawnRegionCh].YMin = atoi(value);
+					}
+				if (strstr(line, "avoid"))
+					while (fgets(line, 255, stream)) {
+						if (strstr(line, "}")) {
+							spawnGroup[TotalSpawnGroup].avoidRegionCh++;
+							break;
+						}
+						if (strstr(line, "xmax")) spawnGroup[TotalSpawnGroup].avoidRegion[spawnGroup[TotalSpawnGroup].avoidRegionCh].XMax = atoi(value);
+						if (strstr(line, "xmin")) spawnGroup[TotalSpawnGroup].avoidRegion[spawnGroup[TotalSpawnGroup].avoidRegionCh].XMin = atoi(value);
+						if (strstr(line, "ymax")) spawnGroup[TotalSpawnGroup].avoidRegion[spawnGroup[TotalSpawnGroup].avoidRegionCh].YMax = atoi(value);
+						if (strstr(line, "ymin")) spawnGroup[TotalSpawnGroup].avoidRegion[spawnGroup[TotalSpawnGroup].avoidRegionCh].YMin = atoi(value);
+					}
+
+			}
+	}
+}
+
+
+void ReadSpawnInfo(FILE *stream)
+{
+	char *value;
+	char line[256];
+
+	while (fgets(line, 255, stream)) {
+		if (strstr(line, "}")) {
+			//DinoInfo[TotalC].RType0[DinoInfo[TotalC].RegionCount] = TotalRegion;
+			DinoInfo[TotalC].SpawnInfoCh++;
+			//TotalRegion++;
+			break;
+		}
+		value = strstr(line, "=");
+		if (!value)
+			DoHalt("Script loading error");
+		value++;
+
+		if (strstr(line, "spawnratio")) DinoInfo[TotalC].SpawnInfo[DinoInfo[TotalC].SpawnInfoCh].spawnRatio = (float)atof(value);
+		if (strstr(line, "spawngroup")) DinoInfo[TotalC].SpawnInfo[DinoInfo[TotalC].SpawnInfoCh].spawnGroup = atoi(value);
+	}
+}
+
+
 void ReadWeapons(FILE *stream)
 {
   TotalW = 0;
@@ -2264,7 +2346,7 @@ void SkipSector(FILE *stream)
 	}
 }
 
-void WipeRegions() {
+/*void WipeRegions() {
 
 	if (DinoInfo[TotalC].RegionCount) {
 
@@ -2278,6 +2360,7 @@ void WipeRegions() {
 	}
 
 }
+*/
 
 void WipeKillTypes() {
 	if (DinoInfo[TotalC].killTypeCount) {
@@ -2315,6 +2398,15 @@ void WipeIdleGroups() {
 	DinoInfo[TotalC].idleGroupCount = 0;
 }
 
+void WipeSpawnInfo() {
+	if (DinoInfo[TotalC].SpawnInfoCh) {
+		for (int i = 0; i < DinoInfo[TotalC].SpawnInfoCh; i++) {
+			DinoInfo[TotalC].SpawnInfo[i] = {};
+		}
+	}
+	DinoInfo[TotalC].SpawnInfoCh = 0;
+}
+
 void WipeIdle2Groups() {
 	if (DinoInfo[TotalC].idle2GroupCount) {
 		for (int i = 0; i < DinoInfo[TotalC].idle2GroupCount; i++) {
@@ -2324,7 +2416,7 @@ void WipeIdle2Groups() {
 	DinoInfo[TotalC].idle2GroupCount = 0;
 }
 
-void WipeAvoidances() {
+/*void WipeAvoidances() {
 
 	if (DinoInfo[TotalC].AvoidCount) {
 
@@ -2338,7 +2430,7 @@ void WipeAvoidances() {
 	}
 
 }
-
+*/
 
 void ReadIdleGroupInfo(FILE *stream)
 {
@@ -2500,7 +2592,7 @@ void ReadTrophyTypeInfo(FILE *stream)
 
 
 
-
+/*
 void ReadSpawnInfo(FILE *stream)
 {
 	char *value;
@@ -2561,6 +2653,7 @@ void ReadAvoidInfo(FILE *stream)
 	}
 
 }
+*/
 
 
 
@@ -2571,12 +2664,17 @@ void ReadCharacterLine(FILE *stream, char *_value, char line[256], bool &regionO
 	char *value = _value;
 //	bool overwrite = _overwrite;
 
+
+	if (strstr(line, "callNo")) DinoInfo[TotalC].menuDino = atoi(value);
+
 	if (strstr(line, "mass")) DinoInfo[TotalC].Mass = (float)atof(value);
 	if (strstr(line, "length")) DinoInfo[TotalC].Length = (float)atof(value);
 	if (strstr(line, "radius")) DinoInfo[TotalC].Radius = (float)atof(value);
 	if (strstr(line, "health")) DinoInfo[TotalC].Health0 = atoi(value);
 	if (strstr(line, "basescore")) DinoInfo[TotalC].BaseScore = atoi(value);
-	if (strstr(line, "clone")) DinoInfo[TotalC].Clone = atoi(value);
+
+	if (strstr(line, "ai")) DinoInfo[TotalC].Clone = atoi(value);
+
 	if (strstr(line, "smellK")) DinoInfo[TotalC].SmellK = (float)atof(value);
 	if (strstr(line, "hearK")) DinoInfo[TotalC].HearK = (float)atof(value);
 	if (strstr(line, "lookK")) DinoInfo[TotalC].LookK = (float)atof(value);
@@ -2602,7 +2700,7 @@ void ReadCharacterLine(FILE *stream, char *_value, char line[256], bool &regionO
 	if (strstr(line, "aggress")) DinoInfo[TotalC].aggress = atoi(value);
 	if (strstr(line, "flydist")) DinoInfo[TotalC].flyDist = atoi(value);
 	if (strstr(line, "killdist")) DinoInfo[TotalC].killDist = atoi(value);
-	if (strstr(line, "radar")) DinoInfo[TotalC].onRadar = atoi(value);
+	if (strstr(line, "radar")) readBool(value, DinoInfo[TotalC].onRadar);
 	if (strstr(line, "dontswimaway")) readBool(value, DinoInfo[TotalC].dontSwimAway);
 
 
@@ -2821,17 +2919,18 @@ void ReadCharacterLine(FILE *stream, char *_value, char line[256], bool &regionO
 		ReadIdle2GroupInfo(stream);
 	}
 
-
+	
 	if (strstr(line, "spawninfo")){
 
 		if (regionOverwrite) {
-			WipeRegions();
+			WipeSpawnInfo();
 			regionOverwrite = false;
 		}
 
 		ReadSpawnInfo(stream);
 	}
 
+	/*
 	if (strstr(line, "avoid")) {
 
 		if (avoidOverwrite) {
@@ -2841,33 +2940,35 @@ void ReadCharacterLine(FILE *stream, char *_value, char line[256], bool &regionO
 		ReadAvoidInfo(stream);
 		
 	}
-
+	*/
 
 
 }
 
 
-void ReadCharacters(FILE *stream, bool mapamb, int &nextTrophySlot)
+void ReadCharacters(FILE *stream, int &nextTrophySlot)
 {
 	//area
 	char tempProjectName[128];
+	int timeOfDay, dinSelect;
 	for (int a = 0; a < __argc; a++)
 	{
 		LPSTR s = __argv[a];
 		if (strstr(s, "prj="))
 		{
 			strcpy(tempProjectName, (s + 4));
-			break;
 		}
+		if (strstr(s, "dtm=")) timeOfDay = atoi(&s[4]);
+		if (strstr(s, "din=")) dinSelect = (atoi(&s[4]) * 1024);
 	}
 
 	//time
-	int timeOfDay;
 	for (int a = 0; a < __argc; a++)
 	{
 		LPSTR s = __argv[a];
-		if (strstr(s, "dtm=")) timeOfDay = atoi(&s[4]);
 	}
+
+
 
   char line[256], *value;
   while (fgets( line, 255, stream))
@@ -2880,11 +2981,10 @@ void ReadCharacters(FILE *stream, bool mapamb, int &nextTrophySlot)
         if (strstr(line, "}"))
         {
 
-		  if (tempProjectName[18] == 'h' && !DinoInfo[TotalC].trophyCode ||
-			  mapamb && !DinoInfo[TotalC].RegionCount) {
+		  if ((tempProjectName[18] == 'h' && !DinoInfo[TotalC].trophyCode) || (!DinoInfo[TotalC].SpawnInfoCh && TotalC > 0)) { //totalc = 0 for hunter char
 				  
-			  WipeRegions();
-			  WipeAvoidances();
+			  //WipeRegions();
+			  //WipeAvoidances();
 
 				  DinoInfo[TotalC] = {};
 				  DinoInfo[TotalC].Scale0 = 800;
@@ -2893,13 +2993,14 @@ void ReadCharacters(FILE *stream, bool mapamb, int &nextTrophySlot)
 				  break;
 		  }
 
-		  int _ctype = DinoInfo[TotalC].AI;
-		  if (mapamb) {
-		  	TotalMA ++;
-		  	DinoInfo[TotalC].AI = -TotalMA;
-		  	_ctype = AI_FINAL + TotalMA;
-		  }
-          AI_to_CIndex[_ctype] = TotalC;
+		  
+		  //int _ctype = DinoInfo[TotalC].AI;
+		  //if (mapamb) {
+		  //	TotalMA ++;
+		  //	DinoInfo[TotalC].AI = -TotalMA;
+		  //	_ctype = AI_FINAL + TotalMA;
+		  //}
+          //AI_to_CIndex[_ctype] = TotalC;
 		  if (DinoInfo[TotalC].Clone == AI_MOSA ||
 			  DinoInfo[TotalC].Clone == AI_FISH) {
 			  DinoInfo[TotalC].Aquatic = TRUE;
@@ -2929,12 +3030,13 @@ void ReadCharacters(FILE *stream, bool mapamb, int &nextTrophySlot)
 				DoHalt("Script loading error");
 			value++;
 
-			if (strstr(line, "ai")) DinoInfo[TotalC].AI = atoi(value);
 
 			bool temp, temp2, temp3, temp4, temp5, temp6, temp7, temp8, temp9, temp10, temp11;
 			ReadCharacterLine(stream, value, line, temp, temp2, temp3, temp4, temp5, temp6, temp7, temp8, temp9, nextTrophySlot, temp10, temp11);
 
 			if (strstr(line, "overwrite") || strstr(line, "addition")) {
+
+
 
 				bool readThis = true;
 				char mapNo1 = tempProjectName[18];
@@ -2992,6 +3094,23 @@ void ReadCharacters(FILE *stream, bool mapamb, int &nextTrophySlot)
 							break;
 						}
 					}
+
+
+					if (strstr(line, "char")){
+						bool readChar = false;
+						if (strstr(line, "char0") && (dinSelect & (1<<10))) readChar = true;
+						if (strstr(line, "char1") && (dinSelect & (1<<11))) readChar = true;
+						if (strstr(line, "char2") && (dinSelect & (1<<12))) readChar = true;
+						if (strstr(line, "char3") && (dinSelect & (1<<13))) readChar = true;
+						if (strstr(line, "char4") && (dinSelect & (1<<14))) readChar = true;
+						if (strstr(line, "char5") && (dinSelect & (1<<15))) readChar = true;
+						if (strstr(line, "char6") && (dinSelect & (1<<16))) readChar = true;
+						if (strstr(line, "char7") && (dinSelect & (1<<17))) readChar = true;
+						if (strstr(line, "char8") && (dinSelect & (1<<18))) readChar = true;
+						if (strstr(line, "char9") && (dinSelect & (1<<19))) readChar = true;
+						if (!readChar) readThis = false;
+					}
+					
 
 					break;
 				}
@@ -3599,26 +3718,25 @@ void LoadResourcesScript()
   while (fgets( line, 255, stream))
   {
     if (line[0] == '.') break;
+	if (strstr(line, "spawntable")) ReadSpawnTable(stream);
 	if (strstr(line, "areatable")) ReadAreaTable(stream, areaNumber);
     if (strstr(line, "weapons") ) ReadWeapons(stream);
-	if (strstr(line, "hunterinfo")) ReadCharacters(stream, false, nextTrophySlot);
-	if (strstr(line, "oldambients")) ReadCharacters(stream, false, nextTrophySlot);
-	if (strstr(line, "corpseambients")) ReadCharacters(stream, false, nextTrophySlot);
-    if (strstr(line, "characters") ) ReadCharacters(stream, false, nextTrophySlot);
-	if (strstr(line, "mapambients")) ReadCharacters(stream, true, nextTrophySlot);
+	//if (strstr(line, "hunterinfo")) ReadCharacters(stream, false, nextTrophySlot);
+	//if (strstr(line, "oldambients")) ReadCharacters(stream, false, nextTrophySlot);
+	//if (strstr(line, "corpseambients")) ReadCharacters(stream, false, nextTrophySlot);
+    if (strstr(line, "characters") ) ReadCharacters(stream, nextTrophySlot);
+	//if (strstr(line, "mapambients")) ReadCharacters(stream, true, nextTrophySlot);
 
   }
 
   //default region
-  for (int r = 0; r < TotalRegion; r++) {
-	  if (!Region[r].XMax &&
-		  !Region[r].XMin &&
-		  !Region[r].YMax &&
-		  !Region[r].YMin) {
-		  Region[r].XMax = 988;
-		  Region[r].YMax = 988;
-		  Region[r].XMin = 12;
-		  Region[r].YMin = 12;
+  for (int sg = 0; sg < TotalSpawnGroup; sg++) {    
+	  if (!spawnGroup[sg].spawnRegionCh) {
+		  spawnGroup[sg].spawnRegion[0].XMax = 988;
+		  spawnGroup[sg].spawnRegion[0].YMax = 988;
+		  spawnGroup[sg].spawnRegion[0].XMin = 12;
+		  spawnGroup[sg].spawnRegion[0].YMin = 12;
+		  spawnGroup[sg].spawnRegionCh = 1;
 	  }
   }
 

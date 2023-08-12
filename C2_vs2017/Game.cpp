@@ -632,7 +632,7 @@ void AddShipTask(int cindex)
   if (TrophyRoom.Last.success>1)
     score*=(1.f + TrophyRoom.Last.success / 10.f);
 
-  if (!(TargetDino & (1<<Characters[cindex].AI)) ) score/=2.f;
+  //if (!(TargetDino & (1<<DinoInfo[Characters[cindex].CType].menuDino)) ) score/=2.f;
 
   if (Tranq    ) score *= 1.25f;
   if (RadarMode) score *= 0.70f;
@@ -1702,7 +1702,7 @@ void MakeCall()
       }
 	  */
 
-    if (cptr->AI!=TargetCall) continue;
+	if (DinoInfo[cptr->CType].menuDino != TargetCall) continue;
     if (cptr->AfraidTime) continue;
     if (cptr->State) continue;
 
@@ -1977,8 +1977,8 @@ void registerDamage(int Dino) {
 			AddShipTask(Dino);
 		}
 
-		if (Characters[Dino].AI > 0 && Characters[Dino].AI < 6 && !Multiplayer) //No amb respawn in multiplayer for now - update this at later date?
-			Characters_AddSecondaryOne(Characters[Dino].CType);
+		//No amb respawn in multiplayer for now - update this at later date?
+		Characters_AddSecondaryOne(&Characters[Dino]);
 
 	}
 	else

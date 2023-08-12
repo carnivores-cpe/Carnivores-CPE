@@ -327,7 +327,7 @@ typedef struct _TSnowElement {
 
 typedef struct _TCharacter
 {
-  int CType, AI, Clone;
+  int CType, Clone;
   TCharacterInfo *pinfo;
   int StateF;
   int State;
@@ -365,7 +365,7 @@ typedef struct _TCharacter
 
   int spcDepth;
 
-  int RType;
+  int SpawnGroupType;
 
   int packId;
   bool followLeader;
@@ -544,20 +544,27 @@ typedef struct _TDinoIdleType
 	bool instantRepeat;
 } TDinoIdleType;
 
+typedef struct _TSpawnInfo
+{
+	int spawnGroup;
+	float spawnRatio;
+} TSpawnInfo;
+
+typedef struct _TMenuDinoInfo
+{
+	TPicture CallIcon;
+} TMenuDinoInfo;
+
 typedef struct _TDinoInfo
 {
+	int menuDino;
+
   char Name[48], FName[48], PName[48];
-  int Health0, AI, Clone;
+  int Health0, Clone;
   float Mass, Length, Radius,
         SmellK, HearK, LookK,
         ShDelta;
   int   Scale0, ScaleA, BaseScore;
-  TPicture CallIcon;
-  
-  int RegionCount;
-  int RType0[32];
-  int AvoidCount;
-  int Avoidances[32];
 
   BOOL fearCall[64];
   BOOL Aquatic;
@@ -581,7 +588,7 @@ typedef struct _TDinoInfo
   //int hunterDeathAnim, hunterDeathOffset;
   int aggress, killDist, flyDist;
 
-  int onRadar;
+  bool onRadar;
   float runspd, jmpspd, wlkspd, swmspd, flyspd, gldspd, tkfspd, lndspd, divspd;
 
   int maxGrad;
@@ -653,6 +660,9 @@ typedef struct _TDinoInfo
   WORD radarColour565, radarColour555;
 
 
+  int SpawnInfoCh;
+  TSpawnInfo SpawnInfo[32];
+
 } TDinoInfo;
 
 typedef struct _TPack
@@ -688,15 +698,30 @@ typedef struct _TAIInfo {
 
 	float rot1, rot2, pWMin; //weaveRange
 
+
+
 } TAIInfo;
 
-typedef struct _TRegion
+typedef struct _TSpawnRegion
+{
+	int XMax, YMax, XMin, YMin;
+} TSpawnRegion;
+
+typedef struct _TSpawnGroup
 {
 	int SpawnMax, SpawnMin;
 	float SpawnRate;
-	int XMax, YMax, XMin, YMin;
+	bool moveForward, Randomised, OnlyActiveNearby;
+	int densityMulti;
+
 	BOOL stayInRegion;
-} TRegion;
+	int spawnRegionCh, avoidRegionCh;
+	TSpawnRegion spawnRegion[16];
+	TSpawnRegion avoidRegion[16];
+
+	int dinoIndexCh;
+	int dinoIndex[128];
+} TSpawnGroup;
 
 
 typedef struct _TWeapInfo
@@ -836,7 +861,7 @@ void InitDirectDraw();
 void WaitRetrace();
 
 //============= Characters =======================
-void Characters_AddSecondaryOne(int ctype);
+void Characters_AddSecondaryOne(TCharacter *cptr);
 void AddDeadBody(TCharacter *cptr, int, bool);
 void PlaceCharacters();
 void PlaceCharactersSurvival();
@@ -966,7 +991,7 @@ void CloseLog();
 _EXTORNOT   float BackViewR;
 _EXTORNOT   int   BackViewRR;
 _EXTORNOT   int   UnderWaterT;
-_EXTORNOT   int   TotalTreeTable, TotalAreaInfo, TotalC, TotalW, TotalMA, TotalTrophy, TotalRegion, TotalAvoid;
+_EXTORNOT   int   TotalTreeTable, TotalAreaInfo, TotalSpawnGroup, TotalC, TotalW, TotalMA, TotalTrophy;// , TotalRegion, TotalAvoid;
 
 
 //========== multiplayer =============//
@@ -1104,6 +1129,7 @@ _EXTORNOT TCharacterInfo WCircleModel;
 _EXTORNOT TModel *CompasModel;
 _EXTORNOT TModel *Binocular;
 _EXTORNOT TDinoInfo DinoInfo[DINOINFO_MAX];
+_EXTORNOT TMenuDinoInfo MenuDinoInfo[16];
 _EXTORNOT int sendGunShot;
 _EXTORNOT int mGunShot[4];
 _EXTORNOT int sendHunterCall;
@@ -1117,11 +1143,12 @@ _EXTORNOT int mDamage[4][DINOINFO_MAX];
 //_EXTORNOT int mDinoCall[4];
 _EXTORNOT bool TreeTable[255];
 _EXTORNOT TAIInfo AIInfo[DINOINFO_MAX];
-_EXTORNOT TRegion Region[256];
-_EXTORNOT TRegion Avoid[256];
+//_EXTORNOT TRegion Region[256];
+//_EXTORNOT TRegion Avoid[256];
 _EXTORNOT TWeapInfo WeapInfo[10];
 _EXTORNOT TCharacterInfo ShipModel;
-_EXTORNOT int AI_to_CIndex[DINOINFO_MAX];
+_EXTORNOT TSpawnGroup spawnGroup[64];
+//_EXTORNOT int AI_to_CIndex[DINOINFO_MAX];
 _EXTORNOT int TrophyIndex[DINOINFO_MAX];
 _EXTORNOT int ChCount, WCCount, ElCount, SnCount,
           ShotDino, TrophyBody, HunterCount; //HunterCount is for multiplayer, up to 3 others
@@ -1139,7 +1166,7 @@ _EXTORNOT TCharacter     MPlayers[3]; //multiplayer
 _EXTORNOT int SurvivalSpawnX; //survival
 _EXTORNOT int SurvivalSpawnZ;
 _EXTORNOT float SurvivalSpawnA;
-_EXTORNOT TRegion SurvivalDinoSpawn; //dino spawn zone
+_EXTORNOT TSpawnRegion SurvivalDinoSpawn; //dino spawn zone
 _EXTORNOT int SurvivalWave;
 _EXTORNOT int SurvivalIndex[128];
 _EXTORNOT int SurvivalIndexCh;
@@ -1278,12 +1305,6 @@ _EXTORNOT   struct _t
 #define HUNT_KILL     3
 
 
-#define AI_BRACH       -1
-#define AI_ICTH        -2
-#define AI_FISH        -3
-#define AI_MOSA        -4
-#define AI_BRACHDANGER -5
-#define AI_LANDBRACH   -6
 
 
 
@@ -1321,7 +1342,15 @@ _EXTORNOT   struct _t
 #define AI_TITAN      28
 #define AI_MICRO      29
 
-#define AI_FINAL	  29 //Last AI of max huntable roster (menu can only display 10)
+
+#define AI_BRACH       30
+#define AI_ICTH        31
+#define AI_FISH        32
+#define AI_MOSA        33
+#define AI_BRACHDANGER 34
+#define AI_LANDBRACH   35
+
+//#define AI_FINAL	  29 //Last AI of max huntable roster (menu can only display 10)
 
 //#define AI_POACHER    22
 

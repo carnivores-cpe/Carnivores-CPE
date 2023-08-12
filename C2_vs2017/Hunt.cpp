@@ -620,8 +620,8 @@ SKIPWEAPON:
   {
     ChCallTime-=TimeDt;
     if (ChCallTime<0) ChCallTime=0;
-    DrawPicture(WinW - 10 - DinoInfo[ AI_to_CIndex[TargetCall] ].CallIcon.W, 7,
-                DinoInfo[ AI_to_CIndex[TargetCall] ].CallIcon);
+    DrawPicture(WinW - 10 - MenuDinoInfo[TargetCall-10].CallIcon.W, 7,
+		MenuDinoInfo[TargetCall-10].CallIcon);
   }
 
   Hardware_ZBuffer(TRUE);

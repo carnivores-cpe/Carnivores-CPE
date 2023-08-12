@@ -3618,7 +3618,7 @@ void RenderCharacterPost(TCharacter *cptr)
     if (cptr->FTime==at-1) return;
     Al = Al * (at-cptr->FTime) / at;
   }
-  if (cptr->AI==0) Al = 0x50;
+  if (cptr->CType==0) Al = 0x50;
 
   grConstantColorValue(Al<<24);
 
@@ -4259,17 +4259,13 @@ void DrawHMap()
       
 		//if (Characters[c].AI<10) continue;
 
-		if (DinoInfo[Characters[c].CType].onRadar > 0) {
-			if (Characters[c].AI >= 10 && DinoInfo[Characters[c].CType].onRadar == 1) {
-				if (!(TargetDino & (1 << Characters[c].AI))) continue;
-			}
-		}
-		else continue;
+		if (!DinoInfo[Characters[c].CType].onRadar) continue;
+
 		//else if (Characters[c].Clone < 1 || Characters[c].Clone > 9) continue; //TEST
 
 			if (!Characters[c].Health) continue;
 			
-			if (Characters[c].AI == AI_HUNTDOG) {
+			if (Characters[c].Clone == AI_HUNTDOG) {
 
 				xx = VideoCX - 128 + (int)Characters[c].pos.x / 1024;
 				yy = VideoCY - 128 + (int)Characters[c].pos.z / 1024;

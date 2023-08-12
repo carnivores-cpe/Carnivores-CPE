@@ -1,0 +1,144 @@
+{
+ name = 'Titanopteryx'
+ file = 'titanopteryx_flier-placeholder.car'
+ clone  = 28
+ radar = 2
+ radR = 0
+ radG = 240
+ radB = 0
+ dogSmell  = TRUE
+ mass      = 1.4
+ length    = 7.1
+ radius    = 256
+ health    = 16
+ basescore = 20
+ scale0    = 1000
+ scaleA    = 550
+ smellK     = 1.8
+ hearK     = 0.9
+ lookK     = 2.0
+ shipdelta = 96
+ flyspd = 1.5
+ gldspd = 1.3
+ divspd = 1.8
+ tkfspd = 1.0
+ lndspd = 0.3
+ runspd = 1.1
+ wlkspd = 0.35
+ swmspd = 0.75
+ aggress = 240
+ flydist = 50
+ killdist = 350
+ runAnim = 1
+ walkAnim = 0
+ flyAnim = 8
+ glideAnim = 9
+ takeoffAnim = 11
+ diveAnim = 12	
+ landAnim = 13
+deathtype{
+ dieAnim = 5
+ fallAnim = 10
+ sleepAnim = 6
+}
+idlegroup{
+ anim = 2
+ startChance = 0.046875
+ endChance = 1
+ instantRepeat = TRUE
+}
+idlegroup{
+ anim = 3
+ startChance = 0.046875
+ endChance = 1
+ instantRepeat = TRUE
+}
+idlegroup{
+ anim = 4
+ startChance = 0.046875
+ endChance = 1
+ instantRepeat = TRUE
+}
+ waterLevel = 140
+killtype{
+ hunterAnim = 0
+ hunterOffset = 320
+ eatAnim = 7
+ scream = TRUE
+}
+ CamYLand = 256
+ CamYWater = 256
+ CamBaseLand = 824
+ CamBaseWater = 824
+ spawninfo {
+ spawnrate = 1
+ spawnmax  = 1
+ spawnmin  = 0
+ }
+ bloR = 112
+ bloG = 0
+ bloB = 0
+ weaveRange = 6592
+}
+
+{
+ name = 'Hesperonychus'
+ file = 'hesper12_3_10-test.car'
+ clone  = 29
+ dogSmell  = TRUE
+ climbDist = 181
+ mass      = 0.3
+ length    = 4.0
+ radius    = 256
+ health    = 6
+ basescore = 12
+ scaleA    = 400
+ smellK     = 1.3
+ hearK     = 0.7
+ lookK     = 0.5
+ shipdelta = -32
+ fearCall = 17
+ fearCall = 18
+ runspd = 1.2
+ wlkspd = 0.428
+ gldspd = 1.80
+ aggress = 160
+ killdist = 256
+ radar = 2
+ radR = 0
+ radG = 240
+ radB = 0
+ runAnim = 0
+ walkAnim = 1
+ slideAnim = 2
+ climbAnim = 3
+ glideAnim = 4
+deathtype{
+ dieAnim = 6
+ sleepAnim = 7
+ fallAnim = 8
+}
+ waterLevel = 140
+killtype{
+ hunterAnim = 0
+ hunterOffset = 170
+ eatAnim = 5
+ scream = TRUE
+}
+ spawninfo {
+ spawnrate = 1
+ spawnmax  = 1
+ spawnmin  = 0
+ }
+ packMax = 4
+ packMin = 3
+ packDensity = 25
+ CamYLand = 256
+ CamYWater = 256
+ CamBaseLand = 824
+ CamBaseWater = 824
+ bloR = 112
+ bloG = 0
+ bloB = 0
+ weaveRange = 1648
+}
