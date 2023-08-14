@@ -1047,9 +1047,9 @@ void d3dDetectCaps()
       conv_pic555(TrophyExit);
       conv_pic555(MapPic);
       conv_pic555(TrophyPic);
-      for (int c=0; c<20; c++)
-        if (DinoInfo[c].CallIcon.W)
-          conv_pic555(DinoInfo[c].CallIcon);
+      for (int c=0; c<10; c++)
+        if (MenuDinoInfo[c].CallIcon.W)
+          conv_pic555(MenuDinoInfo[c].CallIcon);
 
       for (int w=0; w<TotalW; w++)
         if (Weapon.BulletPic[w].W)
@@ -4964,7 +4964,7 @@ void RenderCharacterPost(TCharacter *cptr)
     if (cptr->FTime==at-1) return;
     Al = Al * (at-cptr->FTime) / at;
   }
-  if (cptr->AI==0) Al = 0x50;
+  if (cptr->CType==0) Al = 0x50;
 
   GlassL = (Al<<24) + 0x00222222;
 
@@ -5247,22 +5247,17 @@ void DrawHMap()
       //if (Characters[c].AI<10) continue;
       //if (! (TargetDino & (1<<Characters[c].AI)) ) continue;
 
-		if (DinoInfo[Characters[c].CType].onRadar > 0) {
-			if (Characters[c].AI >= 10 && DinoInfo[Characters[c].CType].onRadar == 1) {
-				if (!(TargetDino & (1 << Characters[c].AI))) continue;
-			}
-		}
-		else continue;
+		if (!DinoInfo[Characters[c].CType].onRadar) continue;
 
       if (!Characters[c].Health) continue;
-	  if (!RadarMode && Characters[c].AI != AI_HUNTDOG) continue;
+	  if (!RadarMode && Characters[c].Clone != AI_HUNTDOG) continue;
       xx = VideoCX - 128 + (int)Characters[c].pos.x / 1024;
       yy = VideoCY - 128 + (int)Characters[c].pos.z / 1024;
       if (yy<=0 || yy>=WinH) goto endmap;
       if (xx<=0 || xx>=WinW) goto endmap;
 
 
-	  if (Characters[c].AI == AI_HUNTDOG) {
+	  if (Characters[c].Clone == AI_HUNTDOG) {
 		  if (VMFORMAT565) DrawBox((WORD*)ddsd.lpSurface, lsw, xx, yy, DinoInfo[Characters[c].CType].radarColour565);
 		  else DrawBox((WORD*)ddsd.lpSurface, lsw, xx, yy, DinoInfo[Characters[c].CType].radarColour555);
 	  }

@@ -3111,7 +3111,6 @@ void ReadCharacters(FILE *stream, int &nextTrophySlot)
 						if (!readChar) readThis = false;
 					}
 					
-
 					break;
 				}
 

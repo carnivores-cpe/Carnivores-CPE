@@ -2641,21 +2641,16 @@ void DrawHMap()
 			//if (! (TargetDino & (1<<Characters[c].AI)) ) continue;
 			//if (Characters[c].AI > 0) continue;
 		
-		if (DinoInfo[Characters[c].CType].onRadar > 0) {
-			if (Characters[c].AI >= 10 && DinoInfo[Characters[c].CType].onRadar ==1) {
-				if (!(TargetDino & (1 << Characters[c].AI))) continue;
-			}
-		}
-		else continue;
+		if (!DinoInfo[Characters[c].CType].onRadar) continue;
 		
 		if (!Characters[c].Health) continue;
-		if (!RadarMode && Characters[c].AI != AI_HUNTDOG) continue;
+		if (!RadarMode && Characters[c].Clone != AI_HUNTDOG) continue;
 			xx = VideoCX - 128 + (int)Characters[c].pos.x / 1024;
 			yy = VideoCY - 128 + (int)Characters[c].pos.z / 1024;
 			if (yy <= 0 || yy >= WinH) continue;
 			if (xx <= 0 || xx >= WinW) continue;
 
-			if (Characters[c].AI == AI_HUNTDOG) {
+			if (Characters[c].Clone == AI_HUNTDOG) {
 				DrawBox((WORD*)lpVideoBuf, xx, yy, DinoInfo[Characters[c].CType].radarColour555);//31<<10
 			}
 			else {
