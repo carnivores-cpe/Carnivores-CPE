@@ -1898,7 +1898,7 @@ void LoadCharacterInfo(TCharacterInfo &chinfo, char* FName)
   ReadFile(hfile, chinfo.Anifx, 64*4, &l, NULL);
   if (l!=256)
     for (l=0; l<64; l++) chinfo.Anifx[l] = -1;
-  CloseHandle(hfile);
+  CloseHandle(hfile); 
 }
 
 
@@ -3185,6 +3185,28 @@ void LoadResourcesScript()
 
 	//mosh/dimet waterlevel 50
 	//gall waterlevel 100
+
+	//these ai can detect player with sight or scent. Maybe make this a res option at some point.
+	AIInfo[AI_PARA].sniffer = TRUE;
+	AIInfo[AI_ANKY].sniffer = TRUE;
+	AIInfo[AI_STEGO].sniffer = TRUE;
+	AIInfo[AI_CHASM].sniffer = TRUE;
+	AIInfo[AI_ALLO].sniffer = TRUE;
+	AIInfo[AI_VELO].sniffer = TRUE;
+	AIInfo[AI_SPINO].sniffer = TRUE;
+	AIInfo[AI_CERAT].sniffer = TRUE;
+	AIInfo[AI_TREX].sniffer = TRUE;
+	AIInfo[AI_PACH].sniffer = TRUE;
+	AIInfo[AI_MICRO].sniffer = TRUE;
+	AIInfo[AI_TITAN].sniffer = TRUE;
+	AIInfo[AI_BRONT].sniffer = TRUE;
+	AIInfo[AI_HOG].sniffer = TRUE;
+	AIInfo[AI_WOLF].sniffer = TRUE;
+	AIInfo[AI_RHINO].sniffer = TRUE;
+	AIInfo[AI_DEER].sniffer = TRUE;
+	AIInfo[AI_SMILO].sniffer = TRUE;
+	AIInfo[AI_MAMM].sniffer = TRUE;
+	AIInfo[AI_BEAR].sniffer = TRUE;
 
 	AIInfo[AI_HUNTDOG].targetDistance = 8048.f;
 	AIInfo[AI_HUNTDOG].noWayCntMin = 8;

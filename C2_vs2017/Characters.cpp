@@ -182,6 +182,14 @@ void SetNewTargetPlaceVanilla(TCharacter *cptr, float R);
 
 void ProcessPrevPhase(TCharacter *cptr)
 {
+/*	char buff[100];
+	sprintf(buff, "\n AI= %i", DinoInfo[cptr->CType].Clone);
+	PrintLog(buff);
+
+	char buff2[100];
+	sprintf(buff2, " Ph= %i", cptr->Phase);
+	PrintLog(buff2);*/
+
 	cptr->PPMorphTime += TimeDt;
 	if (cptr->PPMorphTime > PMORPHTIME) cptr->PrevPhase = cptr->Phase;
 
@@ -208,6 +216,15 @@ void ActivateCharacterFxAquatic(TCharacter *cptr)
 
 void ActivateCharacterFx(TCharacter *cptr)
 {
+	
+	//char buff[100];
+	//sprintf(buff, "\n AI= %i", DinoInfo[cptr->CType].Clone);
+	//PrintLog(buff);
+
+	//char buff2[100];
+	//sprintf(buff2, " Ph= %i", cptr->Phase);
+	//PrintLog(buff2);
+
 	if (cptr->CType) //== not hunter ==//
 		if (UNDERWATER) return;
 	int fx = cptr->pinfo->Anifx[cptr->Phase];
@@ -218,6 +235,7 @@ void ActivateCharacterFx(TCharacter *cptr)
 	AddVoice3d(cptr->pinfo->SoundFX[fx].length,
 		cptr->pinfo->SoundFX[fx].lpData,
 		cptr->pos.x, cptr->pos.y, cptr->pos.z);
+		
 }
 
 
@@ -7781,30 +7799,11 @@ void AnimateCharacters()
 		}
 
 		if (cptr->tgtime > 30 * 1000) {
-			if (cptr->Clone < 0) {
 
-				switch (cptr->Clone) {
-				case AI_BRACH:
-					SetNewTargetPlace_Brahi(cptr, 2048.f);
-					break;
-				case AI_BRACHDANGER:
-					SetNewTargetPlace_Brahi(cptr, 2048.f);
-					break;
-				case AI_LANDBRACH:
-					SetNewTargetPlace_Brahi(cptr, 2048.f);
-					break;
-				case AI_MOSA:
-					SetNewTargetPlaceFish(cptr, 5048.f);
-					break;
-				case AI_FISH:
-					SetNewTargetPlaceFish(cptr, 1024.f);
-					break;
-				}
-
-			}
-			else {
-				SetNewTargetPlace(cptr, 2048);
-			}
+			if (cptr->Clone == AI_BRACH || cptr->Clone == AI_BRACHDANGER || cptr->Clone == AI_LANDBRACH) SetNewTargetPlace_Brahi(cptr, 2048.f);
+			else if (cptr->Clone == AI_MOSA) SetNewTargetPlaceFish(cptr, 5048.f);
+			else if (cptr->Clone == AI_FISH) SetNewTargetPlaceFish(cptr, 1024.f);
+			else SetNewTargetPlace(cptr, 2048);
 
 		}
 
@@ -7993,7 +7992,7 @@ void CheckAfraid()
 	{
 		TCharacter *cptr = &Characters[c];
 		if (!cptr->Health) continue;
-		if (cptr->Clone < 10) continue;
+		if (!AIInfo[cptr->Clone].sniffer) continue;
 		//if (cptr->AfraidTime || cptr->State == 1) continue;
 
 		if (cptr->Clone == AI_TREX && (cptr->AfraidTime || cptr->State == 1)) continue; //here to check if hunter detected once it starts running from fear call, trex doesn't like it tho
@@ -8290,13 +8289,25 @@ replaceSMA:
 		}
 	}
 
-	
 	if (!moveForward)
 		if (fabs(Characters[ChCount].pos.x - PlayerX) +
 			fabs(Characters[ChCount].pos.z - PlayerZ) < 256 * 40)
 			goto replaceSMA;
 
-	if (CheckPlaceCollisionP(Characters[ChCount].pos)) goto replaceSMA;
+	
+	if (DinoInfo[Characters[ChCount].CType].Clone == AI_BRACH ||
+		DinoInfo[Characters[ChCount].CType].Clone == AI_BRACHDANGER ||
+		DinoInfo[Characters[ChCount].CType].Clone == AI_ICTH) {
+		if (AquaticCheckPlaceCollisionP(Characters[ChCount].pos)) goto replaceSMA;
+	}
+	else if (DinoInfo[Characters[ChCount].CType].Clone == AI_FISH ||
+		DinoInfo[Characters[ChCount].CType].Clone == AI_MOSA) {
+		if (AquaticCheckPlaceCollisionP(Characters[ChCount].pos)) goto replaceSMA;
+	}
+	else if (CheckPlaceCollisionP(Characters[ChCount].pos)) goto replaceSMA;
+
+
+	
 	
 
 	Characters[ChCount].tgx = Characters[ChCount].pos.x;

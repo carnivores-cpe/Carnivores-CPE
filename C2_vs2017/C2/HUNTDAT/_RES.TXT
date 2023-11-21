@@ -1211,10 +1211,14 @@ killtype{
  name = 'Brachiosaurus'
  file = 'dangerbrachikiller9.car'
  ai  = 34
+spawninfo{
+ spawngroup = 3
+ spawnratio = 1
+}
  radar = TRUE
- radR = 0
- radG = 240
- radB = 240
+ radR = 250
+ radG = 150
+ radB = 50
  canswim = TRUE
  waterLevel = 550
  mass      = 9
@@ -1234,6 +1238,7 @@ killtype{
  runrotatespeed = 2.0
  collisiondist = 128
  walkAnim = 0
+ runAnim = 7
 deathtype{
  dieAnim = 4
  sleepAnim = 5

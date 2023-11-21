@@ -698,7 +698,7 @@ typedef struct _TAIInfo {
 
 	float rot1, rot2, pWMin; //weaveRange
 
-
+	bool sniffer;
 
 } TAIInfo;
 
