@@ -52,29 +52,15 @@ Loading: HUNTDAT\ptera.car
 Loading: HUNTDAT\dimet.car
 Loading: HUNTDAT\par9.car
 Loading: HUNTDAT\ankylo1.car
-Loading: HUNTDAT\stego.car
 Loading: HUNTDAT\ALLOt_iictt.car
-Loading: HUNTDAT\chasmosa.car
 Loading: HUNTDAT\velo_iidct2.car
-Loading: HUNTDAT\spino_s.car
-Loading: HUNTDAT\cerato1_s.car
-Loading: HUNTDAT\tirex.car
-Loading: HUNTDAT\burianicth_2023_3.car
+Loading: HUNTDAT\dangerbrachikiller9.car
 Loading: HUNTDAT\WEAPONS\shotgun.car
 Loading: HUNTDAT\WEAPONS\bullet2.tga
 Voodoo: Can't set selected video mode
 Start Address: 0
 End   Address: 8388592
 Audio_UpdateGeometry: 324 faces uploaded
-Trophy Loaded.
-TrophyB Loaded.
-  AudioStop ()
-Entered game
-ReInitGame();
-Placing...
-Voodoo: Can't set selected video mode
-Start Address: 0
-End   Address: 8388592
 Trophy Saved.
 TrophyB Saved.
   AudioStop ()

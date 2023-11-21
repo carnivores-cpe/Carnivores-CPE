@@ -260,6 +260,15 @@ void ResetCharacter(TCharacter *cptr)
 	cptr->BloodTTime = 0;
 	cptr->BloodTime = 0;
 
+	if (cptr->Clone == AI_BRACH ||
+		cptr->Clone == AI_BRACHDANGER ||
+		cptr->Clone == AI_ICTH ||
+		cptr->Clone == AI_FISH ||
+		cptr->Clone == AI_MOSA) {
+		cptr->cpcpAquatic = TRUE;
+	}
+	else cptr->cpcpAquatic = FALSE;
+
 	cptr->currentIdleGroup = -1;
 	cptr->currentIdle2Group = -1;
 
@@ -441,7 +450,7 @@ void ThinkY_Beta_Gamma(TCharacter *cptr, float blook, float glook, float blim, f
 
 
 
-int CheckPlaceCollisionP(Vector3d &v)
+int CheckPlaceCollisionP(Vector3d &v, bool aquatic)
 {
 	int ccx = (int)v.x / 256;
 	int ccz = (int)v.z / 256;
@@ -452,7 +461,13 @@ int CheckPlaceCollisionP(Vector3d &v)
 		FMap[ccz][ccx] |
 		FMap[ccz + 1][ccx] | FMap[ccz][ccx + 1] | FMap[ccz + 1][ccx + 1]);
 
-	if (F & (fmWater + fmNOWAY)) return 1;
+	if (aquatic) {
+		if (F & fmNOWAY) return 1;
+	}
+	else if (F & (fmWater + fmNOWAY)) return 1;
+
+
+	
 
 
 	float h = GetLandH(v.x, v.z);
@@ -467,57 +482,6 @@ int CheckPlaceCollisionP(Vector3d &v)
 	hh = GetLandH(v.x + 164, v.z + 164);
 	if (fabs(hh - h) > 160) return 1;
 
-	for (int z = -2; z <= 2; z++)
-		for (int x = -2; x <= 2; x++)
-			if (OMap[ccz + z][ccx + x] != 255)
-			{
-				int ob = OMap[ccz + z][ccx + x];
-				if (MObjects[ob].info.Radius < 10) continue;
-				float CR = (float)MObjects[ob].info.Radius + 64;
-
-				float oz = (ccz + z) * 256.f + 128.f;
-				float ox = (ccx + x) * 256.f + 128.f;
-
-				float r = (float)sqrt((ox - v.x)*(ox - v.x) + (oz - v.z)*(oz - v.z));
-				if (r < CR) return 1;
-			}
-
-	return 0;
-}
-
-
-//checks place collision without checking for water I think?
-int AquaticCheckPlaceCollisionP(Vector3d &v)
-{
-	int ccx = (int)v.x / 256;
-	int ccz = (int)v.z / 256;
-
-	//keep this
-	if (ccx < 4 || ccz < 4 || ccx>1008 || ccz>1008) return 1;
-
-	//what does this mean??
-	int F = (FMap[ccz][ccx - 1] | FMap[ccz - 1][ccx] | FMap[ccz - 1][ccx - 1] |
-		FMap[ccz][ccx] |
-		FMap[ccz + 1][ccx] | FMap[ccz][ccx + 1] | FMap[ccz + 1][ccx + 1]);
-
-	//what does this mean??
-	if (F & fmNOWAY) return 1;
-
-	//keep this
-	float h = GetLandH(v.x, v.z);
-	v.y = h;
-
-	//keep this
-	float hh = GetLandH(v.x - 164, v.z - 164);
-	if (fabs(hh - h) > 160) return 1;
-	hh = GetLandH(v.x + 164, v.z - 164);
-	if (fabs(hh - h) > 160) return 1;
-	hh = GetLandH(v.x - 164, v.z + 164);
-	if (fabs(hh - h) > 160) return 1;
-	hh = GetLandH(v.x + 164, v.z + 164);
-	if (fabs(hh - h) > 160) return 1;
-
-	//keep this
 	for (int z = -2; z <= 2; z++)
 		for (int x = -2; x <= 2; x++)
 			if (OMap[ccz + z][ccx + x] != 255)
@@ -960,16 +924,18 @@ int CheckPlaceCollisionBrahi(TCharacter *cptr, Vector3d &v, BOOL wc, BOOL mc)
 		}
 	}
 
+	int limit = 550;//550
+	int range = 256;//256bluz
 	if (wc) {
-		if ((GetLandUpH(v.x, v.z) - GetLandH(v.x, v.z)) > 550 ||
-			(GetLandUpH(v.x + 256, v.z) - GetLandH(v.x + 256, v.z)) > 550 ||
-			(GetLandUpH(v.x, v.z + 256) - GetLandH(v.x, v.z + 256)) > 550 ||
-			(GetLandUpH(v.x + 256, v.z + 256) - GetLandH(v.x + 256, v.z + 256)) > 550 ||
-			(GetLandUpH(v.x - 256, v.z) - GetLandH(v.x - 256, v.z)) > 550 ||
-			(GetLandUpH(v.x, v.z - 256) - GetLandH(v.x, v.z - 256)) > 550 ||
-			(GetLandUpH(v.x - 256, v.z - 256) - GetLandH(v.x - 256, v.z - 256)) > 550 ||
-			(GetLandUpH(v.x + 256, v.z - 256) - GetLandH(v.x + 256, v.z - 256)) > 550 ||
-			(GetLandUpH(v.x - 256, v.z + 256) - GetLandH(v.x - 256, v.z + 256)) > 550) return 1;
+		if ((GetLandUpH(v.x, v.z) - GetLandH(v.x, v.z)) > limit ||
+			(GetLandUpH(v.x + range, v.z) - GetLandH(v.x + range, v.z)) > limit ||
+			(GetLandUpH(v.x, v.z + range) - GetLandH(v.x, v.z + range)) > limit ||
+			(GetLandUpH(v.x + range, v.z + range) - GetLandH(v.x + range, v.z + range)) > limit ||
+			(GetLandUpH(v.x - range, v.z) - GetLandH(v.x - range, v.z)) > limit ||
+			(GetLandUpH(v.x, v.z - range) - GetLandH(v.x, v.z - range)) > limit ||
+			(GetLandUpH(v.x - range, v.z - range) - GetLandH(v.x - range, v.z - range)) > limit ||
+			(GetLandUpH(v.x + range, v.z - range) - GetLandH(v.x + range, v.z - range)) > limit ||
+			(GetLandUpH(v.x - range, v.z + range) - GetLandH(v.x - range, v.z + range)) > limit) return 1;
 	}
 
 	float h = GetLandH(v.x, v.z);
@@ -1165,7 +1131,8 @@ BOOL ReplaceCharacterForward(TCharacter *cptr)
 	if (p.x > 1000 * 256) return FALSE;
 	if (p.z > 1000 * 256) return FALSE;
 
-	if (CheckPlaceCollisionP(p)) return FALSE;
+
+	if (CheckPlaceCollisionP(p, cptr->cpcpAquatic)) return FALSE;
 
 	cptr->State = 0;
 	cptr->pos = p;
@@ -1195,7 +1162,7 @@ replace1:
 	Characters[ChCount].pos.y = GetLandH(Characters[ChCount].pos.x,
 		Characters[ChCount].pos.z);
 
-	if (CheckPlaceCollisionP(Characters[ChCount].pos)) goto replace1;
+	if (CheckPlaceCollisionP(Characters[ChCount].pos, cptr->cpcpAquatic)) goto replace1;
 
 	if (fabs(Characters[ChCount].pos.x - PlayerX) +
 		fabs(Characters[ChCount].pos.z - PlayerZ) < 256 * 40)
@@ -1398,7 +1365,7 @@ replace:
 	*/
 
 	if (tr < 256)
-		if (AquaticCheckPlaceCollisionP(p)) goto replace;
+		if (CheckPlaceCollisionP(p,true)) goto replace;
 
 	cptr->tgtime = 0;
 	cptr->tgx = p.x;
@@ -1430,7 +1397,7 @@ replace:
 	}
 
 	if (tr < 256)
-		if (AquaticCheckPlaceCollisionP(p)) goto replace;
+		if (CheckPlaceCollisionP(p,true)) goto replace;
 
 	cptr->tgtime = 0;
 	cptr->tgx = p.x;
@@ -1475,7 +1442,7 @@ replace:
 	R += 512;
 
 	if (tr < 256)
-		if (CheckPlaceCollisionP(p)) goto replace;
+		if (CheckPlaceCollisionP(p, cptr->cpcpAquatic)) goto replace;
 
 	cptr->tgtime = 0;
 	cptr->tgx = p.x;
@@ -1526,7 +1493,7 @@ replace:
 	R += 512;
 
 	if (tr < 256)
-		if (CheckPlaceCollisionP(p)) goto replace;
+		if (CheckPlaceCollisionP(p, cptr->cpcpAquatic)) goto replace;
 
 	cptr->tgtime = 0;
 	cptr->tgx = p.x;
@@ -8294,17 +8261,15 @@ replaceSMA:
 			fabs(Characters[ChCount].pos.z - PlayerZ) < 256 * 40)
 			goto replaceSMA;
 
-	
+	//note character not reset yet, cpcpAquatic not set.
 	if (DinoInfo[Characters[ChCount].CType].Clone == AI_BRACH ||
 		DinoInfo[Characters[ChCount].CType].Clone == AI_BRACHDANGER ||
-		DinoInfo[Characters[ChCount].CType].Clone == AI_ICTH) {
-		if (AquaticCheckPlaceCollisionP(Characters[ChCount].pos)) goto replaceSMA;
-	}
-	else if (DinoInfo[Characters[ChCount].CType].Clone == AI_FISH ||
+		DinoInfo[Characters[ChCount].CType].Clone == AI_ICTH ||
+		DinoInfo[Characters[ChCount].CType].Clone == AI_FISH ||
 		DinoInfo[Characters[ChCount].CType].Clone == AI_MOSA) {
-		if (AquaticCheckPlaceCollisionP(Characters[ChCount].pos)) goto replaceSMA;
+		if (CheckPlaceCollisionP(Characters[ChCount].pos, true)) goto replaceSMA;
 	}
-	else if (CheckPlaceCollisionP(Characters[ChCount].pos)) goto replaceSMA;
+	else if (CheckPlaceCollisionP(Characters[ChCount].pos, false)) goto replaceSMA;
 
 
 	

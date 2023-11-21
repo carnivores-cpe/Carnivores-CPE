@@ -1702,8 +1702,8 @@ void MakeCall()
       }
 	  */
 
-	if (DinoInfo[cptr->CType].menuDino != TargetCall) continue;
-    if (cptr->AfraidTime) continue;
+	if (DinoInfo[cptr->CType].menuDino != TargetCall-10) continue;
+	if (cptr->AfraidTime) continue;
     if (cptr->State) continue;
 
     float d = VectorLength(SubVectors(PlayerPos, cptr->pos));

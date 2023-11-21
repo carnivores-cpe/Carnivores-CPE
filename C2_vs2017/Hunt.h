@@ -397,6 +397,8 @@ typedef struct _TCharacter
   Vector3d sonar;
   BOOL showSonar;
 
+  bool cpcpAquatic;//checkplacecollisionaquatic - can spawn in water,brach,icth,mosa,fish
+
 } TCharacter;
 
 
@@ -557,7 +559,7 @@ typedef struct _TMenuDinoInfo
 
 typedef struct _TDinoInfo
 {
-	int menuDino;
+	int menuDino = -1;
 
   char Name[48], FName[48], PName[48];
   int Health0, Clone;
