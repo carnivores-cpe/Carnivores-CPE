@@ -8594,6 +8594,7 @@ void PlaceCharacters()
 				m /= 128.f;
 				m *= spawnGroup[sg].densityMulti;
 				spawnNo += (int)m;
+				if (spawnNo < 0) spawnNo = 0;
 			}
 
 			tr = 0;
