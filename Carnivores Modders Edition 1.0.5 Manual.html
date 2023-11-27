@@ -259,6 +259,8 @@ function expand(n) {
 			
 			
 			<ul>
+				<li>New spawngroup system.</li>
+				<li>A creature can now be set to respond to a specific call.</li>
 				<li>Overwrite if a creature is selected from the menu.</li>
 				<!--<li>You can now hide creatures on the hunt menu until the player can afford them</li>-->
 				<!--<li>10th huntable slot</li>
@@ -270,8 +272,19 @@ function expand(n) {
 			<b>Note: The new carnivores menu should NOT be set to compatibility mode</b>
 			</p>-->
 			
+			<b>Note: As of 1.0.5, AI should be used to set a creatures AI, not Clone.</b>
 			
-			<b>Note: An account must be created with the Carn2 menu before you can run survival mode.</b>
+			<p>
+			<b>Note: As of 1.0.5, all creatures are defined within the characters section of the _RES.</b>
+			</p>
+			
+			Note: As of 1.0.5, radar should now be set to TRUE or FALSE (a char overwrite can be used for huntables).
+
+			<p>
+			<b>Note: As of 1.0.5, fearCall should now use numbers 0-8 (or 0-9) to specify which call to fear.</b>
+</p><br>
+	
+	<b>Note: An account must be created with the Carn2 menu before you can run survival mode.</b>
 			
 			<p>
 			<b>Note: Save files from Modders Edition 1.0.3 or prior or vanilla Carnivores 2 are not compatible with this version.</b>
@@ -311,19 +324,20 @@ function expand(n) {
 				<li>All huntable carnivore AI can be made non-dangerous</li>
 				<li>All ambient AI available for map ambient slots</li>
 				<li>All huntable AI available for map ambient slots</li>
-				<li>Pachycephalosaurus AI (available as huntable or map ambient)</li>
-				<li>All Ice Age AI (available as huntable or map ambient)</li>
-				<li>Dangerous brachiosaurus AI (available as a map ambient)</li>
-				<li>(Dangerous) land brachiosaurus AI (available as a map ambient)</li>
-				<li>Ichthyornis AI (available as a map ambient)</li>
-				<li>Fish AI (available as a map ambient)</li>
-				<li>Mosasaurus AI (available as a map ambient)</li>
+				<li>Pachycephalosaurus AI</li>
+				<li>All Ice Age AI</li>
+				<li>Dangerous brachiosaurus AI</li>
+				<li>(Dangerous) land brachiosaurus AI</li>
+				<li>Ichthyornis AI</li>
+				<li>Fish AI</li>
+				<li>Mosasaurus AI</li>
+				<li>Fully customisable spawning rules for all creatures</li>
 				<li>Fish/mosasaurus AI can be made dangerous/non-dangerous</li>
 				<li>Swimming can be added to ambient creatures</li>
 				<li>Swimming can be added to huntable herbivores</li>
 				<li>Swimming can be disabled for carnivores</li>
 				<li>Manually set how high each creature swims in the water</li>
-				<li>Pack/herding AI can be added to any AI in huntable and map ambient slots</li>
+				<li>Pack/herding AI can be added to any AI</li>
 				<li>Pack max/min size and density can be customised</li>
 				<li>Speed patch</li>
 				<li>Aggression patch</li>
@@ -339,11 +353,7 @@ function expand(n) {
 				<li>Up to 32 smell animations per creature (t-rex AI creatures only)</li>
 				<li>Up to 32 water idle animations per creature (ichthyornis AI creatures only)</li>
 				<li>Up to 32 water death animations per creature (dimorphodon/pteranodon/ichthyornis AI creatures only)</li>
-				<li>Specific ambients can be made visible on radar</li>
-				<li>Specific map ambients can be made visible on radar</li>
-				<li>Specific huntables can be made invisible to radar</li>
-				<li>Specific huntables can be made visible to radar when unselected</li>
-				<li>Make creatures appear as a question mark on radar</li>
+				<li>Creatures showing on radar can be individually toggled</li>
 				<li>Set radar colour for creatures</li>
 				<li>Set blood colour for creatures</li>
 				<li>Option to disable bending for creatures</li>
@@ -358,10 +368,10 @@ function expand(n) {
 				<li>Specific huntables can be non-addable to the trophy room</li>
 				<li>Kill animations can be changed to only play once, instead of looping.</li>
 				<li>Change which dinos run from certain calls</li>
-				<li>Up to 32 spawn regions for each map ambient per map</li>
-				<li>Spawn max/min and spawnrate per map ambient per spawn region (minimum spawn rate of 1/1000 chance per hunt)</li>
-				<li>Map ambients can be set to never leave certain spawn regions unless chased/lured out.</li>
-				<li>Up to 32 avoidance regions for each map ambient per map</li>
+				<li>Custom spawn regions for each creture per map</li>
+				<li>Spawn max/min and spawnrate per creature per map (minimum spawn rate of 1/1000 chance per hunt)</li>
+				<li>Creatures can be set to never leave certain spawn regions unless chased/lured out.</li>
+				<li>Individual creatures can be set to avoid specific areas per map.</li>
 				<li>Minimum/maximum depth (fish/mosasaurus AI creatures only)</li>
 				<li>Minimum/maximum altitude for flier AI creatures</li>
 				<li>New overwrite system - Any RES value can be adjusted depending on map, time of day, creature selected or a combination</li>
@@ -1500,7 +1510,7 @@ reduced by the whole value of densityMulti. e.g. in the above screenshot, the ma
 		
 		<p>
 		An overwrite is used to change any _RES value depending on the area, time of day and creature(s) selected from the hunt menu.
-		This can be used to change the name, CAR file, clone etc.
+		This can be used to change the name, CAR file, ai etc.
 		</p>
 
 		<p>
@@ -1562,10 +1572,6 @@ reduced by the whole value of densityMulti. e.g. in the above screenshot, the ma
 		The below example adds an extra eat animation at night without removing the existing one.
 		</p>
 		<img width=50% height=auto alt="" src=" data:image/png;base64,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">
-			
-		<p>
-		Note: The ai value cannot be changed in an overwrite or addition statement. To overwrite the ai, use the clone value.
-		</p>
 		
 		<p>
 		Note: The 10th area should be written as area0, not area10.
@@ -1576,37 +1582,7 @@ reduced by the whole value of densityMulti. e.g. in the above screenshot, the ma
 	</div>
 </p>
 
-		
-<p style="margin-top:4%;">
-	<h2 id="arrow_6" unselectable="on" onclick="expand(6)"
-		style="float:left;margin-top:0;cursor:pointer;
-		-moz-user-select:none;
-		user-select:none;
-		-webkit-user-select: none;
-		-ms-user-select: none;"
-		>></h2>
-	<div class = "con" style="margin-left:4%">
-		<h2 onclick="expand(6)" style="cursor:pointer;">_RES value: ai</h2>
-		<div id="content_6" style="display: none">
-		
-			<p><b>Data type: Whole Number</b></p>
-			
-			This value defines the creatures slot. Classic ambients must use slots 1-5, and huntables must use slots 10+ (This value should not be changed - use
-			the clone value to switch out AI). There is no need to define AI for map
-			ambients.
-			
-			<div class="grid-container">
-				<div class="grid-item">Classic Ambients</div>
-				<div class="grid-item">Required (1-5)</div>
-				<div class="grid-item">Map Ambients</div>
-				<div class="grid-item">No</div>
-				<div class="grid-item">Huntables</div>
-				<div class="grid-item">Required (10+)</div>
-			</div>
-			
-		</div>
-	</div>
-</p>
+	
 		
 <p style="margin-top:4%;">
 	<h2 id="arrow_7" unselectable="on" onclick="expand(7)"
@@ -1617,13 +1593,12 @@ reduced by the whole value of densityMulti. e.g. in the above screenshot, the ma
 		-ms-user-select: none;"
 		>></h2>
 	<div class = "con" style="margin-left:4%">
-		<h2 onclick="expand(7)" style="cursor:pointer;">_RES value: clone</h2>
+		<h2 onclick="expand(7)" style="cursor:pointer;">_RES value: AI</h2>
 		<div id="content_7" style="display: none">
 		
 			<p><b>Data type: Whole Number</b></p>
 			
-			This value defines the AI used by the creature, it can be used to change the order of the huntable roster (including making multiple slots use the
-			same AI), and is used to set the AI for map ambients (including setting map ambients to use huntable and classic ambient AI):
+			This value defines the AI used by the creature:
 			
 			<div class="grid-container">
 				<div class="grid-item"><b>Value</b></div>
@@ -1692,20 +1667,6 @@ reduced by the whole value of densityMulti. e.g. in the above screenshot, the ma
 				<div class="grid-item">Bear/Yeti</div>
 				
 			</div>
-			<p>
-			Note: Although huntable and classic ambient slots can be set to non-huntable and non-classic ambient AI using clone, the spawning rules may be
-			affected (see below recommendations). It's advised to test using
-			the radar value. This may be subject to change in future updates.
-			
-			<div class="grid-container">
-				<div class="grid-item">Classic Ambients</div>
-				<div class="grid-item">Required (1-6)</div>
-				<div class="grid-item">Map Ambients</div>
-				<div class="grid-item">Required (Any value)</div>
-				<div class="grid-item">Huntables</div>
-				<div class="grid-item">Required (10+)</div>
-			</div>
-			</p>
 		</div>
 	</div>
 </p>
@@ -1739,6 +1700,73 @@ reduced by the whole value of densityMulti. e.g. in the above screenshot, the ma
 		
 		
 <p style="margin-top:4%;">
+	<h2 id="arrow_77" unselectable="on" onclick="expand(77)"
+		style="float:left;margin-top:0;cursor:pointer;
+		-moz-user-select:none;
+		user-select:none;
+		-webkit-user-select: none;
+		-ms-user-select: none;"
+		>></h2>
+	<div class = "con" style="margin-left:4%">
+		<h2 onclick="expand(77)" style="cursor:pointer;">_RES value: callNo</h2>
+		<div id="content_77" style="display: none">
+		
+			<p><b>Data type: Whole Number</b></p>
+			<p>
+			The animal will respond when this call is played.
+			</p>
+
+			<div class="grid-container">
+				<div class="grid-item"><b>AI</b></div>
+				<div class="grid-item"><b>Vanilla Value</b></div>
+
+				<div class="grid-item">Parasaurolophus</div>
+				<div class="grid-item">0</div>
+				<div class="grid-item">Ankylosaurus</div>
+				<div class="grid-item">1</div>
+				<div class="grid-item">Stegosaurus</div>
+				<div class="grid-item">2</div>
+				<div class="grid-item">Allosaurus</div>
+				<div class="grid-item">3</div>
+				<div class="grid-item">Chasmosaurus/Triceratops</div>
+				<div class="grid-item">4</div>
+				<div class="grid-item">Velociraptor</div>
+				<div class="grid-item">5</div>
+				<div class="grid-item">Spinosaurus</div>
+				<div class="grid-item">6</div>
+				<div class="grid-item">Ceratosaurus</div>
+				<div class="grid-item">7</div>
+				<div class="grid-item">T-Rex</div>
+				<div class="grid-item">8</div>
+				
+				<div class="grid-item">Brontoteriy</div>
+				<div class="grid-item">0</div>
+				<div class="grid-item">Wild Boar</div>
+				<div class="grid-item">1</div>
+				<div class="grid-item">Wolf</div>
+				<div class="grid-item">2</div>
+				<div class="grid-item">Wooly Rhinoceros</div>
+				<div class="grid-item">3</div>
+				<div class="grid-item">Diatryma</div>
+				<div class="grid-item">4</div>
+				<div class="grid-item">Giant deer</div>
+				<div class="grid-item">5</div>
+				<div class="grid-item">Smilodon</div>
+				<div class="grid-item">6</div>
+				<div class="grid-item">Mammoth</div>
+				<div class="grid-item">7</div>
+				<div class="grid-item">Bear</div>
+				<div class="grid-item">8</div>
+				<div class="grid-item">Yeti</div>
+				<div class="grid-item">9</div>
+				
+			</div>
+			
+		</div>
+	</div>
+</p>		
+		
+<p style="margin-top:4%;">
 	<h2 id="arrow_10" unselectable="on" onclick="expand(10)"
 		style="float:left;margin-top:0;cursor:pointer;
 		-moz-user-select:none;
@@ -1752,15 +1780,61 @@ reduced by the whole value of densityMulti. e.g. in the above screenshot, the ma
 		
 			<p><b>Data type: Whole Number</b></p>
 			<p>
-			The animal will flee when this call is played. Set fearCall to the ai of the call to run from. It can be defined multiple times for each creature's call
-			</p><p>
-			e.g. to make a dino run from ceratosaurus and t-rex calls, you should add these two lines:
-		    </p>
-			<img width=50% height=auto alt="" src="data:image/png;base64,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">
+			The animal will flee when this call is played. Set fearCall to the creatures number of the call to run from. It can be defined multiple times for each creature's call
+			</p>
+			
+			
+			<div class="grid-container">
+				<div class="grid-item"><b>AI</b></div>
+				<div class="grid-item"><b>corresponding fearCall value</b></div>
+
+				<div class="grid-item">Parasaurolophus</div>
+				<div class="grid-item">0</div>
+				<div class="grid-item">Ankylosaurus</div>
+				<div class="grid-item">1</div>
+				<div class="grid-item">Stegosaurus</div>
+				<div class="grid-item">2</div>
+				<div class="grid-item">Allosaurus</div>
+				<div class="grid-item">3</div>
+				<div class="grid-item">Chasmosaurus/Triceratops</div>
+				<div class="grid-item">4</div>
+				<div class="grid-item">Velociraptor</div>
+				<div class="grid-item">5</div>
+				<div class="grid-item">Spinosaurus</div>
+				<div class="grid-item">6</div>
+				<div class="grid-item">Ceratosaurus</div>
+				<div class="grid-item">7</div>
+				<div class="grid-item">T-Rex</div>
+				<div class="grid-item">8</div>
+				
+				<div class="grid-item">Brontoteriy</div>
+				<div class="grid-item">0</div>
+				<div class="grid-item">Wild Boar</div>
+				<div class="grid-item">1</div>
+				<div class="grid-item">Wolf</div>
+				<div class="grid-item">2</div>
+				<div class="grid-item">Wooly Rhinoceros</div>
+				<div class="grid-item">3</div>
+				<div class="grid-item">Diatryma</div>
+				<div class="grid-item">4</div>
+				<div class="grid-item">Giant deer</div>
+				<div class="grid-item">5</div>
+				<div class="grid-item">Smilodon</div>
+				<div class="grid-item">6</div>
+				<div class="grid-item">Mammoth</div>
+				<div class="grid-item">7</div>
+				<div class="grid-item">Bear</div>
+				<div class="grid-item">8</div>
+				<div class="grid-item">Yeti</div>
+				<div class="grid-item">9</div>
+				
+			</div>
+			
 			<p>
-			Note: A dino will only charge if within "aggress" range AND if it has detected the hunter, so players can use fearCall to scare away big predators if they haven't noticed the hunter).
+			Note: A dino will only charge if within "aggress" range AND if it has detected the hunter, so players can use fearCall to scare away big predators if they
+			haven't noticed the hunter).
 			</p><p>
-			Note: Creatures using a clone value of 18 (t-rex AI) will never flee.
+			Note: Creatures using an AI value of 18 (t-rex AI) will never flee.
 			</p>
 		</div>
 	</div>
@@ -1785,7 +1859,16 @@ reduced by the whole value of densityMulti. e.g. in the above screenshot, the ma
 			<p>
 			This will undo a fearCall statement, e.g. the following will make a creature no longer fear t-rex calls at night:
 		    </p>
-			<img width=50% height=auto alt="" src=" data:image/png;base64,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">
+			<div class="grid-container">
+				<div class="grid-item" style="text-align: left">
+fearCall = 18</br>
+overwrite time2 {</br>
+dontFear = 18</br>
+}
+				</div>
+			</div>
+			
+			
 		</div>
 	</div>
 </p>
@@ -1805,10 +1888,10 @@ reduced by the whole value of densityMulti. e.g. in the above screenshot, the ma
 		
 			<p><b>Data type: TRUE/FALSE</b></p>
 			<p>
-			Setting this to true allows the creature to swim. This can be applied to carnivores, herbivores and classic ambients, but not to classic brachiosaurus, dangerous brachiosaurus, ichthyornis, fish or mosasaurus AI creatures.
+			Setting this to true allows the creature to swim. This cannot be applied to classic brachiosaurus, dangerous brachiosaurus, ichthyornis, fish or mosasaurus AI creatures.
 			Setting canswim to true for land brachiosaurus AI will allow it to also wade into the water like a standard brachiosaurus.
 			</p><p>
-			Note: if canswim is true, you must also set waterLevel (see below).
+			Note: if canswim is true, you must also set waterLevel (see below).<br>
 			Note: Creatures that can swim must also have swimAnim and swmspd.
 			</p>
 		</div>
@@ -2210,22 +2293,12 @@ reduced by the whole value of densityMulti. e.g. in the above screenshot, the ma
 		<h2 onclick="expand(50)" style="cursor:pointer;">_RES value: radar</h2>
 		<div id="content_50" style="display: none">
 		
-			<p><b>Data type: Whole Number</b></p>
+			<p><b>Data type: TRUE/FALSE</b></p>
 			<p>
-			Sets whether a creature can be seen on radar, see below.
+			If set to true, the creature will show on radar.
 		    </p>
 			
-			
-			<div class="grid-container">
-				<div class="grid-item"><b>radar value</b></div>
-				<div class="grid-item"><b>result</b></div>
-				<div class="grid-item">0</div>
-				<div class="grid-item">Never appears on radar</div>
-				<div class="grid-item">1</div>
-				<div class="grid-item">Appears on radar if selected from the hunt menu (huntables only)</div>
-				<div class="grid-item">2</div>
-				<div class="grid-item">Always appears on radar</div>
-			</div>
+
 		</div>
 	</div>
 </p>	
@@ -2891,7 +2964,7 @@ reduced by the whole value of densityMulti. e.g. in the above screenshot, the ma
 		
 			<p><b>Data type: Decimal Number</b></p>
 			<p>
-			Required for dangerous brachiosaurus and land brachiosaurus AI only. Thsi value sets the maxmimum turning speed while running.
+			Required for dangerous brachiosaurus and land brachiosaurus AI only. This value sets the maxmimum turning speed while running.
 		    </p>
 			
 			
@@ -2924,8 +2997,10 @@ reduced by the whole value of densityMulti. e.g. in the above screenshot, the ma
 		
 			<p><b>Data type: Whole Number</b></p>
 			<p>
-			Required for dangerous brachiosaurus and land brachiosaurus AI only. This value controls sensitivity to obstacles and terrain. Increasing this value lowers the maximum gradient the brachiosaurus
-			can ascend while running. When set to 0, the brachiosaurus will ignore all terrain. 128 is recommended for brachiosaurus, but if you place a smaller creature on brachiosaurus AI, then this value should
+			Required for dangerous brachiosaurus and land brachiosaurus AI only. This value controls sensitivity to obstacles and terrain.
+			Increasing this value lowers the maximum gradient the brachiosaurus
+			can ascend while running. When set to 0, the brachiosaurus will ignore all terrain. 128 is recommended for brachiosaurus,
+			but if you place a smaller creature on brachiosaurus AI, then this value should
 			be set to 64.
 		    </p>
 			<p>
@@ -3815,7 +3890,7 @@ reduced by the whole value of densityMulti. e.g. in the above screenshot, the ma
 			<p><b>Data type: Whole Number</b></p>
 			<p>
 			Position of the swim animation in the CAR file (starting from 0) (not including fish and mosasaurus AI which use walkAnim and runAnim).
-			This is only required if canswim is set to true, but is manditory for ichthyornis AI.
+			This is only required if canswim is set to true, but is mandatory for ichthyornis AI.
 			</p>
 			<p>
 			Note: It is not recommended to set this to the same value as walkAnim, instead duplicate the walkAnim within the CAR file and set swimAnim to the new value.
@@ -5631,7 +5706,7 @@ idlegroup{
 <!--
 
 <p style="margin-top:4%;">
-	<h2 id="arrow_77" unselectable="on" onclick="expand(77)"
+	<h2 id="arrow_770" unselectable="on" onclick="expand(770)"
 		style="float:left;margin-top:0;cursor:pointer;
 		-moz-user-select:none;
 		user-select:none;
@@ -5639,8 +5714,8 @@ idlegroup{
 		-ms-user-select: none;"
 		>></h2>
 	<div class = "con" style="margin-left:8%">
-		<h2 onclick="expand(77)" style="cursor:pointer;">_RES value: spawnmin</h2>
-		<div id="content_77" style="display: none">
+		<h2 onclick="expand(770)" style="cursor:pointer;">_RES value: spawnmin</h2>
+		<div id="content_770" style="display: none">
 		
 			<p><b>Data type: Whole Number</b></p>
 			<p>

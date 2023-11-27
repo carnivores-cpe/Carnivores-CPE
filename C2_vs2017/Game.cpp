@@ -1688,7 +1688,7 @@ void MakeCall()
   {
     TCharacter *cptr = &Characters[c];
 
-	if (DinoInfo[cptr->CType].fearCall[TargetCall]) {
+	if (DinoInfo[cptr->CType].fearCall[TargetCall-10]) {
 		cptr->State = 2;
 		cptr->AfraidTime = (10 + rRand(5)) * 1024;
 	}
