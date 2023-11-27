@@ -2911,6 +2911,11 @@ TBEGIN:
 
 	}
 
+
+	if (pdist > (ctViewR + 20) * 256)
+		if (ReplaceCharacterForward(cptr)) goto TBEGIN;
+
+
 	if (!cptr->State)
 	{
 		if (cptr->Clone == AI_VELO || cptr->Clone == AI_CERAT || !AIInfo[cptr->Clone].carnivore) cptr->AfraidTime = 0;
@@ -8604,41 +8609,53 @@ void PlaceCharacters()
 				else Characters[ChCount].CType = spawnGroup[sg].dinoIndex[c % spawnGroup[sg].dinoIndexCh];
 
 				Characters[ChCount].Clone = DinoInfo[Characters[ChCount].CType].Clone;
+				Characters[ChCount].SpawnGroupType = sg;
 
 				int leaderIndex = ChCount;
 				// pack leaders
 				spawnMapAmbient(tr, -1, spawnGroup[sg].moveForward);
 
 				//pack size
-				int packNo = 1;
-				if (DinoInfo[Characters[ChCount].CType].packMax > 1 && !spawnGroup[sg].moveForward) {
-					packNo = DinoInfo[Characters[ChCount].CType].packMin;
-					if (DinoInfo[Characters[ChCount].CType].packMax != DinoInfo[Characters[ChCount].CType].packMin) {
-						for (int i = 0; i < DinoInfo[Characters[ChCount].CType].packMax - DinoInfo[Characters[ChCount].CType].packMin; i++) {
-							if (1 == rRand(2)) packNo++;
+				if (spawnGroup[sg].moveForward) {
+					Characters[ChCount].packId = -1;
+					ChCount++;
+				} else {
+				
+					int packNo = 1;
+					if (DinoInfo[Characters[ChCount].CType].packMax > 1) {//!spawnGroup[sg].moveForward
+						packNo = DinoInfo[Characters[ChCount].CType].packMin;
+						if (DinoInfo[Characters[ChCount].CType].packMax != DinoInfo[Characters[ChCount].CType].packMin) {
+							for (int i = 0; i < DinoInfo[Characters[ChCount].CType].packMax - DinoInfo[Characters[ChCount].CType].packMin; i++) {
+								if (1 == rRand(2)) packNo++;
+							}
 						}
 					}
-				}
-				
 
-				//pack members
-				if (packNo > 1) {
-					Packs[PackCount].leader = &Characters[leaderIndex];
-					Packs[PackCount].alert = FALSE;
-					Packs[PackCount].attack = FALSE;
-					Packs[PackCount]._alert = FALSE;
-					Packs[PackCount]._attack = FALSE;
-					Characters[leaderIndex].packId = PackCount;
-					for (int packN = 0; packN < packNo - 1; packN++) {
-						Characters[ChCount].packId = PackCount;
-						spawnMapAmbient(tr, leaderIndex, false);
+					ChCount++;
+
+
+					//pack members
+					if (packNo > 1) {
+						Packs[PackCount].leader = &Characters[leaderIndex];
+						Packs[PackCount].alert = FALSE;
+						Packs[PackCount].attack = FALSE;
+						Packs[PackCount]._alert = FALSE;
+						Packs[PackCount]._attack = FALSE;
+						Characters[leaderIndex].packId = PackCount;
+						for (int packN = 0; packN < packNo - 1; packN++) {
+							Characters[ChCount].packId = PackCount;
+							Characters[ChCount].CType = Characters[leaderIndex].CType;
+							Characters[ChCount].SpawnGroupType = sg;
+							spawnMapAmbient(tr, leaderIndex, false);
+							ChCount++;
+						}
+						PackCount++;
 					}
-					PackCount++;
+					else Characters[leaderIndex].packId = -1;
+
 				}
-				else Characters[leaderIndex].packId = -1;
 
-
-				ChCount++;
+				//ChCount++;
 
 				if (tr > 10500) break;
 
