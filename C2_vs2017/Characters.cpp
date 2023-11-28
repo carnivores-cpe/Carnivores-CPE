@@ -1134,8 +1134,9 @@ BOOL ReplaceCharacterForward(TCharacter *cptr)
 
 	if (CheckPlaceCollisionP(p, cptr->cpcpAquatic)) return FALSE;
 
-	cptr->State = 0;
+//	cptr->State = 0;
 	cptr->pos = p;
+	ResetCharacter(cptr);
 	//cptr->tgx = cptr->pos.x + siRand(2048);
 	//cptr->tgz = cptr->pos.z + siRand(2048);
 	SetNewTargetPlace(cptr, 2048);
@@ -4525,6 +4526,9 @@ TBEGIN:
 
 
 	}
+
+	if (pdist > (ctViewR + 20) * 256)
+		if (ReplaceCharacterForward(cptr)) goto TBEGIN;
 
 	if (!cptr->State) {
 
