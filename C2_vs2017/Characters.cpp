@@ -971,7 +971,60 @@ int CheckPlaceCollisionBrahi(TCharacter *cptr, Vector3d &v, BOOL wc, BOOL mc)
 	return 0;
 }
 
+int CheckPlaceCollisionBrahiP(Vector3d &v)
+{
+	int ccx = (int)v.x / 256;
+	int ccz = (int)v.z / 256;
 
+	if (ccx < 4 || ccz < 4 || ccx>1008 || ccz>1008) return 1;
+
+	int F = (FMap[ccz][ccx - 1] | FMap[ccz - 1][ccx] | FMap[ccz - 1][ccx - 1] |
+		FMap[ccz][ccx] |
+		FMap[ccz + 1][ccx] | FMap[ccz][ccx + 1] | FMap[ccz + 1][ccx + 1]);
+
+	if (!(GetLandUpH(v.x, v.z) > GetLandH(v.x, v.z))) return 1;
+
+	int limit = 550;//550
+	int range = 256;//256bluz
+	if ((GetLandUpH(v.x, v.z) - GetLandH(v.x, v.z)) > limit ||
+		(GetLandUpH(v.x + range, v.z) - GetLandH(v.x + range, v.z)) > limit ||
+		(GetLandUpH(v.x, v.z + range) - GetLandH(v.x, v.z + range)) > limit ||
+		(GetLandUpH(v.x + range, v.z + range) - GetLandH(v.x + range, v.z + range)) > limit ||
+		(GetLandUpH(v.x - range, v.z) - GetLandH(v.x - range, v.z)) > limit ||
+		(GetLandUpH(v.x, v.z - range) - GetLandH(v.x, v.z - range)) > limit ||
+		(GetLandUpH(v.x - range, v.z - range) - GetLandH(v.x - range, v.z - range)) > limit ||
+		(GetLandUpH(v.x + range, v.z - range) - GetLandH(v.x + range, v.z - range)) > limit ||
+		(GetLandUpH(v.x - range, v.z + range) - GetLandH(v.x - range, v.z + range)) > limit) return 1;
+
+	float h = GetLandH(v.x, v.z);
+	v.y = h;
+
+	float hh = GetLandH(v.x - 164, v.z - 164);
+	if (fabs(hh - h) > 160) return 1;
+	hh = GetLandH(v.x + 164, v.z - 164);
+	if (fabs(hh - h) > 160) return 1;
+	hh = GetLandH(v.x - 164, v.z + 164);
+	if (fabs(hh - h) > 160) return 1;
+	hh = GetLandH(v.x + 164, v.z + 164);
+	if (fabs(hh - h) > 160) return 1;
+
+	for (int z = -2; z <= 2; z++)
+		for (int x = -2; x <= 2; x++)
+			if (OMap[ccz + z][ccx + x] != 255)
+			{
+				int ob = OMap[ccz + z][ccx + x];
+				if (MObjects[ob].info.Radius < 10) continue;
+				float CR = (float)MObjects[ob].info.Radius + 64;
+
+				float oz = (ccz + z) * 256.f + 128.f;
+				float ox = (ccx + x) * 256.f + 128.f;
+
+				float r = (float)sqrt((ox - v.x)*(ox - v.x) + (oz - v.z)*(oz - v.z));
+				if (r < CR) return 1;
+			}
+
+	return 0;
+}
 
 
 
@@ -1131,8 +1184,9 @@ BOOL ReplaceCharacterForward(TCharacter *cptr)
 	if (p.x > 1000 * 256) return FALSE;
 	if (p.z > 1000 * 256) return FALSE;
 
-
-	if (CheckPlaceCollisionP(p, cptr->cpcpAquatic)) return FALSE;
+	if (cptr->Clone == AI_BRACH || cptr->Clone == AI_BRACHDANGER) {
+		if (CheckPlaceCollisionBrahiP(p)) return FALSE;
+	} else if (CheckPlaceCollisionP(p, cptr->cpcpAquatic)) return FALSE;
 
 //	cptr->State = 0;
 	cptr->pos = p;
@@ -1163,7 +1217,12 @@ replace1:
 	Characters[ChCount].pos.y = GetLandH(Characters[ChCount].pos.x,
 		Characters[ChCount].pos.z);
 
-	if (CheckPlaceCollisionP(Characters[ChCount].pos, cptr->cpcpAquatic)) goto replace1;
+
+	if (cptr->Clone == AI_BRACH || cptr->Clone == AI_BRACHDANGER) {
+		if (CheckPlaceCollisionBrahiP(Characters[ChCount].pos))goto replace1;
+	}
+	else if (CheckPlaceCollisionP(Characters[ChCount].pos, cptr->cpcpAquatic)) goto replace1;
+	
 
 	if (fabs(Characters[ChCount].pos.x - PlayerX) +
 		fabs(Characters[ChCount].pos.z - PlayerZ) < 256 * 40)
@@ -7012,6 +7071,9 @@ TBEGIN:
 			}
 	}
 
+	if (pdist > (ctViewR + 20) * 256)
+		if (ReplaceCharacterForward(cptr)) goto TBEGIN;
+
 	if (!cptr->State)
 	{
 		attacking = false;
@@ -7302,6 +7364,11 @@ TBEGIN:
 
 	float tdist = (float)sqrt(targetdx * targetdx + targetdz * targetdz);
 
+	float playerdx = PlayerX - cptr->pos.x - cptr->lookx * 108;
+	float playerdz = PlayerZ - cptr->pos.z - cptr->lookz * 108;
+	float pdist = (float)sqrt(playerdx * playerdx + playerdz * playerdz);
+	if (pdist > (ctViewR + 20) * 256)
+		if (ReplaceCharacterForward(cptr)) goto TBEGIN;
 
 	if (cptr->packId >= 0) {
 		float leaderdx = Packs[cptr->packId].leader->pos.x - cptr->pos.x;
@@ -8208,7 +8275,7 @@ void spawnMapAmbient(int &tr, int leader, bool moveForward) {
 
 replaceSMA:
 
-	if (moveForward) {
+	if (moveForward && tr < 1024) {
 		Characters[ChCount].pos.x = PlayerX + siRand(10040);
 		Characters[ChCount].pos.z = PlayerZ + siRand(10040);
 	} else {
