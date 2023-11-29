@@ -501,6 +501,36 @@ int CheckPlaceCollisionP(Vector3d &v, bool aquatic)
 }
 
 
+int CheckPlaceCollisionFishP(Vector3d &v, int minDepth, int maxDepth)
+{
+	int ccx = (int)v.x / 256;
+	int ccz = (int)v.z / 256;
+
+	if (ccx < 4 || ccz < 4 || ccx>1008 || ccz>1008) return 1;
+	
+	if ((GetLandUpH(v.x, v.z) - GetLandH(v.x, v.z)) < minDepth ||
+		(GetLandUpH(v.x + 256, v.z) - GetLandH(v.x + 256, v.z)) < minDepth ||
+		(GetLandUpH(v.x, v.z + 256) - GetLandH(v.x, v.z + 256)) < minDepth ||
+		(GetLandUpH(v.x + 256, v.z + 256) - GetLandH(v.x + 256, v.z + 256)) < minDepth ||
+		(GetLandUpH(v.x - 256, v.z) - GetLandH(v.x - 256, v.z)) < minDepth ||
+		(GetLandUpH(v.x, v.z - 256) - GetLandH(v.x, v.z - 256)) < minDepth ||
+		(GetLandUpH(v.x - 256, v.z - 256) - GetLandH(v.x - 256, v.z - 256)) < minDepth ||
+		(GetLandUpH(v.x + 256, v.z - 256) - GetLandH(v.x + 256, v.z - 256)) < minDepth ||
+		(GetLandUpH(v.x - 256, v.z + 256) - GetLandH(v.x - 256, v.z + 256)) < minDepth) return 1;
+		
+	if ((GetLandUpH(v.x, v.z) - GetLandH(v.x, v.z)) > maxDepth ||
+		(GetLandUpH(v.x + 256, v.z) - GetLandH(v.x + 256, v.z)) > maxDepth ||
+		(GetLandUpH(v.x, v.z + 256) - GetLandH(v.x, v.z + 256)) > maxDepth ||
+		(GetLandUpH(v.x + 256, v.z + 256) - GetLandH(v.x + 256, v.z + 256)) > maxDepth ||
+		(GetLandUpH(v.x - 256, v.z) - GetLandH(v.x - 256, v.z)) > maxDepth ||
+		(GetLandUpH(v.x, v.z - 256) - GetLandH(v.x, v.z - 256)) > maxDepth ||
+		(GetLandUpH(v.x - 256, v.z - 256) - GetLandH(v.x - 256, v.z - 256)) > maxDepth ||
+		(GetLandUpH(v.x + 256, v.z - 256) - GetLandH(v.x + 256, v.z - 256)) > maxDepth ||
+		(GetLandUpH(v.x - 256, v.z + 256) - GetLandH(v.x - 256, v.z + 256)) > maxDepth) return 1;
+		
+	return 0;
+}
+
 
 int CheckPlaceCollisionFish(TCharacter *cptr, Vector3d &v, float mosaDepth, int maxDepth, int minDepth)
 {
@@ -1164,6 +1194,518 @@ void LookForAWay(TCharacter *cptr, BOOL wc, BOOL mc)
 }
 
 
+void SetNewTargetPlace_Icth(TCharacter *cptr, float R)
+{
+	Vector3d p;
+	int tr = 0;
+
+
+	//PrintLog("iT");//TEST20200412
+replace:
+	//PrintLog("-");//TEST20200412
+	p.x = cptr->pos.x + siRand((int)R);
+	p.z = cptr->pos.z + siRand((int)R);
+
+	if (p.x < 512) p.x = 512;
+	if (p.x > 1018 * 256) p.x = 1018 * 256;
+	if (p.z < 512) p.z = 512;
+	if (p.z > 1018 * 256) p.z = 1018 * 256;
+	tr++;
+	if (tr < 16)
+		if (fabs(p.x - cptr->pos.x) + fabs(p.z - cptr->pos.z) < R / 2.f) goto replace;
+
+	if (spawnGroup[cptr->SpawnGroupType].stayInRegion) {
+		for (int sr = 0; sr < spawnGroup[cptr->SpawnGroupType].spawnRegionCh; sr++) {
+			//for (TSpawnRegion sr : spawnGroup[cptr->SpawnGroupType].spawnRegion) {
+			if (p.x < spawnGroup[cptr->SpawnGroupType].spawnRegion[sr].XMin * 256 ||
+				p.x > spawnGroup[cptr->SpawnGroupType].spawnRegion[sr].XMax * 256 ||
+				p.z < spawnGroup[cptr->SpawnGroupType].spawnRegion[sr].YMin * 256 ||
+				p.z > spawnGroup[cptr->SpawnGroupType].spawnRegion[sr].YMax * 256) goto replace;
+		}
+	}
+	if (spawnGroup[cptr->SpawnGroupType].avoidRegionCh) {
+		for (int ar = 0; ar < spawnGroup[cptr->SpawnGroupType].avoidRegionCh; ar++) {
+			//for (TSpawnRegion ar : spawnGroup[cptr->SpawnGroupType].avoidRegion) {
+			if (p.x > spawnGroup[cptr->SpawnGroupType].avoidRegion[ar].XMin * 256 ||
+				p.x < spawnGroup[cptr->SpawnGroupType].avoidRegion[ar].XMax * 256 ||
+				p.z > spawnGroup[cptr->SpawnGroupType].avoidRegion[ar].YMin * 256 ||
+				p.z < spawnGroup[cptr->SpawnGroupType].avoidRegion[ar].YMax * 256) goto replace;
+		}
+	}
+
+	/*
+	if (stayRegion && outsideRegion && tr > 64) {
+		if (fabs(p.x - cptr->pos.x) + fabs(p.z - cptr->pos.z) > R * 25.f) {
+			stayRegion = false;
+			goto replace;
+		}
+	}
+	*/
+
+	//if (tr < 128)
+	if (tr < 1024)
+	{
+		if (!waterNear(p.x, p.z, 50)) goto replace;
+		if (cptr->spawnAlt + 400 < GetLandUpH(p.x, p.z)) goto replace;
+	}
+	/*
+	else if (R < 10240 && !(tr % 20)) {
+		if (!waterNear(p.x, p.z, 50)) {
+			R *= 2;
+			goto replace;
+		}
+	}
+	*/
+
+	if (tr < 256)
+		if (CheckPlaceCollisionP(p, true)) goto replace;
+
+	cptr->tgtime = 0;
+	cptr->tgx = p.x;
+	cptr->tgz = p.z;
+}
+
+void SetNewTargetPlace_IcthOld(TCharacter *cptr, float R)
+{
+	Vector3d p;
+	int tr = 0;
+	PrintLog("iT");//TEST20200412
+replace:
+	PrintLog("-");//TEST20200412
+	p.x = cptr->pos.x + siRand((int)R);
+	if (p.x < 512) p.x = 512;
+	if (p.x > 1018 * 256) p.x = 1018 * 256;
+	p.z = cptr->pos.z + siRand((int)R);
+	if (p.z < 512) p.z = 512;
+	if (p.z > 1018 * 256) p.z = 1018 * 256;
+	tr++;
+	if (tr < 16)
+		if (fabs(p.x - cptr->pos.x) + fabs(p.z - cptr->pos.z) < R / 2.f) goto replace;
+
+	if (tr < 128)
+	{
+		if (!waterNear(p.x, p.z, 50)) goto replace;
+	}
+
+	if (tr < 256)
+		if (CheckPlaceCollisionP(p, true)) goto replace;
+
+	cptr->tgtime = 0;
+	cptr->tgx = p.x;
+	cptr->tgz = p.z;
+}
+
+void SetNewTargetPlace(TCharacter *cptr, float R)
+{
+
+	//if (cptr->AI < 0) {//STILL NEED THIS FOR CLASSIC AMBIENTS
+	SetNewTargetPlaceRegion(cptr, R);
+	//}
+	//else {
+	//	SetNewTargetPlaceVanilla(cptr, R);
+	//}
+
+
+}
+
+void SetNewTargetPlaceVanilla(TCharacter *cptr, float R)
+{
+	Vector3d p;
+	int tr = 0;
+	//PrintLog("PAR_START--");
+replace:
+	//PrintLog("PAR_IT--");
+	p.x = cptr->pos.x + siRand((int)R);
+	if (p.x < 512) p.x = 512;
+	if (p.x > 1018 * 256) p.x = 1018 * 256;
+	p.z = cptr->pos.z + siRand((int)R);
+	if (p.z < 512) p.z = 512;
+	if (p.z > 1018 * 256) p.z = 1018 * 256;
+	p.y = GetLandH(p.x, p.z);
+	tr++;
+	if (tr < 128)
+		if (fabs(p.x - cptr->pos.x) + fabs(p.z - cptr->pos.z) < R / 2.f) goto replace;
+
+	R += 512;
+
+	if (tr < 256)
+		if (CheckPlaceCollisionP(p, cptr->cpcpAquatic)) goto replace;
+
+	cptr->tgtime = 0;
+	cptr->tgx = p.x;
+	cptr->tgz = p.z;
+}
+
+void SetNewTargetPlaceRegion(TCharacter *cptr, float R)
+{
+	Vector3d p;
+	int tr = 0;
+replace:
+	//PrintLog("-");//TEST20200415
+	p.x = cptr->pos.x + siRand((int)R);
+	p.z = cptr->pos.z + siRand((int)R);
+
+	if (p.x < 512) p.x = 512;
+	if (p.x > 1018 * 256) p.x = 1018 * 256;
+	if (p.z < 512) p.z = 512;
+	if (p.z > 1018 * 256) p.z = 1018 * 256;
+	p.y = GetLandH(p.x, p.z);
+	tr++;
+	if (tr < 128) {
+		if (fabs(p.x - cptr->pos.x) + fabs(p.z - cptr->pos.z) < R / 2.f) goto replace;
+
+		if (spawnGroup[cptr->SpawnGroupType].stayInRegion) {
+			for (int sr = 0; sr < spawnGroup[cptr->SpawnGroupType].spawnRegionCh; sr++) {
+				//for (TSpawnRegion sr : spawnGroup[cptr->SpawnGroupType].spawnRegion) {
+				if (p.x < spawnGroup[cptr->SpawnGroupType].spawnRegion[sr].XMin * 256 ||
+					p.x > spawnGroup[cptr->SpawnGroupType].spawnRegion[sr].XMax * 256 ||
+					p.z < spawnGroup[cptr->SpawnGroupType].spawnRegion[sr].YMin * 256 ||
+					p.z > spawnGroup[cptr->SpawnGroupType].spawnRegion[sr].YMax * 256) goto replace;
+			}
+		}
+		if (spawnGroup[cptr->SpawnGroupType].avoidRegionCh) {
+			for (int ar = 0; ar < spawnGroup[cptr->SpawnGroupType].avoidRegionCh; ar++) {
+				//for (TSpawnRegion ar : spawnGroup[cptr->SpawnGroupType].avoidRegion) {
+				if (p.x > spawnGroup[cptr->SpawnGroupType].avoidRegion[ar].XMin * 256 ||
+					p.x < spawnGroup[cptr->SpawnGroupType].avoidRegion[ar].XMax * 256 ||
+					p.z > spawnGroup[cptr->SpawnGroupType].avoidRegion[ar].YMin * 256 ||
+					p.z < spawnGroup[cptr->SpawnGroupType].avoidRegion[ar].YMax * 256) goto replace;
+			}
+		}
+
+	}
+
+	R += 512;
+
+	if (tr < 256)
+		if (CheckPlaceCollisionP(p, cptr->cpcpAquatic)) goto replace;
+
+	cptr->tgtime = 0;
+	cptr->tgx = p.x;
+	cptr->tgz = p.z;
+}
+
+void SetNewTargetPlace_Brahi(TCharacter *cptr, float R)
+{
+	Vector3d p;
+	int tr = 0;
+	//PrintLog("bT");//TEST202004111501
+replace:
+	//PrintLog("-");//TEST202004111501
+	p.x = cptr->pos.x + siRand((int)R);
+	if (p.x < 512) p.x = 512;
+	if (p.x > 1018 * 256) p.x = 1018 * 256;
+	p.z = cptr->pos.z + siRand((int)R);
+	if (p.z < 512) p.z = 512;
+	if (p.z > 1018 * 256) p.z = 1018 * 256;
+	tr++;
+	if (tr < 16)
+		if (fabs(p.x - cptr->pos.x) + fabs(p.z - cptr->pos.z) < R / 2.f) goto replace;
+
+	p.y = GetLandH(p.x, p.z);
+	float wy = GetLandUpH(p.x, p.z) - p.y;
+
+	if (tr < 128)
+	{
+		if (cptr->Clone == AI_LANDBRACH) {
+			if (DinoInfo[cptr->CType].canSwim) {
+				if (wy > 400) goto replace;
+			}
+			else {
+				if (wy > 0) goto replace;
+			}
+		}
+		else {
+			if (wy > 400) goto replace;
+			if (wy < 200) goto replace;
+		}
+		if (spawnGroup[cptr->SpawnGroupType].stayInRegion) {
+			for (int sr = 0; sr < spawnGroup[cptr->SpawnGroupType].spawnRegionCh; sr++) {
+				//for (TSpawnRegion sr : spawnGroup[cptr->SpawnGroupType].spawnRegion) {
+				if (p.x < spawnGroup[cptr->SpawnGroupType].spawnRegion[sr].XMin * 256 ||
+					p.x > spawnGroup[cptr->SpawnGroupType].spawnRegion[sr].XMax * 256 ||
+					p.z < spawnGroup[cptr->SpawnGroupType].spawnRegion[sr].YMin * 256 ||
+					p.z > spawnGroup[cptr->SpawnGroupType].spawnRegion[sr].YMax * 256) goto replace;
+			}
+		}
+		if (spawnGroup[cptr->SpawnGroupType].avoidRegionCh) {
+			for (int ar = 0; ar < spawnGroup[cptr->SpawnGroupType].avoidRegionCh; ar++) {
+				//for (TSpawnRegion ar : spawnGroup[cptr->SpawnGroupType].avoidRegion) {
+				if (p.x > spawnGroup[cptr->SpawnGroupType].avoidRegion[ar].XMin * 256 ||
+					p.x < spawnGroup[cptr->SpawnGroupType].avoidRegion[ar].XMax * 256 ||
+					p.z > spawnGroup[cptr->SpawnGroupType].avoidRegion[ar].YMin * 256 ||
+					p.z < spawnGroup[cptr->SpawnGroupType].avoidRegion[ar].YMax * 256) goto replace;
+			}
+		}
+
+	}
+
+	cptr->tgtime = 0;
+	cptr->tgx = p.x;
+	cptr->tgz = p.z;
+}
+
+void SetNewTargetPlaceFish(TCharacter *cptr, float R)
+{
+	Vector3d p;
+	int tr = 0;
+replace:
+	//PrintLog("-");//TEST202004091129
+
+	/*
+	p.x = cptr->pos.x + siRand((int)(R/3));
+	p.z = cptr->pos.z + siRand((int)(R/3));
+	if (p.x > cptr->pos.x) p.x += R * (2 / 3); else p.x -= R * (2 / 3);
+	if (p.z > cptr->pos.z) p.z += R * (2 / 3); else p.z -= R * (2 / 3);
+	*/
+
+	p.x = cptr->pos.x + siRand((int)(R));
+	p.z = cptr->pos.z + siRand((int)(R));
+
+	if (p.x < 512) p.x = 512;
+	if (p.x > 1018 * 256) p.x = 1018 * 256;
+	if (p.z < 512) p.z = 512;
+	if (p.z > 1018 * 256) p.z = 1018 * 256;
+
+	tr++;
+	if (tr < 128) {
+		if (fabs(p.x - cptr->pos.x) + fabs(p.z - cptr->pos.z) < R * 0.7) goto replace;
+
+		if (spawnGroup[cptr->SpawnGroupType].stayInRegion) {
+			for (int sr = 0; sr < spawnGroup[cptr->SpawnGroupType].spawnRegionCh; sr++) {
+				//for (TSpawnRegion sr : spawnGroup[cptr->SpawnGroupType].spawnRegion) {
+				if (p.x < spawnGroup[cptr->SpawnGroupType].spawnRegion[sr].XMin * 256 ||
+					p.x > spawnGroup[cptr->SpawnGroupType].spawnRegion[sr].XMax * 256 ||
+					p.z < spawnGroup[cptr->SpawnGroupType].spawnRegion[sr].YMin * 256 ||
+					p.z > spawnGroup[cptr->SpawnGroupType].spawnRegion[sr].YMax * 256) goto replace;
+			}
+		}
+		if (spawnGroup[cptr->SpawnGroupType].avoidRegionCh) {
+			for (int ar = 0; ar < spawnGroup[cptr->SpawnGroupType].avoidRegionCh; ar++) {
+				//for (TSpawnRegion ar : spawnGroup[cptr->SpawnGroupType].avoidRegion) {
+				if (p.x > spawnGroup[cptr->SpawnGroupType].avoidRegion[ar].XMin * 256 ||
+					p.x < spawnGroup[cptr->SpawnGroupType].avoidRegion[ar].XMax * 256 ||
+					p.z > spawnGroup[cptr->SpawnGroupType].avoidRegion[ar].YMin * 256 ||
+					p.z < spawnGroup[cptr->SpawnGroupType].avoidRegion[ar].YMax * 256) goto replace;
+			}
+		}
+
+	}
+
+	p.y = GetLandH(p.x, p.z);
+	float wy = GetLandUpH(p.x, p.z) - GetLandH(p.x, p.z);
+
+
+	int spcdm = 1;
+	if (cptr->aquaticIdle) spcdm = 0.75;
+
+	float targetDepthTemp;
+
+	/*
+	if (cptr->aquaticIdle) {
+		targetDepthTemp = GetLandUpH(p.x, p.z) - (cptr->spcDepth * 0.75);
+		goto skipY;
+	}
+	*/
+
+	float tdistTemp = fabs((float)sqrt(
+		((p.x - cptr->pos.x)*(p.x - cptr->pos.x)) +
+		((p.z - cptr->pos.z) * (p.z - cptr->pos.z))));
+	/*
+	float tdistTemp = fabs((float)sqrt(
+		((p.x - cptr->pos.x)*(p.x - cptr->pos.x)) +
+		((p.z - cptr->pos.z) * (p.z - cptr->pos.z))) / 3);
+	*/
+	tr = 0;
+
+	//PrintLog("fTY");//TEST202004091129
+
+replace2:
+	//PrintLog("-");//TEST202004091129
+	//targetDepthTemp = siRand((int)(R/3));
+
+	if (cptr->aquaticIdle) {
+		targetDepthTemp = rRand((int)(GetLandUpH(p.x, p.z) - (cptr->spcDepth * 0.68) - cptr->depth)); //target slightly higher so it doesn't take forever - correct to 0.75 later
+	}
+	else {
+		targetDepthTemp = siRand((int)(tdistTemp));
+	}
+
+	tr++;
+
+	/*
+	if (cptr->aquaticIdle) {
+		if (targetDepthTemp < 0) targetDepthTemp *= -1;
+		if (cptr->depth > GetLandUpH(p.x, p.z) - (cptr->spcDepth * 1.1)) {
+			targetDepthTemp = GetLandUpH(p.x, p.z) - (cptr->spcDepth * 0.75);
+			goto skipY;
+		}
+	}
+	*/
+
+	//PREVENT TOO MUCH TURNING/bending
+	if (tr < 1024) {
+		float tbeta = -atan((targetDepthTemp) / tdistTemp);
+		int dbeta = tbeta - cptr->beta;
+		if (dbeta < 0) dbeta *= -1;
+		if (dbeta > pi / 16) {
+			goto replace2;
+		}
+	}
+
+	/*
+	if (tr < 1024) {
+		if (fabs(targetDepthTemp) > tdistTemp) {
+			if (targetDepthTemp > 0) {
+				targetDepthTemp = tdistTemp;
+			}
+			else {
+				targetDepthTemp = -tdistTemp;
+			}
+		}
+	}
+	*/
+
+	targetDepthTemp = cptr->depth + targetDepthTemp;
+
+
+	if (targetDepthTemp < GetLandH(p.x, p.z) + (cptr->spcDepth * spcdm)) {
+		if (tr < 3024) {
+			goto replace2;
+		}
+		else {
+			targetDepthTemp = GetLandH(p.x, p.z) + (cptr->spcDepth * spcdm);
+		}
+	}
+	if (targetDepthTemp > GetLandUpH(p.x, p.z) - (cptr->spcDepth * spcdm)) {
+		if (tr < 3024) {
+			goto replace2;
+		}
+		else {
+			targetDepthTemp = GetLandUpH(p.x, p.z) - (cptr->spcDepth * spcdm);
+		}
+	}
+
+	//skipY:
+
+	cptr->tgtime = 0;
+	cptr->tgx = p.x;
+	cptr->tgz = p.z;
+	cptr->tdepth = targetDepthTemp;
+	cptr->lastTBeta = cptr->beta;
+	cptr->turny = 0;
+}
+
+//OLD
+void SetNewTargetPlaceMosasaurus(TCharacter *cptr, float R)
+{
+	Vector3d p;
+	int tr = 0;
+replace:
+	p.x = cptr->pos.x + siRand((int)R);
+	if (p.x < 512) p.x = 512;
+	if (p.x > 1018 * 256) p.x = 1018 * 256;
+	p.z = cptr->pos.z + siRand((int)R);
+	if (p.z < 512) p.z = 512;
+	if (p.z > 1018 * 256) p.z = 1018 * 256;
+
+	tr++;
+	//if (tr < 128)
+	if (fabs(p.x - cptr->pos.x) + fabs(p.z - cptr->pos.z) < R / 2.f) goto replace;
+
+	p.y = GetLandH(p.x, p.z);
+	float wy = GetLandUpH(p.x, p.z) - GetLandH(p.x, p.z);
+
+	if (tr < 8024)
+	{
+		if (wy < 1500) goto replace;
+	}
+
+	if (tr < 128)
+	{
+		if (spawnGroup[cptr->SpawnGroupType].stayInRegion) {
+			for (int sr = 0; sr < spawnGroup[cptr->SpawnGroupType].spawnRegionCh; sr++) {
+				//for (TSpawnRegion sr : spawnGroup[cptr->SpawnGroupType].spawnRegion) {
+				if (p.x < spawnGroup[cptr->SpawnGroupType].spawnRegion[sr].XMin * 256 ||
+					p.x > spawnGroup[cptr->SpawnGroupType].spawnRegion[sr].XMax * 256 ||
+					p.z < spawnGroup[cptr->SpawnGroupType].spawnRegion[sr].YMin * 256 ||
+					p.z > spawnGroup[cptr->SpawnGroupType].spawnRegion[sr].YMax * 256) goto replace;
+			}
+		}
+		if (spawnGroup[cptr->SpawnGroupType].avoidRegionCh) {
+			for (int ar = 0; ar < spawnGroup[cptr->SpawnGroupType].avoidRegionCh; ar++) {
+				//for (TSpawnRegion ar : spawnGroup[cptr->SpawnGroupType].avoidRegion) {
+				if (p.x > spawnGroup[cptr->SpawnGroupType].avoidRegion[ar].XMin * 256 ||
+					p.x < spawnGroup[cptr->SpawnGroupType].avoidRegion[ar].XMax * 256 ||
+					p.z > spawnGroup[cptr->SpawnGroupType].avoidRegion[ar].YMin * 256 ||
+					p.z < spawnGroup[cptr->SpawnGroupType].avoidRegion[ar].YMax * 256) goto replace;
+			}
+		}
+
+	}
+
+	float targetDepthTemp;
+	float tdistTemp = fabs((float)sqrt(
+		((p.x - cptr->pos.x)*(p.x - cptr->pos.x)) +
+		((p.z - cptr->pos.z) * (p.z - cptr->pos.z))) / 3);
+	/*
+	float tdistTemp = fabs((float)sqrt(
+		((p.x - cptr->pos.x)*(p.x - cptr->pos.x)) +
+		((p.z - cptr->pos.z) * (p.z - cptr->pos.z))) / 3);
+	*/
+replace2:
+	targetDepthTemp = siRand((int)(R / 3));
+	//targetDepthTemp = siRand((int)(R/3));
+
+	tr++;
+
+	//PREVENT TOO MUCH TURNING
+	if (tr < 1024) {
+		float tbeta = -atan((targetDepthTemp) / tdistTemp);
+		int dbeta = tbeta - cptr->beta;
+		if (dbeta < 0) dbeta *= -1;
+		if (dbeta > pi / 8) {
+			goto replace2;
+		}
+	}
+
+
+	if (tr < 1024) {
+		if (fabs(targetDepthTemp) > tdistTemp) {
+			if (targetDepthTemp > 0) {
+				targetDepthTemp = tdistTemp;
+			}
+			else {
+				targetDepthTemp = -tdistTemp;
+			}
+		}
+	}
+
+	targetDepthTemp = cptr->depth + targetDepthTemp;
+	if (targetDepthTemp < GetLandH(p.x, p.z) + 400) {
+		if (tr < 8024) {
+			goto replace2;
+		}
+		else {
+			targetDepthTemp = GetLandH(p.x, p.z) + 400;
+		}
+	}
+	if (targetDepthTemp > GetLandUpH(p.x, p.z) - 700) {
+		if (tr < 8024) {
+			goto replace2;
+		}
+		else {
+			targetDepthTemp = GetLandUpH(p.x, p.z) - 700;
+		}
+	}
+
+	cptr->tgtime = 0;
+	cptr->tgx = p.x;
+	cptr->tgz = p.z;
+	cptr->tdepth = targetDepthTemp;
+	cptr->lastTBeta = cptr->beta;
+	cptr->turny = 0;
+}
 
 
 BOOL ReplaceCharacterForward(TCharacter *cptr)
@@ -1186,6 +1728,10 @@ BOOL ReplaceCharacterForward(TCharacter *cptr)
 
 	if (cptr->Clone == AI_BRACH || cptr->Clone == AI_BRACHDANGER || cptr->Clone == AI_ICTH) {
 		if (CheckPlaceCollisionBrahiP(p)) return FALSE;
+	} else if (cptr->Clone == AI_FISH || cptr->Clone == AI_MOSA) {
+			if (CheckPlaceCollisionFishP(p,
+				DinoInfo[cptr->CType].minDepth,
+				DinoInfo[cptr->CType].maxDepth)) return FALSE;
 	} else if (CheckPlaceCollisionP(p, cptr->cpcpAquatic)) return FALSE;
 
 //	cptr->State = 0;
@@ -1193,12 +1739,20 @@ BOOL ReplaceCharacterForward(TCharacter *cptr)
 	ResetCharacter(cptr);
 	//cptr->tgx = cptr->pos.x + siRand(2048);
 	//cptr->tgz = cptr->pos.z + siRand(2048);
-	SetNewTargetPlace(cptr, 2048);
+	if (cptr->Clone == AI_BRACH || cptr->Clone == AI_BRACHDANGER || cptr->Clone == AI_LANDBRACH) SetNewTargetPlace_Brahi(cptr, 2048.f);
+	else if (cptr->Clone == AI_MOSA) SetNewTargetPlaceFish(cptr, 5048.f);
+	else if (cptr->Clone == AI_FISH) SetNewTargetPlaceFish(cptr, 1024.f);
+	else SetNewTargetPlace(cptr, 2048);
+
+	if (cptr->Clone == AI_FISH || cptr->Clone == AI_MOSA) {
+		cptr->pos.y = GetLandUpH(cptr->pos.x, cptr->pos.z) - ((GetLandUpH(cptr->pos.x, cptr->pos.z) - GetLandH(cptr->pos.x, cptr->pos.z)) / 2);
+	}
 
 	if (cptr->Clone == AI_DIMOR || cptr->Clone == AI_PTERA) //===== dimor ========//
 		cptr->pos.y += DinoInfo[cptr->CType].minDepth;
 	return TRUE;
 }
+
 
 
 void Characters_AddSecondaryOne(TCharacter *cptr)
@@ -1220,8 +1774,11 @@ replace1:
 
 	if (cptr->Clone == AI_BRACH || cptr->Clone == AI_BRACHDANGER || cptr->Clone == AI_ICTH) {
 		if (CheckPlaceCollisionBrahiP(Characters[ChCount].pos))goto replace1;
-	}
-	else if (CheckPlaceCollisionP(Characters[ChCount].pos, cptr->cpcpAquatic)) goto replace1;
+	} else if (cptr->Clone == AI_FISH || cptr->Clone == AI_MOSA) {
+		if (CheckPlaceCollisionFishP(Characters[ChCount].pos,
+			DinoInfo[cptr->CType].minDepth,
+			DinoInfo[cptr->CType].maxDepth)) goto replace1;
+	} else if (CheckPlaceCollisionP(Characters[ChCount].pos, cptr->cpcpAquatic)) goto replace1;
 	
 
 	if (fabs(Characters[ChCount].pos.x - PlayerX) +
@@ -1231,6 +1788,10 @@ replace1:
 	Characters[ChCount].tgx = Characters[ChCount].pos.x;
 	Characters[ChCount].tgz = Characters[ChCount].pos.z;
 	Characters[ChCount].tgtime = 0;
+
+	if (cptr->Clone == AI_FISH || cptr->Clone == AI_MOSA) {
+		cptr->pos.y = GetLandUpH(cptr->pos.x, cptr->pos.z) - ((GetLandUpH(cptr->pos.x, cptr->pos.z) - GetLandH(cptr->pos.x, cptr->pos.z)) / 2);
+	}
 
 	Characters[ChCount].packId = -1;	//Classic ambient- no pack hunting
 	ResetCharacter(&Characters[ChCount]);
@@ -1361,528 +1922,6 @@ void MoveCharacter2(TCharacter *cptr, float dx, float dz)
 }
 
 
-void SetNewTargetPlace_Icth(TCharacter *cptr, float R)
-{
-	Vector3d p;
-	int tr = 0;
-	
-
-	//PrintLog("iT");//TEST20200412
-replace:
-	//PrintLog("-");//TEST20200412
-	p.x = cptr->pos.x + siRand((int)R);
-	p.z = cptr->pos.z + siRand((int)R);
-
-	if (p.x < 512) p.x = 512;
-	if (p.x > 1018 * 256) p.x = 1018 * 256;
-	if (p.z < 512) p.z = 512;
-	if (p.z > 1018 * 256) p.z = 1018 * 256;
-	tr++;
-	if (tr < 16)
-		if (fabs(p.x - cptr->pos.x) + fabs(p.z - cptr->pos.z) < R / 2.f) goto replace;
-
-	if (spawnGroup[cptr->SpawnGroupType].stayInRegion) {
-		for (int sr = 0; sr < spawnGroup[cptr->SpawnGroupType].spawnRegionCh; sr++) {
-		//for (TSpawnRegion sr : spawnGroup[cptr->SpawnGroupType].spawnRegion) {
-			if (p.x < spawnGroup[cptr->SpawnGroupType].spawnRegion[sr].XMin * 256 ||
-				p.x > spawnGroup[cptr->SpawnGroupType].spawnRegion[sr].XMax * 256 ||
-				p.z < spawnGroup[cptr->SpawnGroupType].spawnRegion[sr].YMin * 256 ||
-				p.z > spawnGroup[cptr->SpawnGroupType].spawnRegion[sr].YMax * 256) goto replace;
-		}
-	}
-	if (spawnGroup[cptr->SpawnGroupType].avoidRegionCh) {
-		for (int ar = 0; ar < spawnGroup[cptr->SpawnGroupType].avoidRegionCh; ar++) {
-		//for (TSpawnRegion ar : spawnGroup[cptr->SpawnGroupType].avoidRegion) {
-			if (p.x > spawnGroup[cptr->SpawnGroupType].avoidRegion[ar].XMin * 256 ||
-				p.x < spawnGroup[cptr->SpawnGroupType].avoidRegion[ar].XMax * 256 ||
-				p.z > spawnGroup[cptr->SpawnGroupType].avoidRegion[ar].YMin * 256 ||
-				p.z < spawnGroup[cptr->SpawnGroupType].avoidRegion[ar].YMax * 256) goto replace;
-		}
-	}
-
-	/*
-	if (stayRegion && outsideRegion && tr > 64) {
-		if (fabs(p.x - cptr->pos.x) + fabs(p.z - cptr->pos.z) > R * 25.f) {
-			stayRegion = false;
-			goto replace;
-		}
-	}
-	*/
-
-	//if (tr < 128)
-	if (tr < 1024)
-	{
-		if (!waterNear(p.x, p.z, 50)) goto replace;
-		if (cptr->spawnAlt + 400 < GetLandUpH(p.x, p.z)) goto replace;
-	}
-	/*
-	else if (R < 10240 && !(tr % 20)) {
-		if (!waterNear(p.x, p.z, 50)) {
-			R *= 2;
-			goto replace;
-		}
-	}
-	*/
-
-	if (tr < 256)
-		if (CheckPlaceCollisionP(p,true)) goto replace;
-
-	cptr->tgtime = 0;
-	cptr->tgx = p.x;
-	cptr->tgz = p.z;
-}
-
-
-
-void SetNewTargetPlace_IcthOld(TCharacter *cptr, float R)
-{
-	Vector3d p;
-	int tr = 0;
-	PrintLog("iT");//TEST20200412
-replace:
-	PrintLog("-");//TEST20200412
-	p.x = cptr->pos.x + siRand((int)R);
-	if (p.x < 512) p.x = 512;
-	if (p.x > 1018 * 256) p.x = 1018 * 256;
-	p.z = cptr->pos.z + siRand((int)R);
-	if (p.z < 512) p.z = 512;
-	if (p.z > 1018 * 256) p.z = 1018 * 256;
-	tr++;
-	if (tr < 16)
-		if (fabs(p.x - cptr->pos.x) + fabs(p.z - cptr->pos.z) < R / 2.f) goto replace;
-
-	if (tr < 128)
-	{
-		if (!waterNear(p.x, p.z, 50)) goto replace;
-	}
-
-	if (tr < 256)
-		if (CheckPlaceCollisionP(p,true)) goto replace;
-
-	cptr->tgtime = 0;
-	cptr->tgx = p.x;
-	cptr->tgz = p.z;
-}
-
-
-
-void SetNewTargetPlace(TCharacter *cptr, float R)
-{
-	
-	//if (cptr->AI < 0) {//STILL NEED THIS FOR CLASSIC AMBIENTS
-		SetNewTargetPlaceRegion(cptr, R);
-	//}
-	//else {
-	//	SetNewTargetPlaceVanilla(cptr, R);
-	//}
-
-
-}
-
-
-
-void SetNewTargetPlaceVanilla(TCharacter *cptr, float R)
-{
-	Vector3d p;
-	int tr = 0;
-	//PrintLog("PAR_START--");
-replace:
-	//PrintLog("PAR_IT--");
-	p.x = cptr->pos.x + siRand((int)R);
-	if (p.x < 512) p.x = 512;
-	if (p.x > 1018 * 256) p.x = 1018 * 256;
-	p.z = cptr->pos.z + siRand((int)R);
-	if (p.z < 512) p.z = 512;
-	if (p.z > 1018 * 256) p.z = 1018 * 256;
-	p.y = GetLandH(p.x, p.z);
-	tr++;
-	if (tr < 128)
-		if (fabs(p.x - cptr->pos.x) + fabs(p.z - cptr->pos.z) < R / 2.f) goto replace;
-
-	R += 512;
-
-	if (tr < 256)
-		if (CheckPlaceCollisionP(p, cptr->cpcpAquatic)) goto replace;
-
-	cptr->tgtime = 0;
-	cptr->tgx = p.x;
-	cptr->tgz = p.z;
-}
-
-
-
-void SetNewTargetPlaceRegion(TCharacter *cptr, float R)
-{
-	Vector3d p;
-	int tr = 0;
-replace:
-	//PrintLog("-");//TEST20200415
-	p.x = cptr->pos.x + siRand((int)R);
-	p.z = cptr->pos.z + siRand((int)R);
-
-	if (p.x < 512) p.x = 512;
-	if (p.x > 1018 * 256) p.x = 1018 * 256;
-	if (p.z < 512) p.z = 512;
-	if (p.z > 1018 * 256) p.z = 1018 * 256;
-	p.y = GetLandH(p.x, p.z);
-	tr++;
-	if (tr < 128) {
-		if (fabs(p.x - cptr->pos.x) + fabs(p.z - cptr->pos.z) < R / 2.f) goto replace;
-
-		if (spawnGroup[cptr->SpawnGroupType].stayInRegion) {
-			for (int sr = 0; sr < spawnGroup[cptr->SpawnGroupType].spawnRegionCh; sr++) {
-				//for (TSpawnRegion sr : spawnGroup[cptr->SpawnGroupType].spawnRegion) {
-				if (p.x < spawnGroup[cptr->SpawnGroupType].spawnRegion[sr].XMin * 256 ||
-					p.x > spawnGroup[cptr->SpawnGroupType].spawnRegion[sr].XMax * 256 ||
-					p.z < spawnGroup[cptr->SpawnGroupType].spawnRegion[sr].YMin * 256 ||
-					p.z > spawnGroup[cptr->SpawnGroupType].spawnRegion[sr].YMax * 256) goto replace;
-			}
-		}
-		if (spawnGroup[cptr->SpawnGroupType].avoidRegionCh) {
-			for (int ar = 0; ar < spawnGroup[cptr->SpawnGroupType].avoidRegionCh; ar++) {
-				//for (TSpawnRegion ar : spawnGroup[cptr->SpawnGroupType].avoidRegion) {
-				if (p.x > spawnGroup[cptr->SpawnGroupType].avoidRegion[ar].XMin * 256 ||
-					p.x < spawnGroup[cptr->SpawnGroupType].avoidRegion[ar].XMax * 256 ||
-					p.z > spawnGroup[cptr->SpawnGroupType].avoidRegion[ar].YMin * 256 ||
-					p.z < spawnGroup[cptr->SpawnGroupType].avoidRegion[ar].YMax * 256) goto replace;
-			}
-		}
-
-	}
-
-	R += 512;
-
-	if (tr < 256)
-		if (CheckPlaceCollisionP(p, cptr->cpcpAquatic)) goto replace;
-
-	cptr->tgtime = 0;
-	cptr->tgx = p.x;
-	cptr->tgz = p.z;
-}
-
-
-
-void SetNewTargetPlace_Brahi(TCharacter *cptr, float R)
-{
-	Vector3d p;
-	int tr = 0;
-	//PrintLog("bT");//TEST202004111501
-replace:
-	//PrintLog("-");//TEST202004111501
-	p.x = cptr->pos.x + siRand((int)R);
-	if (p.x < 512) p.x = 512;
-	if (p.x > 1018 * 256) p.x = 1018 * 256;
-	p.z = cptr->pos.z + siRand((int)R);
-	if (p.z < 512) p.z = 512;
-	if (p.z > 1018 * 256) p.z = 1018 * 256;
-	tr++;
-	if (tr < 16)
-		if (fabs(p.x - cptr->pos.x) + fabs(p.z - cptr->pos.z) < R / 2.f) goto replace;
-
-	p.y = GetLandH(p.x, p.z);
-	float wy = GetLandUpH(p.x, p.z) - p.y;
-
-	if (tr < 128)
-	{
-		if (cptr->Clone == AI_LANDBRACH) {
-			if (DinoInfo[cptr->CType].canSwim) {
-				if (wy > 400) goto replace;
-			} else {
-				if (wy > 0) goto replace;
-			}
-		} else {
-			if (wy > 400) goto replace;
-			if (wy < 200) goto replace;
-		}
-		if (spawnGroup[cptr->SpawnGroupType].stayInRegion) {
-			for (int sr = 0; sr < spawnGroup[cptr->SpawnGroupType].spawnRegionCh; sr++) {
-				//for (TSpawnRegion sr : spawnGroup[cptr->SpawnGroupType].spawnRegion) {
-				if (p.x < spawnGroup[cptr->SpawnGroupType].spawnRegion[sr].XMin * 256 ||
-					p.x > spawnGroup[cptr->SpawnGroupType].spawnRegion[sr].XMax * 256 ||
-					p.z < spawnGroup[cptr->SpawnGroupType].spawnRegion[sr].YMin * 256 ||
-					p.z > spawnGroup[cptr->SpawnGroupType].spawnRegion[sr].YMax * 256) goto replace;
-			}
-		}
-		if (spawnGroup[cptr->SpawnGroupType].avoidRegionCh) {
-			for (int ar = 0; ar < spawnGroup[cptr->SpawnGroupType].avoidRegionCh; ar++) {
-				//for (TSpawnRegion ar : spawnGroup[cptr->SpawnGroupType].avoidRegion) {
-				if (p.x > spawnGroup[cptr->SpawnGroupType].avoidRegion[ar].XMin * 256 ||
-					p.x < spawnGroup[cptr->SpawnGroupType].avoidRegion[ar].XMax * 256 ||
-					p.z > spawnGroup[cptr->SpawnGroupType].avoidRegion[ar].YMin * 256 ||
-					p.z < spawnGroup[cptr->SpawnGroupType].avoidRegion[ar].YMax * 256) goto replace;
-			}
-		}
-
-	}
-
-	cptr->tgtime = 0;
-	cptr->tgx = p.x;
-	cptr->tgz = p.z;
-}
-
-
-
-void SetNewTargetPlaceFish(TCharacter *cptr, float R)
-{
-	Vector3d p;
-	int tr = 0;
-replace:
-	//PrintLog("-");//TEST202004091129
-
-	/*
-	p.x = cptr->pos.x + siRand((int)(R/3));
-	p.z = cptr->pos.z + siRand((int)(R/3));
-	if (p.x > cptr->pos.x) p.x += R * (2 / 3); else p.x -= R * (2 / 3);
-	if (p.z > cptr->pos.z) p.z += R * (2 / 3); else p.z -= R * (2 / 3);
-	*/
-
-	p.x = cptr->pos.x + siRand((int)(R));
-	p.z = cptr->pos.z + siRand((int)(R));
-
-	if (p.x < 512) p.x = 512;
-	if (p.x > 1018 * 256) p.x = 1018 * 256;
-	if (p.z < 512) p.z = 512;
-	if (p.z > 1018 * 256) p.z = 1018 * 256;
-
-	tr++;
-	if (tr < 128) {
-		if (fabs(p.x - cptr->pos.x) + fabs(p.z - cptr->pos.z) < R * 0.7) goto replace;
-
-		if (spawnGroup[cptr->SpawnGroupType].stayInRegion) {
-			for (int sr = 0; sr < spawnGroup[cptr->SpawnGroupType].spawnRegionCh; sr++) {
-				//for (TSpawnRegion sr : spawnGroup[cptr->SpawnGroupType].spawnRegion) {
-				if (p.x < spawnGroup[cptr->SpawnGroupType].spawnRegion[sr].XMin * 256 ||
-					p.x > spawnGroup[cptr->SpawnGroupType].spawnRegion[sr].XMax * 256 ||
-					p.z < spawnGroup[cptr->SpawnGroupType].spawnRegion[sr].YMin * 256 ||
-					p.z > spawnGroup[cptr->SpawnGroupType].spawnRegion[sr].YMax * 256) goto replace;
-			}
-		}
-		if (spawnGroup[cptr->SpawnGroupType].avoidRegionCh) {
-			for (int ar = 0; ar < spawnGroup[cptr->SpawnGroupType].avoidRegionCh; ar++) {
-				//for (TSpawnRegion ar : spawnGroup[cptr->SpawnGroupType].avoidRegion) {
-				if (p.x > spawnGroup[cptr->SpawnGroupType].avoidRegion[ar].XMin * 256 ||
-					p.x < spawnGroup[cptr->SpawnGroupType].avoidRegion[ar].XMax * 256 ||
-					p.z > spawnGroup[cptr->SpawnGroupType].avoidRegion[ar].YMin * 256 ||
-					p.z < spawnGroup[cptr->SpawnGroupType].avoidRegion[ar].YMax * 256) goto replace;
-			}
-		}
-
-	}
-
-	p.y = GetLandH(p.x, p.z);
-	float wy = GetLandUpH(p.x, p.z) - GetLandH(p.x, p.z);
-
-
-	int spcdm = 1;
-	if (cptr->aquaticIdle) spcdm = 0.75;
-
-	float targetDepthTemp;
-
-	/*
-	if (cptr->aquaticIdle) {
-		targetDepthTemp = GetLandUpH(p.x, p.z) - (cptr->spcDepth * 0.75);
-		goto skipY;
-	}
-	*/
-
-	float tdistTemp = fabs((float)sqrt(
-		((p.x - cptr->pos.x)*(p.x - cptr->pos.x)) +
-		((p.z - cptr->pos.z) * (p.z - cptr->pos.z))));
-	/*
-	float tdistTemp = fabs((float)sqrt(
-		((p.x - cptr->pos.x)*(p.x - cptr->pos.x)) +
-		((p.z - cptr->pos.z) * (p.z - cptr->pos.z))) / 3);
-	*/
-	tr = 0;
-
-	//PrintLog("fTY");//TEST202004091129
-
-replace2:
-	//PrintLog("-");//TEST202004091129
-	//targetDepthTemp = siRand((int)(R/3));
-
-	if (cptr->aquaticIdle) {
-		targetDepthTemp = rRand((int)(GetLandUpH(p.x, p.z) - (cptr->spcDepth * 0.68) - cptr->depth)); //target slightly higher so it doesn't take forever - correct to 0.75 later
-	} else {
-		targetDepthTemp = siRand((int)(tdistTemp));
-	}
-
-	tr++;
-
-	/*
-	if (cptr->aquaticIdle) {
-		if (targetDepthTemp < 0) targetDepthTemp *= -1;
-		if (cptr->depth > GetLandUpH(p.x, p.z) - (cptr->spcDepth * 1.1)) {
-			targetDepthTemp = GetLandUpH(p.x, p.z) - (cptr->spcDepth * 0.75);
-			goto skipY;
-		}
-	}
-	*/
-
-	//PREVENT TOO MUCH TURNING/bending
-	if (tr < 1024) {
-		float tbeta = -atan((targetDepthTemp) / tdistTemp);
-		int dbeta = tbeta - cptr->beta;
-		if (dbeta < 0) dbeta *= -1;
-		if (dbeta > pi / 16) {
-			goto replace2;
-		}
-	}
-
-	/*
-	if (tr < 1024) {
-		if (fabs(targetDepthTemp) > tdistTemp) {
-			if (targetDepthTemp > 0) {
-				targetDepthTemp = tdistTemp;
-			}
-			else {
-				targetDepthTemp = -tdistTemp;
-			}
-		}
-	}
-	*/
-
-	targetDepthTemp = cptr->depth + targetDepthTemp;
-	
-
-	if (targetDepthTemp < GetLandH(p.x, p.z) + (cptr->spcDepth * spcdm)) {
-		if (tr < 3024) {
-			goto replace2;
-		}
-		else {
-			targetDepthTemp = GetLandH(p.x, p.z) + (cptr->spcDepth * spcdm);
-		}
-	}
-	if (targetDepthTemp > GetLandUpH(p.x, p.z) - (cptr->spcDepth * spcdm)) {
-		if (tr < 3024) {
-			goto replace2;
-		}
-		else {
-			targetDepthTemp = GetLandUpH(p.x, p.z) - (cptr->spcDepth * spcdm);
-		}
-	}
-
-//skipY:
-
-	cptr->tgtime = 0;
-	cptr->tgx = p.x;
-	cptr->tgz = p.z;
-	cptr->tdepth = targetDepthTemp;
-	cptr->lastTBeta = cptr->beta;
-	cptr->turny = 0;
-}
-
-
-//OLD
-void SetNewTargetPlaceMosasaurus(TCharacter *cptr, float R)
-{
-	Vector3d p;
-	int tr = 0;
-replace:
-	p.x = cptr->pos.x + siRand((int)R);
-	if (p.x < 512) p.x = 512;
-	if (p.x > 1018 * 256) p.x = 1018 * 256;
-	p.z = cptr->pos.z + siRand((int)R);
-	if (p.z < 512) p.z = 512;
-	if (p.z > 1018 * 256) p.z = 1018 * 256;
-
-	tr++;
-	//if (tr < 128)
-	if (fabs(p.x - cptr->pos.x) + fabs(p.z - cptr->pos.z) < R / 2.f) goto replace;
-
-	p.y = GetLandH(p.x, p.z);
-	float wy = GetLandUpH(p.x, p.z) - GetLandH(p.x, p.z);
-
-	if (tr < 8024)
-	{
-		if (wy < 1500) goto replace;
-	}
-
-	if (tr < 128)
-	{
-		if (spawnGroup[cptr->SpawnGroupType].stayInRegion) {
-			for (int sr = 0; sr < spawnGroup[cptr->SpawnGroupType].spawnRegionCh; sr++) {
-				//for (TSpawnRegion sr : spawnGroup[cptr->SpawnGroupType].spawnRegion) {
-				if (p.x < spawnGroup[cptr->SpawnGroupType].spawnRegion[sr].XMin * 256 ||
-					p.x > spawnGroup[cptr->SpawnGroupType].spawnRegion[sr].XMax * 256 ||
-					p.z < spawnGroup[cptr->SpawnGroupType].spawnRegion[sr].YMin * 256 ||
-					p.z > spawnGroup[cptr->SpawnGroupType].spawnRegion[sr].YMax * 256) goto replace;
-			}
-		}
-		if (spawnGroup[cptr->SpawnGroupType].avoidRegionCh) {
-			for (int ar = 0; ar < spawnGroup[cptr->SpawnGroupType].avoidRegionCh; ar++) {
-				//for (TSpawnRegion ar : spawnGroup[cptr->SpawnGroupType].avoidRegion) {
-				if (p.x > spawnGroup[cptr->SpawnGroupType].avoidRegion[ar].XMin * 256 ||
-					p.x < spawnGroup[cptr->SpawnGroupType].avoidRegion[ar].XMax * 256 ||
-					p.z > spawnGroup[cptr->SpawnGroupType].avoidRegion[ar].YMin * 256 ||
-					p.z < spawnGroup[cptr->SpawnGroupType].avoidRegion[ar].YMax * 256) goto replace;
-			}
-		}
-
-	}
-
-	float targetDepthTemp;
-	float tdistTemp = fabs((float)sqrt(
-		((p.x - cptr->pos.x)*(p.x - cptr->pos.x)) +
-		((p.z - cptr->pos.z) * (p.z - cptr->pos.z))) / 3);
-	/*
-	float tdistTemp = fabs((float)sqrt(
-		((p.x - cptr->pos.x)*(p.x - cptr->pos.x)) +
-		((p.z - cptr->pos.z) * (p.z - cptr->pos.z))) / 3);
-	*/
-replace2:
-	targetDepthTemp = siRand((int)(R / 3));
-	//targetDepthTemp = siRand((int)(R/3));
-
-	tr++;
-
-	//PREVENT TOO MUCH TURNING
-	if (tr < 1024) {
-		float tbeta = -atan((targetDepthTemp) / tdistTemp);
-		int dbeta = tbeta - cptr->beta;
-		if (dbeta < 0) dbeta *= -1;
-		if (dbeta > pi/8) {
-			goto replace2;
-		}
-	}
-	
-
-	if (tr < 1024) {
-		if (fabs(targetDepthTemp) > tdistTemp) {
-			if (targetDepthTemp > 0) {
-				targetDepthTemp = tdistTemp;
-			}
-			else {
-				targetDepthTemp = -tdistTemp;
-			}
-		}
-	}
-
-	targetDepthTemp = cptr->depth + targetDepthTemp;
-	if (targetDepthTemp < GetLandH(p.x, p.z) + 400) {
-		if (tr < 8024) {
-			goto replace2;
-		}
-		else {
-			targetDepthTemp = GetLandH(p.x, p.z) + 400;
-		}
-	}
-	if (targetDepthTemp > GetLandUpH(p.x, p.z) - 700) {
-		if (tr < 8024) {
-			goto replace2;
-		}
-		else {
-			targetDepthTemp = GetLandUpH(p.x, p.z) - 700;
-		}
-	}
-
-	cptr->tgtime = 0;
-	cptr->tgx = p.x;
-	cptr->tgz = p.z;
-	cptr->tdepth = targetDepthTemp;
-	cptr->lastTBeta = cptr->beta;
-	cptr->turny = 0;
-}
 
 
 
@@ -5395,6 +5434,12 @@ TBEGIN:
 	float playerdz = PlayerZ - cptr->pos.z - cptr->lookz * 100 *cptr->scale;
 	float pdist = (float)sqrt(playerdx * playerdx + playerdz * playerdz);
 
+	if (pdist > (ctViewR + 20) * 256) {
+		if (ReplaceCharacterForward(cptr)) {
+			goto TBEGIN;
+		}
+	}
+
 	//REMOVED - turny !!!
 	//if (cptr->State == 2)
 	//{
@@ -5641,6 +5686,7 @@ TBEGIN:
 		
 
 	}
+
 
 NOTHINK:
 	if (pdist < 2048) cptr->NoFindCnt = 0;
