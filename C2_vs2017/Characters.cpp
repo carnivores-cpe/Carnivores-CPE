@@ -1184,7 +1184,7 @@ BOOL ReplaceCharacterForward(TCharacter *cptr)
 	if (p.x > 1000 * 256) return FALSE;
 	if (p.z > 1000 * 256) return FALSE;
 
-	if (cptr->Clone == AI_BRACH || cptr->Clone == AI_BRACHDANGER) {
+	if (cptr->Clone == AI_BRACH || cptr->Clone == AI_BRACHDANGER || cptr->Clone == AI_ICTH) {
 		if (CheckPlaceCollisionBrahiP(p)) return FALSE;
 	} else if (CheckPlaceCollisionP(p, cptr->cpcpAquatic)) return FALSE;
 
@@ -1218,7 +1218,7 @@ replace1:
 		Characters[ChCount].pos.z);
 
 
-	if (cptr->Clone == AI_BRACH || cptr->Clone == AI_BRACHDANGER) {
+	if (cptr->Clone == AI_BRACH || cptr->Clone == AI_BRACHDANGER || cptr->Clone == AI_ICTH) {
 		if (CheckPlaceCollisionBrahiP(Characters[ChCount].pos))goto replace1;
 	}
 	else if (CheckPlaceCollisionP(Characters[ChCount].pos, cptr->cpcpAquatic)) goto replace1;
@@ -6138,6 +6138,9 @@ TBEGIN:
 
 	}
 
+
+	if (pdist > (ctViewR + 20) * 256)
+		if (ReplaceCharacterForward(cptr)) goto TBEGIN;
 
 	//======== exploring area ===============//
 	if (!cptr->State)

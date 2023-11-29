@@ -134,6 +134,11 @@ spawntable {
   spawnmin = 2
   spawnrate = 0.5
  }
+ spawngroup{
+  spawnmax = 4
+  spawnmin = 2
+  spawnrate = 0.5
+ }
 
 } //==== end of spawntable =========//
 
@@ -1215,10 +1220,6 @@ spawninfo{
  spawngroup = 3
  spawnratio = 1
 }
- radar = TRUE
- radR = 250
- radG = 150
- radB = 50
  canswim = TRUE
  waterLevel = 550
  mass      = 9
@@ -1267,6 +1268,74 @@ killtype{
  dontWeave = TRUE
 }
 
+{
+ name = 'Ichthyornis'
+ file = 'burianicth_2023_7.car'
+ ai  = 31
+ radar = TRUE
+ radR = 250
+ radG = 150
+ radB = 50
+spawninfo{
+ spawngroup = 4
+ spawnratio = 1
+}
+ maxalt = 2800
+ minalt = 1800
+ waterLevel = 110
+ scale0    = 500
+ scaleA    = 0
+ mass      = 0.2
+ length    = 0.5
+ radius    = 256
+ health    = 1
+ shipdelta = 16
+ fearCall = 3
+ fearCall = 5
+ fearCall = 6
+ fearCall = 7
+ fearCall = 8
+ wlkspd = 0.20
+ swmspd = 0.25
+ flyspd = 2.00
+ gldspd = 1.80
+ lndspd = 0.30
+ tkfspd = 1.50
+ walkAnim = 0
+ shakeLAnim = 9
+ swimAnim = 1
+ shakeWAnim = 10
+ flyAnim = 2
+ glideAnim = 3
+ takeoffAnim = 4
+ landAnim = 5
+idlegroup{
+ anim = 11
+ startChance = 0.0703125
+ endChance = 1
+ instantRepeat = TRUE
+}
+idlegroup{
+ anim = 12
+ startChance = 0.0703125
+ endChance = 1
+ instantRepeat = TRUE
+}
+waterIgroup{
+ anim = 13
+ startChance = 0.140625
+ endChance = 1 
+ instantRepeat = TRUE
+}
+deathtype{
+ fallAnim = 6
+ dieAnim = 7
+ sleepAnim = 8
+}
+ bloR = 112
+ bloG = 0
+ bloB = 0
+}
 
 
 }//===== end of characters ==========//
