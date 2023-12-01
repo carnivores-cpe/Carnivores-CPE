@@ -1707,7 +1707,7 @@ void MakeCall()
     if (cptr->State) continue;
 
     float d = VectorLength(SubVectors(PlayerPos, cptr->pos));
-    if (d < ctViewR * 400)
+    if (d < (ctViewR * 400)  * (DinoInfo[cptr->CType].HearK * 2))
     {
       if (rRand(128) > 32)
         if (d<dmin)

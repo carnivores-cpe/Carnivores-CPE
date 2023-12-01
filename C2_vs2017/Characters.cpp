@@ -8029,7 +8029,8 @@ void MakeNoise(Vector3d pos, float range)
 		TCharacter *cptr = &Characters[c];
 		if (!cptr->Health) continue;
 		float l = VectorLength(SubVectors(cptr->pos, pos));
-		if (l > range) continue;
+		float r = range * (DinoInfo[cptr->CType].HearK * 2);
+		if (l > r) continue;
 
 
 		if (cptr->Clone == AI_TREX) {  //===== T-Rex

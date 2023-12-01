@@ -278,7 +278,7 @@ function expand(n) {
 			<b>Note: As of 1.0.5, all creatures are defined within the characters section of the _RES.</b>
 			</p>
 			
-			Note: As of 1.0.5, radar should now be set to TRUE or FALSE (a char overwrite can be used for huntables).
+			<b>Note: As of 1.0.5, radar should now be set to TRUE or FALSE (a char overwrite can be used for huntables).</b>
 
 			<p>
 			<b>Note: As of 1.0.5, fearCall should now use numbers 0-8 (or 0-9) to specify which call to fear.</b>
@@ -299,7 +299,7 @@ function expand(n) {
 			
 			
 			<ul>
-				<li></li>
+				<li>Creatures can now hear.</li>
 			</ul>
 			
 			<p>
@@ -1342,7 +1342,10 @@ reduced by the whole value of densityMulti. e.g. in the above screenshot, the ma
 			<p><b>Data type: TRUE/FALSE</b></p>
 			<p>
 			If set to true, creatures will spawn within the hunters view range, and will respawn if killed or if they move too far from the hunter.
+			<br>
+			This option is useful to give the impression that the entire map is populated by an ambient creature while saving processing time.
 			</p>
+			Note: pack hunting cannot be used when moveForward is enabled.
 		
 		</div>
 	</div>
