@@ -9041,8 +9041,10 @@ void CreateChMorphedModel(TCharacter *cptr)
 		PSplineD = PCurFrame & 0xFF;
 		PCurFrame = (PCurFrame >> 8);
 	}
-
-
+	else
+	{
+		PCurFrame = 0;
+	}
 
 	if (!MORPHA)
 	{
