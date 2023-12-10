@@ -547,17 +547,12 @@ int CheckPlaceCollisionFish(TCharacter *cptr, Vector3d &v, float mosaDepth, int 
 			return 1;
 	 */
 
-	for (int si = 0; si < DinoInfo[cptr->CType].SpawnInfoCh; si++) {
-	//for (TSpawnInfo si : DinoInfo[cptr->CType].SpawnInfo) {
-		if (spawnGroup[DinoInfo[cptr->CType].SpawnInfo[si].spawnGroup].avoidRegionCh)
-		{
-			for (int ar = 0; ar < spawnGroup[DinoInfo[cptr->CType].SpawnInfo[si].spawnGroup].avoidRegionCh; ar++) {
-			//for (TSpawnRegion ar : spawnGroup[DinoInfo[cptr->CType].SpawnInfo[si].spawnGroup].avoidRegion) {
-				if (ccx < (spawnGroup[DinoInfo[cptr->CType].SpawnInfo[si].spawnGroup].avoidRegion[ar].XMax) &&
-					ccz < (spawnGroup[DinoInfo[cptr->CType].SpawnInfo[si].spawnGroup].avoidRegion[ar].YMax) &&
-					ccx >(spawnGroup[DinoInfo[cptr->CType].SpawnInfo[si].spawnGroup].avoidRegion[ar].XMin) &&
-					ccz >(spawnGroup[DinoInfo[cptr->CType].SpawnInfo[si].spawnGroup].avoidRegion[ar].YMin)) return 1;
-			}
+	if (spawnGroup[cptr->SpawnGroupType].avoidRegionCh) {
+		for (int ar = 0; ar < spawnGroup[cptr->SpawnGroupType].avoidRegionCh; ar++) {
+			if (ccx > spawnGroup[cptr->SpawnGroupType].avoidRegion[ar].XMin &&
+				ccx < spawnGroup[cptr->SpawnGroupType].avoidRegion[ar].XMax &&
+				ccz > spawnGroup[cptr->SpawnGroupType].avoidRegion[ar].YMin &&
+				ccz < spawnGroup[cptr->SpawnGroupType].avoidRegion[ar].YMax) return 1;
 		}
 	}
 
@@ -640,17 +635,12 @@ int CheckPlaceCollisionMosasaurus(TCharacter *cptr, Vector3d &v, float mosaDepth
 			return 1;
 	 */
 
-	for (int si = 0; si < DinoInfo[cptr->CType].SpawnInfoCh; si++) {
-		//for (TSpawnInfo si : DinoInfo[cptr->CType].SpawnInfo) {
-		if (spawnGroup[DinoInfo[cptr->CType].SpawnInfo[si].spawnGroup].avoidRegionCh)
-		{
-			for (int ar = 0; ar < spawnGroup[DinoInfo[cptr->CType].SpawnInfo[si].spawnGroup].avoidRegionCh; ar++) {
-				//for (TSpawnRegion ar : spawnGroup[DinoInfo[cptr->CType].SpawnInfo[si].spawnGroup].avoidRegion) {
-				if (ccx < (spawnGroup[DinoInfo[cptr->CType].SpawnInfo[si].spawnGroup].avoidRegion[ar].XMax) &&
-					ccz < (spawnGroup[DinoInfo[cptr->CType].SpawnInfo[si].spawnGroup].avoidRegion[ar].YMax) &&
-					ccx >(spawnGroup[DinoInfo[cptr->CType].SpawnInfo[si].spawnGroup].avoidRegion[ar].XMin) &&
-					ccz >(spawnGroup[DinoInfo[cptr->CType].SpawnInfo[si].spawnGroup].avoidRegion[ar].YMin)) return 1;
-			}
+	if (spawnGroup[cptr->SpawnGroupType].avoidRegionCh) {
+		for (int ar = 0; ar < spawnGroup[cptr->SpawnGroupType].avoidRegionCh; ar++) {
+			if (ccx > spawnGroup[cptr->SpawnGroupType].avoidRegion[ar].XMin &&
+				ccx < spawnGroup[cptr->SpawnGroupType].avoidRegion[ar].XMax &&
+				ccz > spawnGroup[cptr->SpawnGroupType].avoidRegion[ar].YMin &&
+				ccz < spawnGroup[cptr->SpawnGroupType].avoidRegion[ar].YMax) return 1;
 		}
 	}
 
@@ -741,17 +731,12 @@ int CheckPlaceCollision(TCharacter *cptr, Vector3d &v, BOOL wc, BOOL mc)
 	if (!(FMap[ccz][ccx] & fmWater))
 		if (fabs(h - v.y) > 64) return 1;
 
-	for (int si = 0; si < DinoInfo[cptr->CType].SpawnInfoCh; si++) {
-		//for (TSpawnInfo si : DinoInfo[cptr->CType].SpawnInfo) {
-		if (spawnGroup[DinoInfo[cptr->CType].SpawnInfo[si].spawnGroup].avoidRegionCh)
-		{
-			for (int ar = 0; ar < spawnGroup[DinoInfo[cptr->CType].SpawnInfo[si].spawnGroup].avoidRegionCh; ar++) {
-				//for (TSpawnRegion ar : spawnGroup[DinoInfo[cptr->CType].SpawnInfo[si].spawnGroup].avoidRegion) {
-				if (ccx < (spawnGroup[DinoInfo[cptr->CType].SpawnInfo[si].spawnGroup].avoidRegion[ar].XMax) &&
-					ccz < (spawnGroup[DinoInfo[cptr->CType].SpawnInfo[si].spawnGroup].avoidRegion[ar].YMax) &&
-					ccx >(spawnGroup[DinoInfo[cptr->CType].SpawnInfo[si].spawnGroup].avoidRegion[ar].XMin) &&
-					ccz >(spawnGroup[DinoInfo[cptr->CType].SpawnInfo[si].spawnGroup].avoidRegion[ar].YMin)) return 1;
-			}
+	if (spawnGroup[cptr->SpawnGroupType].avoidRegionCh) {
+		for (int ar = 0; ar < spawnGroup[cptr->SpawnGroupType].avoidRegionCh; ar++) {
+			if (ccx > spawnGroup[cptr->SpawnGroupType].avoidRegion[ar].XMin &&
+				ccx < spawnGroup[cptr->SpawnGroupType].avoidRegion[ar].XMax &&
+				ccz > spawnGroup[cptr->SpawnGroupType].avoidRegion[ar].YMin &&
+				ccz < spawnGroup[cptr->SpawnGroupType].avoidRegion[ar].YMax) return 1;
 		}
 	}
 
@@ -803,17 +788,12 @@ int CheckPlaceCollisionMicro(TCharacter *cptr, Vector3d &v, BOOL wc, BOOL mc)
 	if (!(FMap[ccz][ccx] & fmWater))
 		if (fabs(h - v.y) > 64) return 1;
 
-	for (int si = 0; si < DinoInfo[cptr->CType].SpawnInfoCh; si++) {
-		//for (TSpawnInfo si : DinoInfo[cptr->CType].SpawnInfo) {
-		if (spawnGroup[DinoInfo[cptr->CType].SpawnInfo[si].spawnGroup].avoidRegionCh)
-		{
-			for (int ar = 0; ar < spawnGroup[DinoInfo[cptr->CType].SpawnInfo[si].spawnGroup].avoidRegionCh; ar++) {
-				//for (TSpawnRegion ar : spawnGroup[DinoInfo[cptr->CType].SpawnInfo[si].spawnGroup].avoidRegion) {
-				if (ccx < (spawnGroup[DinoInfo[cptr->CType].SpawnInfo[si].spawnGroup].avoidRegion[ar].XMax) &&
-					ccz < (spawnGroup[DinoInfo[cptr->CType].SpawnInfo[si].spawnGroup].avoidRegion[ar].YMax) &&
-					ccx >(spawnGroup[DinoInfo[cptr->CType].SpawnInfo[si].spawnGroup].avoidRegion[ar].XMin) &&
-					ccz >(spawnGroup[DinoInfo[cptr->CType].SpawnInfo[si].spawnGroup].avoidRegion[ar].YMin)) return 1;
-			}
+	if (spawnGroup[cptr->SpawnGroupType].avoidRegionCh) {
+		for (int ar = 0; ar < spawnGroup[cptr->SpawnGroupType].avoidRegionCh; ar++) {
+			if (ccx > spawnGroup[cptr->SpawnGroupType].avoidRegion[ar].XMin &&
+				ccx < spawnGroup[cptr->SpawnGroupType].avoidRegion[ar].XMax &&
+				ccz > spawnGroup[cptr->SpawnGroupType].avoidRegion[ar].YMin &&
+				ccz < spawnGroup[cptr->SpawnGroupType].avoidRegion[ar].YMax) return 1;
 		}
 	}
 
@@ -861,17 +841,12 @@ int CheckPlaceCollisionLandBrahi(TCharacter *cptr, Vector3d &v, BOOL wc, BOOL mc
 			return 1;
 	 */
 
-	for (int si = 0; si < DinoInfo[cptr->CType].SpawnInfoCh; si++) {
-		//for (TSpawnInfo si : DinoInfo[cptr->CType].SpawnInfo) {
-		if (spawnGroup[DinoInfo[cptr->CType].SpawnInfo[si].spawnGroup].avoidRegionCh)
-		{
-			for (int ar = 0; ar < spawnGroup[DinoInfo[cptr->CType].SpawnInfo[si].spawnGroup].avoidRegionCh; ar++) {
-				//for (TSpawnRegion ar : spawnGroup[DinoInfo[cptr->CType].SpawnInfo[si].spawnGroup].avoidRegion) {
-				if (ccx < (spawnGroup[DinoInfo[cptr->CType].SpawnInfo[si].spawnGroup].avoidRegion[ar].XMax) &&
-					ccz < (spawnGroup[DinoInfo[cptr->CType].SpawnInfo[si].spawnGroup].avoidRegion[ar].YMax) &&
-					ccx >(spawnGroup[DinoInfo[cptr->CType].SpawnInfo[si].spawnGroup].avoidRegion[ar].XMin) &&
-					ccz >(spawnGroup[DinoInfo[cptr->CType].SpawnInfo[si].spawnGroup].avoidRegion[ar].YMin)) return 1;
-			}
+	if (spawnGroup[cptr->SpawnGroupType].avoidRegionCh) {
+		for (int ar = 0; ar < spawnGroup[cptr->SpawnGroupType].avoidRegionCh; ar++) {
+			if (ccx > spawnGroup[cptr->SpawnGroupType].avoidRegion[ar].XMin &&
+				ccx < spawnGroup[cptr->SpawnGroupType].avoidRegion[ar].XMax &&
+				ccz > spawnGroup[cptr->SpawnGroupType].avoidRegion[ar].YMin &&
+				ccz < spawnGroup[cptr->SpawnGroupType].avoidRegion[ar].YMax) return 1;
 		}
 	}
 
@@ -940,17 +915,12 @@ int CheckPlaceCollisionBrahi(TCharacter *cptr, Vector3d &v, BOOL wc, BOOL mc)
 			return 1;
 	 */
 
-	for (int si = 0; si < DinoInfo[cptr->CType].SpawnInfoCh; si++) {
-		//for (TSpawnInfo si : DinoInfo[cptr->CType].SpawnInfo) {
-		if (spawnGroup[DinoInfo[cptr->CType].SpawnInfo[si].spawnGroup].avoidRegionCh)
-		{
-			for (int ar = 0; ar < spawnGroup[DinoInfo[cptr->CType].SpawnInfo[si].spawnGroup].avoidRegionCh; ar++) {
-				//for (TSpawnRegion ar : spawnGroup[DinoInfo[cptr->CType].SpawnInfo[si].spawnGroup].avoidRegion) {
-				if (ccx < (spawnGroup[DinoInfo[cptr->CType].SpawnInfo[si].spawnGroup].avoidRegion[ar].XMax) &&
-					ccz < (spawnGroup[DinoInfo[cptr->CType].SpawnInfo[si].spawnGroup].avoidRegion[ar].YMax) &&
-					ccx >(spawnGroup[DinoInfo[cptr->CType].SpawnInfo[si].spawnGroup].avoidRegion[ar].XMin) &&
-					ccz >(spawnGroup[DinoInfo[cptr->CType].SpawnInfo[si].spawnGroup].avoidRegion[ar].YMin)) return 1;
-			}
+	if (spawnGroup[cptr->SpawnGroupType].avoidRegionCh) {
+		for (int ar = 0; ar < spawnGroup[cptr->SpawnGroupType].avoidRegionCh; ar++) {
+			if (ccx > spawnGroup[cptr->SpawnGroupType].avoidRegion[ar].XMin &&
+				ccx < spawnGroup[cptr->SpawnGroupType].avoidRegion[ar].XMax &&
+				ccz > spawnGroup[cptr->SpawnGroupType].avoidRegion[ar].YMin &&
+				ccz < spawnGroup[cptr->SpawnGroupType].avoidRegion[ar].YMax) return 1;
 		}
 	}
 
@@ -1072,17 +1042,12 @@ int CheckPlaceCollision2(TCharacter *cptr, Vector3d &v, BOOL wc)
 			FMap[ccz + 1][ccx] | FMap[ccz][ccx + 1] | FMap[ccz + 1][ccx + 1]) & fmWater)
 			return 1;
 
-	for (int si = 0; si < DinoInfo[cptr->CType].SpawnInfoCh; si++) {
-		//for (TSpawnInfo si : DinoInfo[cptr->CType].SpawnInfo) {
-		if (spawnGroup[DinoInfo[cptr->CType].SpawnInfo[si].spawnGroup].avoidRegionCh)
-		{
-			for (int ar = 0; ar < spawnGroup[DinoInfo[cptr->CType].SpawnInfo[si].spawnGroup].avoidRegionCh; ar++) {
-				//for (TSpawnRegion ar : spawnGroup[DinoInfo[cptr->CType].SpawnInfo[si].spawnGroup].avoidRegion) {
-				if (ccx < (spawnGroup[DinoInfo[cptr->CType].SpawnInfo[si].spawnGroup].avoidRegion[ar].XMax) &&
-					ccz < (spawnGroup[DinoInfo[cptr->CType].SpawnInfo[si].spawnGroup].avoidRegion[ar].YMax) &&
-					ccx >(spawnGroup[DinoInfo[cptr->CType].SpawnInfo[si].spawnGroup].avoidRegion[ar].XMin) &&
-					ccz >(spawnGroup[DinoInfo[cptr->CType].SpawnInfo[si].spawnGroup].avoidRegion[ar].YMin)) return 1;
-			}
+	if (spawnGroup[cptr->SpawnGroupType].avoidRegionCh) {
+		for (int ar = 0; ar < spawnGroup[cptr->SpawnGroupType].avoidRegionCh; ar++) {
+			if (ccx > spawnGroup[cptr->SpawnGroupType].avoidRegion[ar].XMin &&
+				ccx < spawnGroup[cptr->SpawnGroupType].avoidRegion[ar].XMax &&
+				ccz > spawnGroup[cptr->SpawnGroupType].avoidRegion[ar].YMin &&
+				ccz < spawnGroup[cptr->SpawnGroupType].avoidRegion[ar].YMax) return 1;
 		}
 	}
 
@@ -1215,20 +1180,20 @@ replace:
 		if (fabs(p.x - cptr->pos.x) + fabs(p.z - cptr->pos.z) < R / 2.f) goto replace;
 
 	if (spawnGroup[cptr->SpawnGroupType].stayInRegion) {
+		BOOL outside = true;
 		for (int sr = 0; sr < spawnGroup[cptr->SpawnGroupType].spawnRegionCh; sr++) {
-			//for (TSpawnRegion sr : spawnGroup[cptr->SpawnGroupType].spawnRegion) {
-			if (p.x < spawnGroup[cptr->SpawnGroupType].spawnRegion[sr].XMin * 256 ||
-				p.x > spawnGroup[cptr->SpawnGroupType].spawnRegion[sr].XMax * 256 ||
-				p.z < spawnGroup[cptr->SpawnGroupType].spawnRegion[sr].YMin * 256 ||
-				p.z > spawnGroup[cptr->SpawnGroupType].spawnRegion[sr].YMax * 256) goto replace;
+			if (p.x > spawnGroup[cptr->SpawnGroupType].spawnRegion[sr].XMin * 256 &&
+				p.x < spawnGroup[cptr->SpawnGroupType].spawnRegion[sr].XMax * 256 &&
+				p.z > spawnGroup[cptr->SpawnGroupType].spawnRegion[sr].YMin * 256 &&
+				p.z < spawnGroup[cptr->SpawnGroupType].spawnRegion[sr].YMax * 256) outside = false;
 		}
+		if (outside) goto replace;
 	}
 	if (spawnGroup[cptr->SpawnGroupType].avoidRegionCh) {
 		for (int ar = 0; ar < spawnGroup[cptr->SpawnGroupType].avoidRegionCh; ar++) {
-			//for (TSpawnRegion ar : spawnGroup[cptr->SpawnGroupType].avoidRegion) {
-			if (p.x > spawnGroup[cptr->SpawnGroupType].avoidRegion[ar].XMin * 256 ||
-				p.x < spawnGroup[cptr->SpawnGroupType].avoidRegion[ar].XMax * 256 ||
-				p.z > spawnGroup[cptr->SpawnGroupType].avoidRegion[ar].YMin * 256 ||
+			if (p.x > spawnGroup[cptr->SpawnGroupType].avoidRegion[ar].XMin * 256 &&
+				p.x < spawnGroup[cptr->SpawnGroupType].avoidRegion[ar].XMax * 256 &&
+				p.z > spawnGroup[cptr->SpawnGroupType].avoidRegion[ar].YMin * 256 &&
 				p.z < spawnGroup[cptr->SpawnGroupType].avoidRegion[ar].YMax * 256) goto replace;
 		}
 	}
@@ -1355,20 +1320,20 @@ replace:
 		if (fabs(p.x - cptr->pos.x) + fabs(p.z - cptr->pos.z) < R / 2.f) goto replace;
 
 		if (spawnGroup[cptr->SpawnGroupType].stayInRegion) {
+			BOOL outside = true;
 			for (int sr = 0; sr < spawnGroup[cptr->SpawnGroupType].spawnRegionCh; sr++) {
-				//for (TSpawnRegion sr : spawnGroup[cptr->SpawnGroupType].spawnRegion) {
-				if (p.x < spawnGroup[cptr->SpawnGroupType].spawnRegion[sr].XMin * 256 ||
-					p.x > spawnGroup[cptr->SpawnGroupType].spawnRegion[sr].XMax * 256 ||
-					p.z < spawnGroup[cptr->SpawnGroupType].spawnRegion[sr].YMin * 256 ||
-					p.z > spawnGroup[cptr->SpawnGroupType].spawnRegion[sr].YMax * 256) goto replace;
+				if (p.x > spawnGroup[cptr->SpawnGroupType].spawnRegion[sr].XMin * 256 &&
+					p.x < spawnGroup[cptr->SpawnGroupType].spawnRegion[sr].XMax * 256 &&
+					p.z > spawnGroup[cptr->SpawnGroupType].spawnRegion[sr].YMin * 256 &&
+					p.z < spawnGroup[cptr->SpawnGroupType].spawnRegion[sr].YMax * 256) outside = false;
 			}
+			if (outside) goto replace;
 		}
 		if (spawnGroup[cptr->SpawnGroupType].avoidRegionCh) {
 			for (int ar = 0; ar < spawnGroup[cptr->SpawnGroupType].avoidRegionCh; ar++) {
-				//for (TSpawnRegion ar : spawnGroup[cptr->SpawnGroupType].avoidRegion) {
-				if (p.x > spawnGroup[cptr->SpawnGroupType].avoidRegion[ar].XMin * 256 ||
-					p.x < spawnGroup[cptr->SpawnGroupType].avoidRegion[ar].XMax * 256 ||
-					p.z > spawnGroup[cptr->SpawnGroupType].avoidRegion[ar].YMin * 256 ||
+				if (p.x > spawnGroup[cptr->SpawnGroupType].avoidRegion[ar].XMin * 256 &&
+					p.x < spawnGroup[cptr->SpawnGroupType].avoidRegion[ar].XMax * 256 &&
+					p.z > spawnGroup[cptr->SpawnGroupType].avoidRegion[ar].YMin * 256 &&
 					p.z < spawnGroup[cptr->SpawnGroupType].avoidRegion[ar].YMax * 256) goto replace;
 			}
 		}
@@ -1419,21 +1384,22 @@ replace:
 			if (wy > 400) goto replace;
 			if (wy < 200) goto replace;
 		}
+		
 		if (spawnGroup[cptr->SpawnGroupType].stayInRegion) {
+			BOOL outside = true;
 			for (int sr = 0; sr < spawnGroup[cptr->SpawnGroupType].spawnRegionCh; sr++) {
-				//for (TSpawnRegion sr : spawnGroup[cptr->SpawnGroupType].spawnRegion) {
-				if (p.x < spawnGroup[cptr->SpawnGroupType].spawnRegion[sr].XMin * 256 ||
-					p.x > spawnGroup[cptr->SpawnGroupType].spawnRegion[sr].XMax * 256 ||
-					p.z < spawnGroup[cptr->SpawnGroupType].spawnRegion[sr].YMin * 256 ||
-					p.z > spawnGroup[cptr->SpawnGroupType].spawnRegion[sr].YMax * 256) goto replace;
+				if (p.x > spawnGroup[cptr->SpawnGroupType].spawnRegion[sr].XMin * 256 &&
+					p.x < spawnGroup[cptr->SpawnGroupType].spawnRegion[sr].XMax * 256 &&
+					p.z > spawnGroup[cptr->SpawnGroupType].spawnRegion[sr].YMin * 256 &&
+					p.z < spawnGroup[cptr->SpawnGroupType].spawnRegion[sr].YMax * 256) outside = false;
 			}
+			if (outside) goto replace;
 		}
 		if (spawnGroup[cptr->SpawnGroupType].avoidRegionCh) {
 			for (int ar = 0; ar < spawnGroup[cptr->SpawnGroupType].avoidRegionCh; ar++) {
-				//for (TSpawnRegion ar : spawnGroup[cptr->SpawnGroupType].avoidRegion) {
-				if (p.x > spawnGroup[cptr->SpawnGroupType].avoidRegion[ar].XMin * 256 ||
-					p.x < spawnGroup[cptr->SpawnGroupType].avoidRegion[ar].XMax * 256 ||
-					p.z > spawnGroup[cptr->SpawnGroupType].avoidRegion[ar].YMin * 256 ||
+				if (p.x > spawnGroup[cptr->SpawnGroupType].avoidRegion[ar].XMin * 256 &&
+					p.x < spawnGroup[cptr->SpawnGroupType].avoidRegion[ar].XMax * 256 &&
+					p.z > spawnGroup[cptr->SpawnGroupType].avoidRegion[ar].YMin * 256 &&
 					p.z < spawnGroup[cptr->SpawnGroupType].avoidRegion[ar].YMax * 256) goto replace;
 			}
 		}
@@ -1472,20 +1438,20 @@ replace:
 		if (fabs(p.x - cptr->pos.x) + fabs(p.z - cptr->pos.z) < R * 0.7) goto replace;
 
 		if (spawnGroup[cptr->SpawnGroupType].stayInRegion) {
+			BOOL outside = true;
 			for (int sr = 0; sr < spawnGroup[cptr->SpawnGroupType].spawnRegionCh; sr++) {
-				//for (TSpawnRegion sr : spawnGroup[cptr->SpawnGroupType].spawnRegion) {
-				if (p.x < spawnGroup[cptr->SpawnGroupType].spawnRegion[sr].XMin * 256 ||
-					p.x > spawnGroup[cptr->SpawnGroupType].spawnRegion[sr].XMax * 256 ||
-					p.z < spawnGroup[cptr->SpawnGroupType].spawnRegion[sr].YMin * 256 ||
-					p.z > spawnGroup[cptr->SpawnGroupType].spawnRegion[sr].YMax * 256) goto replace;
+				if (p.x > spawnGroup[cptr->SpawnGroupType].spawnRegion[sr].XMin * 256 &&
+					p.x < spawnGroup[cptr->SpawnGroupType].spawnRegion[sr].XMax * 256 &&
+					p.z > spawnGroup[cptr->SpawnGroupType].spawnRegion[sr].YMin * 256 &&
+					p.z < spawnGroup[cptr->SpawnGroupType].spawnRegion[sr].YMax * 256) outside = false;
 			}
+			if (outside) goto replace;
 		}
 		if (spawnGroup[cptr->SpawnGroupType].avoidRegionCh) {
 			for (int ar = 0; ar < spawnGroup[cptr->SpawnGroupType].avoidRegionCh; ar++) {
-				//for (TSpawnRegion ar : spawnGroup[cptr->SpawnGroupType].avoidRegion) {
-				if (p.x > spawnGroup[cptr->SpawnGroupType].avoidRegion[ar].XMin * 256 ||
-					p.x < spawnGroup[cptr->SpawnGroupType].avoidRegion[ar].XMax * 256 ||
-					p.z > spawnGroup[cptr->SpawnGroupType].avoidRegion[ar].YMin * 256 ||
+				if (p.x > spawnGroup[cptr->SpawnGroupType].avoidRegion[ar].XMin * 256 &&
+					p.x < spawnGroup[cptr->SpawnGroupType].avoidRegion[ar].XMax * 256 &&
+					p.z > spawnGroup[cptr->SpawnGroupType].avoidRegion[ar].YMin * 256 &&
 					p.z < spawnGroup[cptr->SpawnGroupType].avoidRegion[ar].YMax * 256) goto replace;
 			}
 		}
@@ -1623,21 +1589,22 @@ replace:
 
 	if (tr < 128)
 	{
+		
 		if (spawnGroup[cptr->SpawnGroupType].stayInRegion) {
+			BOOL outside = true;
 			for (int sr = 0; sr < spawnGroup[cptr->SpawnGroupType].spawnRegionCh; sr++) {
-				//for (TSpawnRegion sr : spawnGroup[cptr->SpawnGroupType].spawnRegion) {
-				if (p.x < spawnGroup[cptr->SpawnGroupType].spawnRegion[sr].XMin * 256 ||
-					p.x > spawnGroup[cptr->SpawnGroupType].spawnRegion[sr].XMax * 256 ||
-					p.z < spawnGroup[cptr->SpawnGroupType].spawnRegion[sr].YMin * 256 ||
-					p.z > spawnGroup[cptr->SpawnGroupType].spawnRegion[sr].YMax * 256) goto replace;
+				if (p.x > spawnGroup[cptr->SpawnGroupType].spawnRegion[sr].XMin * 256 &&
+					p.x < spawnGroup[cptr->SpawnGroupType].spawnRegion[sr].XMax * 256 &&
+					p.z > spawnGroup[cptr->SpawnGroupType].spawnRegion[sr].YMin * 256 &&
+					p.z < spawnGroup[cptr->SpawnGroupType].spawnRegion[sr].YMax * 256) outside = false;
 			}
+			if (outside) goto replace;
 		}
 		if (spawnGroup[cptr->SpawnGroupType].avoidRegionCh) {
 			for (int ar = 0; ar < spawnGroup[cptr->SpawnGroupType].avoidRegionCh; ar++) {
-				//for (TSpawnRegion ar : spawnGroup[cptr->SpawnGroupType].avoidRegion) {
-				if (p.x > spawnGroup[cptr->SpawnGroupType].avoidRegion[ar].XMin * 256 ||
-					p.x < spawnGroup[cptr->SpawnGroupType].avoidRegion[ar].XMax * 256 ||
-					p.z > spawnGroup[cptr->SpawnGroupType].avoidRegion[ar].YMin * 256 ||
+				if (p.x > spawnGroup[cptr->SpawnGroupType].avoidRegion[ar].XMin * 256 &&
+					p.x < spawnGroup[cptr->SpawnGroupType].avoidRegion[ar].XMax * 256 &&
+					p.z > spawnGroup[cptr->SpawnGroupType].avoidRegion[ar].YMin * 256 &&
 					p.z < spawnGroup[cptr->SpawnGroupType].avoidRegion[ar].YMax * 256) goto replace;
 			}
 		}
@@ -1726,6 +1693,23 @@ BOOL ReplaceCharacterForward(TCharacter *cptr)
 	if (p.x > 1000 * 256) return FALSE;
 	if (p.z > 1000 * 256) return FALSE;
 
+	BOOL outside = true;
+	for (int sr = 0; sr < spawnGroup[cptr->SpawnGroupType].spawnRegionCh; sr++) {
+		if (p.x > spawnGroup[cptr->SpawnGroupType].spawnRegion[sr].XMin * 256 &&
+			p.x < spawnGroup[cptr->SpawnGroupType].spawnRegion[sr].XMax * 256 &&
+			p.z > spawnGroup[cptr->SpawnGroupType].spawnRegion[sr].YMin * 256 &&
+			p.z < spawnGroup[cptr->SpawnGroupType].spawnRegion[sr].YMax * 256) outside = false;
+	}
+	if (outside) return FALSE;
+	if (spawnGroup[cptr->SpawnGroupType].avoidRegionCh) {
+		for (int ar = 0; ar < spawnGroup[cptr->SpawnGroupType].avoidRegionCh; ar++) {
+			if (p.x > spawnGroup[cptr->SpawnGroupType].avoidRegion[ar].XMin * 256 &&
+				p.x < spawnGroup[cptr->SpawnGroupType].avoidRegion[ar].XMax * 256 &&
+				p.z > spawnGroup[cptr->SpawnGroupType].avoidRegion[ar].YMin * 256 &&
+				p.z < spawnGroup[cptr->SpawnGroupType].avoidRegion[ar].YMax * 256) return FALSE;
+		}
+	}
+
 	if (cptr->Clone == AI_BRACH || cptr->Clone == AI_BRACHDANGER || cptr->Clone == AI_ICTH) {
 		if (CheckPlaceCollisionBrahiP(p)) return FALSE;
 	} else if (cptr->Clone == AI_FISH || cptr->Clone == AI_MOSA) {
@@ -1771,6 +1755,23 @@ replace1:
 	Characters[ChCount].pos.y = GetLandH(Characters[ChCount].pos.x,
 		Characters[ChCount].pos.z);
 
+	
+	BOOL outside = true;
+	for (int sr = 0; sr < spawnGroup[cptr->SpawnGroupType].spawnRegionCh; sr++) {
+		if (cptr->pos.x > spawnGroup[cptr->SpawnGroupType].spawnRegion[sr].XMin * 256 &&
+			cptr->pos.x < spawnGroup[cptr->SpawnGroupType].spawnRegion[sr].XMax * 256 &&
+			cptr->pos.z > spawnGroup[cptr->SpawnGroupType].spawnRegion[sr].YMin * 256 &&
+			cptr->pos.z < spawnGroup[cptr->SpawnGroupType].spawnRegion[sr].YMax * 256) outside = false;
+	}
+	if (outside) goto replace1;
+	if (spawnGroup[cptr->SpawnGroupType].avoidRegionCh) {
+		for (int ar = 0; ar < spawnGroup[cptr->SpawnGroupType].avoidRegionCh; ar++) {
+			if (cptr->pos.x > spawnGroup[cptr->SpawnGroupType].avoidRegion[ar].XMin * 256 &&
+				cptr->pos.x < spawnGroup[cptr->SpawnGroupType].avoidRegion[ar].XMax * 256 &&
+				cptr->pos.z > spawnGroup[cptr->SpawnGroupType].avoidRegion[ar].YMin * 256 &&
+				cptr->pos.z < spawnGroup[cptr->SpawnGroupType].avoidRegion[ar].YMax * 256) goto replace1;
+		}
+	}
 
 	if (cptr->Clone == AI_BRACH || cptr->Clone == AI_BRACHDANGER || cptr->Clone == AI_ICTH) {
 		if (CheckPlaceCollisionBrahiP(Characters[ChCount].pos))goto replace1;
@@ -8328,6 +8329,19 @@ replaceSMA:
 	if (moveForward && tr < 1024) {
 		Characters[ChCount].pos.x = PlayerX + siRand(10040);
 		Characters[ChCount].pos.z = PlayerZ + siRand(10040);
+
+		BOOL outside = true;
+		for (int sr = 0; sr < spawnGroup[Characters[ChCount].SpawnGroupType].spawnRegionCh; sr++) {
+			if (Characters[ChCount].pos.x > spawnGroup[Characters[ChCount].SpawnGroupType].spawnRegion[sr].XMin * 256 &&
+				Characters[ChCount].pos.x < spawnGroup[Characters[ChCount].SpawnGroupType].spawnRegion[sr].XMax * 256 &&
+				Characters[ChCount].pos.z > spawnGroup[Characters[ChCount].SpawnGroupType].spawnRegion[sr].YMin * 256 &&
+				Characters[ChCount].pos.z < spawnGroup[Characters[ChCount].SpawnGroupType].spawnRegion[sr].YMax * 256) outside = false;
+		}
+		if (outside) {
+			tr++;
+			goto replaceSMA;
+		}
+		
 	} else {
 	
 		if (leader >= 0) {
@@ -8372,12 +8386,12 @@ replaceSMA:
 	}
 
 
+
 	if (spawnGroup[Characters[ChCount].SpawnGroupType].avoidRegionCh) {
 		for (int ar = 0; ar < spawnGroup[Characters[ChCount].SpawnGroupType].avoidRegionCh; ar++) {
-			//for (TSpawnRegion ar : spawnGroup[cptr->SpawnGroupType].avoidRegion) {
-			if (Characters[ChCount].pos.x > spawnGroup[Characters[ChCount].SpawnGroupType].avoidRegion[ar].XMin * 256 ||
-				Characters[ChCount].pos.x < spawnGroup[Characters[ChCount].SpawnGroupType].avoidRegion[ar].XMax * 256 ||
-				Characters[ChCount].pos.z > spawnGroup[Characters[ChCount].SpawnGroupType].avoidRegion[ar].YMin * 256 ||
+			if (Characters[ChCount].pos.x > spawnGroup[Characters[ChCount].SpawnGroupType].avoidRegion[ar].XMin * 256 &&
+				Characters[ChCount].pos.x < spawnGroup[Characters[ChCount].SpawnGroupType].avoidRegion[ar].XMax * 256 &&
+				Characters[ChCount].pos.z > spawnGroup[Characters[ChCount].SpawnGroupType].avoidRegion[ar].YMin * 256 &&
 				Characters[ChCount].pos.z < spawnGroup[Characters[ChCount].SpawnGroupType].avoidRegion[ar].YMax * 256) goto replaceSMA;
 		}
 	}

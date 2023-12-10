@@ -110,6 +110,8 @@ areatable {
 
 
 spawntable {
+
+//==== 0 ambients =========//
  spawngroup{
   spawnmax = 6
   spawnmin = 0
@@ -117,34 +119,46 @@ spawntable {
   densityMulti = 2
   moveForward = TRUE
  }
+
+//==== 1 main roster random =========//
  spawngroup{
   spawnmax = 4
   spawnmin = 0
   spawnrate = 1
   randomise = TRUE
  }
+
+//==== 2 main roster selected =========//
  spawngroup{
   spawnmax = 13
   spawnmin = 12
   spawnrate = 0.5
   densityMulti = 4
  }
+
+//==== 3 brachi =========//
  spawngroup{
   spawnmax = 4
   spawnmin = 2
   spawnrate = 0.5
  }
+
+//==== 4 ichthyornis =========//
  spawngroup{
   spawnmax = 4
   spawnmin = 2
   spawnrate = 0.5
  }
+
+//==== 5 parexus =========//
  spawngroup{
-  spawnmax = 2
-  spawnmin = 0
-  spawnrate = 1
-  moveForward = TRUE
+  spawnmax = 4
+  spawnmin = 2
+  spawnrate = 0.5
  }
+
+
+//==== 6 mosasaurus =========//
  spawngroup{
   spawnmax = 3
   spawnmin = 0
@@ -159,7 +173,7 @@ weapons {
  file  = 'pistol.car'
  pic   = 'bullet1.tga'
  gunshot = 'pistol.wav'
- power = 0
+ power = 100
  prec  = 0.8
  loud  = 0.8
  rate  = 1.6
@@ -251,6 +265,7 @@ characters {
  name    = 'Moshops'
  file    = 'mosh.car'
  ai      = 1
+ hearK      = 0.5
 spawninfo{
  spawngroup = 0
  spawnratio = 1
@@ -287,6 +302,7 @@ idlegroup{
  name    = 'Galimimus'
  file    = 'gall.car'
  ai      = 2
+ hearK      = 0.5
 spawninfo{
  spawngroup = 0
  spawnratio = 1
@@ -376,6 +392,7 @@ deathtype{
  name   = 'Dimetrodon'
  file   = 'dimet.car'
  ai     = 5
+ hearK      = 0.5
 spawninfo{
  spawngroup = 0
  spawnratio = 1
@@ -1283,6 +1300,7 @@ killtype{
  name = 'Ichthyornis'
  file = 'burianicth_2023_7.car'
  ai  = 31
+ hearK      = 0.5
 spawninfo{
  spawngroup = 4
  spawnratio = 1

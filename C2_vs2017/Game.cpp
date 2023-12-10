@@ -1688,7 +1688,10 @@ void MakeCall()
   {
     TCharacter *cptr = &Characters[c];
 
-	if (DinoInfo[cptr->CType].fearCall[TargetCall-10]) {
+	float d = VectorLength(SubVectors(PlayerPos, cptr->pos));
+	bool canHear = d < (ctViewR * 400)  * (DinoInfo[cptr->CType].HearK * 2);
+
+	if (DinoInfo[cptr->CType].fearCall[TargetCall-10] && canHear) {
 		cptr->State = 2;
 		cptr->AfraidTime = (10 + rRand(5)) * 1024;
 	}
@@ -1706,8 +1709,8 @@ void MakeCall()
 	if (cptr->AfraidTime) continue;
     if (cptr->State) continue;
 
-    float d = VectorLength(SubVectors(PlayerPos, cptr->pos));
-    if (d < (ctViewR * 400)  * (DinoInfo[cptr->CType].HearK * 2))
+    
+    if (canHear)
     {
       if (rRand(128) > 32)
         if (d<dmin)

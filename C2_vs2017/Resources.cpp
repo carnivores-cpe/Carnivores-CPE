@@ -2174,6 +2174,52 @@ void ReadAreaTable (FILE *stream, int areaNumber)
 
 }
 
+void ReadAvoid(FILE *stream)
+{
+	char *value;
+	char line[256];
+
+	while (fgets(line, 255, stream)) {
+		if (strstr(line, "}")) {
+			spawnGroup[TotalSpawnGroup].avoidRegionCh++;
+			break;
+		}
+		value = strstr(line, "=");
+		if (!value)
+			DoHalt("Script loading error");
+		value++;
+
+		if (strstr(line, "xmax")) spawnGroup[TotalSpawnGroup].avoidRegion[spawnGroup[TotalSpawnGroup].avoidRegionCh].XMax = atoi(value);
+		if (strstr(line, "xmin")) spawnGroup[TotalSpawnGroup].avoidRegion[spawnGroup[TotalSpawnGroup].avoidRegionCh].XMin = atoi(value);
+		if (strstr(line, "ymax")) spawnGroup[TotalSpawnGroup].avoidRegion[spawnGroup[TotalSpawnGroup].avoidRegionCh].YMax = atoi(value);
+		if (strstr(line, "ymin")) spawnGroup[TotalSpawnGroup].avoidRegion[spawnGroup[TotalSpawnGroup].avoidRegionCh].YMin = atoi(value);
+
+	}
+}
+
+void ReadRegion(FILE *stream)
+{
+	char *value;
+	char line[256];
+
+	while (fgets(line, 255, stream)) {
+		if (strstr(line, "}")) {
+			spawnGroup[TotalSpawnGroup].spawnRegionCh++;
+			break;
+		}
+		value = strstr(line, "=");
+		if (!value) {
+			DoHalt("Script loading error");
+		}
+		value++;
+
+		if (strstr(line, "xmax")) spawnGroup[TotalSpawnGroup].spawnRegion[spawnGroup[TotalSpawnGroup].spawnRegionCh].XMax = atoi(value);
+		if (strstr(line, "xmin")) spawnGroup[TotalSpawnGroup].spawnRegion[spawnGroup[TotalSpawnGroup].spawnRegionCh].XMin = atoi(value);
+		if (strstr(line, "ymax")) spawnGroup[TotalSpawnGroup].spawnRegion[spawnGroup[TotalSpawnGroup].spawnRegionCh].YMax = atoi(value);
+		if (strstr(line, "ymin")) spawnGroup[TotalSpawnGroup].spawnRegion[spawnGroup[TotalSpawnGroup].spawnRegionCh].YMin = atoi(value);
+
+	}
+}
 
 
 void ReadSpawnTable(FILE *stream)
@@ -2193,19 +2239,40 @@ void ReadSpawnTable(FILE *stream)
 					break;
 				}
 				value = strstr(line, "=");
-				if (!value) DoHalt("Script loading error");
-				value++;
+				if (!value) {
+					if (strstr(line, "region")) {
 
-				if (strstr(line, "spawnrate")) spawnGroup[TotalSpawnGroup].SpawnRate = (float)atof(value);
-				if (strstr(line, "spawnmax")) spawnGroup[TotalSpawnGroup].SpawnMax = atoi(value);
-				if (strstr(line, "spawnmin")) spawnGroup[TotalSpawnGroup].SpawnMin = atoi(value);
+						//if (regionOverwrite) {
+						//	WipeSpawnInfo();
+						//	regionOverwrite = false;
+						//}
 
-				if (strstr(line, "densityMulti")) spawnGroup[TotalSpawnGroup].densityMulti = atoi(value);
-				if (strstr(line, "moveForward")) readBool(value, spawnGroup[TotalSpawnGroup].moveForward);
-				if (strstr(line, "randomise")) readBool(value, spawnGroup[TotalSpawnGroup].Randomised);
-				if (strstr(line, "onlyActiveNearby")) readBool(value, spawnGroup[TotalSpawnGroup].OnlyActiveNearby);
+						ReadRegion(stream);
+					} else if (strstr(line, "avoid")) {
 
+						//if (regionOverwrite) {
+						//	WipeSpawnInfo();
+						//	regionOverwrite = false;
+						//}
 
+						ReadAvoid(stream);
+					} else DoHalt("Script loading error");
+
+				} else {
+					value++;
+
+					if (strstr(line, "spawnrate")) spawnGroup[TotalSpawnGroup].SpawnRate = (float)atof(value);
+					if (strstr(line, "spawnmax")) spawnGroup[TotalSpawnGroup].SpawnMax = atoi(value);
+					if (strstr(line, "spawnmin")) spawnGroup[TotalSpawnGroup].SpawnMin = atoi(value);
+
+					if (strstr(line, "densityMulti")) spawnGroup[TotalSpawnGroup].densityMulti = atoi(value);
+					if (strstr(line, "moveForward")) readBool(value, spawnGroup[TotalSpawnGroup].moveForward);
+					if (strstr(line, "randomise")) readBool(value, spawnGroup[TotalSpawnGroup].Randomised);
+					if (strstr(line, "onlyActiveNearby")) readBool(value, spawnGroup[TotalSpawnGroup].OnlyActiveNearby);
+					if (strstr(line, "styInRgn")) readBool(value, spawnGroup[TotalSpawnGroup].stayInRegion);
+				}
+				
+				/*
 				if (strstr(line, "region"))
 					while (fgets(line, 255, stream)) {
 						if (strstr(line, "}")) {
@@ -2228,6 +2295,7 @@ void ReadSpawnTable(FILE *stream)
 						if (strstr(line, "ymax")) spawnGroup[TotalSpawnGroup].avoidRegion[spawnGroup[TotalSpawnGroup].avoidRegionCh].YMax = atoi(value);
 						if (strstr(line, "ymin")) spawnGroup[TotalSpawnGroup].avoidRegion[spawnGroup[TotalSpawnGroup].avoidRegionCh].YMin = atoi(value);
 					}
+					*/
 
 			}
 	}

@@ -713,10 +713,9 @@ typedef struct _TSpawnGroup
 {
 	int SpawnMax, SpawnMin;
 	float SpawnRate;
-	bool moveForward, Randomised, OnlyActiveNearby;
+	bool moveForward, Randomised, OnlyActiveNearby, stayInRegion;
 	int densityMulti;
 
-	BOOL stayInRegion;
 	int spawnRegionCh, avoidRegionCh;
 	TSpawnRegion spawnRegion[16];
 	TSpawnRegion avoidRegion[16];

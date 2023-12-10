@@ -259,7 +259,7 @@ function expand(n) {
 			
 			
 			<ul>
-				<li>New spawngroup system.</li>
+				<li>New spawngroup system offers completely flexible spawning rules.</li>
 				<li>A creature can now be set to respond to a specific call.</li>
 				<li>Overwrite if a creature is selected from the menu.</li>
 				<!--<li>You can now hide creatures on the hunt menu until the player can afford them</li>-->
@@ -282,7 +282,11 @@ function expand(n) {
 
 			<p>
 			<b>Note: As of 1.0.5, fearCall should now use numbers 0-8 (or 0-9) to specify which call to fear.</b>
-</p><br>
+			</p>
+			
+			<b>Note: As of 1.0.5, all creatures need a hearK value to react to gunshots (default 0.5).</b>
+			
+			<br>
 	
 	<b>Note: An account must be created with the Carn2 menu before you can run survival mode.</b>
 			
@@ -317,13 +321,13 @@ function expand(n) {
 			<h3>Features</h3>
 			<ul>
 				<li>10th huntable slot</li>
-				<li>Huntable AI can be reordered or duplicated throughout the huntable roster</li>
+				<li>AI can be reordered or duplicated throughout the roster</li>
 				<li>108 map ambient slots per area</li>
 				<li>128 trophy slots</li>
 				<li>All huntable herbivore AI can be made dangerous</li>
 				<li>All huntable carnivore AI can be made non-dangerous</li>
-				<li>All ambient AI available for map ambient slots</li>
-				<li>All huntable AI available for map ambient slots</li>
+				<li>Any AI creature can be spawned as map ambients</li>
+				<li>Set which creatures can random spawn</li>
 				<li>Pachycephalosaurus AI</li>
 				<li>All Ice Age AI</li>
 				<li>Dangerous brachiosaurus AI</li>
@@ -363,15 +367,13 @@ function expand(n) {
 				<li>Option to make creatures always flee after being shot</li>
 				<li>Option to make creatures flee if it hears gunshots regardless of aggression</li>
 				<li>Hide a creatures stats in the binoculars</li>
-				<li>Specific ambients can be added to the trophy room</li>
-				<li>Specific map ambients can be added to the trophy room</li>
-				<li>Specific huntables can be non-addable to the trophy room</li>
+				<li>Set which creatures can be added to the trophy room</li>
 				<li>Kill animations can be changed to only play once, instead of looping.</li>
 				<li>Change which dinos run from certain calls</li>
-				<li>Custom spawn regions for each creture per map</li>
-				<li>Spawn max/min and spawnrate per creature per map (minimum spawn rate of 1/1000 chance per hunt)</li>
-				<li>Creatures can be set to never leave certain spawn regions unless chased/lured out.</li>
-				<li>Individual creatures can be set to avoid specific areas per map.</li>
+				<li>Custom spawn regions per map</li>
+				<li>Spawn max/min and spawnrate per map (minimum spawn rate of 1/1000 chance per hunt)</li>
+				<li>Creatures can be set to never leave certain regions unless chased/lured out.</li>
+				<li>Creatures can be set to avoid specific areas per map.</li>
 				<li>Minimum/maximum depth (fish/mosasaurus AI creatures only)</li>
 				<li>Minimum/maximum altitude for flier AI creatures</li>
 				<li>New overwrite system - Any RES value can be adjusted depending on map, time of day, creature selected or a combination</li>
@@ -1341,7 +1343,8 @@ reduced by the whole value of densityMulti. e.g. in the above screenshot, the ma
 		
 			<p><b>Data type: TRUE/FALSE</b></p>
 			<p>
-			If set to true, creatures will spawn within the hunters view range, and will respawn if killed or if they move too far from the hunter.
+			If set to true, creatures will spawn within the hunters view range, and will respawn if killed or if they move too far from the hunter. This feature is compatible with
+			regions/avoidances.
 			<br>
 			This option is useful to give the impression that the entire map is populated by an ambient creature while saving processing time.
 			</p>
@@ -1401,9 +1404,113 @@ reduced by the whole value of densityMulti. e.g. in the above screenshot, the ma
 </p>
 
 
+
+
+
+
+
+
+			<p style="margin-top:4%;">
+	<h2 id="arrow_151" unselectable="on" onclick="expand(151)"
+		style="float:left;margin-top:0;cursor:pointer;
+		-moz-user-select:none;
+		user-select:none;
+		-webkit-user-select: none;
+		-ms-user-select: none;"
+		>></h2>
+	<div class = "con" style="margin-left:4%;">
+		<h2 onclick="expand(151)" style="cursor:pointer;">_RES Subsection: region</h2>
+		<div id="content_151" style="display: none">
+		
+		<p>
+		Defines an area that creatures must spawn in. Each spawngroup can have up to 16 regions per map. If none are defined, the creatures will spawn anywhere on the map.
+		</p>
+		
+		
+<p style="margin-top:4%;">
+	<h2 id="arrow_152" unselectable="on" onclick="expand(152)"
+		style="float:left;margin-top:0;cursor:pointer;
+		-moz-user-select:none;
+		user-select:none;
+		-webkit-user-select: none;
+		-ms-user-select: none;"
+		>></h2>
+	<div class = "con" style="margin-left:8%">
+		<h2 onclick="expand(152)" style="cursor:pointer;">_RES value: xmax, xmin, ymax, ymin</h2>
+		<div id="content_152" style="display: none">
+		
+			<p><b>Data type: Whole Number</b></p>
+			<p>
+			Regions are square. These four values control the four corners of the spawn region (xmin,ymin is the top left corner, xmax,ymax is the bottom right corner).
+			</p>
+			<p>
+			Note: It's recommended to open the map in Alt Editor 2, and use the mouse cursor to find the coordinates for these values.
+			</p>
+		
+		</div>
+	</div>
+</p>
+
+
+		</div>
+	</div>
+</p>
+
+
+
+
+
+
+
+
+
 			
 			
-			
+			<p style="margin-top:4%;">
+	<h2 id="arrow_39" unselectable="on" onclick="expand(39)"
+		style="float:left;margin-top:0;cursor:pointer;
+		-moz-user-select:none;
+		user-select:none;
+		-webkit-user-select: none;
+		-ms-user-select: none;"
+		>></h2>
+	<div class = "con" style="margin-left:4%;">
+		<h2 onclick="expand(39)" style="cursor:pointer;">_RES Subsection: avoid</h2>
+		<div id="content_39" style="display: none">
+		
+		<p>
+		Defines an area that creatures cannot spawn in nor enter. Each spawngroup can have up to 16 avoidance regions per map.
+		</p>
+		
+		
+<p style="margin-top:4%;">
+	<h2 id="arrow_82" unselectable="on" onclick="expand(82)"
+		style="float:left;margin-top:0;cursor:pointer;
+		-moz-user-select:none;
+		user-select:none;
+		-webkit-user-select: none;
+		-ms-user-select: none;"
+		>></h2>
+	<div class = "con" style="margin-left:8%">
+		<h2 onclick="expand(82)" style="cursor:pointer;">_RES value: xmax, xmin, ymax, ymin</h2>
+		<div id="content_82" style="display: none">
+		
+			<p><b>Data type: Whole Number</b></p>
+			<p>
+			Avoid regions are square. These four values control the four corners of the spawn region (xmin,ymin is the top left corner, xmax,ymax is the bottom right corner).
+			</p>
+			<p>
+			Note: It's recommended to open the map in Alt Editor 2, and use the mouse cursor to find the coordinates for these values.
+			</p>
+		
+		</div>
+	</div>
+</p>
+
+
+		</div>
+	</div>
+</p>
 			
 			
 			
@@ -5854,52 +5961,7 @@ idlegroup{
 
 
 
-<p style="margin-top:4%;">
-	<h2 id="arrow_39" unselectable="on" onclick="expand(39)"
-		style="float:left;margin-top:0;cursor:pointer;
-		-moz-user-select:none;
-		user-select:none;
-		-webkit-user-select: none;
-		-ms-user-select: none;"
-		>></h2>
-	<div class = "con" style="margin-left:4%;">
-		<h2 onclick="expand(39)" style="cursor:pointer;">_RES Subsection: avoid</h2>
-		<div id="content_39" style="display: none">
-		
-		<p>
-		Defines areas that a map ambient cannot spawn in nor enter.
-		</p>
-		
-		
-<p style="margin-top:4%;">
-	<h2 id="arrow_82" unselectable="on" onclick="expand(82)"
-		style="float:left;margin-top:0;cursor:pointer;
-		-moz-user-select:none;
-		user-select:none;
-		-webkit-user-select: none;
-		-ms-user-select: none;"
-		>></h2>
-	<div class = "con" style="margin-left:8%">
-		<h2 onclick="expand(82)" style="cursor:pointer;">_RES value: xmax, xmin, ymax, ymin</h2>
-		<div id="content_82" style="display: none">
-		
-			<p><b>Data type: Whole Number</b></p>
-			<p>
-			Avoid regions are square. These four values control the four corners of the spawn region (xmin,ymin is the top left corner, xmax,ymax is the bottom right corner).
-			These values are optional. Excluding these four values from a spawninfo subsection will result in the creature spawning over the entire map.
-			</p>
-			<p>
-			Note: It's recommended to open the map in Alt Editor 2, and use the mouse cursor to find the coordinates for these values.
-			</p>
-		
-		</div>
-	</div>
-</p>
 
-
-		</div>
-	</div>
-</p>
 
 
 		
