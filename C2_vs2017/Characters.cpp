@@ -1179,25 +1179,26 @@ replace:
 	if (tr < 16)
 		if (fabs(p.x - cptr->pos.x) + fabs(p.z - cptr->pos.z) < R / 2.f) goto replace;
 
-	if (spawnGroup[cptr->SpawnGroupType].stayInRegion) {
-		BOOL outside = true;
-		for (int sr = 0; sr < spawnGroup[cptr->SpawnGroupType].spawnRegionCh; sr++) {
-			if (p.x > spawnGroup[cptr->SpawnGroupType].spawnRegion[sr].XMin * 256 &&
-				p.x < spawnGroup[cptr->SpawnGroupType].spawnRegion[sr].XMax * 256 &&
-				p.z > spawnGroup[cptr->SpawnGroupType].spawnRegion[sr].YMin * 256 &&
-				p.z < spawnGroup[cptr->SpawnGroupType].spawnRegion[sr].YMax * 256) outside = false;
+	if (tr < 1024) {
+		if (spawnGroup[cptr->SpawnGroupType].stayInRegion) {
+			BOOL outside = true;
+			for (int sr = 0; sr < spawnGroup[cptr->SpawnGroupType].spawnRegionCh; sr++) {
+				if (p.x > spawnGroup[cptr->SpawnGroupType].spawnRegion[sr].XMin * 256 &&
+					p.x < spawnGroup[cptr->SpawnGroupType].spawnRegion[sr].XMax * 256 &&
+					p.z > spawnGroup[cptr->SpawnGroupType].spawnRegion[sr].YMin * 256 &&
+					p.z < spawnGroup[cptr->SpawnGroupType].spawnRegion[sr].YMax * 256) outside = false;
+			}
+			if (outside) goto replace;
 		}
-		if (outside) goto replace;
-	}
-	if (spawnGroup[cptr->SpawnGroupType].avoidRegionCh) {
-		for (int ar = 0; ar < spawnGroup[cptr->SpawnGroupType].avoidRegionCh; ar++) {
-			if (p.x > spawnGroup[cptr->SpawnGroupType].avoidRegion[ar].XMin * 256 &&
-				p.x < spawnGroup[cptr->SpawnGroupType].avoidRegion[ar].XMax * 256 &&
-				p.z > spawnGroup[cptr->SpawnGroupType].avoidRegion[ar].YMin * 256 &&
-				p.z < spawnGroup[cptr->SpawnGroupType].avoidRegion[ar].YMax * 256) goto replace;
+		if (spawnGroup[cptr->SpawnGroupType].avoidRegionCh) {
+			for (int ar = 0; ar < spawnGroup[cptr->SpawnGroupType].avoidRegionCh; ar++) {
+				if (p.x > spawnGroup[cptr->SpawnGroupType].avoidRegion[ar].XMin * 256 &&
+					p.x < spawnGroup[cptr->SpawnGroupType].avoidRegion[ar].XMax * 256 &&
+					p.z > spawnGroup[cptr->SpawnGroupType].avoidRegion[ar].YMin * 256 &&
+					p.z < spawnGroup[cptr->SpawnGroupType].avoidRegion[ar].YMax * 256) goto replace;
+			}
 		}
 	}
-
 	/*
 	if (stayRegion && outsideRegion && tr > 64) {
 		if (fabs(p.x - cptr->pos.x) + fabs(p.z - cptr->pos.z) > R * 25.f) {
@@ -1208,7 +1209,7 @@ replace:
 	*/
 
 	//if (tr < 128)
-	if (tr < 1024)
+	if (tr < 100)
 	{
 		if (!waterNear(p.x, p.z, 50)) goto replace;
 		if (cptr->spawnAlt + 400 < GetLandUpH(p.x, p.z)) goto replace;
