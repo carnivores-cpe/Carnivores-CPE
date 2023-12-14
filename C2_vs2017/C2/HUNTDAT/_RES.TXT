@@ -432,7 +432,7 @@ idlegroup{
  callNo = 0
 overwrite char0 {
  radar = TRUE
- radR = 0
+ radR = 240
  radG = 240
  radB = 0
 spawninfo{
@@ -1052,10 +1052,10 @@ overwrite char7 {
  radar = TRUE
  radR = 0
  radG = 240
- radB = 0
+ radB = 240
 spawninfo{
  spawngroup = 2
- spawnratio = 1
+ spawnratio = 0.5
 }
 }
  dogSmell  = TRUE
@@ -1065,6 +1065,99 @@ spawninfo{
  health    = 16
  basescore = 18
  scaleA    = 400
+ smellK     = 1.2
+ hearK     = 0.7
+ lookK     = 0.6
+ shipdelta = 96
+ runspd = 2.2
+ wlkspd = 0.75
+ swmspd = 0.75
+ aggress = 200
+ killdist = 350
+ trophy  = TRUE
+ tropinfo{
+ tropPos = 9
+  alpha = 0
+  tropAnim = 0
+  xoffset = 0
+  zoffset = 0
+  xdata = 1650
+ }
+ tropinfo{
+ tropPos = 9
+  alpha = 0
+  tropAnim = 0
+  xoffset = 0
+  zoffset = 500
+  xdata = 1650
+ }
+ canswim = TRUE
+ runAnim = 1
+ walkAnim = 0
+ swimAnim = 8
+deathtype{
+ dieAnim = 5
+ sleepAnim = 6
+}
+idlegroup{
+ anim = 2
+ startChance = 0.046875
+ endChance = 1
+ instantRepeat = TRUE
+}
+idlegroup{
+ anim = 3
+ startChance = 0.046875
+ endChance = 1
+ instantRepeat = TRUE
+}
+idlegroup{
+ anim = 4
+ startChance = 0.046875
+ endChance = 1
+ instantRepeat = TRUE
+}
+ waterLevel = 140
+killtype{
+ hunterAnim = 0
+ hunterOffset = 320
+ eatAnim = 7
+ scream = TRUE
+}
+ CamYLand = 256
+ CamYWater = 256
+ CamBaseLand = 824
+ CamBaseWater = 824
+ bloR = 112
+ bloG = 0
+ bloB = 0
+ weaveRange = 1648
+ survivalIndex = 4
+}
+
+{
+ name = 'Ceratosaurus'
+ file = 'ceratom.car'
+ ai        = 17
+ callNo = 7
+overwrite char7 {
+ radar = TRUE
+ radR = 0
+ radG = 170
+ radB = 170
+spawninfo{
+ spawngroup = 2
+ spawnratio = 0.5
+}
+}
+ dogSmell  = TRUE
+ mass      = 0.3
+ length    = 4.0
+ radius    = 256
+ health    = 16
+ basescore = 18
+ scale0    = 700
+ scaleA    = 350
  smellK     = 1.2
  hearK     = 0.7
  lookK     = 0.6

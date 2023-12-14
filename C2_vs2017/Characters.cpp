@@ -8741,6 +8741,7 @@ void PlaceCharacters()
 			for (int si = 0; si < DinoInfo[di].SpawnInfoCh; si++) {
 				//for (TSpawnInfo si : DinoInfo->SpawnInfo){
 				spawnGroup[DinoInfo[di].SpawnInfo[si].spawnGroup].dinoIndex[spawnGroup[DinoInfo[di].SpawnInfo[si].spawnGroup].dinoIndexCh] = di;
+				spawnGroup[DinoInfo[di].SpawnInfo[si].spawnGroup].spawnInfoIndex[spawnGroup[DinoInfo[di].SpawnInfo[si].spawnGroup].dinoIndexCh] = si;
 				spawnGroup[DinoInfo[di].SpawnInfo[si].spawnGroup].dinoIndexCh++;
 			}
 		}
@@ -8762,11 +8763,53 @@ void PlaceCharacters()
 				if (spawnNo < 0) spawnNo = 0;
 			}
 
+			float scores[256];
+			for (c = 0; c < spawnGroup[sg].dinoIndexCh; c++) {
+				scores[c] = 0;
+			}
+			int posi = 0;
+
+			//char buff[100];
+			//sprintf_s(buff, "\nTOTALINDEXES:%i", spawnGroup[sg].dinoIndexCh);//test
+			//PrintLog(buff);//test
+
 			tr = 0;
 			for (c = 0; c < spawnNo; c++) {
 
+				while (!Characters[ChCount].CType) {
+					int post = posi % spawnGroup[sg].dinoIndexCh;
+					if (scores[post] >= 1) {
+						scores[post] -= 1;//test
+						//PrintLog(buff);//test
+						Characters[ChCount].CType = spawnGroup[sg].dinoIndex[post];
+					} else {
+						scores[post] += DinoInfo[spawnGroup[sg].dinoIndex[post]].SpawnInfo[spawnGroup[sg].spawnInfoIndex[post]].spawnRatio;
+						posi++;
+					}
+				}
+
+				/*
+				std::list<int> spawnList;
+				for (int indx = 0; indx < spawnGroup[sg].dinoIndexCh; indx++) {
+					for (int rat = 0; rat < DinoInfo[spawnGroup[sg].dinoIndex[indx]].SpawnInfo[spawnGroup[sg].spawnInfoIndex[indx]].spawnRatio; rat++) {
+						spawnList.push_back(spawnGroup[sg].dinoIndex[indx]);
+					}
+				}
+
+				auto it = spawnList.begin();
+				if (spawnGroup[sg].Randomised) {	
+					std::advance(it, rRand(spawnList.size() - 1));	
+				} else {
+					std::advance(it, c % spawnList.size());
+				}
+				Characters[ChCount].CType = *it;
+				*/
+
+				//DinoInfo[spawnGroup[sg].dinoIndex[indx]].SpawnInfo[spawnGroup[sg].spawnInfoIndex[indx]].spawnRatio;
+				/*
 				if (spawnGroup[sg].Randomised) Characters[ChCount].CType = spawnGroup[sg].dinoIndex[rRand(spawnGroup[sg].dinoIndexCh - 1)];
 				else Characters[ChCount].CType = spawnGroup[sg].dinoIndex[c % spawnGroup[sg].dinoIndexCh];
+				*/
 
 				Characters[ChCount].Clone = DinoInfo[Characters[ChCount].CType].Clone;
 				Characters[ChCount].SpawnGroupType = sg;

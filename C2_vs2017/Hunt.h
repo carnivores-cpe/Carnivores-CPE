@@ -722,6 +722,7 @@ typedef struct _TSpawnGroup
 
 	int dinoIndexCh;
 	int dinoIndex[128];
+	int spawnInfoIndex[128];
 } TSpawnGroup;
 
 
