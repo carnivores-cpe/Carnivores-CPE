@@ -134,6 +134,7 @@ spawntable {
   spawnmin = 12
   spawnrate = 0.5
   densityMulti = 4
+  randomise = TRUE
  }
 
 //==== 3 brachi =========//
@@ -430,6 +431,10 @@ idlegroup{
  file      = 'par9.car'
  ai        = 10
  callNo = 0
+ radar = TRUE
+ radR = 240
+ radG = 240
+ radB = 240
 overwrite char0 {
  radar = TRUE
  radR = 240
@@ -513,6 +518,10 @@ deathtype{
  file = 'ankylo1.car'
  ai        = 11
  callNo = 1
+ radar = TRUE
+ radR = 240
+ radG = 240
+ radB = 240
 overwrite char1 {
  radar = TRUE
  radR = 0
@@ -593,6 +602,10 @@ deathtype{
  file = 'stego.car'
  ai        = 12
  callNo = 2
+ radar = TRUE
+ radR = 240
+ radG = 240
+ radB = 240
 overwrite char2 {
  radar = TRUE
  radR = 0
@@ -671,6 +684,10 @@ deathtype{
  file = 'ALLOt_iictt.car'
  ai        = 13
  callNo = 3
+ radar = TRUE
+ radR = 240
+ radG = 240
+ radB = 240
 overwrite char3 {
  radar = TRUE
  radR = 0
@@ -773,6 +790,10 @@ killtype{
  file = 'chasmosa.car'
  ai        = 14
  callNo = 4
+ radar = TRUE
+ radR = 240
+ radG = 240
+ radB = 240
 overwrite char4 {
  radar = TRUE
  radR = 0
@@ -852,6 +873,10 @@ deathtype{
  file = 'velo_iidct2.car'
  ai        = 15
  callNo = 5
+ radar = TRUE
+ radR = 240
+ radG = 240
+ radB = 240
 overwrite char5 {
  radar = TRUE
  radR = 0
@@ -951,6 +976,10 @@ killtype{
  file = 'spino_s.car'
  ai        = 16
  callNo = 6
+ radar = TRUE
+ radR = 240
+ radG = 240
+ radB = 240
 overwrite char6 {
  radar = TRUE
  radR = 0

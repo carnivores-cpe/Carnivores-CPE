@@ -8720,6 +8720,9 @@ void PlaceCharacters()
 {
 
 	int c, tr;
+	for (int i = 0; i < ChCount; i++) {
+		Characters[i] = {};
+	}
 	ChCount = 0;
 	PrintLog("Placing...");
 
@@ -8763,30 +8766,42 @@ void PlaceCharacters()
 				if (spawnNo < 0) spawnNo = 0;
 			}
 
+			char buff[100];//test
+
 			float scores[256];
+			float totalRatio = 0;
 			for (c = 0; c < spawnGroup[sg].dinoIndexCh; c++) {
 				scores[c] = 0;
+				totalRatio += DinoInfo[spawnGroup[sg].dinoIndex[c]].SpawnInfo[spawnGroup[sg].spawnInfoIndex[c]].spawnRatio;
 			}
 			int posi = 0;
-
-			//char buff[100];
-			//sprintf_s(buff, "\nTOTALINDEXES:%i", spawnGroup[sg].dinoIndexCh);//test
-			//PrintLog(buff);//test
-
 			tr = 0;
 			for (c = 0; c < spawnNo; c++) {
 
-				while (!Characters[ChCount].CType) {
-					int post = posi % spawnGroup[sg].dinoIndexCh;
-					if (scores[post] >= 1) {
-						scores[post] -= 1;//test
-						//PrintLog(buff);//test
-						Characters[ChCount].CType = spawnGroup[sg].dinoIndex[post];
-					} else {
-						scores[post] += DinoInfo[spawnGroup[sg].dinoIndex[post]].SpawnInfo[spawnGroup[sg].spawnInfoIndex[post]].spawnRatio;
-						posi++;
+				if (spawnGroup[sg].Randomised) {
+					float selector = rRand(30000);
+					selector /= 30000;
+					selector *= totalRatio;
+					for (int ch = 0; ch < spawnGroup[sg].dinoIndexCh; ch++) {
+						if (selector <= DinoInfo[spawnGroup[sg].dinoIndex[ch]].SpawnInfo[spawnGroup[sg].spawnInfoIndex[ch]].spawnRatio) {
+							Characters[ChCount].CType = spawnGroup[sg].dinoIndex[ch];
+							break;
+						} else selector -= DinoInfo[spawnGroup[sg].dinoIndex[ch]].SpawnInfo[spawnGroup[sg].spawnInfoIndex[ch]].spawnRatio;
+					}
+				} else {
+					while (!Characters[ChCount].CType) {
+						int post = posi % spawnGroup[sg].dinoIndexCh;
+						if (scores[post] >= 1) {
+							scores[post] -= 1;
+							Characters[ChCount].CType = spawnGroup[sg].dinoIndex[post];
+						}
+						else {
+							scores[post] += DinoInfo[spawnGroup[sg].dinoIndex[post]].SpawnInfo[spawnGroup[sg].spawnInfoIndex[post]].spawnRatio;
+							posi++;
+						}
 					}
 				}
+				
 
 				/*
 				std::list<int> spawnList;
