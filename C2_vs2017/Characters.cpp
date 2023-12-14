@@ -6996,6 +6996,8 @@ void AnimateBrahi(TCharacter *cptr)
 	int _FTime = cptr->FTime;
 	float _tgalpha = cptr->tgalpha;
 
+	bool autoCorrect = false;
+
 TBEGIN:
 	//cptr->tgtime = 0;
 	float targetx = cptr->tgx;
@@ -7054,44 +7056,51 @@ TBEGIN:
 			if (Packs[cptr->packId]._attack) fleeMode = FALSE;
 		}
 
-		if (!fleeMode)
-		{
-			attacking = true;
-			cptr->tgx = PlayerX;
-			cptr->tgz = PlayerZ;
-			cptr->tgtime = 0;
-			if (cptr->packId >= 0) {
-				Packs[cptr->packId].alert = true;
+		if (!autoCorrect) {
+			if (GetLandUpH(cptr->pos.x, cptr->pos.z) - GetLandH(cptr->pos.x, cptr->pos.z) > 550) {
+				autoCorrect = TRUE;
+				SetNewTargetPlace_Brahi(cptr, 2048.f);
+				goto TBEGIN;
 			}
-		}
-		else
-		{
-			attacking = false;
-			nv.x = playerdx;
-			nv.z = playerdz;
-			nv.y = 0;
-			NormVector(nv, 2048.f);
-			cptr->tgx = cptr->pos.x - nv.x;
-			cptr->tgz = cptr->pos.z - nv.z;
-			cptr->tgtime = 0;
-			cptr->AfraidTime -= TimeDt;
-
-
-			if (cptr->packId >= 0) {
-				if (cptr->AfraidTime <= 0)
-				{
-					if (!Packs[cptr->packId]._alert) {
-						cptr->AfraidTime = 0;
-						cptr->State = 0;
-					}
+			else if (!fleeMode)
+			{
+				attacking = true;
+				cptr->tgx = PlayerX;
+				cptr->tgz = PlayerZ;
+				cptr->tgtime = 0;
+				if (cptr->packId >= 0) {
+					Packs[cptr->packId].alert = true;
 				}
-				else Packs[cptr->packId].alert = true;
 			}
-			else if (cptr->AfraidTime <= 0) {
-				cptr->AfraidTime = 0;
-				cptr->State = 0;
-			}
+			else
+			{
+				attacking = false;
+				nv.x = playerdx;
+				nv.z = playerdz;
+				nv.y = 0;
+				NormVector(nv, 2048.f);
+				cptr->tgx = cptr->pos.x - nv.x;
+				cptr->tgz = cptr->pos.z - nv.z;
+				cptr->tgtime = 0;
+				cptr->AfraidTime -= TimeDt;
 
+
+				if (cptr->packId >= 0) {
+					if (cptr->AfraidTime <= 0)
+					{
+						if (!Packs[cptr->packId]._alert) {
+							cptr->AfraidTime = 0;
+							cptr->State = 0;
+						}
+					}
+					else Packs[cptr->packId].alert = true;
+				}
+				else if (cptr->AfraidTime <= 0) {
+					cptr->AfraidTime = 0;
+					cptr->State = 0;
+				}
+
+			}
 		}
 
 		if (pdist < DinoInfo[cptr->CType].killDist && DinoInfo[cptr->CType].killDist > 0) //killdist = 600
@@ -7165,11 +7174,39 @@ TBEGIN:
 	}
 
 NOTHINK:
-	if (pdist < 2048) cptr->NoFindCnt = 0;
-	if (cptr->NoFindCnt) cptr->NoFindCnt--;
-	else
-	{
-		cptr->tgalpha = CorrectedAlpha(FindVectorAlpha(targetdx, targetdz), cptr->alpha);//FindVectorAlpha(targetdx, targetdz);
+	
+	if ((cptr->Clone == AI_LANDBRACH || cptr->State) && !autoCorrect) {
+		if (pdist < 2048) cptr->NoFindCnt = 0;
+		if (cptr->NoFindCnt) cptr->NoFindCnt--;
+		else
+		{
+			cptr->tgalpha = CorrectedAlpha(FindVectorAlpha(targetdx, targetdz), cptr->alpha);//FindVectorAlpha(targetdx, targetdz);
+
+			if (cptr->State && pdist > DinoInfo[cptr->CType].weaveRange && !DinoInfo[cptr->CType].dontWeave)
+			{
+				cptr->tgalpha += (float)sin(RealTime / 824.f) / 4.f;
+				if (cptr->tgalpha < 0) cptr->tgalpha += 2 * pi;
+				if (cptr->tgalpha > 2 * pi) cptr->tgalpha -= 2 * pi;
+			}
+
+
+		}
+
+		if (cptr->Clone == AI_LANDBRACH) {
+			LookForAWay(cptr, !DinoInfo[cptr->CType].canSwim, TRUE);
+		}
+		else {
+			LookForAWay(cptr, TRUE, TRUE);
+		}
+
+
+		if (cptr->NoWayCnt > 12)
+		{
+			cptr->NoWayCnt = 0;
+			cptr->NoFindCnt = 16 + rRand(20);
+		}
+	} else {
+		cptr->tgalpha = FindVectorAlpha(targetdx, targetdz);
 
 		if (cptr->State && pdist > DinoInfo[cptr->CType].weaveRange && !DinoInfo[cptr->CType].dontWeave)
 		{
@@ -7177,22 +7214,9 @@ NOTHINK:
 			if (cptr->tgalpha < 0) cptr->tgalpha += 2 * pi;
 			if (cptr->tgalpha > 2 * pi) cptr->tgalpha -= 2 * pi;
 		}
-		
-
-	}
-
-	if (cptr->Clone == AI_LANDBRACH) {
-		LookForAWay(cptr, !DinoInfo[cptr->CType].canSwim, TRUE);
-	} else {
-		LookForAWay(cptr, !attacking && cptr->State, TRUE);
 	}
 
 
-	if (cptr->NoWayCnt > 12)
-	{
-		cptr->NoWayCnt = 0;
-		cptr->NoFindCnt = 16 + rRand(20);
-	}
 
 	if (cptr->tgalpha < 0) cptr->tgalpha += 2 * pi;
 	if (cptr->tgalpha > 2 * pi) cptr->tgalpha -= 2 * pi;
