@@ -8724,6 +8724,7 @@ void PlaceCharacters()
 		Characters[i] = {};
 	}
 	ChCount = 0;
+
 	PrintLog("Placing...");
 
 	for (c = 10; c < 30; c++)
@@ -8738,7 +8739,7 @@ void PlaceCharacters()
 	//TODO - NO PACK HUNTING WITH MOVEFORWARD
 	//TODO - HALF AMBIENT SPAWN AT NIGHT MANUALLY IN RES?
 
-
+	if (!RestartMode)
 	for (int di = 0; di < DINOINFO_MAX; di++) {
 		if (DinoInfo[di].SpawnInfoCh) {
 			for (int si = 0; si < DinoInfo[di].SpawnInfoCh; si++) {
@@ -8766,13 +8767,11 @@ void PlaceCharacters()
 				if (spawnNo < 0) spawnNo = 0;
 			}
 
-			
-
-			//int counter[256];
-			float scores[256];
+			float ratioScores[256];
 			float totalRatio = 0;
+			//int counter[256];
 			for (c = 0; c < spawnGroup[sg].dinoIndexCh; c++) {
-				scores[c] = 0;
+				ratioScores[c] = 0.f;
 				//counter[c] = 0;
 				totalRatio += DinoInfo[spawnGroup[sg].dinoIndex[c]].SpawnInfo[spawnGroup[sg].spawnInfoIndex[c]].spawnRatio;
 			}
@@ -8794,12 +8793,13 @@ void PlaceCharacters()
 				} else {
 					while (!Characters[ChCount].CType) {
 						int post = posi % spawnGroup[sg].dinoIndexCh;
-						if (scores[post] >= 1) {
-							scores[post] -= 1;
+						if (ratioScores[post] >= 1.f) {
+							ratioScores[post] -= 1.f;
+									char buff[100];
 							Characters[ChCount].CType = spawnGroup[sg].dinoIndex[post];
 						}
 						else {
-							scores[post] += DinoInfo[spawnGroup[sg].dinoIndex[post]].SpawnInfo[spawnGroup[sg].spawnInfoIndex[post]].spawnRatio;
+							ratioScores[post] += DinoInfo[spawnGroup[sg].dinoIndex[post]].SpawnInfo[spawnGroup[sg].spawnInfoIndex[post]].spawnRatio;
 							posi++;
 						}
 					}

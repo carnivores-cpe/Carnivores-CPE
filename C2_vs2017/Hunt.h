@@ -936,6 +936,7 @@ void LoadResources();
 void ReInitGame();
 
 
+
 void SaveScreenShot();
 void CreateWaterTab();
 void CreateFadeTab();
