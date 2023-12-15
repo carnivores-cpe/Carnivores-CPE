@@ -134,7 +134,6 @@ spawntable {
   spawnmin = 12
   spawnrate = 0.5
   densityMulti = 4
-  randomise = TRUE
  }
 
 //==== 3 brachi =========//
@@ -543,11 +542,11 @@ spawninfo{
  length    = 4.5
  radius    = 280
  health    = 6
- basescore = 6
  smellK     = 0.4 
  hearK      = 0.8
  lookK      = 0.6
  shipdelta = 16
+ basescore = 6
  fearCall = 3
  fearCall = 5
  fearCall = 6
@@ -1273,6 +1272,7 @@ overwrite char8 {
 spawninfo{
  spawngroup = 2
  spawnratio = 1
+ spawnmax = 2
 }
 }
  dogSmell  = TRUE

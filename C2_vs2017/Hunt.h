@@ -548,7 +548,7 @@ typedef struct _TDinoIdleType
 
 typedef struct _TSpawnInfo
 {
-	int spawnGroup;
+	int spawnGroup;//, spawnMax;
 	float spawnRatio;
 } TSpawnInfo;
 

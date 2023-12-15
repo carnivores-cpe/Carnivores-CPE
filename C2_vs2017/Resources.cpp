@@ -2114,6 +2114,27 @@ void readBool(char *value, bool &out) {
 	if (strstr(value, "FALSE")) out = FALSE;
 }
 
+void SkipSector(FILE *stream)
+{
+	char line[256], *value;
+	while (fgets(line, 255, stream))
+	{
+		if (strstr(line, "}")) break;
+		if (strstr(line, "{"))
+			while (fgets(line, 255, stream)) {
+				if (strstr(line, "}")) break;
+				if (strstr(line, "{"))
+					while (fgets(line, 255, stream)) {
+						if (strstr(line, "}")) break;
+						if (strstr(line, "{"))
+							while (fgets(line, 255, stream)) {
+								if (strstr(line, "}")) break;
+							}
+					}
+			}
+	}
+}
+
 void ReadAreaTable (FILE *stream, int areaNumber)
 {
 	SNOW = FALSE;
@@ -2132,7 +2153,7 @@ void ReadAreaTable (FILE *stream, int areaNumber)
 					break;
 				}
 				value = strstr(line, "=");
-				if (!value) DoHalt("Script loading error");
+				if (!value) DoHalt("Script loading error: AreaTable");
 				value++;
 
 				if (TotalAreaInfo == areaNumber) {
@@ -2186,7 +2207,7 @@ void ReadAvoid(FILE *stream)
 		}
 		value = strstr(line, "=");
 		if (!value)
-			DoHalt("Script loading error");
+			DoHalt("Script loading error: Avoid");
 		value++;
 
 		if (strstr(line, "xmax")) spawnGroup[TotalSpawnGroup].avoidRegion[spawnGroup[TotalSpawnGroup].avoidRegionCh].XMax = atoi(value);
@@ -2209,7 +2230,7 @@ void ReadRegion(FILE *stream)
 		}
 		value = strstr(line, "=");
 		if (!value) {
-			DoHalt("Script loading error");
+			DoHalt("Script loading error: Region");
 		}
 		value++;
 
@@ -2221,9 +2242,94 @@ void ReadRegion(FILE *stream)
 	}
 }
 
+void WipeAvoidReg() {
+
+	if (spawnGroup[TotalSpawnGroup].avoidRegionCh) {
+
+		for (int i = 0; i < spawnGroup[TotalSpawnGroup].avoidRegionCh; i++) {
+			spawnGroup[TotalSpawnGroup].avoidRegion[i] = {};
+		}
+		spawnGroup[TotalSpawnGroup].avoidRegionCh = 0;
+
+	}
+
+}
+
+void WipeSpawnReg() {
+
+	if (spawnGroup[TotalSpawnGroup].spawnRegionCh) {
+
+		for (int i = 0; i < spawnGroup[TotalSpawnGroup].spawnRegionCh; i++) {
+			spawnGroup[TotalSpawnGroup].spawnRegion[i] = {};
+		}
+		spawnGroup[TotalSpawnGroup].spawnRegionCh = 0;
+
+	}
+
+}
+
+
+void ReadSpawnTableLine(FILE *stream, char *_value, char line[256], bool &spawnOverwrite, bool &avoidOverwrite) {
+	char *value = _value;
+
+		if (strstr(line, "region")) {
+
+			if (spawnOverwrite) {
+				WipeSpawnReg();
+				spawnOverwrite = false;
+			}
+
+			ReadRegion(stream);
+		}
+		
+		if (strstr(line, "avoid")) {
+
+			if (avoidOverwrite) {
+				WipeAvoidReg();
+				avoidOverwrite = false;
+			}
+
+			ReadAvoid(stream);
+		}
+		
+
+
+		if (strstr(line, "spawnrate")) spawnGroup[TotalSpawnGroup].SpawnRate = (float)atof(value);
+		if (strstr(line, "spawnmax")) spawnGroup[TotalSpawnGroup].SpawnMax = atoi(value);
+		if (strstr(line, "spawnmin")) spawnGroup[TotalSpawnGroup].SpawnMin = atoi(value);
+
+		if (strstr(line, "densityMulti")) spawnGroup[TotalSpawnGroup].densityMulti = atoi(value);
+		if (strstr(line, "moveForward")) readBool(value, spawnGroup[TotalSpawnGroup].moveForward);
+		if (strstr(line, "randomise")) readBool(value, spawnGroup[TotalSpawnGroup].Randomised);
+		if (strstr(line, "onlyActiveNearby")) readBool(value, spawnGroup[TotalSpawnGroup].OnlyActiveNearby);
+		if (strstr(line, "styInRgn")) readBool(value, spawnGroup[TotalSpawnGroup].stayInRegion);
+
+}
 
 void ReadSpawnTable(FILE *stream)
 {
+	//area
+	char tempProjectName[128];
+	int timeOfDay, dinSelect;
+	for (int a = 0; a < __argc; a++)
+	{
+		LPSTR s = __argv[a];
+		if (strstr(s, "prj="))
+		{
+			strcpy(tempProjectName, (s + 4));
+		}
+		if (strstr(s, "dtm=")) timeOfDay = atoi(&s[4]);
+		if (strstr(s, "din=")) dinSelect = (atoi(&s[4]) * 1024);
+	}
+
+	//time
+	for (int a = 0; a < __argc; a++)
+	{
+		LPSTR s = __argv[a];
+	}
+
+
+
 	TotalSpawnGroup = 0;
 	char line[256], *value;
 	while (fgets(line, 255, stream))
@@ -2239,63 +2345,121 @@ void ReadSpawnTable(FILE *stream)
 					break;
 				}
 				value = strstr(line, "=");
-				if (!value) {
-					if (strstr(line, "region")) {
-
-						//if (regionOverwrite) {
-						//	WipeSpawnInfo();
-						//	regionOverwrite = false;
-						//}
-
-						ReadRegion(stream);
-					} else if (strstr(line, "avoid")) {
-
-						//if (regionOverwrite) {
-						//	WipeSpawnInfo();
-						//	regionOverwrite = false;
-						//}
-
-						ReadAvoid(stream);
-					} else DoHalt("Script loading error");
-
-				} else {
-					value++;
-
-					if (strstr(line, "spawnrate")) spawnGroup[TotalSpawnGroup].SpawnRate = (float)atof(value);
-					if (strstr(line, "spawnmax")) spawnGroup[TotalSpawnGroup].SpawnMax = atoi(value);
-					if (strstr(line, "spawnmin")) spawnGroup[TotalSpawnGroup].SpawnMin = atoi(value);
-
-					if (strstr(line, "densityMulti")) spawnGroup[TotalSpawnGroup].densityMulti = atoi(value);
-					if (strstr(line, "moveForward")) readBool(value, spawnGroup[TotalSpawnGroup].moveForward);
-					if (strstr(line, "randomise")) readBool(value, spawnGroup[TotalSpawnGroup].Randomised);
-					if (strstr(line, "onlyActiveNearby")) readBool(value, spawnGroup[TotalSpawnGroup].OnlyActiveNearby);
-					if (strstr(line, "styInRgn")) readBool(value, spawnGroup[TotalSpawnGroup].stayInRegion);
-				}
 				
-				/*
-				if (strstr(line, "region"))
-					while (fgets(line, 255, stream)) {
-						if (strstr(line, "}")) {
-							spawnGroup[TotalSpawnGroup].spawnRegionCh++;
-							break;
+
+
+				if (strstr(line, "overwrite") || strstr(line, "addition")) {
+
+					bool readThis = true;
+					char mapNo1 = tempProjectName[18];
+					while (readThis == true) {
+
+						//trophy
+						if (tempProjectName[18] == 'h') break;
+
+						if (strstr(line, "area")) {
+
+							switch ((char)tempProjectName[18]) {
+							case '1':
+								if (tempProjectName[19]) {
+									if (!strstr(line, "area0")) readThis = false;//area10
+								}
+								else if (!strstr(line, "area1")) readThis = false;
+								break;
+							case '2':
+								if (!strstr(line, "area2")) readThis = false;
+								break;
+							case '3':
+								if (!strstr(line, "area3")) readThis = false;
+								break;
+							case '4':
+								if (!strstr(line, "area4")) readThis = false;
+								break;
+							case '5':
+								if (!strstr(line, "area5")) readThis = false;
+								break;
+							case '6':
+								if (!strstr(line, "area6")) readThis = false;
+								break;
+							case '7':
+								if (!strstr(line, "area7")) readThis = false;
+								break;
+							case '8':
+								if (!strstr(line, "area8")) readThis = false;
+								break;
+							case '9':
+								if (!strstr(line, "area9")) readThis = false;
+								break;
+							}
 						}
-						if (strstr(line, "xmax")) spawnGroup[TotalSpawnGroup].spawnRegion[spawnGroup[TotalSpawnGroup].spawnRegionCh].XMax = atoi(value);
-						if (strstr(line, "xmin")) spawnGroup[TotalSpawnGroup].spawnRegion[spawnGroup[TotalSpawnGroup].spawnRegionCh].XMin = atoi(value);
-						if (strstr(line, "ymax")) spawnGroup[TotalSpawnGroup].spawnRegion[spawnGroup[TotalSpawnGroup].spawnRegionCh].YMax = atoi(value);
-						if (strstr(line, "ymin")) spawnGroup[TotalSpawnGroup].spawnRegion[spawnGroup[TotalSpawnGroup].spawnRegionCh].YMin = atoi(value);
-					}
-				if (strstr(line, "avoid"))
-					while (fgets(line, 255, stream)) {
-						if (strstr(line, "}")) {
-							spawnGroup[TotalSpawnGroup].avoidRegionCh++;
-							break;
+
+						if (strstr(line, "time")) {
+							switch (timeOfDay) {
+							case 0:
+								if (!strstr(line, "time0")) readThis = false;
+								break;
+							case 1:
+								if (!strstr(line, "time1")) readThis = false;
+								break;
+							case 2:
+								if (!strstr(line, "time2")) readThis = false;
+								break;
+							}
 						}
-						if (strstr(line, "xmax")) spawnGroup[TotalSpawnGroup].avoidRegion[spawnGroup[TotalSpawnGroup].avoidRegionCh].XMax = atoi(value);
-						if (strstr(line, "xmin")) spawnGroup[TotalSpawnGroup].avoidRegion[spawnGroup[TotalSpawnGroup].avoidRegionCh].XMin = atoi(value);
-						if (strstr(line, "ymax")) spawnGroup[TotalSpawnGroup].avoidRegion[spawnGroup[TotalSpawnGroup].avoidRegionCh].YMax = atoi(value);
-						if (strstr(line, "ymin")) spawnGroup[TotalSpawnGroup].avoidRegion[spawnGroup[TotalSpawnGroup].avoidRegionCh].YMin = atoi(value);
+
+
+						if (strstr(line, "char")) {
+							bool readChar = false;
+							if (strstr(line, "char0") && (dinSelect & (1 << 10))) readChar = true;
+							if (strstr(line, "char1") && (dinSelect & (1 << 11))) readChar = true;
+							if (strstr(line, "char2") && (dinSelect & (1 << 12))) readChar = true;
+							if (strstr(line, "char3") && (dinSelect & (1 << 13))) readChar = true;
+							if (strstr(line, "char4") && (dinSelect & (1 << 14))) readChar = true;
+							if (strstr(line, "char5") && (dinSelect & (1 << 15))) readChar = true;
+							if (strstr(line, "char6") && (dinSelect & (1 << 16))) readChar = true;
+							if (strstr(line, "char7") && (dinSelect & (1 << 17))) readChar = true;
+							if (strstr(line, "char8") && (dinSelect & (1 << 18))) readChar = true;
+							if (strstr(line, "char9") && (dinSelect & (1 << 19))) readChar = true;
+							if (!readChar) readThis = false;
+						}
+
+						break;
 					}
-					*/
+
+
+
+
+					if (readThis) {
+
+						bool regionOverwrite = strstr(line, "overwrite");
+						bool avoidOverwrite = strstr(line, "overwrite");
+						
+						while (fgets(line, 255, stream)) {
+							if (strstr(line, "}")) break;
+
+							value = strstr(line, "=");
+							if (!value
+								&& !strstr(line, "region")
+								&& !strstr(line, "avoid"))
+								DoHalt("Script loading error: SpawnTable");
+							value++;
+
+							ReadSpawnTableLine(stream, value, line, regionOverwrite,avoidOverwrite);
+
+						}
+
+					}
+					else {
+						SkipSector(stream);
+					}
+				}
+				else {
+					bool temp, temp2;
+					value++;
+					ReadSpawnTableLine(stream, value, line, temp, temp2);
+
+				}
+
 
 			}
 	}
@@ -2316,11 +2480,12 @@ void ReadSpawnInfo(FILE *stream)
 		}
 		value = strstr(line, "=");
 		if (!value)
-			DoHalt("Script loading error");
+			DoHalt("Script loading error: SpawnInfo");
 		value++;
 
 		if (strstr(line, "spawnratio")) DinoInfo[TotalC].SpawnInfo[DinoInfo[TotalC].SpawnInfoCh].spawnRatio = (float)atof(value);
 		if (strstr(line, "spawngroup")) DinoInfo[TotalC].SpawnInfo[DinoInfo[TotalC].SpawnInfoCh].spawnGroup = atoi(value);
+		//if (strstr(line, "spawnmax")) DinoInfo[TotalC].SpawnInfo[DinoInfo[TotalC].SpawnInfoCh].spawnMax = atoi(value);
 	}
 }
 
@@ -2341,7 +2506,7 @@ void ReadWeapons(FILE *stream)
           break;
         }
         value = strstr(line, "=");
-        if (!value) DoHalt("Script loading error");
+        if (!value) DoHalt("Script loading error: Weapons");
         value++;
 
         if (strstr(line, "power"))  WeapInfo[TotalW].Power = (float)atof(value);
@@ -2358,7 +2523,7 @@ void ReadWeapons(FILE *stream)
         if (strstr(line, "name"))
         {
           value = strstr(line, "'");
-          if (!value) DoHalt("Script loading error");
+          if (!value) DoHalt("Script loading error: Weapons name");
           value[strlen(value)-2] = 0;
           strcpy(WeapInfo[TotalW].Name, &value[1]);
         }
@@ -2366,7 +2531,7 @@ void ReadWeapons(FILE *stream)
 		if (strstr(line, "file"))
 		{
 			value = strstr(line, "'");
-			if (!value) DoHalt("Script loading error");
+			if (!value) DoHalt("Script loading error: Weapons file");
 			value[strlen(value) - 2] = 0;
 			strcpy(WeapInfo[TotalW].FName, &value[1]);
 		}
@@ -2374,7 +2539,7 @@ void ReadWeapons(FILE *stream)
         if (strstr(line, "gunshot"))
         {
           value = strstr(line, "'");
-          if (!value) DoHalt("Script loading error");
+          if (!value) DoHalt("Script loading error: Weapons gunshot");
           value[strlen(value)-2] = 0;
           strcpy(WeapInfo[TotalW].SFXName, &value[1]);
 		  WeapInfo[TotalW].MGSSound = TRUE;
@@ -2383,7 +2548,7 @@ void ReadWeapons(FILE *stream)
         if (strstr(line, "pic"))
         {
           value = strstr(line, "'");
-          if (!value) DoHalt("Script loading error");
+          if (!value) DoHalt("Script loading error: Weapons pic");
           value[strlen(value)-2] = 0;
           strcpy(WeapInfo[TotalW].BFName, &value[1]);
         }
@@ -2393,42 +2558,7 @@ void ReadWeapons(FILE *stream)
 
 }
 
-void SkipSector(FILE *stream)
-{
-	char line[256], *value;
-	while (fgets(line, 255, stream))
-	{
-		if (strstr(line, "}")) break;
-		if (strstr(line, "{"))
-			while (fgets(line, 255, stream)) {
-				if (strstr(line, "}")) break;
-				if (strstr(line, "{"))
-					while (fgets(line, 255, stream)) {
-						if (strstr(line, "}")) break;
-						if (strstr(line, "{"))
-							while (fgets(line, 255, stream)) {
-								if (strstr(line, "}")) break;
-							}
-					}
-			}
-	}
-}
 
-/*void WipeRegions() {
-
-	if (DinoInfo[TotalC].RegionCount) {
-
-		for (int i = 0; i < DinoInfo[TotalC].RegionCount; i++) {
-			TotalRegion--;
-			Region[TotalRegion] = {};
-			DinoInfo[TotalC].RType0[i] = 0;
-		}
-		DinoInfo[TotalC].RegionCount = 0;
-
-	}
-
-}
-*/
 
 void WipeKillTypes() {
 	if (DinoInfo[TotalC].killTypeCount) {
@@ -2512,7 +2642,7 @@ void ReadIdleGroupInfo(FILE *stream)
 		}
 		value = strstr(line, "=");
 		if (!value)
-			DoHalt("Script loading error");
+			DoHalt("Script loading error: IdleGroup");
 		value++;
 
 		if (strstr(line, "startChance")) DinoInfo[TotalC].idleGroup[DinoInfo[TotalC].idleGroupCount].start = atof(value);
@@ -2546,7 +2676,7 @@ void ReadIdle2GroupInfo(FILE *stream)
 		}
 		value = strstr(line, "=");
 		if (!value)
-			DoHalt("Script loading error");
+			DoHalt("Script loading error IdleGroup2");
 		value++;
 
 		if (strstr(line, "startChance")) DinoInfo[TotalC].idle2Group[DinoInfo[TotalC].idle2GroupCount].start = atof(value);
@@ -2580,7 +2710,7 @@ void ReadDeathTypeInfo(FILE *stream)
 		}
 		value = strstr(line, "=");
 		if (!value)
-			DoHalt("Script loading error");
+			DoHalt("Script loading error: DeathType");
 		value++;
 
 		if (strstr(line, "dieAnim")) DinoInfo[TotalC].deathType[DinoInfo[TotalC].deathTypeCount].die = atoi(value);
@@ -2602,7 +2732,7 @@ void ReadKillTypeInfo(FILE *stream)
 		}
 		value = strstr(line, "=");
 		if (!value)
-			DoHalt("Script loading error");
+			DoHalt("Script loading error: KillInfo");
 		value++;
 
 		if (strstr(line, "hunterAnim")) DinoInfo[TotalC].killType[DinoInfo[TotalC].killTypeCount].hunteranim = atoi(value);
@@ -2630,7 +2760,7 @@ void ReadTrophyTypeInfo(FILE *stream)
 		}
 		value = strstr(line, "=");
 		if (!value)
-			DoHalt("Script loading error");
+			DoHalt("Script loading error: TrophyType");
 		value++;
 
 
@@ -2725,7 +2855,7 @@ void ReadAvoidInfo(FILE *stream)
 
 
 
-void ReadCharacterLine(FILE *stream, char *_value, char line[256], bool &regionOverwrite, bool &avoidOverwrite,
+void ReadCharacterLine(FILE *stream, char *_value, char line[256], bool &regionOverwrite,
 	bool &idleOverwrite, bool &idle2Overwrite, bool &roarOverwrite, bool &killOverwrite, bool &waterDieOverwrite,
 	bool &deathTypeOverwrite, bool &trophyTypeOverwrite, int &nextTrophySlot, bool &idleGroupOverwrite, bool &idle2GroupOverwrite) {
 
@@ -2933,7 +3063,7 @@ void ReadCharacterLine(FILE *stream, char *_value, char line[256], bool &regionO
 	if (strstr(line, "name"))
 	{
 		value = strstr(line, "'");
-		if (!value) DoHalt("Script loading error");
+		if (!value) DoHalt("Script loading error: Characters name");
 		value[strlen(value) - 2] = 0;
 		strcpy(DinoInfo[TotalC].Name, &value[1]);
 	}
@@ -2941,7 +3071,7 @@ void ReadCharacterLine(FILE *stream, char *_value, char line[256], bool &regionO
 	if (strstr(line, "file"))
 	{
 		value = strstr(line, "'");
-		if (!value) DoHalt("Script loading error");
+		if (!value) DoHalt("Script loading error: Characters file");
 		value[strlen(value) - 2] = 0;
 		strcpy(DinoInfo[TotalC].FName, &value[1]);
 	}
@@ -3090,17 +3220,17 @@ void ReadCharacters(FILE *stream, int &nextTrophySlot)
 				!strstr(line, "addition") &&
 				!strstr(line, "spawninfo") &&
 				!strstr(line, "killtype") &&
-				!strstr(line, "avoid") &&
+				//!strstr(line, "avoid") &&
 				!strstr(line, "tropinfo") &&
 				!strstr(line, "deathtype") &&
 				!strstr(line, "idlegroup") &&
 				!strstr(line, "waterIgroup"))
-				DoHalt("Script loading error");
+				DoHalt("Script loading error: Characters");
 			value++;
 
 
-			bool temp, temp2, temp3, temp4, temp5, temp6, temp7, temp8, temp9, temp10, temp11;
-			ReadCharacterLine(stream, value, line, temp, temp2, temp3, temp4, temp5, temp6, temp7, temp8, temp9, nextTrophySlot, temp10, temp11);
+			bool temp, temp3, temp4, temp5, temp6, temp7, temp8, temp9, temp10, temp11;
+			ReadCharacterLine(stream, value, line, temp, temp3, temp4, temp5, temp6, temp7, temp8, temp9, nextTrophySlot, temp10, temp11);
 
 			if (strstr(line, "overwrite") || strstr(line, "addition")) {
 
@@ -3188,7 +3318,7 @@ void ReadCharacters(FILE *stream, int &nextTrophySlot)
 				if (readThis) {
 
 					bool regionOverwrite = strstr(line, "overwrite");
-					bool avoidOverwrite = strstr(line, "overwrite");
+					// bool avoidOverwrite = strstr(line, "overwrite");
 					bool idleOverwrite = strstr(line, "overwrite");
 					bool killOverwrite = strstr(line, "overwrite");
 					bool idle2Overwrite = strstr(line, "overwrite");
@@ -3205,16 +3335,16 @@ void ReadCharacters(FILE *stream, int &nextTrophySlot)
 						value = strstr(line, "=");
 						if (!value
 							&& !strstr(line, "spawninfo")
-							&& !strstr(line, "avoid")
+							//&& !strstr(line, "avoid")
 							&& !strstr(line, "deathtype")
 							&& !strstr(line, "idlegroup")
 							&& !strstr(line, "waterIgroup")
 							&& !strstr(line, "tropinfo")
 							&& !strstr(line, "killtype"))
-							DoHalt("Script loading error");
+							DoHalt("Script loading error: Characters");
 						value++;
 
-						ReadCharacterLine(stream, value, line, regionOverwrite, avoidOverwrite,
+						ReadCharacterLine(stream, value, line, regionOverwrite,
 							idleOverwrite, idle2Overwrite, roarOverwrite, killOverwrite,
 							waterDieOverwrite, deathTypeOverwrite, trophyTypeOverwrite, nextTrophySlot,
 							idleGroupOverwrite, idle2GroupOverwrite);

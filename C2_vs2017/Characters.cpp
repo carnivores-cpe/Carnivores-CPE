@@ -8756,7 +8756,7 @@ void PlaceCharacters()
 		if (spawnGroup[sg].dinoIndexCh) {
 			int spawnNo = spawnGroup[sg].SpawnMin;
 			for (int i = 0; i < spawnGroup[sg].SpawnMax - spawnGroup[sg].SpawnMin; i++) {
-				if (spawnGroup[sg].SpawnRate * 1000 > rRand(1000)) spawnNo++;
+				if (spawnGroup[sg].SpawnRate * 30000 > rRand(30000)) spawnNo++;
 			}
 			if (spawnGroup[sg].densityMulti != 0) {
 				float m = OptDens - 128;
@@ -8766,18 +8766,21 @@ void PlaceCharacters()
 				if (spawnNo < 0) spawnNo = 0;
 			}
 
-			char buff[100];//test
+			
 
+			//int counter[256];
 			float scores[256];
 			float totalRatio = 0;
 			for (c = 0; c < spawnGroup[sg].dinoIndexCh; c++) {
 				scores[c] = 0;
+				//counter[c] = 0;
 				totalRatio += DinoInfo[spawnGroup[sg].dinoIndex[c]].SpawnInfo[spawnGroup[sg].spawnInfoIndex[c]].spawnRatio;
 			}
 			int posi = 0;
 			tr = 0;
 			for (c = 0; c < spawnNo; c++) {
 
+				// select ctype accounting for spawn ratio
 				if (spawnGroup[sg].Randomised) {
 					float selector = rRand(30000);
 					selector /= 30000;
