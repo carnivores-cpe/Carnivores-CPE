@@ -1600,6 +1600,7 @@ void LoadCharacters()
 
   for (int c=0; c<TotalC; c++) if (pres[c] || (SurvivalMode && DinoInfo[c].survivalDino))
     {
+
       if (!ChInfo[c].mptr)
       {
         wsprintf(logt, "HUNTDAT\\%s", DinoInfo[c].FName);
@@ -2308,6 +2309,20 @@ void ReadSpawnTableLine(FILE *stream, char *_value, char line[256], bool &spawnO
 
 void ReadSpawnTable(FILE *stream)
 {
+	
+	if (SurvivalMode)
+	{
+		spawnGroup[0].spawnRegion[0].XMax = SurvivalDinoSpawn.XMax;
+		spawnGroup[0].spawnRegion[0].XMin = SurvivalDinoSpawn.XMin;
+		spawnGroup[0].spawnRegion[0].YMax = SurvivalDinoSpawn.YMax;
+		spawnGroup[0].spawnRegion[0].YMin = SurvivalDinoSpawn.YMin;
+		spawnGroup[0].spawnRegionCh = 1;
+		TotalSpawnGroup = 1;
+		SkipSector(stream);
+		return;
+	}
+	
+
 	//area
 	char tempProjectName[128];
 	int timeOfDay, dinSelect;
@@ -3117,15 +3132,16 @@ void ReadCharacterLine(FILE *stream, char *_value, char line[256], bool &regionO
 		ReadIdle2GroupInfo(stream);
 	}
 
-	
-	if (strstr(line, "spawninfo")){
-
-		if (regionOverwrite) {
-			WipeSpawnInfo();
-			regionOverwrite = false;
+	if (strstr(line, "spawninfo")) {
+		if (SurvivalMode) {
+			SkipSector(stream);
+		} else {
+			if (regionOverwrite) {
+				WipeSpawnInfo();
+				regionOverwrite = false;
+			}
+			ReadSpawnInfo(stream);
 		}
-
-		ReadSpawnInfo(stream);
 	}
 
 	/*
@@ -3146,6 +3162,8 @@ void ReadCharacterLine(FILE *stream, char *_value, char line[256], bool &regionO
 
 void ReadCharacters(FILE *stream, int &nextTrophySlot)
 {
+
+
 	//area
 	char tempProjectName[128];
 	int timeOfDay, dinSelect;
@@ -3179,6 +3197,12 @@ void ReadCharacters(FILE *stream, int &nextTrophySlot)
         if (strstr(line, "}"))
         {
 
+			if (SurvivalMode && DinoInfo[TotalC].survivalDino)
+			{
+				DinoInfo[TotalC].SpawnInfoCh = 1;
+				DinoInfo[TotalC].SpawnInfo[0].spawnGroup = 0;
+			}
+
 		  if ((tempProjectName[18] == 'h' && !DinoInfo[TotalC].trophyCode) || (!DinoInfo[TotalC].SpawnInfoCh && TotalC > 0)) { //totalc = 0 for hunter char
 				  
 			  //WipeRegions();
@@ -3208,8 +3232,10 @@ void ReadCharacters(FILE *stream, int &nextTrophySlot)
 	
 		  DinoInfo[TotalC].radarColour565 = ((DinoInfo[TotalC].radarRed>>3) << 11) | ((DinoInfo[TotalC].radarGreen>>2) << 5) | (DinoInfo[TotalC].radarBlue>>3);
 		  DinoInfo[TotalC].radarColour555 = ((DinoInfo[TotalC].radarRed >> 3) << 10) | ((DinoInfo[TotalC].radarGreen >> 3) << 5) | (DinoInfo[TotalC].radarBlue >> 3);
-		  
+		 
+
 		  TotalC++;
+
           break;
 
         }
@@ -3898,9 +3924,11 @@ void LoadResourcesScript()
 	  if (strstr(s, "prj="))
 	  {
 		  strcpy(tempProjectName, (s + 4));
-		  break;
+		  //break;
 	  }
+	  if (strstr(s, "-survival")) SurvivalMode = TRUE;
   }
+  
 
   int areaNumber = -1;
   switch ((char)tempProjectName[18]) {
@@ -3949,6 +3977,7 @@ void LoadResourcesScript()
   }
 
   //default region
+  if (!SurvivalMode)
   for (int sg = 0; sg < TotalSpawnGroup; sg++) {    
 	  if (!spawnGroup[sg].spawnRegionCh) {
 		  spawnGroup[sg].spawnRegion[0].XMax = 988;

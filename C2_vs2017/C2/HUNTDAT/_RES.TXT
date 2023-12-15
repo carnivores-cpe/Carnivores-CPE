@@ -1253,7 +1253,6 @@ killtype{
  bloG = 0
  bloB = 0
  weaveRange = 1648
- survivalIndex = 4
 }
 
 

@@ -1235,9 +1235,7 @@ void SetNewTargetPlace_IcthOld(TCharacter *cptr, float R)
 {
 	Vector3d p;
 	int tr = 0;
-	PrintLog("iT");//TEST20200412
 replace:
-	PrintLog("-");//TEST20200412
 	p.x = cptr->pos.x + siRand((int)R);
 	if (p.x < 512) p.x = 512;
 	if (p.x > 1018 * 256) p.x = 1018 * 256;
@@ -8298,6 +8296,7 @@ void PlaceTrophy()
 void spawnPositionPackLeader() {
 	TSpawnRegion *sr = &spawnGroup[Characters[ChCount].SpawnGroupType].spawnRegion[rRand(spawnGroup[Characters[ChCount].SpawnGroupType].spawnRegionCh - 1)];
 
+	
 
 	Characters[ChCount].pos.x = sr->XMin * 256
 		+ abs(rRand(sr->XMax - sr->XMin) * 256);
@@ -8678,6 +8677,7 @@ void PlaceCharactersSurvival()
 	if (SurvivalWave > TrophyRoom2.survivalHighScore) TrophyRoom2.survivalHighScore = SurvivalWave;
 	SaveTrophy();
 	SurvivalWave++;
+	if (SurvivalWave >= 27) DoHalt("Limit Exceeded");
 	int tr = 0;
 	int waveTotal = 1;
 	int dinoCost = 1;
@@ -8688,7 +8688,7 @@ void PlaceCharactersSurvival()
 	//char buff[100];
 	//sprintf(buff, "SurvivalIndexCh %i", SurvivalIndexCh);
 	//MessageBox(hwndMain, buff, "TEST", IDOK);
-	//sprintf(buff, "SurvivalWave    %i", SurvivalWave);
+	//sprintf(buff, "/nSurvivalWave = %i", SurvivalWave);
 	//MessageBox(hwndMain, buff, "TEST", IDOK);
 	//sprintf(buff, "START-waveTotal %i", waveTotal);
 	//MessageBox(hwndMain, buff, "TEST", IDOK);
@@ -8696,24 +8696,26 @@ void PlaceCharactersSurvival()
 	//MessageBox(hwndMain, buff, "TEST", IDOK);
 	//sprintf(buff, "START-dinoIndex %i", dinoIndex);
 	//MessageBox(hwndMain, buff, "TEST", IDOK);
+
 	while (waveTotal < dinoCost) {
 		dinoCost /= 3;
 		dinoIndex --;
 	}
 	while (dinoIndex > 0) {
 		while (waveTotal >= dinoCost) {
-			Characters[ChCount - 1].CType = SurvivalIndex[dinoIndex];
+			if (tr > 10500) DoHalt("Cannot spawn characters");
+			if (ChCount > 254) DoHalt("Character limit exceeded");
+			Characters[ChCount].CType = SurvivalIndex[dinoIndex];
+			Characters[ChCount].SpawnGroupType = 0;
+			Characters[ChCount].packId = -1;
 			spawnMapAmbient(tr, -1, false);
-			Characters[ChCount - 1].packId = -1;
-			Characters[ChCount - 1].State = 2;
+			Characters[ChCount].State = 2;
+			ChCount++;
 			waveTotal -= dinoCost;
-			if (tr > 10500) return;
-			if (ChCount > 254) return;
 		}
 		dinoCost /= 3;
 		dinoIndex--;
 	}
-	
 }
 
 void PlaceCharacters()
@@ -8795,7 +8797,6 @@ void PlaceCharacters()
 						int post = posi % spawnGroup[sg].dinoIndexCh;
 						if (ratioScores[post] >= 1.f) {
 							ratioScores[post] -= 1.f;
-									char buff[100];
 							Characters[ChCount].CType = spawnGroup[sg].dinoIndex[post];
 						}
 						else {
