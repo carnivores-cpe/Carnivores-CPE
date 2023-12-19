@@ -2527,7 +2527,10 @@ void ReadSpawnGroupChar(FILE *stream)
 			break;
 		}
 		value = strstr(line, "=");
-		if (!value) {
+		
+		if (!value &&
+			!strstr(line, "region") &&
+			!strstr(line, "avoid")) {
 			char errorBuff[100];
 			sprintf(errorBuff, "Script loading error: SpawnGroupChar: %s", DinoInfo[TotalC].Name);
 			DoHalt(errorBuff);
