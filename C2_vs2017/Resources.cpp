@@ -2207,8 +2207,11 @@ void ReadAvoid(FILE *stream)
 			break;
 		}
 		value = strstr(line, "=");
-		if (!value)
-			DoHalt("Script loading error: Avoid");
+		if (!value) {
+			char errorBuff[100];
+			sprintf(errorBuff, "Script loading error: Avoid: SpawnGroup %i", TotalSpawnGroup);
+			DoHalt(errorBuff);
+		}
 		value++;
 
 		if (strstr(line, "xmax")) spawnGroup[TotalSpawnGroup].avoidRegion[spawnGroup[TotalSpawnGroup].avoidRegionCh].XMax = atoi(value);
@@ -2230,8 +2233,11 @@ void ReadRegion(FILE *stream)
 			break;
 		}
 		value = strstr(line, "=");
+
 		if (!value) {
-			DoHalt("Script loading error: Region");
+			char errorBuff[100];
+			sprintf(errorBuff, "Script loading error: Region: SpawnGroup %i", TotalSpawnGroup);
+			DoHalt(errorBuff);
 		}
 		value++;
 
@@ -2494,8 +2500,11 @@ void ReadSpawnInfo(FILE *stream)
 			break;
 		}
 		value = strstr(line, "=");
-		if (!value)
-			DoHalt("Script loading error: SpawnInfo");
+		if (!value) {
+			char errorBuff[100];
+			sprintf(errorBuff, "Script loading error: SpawnInfo: %s", DinoInfo[TotalC].Name);
+			DoHalt(errorBuff);
+		}
 		value++;
 		
 		if (strstr(line, "spawnratio")) DinoInfo[TotalC].SpawnInfo[DinoInfo[TotalC].SpawnInfoCh].spawnRatio = (float)atof(value);
@@ -2518,8 +2527,11 @@ void ReadSpawnGroupChar(FILE *stream)
 			break;
 		}
 		value = strstr(line, "=");
-		if (!value)
-			DoHalt("Script loading error: SpawnInfo");
+		if (!value) {
+			char errorBuff[100];
+			sprintf(errorBuff, "Script loading error: SpawnGroupChar: %s", DinoInfo[TotalC].Name);
+			DoHalt(errorBuff);
+		}
 		value++;
 
 		if (strstr(line, "region")) ReadRegion(stream);
@@ -2555,7 +2567,11 @@ void ReadWeapons(FILE *stream)
           break;
         }
         value = strstr(line, "=");
-        if (!value) DoHalt("Script loading error: Weapons");
+		if (!value) {
+			char errorBuff[100];
+			sprintf(errorBuff, "Script loading error: Weapons: %s", WeapInfo[TotalW].Name);
+			DoHalt(errorBuff);
+		}
         value++;
 
         if (strstr(line, "power"))  WeapInfo[TotalW].Power = (float)atof(value);
@@ -2690,8 +2706,11 @@ void ReadIdleGroupInfo(FILE *stream)
 			break;
 		}
 		value = strstr(line, "=");
-		if (!value)
-			DoHalt("Script loading error: IdleGroup");
+		if (!value) {
+			char errorBuff[100];
+			sprintf(errorBuff, "Script loading error: IdleGroup: %s", DinoInfo[TotalC].Name);
+			DoHalt(errorBuff);
+		}
 		value++;
 
 		if (strstr(line, "startChance")) DinoInfo[TotalC].idleGroup[DinoInfo[TotalC].idleGroupCount].start = atof(value);
@@ -2724,8 +2743,11 @@ void ReadIdle2GroupInfo(FILE *stream)
 			break;
 		}
 		value = strstr(line, "=");
-		if (!value)
-			DoHalt("Script loading error IdleGroup2");
+		if (!value) {
+			char errorBuff[100];
+			sprintf(errorBuff, "Script loading error: IdleGroup2: %s", DinoInfo[TotalC].Name);
+			DoHalt(errorBuff);
+		}
 		value++;
 
 		if (strstr(line, "startChance")) DinoInfo[TotalC].idle2Group[DinoInfo[TotalC].idle2GroupCount].start = atof(value);
@@ -2758,8 +2780,11 @@ void ReadDeathTypeInfo(FILE *stream)
 			break;
 		}
 		value = strstr(line, "=");
-		if (!value)
-			DoHalt("Script loading error: DeathType");
+		if (!value) {
+			char errorBuff[100];
+			sprintf(errorBuff, "Script loading error: DeathType: %s", DinoInfo[TotalC].Name);
+			DoHalt(errorBuff);
+		}
 		value++;
 
 		if (strstr(line, "dieAnim")) DinoInfo[TotalC].deathType[DinoInfo[TotalC].deathTypeCount].die = atoi(value);
@@ -2780,8 +2805,11 @@ void ReadKillTypeInfo(FILE *stream)
 			break;
 		}
 		value = strstr(line, "=");
-		if (!value)
-			DoHalt("Script loading error: KillInfo");
+		if (!value) {
+			char errorBuff[100];
+			sprintf(errorBuff, "Script loading error: KillInfo: %s", DinoInfo[TotalC].Name);
+			DoHalt(errorBuff);
+		}
 		value++;
 
 		if (strstr(line, "hunterAnim")) DinoInfo[TotalC].killType[DinoInfo[TotalC].killTypeCount].hunteranim = atoi(value);
@@ -2808,8 +2836,11 @@ void ReadTrophyTypeInfo(FILE *stream)
 			break;
 		}
 		value = strstr(line, "=");
-		if (!value)
-			DoHalt("Script loading error: TrophyType");
+		if (!value) {
+			char errorBuff[100];
+			sprintf(errorBuff, "Script loading error: TrophyType: %s", DinoInfo[TotalC].Name);
+			DoHalt(errorBuff);
+		}
 		value++;
 
 
