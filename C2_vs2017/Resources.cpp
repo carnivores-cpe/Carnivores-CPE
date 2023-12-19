@@ -2497,10 +2497,44 @@ void ReadSpawnInfo(FILE *stream)
 		if (!value)
 			DoHalt("Script loading error: SpawnInfo");
 		value++;
-
+		
 		if (strstr(line, "spawnratio")) DinoInfo[TotalC].SpawnInfo[DinoInfo[TotalC].SpawnInfoCh].spawnRatio = (float)atof(value);
 		if (strstr(line, "spawngroup")) DinoInfo[TotalC].SpawnInfo[DinoInfo[TotalC].SpawnInfoCh].spawnGroup = atoi(value);
 		//if (strstr(line, "spawnmax")) DinoInfo[TotalC].SpawnInfo[DinoInfo[TotalC].SpawnInfoCh].spawnMax = atoi(value);
+	}
+}
+
+void ReadSpawnGroupChar(FILE *stream)
+{
+	char *value;
+	char line[256];
+
+	while (fgets(line, 255, stream)) {
+		if (strstr(line, "}")) {
+			DinoInfo[TotalC].SpawnInfo[DinoInfo[TotalC].SpawnInfoCh].spawnRatio = 1;
+			DinoInfo[TotalC].SpawnInfo[DinoInfo[TotalC].SpawnInfoCh].spawnGroup = TotalSpawnGroup;
+			DinoInfo[TotalC].SpawnInfoCh++;
+			TotalSpawnGroup++;
+			break;
+		}
+		value = strstr(line, "=");
+		if (!value)
+			DoHalt("Script loading error: SpawnInfo");
+		value++;
+
+		if (strstr(line, "region")) ReadRegion(stream);
+
+		if (strstr(line, "avoid")) ReadAvoid(stream);
+
+		if (strstr(line, "spawnrate")) spawnGroup[TotalSpawnGroup].SpawnRate = (float)atof(value);
+		if (strstr(line, "spawnmax")) spawnGroup[TotalSpawnGroup].SpawnMax = atoi(value);
+		if (strstr(line, "spawnmin")) spawnGroup[TotalSpawnGroup].SpawnMin = atoi(value);
+
+		if (strstr(line, "densityMulti")) spawnGroup[TotalSpawnGroup].densityMulti = atoi(value);
+		if (strstr(line, "moveForward")) readBool(value, spawnGroup[TotalSpawnGroup].moveForward);
+		if (strstr(line, "randomise")) readBool(value, spawnGroup[TotalSpawnGroup].Randomised);
+		if (strstr(line, "onlyActiveNearby")) readBool(value, spawnGroup[TotalSpawnGroup].OnlyActiveNearby);
+		if (strstr(line, "styInRgn")) readBool(value, spawnGroup[TotalSpawnGroup].stayInRegion);
 	}
 }
 
@@ -2870,7 +2904,7 @@ void ReadAvoidInfo(FILE *stream)
 
 
 
-void ReadCharacterLine(FILE *stream, char *_value, char line[256], bool &regionOverwrite,
+void ReadCharacterLine(FILE *stream, char *_value, char line[256], bool &spawnInfoOverwrite, bool &spawnGroupOverwrite,
 	bool &idleOverwrite, bool &idle2Overwrite, bool &roarOverwrite, bool &killOverwrite, bool &waterDieOverwrite,
 	bool &deathTypeOverwrite, bool &trophyTypeOverwrite, int &nextTrophySlot, bool &idleGroupOverwrite, bool &idle2GroupOverwrite) {
 
@@ -3136,11 +3170,23 @@ void ReadCharacterLine(FILE *stream, char *_value, char line[256], bool &regionO
 		if (SurvivalMode) {
 			SkipSector(stream);
 		} else {
-			if (regionOverwrite) {
+			if (spawnInfoOverwrite) {
 				WipeSpawnInfo();
-				regionOverwrite = false;
+				spawnInfoOverwrite = false;
 			}
 			ReadSpawnInfo(stream);
+		}
+	}
+
+	if (strstr(line, "spawngroup")) {
+		if (SurvivalMode) {
+			SkipSector(stream);
+		} else {
+			if (spawnGroupOverwrite) {
+				WipeSpawnInfo();
+				spawnGroupOverwrite = false;
+			}
+			ReadSpawnGroupChar(stream);
 		}
 	}
 
@@ -3245,6 +3291,7 @@ void ReadCharacters(FILE *stream, int &nextTrophySlot)
 				!strstr(line, "overwrite") &&
 				!strstr(line, "addition") &&
 				!strstr(line, "spawninfo") &&
+				!strstr(line, "spawngroup") &&
 				!strstr(line, "killtype") &&
 				//!strstr(line, "avoid") &&
 				!strstr(line, "tropinfo") &&
@@ -3255,8 +3302,8 @@ void ReadCharacters(FILE *stream, int &nextTrophySlot)
 			value++;
 
 
-			bool temp, temp3, temp4, temp5, temp6, temp7, temp8, temp9, temp10, temp11;
-			ReadCharacterLine(stream, value, line, temp, temp3, temp4, temp5, temp6, temp7, temp8, temp9, nextTrophySlot, temp10, temp11);
+			bool temp, temp3, temp4, temp5, temp6, temp7, temp8, temp9, temp10, temp11, temp12;
+			ReadCharacterLine(stream, value, line, temp, temp3, temp4, temp5, temp6, temp7, temp8, temp9, temp12, nextTrophySlot, temp10, temp11);
 
 			if (strstr(line, "overwrite") || strstr(line, "addition")) {
 
@@ -3343,7 +3390,8 @@ void ReadCharacters(FILE *stream, int &nextTrophySlot)
 
 				if (readThis) {
 
-					bool regionOverwrite = strstr(line, "overwrite");
+					bool spawnInfoOverwrite = strstr(line, "overwrite");
+					bool spawnGroupOverwrite = strstr(line, "overwrite");
 					// bool avoidOverwrite = strstr(line, "overwrite");
 					bool idleOverwrite = strstr(line, "overwrite");
 					bool killOverwrite = strstr(line, "overwrite");
@@ -3361,6 +3409,7 @@ void ReadCharacters(FILE *stream, int &nextTrophySlot)
 						value = strstr(line, "=");
 						if (!value
 							&& !strstr(line, "spawninfo")
+							&& !strstr(line, "spawngroup")
 							//&& !strstr(line, "avoid")
 							&& !strstr(line, "deathtype")
 							&& !strstr(line, "idlegroup")
@@ -3370,7 +3419,7 @@ void ReadCharacters(FILE *stream, int &nextTrophySlot)
 							DoHalt("Script loading error: Characters");
 						value++;
 
-						ReadCharacterLine(stream, value, line, regionOverwrite,
+						ReadCharacterLine(stream, value, line, spawnInfoOverwrite, spawnGroupOverwrite,
 							idleOverwrite, idle2Overwrite, roarOverwrite, killOverwrite,
 							waterDieOverwrite, deathTypeOverwrite, trophyTypeOverwrite, nextTrophySlot,
 							idleGroupOverwrite, idle2GroupOverwrite);

@@ -1,0 +1,1785 @@
+
+common {
+ survivalArea = 5
+ survivalWeapon = 2
+ survivalDTM = 0
+}
+
+areatable {
+{
+ snow1 = FALSE
+ hSpd = 4
+ vSpd = 192
+ dens = 2000
+ red1 = 240
+ gre1 = 240
+ blu1 = 240
+ alp1 = 255
+ rad1 = 1
+ tree = 7
+ tree = 8
+ tree = 11
+ tree = 12
+ tree = 14
+}
+
+{
+ snow1 = FALSE
+ hSpd = 4
+ vSpd = 192
+ dens = 2000
+ red1 = 240
+ gre1 = 240
+ blu1 = 240
+ alp1 = 255
+ rad1 = 1
+ tree = 6
+ tree = 11
+ tree = 12
+ tree = 13
+ tree = 14
+ tree = 15
+ tree = 16
+ tree = 17
+}
+
+{
+ snow1 = FALSE
+ hSpd = 4
+ vSpd = 192
+ dens = 2000
+ red1 = 240
+ gre1 = 240
+ blu1 = 240
+ alp1 = 255
+ rad1 = 1
+ tree = 10
+ tree = 18
+}
+
+{
+ snow1 = FALSE
+ hSpd = 4
+ vSpd = 192
+ dens = 2000
+ red1 = 240
+ gre1 = 240
+ blu1 = 240
+ alp1 = 255
+ rad1 = 1
+ tree = 4
+ tree = 5
+ tree = 6
+ tree = 12
+ tree = 13
+ tree = 14
+ tree = 15
+}
+
+{
+ snow1 = FALSE
+ hSpd = 4
+ vSpd = 192
+ dens = 2000
+ red1 = 240
+ gre1 = 240
+ blu1 = 240
+ alp1 = 255
+ rad1 = 1
+ tree = 9
+ tree = 10
+ tree = 11
+ tree = 23
+ survivalPlayerX = 345
+ survivalPlayerY = 245
+ survivalPlayerA = 345
+ survivalDinoXMin = 318
+ survivalDinoXMax = 336
+ survivalDinoYMin = 170
+ survivalDinoYMax = 180
+}
+
+
+} //==== end of areatable =========//
+
+
+spawntable {
+
+//==== 0 ambients =========//
+ spawngroup{
+  spawnmax = 6
+  spawnmin = 0
+  spawnrate = 1
+  densityMulti = 2
+  moveForward = TRUE
+ }
+
+//==== 1 main roster random =========//
+ spawngroup{
+  spawnmax = 4
+  spawnmin = 0
+  spawnrate = 1
+  randomise = TRUE
+ }
+
+//==== 2 main roster selected =========//
+ spawngroup{
+  spawnmax = 13
+  spawnmin = 12
+  spawnrate = 0.5
+  densityMulti = 4
+ }
+
+//==== 3 brachi =========//
+ spawngroup{
+  spawnmax = 4
+  spawnmin = 2
+  spawnrate = 0.5
+ }
+
+//==== 4 ichthyornis =========//
+ spawngroup{
+  spawnmax = 3
+  spawnmin = 1
+  spawnrate = 0.5
+  moveForward = TRUE
+ }
+
+//==== 5 climatius =========//
+ spawngroup{
+  spawnmax = 4
+  spawnmin = 2
+  spawnrate = 0.5
+  moveForward = TRUE
+ }
+
+
+//==== 6 mosasaurus =========//
+ spawngroup{
+  spawnmax = 3
+  spawnmin = 0
+  spawnrate = 0.5
+ }
+ 
+ //==== 7 pink parexus ========//
+ spawngroup{
+  spawnmax = 7
+  spawnmin = 4
+  spawnrate = 0.4
+  overwrite area1 {
+   region{
+    xmax = 757
+    xmin = 718
+    ymax = 133
+    ymin = 94
+   }
+  }
+ } 
+ 
+ //==== 8 parexus ========//
+ spawngroup{
+  spawnmax = 3
+  spawnmin = 1
+  spawnrate = 0.4
+  moveForward = TRUE
+  styInRgn = TRUE
+  overwrite area1 {
+   region{
+xmin = 322
+ymin = 277
+xmax = 493
+ymax = 411
+   }
+   region{
+xmin = 285
+ymin = 586
+xmax = 391
+ymax = 691
+   }
+  }
+ } 
+ 
+
+} //==== end of spawntable =========//
+
+weapons {
+{
+ name  = 'Pistol'
+ file  = 'pistol.car'
+ pic   = 'bullet1.tga'
+ gunshot = 'pistol.wav'
+ power = 2
+ prec  = 0.8
+ loud  = 0.8
+ rate  = 1.6
+ shots = 8
+}
+
+{
+ name  = 'Shotgun'
+ file  = 'shotgun.car'
+ pic   = 'bullet2.tga'
+ gunshot = 'shotgun.wav'
+ power = 1
+ prec  = 0.3
+ loud  = 1.5
+ rate  = 1.2
+ trace = 6
+ shots = 7
+} 
+
+
+{
+ name  = 'DB Shotgun'
+ file  = 'dbsgun.car'
+ pic   = 'bullet2.tga'
+ gunshot = 'dbsgun.wav'
+ fall  = 1
+ power = 1
+ prec  = 0.2
+ loud  = 1.9
+ rate  = 1.2
+ trace = 6
+ shots = 6
+ reload = 2
+} 
+
+
+{
+ name  = 'X-Bow'
+ file  = 'x_bow.car'
+ pic   = 'bullet4.tga'
+ shots = 6
+ power = 6
+ prec  = 1.0
+ loud  = 0.4
+ rate  = 1.0
+}
+
+{
+ name  = 'Rifle'
+ file  = 'rifle.car'
+ pic   = 'bullet3.tga'
+ gunshot = 'rifle.wav'
+ power = 4
+ prec  = 1.8
+ loud  = 1.5
+ rate  = 1.0
+ shots = 7
+}
+
+{
+ name  = 'Sniper rifle'
+ file  = 'sniper.car'
+ pic   = 'bullet3.tga'
+ gunshot = 'sniper.wav'
+ power = 4
+ optic = 1
+ prec  = 2.0
+ loud  = 1.4
+ rate  = 1.0
+ shots = 7
+}
+
+
+
+}  //==== end of weapons =========//
+
+
+characters {
+
+{
+ name    = 'Hunter'
+ file    = 'hunter1_brach_mosa12.car'
+ ai      = 0
+ health  = 1
+}
+
+
+{    
+ name    = 'Moshops'
+ file    = 'mosh.car'
+ ai      = 1
+ hearK      = 0.5
+spawninfo{
+ spawngroup = 0
+ spawnratio = 1
+}
+ health  = 2
+ mass    = 0.15  
+ fearCall = 3
+ fearCall = 5
+ fearCall = 6
+ fearCall = 7
+ fearCall = 8
+ runspd = 0.6
+ wlkspd = 0.3
+ runAnim = 0
+ walkAnim = 1
+deathtype{
+ dieAnim = 2
+ sleepAnim = 5
+}
+idlegroup{
+ anim = 3
+ anim = 4
+ startChance = 0.0625
+ endChance = 0.40625
+}
+ waterLevel = 50
+ bloR = 112
+ bloG = 0
+ bloB = 0
+ dontWeave = TRUE
+}
+
+{
+ name    = 'Galimimus'
+ file    = 'gall.car'
+ ai      = 2
+ hearK      = 0.5
+spawninfo{
+ spawngroup = 0
+ spawnratio = 1
+}
+ health  = 2
+ mass    = 0.1
+ fearCall = 3
+ fearCall = 5
+ fearCall = 6
+ fearCall = 7
+ fearCall = 8
+ runspd = 0.9
+ wlkspd = 0.32
+ runAnim = 0
+ walkAnim = 1
+ slideAnim = 2
+deathtype{
+ dieAnim = 3
+ sleepAnim = 6
+}
+idlegroup{
+ anim = 4
+ anim = 5
+ startChance = 0.0625
+ endChance = 0.40625
+}
+ waterLevel = 100
+ bloR = 112
+ bloG = 0
+ bloB = 0
+ dontWeave = TRUE
+}
+
+{
+ name   = 'Dimorphodon'
+ file   = 'dimor2.car'
+ ai     = 3
+spawninfo{
+ spawngroup = 0
+ spawnratio = 1
+}
+ maxalt = 2800
+ minalt = 1800
+ waterLevel = 40
+ health = 1
+ mass   = 0.05
+ flyspd = 1.5
+ gldspd = 1.3
+ flyAnim = 0
+ glideAnim = 1
+deathtype{
+ fallAnim = 2
+ dieAnim = 3
+}
+ bloR = 112
+ bloG = 0
+ bloB = 0
+}
+
+{
+ name   = 'Pteranodon'
+ file   = 'ptera.car'
+ ai     = 4
+spawninfo{
+ spawngroup = 0
+ spawnratio = 1
+}
+ maxalt = 2800
+ minalt = 1800
+ waterLevel = 40
+ health = 1
+ mass   = 0.25
+ flyspd = 1.5
+ gldspd = 1.3
+ flyAnim = 0
+ glideAnim = 1
+deathtype{
+ fallAnim = 2
+ dieAnim = 3
+}
+ bloR = 112
+ bloG = 0
+ bloB = 0
+}
+
+{
+ name   = 'Dimetrodon'
+ file   = 'dimet.car'
+ ai     = 5
+ hearK      = 0.5
+spawninfo{
+ spawngroup = 0
+ spawnratio = 1
+}
+ health = 3
+ mass   = 0.22
+ fearCall = 3
+ fearCall = 5
+ fearCall = 6
+ fearCall = 7
+ fearCall = 8
+ runspd = 0.6
+ wlkspd = 0.3
+ runAnim = 1
+ walkAnim = 0
+deathtype{
+ dieAnim = 4
+ sleepAnim = 5
+}
+idlegroup{
+ anim = 2
+ anim = 3
+ startChance = 0.0625
+ endChance = 0.40625
+}
+ waterLevel = 50
+ bloR = 112
+ bloG = 0
+ bloB = 0
+ dontWeave = TRUE
+}
+
+{
+ name      = 'Parasaurolophus'
+ file      = 'par9.car'
+ ai        = 10
+ callNo = 0
+overwrite char0 {
+ radar = TRUE
+ radR = 0
+ radG = 240
+ radB = 0
+spawninfo{
+ spawngroup = 2
+ spawnratio = 1
+}
+}
+spawninfo{
+ spawngroup = 1
+ spawnratio = 1
+}
+ dogSmell  = TRUE
+ mass      = 1.5
+ length    = 5.8
+ radius    = 320
+ health    = 6
+ basescore = 5
+ smellK     = 0.8
+ hearK      = 1.0
+ lookK      = 0.4
+ shipdelta = 48
+ fearCall = 3
+ fearCall = 5
+ fearCall = 6
+ fearCall = 7
+ fearCall = 8
+ runspd = 1.6
+ wlkspd = 0.40
+ aggress = 0
+ killdist = 0
+ trophy  = TRUE
+tropinfo{
+ tropPos = 0
+  alpha = 340
+  tropAnim = 6
+  xoffset = -250
+  xscale = -165
+  zoffset = -180
+  zscale = 60
+  xdata = -500
+  zdata = 1250
+ }
+ tropinfo{
+ tropPos = 0
+  alpha = 150
+  tropAnim = 7
+  xoffset = 180
+  xscale = 100
+  zoffset = 50
+  xdata = 250
+  zdata = 1250
+ }
+ runAnim = 1
+ walkAnim = 0
+idlegroup{
+ anim = 2
+ anim = 3
+ startChance = 0.0625
+ endChance = 0.5
+}
+deathtype{
+ dieAnim = 4
+ sleepAnim = 5
+}
+ waterLevel = 160
+ CamYLand = 256
+ CamYWater = 256
+ CamBaseLand = 824
+ CamBaseWater = 824
+ bloR = 112
+ bloG = 0
+ bloB = 0
+ weaveRange = 0
+}
+
+{
+ name = 'Ankylosaurus'
+ file = 'anky_tt.car'
+ ai        = 11
+ callNo = 1
+overwrite char1 {
+ radar = TRUE
+ radR = 0
+ radG = 240
+ radB = 0
+spawninfo{
+ spawngroup = 2
+ spawnratio = 1
+}
+}
+spawninfo{
+ spawngroup = 1
+ spawnratio = 1
+}
+ dogSmell  = TRUE
+ scale0    = 1200
+ scaleA    = 600
+ mass      = 0.8
+ length    = 4.5
+ radius    = 280
+ health    = 6
+ basescore = 6
+ smellK     = 0.4 
+ hearK      = 0.8
+ lookK      = 0.6
+ shipdelta = 16
+ fearCall = 3
+ fearCall = 5
+ fearCall = 6
+ fearCall = 7
+ fearCall = 8
+ runspd = 0.75
+ wlkspd = 0.28
+ aggress = 0
+ killdist = 0
+ trophy  = TRUE
+ tropinfo{
+ tropPos = 1
+  alpha = 140
+  tropAnim = 7
+  xoffset = -400
+  zoffset = 0
+  xdata = -500
+  zdata = 1250
+ }
+ tropinfo{
+ tropPos = 1
+  alpha = 50
+  tropAnim = 6
+  xoffset = 250
+  zoffset = 0
+  xdata = 250
+  zdata = 1250
+ }
+ runAnim = 0
+ walkAnim = 1
+idlegroup{
+ anim = 2
+ anim = 3
+ startChance = 0.0625
+ endChance = 0.5
+}
+deathtype{
+ dieAnim = 4
+ sleepAnim = 5
+}
+ waterLevel = 60
+ CamYLand = 256
+ CamYWater = 256
+ CamBaseLand = 824
+ CamBaseWater = 824
+ bloR = 112
+ bloG = 0
+ bloB = 0
+ weaveRange = 0
+}
+
+{
+ name = 'Stegosaurus'
+ file = 'stego_tt.car'
+ ai        = 12
+ callNo = 2
+overwrite char2 {
+ radar = TRUE
+ radR = 0
+ radG = 240
+ radB = 0
+spawninfo{
+ spawngroup = 2
+ spawnratio = 1
+}
+}
+spawninfo{
+ spawngroup = 1
+ spawnratio = 1
+}
+ dogSmell  = TRUE
+ mass      = 7
+ length    = 7
+ radius    = 480
+ health    = 7
+ basescore = 7
+ smellK     = 0.4
+ hearK      = 0.8
+ lookK      = 0.6
+ shipdelta = 128
+ fearCall = 3
+ fearCall = 5
+ fearCall = 6
+ fearCall = 7
+ fearCall = 8
+ runspd = 0.96
+ wlkspd = 0.36
+ aggress = 0
+ killdist = 0
+ trophy  = TRUE
+ tropinfo{
+ tropPos = 2
+  alpha = 150
+  tropAnim = 7
+  xoffset = -450
+  zoffset = -300
+  xdata = -500
+  zdata = 1250
+ }
+ tropinfo{
+ tropPos = 2
+  alpha = 160
+  tropAnim = 6
+  xoffset = 300
+  zoffset = 200
+  xdata = 250
+  zdata = 1250
+ }
+ runAnim = 0
+ walkAnim = 1
+idlegroup{
+ anim = 3
+ anim = 4
+ startChance = 0.0625
+ endChance = 0.5
+}
+deathtype{
+ dieAnim = 2
+ sleepAnim = 5
+}
+ waterLevel = 160
+ CamYLand = 256
+ CamYWater = 256
+ CamBaseLand = 824
+ CamBaseWater = 824
+ bloR = 112
+ bloG = 0
+ bloB = 0
+ weaveRange = 0
+}
+
+{
+ name = 'Allosaurus'
+ file = 'allot_iictt.car'
+ ai        = 13
+ callNo = 3
+overwrite char3 {
+ radar = TRUE
+ radR = 0
+ radG = 240
+ radB = 0
+spawninfo{
+ spawngroup = 2
+ spawnratio = 1
+}
+}
+spawninfo{
+ spawngroup = 1
+ spawnratio = 1
+}
+ dogSmell  = TRUE
+ mass      = 0.5
+ length    = 4.2
+ radius    = 256
+ health    = 6
+ basescore = 10
+ scale0    = 1000
+ scaleA    = 600
+ smellK     = 1.0
+ hearK      = 0.3
+ lookK      = 0.5
+ shipdelta = 0
+ fearCall = 7
+ fearCall = 8
+ runspd = 1.2
+ wlkspd = 0.428
+ swmspd = 0.4
+ jmpspd = 1.1
+ aggress = 128
+ killdist = 256
+ trophy  = TRUE
+ tropinfo{
+ tropPos = 3
+  alpha = 45
+  tropAnim = 11
+  xoffset = -750
+  zoffset = 150
+  xdata = -500
+  zdata = 1250
+ }
+ tropinfo{
+ tropPos = 3
+  alpha = 50
+  tropAnim = 12
+  xoffset = 250
+  zoffset = 0
+  xdata = 250
+  zdata = 1250
+ }
+ canswim = TRUE
+ runAnim = 0
+ walkAnim = 1
+ swimAnim = 2
+ slideAnim = 3
+ jumpAnim = 4
+deathtype{
+ dieAnim = 5
+ sleepAnim = 7
+}
+idlegroup{
+ anim = 8
+ startChance = 0.02905569
+ endChance = 1
+ instantRepeat = TRUE
+}
+idlegroup{
+ anim = 9
+ startChance = 0.02905569
+ endChance = 1
+ instantRepeat = TRUE
+}
+idlegroup{
+ anim = 10
+ startChance = 0.00968523
+ endChance = 1
+ instantRepeat = TRUE
+}
+ waterLevel = 180
+killtype{
+ hunterAnim = 0
+ hunterOffset = 170
+ eatAnim = 6
+ scream = TRUE
+}
+ CamYLand = 256
+ CamYWater = 256
+ CamBaseLand = 824
+ CamBaseWater = 824
+ bloR = 112
+ bloG = 0
+ bloB = 0
+ weaveRange = 1648
+ survivalIndex = 1
+}
+
+{
+ name = 'Chasmosaurus'
+ file = 'chasmosa_tt.car'
+ ai        = 14
+ callNo = 4
+overwrite char4 {
+ radar = TRUE
+ radR = 0
+ radG = 240
+ radB = 0
+spawninfo{
+ spawngroup = 2
+ spawnratio = 1
+}
+}
+spawninfo{
+ spawngroup = 1
+ spawnratio = 1
+}
+ dogSmell  = TRUE
+ mass      = 3
+ length    = 5.0
+ radius    = 400
+ health    = 8
+ basescore = 9
+ smellK     = 0.6 
+ hearK      = 0.5
+ lookK      = 0.4
+ shipdelta = 108
+ fearCall = 3
+ fearCall = 5
+ fearCall = 6
+ fearCall = 7
+ fearCall = 8
+ runspd = 1.2
+ wlkspd = 0.30
+ aggress = 32
+ killdist = 300
+ trophy  = TRUE
+ tropinfo{
+ tropPos = 5
+  alpha = 140
+  tropAnim = 8
+  xoffset = 50
+  zoffset = -550
+  xscale  = -50
+  zscale  = 50
+  zdata = -500
+  xdata = -1250
+ }
+ tropinfo{
+ tropPos = 5
+  alpha = 100
+  tropAnim = 7
+  xoffset = 0
+  zoffset = 250
+  zdata = 250
+  xdata = -1250
+ }
+ runAnim = 0
+ walkAnim = 1
+idlegroup{
+ anim = 2
+ anim = 3
+ anim = 4
+ startChance = 0.03125
+ endChance = 0.5
+}
+deathtype{
+ dieAnim = 5
+ sleepAnim = 6
+}
+ waterLevel = 120
+ CamYLand = 256
+ CamYWater = 256
+ CamBaseLand = 824
+ CamBaseWater = 824
+ bloR = 112
+ bloG = 0
+ bloB = 0
+ weaveRange = 0
+}
+
+{
+ name = 'Velociraptor'
+ file = 'veloteeth5_iidct2.car'
+ ai        = 15
+ callNo = 5
+overwrite char5 {
+ radar = TRUE
+ radR = 0
+ radG = 240
+ radB = 0
+spawninfo{
+ spawngroup = 2
+ spawnratio = 1
+}
+}
+spawninfo{
+ spawngroup = 1
+ spawnratio = 1
+}
+ dogSmell  = TRUE
+ mass      = 0.3
+ length    = 4.0
+ radius    = 256
+ health    = 6
+ basescore = 12
+ scaleA    = 400
+ smellK     = 1.3
+ hearK     = 0.7
+ lookK     = 0.5
+ shipdelta = -32
+ fearCall = 7
+ fearCall = 8
+ runspd = 1.2
+ wlkspd = 0.428
+ swmspd = 0.4
+ jmpspd = 1.1
+ aggress = 160
+ killdist = 256
+ trophy  = TRUE
+ tropinfo{
+ tropPos = 9
+  alpha = 240
+  tropAnim = 12
+  zoffset = -400
+  yoffset = 130
+  zdata = -500
+  xdata = -1250
+ }
+ tropinfo{
+ tropPos = 9
+  alpha = 30
+  tropAnim = 13
+  zoffset = -50
+  xoffset = 50
+  zdata = 250
+  xdata = -1250
+ }
+ canswim = TRUE
+ runAnim = 0
+ walkAnim = 1
+ swimAnim = 3
+ slideAnim = 2
+ jumpAnim = 4
+deathtype{
+ dieAnim = 5
+ sleepAnim = 7
+}
+idlegroup{
+ anim = 8
+ startChance = 0.033898305
+ endChance = 1
+ instantRepeat = TRUE
+}
+idlegroup{
+ anim = 9
+ startChance = 0.033898305
+ endChance = 1
+ instantRepeat = TRUE
+}
+ waterLevel = 140
+killtype{
+ hunterAnim = 0
+ hunterOffset = 170
+ eatAnim = 6
+ scream = TRUE
+}
+ packMax = 4
+ packMin = 3
+ packDensity = 25
+ CamYLand = 256
+ CamYWater = 256
+ CamBaseLand = 824
+ CamBaseWater = 824
+ bloR = 112
+ bloG = 0
+ bloB = 0
+ weaveRange = 1648
+ survivalIndex = 2
+}
+
+{
+ name = 'Spinosaurus'
+ file = 'spino_stt.car'
+ ai        = 16
+ callNo = 6
+overwrite char6 {
+ radar = TRUE
+ radR = 0
+ radG = 240
+ radB = 0
+spawninfo{
+ spawngroup = 2
+ spawnratio = 1
+}
+}
+spawninfo{
+ spawngroup = 1
+ spawnratio = 1
+}
+ dogSmell  = TRUE
+ mass      = 0.3
+ length    = 4.0
+ radius    = 256
+ health    = 12
+ basescore = 15
+ scaleA    = 400
+ smellK     = 1.1
+ hearK     = 0.6
+ lookK     = 0.6
+ shipdelta = 60
+ fearCall = 8
+ runspd = 1.6
+ wlkspd = 0.70
+ swmspd = 1.0
+ jmpspd = 1.4
+ aggress = 140
+ killdist = 300
+ trophy  = TRUE
+ tropinfo{
+ tropPos = 11
+  alpha = 135
+  tropAnim = 10
+  xoffset = -125
+  zoffset = -375
+  zdata = -500
+  xdata = -1250
+ }
+ tropinfo{
+ tropPos = 11
+  alpha = 220
+  tropAnim = 11
+  xoffset = -100
+  zoffset = 400
+  yoffset = -25
+  yscale = -7
+  zdata = 250
+  xdata = -1250
+ }
+ canswim = TRUE
+ runAnim = 0
+ walkAnim = 1
+ swimAnim = 9
+ slideAnim = 2
+ jumpAnim = 5
+deathtype{
+ dieAnim = 6
+ sleepAnim = 8
+}
+idlegroup{
+ anim = 3
+ startChance = 0.0703125
+ endChance = 1
+ instantRepeat = TRUE
+}
+idlegroup{
+ anim = 4
+ startChance = 0.0703125
+ endChance = 1
+ instantRepeat = TRUE
+}
+ waterLevel = 200
+killtype{
+ hunterAnim = 0
+ hunterOffset = 200
+ eatAnim = 7
+ scream = TRUE
+}
+ CamYLand = 256
+ CamYWater = 256
+ CamBaseLand = 824
+ CamBaseWater = 824
+ bloR = 112
+ bloG = 0
+ bloB = 0
+ weaveRange = 1648
+ survivalIndex = 3
+}
+
+
+
+
+{
+ name = 'Ceratosaurus'
+ file = 'cerat_tss.car'
+ ai        = 17
+ callNo = 7
+overwrite char7 {
+ radar = TRUE
+ radR = 0
+ radG = 240
+ radB = 0
+spawninfo{
+ spawngroup = 2
+ spawnratio = 0.5
+}
+}
+ dogSmell  = TRUE
+ mass      = 0.3
+ length    = 4.0
+ radius    = 256
+ health    = 16
+ basescore = 18
+ scaleA    = 400
+ smellK     = 1.2
+ hearK     = 0.7
+ lookK     = 0.6
+ shipdelta = 96
+ runspd = 2.2
+ wlkspd = 0.75
+ swmspd = 0.75
+ aggress = 200
+ killdist = 350
+ trophy  = TRUE
+ tropinfo{
+ tropPos = 15
+  alpha = 225
+  tropAnim = 9
+  xoffset = 0
+  zoffset = -500
+  zdata = -500
+  xdata = -1250
+ }
+ canswim = TRUE
+ runAnim = 1
+ walkAnim = 0
+ swimAnim = 8
+deathtype{
+ dieAnim = 5
+ sleepAnim = 6
+}
+idlegroup{
+ anim = 2
+ startChance = 0.046875
+ endChance = 1
+ instantRepeat = TRUE
+}
+idlegroup{
+ anim = 3
+ startChance = 0.046875
+ endChance = 1
+ instantRepeat = TRUE
+}
+idlegroup{
+ anim = 4
+ startChance = 0.046875
+ endChance = 1
+ instantRepeat = TRUE
+}
+ waterLevel = 140
+killtype{
+ hunterAnim = 0
+ hunterOffset = 320
+ eatAnim = 7
+ scream = TRUE
+}
+ CamYLand = 256
+ CamYWater = 256
+ CamBaseLand = 824
+ CamBaseWater = 824
+ bloR = 112
+ bloG = 0
+ bloB = 0
+ weaveRange = 1648
+ survivalIndex = 4
+}
+
+{
+ name = 'Ceratosaurus'
+ file = 'ceratom.car'
+ ai        = 17
+ callNo = 7
+overwrite char7 {
+ radar = TRUE
+ radR = 0
+ radG = 240
+ radB = 0
+spawninfo{
+ spawngroup = 2
+ spawnratio = 0.5
+}
+}
+ dogSmell  = TRUE
+ mass      = 0.3
+ length    = 4.0
+ radius    = 256
+ health    = 16
+ basescore = 18
+ scale0    = 700
+ scaleA    = 350
+ smellK     = 1.2
+ hearK     = 0.7
+ lookK     = 0.6
+ shipdelta = 96
+ runspd = 2.2
+ wlkspd = 0.75
+ swmspd = 0.75
+ aggress = 200
+ killdist = 350
+ trophy  = TRUE
+ tropinfo{
+ tropPos = 15
+  alpha = 100
+  tropAnim = 10
+  xoffset = 0
+  zoffset = 250
+  zdata = 250
+  xdata = -1250
+ }
+ canswim = TRUE
+ runAnim = 1
+ walkAnim = 0
+ swimAnim = 8
+deathtype{
+ dieAnim = 5
+ sleepAnim = 6
+}
+idlegroup{
+ anim = 2
+ startChance = 0.046875
+ endChance = 1
+ instantRepeat = TRUE
+}
+idlegroup{
+ anim = 3
+ startChance = 0.046875
+ endChance = 1
+ instantRepeat = TRUE
+}
+idlegroup{
+ anim = 4
+ startChance = 0.046875
+ endChance = 1
+ instantRepeat = TRUE
+}
+ waterLevel = 140
+killtype{
+ hunterAnim = 0
+ hunterOffset = 320
+ eatAnim = 7
+ scream = TRUE
+}
+ CamYLand = 256
+ CamYWater = 256
+ CamBaseLand = 824
+ CamBaseWater = 824
+ bloR = 112
+ bloG = 0
+ bloB = 0
+ weaveRange = 1648
+}
+
+
+
+{
+ name = 'T-Rex'
+ file = 'tirex_tt.car'
+ ai        = 18
+ callNo = 8
+overwrite char8 {
+ radar = TRUE
+ radR = 0
+ radG = 240
+ radB = 0
+spawninfo{
+ spawngroup = 2
+ spawnratio = 1
+ spawnmax = 2
+}
+}
+ dogSmell  = TRUE
+ mass      = 6
+ length    = 12
+ radius    = 400
+ health    = 1024
+ basescore = 25
+ smellK     = 0.85 
+ hearK      = 0.8 
+ lookK      = 0.8
+ shipdelta = 168
+ runspd = 2.49
+ wlkspd = 0.76
+ swmspd = 0.70
+ killdist = 380
+ trophy  = TRUE
+ tropinfo{
+ tropPos = 6
+  alpha = 250
+  tropAnim = 11
+  xoffset = 0
+  zoffset = 0
+  zdata = -2250
+ }
+ tropinfo{
+ tropPos = 7
+  alpha = 220
+  tropAnim = 10
+  xoffset = -250
+  zoffset = 0
+  zdata = -2250
+  xdata = -500
+ }
+ canswim = TRUE
+ runAnim = 0
+ walkAnim = 1
+ roarAnim = 2
+ swimAnim = 3
+ lookAnim = 4
+ lookAnim = 5
+ smellAnim = 6
+ smellAnim = 7
+idlegroup{
+ anim = 4
+ startChance = 0.03515625
+ endChance = 1
+ instantRepeat = TRUE
+}
+idlegroup{
+ anim = 5
+ startChance = 0.03515625
+ endChance = 1
+ instantRepeat = TRUE
+}
+idlegroup{
+ anim = 6
+ startChance = 0.03515625
+ endChance = 1
+ instantRepeat = TRUE
+}
+idlegroup{
+ anim = 7
+ startChance = 0.03515625
+ endChance = 1
+ instantRepeat = TRUE
+}
+deathtype{
+ dieAnim = 8
+}
+ waterLevel = 560
+killtype{
+ hunterAnim = 3
+ eatAnim = 9
+ hunterOffset = 0
+ hunterSync = TRUE
+ scream = TRUE
+}
+ CamYLand = 768
+ CamYWater = 256
+ CamBaseLand = 1424
+ CamBaseWater = 824
+ bloR = 112
+ bloG = 0
+ bloB = 0
+ weaveRange = 5648
+ survivalIndex = 5
+}
+
+
+{
+ name = 'Brachiosaurus'
+ file = 'dangerbrachikiller9.car'
+ ai  = 34
+spawninfo{
+ spawngroup = 3
+ spawnratio = 1
+}
+ canswim = TRUE
+ waterLevel = 550
+ mass      = 9
+ length    = 12
+ radius    = 400
+ health    = 100
+ basescore = 0
+ smellK     = 0.4
+ hearK      = 0.8
+ lookK      = 0.6
+ shipdelta = 168
+ fearCall = 8
+ wlkspd = 0.2
+ runspd = 0.32
+ aggress = 42
+ killdist = 380
+ runrotatespeed = 2.0
+ collisiondist = 128
+ runAnim = 7
+ walkAnim = 0
+deathtype{
+ dieAnim = 4
+ sleepAnim = 5
+}
+idlegroup{
+ anim = 1
+ anim = 2
+ anim = 3
+ startChance = 0.5
+ endChance = 0.296875
+}
+killtype{
+ hunterAnim = 4
+ eatAnim = 6
+ hunterOffset = 0
+ hunterSync = TRUE
+ dontloop = TRUE
+}
+ CamYLand = 1106
+ CamYWater = 1106
+ CamBaseLand = 1424
+ CamBaseWater = 1424
+ bloR = 112
+ bloG = 0
+ bloB = 0
+ dontWeave = TRUE
+}
+
+{
+ name      = 'Pachycephalosaurus'
+ file      = 'pach.car'
+ ai  = 19
+spawninfo{
+ spawngroup = 1
+ spawnratio = 0.06
+}
+ mass      = 0.8
+ length    = 4.5
+ radius    = 280
+ health    = 6
+ basescore = 8
+ smellK     = 0.4 
+ hearK      = 0.8
+ lookK      = 0.6
+ shipdelta = 16
+ fearCall = 3
+ fearCall = 5
+ fearCall = 6
+ fearCall = 7
+ fearCall = 8
+ runspd = 1.6
+ wlkspd = 0.40
+ aggress = 0
+ killdist = 0
+ trophy  = TRUE
+ Mystery = TRUE
+ tropinfo{
+ tropPos = 19
+  alpha = 270
+  tropAnim = 0
+  xoffset = 250
+  zoffset = 0
+  xdata = 250
+  zdata = -1250
+ }
+ tropinfo{
+ tropPos = 19
+  alpha = 270
+  tropAnim = 0
+  xoffset = -500
+  zoffset = 0
+  xdata = -500
+  zdata = -1250
+ }
+ runAnim = 1
+ walkAnim = 0
+ slideAnim = 2
+idlegroup{
+ anim = 4
+ anim = 5
+ startChance = 0.0625
+ endChance = 0.5
+}
+deathtype{
+ dieAnim = 3
+ sleepAnim = 6
+}
+ waterLevel = 140
+ CamYLand = 256
+ CamYWater = 256
+ CamBaseLand = 824
+ CamBaseWater = 824
+ bloR = 112
+ bloG = 0
+ bloB = 0
+ weaveRange = 0
+}
+
+{
+ name = 'Triceratops'
+ file = 'tricer.car'
+ ai  = 14
+spawninfo{
+ spawngroup = 1
+ spawnratio = 0.025
+}
+ mass      = 3
+ length    = 5.0
+ radius    = 400
+ health    = 8
+ basescore = 9
+ smellK     = 0.6 
+ hearK      = 0.5
+ lookK      = 0.4
+ shipdelta = 108
+ fearCall = 3
+ fearCall = 5
+ fearCall = 6
+ fearCall = 7
+ fearCall = 8
+ runspd = 1.2
+ wlkspd = 0.30
+ aggress = 32
+ killdist = 370
+ trophy  = TRUE
+ Mystery = TRUE
+ tropinfo{
+ tropPos = 18
+  alpha = 270
+  tropAnim = 0
+  xoffset = 250
+  zoffset = 0
+  xdata = 250
+  zdata = -1250
+ }
+ tropinfo{
+ tropPos = 18
+  alpha = 270
+  tropAnim = 0
+  xoffset = -500
+  zoffset = 0
+  xdata = -500
+  zdata = -1250
+ }
+ runAnim = 0
+ walkAnim = 1
+idlegroup{
+ anim = 2
+ anim = 3
+ anim = 4
+ startChance = 0.03125
+ endChance = 0.5
+}
+deathtype{
+ dieAnim = 5
+ sleepAnim = 6
+}
+ waterLevel = 120
+ CamYLand = 256
+ CamYWater = 256
+ CamBaseLand = 824
+ CamBaseWater = 824
+ bloR = 112
+ bloG = 0
+ bloB = 0
+ weaveRange = 0
+}
+
+{
+ name = 'Climatius'
+ file = 'climatius3.car'
+ ai  = 32
+ spawninfo{
+ spawngroup = 5
+ spawnratio = 1
+}
+ aggress   = 7
+ radius    = 256
+ health    = 1
+ scale0    = 1000
+ scaleA    = 600
+ shipdelta = 0
+ maxdepth = 10000
+ mindepth = 2500
+ spcdepth = 100
+ wlkspd = 0.25
+ runspd = 0.55
+ runAnim = 1
+ walkAnim = 0
+ bloR = 112
+ bloG = 0
+ bloB = 0
+ weaveRange = 0
+}
+
+{
+ name = 'Parexus'
+ file = 'parexusn4.car'
+ ai  = 32
+ overwrite area1 {
+spawninfo{
+ spawngroup = 8
+ spawnratio = 1
+}
+ }
+ aggress   = 7
+ radius    = 256
+ health    = 1
+ scale0    = 1000
+ scaleA    = 600
+ shipdelta = 0
+ maxdepth = 1000
+ mindepth = 450
+ spcdepth = 73
+ wlkspd = 0.25
+ runspd = 0.55
+ runAnim = 1
+ walkAnim = 0
+ bloR = 112
+ bloG = 0
+ bloB = 0
+ weaveRange = 0
+}
+
+{
+ name = 'Pink Parexus'
+ file = 'parexusn4_pink.car'
+ ai  = 32
+ overwrite area1 {
+spawninfo{
+ spawngroup = 7
+ spawnratio = 1
+}
+ }
+ aggress   = 7
+ radius    = 256
+ health    = 1
+ scale0    = 1000
+ scaleA    = 600
+ shipdelta = 0
+ maxdepth = 10000
+ mindepth = 200
+ spcdepth = 100
+ wlkspd = 0.25
+ runspd = 0.55
+ runAnim = 1
+ walkAnim = 0
+ bloR = 112
+ bloG = 0
+ bloB = 0
+ weaveRange = 0
+}
+
+{
+ name = 'Mosasaurus'
+ file = 'mosa30ss.car'
+ ai  = 33
+ overwrite area1 {
+spawninfo{
+ spawngroup = 6
+ spawnratio = 1
+}
+ }
+ DangerFish = TRUE
+ aggress   = 200
+ killdist  = 380
+ radius    = 256
+ health    = 16
+ scale0    = 1000
+ scaleA    = 600
+ shipdelta = 0
+ maxdepth = 10000
+ mindepth = 800
+ spcdepth = 400
+ walkAnim = 0
+ wlkspd = 0.428
+ runAnim = 1
+ runspd = 1.2
+ JumpRange = 1424
+ jumpAnim = 3
+ jmpspd = 1.0
+ jumpPartFrame1 = 1
+ jumpPartFrame2 = 11
+ jumpPartDist = 240
+ jumpPartCnt = 500
+ jumpPartMag = 40
+ jumpPartAngled = TRUE
+ jumpPartCircle = TRUE
+ fishIdleAnim = 4
+ idlePartFrame1 = 12
+ idlePartFrame2 = 13
+ idlePartDist = 22
+ idlePartCnt = 3
+ idlePartMag = 20
+ idlePartOffset = 320
+killtype{
+ hunterAnim = 5
+ hunterCarryAnim = 6
+ eatAnim = 2
+ hunterOffset = 0
+ hunterSync = TRUE
+ dontloop = TRUE
+ carryCorpse = TRUE
+}
+ CamYLand = 256
+ CamYWater = 256
+ CamBaseLand = 824
+ CamBaseWater = 824
+ bloR = 112
+ bloG = 0
+ bloB = 0
+ dontWeave = TRUE
+}
+
+{
+ name = 'Ichthyornis'
+ file = 'burianicth_2023_7.car'
+ ai  = 31
+ hearK      = 0.5
+spawninfo{
+ spawngroup = 4
+ spawnratio = 1
+}
+ maxalt = 2800
+ minalt = 1800
+ waterLevel = 110
+ scale0    = 500
+ scaleA    = 0
+ mass      = 0.2
+ length    = 0.5
+ radius    = 256
+ health    = 1
+ shipdelta = 16
+ fearCall = 3
+ fearCall = 5
+ fearCall = 6
+ fearCall = 7
+ fearCall = 8
+ wlkspd = 0.20
+ swmspd = 0.25
+ flyspd = 2.00
+ gldspd = 1.80
+ lndspd = 0.30
+ tkfspd = 1.50
+ walkAnim = 0
+ shakeLAnim = 9
+ swimAnim = 1
+ shakeWAnim = 10
+ flyAnim = 2
+ glideAnim = 3
+ takeoffAnim = 4
+ landAnim = 5
+idlegroup{
+ anim = 11
+ startChance = 0.0703125
+ endChance = 1
+ instantRepeat = TRUE
+}
+idlegroup{
+ anim = 12
+ startChance = 0.0703125
+ endChance = 1
+ instantRepeat = TRUE
+}
+waterIgroup{
+ anim = 13
+ startChance = 0.140625
+ endChance = 1 
+ instantRepeat = TRUE
+}
+deathtype{
+ fallAnim = 6
+ dieAnim = 7
+ sleepAnim = 8
+}
+ bloR = 112
+ bloG = 0
+ bloB = 0
+}
+
+
+}//===== end of characters ==========//
+
+
+
+.

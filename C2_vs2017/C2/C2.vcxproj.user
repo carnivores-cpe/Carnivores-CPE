@@ -6,7 +6,7 @@
     <DebuggerFlavor>WindowsLocalDebugger</DebuggerFlavor>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release 3DFX|Win32'">
-    <LocalDebuggerCommandArguments>prj=huntdat\areas\trophy reg=0 din=385 wep=63 dtm=1 -radar</LocalDebuggerCommandArguments>
+    <LocalDebuggerCommandArguments>prj=huntdat\areas\area1 reg=0 din=385 wep=63 dtm=1 -radar</LocalDebuggerCommandArguments>
     <DebuggerFlavor>WindowsLocalDebugger</DebuggerFlavor>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release D3D|Win32'">
