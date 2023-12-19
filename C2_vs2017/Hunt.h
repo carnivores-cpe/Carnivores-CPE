@@ -1150,7 +1150,7 @@ _EXTORNOT TAIInfo AIInfo[DINOINFO_MAX];
 //_EXTORNOT TRegion Avoid[256];
 _EXTORNOT TWeapInfo WeapInfo[10];
 _EXTORNOT TCharacterInfo ShipModel;
-_EXTORNOT TSpawnGroup spawnGroup[64];
+_EXTORNOT TSpawnGroup spawnGroup[256];
 //_EXTORNOT int AI_to_CIndex[DINOINFO_MAX];
 _EXTORNOT int TrophyIndex[DINOINFO_MAX];
 _EXTORNOT int ChCount, WCCount, ElCount, SnCount,
