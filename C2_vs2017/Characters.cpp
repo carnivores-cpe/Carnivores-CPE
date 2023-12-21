@@ -8211,10 +8211,9 @@ void PlaceTrophy()
 
 			//do this in addshiptask too
 
-		Characters[ChCount].CType = TrophyIndex[TrophyRoom2.Body[c].ctype];
+		Characters[ChCount].CType = TrophyRoom2.Body[c].ctype;
 
-		if (DinoInfo[Characters[ChCount].CType].tCounter >=
-			DinoInfo[TrophyIndex[TrophyRoom2.Body[c].ctype]].trophyTypeCount) continue;
+//		if (DinoInfo[Characters[ChCount].CType].tCounter >= DinoInfo[TrophyIndex[TrophyRoom2.Body[c].ctype]].trophyTypeCount) continue;
 		
 
 		//Characters[ChCount].CType = TrophyRoom.Body[c].ctype;
@@ -8238,40 +8237,40 @@ void PlaceTrophy()
 			if (DinoInfo[Characters[ChCount].CType].ScaleA != 0) scaleDif /= (DinoInfo[Characters[ChCount].CType].ScaleA / 1000.f);
 			else scaleDif = 0;
 		}
-		int scaleDifx= (int)(scaleDif * DinoInfo[Characters[ChCount].CType].trophyType[DinoInfo[Characters[ChCount].CType].tCounter].xoffsetScale);
-		int scaleDifz= (int)(scaleDif * DinoInfo[Characters[ChCount].CType].trophyType[DinoInfo[Characters[ChCount].CType].tCounter].zoffsetScale);
-		int scaleDify = (int)(scaleDif * DinoInfo[Characters[ChCount].CType].trophyType[DinoInfo[Characters[ChCount].CType].tCounter].yoffsetScale);
+		int scaleDifx = (int)(scaleDif * trophyType[c].xoffsetScale);
+		int scaleDifz = (int)(scaleDif * trophyType[c].zoffsetScale);
+		int scaleDify = (int)(scaleDif * trophyType[c].yoffsetScale);
 
-		Characters[ChCount].pos.x = LandingList.list[DinoInfo[Characters[ChCount].CType].trophyType[DinoInfo[Characters[ChCount].CType].tCounter].trophyPos].x
-			* 256 + 128 + DinoInfo[Characters[ChCount].CType].trophyType[DinoInfo[Characters[ChCount].CType].tCounter].xoffset +scaleDifx;
-		Characters[ChCount].pos.z = LandingList.list[DinoInfo[Characters[ChCount].CType].trophyType[DinoInfo[Characters[ChCount].CType].tCounter].trophyPos].y
-			* 256 + 128 + DinoInfo[Characters[ChCount].CType].trophyType[DinoInfo[Characters[ChCount].CType].tCounter].zoffset +scaleDifz;
+		Characters[ChCount].pos.x = LandingList.list[trophyType[c].trophyPos].x
+			* 256 + 128 + trophyType[c].xoffset +scaleDifx;
+		Characters[ChCount].pos.z = LandingList.list[trophyType[c].trophyPos].y
+			* 256 + 128 + trophyType[c].zoffset +scaleDifz;
 
-		Characters[ChCount].Phase = DinoInfo[Characters[ChCount].CType].trophyType[DinoInfo[Characters[ChCount].CType].tCounter].anim;
+		Characters[ChCount].Phase = trophyType[c].anim;
 		Characters[ChCount].PrevPhase = Characters[ChCount].Phase;
 
 
 		Characters[ChCount].pos.y = GetLandH(Characters[ChCount].pos.x,
 			Characters[ChCount].pos.z);
 
-		Characters[ChCount].pos.y += DinoInfo[Characters[ChCount].CType].trophyType[DinoInfo[Characters[ChCount].CType].tCounter].yoffset +scaleDify;
+		Characters[ChCount].pos.y += trophyType[c].yoffset +scaleDify;
 		
-		float a = (float)DinoInfo[Characters[ChCount].CType].trophyType[DinoInfo[Characters[ChCount].CType].tCounter].alpha;
-		float b = (float)DinoInfo[Characters[ChCount].CType].trophyType[DinoInfo[Characters[ChCount].CType].tCounter].beta;
-		float g = (float)DinoInfo[Characters[ChCount].CType].trophyType[DinoInfo[Characters[ChCount].CType].tCounter].gamma;
+		float a = (float)trophyType[c].alpha;
+		float b = (float)trophyType[c].beta;
+		float g = (float)trophyType[c].gamma;
 		Characters[ChCount].alpha = pi * 2 * a / 360.f;
 		Characters[ChCount].beta = pi * 2 * b / 360.f;
 		Characters[ChCount].gamma = pi * 2 * g / 360.f;
 
-		Characters[ChCount].xdata = (int)(LandingList.list[DinoInfo[Characters[ChCount].CType].trophyType[DinoInfo[Characters[ChCount].CType].tCounter].trophyPos].x
-			* 256 + 128 + DinoInfo[Characters[ChCount].CType].trophyType[DinoInfo[Characters[ChCount].CType].tCounter].xdata);
-		Characters[ChCount].zdata = (int)(LandingList.list[DinoInfo[Characters[ChCount].CType].trophyType[DinoInfo[Characters[ChCount].CType].tCounter].trophyPos].y
-			* 256 + 128 + DinoInfo[Characters[ChCount].CType].trophyType[DinoInfo[Characters[ChCount].CType].tCounter].zdata);
-		Characters[ChCount].ydata = DinoInfo[Characters[ChCount].CType].trophyType[DinoInfo[Characters[ChCount].CType].tCounter].ydata;
+		Characters[ChCount].xdata = (int)(LandingList.list[trophyType[c].trophyPos].x
+			* 256 + 128 + trophyType[c].xdata);
+		Characters[ChCount].zdata = (int)(LandingList.list[trophyType[c].trophyPos].y
+			* 256 + 128 + trophyType[c].zdata);
+		Characters[ChCount].ydata = trophyType[c].ydata;
 
-		Characters[ChCount].animateTrophy = DinoInfo[Characters[ChCount].CType].trophyType[DinoInfo[Characters[ChCount].CType].tCounter].playAnim;
+		Characters[ChCount].animateTrophy = trophyType[c].playAnim;
 
-		DinoInfo[Characters[ChCount].CType].tCounter++;
+		//DinoInfo[Characters[ChCount].CType].tCounter++;
 		ChCount++;
 	}
 }

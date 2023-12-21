@@ -1885,15 +1885,22 @@ void ProcessGame()
   if (!_GameState)
   {
 
-
-	  for (int di = 0; di < 64; di++) {
+	  /*
+	  for (int di = 0; di < DINOINFO_MAX; di++) {
 		  DinoInfo[di].trophyLocTotal1 = 0;
 		  DinoInfo[di].trophyLocTotal2 = 0;
 	  }
+
+	  char Buff[100];
 	  for (int c = 0; c < TROPHY2_COUNT; c++) {
-		  DinoInfo[TrophyIndex[TrophyRoom2.Body[c].ctype]].trophyLocTotal1++;
-		  DinoInfo[TrophyIndex[TrophyRoom2.Body[c].ctype]].trophyLocTotal2++;
+		  sprintf(Buff, "SETTING LOC TOTAL INC %i", c);
+		  PrintLog(Buff);
+		  sprintf(Buff, " = %i\n", TrophyIndex[c]);
+		  PrintLog(Buff);
+		  DinoInfo[TrophyIndex[c]].trophyLocTotal1++;
+		  DinoInfo[TrophyIndex[c]].trophyLocTotal2++;
 	  }
+	  */
 
     PrintLog("Entered game\n");
     ReInitGame();

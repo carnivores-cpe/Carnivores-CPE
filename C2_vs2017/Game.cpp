@@ -622,8 +622,13 @@ void AddShipTask(int cindex)
   SYSTEMTIME st;
   GetLocalTime(&st);
   int t=0;
-  for (t=0; t< TROPHY2_COUNT-1; t++)
-    if (!TrophyRoom2.Body[t].ctype) break;
+  bool foundSpareSlot = false;
+  for (t = 0; t < TROPHY2_COUNT - 1; t++) {
+	  if (!TrophyRoom2.Body[t].ctype && trophyType[t].ctype == cptr->CType) {
+		  foundSpareSlot = true;
+		  break;
+	  }
+  }
 
   //t += DinoInfo[Characters[cindex].CType].trophyFirstSlot;
 
@@ -641,8 +646,6 @@ void AddShipTask(int cindex)
   TrophyRoom.Score+=(int)score;
 
 
-  if (!Tranq)
-  {
 
 	  TrophyDisplayBody.ctype = Characters[cindex].CType; //0 is blank trophy
 	  TrophyDisplayBody.scale = Characters[cindex].scale;
@@ -653,12 +656,14 @@ void AddShipTask(int cindex)
 	  TrophyDisplayBody.date = (st.wYear << 20) + (st.wMonth << 10) + st.wDay;
 	  TrophyDisplayBody.range = VectorLength(SubVectors(Characters[cindex].pos, PlayerPos)) / 64.f;
 	  TrophyDisplay = true;
+	  TrophyTime = 20 * 1000; //display trophy information
 
-	  TrophyTime = 20 * 1000;
-	  if (DinoInfo[Characters[cindex].CType].trophyLocTotal2 < DinoInfo[Characters[cindex].CType].trophyTypeCount) {
-		  DinoInfo[Characters[cindex].CType].trophyLocTotal2++;
+	if (!Tranq)
+	{
+
+	  if (foundSpareSlot) {
 		  TrophyBody = t;
-		  TrophyRoom2.Body[t].ctype = DinoInfo[Characters[cindex].CType].trophyCode; //0 is blank trophy
+		  TrophyRoom2.Body[t].ctype = Characters[cindex].CType; //0 is blank trophy
 		  TrophyRoom2.Body[t].scale = Characters[cindex].scale;
 		  TrophyRoom2.Body[t].weapon = CurrentWeapon;
 		  TrophyRoom2.Body[t].score = (int)score;
@@ -1974,7 +1979,7 @@ void registerDamage(int Dino) {
 
 	if (!Characters[Dino].Health)
 	{
-		if (DinoInfo[Characters[Dino].CType].trophySession && !Multiplayer && !SurvivalMode) //No trophies in multiplayer for now - update this at later date?
+		if (DinoInfo[Characters[Dino].CType].trophyNo && !Multiplayer && !SurvivalMode) //No trophies in multiplayer for now - update this at later date?
 		{
 			TrophyRoom.Last.success++;
 			AddShipTask(Dino);
@@ -2252,7 +2257,7 @@ void ProcessTrophy()
 
 	if (VectorLength(SubVectors(p, PlayerPos)) < 148) {
       TrophyBody = c;
-	  TrophyDisplayBody.ctype = TrophyIndex[TrophyRoom2.Body[c].ctype];
+	  TrophyDisplayBody.ctype = TrophyRoom2.Body[c].ctype;
 	  TrophyDisplayBody.scale = TrophyRoom2.Body[c].scale;
 	  TrophyDisplayBody.weapon = TrophyRoom2.Body[c].weapon;
 	  TrophyDisplayBody.score = TrophyRoom2.Body[c].score;
@@ -2534,7 +2539,7 @@ void RemoveCurrentTrophy()
 
   PrintLog("Trophy removed: ");
   //PrintLog(DinoInfo[TrophyRoom.Body[TrophyBody].ctype].Name);
-  PrintLog(DinoInfo[TrophyIndex[TrophyRoom2.Body[TrophyBody].ctype]].Name);
+  PrintLog(DinoInfo[TrophyRoom2.Body[TrophyBody].ctype].Name);
   PrintLog("\n");
 
   for (int c=0; c<TrophyBody; c++)

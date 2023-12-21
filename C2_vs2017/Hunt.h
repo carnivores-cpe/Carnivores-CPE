@@ -10,7 +10,7 @@
 #pragma comment (lib, "Mswsock.lib")
 #pragma comment (lib, "AdvApi32.lib")
 
-#define MODDERS_EDITION_VERSION_ID	4
+#define MODDERS_EDITION_VERSION_ID	5 //1.0.5
 
 #define DEFAULT_BUFLEN 512
 #define DEFAULT_PORT "1986"
@@ -37,7 +37,7 @@
 
 #define DINOINFO_MAX	128
 #define TROPHY_COUNT	24
-#define TROPHY2_COUNT	128
+#define TROPHY2_COUNT	128 //.sab
 
 #ifdef _MAIN_
 #define _EXTORNOT
@@ -519,6 +519,7 @@ typedef struct _TDinoKill
 
 typedef struct _TTrophyType
 {
+	int ctype = -1;
 	int xoffset, yoffset, zoffset;
 	int xoffsetScale, yoffsetScale, zoffsetScale;
 	int xdata, ydata, zdata;
@@ -610,13 +611,12 @@ typedef struct _TDinoInfo
   TDinoKill killType[32];
   int killTypeCount;
 
-  int tCounter;
-  int trophyCode;
-  int trophyLocTotal1;//CURRENTLY IN SAVE FILE
-  int trophyLocTotal2;//CURRENTLY IN SESSION - REPLACE WITH tlt1 UPON RESTART
+//  int tCounter;
+//  int trophyCode;
+//  int trophyLocTotal1;//CURRENTLY IN SAVE FILE
+//  int trophyLocTotal2;//CURRENTLY IN SESSION - REPLACE WITH tlt1 UPON RESTART
   
-  TTrophyType trophyType[TROPHY2_COUNT];// big waste of memory! move out of the struct and replace this with a pointer array
-  int trophyTypeCount;
+  int trophyNo = 0;
 //  int tCounter; // used to count off trophy locs
 
   int waterDieAnim[32];
@@ -644,7 +644,7 @@ typedef struct _TDinoInfo
 
   BOOL dogSmell;
 
-  bool trophySession;
+  //bool trophySession;
 
   int partFrame1[50], partFrame2[50], partDist[50], partCnt[50], partMag[50], partOffset[50];
   bool partAngled[50], partCircle[50];
@@ -1152,7 +1152,9 @@ _EXTORNOT TWeapInfo WeapInfo[10];
 _EXTORNOT TCharacterInfo ShipModel;
 _EXTORNOT TSpawnGroup spawnGroup[256];
 //_EXTORNOT int AI_to_CIndex[DINOINFO_MAX];
-_EXTORNOT int TrophyIndex[DINOINFO_MAX];
+//_EXTORNOT int TrophyIndex[DINOINFO_MAX];
+_EXTORNOT TTrophyType trophyType[TROPHY2_COUNT];
+_EXTORNOT int trophyTypeCount;
 _EXTORNOT int ChCount, WCCount, ElCount, SnCount,
           ShotDino, TrophyBody, HunterCount; //HunterCount is for multiplayer, up to 3 others
 _EXTORNOT bool TrophyDisplay;
@@ -1174,6 +1176,8 @@ _EXTORNOT int SurvivalWave;
 _EXTORNOT int SurvivalIndex[128];
 _EXTORNOT int SurvivalIndexCh;
 
+//_EXTORNOT int TropSlotData[128]; //ctype per trophySlot
+//_EXTORNOT int TropSlotDataCh = 0;
 
 
 _EXTORNOT TWCircle       WCircles[2096]; //increased

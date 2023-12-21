@@ -2637,6 +2637,7 @@ void WipeKillTypes() {
 	DinoInfo[TotalC].killTypeCount = 0;
 }
 
+/*
 void WipeTrophyTypes() {
 	if (DinoInfo[TotalC].trophyTypeCount) {
 		for (int i = 0; i < DinoInfo[TotalC].trophyTypeCount; i++) {
@@ -2645,6 +2646,7 @@ void WipeTrophyTypes() {
 	}
 	DinoInfo[TotalC].trophyTypeCount = 0;
 }
+*/
 
 void WipeDeathTypes() {
 	if (DinoInfo[TotalC].deathTypeCount) {
@@ -2835,7 +2837,10 @@ void ReadTrophyTypeInfo(FILE *stream)
 
 	while (fgets(line, 255, stream)) {
 		if (strstr(line, "}")) {
-			DinoInfo[TotalC].trophyTypeCount++;
+			trophyType[trophyTypeCount].ctype = TotalC;
+//			DinoInfo[TotalC].trophyNo[DinoInfo[TotalC].trophyNoCh] = trophyTypeCount;
+			DinoInfo[TotalC].trophyNo++;
+			trophyTypeCount++;
 			break;
 		}
 		value = strstr(line, "=");
@@ -2847,21 +2852,21 @@ void ReadTrophyTypeInfo(FILE *stream)
 		value++;
 
 
-		if (strstr(line, "tropPos")) DinoInfo[TotalC].trophyType[DinoInfo[TotalC].trophyTypeCount].trophyPos = atoi(value);
-		if (strstr(line, "alpha")) DinoInfo[TotalC].trophyType[DinoInfo[TotalC].trophyTypeCount].alpha = atoi(value);
-		if (strstr(line, "beta")) DinoInfo[TotalC].trophyType[DinoInfo[TotalC].trophyTypeCount].beta = atoi(value);
-		if (strstr(line, "gamma")) DinoInfo[TotalC].trophyType[DinoInfo[TotalC].trophyTypeCount].gamma = atoi(value);
-		if (strstr(line, "xoffset")) DinoInfo[TotalC].trophyType[DinoInfo[TotalC].trophyTypeCount].xoffset = atoi(value);
-		if (strstr(line, "yoffset")) DinoInfo[TotalC].trophyType[DinoInfo[TotalC].trophyTypeCount].yoffset = atoi(value);
-		if (strstr(line, "zoffset")) DinoInfo[TotalC].trophyType[DinoInfo[TotalC].trophyTypeCount].zoffset = atoi(value);
-		if (strstr(line, "xscale")) DinoInfo[TotalC].trophyType[DinoInfo[TotalC].trophyTypeCount].xoffsetScale = atoi(value);
-		if (strstr(line, "yscale")) DinoInfo[TotalC].trophyType[DinoInfo[TotalC].trophyTypeCount].yoffsetScale = atoi(value);
-		if (strstr(line, "zscale")) DinoInfo[TotalC].trophyType[DinoInfo[TotalC].trophyTypeCount].zoffsetScale = atoi(value);
-		if (strstr(line, "tropAnim")) DinoInfo[TotalC].trophyType[DinoInfo[TotalC].trophyTypeCount].anim = atoi(value);
-		if (strstr(line, "xdata")) DinoInfo[TotalC].trophyType[DinoInfo[TotalC].trophyTypeCount].xdata = atoi(value);
-		if (strstr(line, "ydata")) DinoInfo[TotalC].trophyType[DinoInfo[TotalC].trophyTypeCount].ydata = atoi(value);
-		if (strstr(line, "zdata")) DinoInfo[TotalC].trophyType[DinoInfo[TotalC].trophyTypeCount].zdata = atoi(value);
-		if (strstr(line, "playAnim")) readBool(value, DinoInfo[TotalC].trophyType[DinoInfo[TotalC].trophyTypeCount].playAnim);
+		if (strstr(line, "tropPos")) trophyType[trophyTypeCount].trophyPos = atoi(value);
+		if (strstr(line, "alpha")) trophyType[trophyTypeCount].alpha = atoi(value);
+		if (strstr(line, "beta")) trophyType[trophyTypeCount].beta = atoi(value);
+		if (strstr(line, "gamma")) trophyType[trophyTypeCount].gamma = atoi(value);
+		if (strstr(line, "xoffset")) trophyType[trophyTypeCount].xoffset = atoi(value);
+		if (strstr(line, "yoffset")) trophyType[trophyTypeCount].yoffset = atoi(value);
+		if (strstr(line, "zoffset")) trophyType[trophyTypeCount].zoffset = atoi(value);
+		if (strstr(line, "xscale")) trophyType[trophyTypeCount].xoffsetScale = atoi(value);
+		if (strstr(line, "yscale")) trophyType[trophyTypeCount].yoffsetScale = atoi(value);
+		if (strstr(line, "zscale")) trophyType[trophyTypeCount].zoffsetScale = atoi(value);
+		if (strstr(line, "tropAnim")) trophyType[trophyTypeCount].anim = atoi(value);
+		if (strstr(line, "xdata")) trophyType[trophyTypeCount].xdata = atoi(value);
+		if (strstr(line, "ydata")) trophyType[trophyTypeCount].ydata = atoi(value);
+		if (strstr(line, "zdata")) trophyType[trophyTypeCount].zdata = atoi(value);
+		if (strstr(line, "playAnim")) readBool(value, trophyType[trophyTypeCount].playAnim);
 		
 
 
@@ -2940,7 +2945,7 @@ void ReadAvoidInfo(FILE *stream)
 
 void ReadCharacterLine(FILE *stream, char *_value, char line[256], bool &spawnInfoOverwrite, bool &spawnGroupOverwrite,
 	bool &idleOverwrite, bool &idle2Overwrite, bool &roarOverwrite, bool &killOverwrite, bool &waterDieOverwrite,
-	bool &deathTypeOverwrite, bool &trophyTypeOverwrite, int &nextTrophySlot, bool &idleGroupOverwrite, bool &idle2GroupOverwrite) {
+	bool &deathTypeOverwrite, bool &trophyTypeOverwrite, bool &idleGroupOverwrite, bool &idle2GroupOverwrite) {
 
 	char *value = _value;
 //	bool overwrite = _overwrite;
@@ -3116,7 +3121,7 @@ void ReadCharacterLine(FILE *stream, char *_value, char line[256], bool &spawnIn
 	if (strstr(line, "packDensity")) DinoInfo[TotalC].packDensity = (float)atof(value);
 
 
-
+	/*
 	if (strstr(line, "trophy")) {
 		if (!DinoInfo[TotalC].trophyCode) {
 			bool temp = FALSE;
@@ -3129,17 +3134,16 @@ void ReadCharacterLine(FILE *stream, char *_value, char line[256], bool &spawnIn
 		}
 		readBool(value, DinoInfo[TotalC].trophySession);
 	}
-	
+	*/
 
 	if (strstr(line, "tropinfo")) {
-
+		/*
 		if (trophyTypeOverwrite) {
 			WipeTrophyTypes();
 			trophyTypeOverwrite = false;
 		}
-
+		*/
 		ReadTrophyTypeInfo(stream);
-		nextTrophySlot++;
 	}
 
 
@@ -3240,7 +3244,7 @@ void ReadCharacterLine(FILE *stream, char *_value, char line[256], bool &spawnIn
 }
 
 
-void ReadCharacters(FILE *stream, int &nextTrophySlot)
+void ReadCharacters(FILE *stream)
 {
 
 
@@ -3283,7 +3287,9 @@ void ReadCharacters(FILE *stream, int &nextTrophySlot)
 				DinoInfo[TotalC].SpawnInfo[0].spawnGroup = 0;
 			}
 
-		  if ((tempProjectName[18] == 'h' && !DinoInfo[TotalC].trophyCode) || (!DinoInfo[TotalC].SpawnInfoCh && TotalC > 0)) { //totalc = 0 for hunter char
+			/*
+			// if ((tempProjectName[18] == 'h' && !DinoInfo[TotalC].trophyNo) || (!DinoInfo[TotalC].SpawnInfoCh && TotalC > 0)) { //totalc = 0 for hunter char
+		  if (tempProjectName[18] != 'h' && !DinoInfo[TotalC].SpawnInfoCh && TotalC > 0) { //totalc = 0 for hunter char
 				  
 			  //WipeRegions();
 			  //WipeAvoidances();
@@ -3294,7 +3300,7 @@ void ReadCharacters(FILE *stream, int &nextTrophySlot)
 				  DinoInfo[TotalC].ShDelta = 0;
 				  break;
 		  }
-
+		  */
 		  
 		  //int _ctype = DinoInfo[TotalC].AI;
 		  //if (mapamb) {
@@ -3337,7 +3343,7 @@ void ReadCharacters(FILE *stream, int &nextTrophySlot)
 
 
 			bool temp, temp3, temp4, temp5, temp6, temp7, temp8, temp9, temp10, temp11, temp12;
-			ReadCharacterLine(stream, value, line, temp, temp3, temp4, temp5, temp6, temp7, temp8, temp9, temp12, nextTrophySlot, temp10, temp11);
+			ReadCharacterLine(stream, value, line, temp, temp3, temp4, temp5, temp6, temp7, temp8, temp9, temp12, temp10, temp11);
 
 			if (strstr(line, "overwrite") || strstr(line, "addition")) {
 
@@ -3455,7 +3461,7 @@ void ReadCharacters(FILE *stream, int &nextTrophySlot)
 
 						ReadCharacterLine(stream, value, line, spawnInfoOverwrite, spawnGroupOverwrite,
 							idleOverwrite, idle2Overwrite, roarOverwrite, killOverwrite,
-							waterDieOverwrite, deathTypeOverwrite, trophyTypeOverwrite, nextTrophySlot,
+							waterDieOverwrite, deathTypeOverwrite, trophyTypeOverwrite,
 							idleGroupOverwrite, idle2GroupOverwrite);
 
 					}
@@ -3992,7 +3998,7 @@ void LoadResourcesScript()
   FILE *stream;
   char line[256];
 
-  int nextTrophySlot = 0;
+//  int nextTrophySlot = 0;
 
   stream = fopen("HUNTDAT\\_res.txt", "r");
   if (!stream) DoHalt("Can't open resources file _res.txt");
@@ -4045,6 +4051,9 @@ void LoadResourcesScript()
 	  break;
   }
 
+  trophyTypeCount = 0;
+
+
   while (fgets( line, 255, stream))
   {
     if (line[0] == '.') break;
@@ -4054,7 +4063,7 @@ void LoadResourcesScript()
 	//if (strstr(line, "hunterinfo")) ReadCharacters(stream, false, nextTrophySlot);
 	//if (strstr(line, "oldambients")) ReadCharacters(stream, false, nextTrophySlot);
 	//if (strstr(line, "corpseambients")) ReadCharacters(stream, false, nextTrophySlot);
-    if (strstr(line, "characters") ) ReadCharacters(stream, nextTrophySlot);
+    if (strstr(line, "characters") ) ReadCharacters(stream);
 	//if (strstr(line, "mapambients")) ReadCharacters(stream, true, nextTrophySlot);
 
   }
