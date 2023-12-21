@@ -399,6 +399,7 @@ typedef struct _TCharacter
 
   bool cpcpAquatic;//checkplacecollisionaquatic - can spawn in water,brach,icth,mosa,fish
 
+
 } TCharacter;
 
 
@@ -616,7 +617,7 @@ typedef struct _TDinoInfo
 //  int trophyLocTotal1;//CURRENTLY IN SAVE FILE
 //  int trophyLocTotal2;//CURRENTLY IN SESSION - REPLACE WITH tlt1 UPON RESTART
   
-  int trophyNo = 0;
+  int trophyNo = 0;//counts the number of trophy slots
 //  int tCounter; // used to count off trophy locs
 
   int waterDieAnim[32];

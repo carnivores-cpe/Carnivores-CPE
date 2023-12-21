@@ -8207,7 +8207,7 @@ void PlaceTrophy()
 
 		//MessageBox(hwndMain, c.tostring(), "boring", IDOK);
 
-		if (!TrophyRoom2.Body[c].ctype) continue;
+		//if (!TrophyRoom2.Body[c].ctype) continue;
 
 			//do this in addshiptask too
 

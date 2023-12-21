@@ -2255,7 +2255,7 @@ void ProcessTrophy()
 
 	//Characters[c].Phase = 1;
 
-	if (VectorLength(SubVectors(p, PlayerPos)) < 148) {
+	if (VectorLength(SubVectors(p, PlayerPos)) < 148 && TrophyRoom2.Body[c].ctype) {
       TrophyBody = c;
 	  TrophyDisplayBody.ctype = TrophyRoom2.Body[c].ctype;
 	  TrophyDisplayBody.scale = TrophyRoom2.Body[c].scale;
@@ -2542,11 +2542,12 @@ void RemoveCurrentTrophy()
   PrintLog(DinoInfo[TrophyRoom2.Body[TrophyBody].ctype].Name);
   PrintLog("\n");
 
+  TrophyRoom2.Body[TrophyBody] = {};
+  Characters[TrophyBody] = {};
+
+  /*
   for (int c=0; c<TrophyBody; c++)
     if (TrophyRoom2.Body[c].ctype) p++;
-
-
-  TrophyRoom2.Body[TrophyBody].ctype = 0;
 
   if (TrophyMode)
   {
@@ -2555,7 +2556,7 @@ void RemoveCurrentTrophy()
            (250-p) * sizeof(TCharacter) );
     ChCount--;
   }
-
+*/
   TrophyTime = 0;
   TrophyBody = -1;
 }
