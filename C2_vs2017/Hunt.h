@@ -399,7 +399,7 @@ typedef struct _TCharacter
 
   bool cpcpAquatic;//checkplacecollisionaquatic - can spawn in water,brach,icth,mosa,fish
 
-  int tropIndex;
+//  int tropIndex;
 
 } TCharacter;
 

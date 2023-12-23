@@ -8212,7 +8212,7 @@ void PlaceTrophy()
 			//do this in addshiptask too
 
 		Characters[ChCount].CType = TrophyRoom2.Body[c].ctype;
-		Characters[ChCount].tropIndex = c;
+//		Characters[ChCount].tropIndex = c;
 
 //		if (DinoInfo[Characters[ChCount].CType].tCounter >= DinoInfo[TrophyIndex[TrophyRoom2.Body[c].ctype]].trophyTypeCount) continue;
 		

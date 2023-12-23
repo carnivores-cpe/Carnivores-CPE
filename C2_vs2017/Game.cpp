@@ -2255,22 +2255,22 @@ void ProcessTrophy()
 
 	//Characters[c].Phase = 1;
 
-	if (VectorLength(SubVectors(p, PlayerPos)) < 148 && TrophyRoom2.Body[c].ctype) {
-      TrophyBody = c;
-	  TrophyDisplayBody.ctype = TrophyRoom2.Body[Characters[c].tropIndex].ctype;
-	  TrophyDisplayBody.scale = TrophyRoom2.Body[Characters[c].tropIndex].scale;
-	  TrophyDisplayBody.weapon = TrophyRoom2.Body[Characters[c].tropIndex].weapon;
-	  TrophyDisplayBody.score = TrophyRoom2.Body[Characters[c].tropIndex].score;
-	  TrophyDisplayBody.phase = TrophyRoom2.Body[Characters[c].tropIndex].phase;
- 	  TrophyDisplayBody.time = TrophyRoom2.Body[Characters[c].tropIndex].time;
-	  TrophyDisplayBody.date = TrophyRoom2.Body[Characters[c].tropIndex].date;
-	  TrophyDisplayBody.range = TrophyRoom2.Body[Characters[c].tropIndex].range;
+	if (VectorLength(SubVectors(p, PlayerPos)) < 148 && TrophyRoom2.Body[Characters[c].State].ctype) {
+      TrophyBody = Characters[c].State;
+	  TrophyDisplayBody.ctype = TrophyRoom2.Body[Characters[c].State].ctype;
+	  TrophyDisplayBody.scale = TrophyRoom2.Body[Characters[c].State].scale;
+	  TrophyDisplayBody.weapon = TrophyRoom2.Body[Characters[c].State].weapon;
+	  TrophyDisplayBody.score = TrophyRoom2.Body[Characters[c].State].score;
+	  TrophyDisplayBody.phase = TrophyRoom2.Body[Characters[c].State].phase;
+ 	  TrophyDisplayBody.time = TrophyRoom2.Body[Characters[c].State].time;
+	  TrophyDisplayBody.date = TrophyRoom2.Body[Characters[c].State].date;
+	  TrophyDisplayBody.range = TrophyRoom2.Body[Characters[c].State].range;
 	}
   }
 
-  if (TrophyBody==-1) return;
+  //if (TrophyBody==-1) return;
 
-  TrophyBody = Characters[TrophyBody].State;
+  //TrophyBody = Characters[TrophyBody].State;
 }
 
 void RespawnSnow(int s, BOOL rand)
