@@ -40,12 +40,12 @@ c:\users\ojm14\documents\github\carnivores-cpe\c2_vs2017\characters.cpp(6028): w
 c:\users\ojm14\documents\github\carnivores-cpe\c2_vs2017\characters.cpp(6044): warning C4305: 'initializing': truncation from 'double' to 'float'
 c:\users\ojm14\documents\github\carnivores-cpe\c2_vs2017\characters.cpp(6934): warning C4244: '-=': conversion from 'double' to 'float', possible loss of data
 c:\users\ojm14\documents\github\carnivores-cpe\c2_vs2017\characters.cpp(7787): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
-c:\users\ojm14\documents\github\carnivores-cpe\c2_vs2017\characters.cpp(8245): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
-c:\users\ojm14\documents\github\carnivores-cpe\c2_vs2017\characters.cpp(8247): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
-c:\users\ojm14\documents\github\carnivores-cpe\c2_vs2017\characters.cpp(8301): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
-c:\users\ojm14\documents\github\carnivores-cpe\c2_vs2017\characters.cpp(8304): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
-c:\users\ojm14\documents\github\carnivores-cpe\c2_vs2017\characters.cpp(8764): warning C4244: 'initializing': conversion from 'int' to 'float', possible loss of data
-c:\users\ojm14\documents\github\carnivores-cpe\c2_vs2017\characters.cpp(8785): warning C4244: 'initializing': conversion from 'int' to 'float', possible loss of data
+c:\users\ojm14\documents\github\carnivores-cpe\c2_vs2017\characters.cpp(8246): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+c:\users\ojm14\documents\github\carnivores-cpe\c2_vs2017\characters.cpp(8248): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+c:\users\ojm14\documents\github\carnivores-cpe\c2_vs2017\characters.cpp(8302): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+c:\users\ojm14\documents\github\carnivores-cpe\c2_vs2017\characters.cpp(8305): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+c:\users\ojm14\documents\github\carnivores-cpe\c2_vs2017\characters.cpp(8765): warning C4244: 'initializing': conversion from 'int' to 'float', possible loss of data
+c:\users\ojm14\documents\github\carnivores-cpe\c2_vs2017\characters.cpp(8786): warning C4244: 'initializing': conversion from 'int' to 'float', possible loss of data
   Game.cpp
 c:\users\ojm14\documents\github\carnivores-cpe\c2_vs2017\game.cpp(50): warning C4101: 'temp': unreferenced local variable
 c:\users\ojm14\documents\github\carnivores-cpe\c2_vs2017\game.cpp(175): warning C4244: 'initializing': conversion from 'float' to 'int', possible loss of data
@@ -175,13 +175,13 @@ c:\users\ojm14\documents\github\carnivores-cpe\c2_vs2017\resources.cpp(2722): wa
 c:\users\ojm14\documents\github\carnivores-cpe\c2_vs2017\resources.cpp(2758): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
 c:\users\ojm14\documents\github\carnivores-cpe\c2_vs2017\resources.cpp(2759): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
   Generating code
-c:\users\ojm14\documents\github\carnivores-cpe\c2_vs2017\renderasm.cpp(4269): warning C4731: 'RenderSkyLineFadeLo': frame pointer register 'ebp' modified by inline assembly code
 c:\users\ojm14\documents\github\carnivores-cpe\c2_vs2017\renderasm.cpp(4320): warning C4731: 'RenderSkyLineFade': frame pointer register 'ebp' modified by inline assembly code
-c:\users\ojm14\documents\github\carnivores-cpe\c2_vs2017\renderasm.cpp(4291): warning C4731: 'RenderSkyLineFadeLo': frame pointer register 'ebp' modified by inline assembly code
 c:\users\ojm14\documents\github\carnivores-cpe\c2_vs2017\renderasm.cpp(4341): warning C4731: 'RenderSkyLineFade': frame pointer register 'ebp' modified by inline assembly code
-c:\users\ojm14\documents\github\carnivores-cpe\c2_vs2017\renderasm.cpp(4172): warning C4731: 'RenderSkyLine': frame pointer register 'ebp' modified by inline assembly code
 c:\users\ojm14\documents\github\carnivores-cpe\c2_vs2017\renderasm.cpp(4217): warning C4731: 'RenderSkyLineLo': frame pointer register 'ebp' modified by inline assembly code
+c:\users\ojm14\documents\github\carnivores-cpe\c2_vs2017\renderasm.cpp(4269): warning C4731: 'RenderSkyLineFadeLo': frame pointer register 'ebp' modified by inline assembly code
 c:\users\ojm14\documents\github\carnivores-cpe\c2_vs2017\renderasm.cpp(4239): warning C4731: 'RenderSkyLineLo': frame pointer register 'ebp' modified by inline assembly code
+c:\users\ojm14\documents\github\carnivores-cpe\c2_vs2017\renderasm.cpp(4291): warning C4731: 'RenderSkyLineFadeLo': frame pointer register 'ebp' modified by inline assembly code
+c:\users\ojm14\documents\github\carnivores-cpe\c2_vs2017\renderasm.cpp(4172): warning C4731: 'RenderSkyLine': frame pointer register 'ebp' modified by inline assembly code
 c:\users\ojm14\documents\github\carnivores-cpe\c2_vs2017\renderasm.cpp(4193): warning C4731: 'RenderSkyLine': frame pointer register 'ebp' modified by inline assembly code
 c:\users\ojm14\documents\github\carnivores-cpe\c2_vs2017\renderasm.cpp(2986): warning C4731: 'HLineTxModel75': frame pointer register 'ebp' modified by inline assembly code
 c:\users\ojm14\documents\github\carnivores-cpe\c2_vs2017\renderasm.cpp(3030): warning C4731: 'HLineTxModel75': frame pointer register 'ebp' modified by inline assembly code
@@ -189,27 +189,27 @@ c:\users\ojm14\documents\github\carnivores-cpe\c2_vs2017\renderasm.cpp(2772): wa
 c:\users\ojm14\documents\github\carnivores-cpe\c2_vs2017\renderasm.cpp(2811): warning C4731: 'HLineTxModel50': frame pointer register 'ebp' modified by inline assembly code
 c:\users\ojm14\documents\github\carnivores-cpe\c2_vs2017\renderasm.cpp(2558): warning C4731: 'HLineTxModel25': frame pointer register 'ebp' modified by inline assembly code
 c:\users\ojm14\documents\github\carnivores-cpe\c2_vs2017\renderasm.cpp(2598): warning C4731: 'HLineTxModel25': frame pointer register 'ebp' modified by inline assembly code
-c:\users\ojm14\documents\github\carnivores-cpe\c2_vs2017\renderasm.cpp(2222): warning C4731: 'HLineTxModel3': frame pointer register 'ebp' modified by inline assembly code
-c:\users\ojm14\documents\github\carnivores-cpe\c2_vs2017\renderasm.cpp(2281): warning C4731: 'HLineTxModel3': frame pointer register 'ebp' modified by inline assembly code
-c:\users\ojm14\documents\github\carnivores-cpe\c2_vs2017\renderasm.cpp(1992): warning C4731: 'HLineTxModel2': frame pointer register 'ebp' modified by inline assembly code
-c:\users\ojm14\documents\github\carnivores-cpe\c2_vs2017\renderasm.cpp(2051): warning C4731: 'HLineTxModel2': frame pointer register 'ebp' modified by inline assembly code
 c:\users\ojm14\documents\github\carnivores-cpe\c2_vs2017\renderasm.cpp(2355): warning C4731: 'HLineTxModelBMP': frame pointer register 'ebp' modified by inline assembly code
 c:\users\ojm14\documents\github\carnivores-cpe\c2_vs2017\renderasm.cpp(2384): warning C4731: 'HLineTxModelBMP': frame pointer register 'ebp' modified by inline assembly code
+c:\users\ojm14\documents\github\carnivores-cpe\c2_vs2017\renderasm.cpp(1992): warning C4731: 'HLineTxModel2': frame pointer register 'ebp' modified by inline assembly code
+c:\users\ojm14\documents\github\carnivores-cpe\c2_vs2017\renderasm.cpp(2222): warning C4731: 'HLineTxModel3': frame pointer register 'ebp' modified by inline assembly code
+c:\users\ojm14\documents\github\carnivores-cpe\c2_vs2017\renderasm.cpp(2051): warning C4731: 'HLineTxModel2': frame pointer register 'ebp' modified by inline assembly code
+c:\users\ojm14\documents\github\carnivores-cpe\c2_vs2017\renderasm.cpp(2281): warning C4731: 'HLineTxModel3': frame pointer register 'ebp' modified by inline assembly code
 c:\users\ojm14\documents\github\carnivores-cpe\c2_vs2017\renderasm.cpp(1727): warning C4731: 'HLineTxModel': frame pointer register 'ebp' modified by inline assembly code
 c:\users\ojm14\documents\github\carnivores-cpe\c2_vs2017\renderasm.cpp(1823): warning C4731: 'HLineTxModel': frame pointer register 'ebp' modified by inline assembly code
 c:\users\ojm14\documents\github\carnivores-cpe\c2_vs2017\renderasm.cpp(1391): warning C4731: 'HLineTxC': frame pointer register 'ebp' modified by inline assembly code
-c:\users\ojm14\documents\github\carnivores-cpe\c2_vs2017\renderasm.cpp(1397): warning C4731: 'HLineTxC': frame pointer register 'ebp' modified by inline assembly code
-c:\users\ojm14\documents\github\carnivores-cpe\c2_vs2017\renderasm.cpp(1480): warning C4731: 'HLineTxC': frame pointer register 'ebp' modified by inline assembly code
-c:\users\ojm14\documents\github\carnivores-cpe\c2_vs2017\renderasm.cpp(1485): warning C4731: 'HLineTxC': frame pointer register 'ebp' modified by inline assembly code
-c:\users\ojm14\documents\github\carnivores-cpe\c2_vs2017\renderasm.cpp(1545): warning C4731: 'HLineTxC': frame pointer register 'ebp' modified by inline assembly code
-c:\users\ojm14\documents\github\carnivores-cpe\c2_vs2017\renderasm.cpp(1556): warning C4731: 'HLineTxC': frame pointer register 'ebp' modified by inline assembly code
 c:\users\ojm14\documents\github\carnivores-cpe\c2_vs2017\renderasm.cpp(1159): warning C4731: 'HLineTxB': frame pointer register 'ebp' modified by inline assembly code
-c:\users\ojm14\documents\github\carnivores-cpe\c2_vs2017\renderasm.cpp(931): warning C4731: 'HLineTxGOURAUD': frame pointer register 'ebp' modified by inline assembly code
+c:\users\ojm14\documents\github\carnivores-cpe\c2_vs2017\renderasm.cpp(1397): warning C4731: 'HLineTxC': frame pointer register 'ebp' modified by inline assembly code
 c:\users\ojm14\documents\github\carnivores-cpe\c2_vs2017\renderasm.cpp(1165): warning C4731: 'HLineTxB': frame pointer register 'ebp' modified by inline assembly code
+c:\users\ojm14\documents\github\carnivores-cpe\c2_vs2017\renderasm.cpp(1480): warning C4731: 'HLineTxC': frame pointer register 'ebp' modified by inline assembly code
 c:\users\ojm14\documents\github\carnivores-cpe\c2_vs2017\renderasm.cpp(1250): warning C4731: 'HLineTxB': frame pointer register 'ebp' modified by inline assembly code
+c:\users\ojm14\documents\github\carnivores-cpe\c2_vs2017\renderasm.cpp(1485): warning C4731: 'HLineTxC': frame pointer register 'ebp' modified by inline assembly code
 c:\users\ojm14\documents\github\carnivores-cpe\c2_vs2017\renderasm.cpp(1255): warning C4731: 'HLineTxB': frame pointer register 'ebp' modified by inline assembly code
+c:\users\ojm14\documents\github\carnivores-cpe\c2_vs2017\renderasm.cpp(1545): warning C4731: 'HLineTxC': frame pointer register 'ebp' modified by inline assembly code
 c:\users\ojm14\documents\github\carnivores-cpe\c2_vs2017\renderasm.cpp(1317): warning C4731: 'HLineTxB': frame pointer register 'ebp' modified by inline assembly code
+c:\users\ojm14\documents\github\carnivores-cpe\c2_vs2017\renderasm.cpp(1556): warning C4731: 'HLineTxC': frame pointer register 'ebp' modified by inline assembly code
 c:\users\ojm14\documents\github\carnivores-cpe\c2_vs2017\renderasm.cpp(1328): warning C4731: 'HLineTxB': frame pointer register 'ebp' modified by inline assembly code
+c:\users\ojm14\documents\github\carnivores-cpe\c2_vs2017\renderasm.cpp(931): warning C4731: 'HLineTxGOURAUD': frame pointer register 'ebp' modified by inline assembly code
 c:\users\ojm14\documents\github\carnivores-cpe\c2_vs2017\renderasm.cpp(937): warning C4731: 'HLineTxGOURAUD': frame pointer register 'ebp' modified by inline assembly code
 c:\users\ojm14\documents\github\carnivores-cpe\c2_vs2017\renderasm.cpp(1023): warning C4731: 'HLineTxGOURAUD': frame pointer register 'ebp' modified by inline assembly code
 c:\users\ojm14\documents\github\carnivores-cpe\c2_vs2017\renderasm.cpp(1028): warning C4731: 'HLineTxGOURAUD': frame pointer register 'ebp' modified by inline assembly code
@@ -217,8 +217,8 @@ c:\users\ojm14\documents\github\carnivores-cpe\c2_vs2017\renderasm.cpp(1090): wa
 c:\users\ojm14\documents\github\carnivores-cpe\c2_vs2017\renderasm.cpp(1102): warning C4731: 'HLineTxGOURAUD': frame pointer register 'ebp' modified by inline assembly code
 c:\users\ojm14\documents\github\carnivores-cpe\c2_vs2017\renderasm.cpp(741): warning C4731: 'HLineTBGlass25': frame pointer register 'ebp' modified by inline assembly code
 c:\users\ojm14\documents\github\carnivores-cpe\c2_vs2017\renderasm.cpp(824): warning C4731: 'HLineTBGlass25': frame pointer register 'ebp' modified by inline assembly code
-c:\users\ojm14\documents\github\carnivores-cpe\c2_vs2017\renderasm.cpp(858): warning C4731: 'HLineTBGlass25': frame pointer register 'ebp' modified by inline assembly code
 c:\users\ojm14\documents\github\carnivores-cpe\c2_vs2017\renderasm.cpp(526): warning C4731: 'HLineTDGlass75': frame pointer register 'ebp' modified by inline assembly code
+c:\users\ojm14\documents\github\carnivores-cpe\c2_vs2017\renderasm.cpp(858): warning C4731: 'HLineTBGlass25': frame pointer register 'ebp' modified by inline assembly code
 c:\users\ojm14\documents\github\carnivores-cpe\c2_vs2017\renderasm.cpp(609): warning C4731: 'HLineTDGlass75': frame pointer register 'ebp' modified by inline assembly code
 c:\users\ojm14\documents\github\carnivores-cpe\c2_vs2017\renderasm.cpp(644): warning C4731: 'HLineTDGlass75': frame pointer register 'ebp' modified by inline assembly code
 c:\users\ojm14\documents\github\carnivores-cpe\c2_vs2017\renderasm.cpp(318): warning C4731: 'HLineTDGlass25': frame pointer register 'ebp' modified by inline assembly code

@@ -2257,14 +2257,14 @@ void ProcessTrophy()
 
 	if (VectorLength(SubVectors(p, PlayerPos)) < 148 && TrophyRoom2.Body[c].ctype) {
       TrophyBody = c;
-	  TrophyDisplayBody.ctype = TrophyRoom2.Body[c].ctype;
-	  TrophyDisplayBody.scale = TrophyRoom2.Body[c].scale;
-	  TrophyDisplayBody.weapon = TrophyRoom2.Body[c].weapon;
-	  TrophyDisplayBody.score = TrophyRoom2.Body[c].score;
-	  TrophyDisplayBody.phase = TrophyRoom2.Body[c].phase;
- 	  TrophyDisplayBody.time = TrophyRoom2.Body[c].time;
-	  TrophyDisplayBody.date = TrophyRoom2.Body[c].date;
-	  TrophyDisplayBody.range = TrophyRoom2.Body[c].range;
+	  TrophyDisplayBody.ctype = TrophyRoom2.Body[Characters[c].tropIndex].ctype;
+	  TrophyDisplayBody.scale = TrophyRoom2.Body[Characters[c].tropIndex].scale;
+	  TrophyDisplayBody.weapon = TrophyRoom2.Body[Characters[c].tropIndex].weapon;
+	  TrophyDisplayBody.score = TrophyRoom2.Body[Characters[c].tropIndex].score;
+	  TrophyDisplayBody.phase = TrophyRoom2.Body[Characters[c].tropIndex].phase;
+ 	  TrophyDisplayBody.time = TrophyRoom2.Body[Characters[c].tropIndex].time;
+	  TrophyDisplayBody.date = TrophyRoom2.Body[Characters[c].tropIndex].date;
+	  TrophyDisplayBody.range = TrophyRoom2.Body[Characters[c].tropIndex].range;
 	}
   }
 
@@ -2542,21 +2542,19 @@ void RemoveCurrentTrophy()
   PrintLog(DinoInfo[TrophyRoom2.Body[TrophyBody].ctype].Name);
   PrintLog("\n");
 
-  TrophyRoom2.Body[TrophyBody] = {};
-  Characters[TrophyBody] = {};
-
-  /*
+  
   for (int c=0; c<TrophyBody; c++)
     if (TrophyRoom2.Body[c].ctype) p++;
 
-  if (TrophyMode)
-  {
-    memcpy(&Characters[p],
-           &Characters[p+1],
-           (250-p) * sizeof(TCharacter) );
-    ChCount--;
-  }
-*/
+  Characters[p] = {};
+  TrophyRoom2.Body[TrophyBody] = {};
+
+  memcpy(&Characters[p],
+         &Characters[p+1],
+         (250-p) * sizeof(TCharacter) );
+  ChCount--;
+
+  
   TrophyTime = 0;
   TrophyBody = -1;
 }
