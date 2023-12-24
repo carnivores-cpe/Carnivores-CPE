@@ -569,7 +569,8 @@ typedef struct _TDinoInfo
   float Mass, Length, Radius,
         SmellK, HearK, LookK,
         ShDelta;
-  int   Scale0, ScaleA, BaseScore;
+  int   Scale0, ScaleA;
+  float	  BaseScore;
 
   BOOL fearCall[64];
   BOOL Aquatic;

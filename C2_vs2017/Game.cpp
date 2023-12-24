@@ -632,7 +632,7 @@ void AddShipTask(int cindex)
 
   //t += DinoInfo[Characters[cindex].CType].trophyFirstSlot;
 
-  float score = (float)DinoInfo[Characters[cindex].CType].BaseScore;
+  float score = DinoInfo[Characters[cindex].CType].BaseScore;
 
   if (TrophyRoom.Last.success>1)
     score*=(1.f + TrophyRoom.Last.success / 10.f);

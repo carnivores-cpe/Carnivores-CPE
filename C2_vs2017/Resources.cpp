@@ -2957,7 +2957,7 @@ void ReadCharacterLine(FILE *stream, char *_value, char line[256], bool &spawnIn
 	if (strstr(line, "length")) DinoInfo[TotalC].Length = (float)atof(value);
 	if (strstr(line, "radius")) DinoInfo[TotalC].Radius = (float)atof(value);
 	if (strstr(line, "health")) DinoInfo[TotalC].Health0 = atoi(value);
-	if (strstr(line, "basescore")) DinoInfo[TotalC].BaseScore = atoi(value);
+	if (strstr(line, "basescore")) DinoInfo[TotalC].BaseScore = (float)atof(value);
 
 	if (strstr(line, "ai")) DinoInfo[TotalC].Clone = atoi(value);
 
