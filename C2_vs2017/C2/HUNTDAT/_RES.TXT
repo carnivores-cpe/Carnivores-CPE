@@ -171,6 +171,40 @@ ymax = 691
 
 } //==== end of spawntable =========//
 
+
+trophytable {
+
+ // === parasaur
+ trophygroup {
+  tropinfo{
+   tropPos = 0
+   alpha = 340
+   tropAnim = 6
+   xoffset = -250
+   xscale = -165
+   zoffset = -180
+   zscale = 60
+   xdata = -500
+   zdata = 1250
+  }
+  tropinfo{
+   tropPos = 0
+   alpha = 150
+   tropAnim = 7
+   xoffset = 180
+   xscale = 100
+   zoffset = 50
+   xdata = 250
+   zdata = 1250
+  }
+ }
+
+
+} //==== end of trophytable =========//
+
+
+
+
 weapons {
 {
  name  = 'Pistol'
@@ -433,6 +467,7 @@ idlegroup{
  name      = 'Parasaurolophus'
  file      = 'par9.car'
  ai        = 10
+ tropgroup = 0
  callNo = 0
 overwrite char0 {
  radar = TRUE
@@ -468,27 +503,6 @@ spawninfo{
  aggress = 0
  killdist = 0
  trophy  = TRUE
-tropinfo{
- tropPos = 0
-  alpha = 340
-  tropAnim = 6
-  xoffset = -250
-  xscale = -165
-  zoffset = -180
-  zscale = 60
-  xdata = -500
-  zdata = 1250
- }
- tropinfo{
- tropPos = 0
-  alpha = 150
-  tropAnim = 7
-  xoffset = 180
-  xscale = 100
-  zoffset = 50
-  xdata = 250
-  zdata = 1250
- }
  runAnim = 1
  walkAnim = 0
 idlegroup{

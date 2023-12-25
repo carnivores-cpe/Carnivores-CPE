@@ -624,7 +624,11 @@ void AddShipTask(int cindex)
   int t=0;
   bool foundSpareSlot = false;
   for (t = 0; t < TROPHY2_COUNT - 1; t++) {
-	  if (!TrophyRoom2.Body[t].ctype && trophyType[t].ctype == cptr->CType) {
+	  bool validCType = false;
+	  for (int i = 0; i < trophyType[t].ctypeCh; i++) {
+		  if (trophyType[t].ctype[i] == cptr->CType) validCType = true;
+	  }
+	  if (!TrophyRoom2.Body[t].ctype && validCType) {
 		  foundSpareSlot = true;
 		  break;
 	  }
@@ -1979,7 +1983,7 @@ void registerDamage(int Dino) {
 
 	if (!Characters[Dino].Health)
 	{
-		if (DinoInfo[Characters[Dino].CType].trophyNo && !Multiplayer && !SurvivalMode) //No trophies in multiplayer for now - update this at later date?
+		if (DinoInfo[Characters[Dino].CType].trophy && !Multiplayer && !SurvivalMode) //No trophies in multiplayer for now - update this at later date?
 		{
 			TrophyRoom.Last.success++;
 			AddShipTask(Dino);

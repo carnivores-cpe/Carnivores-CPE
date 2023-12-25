@@ -521,7 +521,9 @@ typedef struct _TDinoKill
 
 typedef struct _TTrophyType
 {
-	int ctype = -1;
+	int group = -1;
+	int ctype[TROPHY2_COUNT];
+	int ctypeCh = 0;
 	int xoffset, yoffset, zoffset;
 	int xoffsetScale, yoffsetScale, zoffsetScale;
 	int xdata, ydata, zdata;
@@ -619,7 +621,7 @@ typedef struct _TDinoInfo
 //  int trophyLocTotal1;//CURRENTLY IN SAVE FILE
 //  int trophyLocTotal2;//CURRENTLY IN SESSION - REPLACE WITH tlt1 UPON RESTART
   
-  int trophyNo = 0;//counts the number of trophy slots
+  bool trophy = false;//counts the number of trophy slots
 //  int tCounter; // used to count off trophy locs
 
   int waterDieAnim[32];
@@ -1156,6 +1158,7 @@ _EXTORNOT TCharacterInfo ShipModel;
 _EXTORNOT TSpawnGroup spawnGroup[256];
 //_EXTORNOT int AI_to_CIndex[DINOINFO_MAX];
 //_EXTORNOT int TrophyIndex[DINOINFO_MAX];
+_EXTORNOT int trophyGroupCount;
 _EXTORNOT TTrophyType trophyType[TROPHY2_COUNT];
 _EXTORNOT int trophyTypeCount;
 _EXTORNOT int ChCount, WCCount, ElCount, SnCount,
