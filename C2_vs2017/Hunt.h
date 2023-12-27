@@ -10,7 +10,7 @@
 #pragma comment (lib, "Mswsock.lib")
 #pragma comment (lib, "AdvApi32.lib")
 
-#define MODDERS_EDITION_VERSION_ID	5 //1.0.5
+#define MODDERS_EDITION_VERSION_ID	6 //1.0.6
 
 #define DEFAULT_BUFLEN 512
 #define DEFAULT_PORT "1986"

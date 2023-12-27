@@ -44,8 +44,9 @@ c:\users\ojm14\documents\github\carnivores-cpe\c2_vs2017\characters.cpp(8246): w
 c:\users\ojm14\documents\github\carnivores-cpe\c2_vs2017\characters.cpp(8248): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
 c:\users\ojm14\documents\github\carnivores-cpe\c2_vs2017\characters.cpp(8302): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
 c:\users\ojm14\documents\github\carnivores-cpe\c2_vs2017\characters.cpp(8305): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
-c:\users\ojm14\documents\github\carnivores-cpe\c2_vs2017\characters.cpp(8765): warning C4244: 'initializing': conversion from 'int' to 'float', possible loss of data
-c:\users\ojm14\documents\github\carnivores-cpe\c2_vs2017\characters.cpp(8786): warning C4244: 'initializing': conversion from 'int' to 'float', possible loss of data
+c:\users\ojm14\documents\github\carnivores-cpe\c2_vs2017\characters.cpp(8789): warning C4244: 'initializing': conversion from 'int' to 'float', possible loss of data
+c:\users\ojm14\documents\github\carnivores-cpe\c2_vs2017\characters.cpp(8814): warning C4244: 'initializing': conversion from 'int' to 'float', possible loss of data
+c:\users\ojm14\documents\github\carnivores-cpe\c2_vs2017\characters.cpp(8907): warning C4244: 'initializing': conversion from 'int' to 'float', possible loss of data
   Game.cpp
 c:\users\ojm14\documents\github\carnivores-cpe\c2_vs2017\game.cpp(50): warning C4101: 'temp': unreferenced local variable
 c:\users\ojm14\documents\github\carnivores-cpe\c2_vs2017\game.cpp(175): warning C4244: 'initializing': conversion from 'float' to 'int', possible loss of data
@@ -153,15 +154,15 @@ c:\users\ojm14\documents\github\carnivores-cpe\c2_vs2017\resources.cpp(64): warn
 c:\users\ojm14\documents\github\carnivores-cpe\c2_vs2017\resources.cpp(65): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
 c:\users\ojm14\documents\github\carnivores-cpe\c2_vs2017\resources.cpp(569): warning C4018: '<': signed/unsigned mismatch
 c:\users\ojm14\documents\github\carnivores-cpe\c2_vs2017\resources.cpp(2120): warning C4101: 'value': unreferenced local variable
-c:\users\ojm14\documents\github\carnivores-cpe\c2_vs2017\resources.cpp(2194): warning C4101: 'value': unreferenced local variable
-c:\users\ojm14\documents\github\carnivores-cpe\c2_vs2017\resources.cpp(2248): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
-c:\users\ojm14\documents\github\carnivores-cpe\c2_vs2017\resources.cpp(2255): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
-c:\users\ojm14\documents\github\carnivores-cpe\c2_vs2017\resources.cpp(2261): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
-c:\users\ojm14\documents\github\carnivores-cpe\c2_vs2017\resources.cpp(2799): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
-c:\users\ojm14\documents\github\carnivores-cpe\c2_vs2017\resources.cpp(2800): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
-c:\users\ojm14\documents\github\carnivores-cpe\c2_vs2017\resources.cpp(2836): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
-c:\users\ojm14\documents\github\carnivores-cpe\c2_vs2017\resources.cpp(2837): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+c:\users\ojm14\documents\github\carnivores-cpe\c2_vs2017\resources.cpp(2489): warning C4101: 'value': unreferenced local variable
+c:\users\ojm14\documents\github\carnivores-cpe\c2_vs2017\resources.cpp(2543): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+c:\users\ojm14\documents\github\carnivores-cpe\c2_vs2017\resources.cpp(2550): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+c:\users\ojm14\documents\github\carnivores-cpe\c2_vs2017\resources.cpp(2556): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+c:\users\ojm14\documents\github\carnivores-cpe\c2_vs2017\resources.cpp(3063): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+c:\users\ojm14\documents\github\carnivores-cpe\c2_vs2017\resources.cpp(3064): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+c:\users\ojm14\documents\github\carnivores-cpe\c2_vs2017\resources.cpp(3100): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+c:\users\ojm14\documents\github\carnivores-cpe\c2_vs2017\resources.cpp(3101): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
   Generating code
-  All 361 functions were compiled because no usable IPDB/IOBJ from previous compilation was found.
+  All 369 functions were compiled because no usable IPDB/IOBJ from previous compilation was found.
   Finished generating code
   C2.vcxproj -> C:\Users\ojm14\Documents\GitHub\Carnivores-CPE\C2_vs2017\Release D3D\v_d3d.ren

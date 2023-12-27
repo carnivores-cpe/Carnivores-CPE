@@ -2246,6 +2246,8 @@ void ReadSpawnInfoPack(FILE *stream)
 	char *value;
 	char line[256];
 
+
+
 	while (fgets(line, 255, stream)) {
 		if (strstr(line, "}")) {
 			packType[packTypeCount].SpawnInfoCh++;
@@ -2289,14 +2291,16 @@ void ReadPackMember(FILE *stream) {
 }
 
 
-void ReadPackTableLine(FILE *stream, char *_value, char line[256], bool &spawnInfoOverwrite, bool &memberOverwrite) {
+void ReadPackTableLine(FILE *stream, char *_value, char line[256], bool &spawnIOverwrite, bool &memberOverwrite) {
+
 
 	char *value = _value;
 
 	if (strstr(line, "spawninfo")) {
-			if (spawnInfoOverwrite) {
+			if (spawnIOverwrite) {
+//				MessageBox(hwndMain, line, "Woah wee", IDOK);
 				WipeSpawnInfoPack();
-				spawnInfoOverwrite = false;
+				spawnIOverwrite = false;
 			}
 			ReadSpawnInfoPack(stream);
 	}
@@ -2360,6 +2364,13 @@ void ReadPackTable(FILE *stream)
 					packTypeCount++;
 					break;
 				}
+
+				value = strstr(line, "=");
+				value++;
+				bool temp1, temp2;
+				temp1 = false;
+				temp2 = false;
+				ReadPackTableLine(stream, value, line, temp1, temp2);
 
 				if (strstr(line, "overwrite") || strstr(line, "addition")) {
 
@@ -2463,13 +2474,6 @@ void ReadPackTable(FILE *stream)
 					else {
 						SkipSector(stream);
 					}
-				} else {
-
-					value = strstr(line, "=");
-					value++;
-					bool temp, temp2;
-					ReadPackTableLine(stream, value, line, temp, temp2);
-
 				}
 
 			}
@@ -2845,6 +2849,8 @@ void ReadSpawnTable(FILE *stream)
 				}
 				else {
 					bool temp, temp2;
+					temp = false;
+					temp2 = false;
 					value++;
 					ReadSpawnTableLine(stream, value, line, temp, temp2);
 

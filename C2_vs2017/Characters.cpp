@@ -8743,7 +8743,9 @@ void PlaceCharacters()
 
 
 	if (!RestartMode) {
-	
+
+
+
 		for (int di = 0; di < DINOINFO_MAX; di++) {
 			if (DinoInfo[di].SpawnInfoCh) {
 				
@@ -8762,12 +8764,13 @@ void PlaceCharacters()
 		}
 
 		for (int p = 0; p < packTypeCount; p++) {
-			if (packType[p].SpawnInfoCh)
+			if (packType[p].SpawnInfoCh){
 				for (int si = 0; si < packType[p].SpawnInfoCh; si++) {
 					spawnGroup[packType[p].SpawnInfo[si].spawnGroup].packIndex[spawnGroup[packType[p].SpawnInfo[si].spawnGroup].packIndexCh] = p;
 					spawnGroup[packType[p].SpawnInfo[si].spawnGroup].spawnInfoIndex[spawnGroup[packType[p].SpawnInfo[si].spawnGroup].packIndexCh] = si;
 					spawnGroup[packType[p].SpawnInfo[si].spawnGroup].packIndexCh++;
 				}
+			}
 		}
 
 	}
