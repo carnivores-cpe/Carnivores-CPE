@@ -8748,7 +8748,7 @@ void PlaceCharacters()
 			if (DinoInfo[di].SpawnInfoCh) {
 				
 				packType[packTypeCount].packMember[packType[packTypeCount].packMemberCh].ctype = di;
-				packType[packTypeCount].packMember[packType[packTypeCount].packMemberCh].max = 0;
+				packType[packTypeCount].packMember[packType[packTypeCount].packMemberCh].ratio = 1;
 				packType[packTypeCount].packMax = 1;
 				packType[packTypeCount].packMin = 1;
 				packType[packTypeCount].packMemberCh++;
@@ -8890,10 +8890,31 @@ void PlaceCharacters()
 						Packs[PackCount]._alert = FALSE;
 						Packs[PackCount]._attack = FALSE;
 						Characters[leaderIndex].packId = PackCount;
+
 						for (int packN = 0; packN < packNo - 1; packN++) {
 							Characters[ChCount].packId = PackCount;
-							Characters[ChCount].CType = Characters[leaderIndex].CType;
+
+							Characters[ChCount].CType = packType[packInd].packMember[0].ctype; //failsafe
+
+							//recalculate every time a member is added
+							float memberRatio = 0;
+							for (int pm = 0; pm < packType[packInd].packMemberCh; pm++) {
+								memberRatio += packType[packInd].packMember[pm].ratio;
+							}
+							float memberSelector = rRand(30000);
+							memberSelector /= 30000;
+							memberSelector *= memberRatio;
+							for (int pm = 0; pm < packType[packInd].packMemberCh; pm++) {
+								if (memberSelector <= packType[packInd].packMember[pm].ratio) {
+									Characters[ChCount].CType = packType[packInd].packMember[pm].ctype;
+									break;
+								}
+								else memberSelector -= packType[packInd].packMember[pm].ratio;
+							}
+
+							//Characters[ChCount].CType = packType[packInd].packMember[rRand(packType[packInd].packMemberCh - 1)].ctype;//Characters[leaderIndex].CType;
 							Characters[ChCount].SpawnGroupType = sg;
+							Characters[ChCount].packDensity = Characters[leaderIndex].packDensity;
 							spawnMapAmbient(tr, leaderIndex, false);
 							ChCount++;
 						}

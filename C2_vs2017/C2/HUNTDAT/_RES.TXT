@@ -137,11 +137,16 @@ packtable {
 
  // ==== Velociraptor
  packinfo{
-  packMax = 4
-  packMin = 3
+  packMax = 9
+  packMin = 7
   packDensity = 25
   packmember{
+   char = 12
+   ratio = 0
+  }
+  packmember{
    char = 11
+   ratio = 1
   }
   overwrite char5 {
    spawninfo{
@@ -987,6 +992,99 @@ killtype{
  bloB = 0
  weaveRange = 1648
  survivalIndex = 2
+}
+
+{
+ name = 'Alpha Velociraptor'
+ file = 'alpharaptor.car'
+ ai        = 15
+ callNo = 5
+ radar = TRUE
+ radR = 0
+ radG = 0
+ radB = 240
+ basescore = 6
+overwrite char5 {
+ basescore = 12
+ radar = TRUE
+ radR = 0
+ radG = 240
+ radB = 240
+}
+ dogSmell  = TRUE
+ mass      = 0.3
+ length    = 4.0
+ radius    = 256
+ health    = 6
+ scale0    = 1100
+ scaleA    = 400
+ smellK     = 1.3
+ hearK     = 0.7
+ lookK     = 0.5
+ shipdelta = -32
+ fearCall = 7
+ fearCall = 8
+ runspd = 1.2
+ wlkspd = 0.428
+ swmspd = 0.4
+ jmpspd = 1.1
+ aggress = 160
+ killdist = 256
+ tropinfo{
+ tropPos = 9
+  alpha = 240
+  tropAnim = 12
+  zoffset = -400
+  yoffset = 130
+  zdata = -500
+  xdata = -1250
+ }
+ tropinfo{
+ tropPos = 9
+  alpha = 30
+  tropAnim = 13
+  zoffset = -50
+  xoffset = 50
+  zdata = 250
+  xdata = -1250
+ }
+ canswim = TRUE
+ runAnim = 0
+ walkAnim = 1
+ swimAnim = 3
+ slideAnim = 2
+ jumpAnim = 4
+deathtype{
+ dieAnim = 5
+ sleepAnim = 7
+}
+idlegroup{
+ anim = 8
+ startChance = 0.033898305
+ endChance = 1
+ instantRepeat = TRUE
+}
+idlegroup{
+ anim = 9
+ startChance = 0.033898305
+ endChance = 1
+ instantRepeat = TRUE
+}
+ waterLevel = 140
+killtype{
+ hunterAnim = 0
+ hunterOffset = 170
+ eatAnim = 6
+ scream = TRUE
+}
+ CamYLand = 256
+ CamYWater = 256
+ CamBaseLand = 824
+ CamBaseWater = 824
+ bloR = 112
+ bloG = 0
+ bloB = 0
+ weaveRange = 1648
 }
 
 {

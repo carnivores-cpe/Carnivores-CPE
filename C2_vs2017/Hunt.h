@@ -538,8 +538,6 @@ typedef struct _TTrophyType
 typedef struct _TPackMember
 {
 	int ctype;
-	int max;
-	int min;
 	float ratio;
 } TPackMember;
 

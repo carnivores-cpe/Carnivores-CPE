@@ -2283,8 +2283,6 @@ void ReadPackMember(FILE *stream) {
 		value++;
 
 		if (strstr(line, "char")) packType[packTypeCount].packMember[packType[packTypeCount].packMemberCh].ctype = atoi(value);
-		if (strstr(line, "min")) packType[packTypeCount].packMember[packType[packTypeCount].packMemberCh].min = atoi(value);
-		if (strstr(line, "max")) packType[packTypeCount].packMember[packType[packTypeCount].packMemberCh].max = atoi(value);
 		if (strstr(line, "ratio")) packType[packTypeCount].packMember[packType[packTypeCount].packMemberCh].ratio = (float)atof(value);
 
 	}

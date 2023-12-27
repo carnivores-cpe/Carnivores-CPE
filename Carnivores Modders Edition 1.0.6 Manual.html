@@ -259,7 +259,8 @@ function expand(n) {
 			
 			
 			<ul>
-				<li>Customise classic, Primal Prey style, or hybrid trophy room.</li>
+				<li>Customisable classic, Primal Prey style, or hybrid trophy room.</li>
+				<li>Packs can contain more than one species.</li>
 				<!--<li>You can now hide creatures on the hunt menu until the player can afford them</li>-->
 				<!--<li>10th huntable slot</li>
 				<li>10 selectable weapon slots (with numkey binding)</li>
@@ -343,6 +344,7 @@ function expand(n) {
 				<li>Manually set how high each creature swims in the water</li>
 				<li>Pack/herding AI can be added to any AI</li>
 				<li>Pack max/min size and density can be customised</li>
+				<li>Add different creatures in set ratios into a pack</li>
 				<li>Speed patch</li>
 				<li>Aggression patch</li>
 				<li>Unlimited triangle count on Creature and Weapon models</li>
@@ -395,7 +397,7 @@ function expand(n) {
 			Ithamar - programming.</br>
 			Poharex - mosasaurus, climatius, parexus & pink parexus models & textures.</br>
 			Starcrafty - allosaurus call & sleep animations, spinosaurus swim animation, mosasaurus sounds.<br>
-			JustTurrable - male ceratosaurus texture.
+			JustTurrable - alpha velociraptor and male ceratosaurus textures.
 			
 		</div>
 	</div>
@@ -1770,6 +1772,7 @@ reduced by the whole value of densityMulti. e.g. in the above screenshot, the ma
 			<p>
 			Defines a type of creature that can spawn in a pack. Each pack must have at least one (and no more than 32) packmember.
 			</p>
+			Note: At least one of the first packmember will always spawn per pack (So for a pack alpha, set it as the first member with a ratio of 0).
 			
 			<p style="margin-top:4%;">
 				<h2 id="arrow_163" unselectable="on" onclick="expand(163)"
@@ -1786,6 +1789,27 @@ reduced by the whole value of densityMulti. e.g. in the above screenshot, the ma
 						<p><b>Data type: Whole Number</b></p>
 						<p>
 						The index of the creature to add to the pack (it's position in the characters table starting from 1 not including the hunter).
+						</p>
+			
+					</div>
+				</div>
+			</p>
+						<p style="margin-top:4%;">
+				<h2 id="arrow_165" unselectable="on" onclick="expand(165)"
+				style="float:left;margin-top:0;cursor:pointer;
+				-moz-user-select:none;
+				user-select:none;
+				-webkit-user-select: none;
+				-ms-user-select: none;"
+				>></h2>
+				<div class = "con" style="margin-left:4%">
+					<h2 onclick="expand(165)" style="cursor:pointer;">_RES Value: ratio</h2>
+					<div id="content_165" style="display: none">
+		
+						<p><b>Data type: Decimal Number</b></p>
+						<p>
+						Used to set the chance of the member spawning compared to others in the packinfo.
+						Pack members are selected randomly so the exact ratio will vary will every pack.
 						</p>
 			
 					</div>
