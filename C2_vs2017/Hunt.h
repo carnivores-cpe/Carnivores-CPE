@@ -401,6 +401,8 @@ typedef struct _TCharacter
 
 //  int tropIndex;
 
+  float packDensity;
+
 } TCharacter;
 
 
@@ -533,6 +535,30 @@ typedef struct _TTrophyType
 	bool playAnim;
 } TTrophyType;
 
+typedef struct _TPackMember
+{
+	int ctype;
+	int max;
+	int min;
+	float ratio;
+} TPackMember;
+
+typedef struct _TSpawnInfo
+{
+	int spawnGroup;//, spawnMax;
+	float spawnRatio;
+} TSpawnInfo;
+
+typedef struct _TPackType
+{
+	TSpawnInfo SpawnInfo[32];
+	TPackMember packMember[32];
+	int packMemberCh = 0;
+	int SpawnInfoCh = 0;
+	int packMax, packMin;
+	float packDensity;
+} TPackType;
+
 typedef struct _TDinoDeathType
 {
 	int die;
@@ -550,12 +576,6 @@ typedef struct _TDinoIdleType
 	bool startOnAny;
 	bool instantRepeat;
 } TDinoIdleType;
-
-typedef struct _TSpawnInfo
-{
-	int spawnGroup;//, spawnMax;
-	float spawnRatio;
-} TSpawnInfo;
 
 typedef struct _TMenuDinoInfo
 {
@@ -602,8 +622,8 @@ typedef struct _TDinoInfo
   int maxGrad;
   float rotspdmulti;
 
-  int packMax, packMin;
-  float packDensity;
+//  int packMax, packMin;
+//  float packDensity;
 
   int jumpRange;
 
@@ -725,8 +745,8 @@ typedef struct _TSpawnGroup
 	TSpawnRegion spawnRegion[16];
 	TSpawnRegion avoidRegion[16];
 
-	int dinoIndexCh;
-	int dinoIndex[128];
+	int packIndexCh;
+	int packIndex[128];
 	int spawnInfoIndex[128];
 } TSpawnGroup;
 
@@ -1159,6 +1179,8 @@ _EXTORNOT TSpawnGroup spawnGroup[256];
 //_EXTORNOT int AI_to_CIndex[DINOINFO_MAX];
 //_EXTORNOT int TrophyIndex[DINOINFO_MAX];
 _EXTORNOT int trophyGroupCount;
+_EXTORNOT TPackType packType[1024];
+_EXTORNOT int packTypeCount;
 _EXTORNOT TTrophyType trophyType[TROPHY2_COUNT];
 _EXTORNOT int trophyTypeCount;
 _EXTORNOT int ChCount, WCCount, ElCount, SnCount,

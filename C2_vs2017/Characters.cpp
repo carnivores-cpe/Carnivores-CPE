@@ -2373,14 +2373,14 @@ TBEGIN:
 			float leaderdist = (float)sqrt(leaderdx * leaderdx + leaderdz * leaderdz);
 
 			if (cptr->followLeader) {
-				if (leaderdist < DinoInfo[cptr->CType].packDensity * 128 * 0.6)
+				if (leaderdist < cptr->packDensity * 128 * 0.6)
 				{
 					cptr->followLeader = false;
 					SetNewTargetPlace(cptr, AIInfo[cptr->Clone].targetDistance);
 					goto TBEGIN;
 				}
 			} else {
-				if (leaderdist > DinoInfo[cptr->CType].packDensity * 128 * 1.3)
+				if (leaderdist > cptr->packDensity * 128 * 1.3)
 				{
 					cptr->followLeader = true;
 				}
@@ -3033,7 +3033,7 @@ TBEGIN:
 			float leaderdist = (float)sqrt(leaderdx * leaderdx + leaderdz * leaderdz);
 
 			if (cptr->followLeader) {
-				if (leaderdist < DinoInfo[cptr->CType].packDensity * 128 * 0.6)
+				if (leaderdist < cptr->packDensity * 128 * 0.6)
 				{
 					cptr->followLeader = false;
 					SetNewTargetPlace(cptr, AIInfo[cptr->Clone].targetDistance);
@@ -3041,7 +3041,7 @@ TBEGIN:
 				}
 			}
 			else {
-				if (leaderdist > DinoInfo[cptr->CType].packDensity * 128 * 1.3)
+				if (leaderdist > cptr->packDensity * 128 * 1.3)
 				{
 					cptr->followLeader = true;
 				}
@@ -3684,7 +3684,7 @@ TBEGIN:
 			float leaderdist = (float)sqrt(leaderdx * leaderdx + leaderdz * leaderdz);
 
 			if (cptr->followLeader) {
-				if (leaderdist < DinoInfo[cptr->CType].packDensity * 128 * 0.6)
+				if (leaderdist < cptr->packDensity * 128 * 0.6)
 				{
 					cptr->followLeader = false;
 					SetNewTargetPlace(cptr, AIInfo[cptr->Clone].targetDistance);
@@ -3692,7 +3692,7 @@ TBEGIN:
 				}
 			}
 			else {
-				if (leaderdist > DinoInfo[cptr->CType].packDensity * 128 * 1.3)
+				if (leaderdist > cptr->packDensity * 128 * 1.3)
 				{
 					cptr->followLeader = true;
 				}
@@ -4637,7 +4637,7 @@ TBEGIN:
 			float leaderdist = (float)sqrt(leaderdx * leaderdx + leaderdz * leaderdz);
 
 			if (cptr->followLeader) {
-				if (leaderdist < DinoInfo[cptr->CType].packDensity * 128 * 0.6)
+				if (leaderdist < cptr->packDensity * 128 * 0.6)
 				{
 					cptr->followLeader = false;
 					SetNewTargetPlace(cptr, 8048.f);
@@ -4645,7 +4645,7 @@ TBEGIN:
 				}
 			}
 			else {
-				if (leaderdist > DinoInfo[cptr->CType].packDensity * 128 * 1.3)
+				if (leaderdist > cptr->packDensity * 128 * 1.3)
 				{
 					cptr->followLeader = true;
 				}
@@ -5158,7 +5158,7 @@ TBEGIN:
 			float leaderdist = (float)sqrt(leaderdx * leaderdx + leaderdz * leaderdz);
 
 			if (cptr->followLeader) {
-				if (leaderdist < DinoInfo[cptr->CType].packDensity * 128 * 0.6)
+				if (leaderdist < cptr->packDensity * 128 * 0.6)
 				{
 					cptr->followLeader = false;
 					SetNewTargetPlace(cptr, 2048.f);
@@ -5166,7 +5166,7 @@ TBEGIN:
 				}
 			}
 			else {
-				if (leaderdist > DinoInfo[cptr->CType].packDensity * 128 * 1.3)
+				if (leaderdist > cptr->packDensity * 128 * 1.3)
 				{
 					cptr->followLeader = true;
 				}
@@ -5525,7 +5525,7 @@ TBEGIN:
 
 
 				if (cptr->followLeader) {
-					if (leaderdist < DinoInfo[cptr->CType].packDensity * 128 * 0.6)
+					if (leaderdist < cptr->packDensity * 128 * 0.6)
 					{
 						cptr->followLeader = false;
 						SetNewTargetPlaceFish(cptr, tv);
@@ -5533,7 +5533,7 @@ TBEGIN:
 					}
 				}
 				else {
-					if (leaderdist > DinoInfo[cptr->CType].packDensity * 128 * 1.3)
+					if (leaderdist > cptr->packDensity * 128 * 1.3)
 					{
 						cptr->followLeader = true;
 						cptr->turny = 0;
@@ -6217,7 +6217,7 @@ TBEGIN:
 		float leaderdist = (float)sqrt(leaderdx * leaderdx + leaderdz * leaderdz);
 
 		if (cptr->followLeader) {
-			if (leaderdist < DinoInfo[cptr->CType].packDensity * 128 * 0.6)
+			if (leaderdist < cptr->packDensity * 128 * 0.6)
 			{
 				cptr->followLeader = false;
 				SetNewTargetPlace_Icth(cptr, 4048.f);
@@ -6225,7 +6225,7 @@ TBEGIN:
 			}
 		}
 		else {
-			if (leaderdist > DinoInfo[cptr->CType].packDensity * 128 * 1.3)
+			if (leaderdist > cptr->packDensity * 128 * 1.3)
 			{
 				cptr->followLeader = true;
 			}
@@ -7144,7 +7144,7 @@ TBEGIN:
 			float leaderdist = (float)sqrt(leaderdx * leaderdx + leaderdz * leaderdz);
 
 			if (cptr->followLeader) {
-				if (leaderdist < DinoInfo[cptr->CType].packDensity * 128 * 0.6)
+				if (leaderdist < cptr->packDensity * 128 * 0.6)
 				{
 					cptr->followLeader = false;
 					SetNewTargetPlace_Brahi(cptr, 2048.f);
@@ -7152,7 +7152,7 @@ TBEGIN:
 				}
 			}
 			else {
-				if (leaderdist > DinoInfo[cptr->CType].packDensity * 128 * 1.3)
+				if (leaderdist > cptr->packDensity * 128 * 1.3)
 				{
 					cptr->followLeader = true;
 				}
@@ -7449,7 +7449,7 @@ TBEGIN:
 		float leaderdist = (float)sqrt(leaderdx * leaderdx + leaderdz * leaderdz);
 
 		if (cptr->followLeader) {
-			if (leaderdist < DinoInfo[cptr->CType].packDensity * 128 * 0.6)
+			if (leaderdist < cptr->packDensity * 128 * 0.6)
 			{
 				cptr->followLeader = false;
 				SetNewTargetPlace_Brahi(cptr, 2048.f);
@@ -7457,7 +7457,7 @@ TBEGIN:
 			}
 		}
 		else {
-			if (leaderdist > DinoInfo[cptr->CType].packDensity * 128 * 1.3)
+			if (leaderdist > cptr->packDensity * 128 * 1.3)
 			{
 				cptr->followLeader = true;
 			}
@@ -7660,7 +7660,7 @@ TBEGIN:
 		float leaderdist = (float)sqrt(leaderdx * leaderdx + leaderdz * leaderdz);
 
 		if (cptr->followLeader) {
-			if (leaderdist < DinoInfo[cptr->CType].packDensity * 128 * 0.6)
+			if (leaderdist < cptr->packDensity * 128 * 0.6)
 			{
 				cptr->followLeader = false;
 				SetNewTargetPlace(cptr, 4048.f);
@@ -7668,7 +7668,7 @@ TBEGIN:
 			}
 		}
 		else {
-			if (leaderdist > DinoInfo[cptr->CType].packDensity * 128 * 1.3)
+			if (leaderdist > cptr->packDensity * 128 * 1.3)
 			{
 				cptr->followLeader = true;
 			}
@@ -8741,22 +8741,43 @@ void PlaceCharacters()
 	//TODO - NO PACK HUNTING WITH MOVEFORWARD
 	//TODO - HALF AMBIENT SPAWN AT NIGHT MANUALLY IN RES?
 
-	if (!RestartMode)
-	for (int di = 0; di < DINOINFO_MAX; di++) {
-		if (DinoInfo[di].SpawnInfoCh) {
-			for (int si = 0; si < DinoInfo[di].SpawnInfoCh; si++) {
-				//for (TSpawnInfo si : DinoInfo->SpawnInfo){
-				spawnGroup[DinoInfo[di].SpawnInfo[si].spawnGroup].dinoIndex[spawnGroup[DinoInfo[di].SpawnInfo[si].spawnGroup].dinoIndexCh] = di;
-				spawnGroup[DinoInfo[di].SpawnInfo[si].spawnGroup].spawnInfoIndex[spawnGroup[DinoInfo[di].SpawnInfo[si].spawnGroup].dinoIndexCh] = si;
-				spawnGroup[DinoInfo[di].SpawnInfo[si].spawnGroup].dinoIndexCh++;
+
+	if (!RestartMode) {
+	
+		for (int di = 0; di < DINOINFO_MAX; di++) {
+			if (DinoInfo[di].SpawnInfoCh) {
+				
+				packType[packTypeCount].packMember[packType[packTypeCount].packMemberCh].ctype = di;
+				packType[packTypeCount].packMember[packType[packTypeCount].packMemberCh].max = 0;
+				packType[packTypeCount].packMax = 1;
+				packType[packTypeCount].packMin = 1;
+				packType[packTypeCount].packMemberCh++;
+				for (int si = 0; si < DinoInfo[di].SpawnInfoCh; si++) {
+					packType[packTypeCount].SpawnInfo[packType[packTypeCount].SpawnInfoCh].spawnGroup = DinoInfo[di].SpawnInfo[si].spawnGroup;
+					packType[packTypeCount].SpawnInfo[packType[packTypeCount].SpawnInfoCh].spawnRatio = DinoInfo[di].SpawnInfo[si].spawnRatio;
+					packType[packTypeCount].SpawnInfoCh++;
+				}
+				packTypeCount++;
 			}
 		}
+
+		for (int p = 0; p < packTypeCount; p++) {
+			if (packType[p].SpawnInfoCh)
+				for (int si = 0; si < packType[p].SpawnInfoCh; si++) {
+					spawnGroup[packType[p].SpawnInfo[si].spawnGroup].packIndex[spawnGroup[packType[p].SpawnInfo[si].spawnGroup].packIndexCh] = p;
+					spawnGroup[packType[p].SpawnInfo[si].spawnGroup].spawnInfoIndex[spawnGroup[packType[p].SpawnInfo[si].spawnGroup].packIndexCh] = si;
+					spawnGroup[packType[p].SpawnInfo[si].spawnGroup].packIndexCh++;
+				}
+		}
+
 	}
 
-	
 	for (int sg = 0; sg < TotalSpawnGroup; sg++){
 	//for (TSpawnGroup sg : spawnGroup) {
-		if (spawnGroup[sg].dinoIndexCh) {
+		
+		
+
+		if (spawnGroup[sg].packIndexCh) {
 			int spawnNo = spawnGroup[sg].SpawnMin;
 			for (int i = 0; i < spawnGroup[sg].SpawnMax - spawnGroup[sg].SpawnMin; i++) {
 				if (spawnGroup[sg].SpawnRate * 30000 > rRand(30000)) spawnNo++;
@@ -8772,40 +8793,43 @@ void PlaceCharacters()
 			float ratioScores[256];
 			float totalRatio = 0;
 			//int counter[256];
-			for (c = 0; c < spawnGroup[sg].dinoIndexCh; c++) {
+			for (c = 0; c < spawnGroup[sg].packIndexCh; c++) {
 				ratioScores[c] = 0.f;
 				//counter[c] = 0;
-				totalRatio += DinoInfo[spawnGroup[sg].dinoIndex[c]].SpawnInfo[spawnGroup[sg].spawnInfoIndex[c]].spawnRatio;
+				totalRatio += packType[spawnGroup[sg].packIndex[c]].SpawnInfo[spawnGroup[sg].spawnInfoIndex[c]].spawnRatio;
+				            //DinoInfo[spawnGroup[sg].dinoIndex[c]].SpawnInfo[spawnGroup[sg].spawnInfoIndex[c]].spawnRatio;
 			}
 			int posi = 0;
 			tr = 0;
+
 			for (c = 0; c < spawnNo; c++) {
+
+				int packInd = -1;
 
 				// select ctype accounting for spawn ratio
 				if (spawnGroup[sg].Randomised) {
 					float selector = rRand(30000);
 					selector /= 30000;
 					selector *= totalRatio;
-					for (int ch = 0; ch < spawnGroup[sg].dinoIndexCh; ch++) {
-						if (selector <= DinoInfo[spawnGroup[sg].dinoIndex[ch]].SpawnInfo[spawnGroup[sg].spawnInfoIndex[ch]].spawnRatio) {
-							Characters[ChCount].CType = spawnGroup[sg].dinoIndex[ch];
+					for (int ch = 0; ch < spawnGroup[sg].packIndexCh; ch++) {
+						if (selector <= packType[spawnGroup[sg].packIndex[ch]].SpawnInfo[spawnGroup[sg].spawnInfoIndex[ch]].spawnRatio) {
+							packInd = spawnGroup[sg].packIndex[ch];
 							break;
-						} else selector -= DinoInfo[spawnGroup[sg].dinoIndex[ch]].SpawnInfo[spawnGroup[sg].spawnInfoIndex[ch]].spawnRatio;
+						} else selector -= packType[spawnGroup[sg].packIndex[ch]].SpawnInfo[spawnGroup[sg].spawnInfoIndex[ch]].spawnRatio;
 					}
 				} else {
-					while (!Characters[ChCount].CType) {
-						int post = posi % spawnGroup[sg].dinoIndexCh;
+					while (packInd == -1) {
+						int post = posi % spawnGroup[sg].packIndexCh;
 						if (ratioScores[post] >= 1.f) {
 							ratioScores[post] -= 1.f;
-							Characters[ChCount].CType = spawnGroup[sg].dinoIndex[post];
+							packInd = spawnGroup[sg].packIndex[post];
 						}
 						else {
-							ratioScores[post] += DinoInfo[spawnGroup[sg].dinoIndex[post]].SpawnInfo[spawnGroup[sg].spawnInfoIndex[post]].spawnRatio;
+							ratioScores[post] += packType[spawnGroup[sg].packIndex[post]].SpawnInfo[spawnGroup[sg].spawnInfoIndex[post]].spawnRatio;
 							posi++;
 						}
 					}
 				}
-				
 
 				/*
 				std::list<int> spawnList;
@@ -8830,9 +8854,11 @@ void PlaceCharacters()
 				else Characters[ChCount].CType = spawnGroup[sg].dinoIndex[c % spawnGroup[sg].dinoIndexCh];
 				*/
 
+				Characters[ChCount].CType = packType[packInd].packMember[0].ctype;
 				Characters[ChCount].Clone = DinoInfo[Characters[ChCount].CType].Clone;
+				Characters[ChCount].packDensity = packType[packInd].packDensity;
 				Characters[ChCount].SpawnGroupType = sg;
-
+				
 				int leaderIndex = ChCount;
 				// pack leaders
 				spawnMapAmbient(tr, -1, spawnGroup[sg].moveForward);
@@ -8844,10 +8870,10 @@ void PlaceCharacters()
 				} else {
 				
 					int packNo = 1;
-					if (DinoInfo[Characters[ChCount].CType].packMax > 1) {//!spawnGroup[sg].moveForward
-						packNo = DinoInfo[Characters[ChCount].CType].packMin;
-						if (DinoInfo[Characters[ChCount].CType].packMax != DinoInfo[Characters[ChCount].CType].packMin) {
-							for (int i = 0; i < DinoInfo[Characters[ChCount].CType].packMax - DinoInfo[Characters[ChCount].CType].packMin; i++) {
+					if (packType[packInd].packMax > 1) {//!spawnGroup[sg].moveForward
+						packNo = packType[packInd].packMin;
+						if (packType[packInd].packMax != packType[packInd].packMin) {
+							for (int i = 0; i < packType[packInd].packMax - packType[packInd].packMin; i++) {
 								if (1 == rRand(2)) packNo++;
 							}
 						}

@@ -2186,6 +2186,299 @@ void ReadTrophyTypeInfo(FILE *stream, int trophyGroup)
 	}
 }
 
+void WipePackMembers() {
+	if (packType[packTypeCount].packMemberCh) {
+		for (int i = 0; i < packType[packTypeCount].packMemberCh; i++) {
+			packType[packTypeCount].packMember[i] = {};
+		}
+	}
+	packType[packTypeCount].packMemberCh = 0;
+}
+
+void WipeSpawnInfo() {
+	if (DinoInfo[TotalC].SpawnInfoCh) {
+		for (int i = 0; i < DinoInfo[TotalC].SpawnInfoCh; i++) {
+			DinoInfo[TotalC].SpawnInfo[i] = {};
+		}
+	}
+	DinoInfo[TotalC].SpawnInfoCh = 0;
+}
+
+void ReadSpawnInfo(FILE *stream)
+{
+	char *value;
+	char line[256];
+
+	while (fgets(line, 255, stream)) {
+		if (strstr(line, "}")) {
+			//DinoInfo[TotalC].RType0[DinoInfo[TotalC].RegionCount] = TotalRegion;
+			DinoInfo[TotalC].SpawnInfoCh++;
+			//TotalRegion++;
+			break;
+		}
+		value = strstr(line, "=");
+		if (!value) {
+			char errorBuff[100];
+			sprintf(errorBuff, "Script loading error: SpawnInfo: %s", DinoInfo[TotalC].Name);
+			DoHalt(errorBuff);
+		}
+		value++;
+
+		if (strstr(line, "spawnratio")) DinoInfo[TotalC].SpawnInfo[DinoInfo[TotalC].SpawnInfoCh].spawnRatio = (float)atof(value);
+		if (strstr(line, "spawngroup")) DinoInfo[TotalC].SpawnInfo[DinoInfo[TotalC].SpawnInfoCh].spawnGroup = atoi(value);
+		//if (strstr(line, "spawnmax")) DinoInfo[TotalC].SpawnInfo[DinoInfo[TotalC].SpawnInfoCh].spawnMax = atoi(value);
+	}
+}
+
+
+
+void WipeSpawnInfoPack() {
+	if (packType[packTypeCount].SpawnInfoCh) {
+		for (int i = 0; i < packType[packTypeCount].SpawnInfoCh; i++) {
+			packType[packTypeCount].SpawnInfo[i] = {};
+		}
+	}
+	packType[packTypeCount].SpawnInfoCh = 0;
+}
+
+void ReadSpawnInfoPack(FILE *stream)
+{
+	char *value;
+	char line[256];
+
+	while (fgets(line, 255, stream)) {
+		if (strstr(line, "}")) {
+			packType[packTypeCount].SpawnInfoCh++;
+			break;
+		}
+		value = strstr(line, "=");
+		if (!value) {
+			char errorBuff[100];
+			sprintf(errorBuff, "Script loading error: SpawnInfo: Pack%i", packTypeCount);
+			DoHalt(errorBuff);
+		}
+		value++;
+
+		if (strstr(line, "spawnratio")) packType[packTypeCount].SpawnInfo[packType[packTypeCount].SpawnInfoCh].spawnRatio = (float)atof(value);
+		if (strstr(line, "spawngroup")) packType[packTypeCount].SpawnInfo[packType[packTypeCount].SpawnInfoCh].spawnGroup = atoi(value);
+	}
+}
+
+void ReadPackMember(FILE *stream) {
+	char *value;
+	char line[256];
+
+	while (fgets(line, 255, stream)) {
+		if (strstr(line, "}")) {
+
+			packType[packTypeCount].packMemberCh++;
+			break;
+		}
+		value = strstr(line, "=");
+		if (!value) {
+			char errorBuff[100];
+			sprintf(errorBuff, "Script loading error: PackMember: %i", packType[packTypeCount].packMemberCh);
+			DoHalt(errorBuff);
+		}
+		value++;
+
+		if (strstr(line, "char")) packType[packTypeCount].packMember[packType[packTypeCount].packMemberCh].ctype = atoi(value);
+		if (strstr(line, "min")) packType[packTypeCount].packMember[packType[packTypeCount].packMemberCh].min = atoi(value);
+		if (strstr(line, "max")) packType[packTypeCount].packMember[packType[packTypeCount].packMemberCh].max = atoi(value);
+		if (strstr(line, "ratio")) packType[packTypeCount].packMember[packType[packTypeCount].packMemberCh].ratio = (float)atof(value);
+
+	}
+}
+
+
+void ReadPackTableLine(FILE *stream, char *_value, char line[256], bool &spawnInfoOverwrite, bool &memberOverwrite) {
+
+	char *value = _value;
+
+	if (strstr(line, "spawninfo")) {
+			if (spawnInfoOverwrite) {
+				WipeSpawnInfoPack();
+				spawnInfoOverwrite = false;
+			}
+			ReadSpawnInfoPack(stream);
+	}
+
+	if (strstr(line, "packmember")) {
+			if (memberOverwrite) {
+				WipePackMembers();
+				memberOverwrite = false;
+			}
+			ReadPackMember(stream);
+	}
+
+
+	if (strstr(line, "packMax")) packType[packTypeCount].packMax = atoi(value);
+	if (strstr(line, "packMin")) packType[packTypeCount].packMin = atoi(value);
+	if (strstr(line, "packDensity")) packType[packTypeCount].packDensity = (float)atof(value);
+	
+}
+
+
+void ReadPackTable(FILE *stream)
+{
+	packTypeCount = 0;
+
+	if (SurvivalMode) {
+		SkipSector(stream);
+		return;
+	}
+
+	//area
+	char tempProjectName[128];
+	int timeOfDay, dinSelect;
+	for (int a = 0; a < __argc; a++)
+	{
+		LPSTR s = __argv[a];
+		if (strstr(s, "prj="))
+		{
+			strcpy(tempProjectName, (s + 4));
+		}
+		if (strstr(s, "dtm=")) timeOfDay = atoi(&s[4]);
+		if (strstr(s, "din=")) dinSelect = (atoi(&s[4]) * 1024);
+	}
+
+	//time
+	for (int a = 0; a < __argc; a++)
+	{
+		LPSTR s = __argv[a];
+	}
+
+	char line[256], *value;
+	while (fgets(line, 255, stream))
+	{
+		if (strstr(line, "}")) break;
+
+
+		if (strstr(line, "packinfo"))
+			while (fgets(line, 255, stream))
+			{
+				if (strstr(line, "}"))
+				{
+					packTypeCount++;
+					break;
+				}
+
+				if (strstr(line, "overwrite") || strstr(line, "addition")) {
+
+
+
+					bool readThis = true;
+					char mapNo1 = tempProjectName[18];
+					while (readThis == true) {
+
+						//trophy
+						if (tempProjectName[18] == 'h') break;
+
+						if (strstr(line, "area")) {
+
+							switch ((char)tempProjectName[18]) {
+							case '1':
+								if (tempProjectName[19]) {
+									if (!strstr(line, "area0")) readThis = false;//area10
+								}
+								else if (!strstr(line, "area1")) readThis = false;
+								break;
+							case '2':
+								if (!strstr(line, "area2")) readThis = false;
+								break;
+							case '3':
+								if (!strstr(line, "area3")) readThis = false;
+								break;
+							case '4':
+								if (!strstr(line, "area4")) readThis = false;
+								break;
+							case '5':
+								if (!strstr(line, "area5")) readThis = false;
+								break;
+							case '6':
+								if (!strstr(line, "area6")) readThis = false;
+								break;
+							case '7':
+								if (!strstr(line, "area7")) readThis = false;
+								break;
+							case '8':
+								if (!strstr(line, "area8")) readThis = false;
+								break;
+							case '9':
+								if (!strstr(line, "area9")) readThis = false;
+								break;
+							}
+						}
+
+						if (strstr(line, "time")) {
+							switch (timeOfDay) {
+							case 0:
+								if (!strstr(line, "time0")) readThis = false;
+								break;
+							case 1:
+								if (!strstr(line, "time1")) readThis = false;
+								break;
+							case 2:
+								if (!strstr(line, "time2")) readThis = false;
+								break;
+							}
+						}
+
+
+						if (strstr(line, "char")) {
+							bool readChar = false;
+							if (strstr(line, "char0") && (dinSelect & (1 << 10))) readChar = true;
+							if (strstr(line, "char1") && (dinSelect & (1 << 11))) readChar = true;
+							if (strstr(line, "char2") && (dinSelect & (1 << 12))) readChar = true;
+							if (strstr(line, "char3") && (dinSelect & (1 << 13))) readChar = true;
+							if (strstr(line, "char4") && (dinSelect & (1 << 14))) readChar = true;
+							if (strstr(line, "char5") && (dinSelect & (1 << 15))) readChar = true;
+							if (strstr(line, "char6") && (dinSelect & (1 << 16))) readChar = true;
+							if (strstr(line, "char7") && (dinSelect & (1 << 17))) readChar = true;
+							if (strstr(line, "char8") && (dinSelect & (1 << 18))) readChar = true;
+							if (strstr(line, "char9") && (dinSelect & (1 << 19))) readChar = true;
+							if (!readChar) readThis = false;
+						}
+
+						break;
+					}
+
+
+
+
+					if (readThis) {
+
+						bool spawnInfoOverwrite = strstr(line, "overwrite");
+						bool memberOverwrite = strstr(line, "overwrite");
+
+						while (fgets(line, 255, stream)) {
+							if (strstr(line, "}")) break;
+
+							value = strstr(line, "=");
+							value++;
+
+							ReadPackTableLine(stream, value, line, spawnInfoOverwrite, memberOverwrite);
+
+						}
+
+					}
+					else {
+						SkipSector(stream);
+					}
+				} else {
+
+					value = strstr(line, "=");
+					value++;
+					bool temp, temp2;
+					ReadPackTableLine(stream, value, line, temp, temp2);
+
+				}
+
+			}
+
+	}
+
+}
 
 void ReadTrophyTable(FILE *stream)
 {
@@ -2565,31 +2858,7 @@ void ReadSpawnTable(FILE *stream)
 }
 
 
-void ReadSpawnInfo(FILE *stream)
-{
-	char *value;
-	char line[256];
 
-	while (fgets(line, 255, stream)) {
-		if (strstr(line, "}")) {
-			//DinoInfo[TotalC].RType0[DinoInfo[TotalC].RegionCount] = TotalRegion;
-			DinoInfo[TotalC].SpawnInfoCh++;
-			//TotalRegion++;
-			break;
-		}
-		value = strstr(line, "=");
-		if (!value) {
-			char errorBuff[100];
-			sprintf(errorBuff, "Script loading error: SpawnInfo: %s", DinoInfo[TotalC].Name);
-			DoHalt(errorBuff);
-		}
-		value++;
-		
-		if (strstr(line, "spawnratio")) DinoInfo[TotalC].SpawnInfo[DinoInfo[TotalC].SpawnInfoCh].spawnRatio = (float)atof(value);
-		if (strstr(line, "spawngroup")) DinoInfo[TotalC].SpawnInfo[DinoInfo[TotalC].SpawnInfoCh].spawnGroup = atoi(value);
-		//if (strstr(line, "spawnmax")) DinoInfo[TotalC].SpawnInfo[DinoInfo[TotalC].SpawnInfoCh].spawnMax = atoi(value);
-	}
-}
 
 void ReadSpawnGroupChar(FILE *stream)
 {
@@ -2742,15 +3011,6 @@ void WipeIdleGroups() {
 		}
 	}
 	DinoInfo[TotalC].idleGroupCount = 0;
-}
-
-void WipeSpawnInfo() {
-	if (DinoInfo[TotalC].SpawnInfoCh) {
-		for (int i = 0; i < DinoInfo[TotalC].SpawnInfoCh; i++) {
-			DinoInfo[TotalC].SpawnInfo[i] = {};
-		}
-	}
-	DinoInfo[TotalC].SpawnInfoCh = 0;
 }
 
 void WipeIdle2Groups() {
@@ -3162,10 +3422,7 @@ void ReadCharacterLine(FILE *stream, char *_value, char line[256], bool &spawnIn
 	}
 
 
-	//pack stuff
-	if (strstr(line, "packMax")) DinoInfo[TotalC].packMax = atoi(value);
-	if (strstr(line, "packMin")) DinoInfo[TotalC].packMin = atoi(value);
-	if (strstr(line, "packDensity")) DinoInfo[TotalC].packDensity = (float)atof(value);
+
 
 
 	/*
@@ -4099,6 +4356,7 @@ void LoadResourcesScript()
   {
     if (line[0] == '.') break;
 	if (strstr(line, "spawntable")) ReadSpawnTable(stream);
+	if (strstr(line, "packtable")) ReadPackTable(stream);
 	if (strstr(line, "trophytable")) ReadTrophyTable(stream);
 	if (strstr(line, "areatable")) ReadAreaTable(stream, areaNumber);
     if (strstr(line, "weapons") ) ReadWeapons(stream);
