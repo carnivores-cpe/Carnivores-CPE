@@ -8744,7 +8744,19 @@ void PlaceCharacters()
 
 	if (!RestartMode) {
 
-
+		for (int di = 0; di < DINOINFO_MAX; di++) {
+			if (DinoInfo[di].packMember2Ch) {
+				for (int pin = 0; pin < DinoInfo[di].packMember2Ch; pin++) {
+					packType[DinoInfo[di].packMember2[pin].packGroup]
+						.packMember[packType[DinoInfo[di].packMember2[pin].packGroup].packMemberCh]
+						.ctype = di;
+					packType[DinoInfo[di].packMember2[pin].packGroup]
+						.packMember[packType[DinoInfo[di].packMember2[pin].packGroup].packMemberCh]
+						.ratio = DinoInfo[di].packMember2[pin].ratio;
+					packType[DinoInfo[di].packMember2[pin].packGroup].packMemberCh++;
+				}
+			}
+		}
 
 		for (int di = 0; di < DINOINFO_MAX; di++) {
 			if (DinoInfo[di].SpawnInfoCh) {

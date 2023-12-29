@@ -2130,6 +2130,22 @@ void SkipSector(FILE *stream)
 						if (strstr(line, "{"))
 							while (fgets(line, 255, stream)) {
 								if (strstr(line, "}")) break;
+								if (strstr(line, "{"))
+									while (fgets(line, 255, stream)) {
+										if (strstr(line, "}")) break;
+										if (strstr(line, "{"))
+											while (fgets(line, 255, stream)) {
+												if (strstr(line, "}")) break;
+												if (strstr(line, "{"))
+													while (fgets(line, 255, stream)) {
+														if (strstr(line, "}")) break;
+														if (strstr(line, "{"))
+															while (fgets(line, 255, stream)) {
+																if (strstr(line, "}")) break;
+															}
+													}
+											}
+									}
 							}
 					}
 			}
@@ -2186,14 +2202,16 @@ void ReadTrophyTypeInfo(FILE *stream, int trophyGroup)
 	}
 }
 
-void WipePackMembers() {
-	if (packType[packTypeCount].packMemberCh) {
-		for (int i = 0; i < packType[packTypeCount].packMemberCh; i++) {
-			packType[packTypeCount].packMember[i] = {};
+
+void WipePackMembers2() {
+	if (DinoInfo[TotalC].packMember2Ch) {
+		for (int i = 0; i < DinoInfo[TotalC].packMember2Ch; i++) {
+			DinoInfo[TotalC].packMember2[i] = {};
 		}
 	}
-	packType[packTypeCount].packMemberCh = 0;
+	DinoInfo[TotalC].packMember2Ch = 0;
 }
+
 
 void WipeSpawnInfo() {
 	if (DinoInfo[TotalC].SpawnInfoCh) {
@@ -2266,32 +2284,33 @@ void ReadSpawnInfoPack(FILE *stream)
 	}
 }
 
-void ReadPackMember(FILE *stream) {
+
+void ReadPackMember2(FILE *stream) {
 	char *value;
 	char line[256];
 
 	while (fgets(line, 255, stream)) {
 		if (strstr(line, "}")) {
 
-			packType[packTypeCount].packMemberCh++;
+			DinoInfo[TotalC].packMember2Ch++;
 			break;
 		}
 		value = strstr(line, "=");
 		if (!value) {
 			char errorBuff[100];
-			sprintf(errorBuff, "Script loading error: PackMember: %i", packType[packTypeCount].packMemberCh);
+			sprintf(errorBuff, "Script loading error: PackInfo: %s", DinoInfo[TotalC].Name);
 			DoHalt(errorBuff);
 		}
 		value++;
 
-		if (strstr(line, "char")) packType[packTypeCount].packMember[packType[packTypeCount].packMemberCh].ctype = atoi(value);
-		if (strstr(line, "ratio")) packType[packTypeCount].packMember[packType[packTypeCount].packMemberCh].ratio = (float)atof(value);
+		if (strstr(line, "group")) DinoInfo[TotalC].packMember2[DinoInfo[TotalC].packMember2Ch].packGroup = atoi(value);
+		if (strstr(line, "ratio")) DinoInfo[TotalC].packMember2[DinoInfo[TotalC].packMember2Ch].ratio = (float)atof(value);
 
 	}
 }
 
 
-void ReadPackTableLine(FILE *stream, char *_value, char line[256], bool &spawnIOverwrite, bool &memberOverwrite) {
+void ReadPackTableLine(FILE *stream, char *_value, char line[256], bool &spawnIOverwrite) {
 
 
 	char *value = _value;
@@ -2303,14 +2322,6 @@ void ReadPackTableLine(FILE *stream, char *_value, char line[256], bool &spawnIO
 				spawnIOverwrite = false;
 			}
 			ReadSpawnInfoPack(stream);
-	}
-
-	if (strstr(line, "packmember")) {
-			if (memberOverwrite) {
-				WipePackMembers();
-				memberOverwrite = false;
-			}
-			ReadPackMember(stream);
 	}
 
 
@@ -2356,7 +2367,7 @@ void ReadPackTable(FILE *stream)
 		if (strstr(line, "}")) break;
 
 
-		if (strstr(line, "packinfo"))
+		if (strstr(line, "packgroup"))
 			while (fgets(line, 255, stream))
 			{
 				if (strstr(line, "}"))
@@ -2367,10 +2378,9 @@ void ReadPackTable(FILE *stream)
 
 				value = strstr(line, "=");
 				value++;
-				bool temp1, temp2;
+				bool temp1;
 				temp1 = false;
-				temp2 = false;
-				ReadPackTableLine(stream, value, line, temp1, temp2);
+				ReadPackTableLine(stream, value, line, temp1);
 
 				if (strstr(line, "overwrite") || strstr(line, "addition")) {
 
@@ -2458,7 +2468,6 @@ void ReadPackTable(FILE *stream)
 					if (readThis) {
 
 						bool spawnInfoOverwrite = strstr(line, "overwrite");
-						bool memberOverwrite = strstr(line, "overwrite");
 
 						while (fgets(line, 255, stream)) {
 							if (strstr(line, "}")) break;
@@ -2466,7 +2475,7 @@ void ReadPackTable(FILE *stream)
 							value = strstr(line, "=");
 							value++;
 
-							ReadPackTableLine(stream, value, line, spawnInfoOverwrite, memberOverwrite);
+							ReadPackTableLine(stream, value, line, spawnInfoOverwrite);
 
 						}
 
@@ -3245,11 +3254,21 @@ void ReadAvoidInfo(FILE *stream)
 
 void ReadCharacterLine(FILE *stream, char *_value, char line[256], bool &spawnInfoOverwrite, bool &spawnGroupOverwrite,
 	bool &idleOverwrite, bool &idle2Overwrite, bool &roarOverwrite, bool &killOverwrite, bool &waterDieOverwrite,
-	bool &deathTypeOverwrite, bool &trophyTypeOverwrite, bool &idleGroupOverwrite, bool &idle2GroupOverwrite) {
+	bool &deathTypeOverwrite, bool &trophyTypeOverwrite, bool &idleGroupOverwrite, bool &idle2GroupOverwrite,
+	bool &memberOverwrite) {
 
 	char *value = _value;
 //	bool overwrite = _overwrite;
 
+
+
+	if (strstr(line, "packinfo")) {
+		if (memberOverwrite) {
+			WipePackMembers2();
+			memberOverwrite = false;
+		}
+		ReadPackMember2(stream);
+	}
 
 	if (strstr(line, "tropgroup")) {						
 		int gr = atoi(value);
@@ -3639,13 +3658,26 @@ void ReadCharacters(FILE *stream)
 				!strstr(line, "tropinfo") &&
 				!strstr(line, "deathtype") &&
 				!strstr(line, "idlegroup") &&
+				!strstr(line, "packinfo") &&
 				!strstr(line, "waterIgroup"))
 				DoHalt("Script loading error: Characters");
 			value++;
 
 
-			bool temp, temp3, temp4, temp5, temp6, temp7, temp8, temp9, temp10, temp11, temp12;
-			ReadCharacterLine(stream, value, line, temp, temp3, temp4, temp5, temp6, temp7, temp8, temp9, temp12, temp10, temp11);
+			bool temp, temp3, temp4, temp5, temp6, temp7, temp8, temp9, temp10, temp11, temp12, temp13;
+			temp = false;
+			temp3 = false;
+			temp4 = false;
+			temp5 = false;
+			temp6 = false;
+			temp7 = false;
+			temp8 = false;
+			temp9 = false;
+			temp10 = false;
+			temp11 = false;
+			temp12 = false;
+			temp13 = false;
+			ReadCharacterLine(stream, value, line, temp, temp3, temp4, temp5, temp6, temp7, temp8, temp9, temp12, temp10, temp11, temp13);
 
 			if (strstr(line, "overwrite") || strstr(line, "addition")) {
 
@@ -3744,6 +3776,7 @@ void ReadCharacters(FILE *stream)
 					bool trophyTypeOverwrite = strstr(line, "overwrite");
 					bool idleGroupOverwrite = strstr(line, "overwrite");
 					bool idle2GroupOverwrite = strstr(line, "overwrite");
+					bool memberOverwrite = strstr(line, "overwrite");
 
 					while (fgets(line, 255, stream)) {
 						if (strstr(line, "}")) break;
@@ -3757,6 +3790,7 @@ void ReadCharacters(FILE *stream)
 							&& !strstr(line, "idlegroup")
 							&& !strstr(line, "waterIgroup")
 							&& !strstr(line, "tropinfo")
+							&& !strstr(line, "packinfo")
 							&& !strstr(line, "killtype"))
 							DoHalt("Script loading error: Characters");
 						value++;
@@ -3764,7 +3798,7 @@ void ReadCharacters(FILE *stream)
 						ReadCharacterLine(stream, value, line, spawnInfoOverwrite, spawnGroupOverwrite,
 							idleOverwrite, idle2Overwrite, roarOverwrite, killOverwrite,
 							waterDieOverwrite, deathTypeOverwrite, trophyTypeOverwrite,
-							idleGroupOverwrite, idle2GroupOverwrite);
+							idleGroupOverwrite, idle2GroupOverwrite,memberOverwrite);
 
 					}
 

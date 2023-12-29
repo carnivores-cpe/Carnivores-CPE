@@ -2432,7 +2432,7 @@ void AnimateElements()
 	  else {
 		  Snow[s].ftime += TimeDt;
 		  Snow[s].pos.y -= TimeDt * (snow_vSpd / 64) / 1000.f; //3
-		  if (Snow[s].ftime > (2000/(snow_vSpd/192)))  RespawnSnow(s, FALSE); //2000
+			  if (Snow[s].ftime > (2000/(snow_vSpd/192)))  RespawnSnow(s, FALSE); //2000
 	  }
 
   }

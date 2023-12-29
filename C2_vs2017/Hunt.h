@@ -541,6 +541,13 @@ typedef struct _TPackMember
 	float ratio;
 } TPackMember;
 
+typedef struct _TPackMember2
+{
+	int packGroup;
+	float ratio;
+} TPackMember2;
+
+
 typedef struct _TSpawnInfo
 {
 	int spawnGroup;//, spawnMax;
@@ -685,8 +692,11 @@ typedef struct _TDinoInfo
   WORD radarColour565, radarColour555;
 
 
-  int SpawnInfoCh;
+  int SpawnInfoCh=0;
   TSpawnInfo SpawnInfo[32];
+
+  int packMember2Ch = 0;
+  TPackMember2 packMember2[32];
 
 } TDinoInfo;
 
