@@ -2651,15 +2651,9 @@ void ReadPackTableLine(FILE *stream, char *_value, char line[256], bool &spawnIO
 	
 }
 
-
-void ReadPackTable(FILE *stream)
-{
-	packTypeCount = 0;
-
-	if (SurvivalMode) {
-		SkipSector(stream);
-		return;
-	}
+//mode 0 = packtable
+//mode 1 = character
+void ReadPackGroup(FILE *stream, char line[256], int mode) {
 
 	//area
 	char tempProjectName[128];
@@ -2681,131 +2675,150 @@ void ReadPackTable(FILE *stream)
 		LPSTR s = __argv[a];
 	}
 
-	char line[256], *value;
+	char *value;
+
+	while (fgets(line, 255, stream))
+	{
+		if (strstr(line, "}"))
+		{
+			if (mode == 1) {
+				DinoInfo[TotalC].packMember2[DinoInfo[TotalC].packMember2Ch].packGroup = packTypeCount;
+				DinoInfo[TotalC].packMember2[DinoInfo[TotalC].packMember2Ch].ratio = 1;
+				DinoInfo[TotalC].packMember2Ch++;
+			}
+			packTypeCount++;
+			break;
+		}
+
+		value = strstr(line, "=");
+		value++;
+		bool temp1;
+		temp1 = false;
+		ReadPackTableLine(stream, value, line, temp1);
+
+		if (strstr(line, "overwrite") || strstr(line, "addition")) {
+
+
+
+			bool readThis = true;
+			char mapNo1 = tempProjectName[18];
+			while (readThis == true) {
+
+				//trophy
+				if (tempProjectName[18] == 'h') break;
+
+				if (strstr(line, "area")) {
+
+					switch ((char)tempProjectName[18]) {
+					case '1':
+						if (tempProjectName[19]) {
+							if (!strstr(line, "area0")) readThis = false;//area10
+						}
+						else if (!strstr(line, "area1")) readThis = false;
+						break;
+					case '2':
+						if (!strstr(line, "area2")) readThis = false;
+						break;
+					case '3':
+						if (!strstr(line, "area3")) readThis = false;
+						break;
+					case '4':
+						if (!strstr(line, "area4")) readThis = false;
+						break;
+					case '5':
+						if (!strstr(line, "area5")) readThis = false;
+						break;
+					case '6':
+						if (!strstr(line, "area6")) readThis = false;
+						break;
+					case '7':
+						if (!strstr(line, "area7")) readThis = false;
+						break;
+					case '8':
+						if (!strstr(line, "area8")) readThis = false;
+						break;
+					case '9':
+						if (!strstr(line, "area9")) readThis = false;
+						break;
+					}
+				}
+
+				if (strstr(line, "time")) {
+					switch (timeOfDay) {
+					case 0:
+						if (!strstr(line, "time0")) readThis = false;
+						break;
+					case 1:
+						if (!strstr(line, "time1")) readThis = false;
+						break;
+					case 2:
+						if (!strstr(line, "time2")) readThis = false;
+						break;
+					}
+				}
+
+
+				if (strstr(line, "char")) {
+					bool readChar = false;
+					if (strstr(line, "char0") && (dinSelect & (1 << 10))) readChar = true;
+					if (strstr(line, "char1") && (dinSelect & (1 << 11))) readChar = true;
+					if (strstr(line, "char2") && (dinSelect & (1 << 12))) readChar = true;
+					if (strstr(line, "char3") && (dinSelect & (1 << 13))) readChar = true;
+					if (strstr(line, "char4") && (dinSelect & (1 << 14))) readChar = true;
+					if (strstr(line, "char5") && (dinSelect & (1 << 15))) readChar = true;
+					if (strstr(line, "char6") && (dinSelect & (1 << 16))) readChar = true;
+					if (strstr(line, "char7") && (dinSelect & (1 << 17))) readChar = true;
+					if (strstr(line, "char8") && (dinSelect & (1 << 18))) readChar = true;
+					if (strstr(line, "char9") && (dinSelect & (1 << 19))) readChar = true;
+					if (!readChar) readThis = false;
+				}
+
+				break;
+			}
+
+
+
+
+			if (readThis) {
+
+				bool spawnInfoOverwrite = strstr(line, "overwrite");
+
+				while (fgets(line, 255, stream)) {
+					if (strstr(line, "}")) break;
+
+					value = strstr(line, "=");
+					value++;
+
+					ReadPackTableLine(stream, value, line, spawnInfoOverwrite);
+
+				}
+
+			}
+			else {
+				SkipSector(stream);
+			}
+		}
+
+	}
+}
+
+void ReadPackTable(FILE *stream)
+{
+	packTypeCount = 0;
+
+	if (SurvivalMode) {
+		SkipSector(stream);
+		return;
+	}
+
+	char line[256];
 	while (fgets(line, 255, stream))
 	{
 		if (strstr(line, "}")) break;
 
 
-		if (strstr(line, "packgroup"))
-			while (fgets(line, 255, stream))
-			{
-				if (strstr(line, "}"))
-				{
-					packTypeCount++;
-					break;
-				}
-
-				value = strstr(line, "=");
-				value++;
-				bool temp1;
-				temp1 = false;
-				ReadPackTableLine(stream, value, line, temp1);
-
-				if (strstr(line, "overwrite") || strstr(line, "addition")) {
-
-
-
-					bool readThis = true;
-					char mapNo1 = tempProjectName[18];
-					while (readThis == true) {
-
-						//trophy
-						if (tempProjectName[18] == 'h') break;
-
-						if (strstr(line, "area")) {
-
-							switch ((char)tempProjectName[18]) {
-							case '1':
-								if (tempProjectName[19]) {
-									if (!strstr(line, "area0")) readThis = false;//area10
-								}
-								else if (!strstr(line, "area1")) readThis = false;
-								break;
-							case '2':
-								if (!strstr(line, "area2")) readThis = false;
-								break;
-							case '3':
-								if (!strstr(line, "area3")) readThis = false;
-								break;
-							case '4':
-								if (!strstr(line, "area4")) readThis = false;
-								break;
-							case '5':
-								if (!strstr(line, "area5")) readThis = false;
-								break;
-							case '6':
-								if (!strstr(line, "area6")) readThis = false;
-								break;
-							case '7':
-								if (!strstr(line, "area7")) readThis = false;
-								break;
-							case '8':
-								if (!strstr(line, "area8")) readThis = false;
-								break;
-							case '9':
-								if (!strstr(line, "area9")) readThis = false;
-								break;
-							}
-						}
-
-						if (strstr(line, "time")) {
-							switch (timeOfDay) {
-							case 0:
-								if (!strstr(line, "time0")) readThis = false;
-								break;
-							case 1:
-								if (!strstr(line, "time1")) readThis = false;
-								break;
-							case 2:
-								if (!strstr(line, "time2")) readThis = false;
-								break;
-							}
-						}
-
-
-						if (strstr(line, "char")) {
-							bool readChar = false;
-							if (strstr(line, "char0") && (dinSelect & (1 << 10))) readChar = true;
-							if (strstr(line, "char1") && (dinSelect & (1 << 11))) readChar = true;
-							if (strstr(line, "char2") && (dinSelect & (1 << 12))) readChar = true;
-							if (strstr(line, "char3") && (dinSelect & (1 << 13))) readChar = true;
-							if (strstr(line, "char4") && (dinSelect & (1 << 14))) readChar = true;
-							if (strstr(line, "char5") && (dinSelect & (1 << 15))) readChar = true;
-							if (strstr(line, "char6") && (dinSelect & (1 << 16))) readChar = true;
-							if (strstr(line, "char7") && (dinSelect & (1 << 17))) readChar = true;
-							if (strstr(line, "char8") && (dinSelect & (1 << 18))) readChar = true;
-							if (strstr(line, "char9") && (dinSelect & (1 << 19))) readChar = true;
-							if (!readChar) readThis = false;
-						}
-
-						break;
-					}
-
-
-
-
-					if (readThis) {
-
-						bool spawnInfoOverwrite = strstr(line, "overwrite");
-
-						while (fgets(line, 255, stream)) {
-							if (strstr(line, "}")) break;
-
-							value = strstr(line, "=");
-							value++;
-
-							ReadPackTableLine(stream, value, line, spawnInfoOverwrite);
-
-						}
-
-					}
-					else {
-						SkipSector(stream);
-					}
-				}
-
-			}
+		if (strstr(line, "packgroup"))ReadPackGroup(stream, line, 0);
+			
 
 	}
 
@@ -3257,6 +3270,14 @@ void ReadCharacterLine(FILE *stream, char *_value, char line[256], bool &spawnIn
 		ReadPackMember2(stream);
 	}
 
+	if (strstr(line, "packgroup")) {
+		if (memberOverwrite) {//reuse same overwrite
+			WipePackMembers2();
+			memberOverwrite = false;
+		}
+		ReadPackGroup(stream,line,1);
+	}
+
 	if (strstr(line, "tropgroup")) {						
 		int gr = atoi(value);
 		for (int i = 0; i < trophyTypeCount; i++){
@@ -3646,6 +3667,7 @@ void ReadCharacters(FILE *stream)
 				!strstr(line, "deathtype") &&
 				!strstr(line, "idlegroup") &&
 				!strstr(line, "packinfo") &&
+				!strstr(line, "packgroup") &&
 				!strstr(line, "waterIgroup"))
 				DoHalt("Script loading error: Characters");
 			value++;
@@ -3778,6 +3800,7 @@ void ReadCharacters(FILE *stream)
 							&& !strstr(line, "waterIgroup")
 							&& !strstr(line, "tropinfo")
 							&& !strstr(line, "packinfo")
+							&& !strstr(line, "packgroup")
 							&& !strstr(line, "killtype"))
 							DoHalt("Script loading error: Characters");
 						value++;
