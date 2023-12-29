@@ -152,6 +152,18 @@ packtable {
   }
  }
 
+ //===1 galli
+ packgroup{
+  packMax = 9
+  packMin = 7
+  packDensity = 25
+  spawngroup{
+   spawnmax = 4
+   spawnmin = 2
+   spawnrate = 0.5
+  }
+ }
+
 
 } //==== end of trophytable =========//
 
@@ -302,6 +314,10 @@ idlegroup{
  name    = 'Galimimus'
  file    = 'gall.car'
  ai      = 2
+ packinfo{
+  group = 1
+  ratio = 0
+ }
  radar = TRUE
  radR = 240
  radG = 240

@@ -1780,6 +1780,45 @@ reduced by the whole value of densityMulti. e.g. in the above screenshot, the ma
 	</div>
 </p>
 
+<p style="margin-top:4%;">
+	<h2 id="arrow_156" unselectable="on" onclick="expand(156)"
+		style="float:left;margin-top:0;cursor:pointer;
+		-moz-user-select:none;
+		user-select:none;
+		-webkit-user-select: none;
+		-ms-user-select: none;"
+		>></h2>
+	<div class = "con" style="margin-left:4%;">
+		<h2 onclick="expand(156)" style="cursor:pointer;">_RES Subsection: spawninfo</h2>
+		<div id="content_156" style="display: none">
+
+		Each pack must have either a spawninfo or spawngroup entry in order to spawn in. See the creatures section of the manual for more details on spawninfo.
+
+		</div>
+	</div>
+</p>
+
+<p style="margin-top:4%;">
+	<h2 id="arrow_167" unselectable="on" onclick="expand(167)"
+		style="float:left;margin-top:0;cursor:pointer;
+		-moz-user-select:none;
+		user-select:none;
+		-webkit-user-select: none;
+		-ms-user-select: none;"
+		>></h2>
+	<div class = "con" style="margin-left:4%;">
+		<h2 onclick="expand(167)" style="cursor:pointer;">_RES Subsection: spawngroup</h2>
+		<div id="content_167" style="display: none">
+
+		Spawngroups can also be defined inside a character section instead of in the spawntable.<br>
+		See the spawntable section of the manual so see how to set up a spawngroup.
+
+
+
+		</div>
+	</div>
+</p>
+
 
 		
 		</div>
@@ -6189,6 +6228,7 @@ idlegroup{
 		Note: you can spawn in huntables selected from the menu by surrounding the spawninfo with a character overwrite (see the overwrite section of the manual).
 		
 		</p>	
+		Note: this will spawn a lone creature, not a pack. To spawn a pack, write spawninfo within a packgroup subsection.
 		
 		
 		<!--xmax ymax xmin ymin-->
@@ -6213,6 +6253,7 @@ idlegroup{
 			<p>
 			The spawngroup to add the creature to (spawngroups are numbered starting from 0).
 			</p>
+			
 		
 		</div>
 	</div>
@@ -6296,10 +6337,9 @@ idlegroup{
 
 		Spawngroups can also be defined inside a character section instead of in the spawntable.<br>
 		See the spawntable section of the manual so see how to set a spawngroup.
-		<p>
-		Note: Overwrite/addition cannot be used inside a spawngroup if defined in a character section.
-		</p>
-
+<p>
+Note: this will spawn a lone creature, not a pack. To spawn a pack, write spawngroup within a packgroup subsection.
+</p>
 
 
 		</div>
