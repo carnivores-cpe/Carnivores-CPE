@@ -573,6 +573,7 @@ typedef struct _TDinoDeathType
 	int die;
 	int sleep;
 	int fall;
+	bool nosleep;
 } TDinoDeathType;
 
 typedef struct _TDinoIdleType

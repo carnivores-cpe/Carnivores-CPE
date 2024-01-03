@@ -1395,6 +1395,7 @@ idlegroup{
 }
 deathtype{
  dieAnim = 8
+ noSleep = TRUE
 }
  waterLevel = 560
 killtype{

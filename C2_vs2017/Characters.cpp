@@ -2053,6 +2053,7 @@ void AnimateHuntDead(TCharacter *cptr)
 
 
 
+/*
 void AnimateTRexDead(TCharacter *cptr)
 {
 
@@ -2086,7 +2087,7 @@ void AnimateTRexDead(TCharacter *cptr)
 	ThinkY_Beta_Gamma(cptr, 200, 196, 0.6f, 0.5f);
 	DeltaFunc(cptr->gamma, cptr->tggamma, TimeDt / 1600.f);
 }
-
+*/
 
 /*
 void AnimateDimorDead(TCharacter *cptr)
@@ -2178,8 +2179,10 @@ void AnimateDimorDead(TCharacter *cptr)
 //universal animate dead proc
 void AnimateDeadCommon(TCharacter *cptr)
 {
+	bool stge = cptr->Phase != DinoInfo[cptr->CType].deathType[cptr->deathType].die;
+	if (!DinoInfo[cptr->CType].deathType[cptr->deathType].nosleep) stge = stge && cptr->Phase != DinoInfo[cptr->CType].deathType[cptr->deathType].sleep;
 
-	if (cptr->Phase != DinoInfo[cptr->CType].deathType[cptr->deathType].die && cptr->Phase != DinoInfo[cptr->CType].deathType[cptr->deathType].sleep)
+	if (stge)
 	{
 		if (cptr->PPMorphTime > 128)
 		{
@@ -2198,7 +2201,7 @@ void AnimateDeadCommon(TCharacter *cptr)
 
 		cptr->FTime += TimeDt;
 		if (cptr->FTime >= cptr->pinfo->Animation[cptr->Phase].AniTime)
-			if (Tranq)
+			if (Tranq && !DinoInfo[cptr->CType].deathType[cptr->deathType].nosleep)
 			{
 				cptr->FTime = 0;
 				cptr->Phase = DinoInfo[cptr->CType].deathType[cptr->deathType].sleep;
@@ -2213,7 +2216,8 @@ void AnimateDeadCommon(TCharacter *cptr)
 	cptr->pos.x += cptr->lookx * cptr->vspeed * TimeDt;
 	cptr->pos.z += cptr->lookz * cptr->vspeed * TimeDt;
 
-	ThinkY_Beta_Gamma(cptr, 100, 96, 0.6f, 0.5f);
+	if (cptr->Clone == AI_TREX)ThinkY_Beta_Gamma(cptr, 200, 196, 0.6f, 0.5f);
+	else ThinkY_Beta_Gamma(cptr, 100, 96, 0.6f, 0.5f);
 
 	DeltaFunc(cptr->gamma, cptr->tggamma, TimeDt / 1600.f);
 }
@@ -8023,7 +8027,7 @@ void AnimateCharacters()
 			break;
 		case AI_TREX:
 			if (cptr->Health) AnimateTRex(cptr);
-			else AnimateTRexDead(cptr);
+			else AnimateDeadCommon(cptr);
 			break;
 		case AI_TITAN:
 			//TEMP DISABLED
