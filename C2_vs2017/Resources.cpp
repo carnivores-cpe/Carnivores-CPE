@@ -1728,7 +1728,15 @@ void ReInitGame()
     if ( WeaponPres & (1<<w) )
     {
       ShotsLeft[w] = WeapInfo[w].Shots;
-      if (DoubleAmmo) AmmoMag[w] = 1;
+	  if (DoubleAmmo) {
+		  if (WeapInfo[w].Reload) {
+			  ShotsLeft[w] *=2;
+			  Chambered[w] = WeapInfo[w].Reload;
+		  } else {
+			  AmmoMag[w] = 1;
+			  MagShotsLeft[w] = WeapInfo[w].Shots;
+		  }
+	  }
       if (TargetWeapon==-1) TargetWeapon=w;
     }
 

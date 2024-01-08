@@ -717,7 +717,7 @@ void HideWeapon()
 
   if (wptr->state == 0)
   {
-    if (!ShotsLeft[CurrentWeapon]) return;
+    //if (!ShotsLeft[CurrentWeapon]) return;
     if (WeapInfo[CurrentWeapon].Optic) OPTICMODE = TRUE;
     AddVoicev(wptr->chinfo[CurrentWeapon].SoundFX[0].length,
               wptr->chinfo[CurrentWeapon].SoundFX[0].lpData, 256);

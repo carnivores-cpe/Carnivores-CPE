@@ -1129,7 +1129,7 @@ _EXTORNOT float snow2_rad;//radius
 //========= GAME ====================//
 _EXTORNOT int TargetDino, TargetArea, TargetWeapon, WeaponPres, TargetCall,
           TrophyTime, ObservMode, Tranq, ObjectsOnLook,
-          CurrentWeapon, ShotsLeft[10], AmmoMag[10];
+          CurrentWeapon, ShotsLeft[10], AmmoMag[10], MagShotsLeft[10], Chambered[10];
 
 _EXTORNOT Vector3d answpos;
 _EXTORNOT int answtime, answcall;

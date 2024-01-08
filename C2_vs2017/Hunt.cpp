@@ -505,7 +505,7 @@ SKIPWIND:
       wptr->FTime = 0;
       wptr->state = 2;
 
-
+	  /*
       if (WeapInfo[CurrentWeapon].Reload && !DEBUG)
         if ( (ShotsLeft[CurrentWeapon] % WeapInfo[CurrentWeapon].Reload) == 0 )
           if ( (ShotsLeft[CurrentWeapon]>0) || (AmmoMag[CurrentWeapon]>0) )
@@ -530,6 +530,7 @@ SKIPWIND:
                       wptr->chinfo[CurrentWeapon].SoundFX[3].lpData, 256);
           }
         }
+		*/
     }
   }
 
@@ -550,7 +551,7 @@ SKIPWIND:
   }
 
 
-
+/*
   if (!ShotsLeft[CurrentWeapon])
   {
     HideWeapon();
@@ -561,6 +562,7 @@ SKIPWIND:
         break;
       }
   }
+  */
 
   CreateMorphedModel(wptr->chinfo[CurrentWeapon].mptr,
                      &wptr->chinfo[CurrentWeapon].Animation[wptr->state-1], wptr->FTime, 1.0);
@@ -629,16 +631,16 @@ SKIPWEAPON:
   if (Weapon.state)
   {
     int y0 = 5;
-    if (AmmoMag[CurrentWeapon])
+    if (!SurvivalMode)
     {
-      for (int bl=0; bl<WeapInfo[CurrentWeapon].Shots; bl++)
-        DrawPicture(6 + bl*Weapon.BulletPic[CurrentWeapon].W, y0, Weapon.BulletPic[CurrentWeapon]);
-      y0+=Weapon.BulletPic[CurrentWeapon].H+4;
-    }
-
-	if (!SurvivalMode)
-    for (int bl=0; bl<ShotsLeft[CurrentWeapon]; bl++)
-      DrawPicture(6 + bl*Weapon.BulletPic[CurrentWeapon].W, y0, Weapon.BulletPic[CurrentWeapon]);
+      for (int bl=0; bl< ShotsLeft[CurrentWeapon]; bl++)
+		  DrawPicture(6 + bl*Weapon.BulletPic[CurrentWeapon].W, y0, Weapon.BulletPic[CurrentWeapon]);
+	  y0+=Weapon.BulletPic[CurrentWeapon].H+4;
+	  
+	  if (AmmoMag[CurrentWeapon])
+		  for (int bl=0; bl< MagShotsLeft[CurrentWeapon]; bl++)
+			  DrawPicture(6 + bl*Weapon.BulletPic[CurrentWeapon].W, y0, Weapon.BulletPic[CurrentWeapon]);
+	}
   }
 
 
@@ -849,7 +851,7 @@ LONG APIENTRY MainWndProc( HWND hWnd, UINT message, UINT wParam, LONG lParam)
         w = 9;
       else
         w = ((int)wParam - '1');
-      if (!ShotsLeft[w])
+      if (!ShotsLeft[w] && !AmmoMag[w])
       {
         AddMessage("No weapon");
         break;
@@ -921,6 +923,14 @@ LONG APIENTRY MainWndProc( HWND hWnd, UINT message, UINT wParam, LONG lParam)
     case 'P':
 		if (!CTRL) { if (DEBUG) ChangeViewR(0, +2, 0); } else  SwitchMode("Phong Mapping", PHONG);
 		break;
+
+//	case VK_UP:
+
+//	case VK_RIGHT:
+
+//	case VK_LEFT:
+
+//	case VK_DOWN:
 
     case VK_TAB:
       if (!TrophyMode) ToggleMapMode();
@@ -1063,8 +1073,42 @@ BOOL CreateMainWindow()
 
 
 
+void ProcessReload() {
 
+	TWeapon *wptr = &Weapon;
+	
+	if (wptr->state == 2 && wptr->FTime == 0)
+		if (WeapInfo[CurrentWeapon].Reload) {
+			if (Chambered[CurrentWeapon] < WeapInfo[CurrentWeapon].Reload &&
+				ShotsLeft[CurrentWeapon]) {
+				Chambered[CurrentWeapon] = WeapInfo[CurrentWeapon].Reload;
 
+				if (wptr->chinfo[CurrentWeapon].Animation[3].AniTime)
+				{
+					wptr->state = 4;
+					wptr->FTime = 1;
+					AddVoicev(wptr->chinfo[CurrentWeapon].SoundFX[3].length,
+						wptr->chinfo[CurrentWeapon].SoundFX[3].lpData, 256);
+				}
+			}
+			
+		} else if (AmmoMag[CurrentWeapon]) {
+			int temp = MagShotsLeft[CurrentWeapon];
+			MagShotsLeft[CurrentWeapon] = ShotsLeft[CurrentWeapon];
+			ShotsLeft[CurrentWeapon] = temp;
+
+			if (!MagShotsLeft[CurrentWeapon]) AmmoMag[CurrentWeapon]--;
+
+			if (wptr->chinfo[CurrentWeapon].Animation[3].AniTime)
+			{
+				wptr->state = 4;
+				wptr->FTime = 1;
+				AddVoicev(wptr->chinfo[CurrentWeapon].SoundFX[3].length,
+					wptr->chinfo[CurrentWeapon].SoundFX[3].lpData, 256);
+			}
+		}
+
+}
 
 
 
@@ -1072,6 +1116,9 @@ void ProcessShoot()
 {
   //if (HeadBackR) return;
   if (!ShotsLeft[CurrentWeapon]) return;
+  if (WeapInfo[CurrentWeapon].Reload && !DEBUG)
+	  if (!Chambered[CurrentWeapon]) return;
+
   TWeapon *wptr = &Weapon;
   if (UNDERWATER)
   {
@@ -1126,6 +1173,7 @@ void ProcessShoot()
     v.y = PlayerY;
     v.z = PlayerZ;
     MakeNoise(v, ctViewR*200 * WeapInfo[CurrentWeapon].Loud);
+	if (WeapInfo[CurrentWeapon].Reload) Chambered[CurrentWeapon]--;
     if (!SurvivalMode) ShotsLeft[CurrentWeapon]--;
 	else if (WeapInfo[CurrentWeapon].Reload) {
 		ShotsLeft[CurrentWeapon]--;
@@ -1303,6 +1351,8 @@ void ProcessPlayerMovement()
   }
 
   if (KeyboardState [KeyMap.fkFire] & 128) ProcessShoot();
+  if (KeyboardState[KeyMap.fkUp] & 128) ProcessReload();
+
 
   if (Multiplayer && Host) {
 	  for (int c = 0; c < 6; c++) {
@@ -1342,8 +1392,8 @@ void ProcessPlayerMovement()
 //=========  rotation =========//
   if (KeyFlags & kfRight)  PlayerAlpha+=DeltaT*1.5f;
   if (KeyFlags & kfLeft )  PlayerAlpha-=DeltaT*1.5f;
-  if (KeyFlags & kfLookUp) PlayerBeta-=DeltaT;
-  if (KeyFlags & kfLookDn) PlayerBeta+=DeltaT;
+//  if (KeyFlags & kfLookUp) PlayerBeta-=DeltaT;
+//  if (KeyFlags & kfLookDn) PlayerBeta+=DeltaT;
 
 //========= movement ==========//
 
@@ -1528,6 +1578,7 @@ void ProcessControls()
   KeyFlags = 0;
   GetKeyboardState(KeyboardState);
 
+  
   if (KeyboardState[KeyMap.fkUp] & 128)  KeyFlags += kfLookUp;
   if (KeyboardState[KeyMap.fkDown] & 128)  KeyFlags += kfLookDn;
 
