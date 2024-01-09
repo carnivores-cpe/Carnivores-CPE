@@ -2946,6 +2946,7 @@ void ReadWeapons(FILE *stream)
         value++;
 
         if (strstr(line, "power"))  WeapInfo[TotalW].Power = (float)atof(value);
+		if (strstr(line, "veloc"))  WeapInfo[TotalW].Veloc = (float)atof(value);
         if (strstr(line, "prec"))   WeapInfo[TotalW].Prec  = (float)atof(value);
         if (strstr(line, "loud"))   WeapInfo[TotalW].Loud  = (float)atof(value);
         if (strstr(line, "rate"))   WeapInfo[TotalW].Rate  = (float)atof(value);
@@ -2953,7 +2954,7 @@ void ReadWeapons(FILE *stream)
         if (strstr(line, "reload")) WeapInfo[TotalW].Reload=        atoi(value);
         if (strstr(line, "trace"))  WeapInfo[TotalW].TraceC=        atoi(value)-1;
         if (strstr(line, "optic"))  WeapInfo[TotalW].Optic =        atoi(value);
-        if (strstr(line, "fall"))   WeapInfo[TotalW].Fall  =        atoi(value);
+        if (strstr(line, "fall"))   WeapInfo[TotalW].Fall  = (float)atof(value);
         //if (strstr(line, "price")) WeapInfo[TotalW].Price =        atoi(value);
 
         if (strstr(line, "name"))

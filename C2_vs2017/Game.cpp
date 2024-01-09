@@ -1895,13 +1895,14 @@ void AddElementsA(float x, float y, float z, int etype, int cnt, int mag, bool a
 }
 
 
-void MakeShot(float ax, float ay, float az,
+
+int AnimateBullet(float ax, float ay, float az,
               float bx, float by, float bz)
 {
   int sres;
-  if (!WeapInfo[CurrentWeapon].Fall)
+//  if (!WeapInfo[CurrentWeapon].Fall)
     sres = TraceShot(ax, ay, az, bx, by, bz);
-  else
+/*  else
   {
     Vector3d dl;
     float dy = 40.f * ctViewR / 36.f;
@@ -1934,10 +1935,10 @@ void MakeShot(float ax, float ay, float az,
     ax = bx;
     ay = by;
     az = bz;
-  }
+  }*/
 
 ENDTRACE:
-  if (sres==-1) return;
+  if (sres==-1) return sres;
 
   int mort = (sres & 0xFF00) && (Characters[ShotDino].Health);
   sres &= 0xFF;
@@ -1960,9 +1961,9 @@ ENDTRACE:
   }
 
 
-  if (sres!=tresChar) return;
+  if (sres!=tresChar) return sres;
   AddElements(bx, by, bz, partBlood, 4 + powerL *4);
-  if (!Characters[ShotDino].Health) return;
+  if (!Characters[ShotDino].Health) return sres;
 
 //======= character damage =========//
 
@@ -1976,7 +1977,59 @@ ENDTRACE:
 	  registerDamage(ShotDino);
   }
   
+  return sres;
 }
+
+
+
+
+void AddBullet(float ax, float ay, float az,
+	float Dx, float Dy, float Dz,
+	float power, float speed, float fall)
+{
+	bullet[bulletCh].a.x = ax;
+	bullet[bulletCh].a.y = ay;
+	bullet[bulletCh].a.z = az;
+	bullet[bulletCh].dif.x = Dx;
+	bullet[bulletCh].dif.y = Dy;
+	bullet[bulletCh].dif.z = Dz;
+	bullet[bulletCh].power = power;
+	bullet[bulletCh].fall = fall;
+	bullet[bulletCh].speed = speed;
+	bulletCh++;
+}
+
+void AnimateBullets() {
+	for (int b=0; b < bulletCh; b++) {
+		int sres = AnimateBullet(
+			bullet[b].a.x,
+			bullet[b].a.y,
+			bullet[b].a.z,
+			bullet[b].a.x + bullet[b].dif.x,
+			bullet[b].a.y + bullet[b].dif.y,
+			bullet[b].a.z + bullet[b].dif.z);
+		//this ought to be adjusted on frame time
+		bullet[b].a.x += bullet[b].dif.x;
+		bullet[b].a.y += bullet[b].dif.y;
+		bullet[b].a.z += bullet[b].dif.z;
+		float pdx = PlayerX - bullet[b].a.x;
+		float pdz = PlayerZ - bullet[b].a.z;
+		float pd = pdx * pdx + pdz * pdz;
+		bullet[b].dif.y -= bullet[b].fall / bullet[b].speed;
+		//remove
+		if (sres>0 || pd > (256 * ctViewR) * (256 * ctViewR)) {
+			memcpy(&bullet[b], &bullet[b + 1], (bulletCh + 1 - b) * sizeof(TBullet));
+			b--;
+			bulletCh--;
+		}
+	}
+
+	//256*ctViewR
+
+	//bulletCh = 0;
+	//memcpy(&Elements[eg], &Elements[eg+1], (ElCount+1-eg) * sizeof(TElements));
+}
+
 
 
 void registerDamage(int Dino) {

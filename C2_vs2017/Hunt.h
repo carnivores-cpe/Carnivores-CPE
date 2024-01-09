@@ -14,7 +14,8 @@
 //1.0.5		=5
 //1.0.6		=6
 //1.0.6.1	=7
-#define MODDERS_EDITION_VERSION_ID	7 //1.0.6.1
+//1.1		=8
+#define MODDERS_EDITION_VERSION_ID	8 //1.1
 
 #define DEFAULT_BUFLEN 512
 #define DEFAULT_PORT "1986"
@@ -312,6 +313,11 @@ typedef struct _TWeapon
 } TWeapon;
 
 
+typedef struct _TBullet
+{
+	Vector3d a,dif;
+	float power, speed, fall;
+} TBullet;
 
 typedef struct _TWCircle
 {
@@ -768,8 +774,8 @@ typedef struct _TWeapInfo
 {
   char Name[48], FName[48], BFName[48], SFXName[48];
   bool MGSSound = FALSE;
-  float Power, Prec, Loud, Rate;
-  int Shots, Optic, Fall, TraceC, Reload, SFXIndex;
+  float Power, Prec, Loud, Rate, Veloc, Fall;
+  int Shots, Optic, TraceC, Reload, SFXIndex;
 } TWeapInfo;
 
 
@@ -1012,8 +1018,12 @@ void LoadTrophy();
 void SaveTrophy();
 void RemoveCurrentTrophy();
 void MakeCall();
-void MakeShot(float ax, float ay, float az,
-              float bx, float by, float bz);
+void AddBullet(float ax, float ay, float az,
+              float bx, float by, float bz,
+	float power, float speed, float fall);
+int AnimateBullet(float ax, float ay, float az,
+	float bx, float by, float bz);
+void AnimateBullets();
 void registerDamage(int);
 
 void AddBloodTrail(TCharacter *cptr);
@@ -1150,10 +1160,15 @@ _EXTORNOT TPicture LandPic,DinoPic,DinoPicM, MapPic, WepPic;
 _EXTORNOT HFONT fnt_BIG, fnt_Small, fnt_Midd;
 _EXTORNOT TLandingList LandingList;
 
+_EXTORNOT TBullet bullet[256];
+_EXTORNOT int bulletCh;
+
+
 //======== MODEL ======================//
 _EXTORNOT TObject  MObjects[256];
 _EXTORNOT TModel* mptr;
 _EXTORNOT TWeapon Weapon;
+
 
 
 _EXTORNOT int   OCount, iModelFade, iModelBaseFade, Current;

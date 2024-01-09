@@ -1158,10 +1158,14 @@ void ProcessShoot()
       nv.y=-sb;
       nv.z*=cb;
 
-      MakeShot(PlayerX, PlayerY+HeadY, PlayerZ,
-               PlayerX+nv.x * 256*ctViewR,
-               PlayerY+nv.y * 256*ctViewR + HeadY,
-               PlayerZ+nv.z * 256*ctViewR);
+      AddBullet(PlayerX, PlayerY+HeadY, PlayerZ,
+               nv.x * 64* WeapInfo[CurrentWeapon].Veloc,
+               nv.y * 64* WeapInfo[CurrentWeapon].Veloc,
+               nv.z * 64* WeapInfo[CurrentWeapon].Veloc,
+			   WeapInfo[CurrentWeapon].Power,
+			   WeapInfo[CurrentWeapon].Veloc,
+   			   WeapInfo[CurrentWeapon].Fall
+			   );
     }
 
 	//Multiplayer)
@@ -2025,6 +2029,7 @@ void ProcessGame()
     AudioSetCameraPos(CameraX, CameraY, CameraZ, CameraAlpha, CameraBeta);
     Audio_UploadGeometry();
     AnimateCharacters();
+	AnimateBullets();
 	if (Multiplayer) {
 		AnimateMHunters();
 	}
