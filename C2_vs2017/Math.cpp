@@ -543,7 +543,7 @@ int  TraceShot(float  ax, float  ay, float az,
       FillVGround(v[1], xx+1, zz);
       if (ReverseOn) FillVGround(v[2], xx, zz+1);
       else FillVGround(v[2], xx+1, zz+1);
-      if (TraceCheckPlane(v[0], v[1], v[2])) TraceRes = tresGround;
+	  if (TraceCheckPlane(v[0], v[1], v[2])) TraceRes = tresGround;
 
       if (ReverseOn)
       {

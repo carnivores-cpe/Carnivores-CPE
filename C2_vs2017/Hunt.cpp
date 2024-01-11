@@ -1115,9 +1115,16 @@ void ProcessReload() {
 void ProcessShoot()
 {
   //if (HeadBackR) return;
-  if (!ShotsLeft[CurrentWeapon]) return;
+	int clickNo = rRand(2);
+	if (!ShotsLeft[CurrentWeapon]) {
+		if (!alreadyFired) AddVoicev(fxClick[clickNo].length, fxClick[clickNo].lpData, 256);
+		return;
+	}
   if (WeapInfo[CurrentWeapon].Reload && !DEBUG)
-	  if (!Chambered[CurrentWeapon]) return;
+	  if (!Chambered[CurrentWeapon]) {
+		  if (!alreadyFired) AddVoicev(fxClick[clickNo].length, fxClick[clickNo].lpData, 256);
+		  return;
+	  }
 
   TWeapon *wptr = &Weapon;
   if (UNDERWATER)
@@ -1354,7 +1361,11 @@ void ProcessPlayerMovement()
     if (SSpeed <-0.30f) SSpeed =-0.30f;
   }
 
-  if (KeyboardState [KeyMap.fkFire] & 128) ProcessShoot();
+  if (KeyboardState[KeyMap.fkFire] & 128) {
+	  ProcessShoot();
+	  alreadyFired = true;
+  } else alreadyFired = false;
+
   if (KeyboardState[KeyMap.fkUp] & 128) ProcessReload();
 
 
@@ -2095,6 +2106,23 @@ int PASCAL WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 
   LoadWav("HUNTDAT\\SOUNDFX\\blip.wav", fxBlip);
 
+  LoadWav("HUNTDAT\\SOUNDFX\\click1.wav", fxClick[0]);
+  LoadWav("HUNTDAT\\SOUNDFX\\click2.wav", fxClick[1]);
+  LoadWav("HUNTDAT\\SOUNDFX\\click3.wav", fxClick[2]);
+
+  LoadWav("HUNTDAT\\SOUNDFX\\IMPACT\\ground1.wav", fxImpactGround[0]);
+  LoadWav("HUNTDAT\\SOUNDFX\\IMPACT\\ground2.wav", fxImpactGround[1]);
+  LoadWav("HUNTDAT\\SOUNDFX\\IMPACT\\ground3.wav", fxImpactGround[2]);
+  LoadWav("HUNTDAT\\SOUNDFX\\IMPACT\\model1.wav", fxImpactModel[0]);
+  LoadWav("HUNTDAT\\SOUNDFX\\IMPACT\\model2.wav", fxImpactModel[1]);
+  LoadWav("HUNTDAT\\SOUNDFX\\IMPACT\\model3.wav", fxImpactModel[2]);
+  LoadWav("HUNTDAT\\SOUNDFX\\IMPACT\\water1.wav", fxImpactWater[0]);
+  LoadWav("HUNTDAT\\SOUNDFX\\IMPACT\\water2.wav", fxImpactWater[1]);
+  LoadWav("HUNTDAT\\SOUNDFX\\IMPACT\\water3.wav", fxImpactWater[2]);
+  LoadWav("HUNTDAT\\SOUNDFX\\IMPACT\\char1.wav", fxImpactChar[0]);
+  LoadWav("HUNTDAT\\SOUNDFX\\IMPACT\\char2.wav", fxImpactChar[1]);
+  LoadWav("HUNTDAT\\SOUNDFX\\IMPACT\\char3.wav", fxImpactChar[2]);
+
   LoadWav("HUNTDAT\\SOUNDFX\\STEPS\\hwalk1.wav",  fxStep[0]);
   LoadWav("HUNTDAT\\SOUNDFX\\STEPS\\hwalk2.wav",  fxStep[1]);
   LoadWav("HUNTDAT\\SOUNDFX\\STEPS\\hwalk3.wav",  fxStep[2]);
@@ -2137,6 +2165,7 @@ int PASCAL WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
   ProcessSyncro();
   blActive = TRUE;
 
+  alreadyFired = false;
 
   PrintLog("Entering messages loop.\n");
   for( ; ; ){

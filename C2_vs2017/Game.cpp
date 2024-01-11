@@ -1946,11 +1946,16 @@ ENDTRACE:
   int powerL = WeapInfo[CurrentWeapon].Power;
   if (powerL > 100) powerL = 100;
 
-  if (sres == tresGround)
+  if (sres == tresGround) {
+	  AddElements(bx, by, bz, partGround, 6 + powerL * 4);
+	  int sNo = rRand(2);
+	  AddVoice3dv(fxImpactGround[sNo].length, fxImpactGround[sNo].lpData, bx, by, bz, 256);
+  }
+  if (sres == tresModel){
     AddElements(bx, by, bz, partGround, 6 + powerL *4);
-  if (sres == tresModel)
-    AddElements(bx, by, bz, partGround, 6 + powerL *4);
-
+	int sNo = rRand(2);
+	AddVoice3dv(fxImpactModel[sNo].length, fxImpactModel[sNo].lpData, bx, by, bz, 256);
+  }
 
   if (sres == tresWater)
   {
@@ -1958,11 +1963,15 @@ ENDTRACE:
     //AddElements(bx, GetLandH(bx, bz), bz, partBubble);
     //AddWCircle(bx, bz, 1.2);
     AddWCircle(bx, bz, 1.2);
+	int sNo = rRand(2);
+	AddVoice3dv(fxImpactWater[sNo].length, fxImpactWater[sNo].lpData, bx, by, bz, 256);
   }
 
 
   if (sres!=tresChar) return sres;
   AddElements(bx, by, bz, partBlood, 4 + powerL *4);
+  int sNo = rRand(2);
+  AddVoice3dv(fxImpactChar[sNo].length, fxImpactChar[sNo].lpData, bx, by, bz, 256);
   if (!Characters[ShotDino].Health) return sres;
 
 //======= character damage =========//
@@ -2016,7 +2025,6 @@ void AnimateBullets() {
 		float pdz = PlayerZ - bullet[b].a.z;
 		float pd = pdx * pdx + pdz * pdz;
 		bullet[b].dif.y -= bullet[b].fall / bullet[b].speed;
-		//remove
 		if (sres>0 || pd > (256 * ctViewR) * (256 * ctViewR)) {
 			memcpy(&bullet[b], &bullet[b + 1], (bulletCh + 1 - b) * sizeof(TBullet));
 			b--;

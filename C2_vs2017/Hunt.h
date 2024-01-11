@@ -1086,6 +1086,11 @@ _EXTORNOT   char    ProjectName[128];
 
 _EXTORNOT   int     _GameState, _MultiplayerState;//multiplayer
 _EXTORNOT   TSFX    fxBlip;
+_EXTORNOT   TSFX    fxClick[3];
+_EXTORNOT   TSFX    fxImpactGround[3];
+_EXTORNOT   TSFX    fxImpactModel[3];
+_EXTORNOT   TSFX    fxImpactWater[3];
+_EXTORNOT   TSFX    fxImpactChar[3];
 _EXTORNOT   TSFX    fxCall[10][3], fxScream[4];
 _EXTORNOT   TSFX	fxGunShot[11];
 _EXTORNOT   TSFX    fxUnderwater, fxWaterIn, fxWaterOut, fxJump, fxStep[3], fxStepW[3];
@@ -1140,6 +1145,8 @@ _EXTORNOT float snow2_rad;//radius
 _EXTORNOT int TargetDino, TargetArea, TargetWeapon, WeaponPres, TargetCall,
           TrophyTime, ObservMode, Tranq, ObjectsOnLook,
           CurrentWeapon, ShotsLeft[10], AmmoMag[10], MagShotsLeft[10], Chambered[10];
+
+_EXTORNOT bool alreadyFired;
 
 _EXTORNOT Vector3d answpos;
 _EXTORNOT int answtime, answcall;
