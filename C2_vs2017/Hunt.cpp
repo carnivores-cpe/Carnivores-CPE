@@ -480,7 +480,7 @@ SKIPWIND:
   if (wptr->state == 1)
   {
     wptr->FTime+=TimeDt;
-    if (wptr->FTime >= wptr->chinfo[CurrentWeapon].Animation[0].AniTime)
+    if (wptr->FTime >= wptr->chinfo[CurrentWeapon].Animation[WeapInfo[CurrentWeapon].getAnim].AniTime)
     {
       wptr->FTime = 0;
       wptr->state = 2;
@@ -490,7 +490,7 @@ SKIPWIND:
   if (wptr->state == 4)
   {
     wptr->FTime+=TimeDt;
-    if (wptr->FTime >= wptr->chinfo[CurrentWeapon].Animation[3].AniTime)
+    if (wptr->FTime >= wptr->chinfo[CurrentWeapon].Animation[WeapInfo[CurrentWeapon].rldAnim].AniTime)
     {
       wptr->FTime = 0;
       wptr->state = 2;
@@ -500,7 +500,7 @@ SKIPWIND:
   if (wptr->state == 2 && wptr->FTime>0)
   {
     wptr->FTime+=TimeDt;
-    if (wptr->FTime >= wptr->chinfo[CurrentWeapon].Animation[1].AniTime)
+    if (wptr->FTime >= wptr->chinfo[CurrentWeapon].Animation[WeapInfo[CurrentWeapon].shtAnim].AniTime)
     {
       wptr->FTime = 0;
       wptr->state = 2;
@@ -537,7 +537,7 @@ SKIPWIND:
   if (wptr->state == 3)
   {
     wptr->FTime+=TimeDt;
-    if (wptr->FTime >= wptr->chinfo[CurrentWeapon].Animation[2].AniTime)
+    if (wptr->FTime >= wptr->chinfo[CurrentWeapon].Animation[WeapInfo[CurrentWeapon].putAnim].AniTime)
     {
       wptr->FTime = 0;
       wptr->state = 0;
@@ -564,8 +564,25 @@ SKIPWIND:
   }
   */
 
+  int phas;
+  switch (wptr->state)
+  {
+  case 1:
+	  phas = WeapInfo[CurrentWeapon].getAnim;
+	  break;
+  case 2:
+	  phas = WeapInfo[CurrentWeapon].shtAnim;
+	  break;
+  case 3:
+	  phas = WeapInfo[CurrentWeapon].putAnim;
+	  break;
+  case 4:
+	  phas = WeapInfo[CurrentWeapon].rldAnim;
+	  break;
+  }
+
   CreateMorphedModel(wptr->chinfo[CurrentWeapon].mptr,
-                     &wptr->chinfo[CurrentWeapon].Animation[wptr->state-1], wptr->FTime, 1.0);
+                     &wptr->chinfo[CurrentWeapon].Animation[phas], wptr->FTime, 1.0);
 
   b = (float)sin((float)RealTime / 300.f) / 100.f;
   wpnDAlpha = wptr->shakel * (float)sin((float)RealTime / 300.f+pi/2) / 200.f;

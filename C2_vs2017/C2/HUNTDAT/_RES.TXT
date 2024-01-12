@@ -169,6 +169,10 @@ weapons {
  file  = 'pistol.car'
  pic   = 'bullet1.tga'
  gunshot = 'pistol.wav'
+ getAnim = 0
+ shtAnim = 1
+ putAnim = 2
+ rldAnim = 3
  power = 2
  veloc = 12
  prec  = 0.8
@@ -182,6 +186,10 @@ weapons {
  file  = 'shotgun.car'
  pic   = 'bullet2.tga'
  gunshot = 'shotgun.wav'
+ getAnim = 0
+ shtAnim = 1
+ putAnim = 2
+ rldAnim = 3
  power = 1
  veloc = 12
  prec  = 0.3
@@ -197,6 +205,10 @@ weapons {
  file  = 'dbsgun.car'
  pic   = 'bullet2.tga'
  gunshot = 'dbsgun.wav'
+ getAnim = 0
+ shtAnim = 1
+ putAnim = 2
+ rldAnim = 3
  power = 1
  veloc = 12
  prec  = 0.2
@@ -212,6 +224,10 @@ weapons {
  name  = 'X-Bow'
  file  = 'x_bow.car'
  pic   = 'bullet4.tga'
+ getAnim = 0
+ shtAnim = 1
+ putAnim = 2
+ rldAnim = 3
  shots = 6
  fall = 1.8
  power = 6
@@ -226,6 +242,10 @@ weapons {
  file  = 'rifle.car'
  pic   = 'bullet3.tga'
  gunshot = 'rifle.wav'
+ getAnim = 0
+ shtAnim = 1
+ putAnim = 2
+ rldAnim = 3
  power = 4
  veloc = 23
  prec  = 1.8
@@ -239,6 +259,10 @@ weapons {
  file  = 'sniper.car'
  pic   = 'bullet3.tga'
  gunshot = 'sniper.wav'
+ getAnim = 0
+ shtAnim = 1
+ putAnim = 2
+ rldAnim = 3
  power = 4
  veloc = 23
  optic = 1

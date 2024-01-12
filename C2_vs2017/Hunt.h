@@ -776,6 +776,7 @@ typedef struct _TWeapInfo
   bool MGSSound = FALSE;
   float Power, Prec, Loud, Rate, Veloc, Fall;
   int Shots, Optic, TraceC, Reload, SFXIndex;
+  int shtAnim, getAnim, putAnim, rldAnim;
 } TWeapInfo;
 
 
