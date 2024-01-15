@@ -1385,6 +1385,9 @@ void ProcessPlayerMovement()
 
   if (KeyboardState[KeyMap.fkUp] & 128) ProcessReload();
 
+  //menu option/already used check needed - TODO
+  if (KeyboardState[KeyMap.fkDown] & 128) AddShipSupply(PlayerX,PlayerZ);
+
 
   if (Multiplayer && Host) {
 	  for (int c = 0; c < 6; c++) {
@@ -2116,6 +2119,8 @@ int PASCAL WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 
   LoadCharacterInfo(WCircleModel, "HUNTDAT\\WCIRCLE2.CAR");
   LoadCharacterInfo(ShipModel, "HUNTDAT\\ship2a.car");
+  LoadCharacterInfo(SShipModel, "HUNTDAT\\sship.car");
+  LoadCharacterInfo(BagModel, "HUNTDAT\\bag1.car");
   LoadCharacterInfo(WindModel, "HUNTDAT\\WIND.CAR");
 
 

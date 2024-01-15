@@ -265,6 +265,89 @@ NOSHIP:
   ;
 
 
+
+
+
+  //=========== sship ================//
+  SShip.rpos.x = SShip.pos.x - CameraX;
+  SShip.rpos.y = SShip.pos.y - CameraY;
+  SShip.rpos.z = SShip.pos.z - CameraZ;
+  r = (float)max(fabs(SShip.rpos.x), fabs(SShip.rpos.z));
+  ri = -1 + (int)(r / 256.f + 1.6f);
+
+  if (SShip.State < 1)
+	  if (ri < ctViewR - 6)
+	  {
+		  int h = (int)((SShip.pos.y - GetLandUpH(SShip.pos.x, SShip.pos.z)) / 1.8);
+		  //           AddShadowCircle((int)Ship.pos.x+h, (int)Ship.pos.z+h, 1200, 24);
+	  }
+
+
+  if (HARD3D) return;
+  //for (int c = 0; c <= ctViewR; c++)
+  //  ChRenderList[c].ICount = 0;
+
+
+  //=========== sship ================//
+
+  if (SShip.State == -1) goto NOSSHIP;
+  if (ri < 0) ri = 0;
+  if (ri < ctViewR)
+  {
+	  SShip.rpos = RotateVector(SShip.rpos);
+	  if (SShip.rpos.z > BackViewR) goto NOSSHIP;
+	  if (fabs(SShip.rpos.x) > -SShip.rpos.z + BackViewR) goto NOSSHIP;
+
+	  int i = ChRenderList[ri].ICount++;
+	  ChRenderList[ri].Items[i].CType = 5;
+  }
+NOSSHIP:
+  ;
+
+
+
+
+
+
+  //=========== bag ================//
+  AmmoBag.rpos.x = AmmoBag.pos.x - CameraX;
+  AmmoBag.rpos.y = AmmoBag.pos.y - CameraY;
+  AmmoBag.rpos.z = AmmoBag.pos.z - CameraZ;
+  r = (float)max(fabs(AmmoBag.rpos.x), fabs(AmmoBag.rpos.z));
+  ri = -1 + (int)(r / 256.f + 1.6f);
+
+  if (AmmoBag.State < 1)
+	  if (ri < ctViewR - 6)
+	  {
+		  int h = (int)((AmmoBag.pos.y - GetLandUpH(AmmoBag.pos.x, AmmoBag.pos.z)) / 1.8);
+		  //           AddShadowCircle((int)Ship.pos.x+h, (int)Ship.pos.z+h, 1200, 24);
+	  }
+
+
+  if (HARD3D) return;
+  //for (int c = 0; c <= ctViewR; c++)
+  //	  ChRenderList[c].ICount = 0;
+
+
+  //=========== bag ================//
+
+  if (AmmoBag.State < 1) goto NOBAG;
+  if (ri < 0) ri = 0;
+  if (ri < ctViewR)
+  {
+	  AmmoBag.rpos = RotateVector(AmmoBag.rpos);
+	  if (AmmoBag.rpos.z > BackViewR) goto NOBAG;
+	  if (fabs(AmmoBag.rpos.x) > -AmmoBag.rpos.z + BackViewR) goto NOBAG;
+
+	  int i = ChRenderList[ri].ICount++;
+	  ChRenderList[ri].Items[i].CType = 6;
+  }
+NOBAG:
+  ;
+
+
+
+
 //============= Dinosaurs ====================//
   TCharacter *cptr;
   for (int c=0; c<ChCount; c++)
@@ -359,7 +442,13 @@ void RenderChList(int r)
 		  RenderCharacter(&Characters[ChRenderList[r].Items[c].Index]);
 	  } else if (ChRenderList[r].Items[c].CType == 4) {
 		  RenderCharacter(&MPlayers[ChRenderList[r].Items[c].Index]);
-	  } else if (ChRenderList[r].Items[c].CType == 3) RenderShip();
+	  } else if (ChRenderList[r].Items[c].CType == 3) {
+		  RenderShip();
+	  }else if (ChRenderList[r].Items[c].CType == 5) {
+		  RenderSShip();
+	  }else if (ChRenderList[r].Items[c].CType == 6) {
+		  RenderBag();
+	  }
 	
   }
 }
@@ -2419,6 +2508,48 @@ void RenderCharacter(TCharacter *cptr)
                 CameraBeta );
 }
 
+
+void RenderBag()
+{
+	float zs = (float)VectorLength(AmmoBag.rpos);
+	if (zs > ctViewR * 256) return;
+
+	GlassL = 0;
+	if (zs > 256 * (ctViewR - 4))
+		GlassL = min(255, (zs / 4 - 64 * (ctViewR - 4)));
+
+
+	CreateMorphedModel(BagModel.mptr, &BagModel.Animation[0], AmmoBag.FTime, 1.0);
+
+	if (fabs(AmmoBag.rpos.z) < 4000)
+		RenderModelClip(BagModel.mptr,
+			AmmoBag.rpos.x, AmmoBag.rpos.y, AmmoBag.rpos.z, 240, 0, -0 - pi / 2 + CameraAlpha, CameraBeta);
+	else
+		RenderModel(BagModel.mptr,
+			AmmoBag.rpos.x, AmmoBag.rpos.y, AmmoBag.rpos.z, 240, 0, -0 - pi / 2 + CameraAlpha, CameraBeta);
+}
+
+
+
+void RenderSShip()
+{
+	float zs = (float)VectorLength(SShip.rpos);
+	if (zs > ctViewR * 256) return;
+
+	GlassL = 0;
+	if (zs > 256 * (ctViewR - 4))
+		GlassL = min(255, (zs / 4 - 64 * (ctViewR - 4)));
+
+
+	CreateMorphedModel(SShipModel.mptr, &SShipModel.Animation[0], SShip.FTime, 1.0);
+
+	if (fabs(SShip.rpos.z) < 4000)
+		RenderModelClip(SShipModel.mptr,
+			SShip.rpos.x, SShip.rpos.y, SShip.rpos.z, 240, 0, -SShip.alpha - pi / 2 + CameraAlpha, CameraBeta);
+	else
+		RenderModel(SShipModel.mptr,
+			SShip.rpos.x, SShip.rpos.y, SShip.rpos.z, 240, 0, -SShip.alpha - pi / 2 + CameraAlpha, CameraBeta);
+}
 
 
 

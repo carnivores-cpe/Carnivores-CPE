@@ -3633,7 +3633,29 @@ void RenderCharacterPost(TCharacter *cptr)
 }
 
 
+void RenderBagPost()
+{
+	if (AmmoBag.State < 1) return;
+	GlassL = 0;
+	zs = (int)VectorLength(AmmoBag.rpos);
+	if (zs > 256 * (ctViewR)) return;
 
+	if (zs > 256 * (ctViewR - 4))
+		GlassL = min(255, (int)(zs - 256 * (ctViewR - 4)) / 4);
+
+
+	grConstantColorValue((255 - GlassL) << 24);
+
+	CreateMorphedModel(BagModel.mptr, &BagModel.Animation[0], AmmoBag.FTime, 1.0);
+
+	if (fabs(AmmoBag.rpos.z) < 4000)
+		RenderModelClip(BagModel.mptr,
+			AmmoBag.rpos.x, AmmoBag.rpos.y, AmmoBag.rpos.z, 210, 0, CameraAlpha, CameraBeta);
+	else
+		RenderModel(BagModel.mptr,
+			AmmoBag.rpos.x, AmmoBag.rpos.y, AmmoBag.rpos.z, 210, 0, -Ship.alpha - pi / 2 + CameraAlpha, CameraBeta);
+	grConstantColorValue(0xFF000000);
+}
 
 
 void RenderShipPost()
@@ -3658,6 +3680,30 @@ void RenderShipPost()
     RenderModel(ShipModel.mptr,
                 Ship.rpos.x, Ship.rpos.y, Ship.rpos.z, 210, 0, -Ship.alpha -pi/2+ CameraAlpha, CameraBeta);
   grConstantColorValue( 0xFF000000);
+}
+
+void RenderSShipPost()
+{
+	if (SShip.State < 1) return;
+	GlassL = 0;
+	zs = (int)VectorLength(SShip.rpos);
+	if (zs > 256 * (ctViewR)) return;
+
+	if (zs > 256 * (ctViewR - 4))
+		GlassL = min(255, (int)(zs - 256 * (ctViewR - 4)) / 4);
+
+
+	grConstantColorValue((255 - GlassL) << 24);
+
+	CreateMorphedModel(SShipModel.mptr, &SShipModel.Animation[0], SShip.FTime, 1.0);
+
+	if (fabs(SShip.rpos.z) < 4000)
+		RenderModelClip(SShipModel.mptr,
+			SShip.rpos.x, SShip.rpos.y, SShip.rpos.z, 210, 0, -SShip.alpha - pi / 2 + CameraAlpha, CameraBeta);
+	else
+		RenderModel(SShipModel.mptr,
+			SShip.rpos.x, SShip.rpos.y, SShip.rpos.z, 210, 0, -SShip.alpha - pi / 2 + CameraAlpha, CameraBeta);
+	grConstantColorValue(0xFF000000);
 }
 
 
@@ -4032,6 +4078,64 @@ void Render3DHardwarePosts()
   }
 NOSHIP:
   ;
+
+  SShip.rpos.x = SShip.pos.x - CameraX;
+  SShip.rpos.y = SShip.pos.y - CameraY;
+  SShip.rpos.z = SShip.pos.z - CameraZ;
+  r = (float)max(fabs(SShip.rpos.x), fabs(SShip.rpos.z));
+
+  ri = -1 + (int)(r / 256.f + 0.2f);
+  if (ri < 0) ri = 0;
+  if (ri < ctViewR)
+  {
+
+	  if (FOGON)
+	  {
+		  CalcFogLevel_Gradient(SShip.rpos);
+		  grFogColorValue(CurFogColor);
+	  }
+
+	  SShip.rpos = RotateVector(SShip.rpos);
+	  if (SShip.rpos.z > BackViewR) goto NOSSHIP;
+	  if (fabs(SShip.rpos.x) > -SShip.rpos.z + BackViewR) goto NOSSHIP;
+
+	  RenderSShipPost();
+  }
+NOSSHIP:
+  ;
+
+
+
+
+
+  AmmoBag.rpos.x = AmmoBag.pos.x - CameraX;
+  AmmoBag.rpos.y = AmmoBag.pos.y - CameraY;
+  AmmoBag.rpos.z = AmmoBag.pos.z - CameraZ;
+  r = (float)max(fabs(AmmoBag.rpos.x), fabs(AmmoBag.rpos.z));
+
+  ri = -1 + (int)(r / 256.f + 0.2f);
+  if (ri < 0) ri = 0;
+  if (ri < ctViewR)
+  {
+
+	  if (FOGON)
+	  {
+		  CalcFogLevel_Gradient(AmmoBag.rpos);
+		  grFogColorValue(CurFogColor);
+	  }
+
+	  AmmoBag.rpos = RotateVector(AmmoBag.rpos);
+	  if (AmmoBag.rpos.z > BackViewR) goto NOAmmoBag;
+	  if (fabs(AmmoBag.rpos.x) > -AmmoBag.rpos.z + BackViewR) goto NOAmmoBag;
+
+	  RenderBagPost();
+  }
+NOAmmoBag:
+  ;
+
+
+
+
 }
 
 

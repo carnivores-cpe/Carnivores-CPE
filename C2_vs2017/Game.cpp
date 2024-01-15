@@ -683,6 +683,31 @@ void AddShipTask(int cindex)
 }
 
 
+void AddShipSupply(float tx, float tz) {
+
+	if (SShip.State != 0) return;
+	if (GetLandUpH(PlayerX, PlayerZ) > GetLandH(PlayerX, PlayerZ)) return;
+
+	AddVoicev(SShipModel.SoundFX[1].length,
+		SShipModel.SoundFX[1].lpData, 256);
+
+	SShip.DeltaY = 7048.f;
+
+	SShip.pos.x = PlayerX - 90 * 256;
+	if (Ship.pos.x < 256) SShip.pos.x = PlayerX + 90 * 256;
+	SShip.pos.z = PlayerZ - 90 * 256;
+	if (Ship.pos.z < 256) SShip.pos.z = PlayerZ + 90 * 256;
+	SShip.pos.y = GetLandUpH(SShip.pos.x, SShip.pos.z) + SShip.DeltaY + 1024;
+
+	SShip.tgpos.x = tx;
+	SShip.tgpos.z = tz;
+	SShip.tgpos.y = GetLandUpH(SShip.tgpos.x, SShip.tgpos.z) + 5048.f;
+	SShip.State = 1;
+
+	SShip.retpos = SShip.pos;
+	SShip.retpos.y += SShip.DeltaY;
+	SShip.FTime = 0;
+}
 
 void InitShip(int cindex)
 {
@@ -2089,6 +2114,125 @@ void RemoveCharacter(int index)
 }
 
 
+void AnimateBag() {
+	if (AmmoBag.State == 1) {
+		AmmoBag.pos.y -= 4 * TimeDt;
+		if (GetLandH(AmmoBag.pos.x, AmmoBag.pos.z) > AmmoBag.pos.y) {
+			AmmoBag.pos.y = GetLandH(AmmoBag.pos.x, AmmoBag.pos.z);
+			AmmoBag.State = 2;
+			AddVoice3d(BagModel.SoundFX[0].length, BagModel.SoundFX[0].lpData,
+				AmmoBag.pos.x, AmmoBag.pos.y, AmmoBag.pos.z);
+		}
+	}
+	if (AmmoBag.State == 2) {
+		AmmoBag.FTime += TimeDt;
+		if (AmmoBag.FTime >= BagModel.Animation[0].AniTime) {
+			AmmoBag.State = 3;
+			AmmoBag.FTime = 0;
+		}
+	}
+
+	if (VectorLength(SubVectors(PlayerPos, AmmoBag.pos)) < 200.f && AmmoBag.State > 0) {
+		AddVoicev(BagModel.SoundFX[1].length,
+			BagModel.SoundFX[1].lpData, 256);
+		AmmoBag.State = -1;
+		refillWeapons();
+	}
+
+}
+
+
+void AnimateSShip() {
+	if (SShip.State < 1) return;
+
+	SetAmbient3d(SShipModel.SoundFX[0].length,
+		SShipModel.SoundFX[0].lpData,
+		SShip.pos.x, SShip.pos.y, SShip.pos.z);
+	
+	int _TimeDt = TimeDt;
+
+	TBEGIN:
+
+	float L = VectorLength(SubVectors2d(SShip.tgpos, SShip.pos));
+	float L2 = sqrt((SShip.tgpos.x - SShip.pos.x) * (SShip.tgpos.x - SShip.pos.x) +
+		(SShip.tgpos.x - SShip.pos.x) * (SShip.tgpos.x - SShip.pos.x));
+
+	if (L < 256.f && SShip.State == 1) {
+		SShip.tgpos = SShip.retpos;
+		SShip.State = 2;
+		AmmoBag.pos = SShip.pos;
+		AmmoBag.State = 1;
+		goto TBEGIN;
+	}
+	if (SShip.State == 2 && VectorLength(SubVectors(PlayerPos, SShip.pos)) > (ctViewR + 2) * 256){
+		SShip.State = -1;
+		return;
+	}
+
+	SShip.pos.y += 0.3f*(float)cos(RealTime / 256.f);
+
+	SShip.tgalpha = FindVectorAlpha(SShip.tgpos.x - SShip.pos.x, SShip.tgpos.z - SShip.pos.z);
+	float currspeed;
+	float dalpha = (float)fabs(SShip.tgalpha - SShip.alpha);
+	float drspd = dalpha;
+	if (drspd > pi) drspd = 2 * pi - drspd;
+
+	if (VectorLength(SubVectors(PlayerPos, SShip.pos)) < (ctViewR + 2) * 256 && SShip.State != 1 && dalpha < 1)
+	{
+		SShip.tgpos.x += (float)cos(SShip.alpha) * 256 * 6.f;
+		SShip.tgpos.z += (float)sin(SShip.alpha) * 256 * 6.f;
+	}
+
+
+	//====== speed ===============//
+	float vspeed = 64;
+	//if (fabs(dalpha) > 0.4) vspeed = 0.f;
+	float _s = SShip.speed;
+	if (vspeed > SShip.speed) DeltaFunc(SShip.speed, vspeed, TimeDt / 200.f);
+	else SShip.speed = vspeed;
+
+	//====== fly ===========//
+	float l = TimeDt * SShip.speed / 16.f;
+			SShip.pos.x += (float)cos(SShip.alpha)*l;
+			SShip.pos.z += (float)sin(SShip.alpha)*l;
+
+	//======= y movement ============//
+	float h = GetLandUpH(SShip.pos.x, SShip.pos.z);
+	DeltaFunc(SShip.pos.y, SShip.tgpos.y, TimeDt / 4.f);
+	if (SShip.pos.y < h + 1024)
+	{
+		SShip.pos.y = h + 1024;
+	}
+
+
+
+	//======= rotation ============//
+
+	if (SShip.tgalpha > SShip.alpha) currspeed = 0.1f + (float)fabs(drspd) / 2.f;
+	else currspeed = -0.1f - (float)fabs(drspd) / 2.f;
+
+	if (fabs(dalpha) > pi) currspeed = -currspeed;
+
+
+	DeltaFunc(SShip.rspeed, currspeed, (float)TimeDt / 420.f);
+
+	float rspd = SShip.rspeed * TimeDt / 2024.f;
+	if (fabs(drspd) < fabs(rspd))
+	{
+		SShip.alpha = SShip.tgalpha;
+		SShip.rspeed /= 2;
+	}
+	else
+	{
+		SShip.alpha += rspd;
+	}
+
+	if (SShip.alpha < 0) SShip.alpha += pi * 2;
+	if (SShip.alpha > pi * 2) SShip.alpha -= pi * 2;
+
+
+}
+
 void AnimateShip()
 {
   if (Ship.State==-1)
@@ -2555,6 +2699,8 @@ void AnimateProcesses()
 
   CheckAfraid();
   AnimateShip();
+  AnimateSShip();
+  AnimateBag();
   if (TrophyMode)
     ProcessTrophy();
 

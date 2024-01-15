@@ -1686,6 +1686,32 @@ void LoadCharacters()
 
 }
 
+void resetSSHip() {
+	SShip.State = 0;
+	SShip.alpha = 0;
+	SShip.speed = 0;
+	AmmoBag.State = 0;
+}
+
+void refillWeapons() {
+	for (int w = 0; w < TotalW; w++)
+		if (WeaponPres & (1 << w))
+		{
+			ShotsLeft[w] = WeapInfo[w].Shots;
+			if (DoubleAmmo) {
+				if (WeapInfo[w].Reload) {
+					ShotsLeft[w] *= 2;
+					Chambered[w] = WeapInfo[w].Reload;
+				}
+				else {
+					AmmoMag[w] = 1;
+					MagShotsLeft[w] = WeapInfo[w].Shots;
+				}
+			}
+			if (TargetWeapon == -1) TargetWeapon = w;
+		}
+}
+
 void ReInitGame()
 {
   PrintLog("ReInitGame();\n");
@@ -1695,7 +1721,8 @@ void ReInitGame()
 	  SurvivalWave = 0;
 	  PlaceCharactersSurvival();
   } else {
-	  PlaceCharacters(); 
+	  PlaceCharacters();
+	  resetSSHip();
 	  if (Multiplayer) {
 		  sendGunShot = -1;
 		  sendHunterCall = -1;
@@ -1724,21 +1751,7 @@ void ReInitGame()
   MyHealth = MAX_HEALTH;
   TargetWeapon = -1;
 
-  for (int w=0; w<TotalW; w++)
-    if ( WeaponPres & (1<<w) )
-    {
-      ShotsLeft[w] = WeapInfo[w].Shots;
-	  if (DoubleAmmo) {
-		  if (WeapInfo[w].Reload) {
-			  ShotsLeft[w] *=2;
-			  Chambered[w] = WeapInfo[w].Reload;
-		  } else {
-			  AmmoMag[w] = 1;
-			  MagShotsLeft[w] = WeapInfo[w].Shots;
-		  }
-	  }
-      if (TargetWeapon==-1) TargetWeapon=w;
-    }
+  refillWeapons();
 
   CurrentWeapon = TargetWeapon;
 

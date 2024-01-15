@@ -456,6 +456,13 @@ typedef struct tagShip
   int State, cindex, FTime;
 } TShip;
 
+typedef struct _TBag
+{
+	Vector3d pos, rpos;
+	int State;
+	int FTime;
+} TBag;
+
 
 typedef struct tagLandingList
 {
@@ -887,6 +894,8 @@ void DrawSurvivalText(int, int);
 void DrawHMap();
 void RenderCharacter(TCharacter*);
 void RenderShip();
+void RenderSShip();
+void RenderBag();
 void RenderPlayer(int);
 void RenderSkyPlane();
 void RenderHealthBar();
@@ -991,6 +1000,7 @@ void RenderLightMap();
 void MulVectorsVect(const Vector3d& v1, const Vector3d& v2, Vector3d& r );
 void MulVectorsScal(const Vector3d& v1, const Vector3d& v2, float& r);
 Vector3d SubVectors( Vector3d& v1, Vector3d& v2 );
+Vector3d SubVectors2d(Vector3d& v1, Vector3d& v2);
 void NormVector(Vector3d& v, float Scale);
 
 LPVOID _HeapAlloc(HANDLE hHeap, DWORD dwFlags, DWORD dwBytes);
@@ -1013,6 +1023,7 @@ void ShutDownServer();
 void ShutDownClient();
 void ShutDownEngine();
 void ProcessSyncro();
+void AddShipSupply(float,float);
 void AddShipTask(int);
 void LoadTrophy();
 //void LoadPlayersInfo();
@@ -1025,6 +1036,7 @@ void AddBullet(float ax, float ay, float az,
 int AnimateBullet(float ax, float ay, float az,
 	float bx, float by, float bz);
 void AnimateBullets();
+void refillWeapons();
 void registerDamage(int);
 
 void AddBloodTrail(TCharacter *cptr);
@@ -1112,7 +1124,9 @@ _EXTORNOT   TFogEntity    FogsList[256];
 _EXTORNOT   TWaterEntity  WaterList[256];
 _EXTORNOT   TWind       Wind;
 _EXTORNOT   TShip       Ship;
+_EXTORNOT   TShip       SShip;
 _EXTORNOT   TShipTask   ShipTask;
+_EXTORNOT   TBag        AmmoBag;
 
 _EXTORNOT   int SkyR, SkyG, SkyB, WaterR, WaterG, WaterB, WaterA,
             SkyTR,SkyTG,SkyTB, CurFogColor;
@@ -1211,6 +1225,8 @@ _EXTORNOT TAIInfo AIInfo[DINOINFO_MAX];
 //_EXTORNOT TRegion Avoid[256];
 _EXTORNOT TWeapInfo WeapInfo[10];
 _EXTORNOT TCharacterInfo ShipModel;
+_EXTORNOT TCharacterInfo SShipModel;
+_EXTORNOT TCharacterInfo BagModel;
 _EXTORNOT TSpawnGroup spawnGroup[256];
 //_EXTORNOT int AI_to_CIndex[DINOINFO_MAX];
 //_EXTORNOT int TrophyIndex[DINOINFO_MAX];

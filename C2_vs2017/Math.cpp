@@ -64,7 +64,14 @@ Vector3d RotateVector(Vector3d& v)
   return vv;
 }
 
-
+Vector3d SubVectors2d(Vector3d& v1, Vector3d& v2)
+{
+	Vector3d res;
+	res.x = v1.x - v2.x;
+	res.y = 0;
+	res.z = v1.z - v2.z;
+	return res;
+}
 
 Vector3d SubVectors( Vector3d& v1, Vector3d& v2 )
 {
