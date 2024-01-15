@@ -224,6 +224,7 @@ weapons {
  name  = 'X-Bow'
  file  = 'x_bow.car'
  pic   = 'bullet4.tga'
+ bModel= 'bullet4.car'
  getAnim = 0
  shtAnim = 1
  putAnim = 2

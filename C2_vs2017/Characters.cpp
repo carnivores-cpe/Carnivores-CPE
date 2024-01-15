@@ -9319,7 +9319,71 @@ void CreateChMorphedModel(TCharacter *cptr)
 }
 
 
+void CreateMorphedModelBetaGamma(TModel* mptr, TAni *aptr, int FTime, float scale, float beta, float gamma) {
 
+	int CurFrame, SplineD, PCurFrame, PSplineD;
+
+	CurFrame = ((aptr->FramesCount - 1) * FTime * 256) / aptr->AniTime;
+	SplineD = CurFrame & 0xFF;
+	CurFrame = (CurFrame >> 8);
+
+	if (!MORPHA)
+	{
+		SplineD = 0;
+		PSplineD = 0;
+	}
+
+	float k1, k2, pk1, pk2, pmk1, pmk2;
+
+	k2 = (float)(SplineD) / 256.f;
+	k1 = 1.0f - k2;
+	k1 /= 8.f;
+	k2 /= 8.f;
+
+
+	int VCount = mptr->VCount;
+	short int* adptr = aptr->aniData + CurFrame * VCount * 3;
+
+	float sb = (float)sin(beta) * scale;
+	float cb = (float)cos(beta) * scale;
+	float sg = (float)sin(gamma);
+	float cg = (float)cos(gamma);
+
+	for (int v = 0; v < VCount; v++)
+	{
+
+
+
+		float x = *(adptr + v * 3 + 0) * k1 + *(adptr + (v + VCount) * 3 + 0) * k2;
+		float y = *(adptr + v * 3 + 1) * k1 + *(adptr + (v + VCount) * 3 + 1) * k2;
+		float z = -(*(adptr + v * 3 + 2) * k1 + *(adptr + (v + VCount) * 3 + 2) * k2);
+
+
+		float zz = z;
+		float xx = cg * x - sg * y;
+		float yy = cg * y + sg * x;
+
+
+		//float fi = (z / 400) * (cptr->bend / 1.5f);
+		float fi;
+		if (z > 0)
+		{
+			fi = z / 240.f;
+			if (fi > 1.f) fi = 1.f;
+		}
+		else
+		{
+			fi = z / 380.f;
+			if (fi < -1.f) fi = -1.f;
+		}
+
+		mptr->gVertex[v].x = xx * scale;
+		mptr->gVertex[v].y = cb * yy - sb * zz;
+		mptr->gVertex[v].z = cb * zz + sb * yy;
+
+
+	}
+}
 
 
 void CreateMorphedModel(TModel* mptr, TAni *aptr, int FTime, float scale)

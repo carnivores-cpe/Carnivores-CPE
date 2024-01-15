@@ -1186,9 +1186,7 @@ void ProcessShoot()
                nv.x * 64* WeapInfo[CurrentWeapon].Veloc,
                nv.y * 64* WeapInfo[CurrentWeapon].Veloc,
                nv.z * 64* WeapInfo[CurrentWeapon].Veloc,
-			   WeapInfo[CurrentWeapon].Power,
-			   WeapInfo[CurrentWeapon].Veloc,
-   			   WeapInfo[CurrentWeapon].Fall
+			   CurrentWeapon
 			   );
     }
 

@@ -3695,7 +3695,7 @@ void RenderSShipPost()
 
 	grConstantColorValue((255 - GlassL) << 24);
 
-	CreateMorphedModel(SShipModel.mptr, &SShipModel.Animation[0], SShip.FTime, 1.0);
+	CreateMorphedModelBetaGamma(SShipModel.mptr, &SShipModel.Animation[0], SShip.FTime, 1.0, SShip.beta, SShip.gamma);
 
 	if (fabs(SShip.rpos.z) < 4000)
 		RenderModelClip(SShipModel.mptr,
@@ -3705,6 +3705,33 @@ void RenderSShipPost()
 			SShip.rpos.x, SShip.rpos.y, SShip.rpos.z, 210, 0, -SShip.alpha - pi / 2 + CameraAlpha, CameraBeta);
 	grConstantColorValue(0xFF000000);
 }
+
+
+void RenderBulletPost(int b) {
+
+			GlassL = 0;
+			zs = (int)VectorLength(bullet[b].rpos);
+			if (zs > 256 * (ctViewR)) return;
+
+			if (zs > 256 * (ctViewR - 4))
+				GlassL = min(255, (int)(zs - 256 * (ctViewR - 4)) / 4);
+
+			grConstantColorValue((255 - GlassL) << 24);
+
+			CreateMorphedModelBetaGamma(Weapon.Bullet[bullet[b].parent].mptr, &Weapon.Bullet[bullet[b].parent].Animation[0],
+				bullet[b].FTime, 1.0, bullet[b].beta, 0);
+
+			if (fabs(bullet[b].rpos.z) < 4000)
+				RenderModelClip(Weapon.Bullet[bullet[b].parent].mptr,
+					bullet[b].rpos.x, bullet[b].rpos.y, bullet[b].rpos.z, 210, 0,
+					-bullet[b].alpha - pi / 2 + CameraAlpha, CameraBeta);
+			else
+				RenderModel(Weapon.Bullet[bullet[b].parent].mptr,
+					bullet[b].rpos.x, bullet[b].rpos.y, bullet[b].rpos.z, 210, 0,
+					-bullet[b].alpha - pi / 2 + CameraAlpha, CameraBeta);
+			grConstantColorValue(0xFF000000);
+}
+
 
 
 
@@ -4103,6 +4130,42 @@ NOSHIP:
   }
 NOSSHIP:
   ;
+
+  for (int b = 0; b < bulletCh; b++) {
+	  if (WeapInfo[bullet[b].parent].bullet) {
+
+
+		  bullet[b].rpos.x = bullet[b].a.x - CameraX;
+		  bullet[b].rpos.y = bullet[b].a.y - CameraY;
+		  bullet[b].rpos.z = bullet[b].a.z - CameraZ;
+		  r = (float)max(fabs(bullet[b].rpos.x), fabs(bullet[b].rpos.z));
+
+		  ri = -1 + (int)(r / 256.f + 0.2f);
+		  if (ri < 0) ri = 0;
+		  if (ri < ctViewR)
+		  {
+
+			  if (FOGON)
+			  {
+				  CalcFogLevel_Gradient(bullet[b].rpos);
+				  grFogColorValue(CurFogColor);
+			  }
+
+			  bullet[b].rpos = RotateVector(bullet[b].rpos);
+			  if (bullet[b].rpos.z > BackViewR) goto NOBULLET;
+			  if (fabs(bullet[b].rpos.x) > -bullet[b].rpos.z + BackViewR) goto NOBULLET;
+
+			  RenderBulletPost(b);
+		  }
+	  NOBULLET:
+		  ;
+
+
+
+	  }
+  }
+
+  
 
 
 

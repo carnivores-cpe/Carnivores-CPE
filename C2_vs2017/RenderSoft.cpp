@@ -348,6 +348,44 @@ NOBAG:
 
 
 
+
+  for (int b = 0; b < bulletCh; b++) {
+	  if (WeapInfo[bullet[b].parent].bullet) {
+
+
+		  //=========== bullet ================//
+		  bullet[b].rpos.x = bullet[b].a.x - CameraX;
+		  bullet[b].rpos.y = bullet[b].a.y - CameraY;
+		  bullet[b].rpos.z = bullet[b].a.z - CameraZ;
+		  r = (float)max(fabs(bullet[b].rpos.x), fabs(bullet[b].rpos.z));
+		  ri = -1 + (int)(r / 256.f + 1.6f);
+
+		  if (HARD3D) return;
+		  //for (int c = 0; c <= ctViewR; c++)
+		  //  ChRenderList[c].ICount = 0;
+
+
+		  //=========== sship ================//
+
+		  if (ri < 0) ri = 0;
+		  if (ri < ctViewR)
+		  {
+			  bullet[b].rpos = RotateVector(bullet[b].rpos);
+			  if (bullet[b].rpos.z > BackViewR) goto NOBULLET;
+			  if (fabs(bullet[b].rpos.x) > -bullet[b].rpos.z + BackViewR) goto NOBULLET;
+
+			  int i = ChRenderList[ri].ICount++;
+			  ChRenderList[ri].Items[i].CType = 7;
+			  ChRenderList[ri].Items[i].Index = b;
+		  }
+	  NOBULLET:
+		  ;
+
+
+	  }
+  }
+
+
 //============= Dinosaurs ====================//
   TCharacter *cptr;
   for (int c=0; c<ChCount; c++)
@@ -448,6 +486,8 @@ void RenderChList(int r)
 		  RenderSShip();
 	  }else if (ChRenderList[r].Items[c].CType == 6) {
 		  RenderBag();
+	  }else if (ChRenderList[r].Items[c].CType == 7) {
+		  RenderBullet(ChRenderList[r].Items[c].Index);
 	  }
 	
   }
@@ -2541,7 +2581,7 @@ void RenderSShip()
 		GlassL = min(255, (zs / 4 - 64 * (ctViewR - 4)));
 
 
-	CreateMorphedModel(SShipModel.mptr, &SShipModel.Animation[0], SShip.FTime, 1.0);
+	CreateMorphedModelBetaGamma(SShipModel.mptr, &SShipModel.Animation[0], SShip.FTime, 1.0, SShip.beta, SShip.gamma);
 
 	if (fabs(SShip.rpos.z) < 4000)
 		RenderModelClip(SShipModel.mptr,
@@ -2574,6 +2614,26 @@ void RenderShip()
                 Ship.rpos.x, Ship.rpos.y, Ship.rpos.z, 240, 0, -Ship.alpha -pi/2 + CameraAlpha, CameraBeta);
 }
 
+
+void RenderBullet(int b)
+{
+	float zs = (float)VectorLength(bullet[b].rpos);
+	if (zs > ctViewR * 256) return;
+
+	GlassL = 0;
+	if (zs > 256 * (ctViewR - 4))
+		GlassL = min(255, (zs / 4 - 64 * (ctViewR - 4)));
+
+
+	CreateMorphedModelBetaGamma(Weapon.Bullet[bullet[b].parent].mptr, &Weapon.Bullet[bullet[b].parent].Animation[0], bullet[b].FTime, 1.0, bullet[b].beta, 0);
+
+	if (fabs(bullet[b].rpos.z) < 4000)
+		RenderModelClip(Weapon.Bullet[bullet[b].parent].mptr,
+			bullet[b].rpos.x, bullet[b].rpos.y, bullet[b].rpos.z, 240, 0, -bullet[b].alpha - pi / 2 + CameraAlpha, CameraBeta);
+	else
+		RenderModel(Weapon.Bullet[bullet[b].parent].mptr,
+			bullet[b].rpos.x, bullet[b].rpos.y, bullet[b].rpos.z, 240, 0, -bullet[b].alpha - pi / 2 + CameraAlpha, CameraBeta);
+}
 
 
 

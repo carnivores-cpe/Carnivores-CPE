@@ -2019,7 +2019,7 @@ ENDTRACE:
 
 void AddBullet(float ax, float ay, float az,
 	float Dx, float Dy, float Dz,
-	float power, float speed, float fall)
+	int parent)
 {
 	bullet[bulletCh].a.x = ax;
 	bullet[bulletCh].a.y = ay;
@@ -2027,9 +2027,7 @@ void AddBullet(float ax, float ay, float az,
 	bullet[bulletCh].dif.x = Dx;
 	bullet[bulletCh].dif.y = Dy;
 	bullet[bulletCh].dif.z = Dz;
-	bullet[bulletCh].power = power;
-	bullet[bulletCh].fall = fall;
-	bullet[bulletCh].speed = speed;
+	bullet[bulletCh].parent = parent;
 	bulletCh++;
 }
 
@@ -2049,7 +2047,18 @@ void AnimateBullets() {
 		float pdx = PlayerX - bullet[b].a.x;
 		float pdz = PlayerZ - bullet[b].a.z;
 		float pd = pdx * pdx + pdz * pdz;
-		bullet[b].dif.y -= bullet[b].fall / bullet[b].speed;
+		bullet[b].dif.y -= WeapInfo[bullet[b].parent].Fall;// / WeapInfo[bullet[b].parent].Veloc;
+
+		if (WeapInfo[bullet[b].parent].bullet) {
+			bullet[b].FTime += TimeDt;
+			if (bullet[b].FTime >= Weapon.Bullet[bullet[b].parent].Animation[0].AniTime)
+				bullet[b].FTime %= Weapon.Bullet[bullet[b].parent].Animation[0].AniTime;
+			bullet[b].alpha = FindVectorAlpha(bullet[b].dif.x, bullet[b].dif.z);
+			bullet[b].beta = FindVectorAlpha(
+				sqrt(bullet[b].dif.z*bullet[b].dif.z +
+					bullet[b].dif.x*bullet[b].dif.x), bullet[b].dif.y);
+		}
+
 		if (sres>0 || pd > (256 * ctViewR) * (256 * ctViewR)) {
 			memcpy(&bullet[b], &bullet[b + 1], (bulletCh + 1 - b) * sizeof(TBullet));
 			b--;
@@ -2193,8 +2202,9 @@ void AnimateSShip() {
 
 	//====== fly ===========//
 	float l = TimeDt * SShip.speed / 16.f;
-			SShip.pos.x += (float)cos(SShip.alpha)*l;
-			SShip.pos.z += (float)sin(SShip.alpha)*l;
+	Vector3d _pos = SShip.pos;
+	SShip.pos.x += (float)cos(SShip.alpha)*l;
+	SShip.pos.z += (float)sin(SShip.alpha)*l;
 
 	//======= y movement ============//
 	float h = GetLandUpH(SShip.pos.x, SShip.pos.z);
@@ -2207,6 +2217,8 @@ void AnimateSShip() {
 
 
 	//======= rotation ============//
+
+	float tggamma = SShip.alpha;
 
 	if (SShip.tgalpha > SShip.alpha) currspeed = 0.1f + (float)fabs(drspd) / 2.f;
 	else currspeed = -0.1f - (float)fabs(drspd) / 2.f;
@@ -2227,10 +2239,43 @@ void AnimateSShip() {
 		SShip.alpha += rspd;
 	}
 
+	tggamma -= SShip.alpha;
+	tggamma *= 100;
 	if (SShip.alpha < 0) SShip.alpha += pi * 2;
 	if (SShip.alpha > pi * 2) SShip.alpha -= pi * 2;
 
+	float curgspeed;
+	float dgamma = (float)fabs(tggamma - SShip.gamma);
+	float dgspd = dgamma;
+	if (dgspd > pi) dgspd = 2 * pi - dgspd;
+	if (tggamma > SShip.gamma) curgspeed = 0.1f + (float)fabs(dgspd) / 2.f;
+	else curgspeed = -0.1f - (float)fabs(dgspd) / 2.f;
+	curgspeed *= 2;
 
+	if (fabs(dgamma) > pi) curgspeed = -curgspeed;
+
+	DeltaFunc(SShip.gspeed, curgspeed, (float)TimeDt / 420.f);
+
+	float gspd = SShip.gspeed * TimeDt / 2024.f;
+	if (fabs(dgspd) < fabs(gspd))
+	{
+		SShip.gamma = tggamma;
+		SShip.gspeed /= 2;
+	}
+	else
+	{
+		SShip.gamma += gspd;
+	}
+//	if (SShip.gamma < 0) SShip.gamma += pi * 2;
+//	if (SShip.gamma > pi * 2) SShip.gamma -= pi * 2;
+
+	//beta
+
+	//bullet[b].beta = FindVectorAlpha(
+	//sqrt(bullet[b].dif.z*bullet[b].dif.z +
+	//	bullet[b].dif.x*bullet[b].dif.x), bullet[b].dif.y);
+
+	
 }
 
 void AnimateShip()

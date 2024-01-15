@@ -306,6 +306,7 @@ typedef struct _TWeapon
 {
   TCharacterInfo chinfo[10];
   TPicture       BulletPic[10];
+  TCharacterInfo Bullet[10];
 
   Vector3d*       normals;
   int state, FTime;
@@ -315,8 +316,11 @@ typedef struct _TWeapon
 
 typedef struct _TBullet
 {
-	Vector3d a,dif;
-	float power, speed, fall;
+	Vector3d a,dif,rpos;
+	int parent;
+	int FTime;
+	float alpha, beta;
+//	float power, speed, fall;
 } TBullet;
 
 typedef struct _TWCircle
@@ -452,7 +456,7 @@ typedef struct tagShipTask
 typedef struct tagShip
 {
   Vector3d pos, rpos, tgpos, retpos;
-  float alpha, tgalpha, speed, rspeed, DeltaY;
+  float alpha, tgalpha, speed, rspeed, DeltaY, beta, gamma, gspeed, bspeed;
   int State, cindex, FTime;
 } TShip;
 
@@ -779,8 +783,9 @@ typedef struct _TSpawnGroup
 
 typedef struct _TWeapInfo
 {
-  char Name[48], FName[48], BFName[48], SFXName[48];
+  char Name[48], FName[48], BFName[48], BLName[48], SFXName[48];
   bool MGSSound = FALSE;
+  bool bullet = FALSE;
   float Power, Prec, Loud, Rate, Veloc, Fall;
   int Shots, Optic, TraceC, Reload, SFXIndex;
   int shtAnim, getAnim, putAnim, rldAnim;
@@ -896,6 +901,7 @@ void RenderCharacter(TCharacter*);
 void RenderShip();
 void RenderSShip();
 void RenderBag();
+void RenderBullet(int);
 void RenderPlayer(int);
 void RenderSkyPlane();
 void RenderHealthBar();
@@ -930,6 +936,7 @@ void CheckAfraid();
 void CreateChMorphedModel(TCharacter* cptr);
 void CreateMorphedObject(TModel* mptr, TVTL &vtl, int FTime);
 void CreateMorphedModel(TModel* mptr, TAni *aptr, int FTime, float scale);
+void CreateMorphedModelBetaGamma(TModel* mptr, TAni *aptr, int FTime, float scale, float beta, float gamma);
 
 //=============================== Math ==================================//
 
@@ -1032,7 +1039,7 @@ void RemoveCurrentTrophy();
 void MakeCall();
 void AddBullet(float ax, float ay, float az,
               float bx, float by, float bz,
-	float power, float speed, float fall);
+	int);
 int AnimateBullet(float ax, float ay, float az,
 	float bx, float by, float bz);
 void AnimateBullets();

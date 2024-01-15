@@ -1635,6 +1635,14 @@ void LoadCharacters()
         PrintLog("\n");
       }
 
+	  if (WeapInfo[c].bullet) {
+		  wsprintf(logt, "HUNTDAT\\WEAPONS\\%s", WeapInfo[c].BLName);
+		  LoadCharacterInfo(Weapon.Bullet[c], logt);
+		  PrintLog("Loading: ");
+		  PrintLog(logt);
+		  PrintLog("\n");
+	  }
+
 	  maxWeaponVCount = MAX(Weapon.chinfo[c].mptr->VCount, maxWeaponVCount);
 
       if (!Weapon.BulletPic[c].lpImage)
@@ -3000,6 +3008,7 @@ void ReadWeapons(FILE *stream)
 		  WeapInfo[TotalW].MGSSound = TRUE;
         }
 
+		
         if (strstr(line, "pic"))
         {
           value = strstr(line, "'");
@@ -3007,6 +3016,17 @@ void ReadWeapons(FILE *stream)
           value[strlen(value)-2] = 0;
           strcpy(WeapInfo[TotalW].BFName, &value[1]);
         }
+
+
+		if (strstr(line, "bModel"))
+		{
+			value = strstr(line, "'");
+			if (!value) DoHalt("Script loading error: Weapons bullet");
+			value[strlen(value) - 2] = 0;
+			strcpy(WeapInfo[TotalW].BLName, &value[1]);
+			WeapInfo[TotalW].bullet = TRUE;
+		}
+		
       }
 
   }
