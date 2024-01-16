@@ -224,18 +224,19 @@ weapons {
  name  = 'X-Bow'
  file  = 'x_bow.car'
  pic   = 'bullet4.tga'
- bModel= 'bullet4.car'
+ bModel= 'arrow9.car'
  getAnim = 0
  shtAnim = 1
  putAnim = 2
  rldAnim = 3
  shots = 6
- fall = 1.8
+ fall = 1.6
  power = 6
  veloc = 4
  prec  = 2.0
  loud  = 0.4
  rate  = 1.0
+ retrieve = TRUE
 }
 
 {

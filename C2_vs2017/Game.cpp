@@ -1925,42 +1925,7 @@ int AnimateBullet(float ax, float ay, float az,
               float bx, float by, float bz)
 {
   int sres;
-//  if (!WeapInfo[CurrentWeapon].Fall)
     sres = TraceShot(ax, ay, az, bx, by, bz);
-/*  else
-  {
-    Vector3d dl;
-    float dy = 40.f * ctViewR / 36.f;
-    dl.x = (bx-ax) / 3;
-    dl.y = (by-ay) / 3;
-    dl.z = (bz-az) / 3;
-    bx = ax + dl.x;
-    by = ay + dl.y - dy / 2;
-    bz = az + dl.z;
-    sres = TraceShot(ax, ay, az, bx, by, bz);
-    if (sres!=-1) goto ENDTRACE;
-    ax = bx;
-    ay = by;
-    az = bz;
-
-    bx = ax + dl.x;
-    by = ay + dl.y - dy * 3;
-    bz = az + dl.z;
-    sres = TraceShot(ax, ay, az, bx, by, bz);
-    if (sres!=-1) goto ENDTRACE;
-    ax = bx;
-    ay = by;
-    az = bz;
-
-    bx = ax + dl.x;
-    by = ay + dl.y - dy * 5;
-    bz = az + dl.z;
-    sres = TraceShot(ax, ay, az, bx, by, bz);
-    if (sres!=-1) goto ENDTRACE;
-    ax = bx;
-    ay = by;
-    az = bz;
-  }*/
 
 ENDTRACE:
   if (sres==-1) return sres;
@@ -2028,48 +1993,75 @@ void AddBullet(float ax, float ay, float az,
 	bullet[bulletCh].dif.y = Dy;
 	bullet[bulletCh].dif.z = Dz;
 	bullet[bulletCh].parent = parent;
+	bullet[bulletCh].state = 0;
 	bulletCh++;
 }
 
 void AnimateBullets() {
 	for (int b=0; b < bulletCh; b++) {
-		int sres = AnimateBullet(
-			bullet[b].a.x,
-			bullet[b].a.y,
-			bullet[b].a.z,
-			bullet[b].a.x + bullet[b].dif.x,
-			bullet[b].a.y + bullet[b].dif.y,
-			bullet[b].a.z + bullet[b].dif.z);
-		//this ought to be adjusted on frame time
-		bullet[b].a.x += bullet[b].dif.x;
-		bullet[b].a.y += bullet[b].dif.y;
-		bullet[b].a.z += bullet[b].dif.z;
-		float pdx = PlayerX - bullet[b].a.x;
-		float pdz = PlayerZ - bullet[b].a.z;
-		float pd = pdx * pdx + pdz * pdz;
-		bullet[b].dif.y -= WeapInfo[bullet[b].parent].Fall;// / WeapInfo[bullet[b].parent].Veloc;
 
-		if (WeapInfo[bullet[b].parent].bullet) {
-			bullet[b].FTime += TimeDt;
-			if (bullet[b].FTime >= Weapon.Bullet[bullet[b].parent].Animation[0].AniTime)
-				bullet[b].FTime %= Weapon.Bullet[bullet[b].parent].Animation[0].AniTime;
-			bullet[b].alpha = FindVectorAlpha(bullet[b].dif.x, bullet[b].dif.z);
-			bullet[b].beta = FindVectorAlpha(
-				sqrt(bullet[b].dif.z*bullet[b].dif.z +
-					bullet[b].dif.x*bullet[b].dif.x), bullet[b].dif.y);
+		if (bullet[b].state) {
+			if (VectorLength(SubVectors(PlayerPos, bullet[b].a)) < 300.f) {
+
+				int collectNo = rRand(2);
+				AddVoicev(fxCollect[collectNo].length, fxCollect[collectNo].lpData, 256);
+
+				int maxAm = WeapInfo[bullet[b].parent].Shots;
+				if (DoubleAmmo && WeapInfo[bullet[b].parent].Reload) maxAm *= 2;
+				if (ShotsLeft[bullet[b].parent] < maxAm) {
+					ShotsLeft[bullet[b].parent]++;
+					memcpy(&bullet[b], &bullet[b + 1], (bulletCh + 1 - b) * sizeof(TBullet));
+					b--;
+					bulletCh--;
+				}
+			}
+		} else {
+			int sres = AnimateBullet(
+				bullet[b].a.x,
+				bullet[b].a.y,
+				bullet[b].a.z,
+				bullet[b].a.x + bullet[b].dif.x,
+				bullet[b].a.y + bullet[b].dif.y,
+				bullet[b].a.z + bullet[b].dif.z);
+
+			//this ought to be adjusted on frame time
+
+			float pdx = PlayerX - bullet[b].a.x;
+			float pdz = PlayerZ - bullet[b].a.z;
+			float pd = pdx * pdx + pdz * pdz;
+
+			if (sres > 0 || pd > (256 * ctViewR) * (256 * ctViewR)) {
+				if (WeapInfo[bullet[b].parent].retrieve && (sres == 1 || sres == 3)) {
+					bullet[b].state = 1;
+					bullet[b].a = TraceB;
+				}
+				else {
+					memcpy(&bullet[b], &bullet[b + 1], (bulletCh + 1 - b) * sizeof(TBullet));
+					b--;
+					bulletCh--;
+				}
+			} else{
+
+				bullet[b].a.x += bullet[b].dif.x;
+				bullet[b].a.y += bullet[b].dif.y;
+				bullet[b].a.z += bullet[b].dif.z;
+				bullet[b].dif.y -= WeapInfo[bullet[b].parent].Fall;// / WeapInfo[bullet[b].parent].Veloc;
+
+				if (WeapInfo[bullet[b].parent].bullet) {
+					bullet[b].FTime += TimeDt;
+					if (bullet[b].FTime >= Weapon.Bullet[bullet[b].parent].Animation[0].AniTime)
+						bullet[b].FTime %= Weapon.Bullet[bullet[b].parent].Animation[0].AniTime;
+					bullet[b].alpha = FindVectorAlpha(bullet[b].dif.x, bullet[b].dif.z);
+					bullet[b].beta = FindVectorAlpha(
+						sqrt(bullet[b].dif.z*bullet[b].dif.z +
+							bullet[b].dif.x*bullet[b].dif.x), bullet[b].dif.y);
+				}
+			}
+
 		}
 
-		if (sres>0 || pd > (256 * ctViewR) * (256 * ctViewR)) {
-			memcpy(&bullet[b], &bullet[b + 1], (bulletCh + 1 - b) * sizeof(TBullet));
-			b--;
-			bulletCh--;
-		}
 	}
 
-	//256*ctViewR
-
-	//bulletCh = 0;
-	//memcpy(&Elements[eg], &Elements[eg+1], (ElCount+1-eg) * sizeof(TElements));
 }
 
 

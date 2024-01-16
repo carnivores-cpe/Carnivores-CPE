@@ -1701,6 +1701,13 @@ void resetSSHip() {
 	AmmoBag.State = 0;
 }
 
+void resetBullets() {
+	for (int b = 0; b < bulletCh; b++) {
+		bullet[b] = {};
+	}
+	bulletCh = 0;
+}
+
 void refillWeapons() {
 	for (int w = 0; w < TotalW; w++)
 		if (WeaponPres & (1 << w))
@@ -1731,6 +1738,7 @@ void ReInitGame()
   } else {
 	  PlaceCharacters();
 	  resetSSHip();
+	  resetBullets();
 	  if (Multiplayer) {
 		  sendGunShot = -1;
 		  sendHunterCall = -1;
@@ -2982,6 +2990,8 @@ void ReadWeapons(FILE *stream)
         if (strstr(line, "optic"))  WeapInfo[TotalW].Optic =        atoi(value);
         if (strstr(line, "fall"))   WeapInfo[TotalW].Fall  = (float)atof(value);
         //if (strstr(line, "price")) WeapInfo[TotalW].Price =        atoi(value);
+
+		if (strstr(line, "retrieve")) readBool(value, WeapInfo[TotalW].retrieve);
 
         if (strstr(line, "name"))
         {

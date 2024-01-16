@@ -1,10 +1,7 @@
 #include "Hunt.h"
 
-Vector3d TraceA, TraceB, TraceNv;
+Vector3d TraceA, TraceNv;
 int      TraceRes;
-
-
-
 
 //====================================================
 void NormVector(Vector3d& v, float Scale)
@@ -569,10 +566,10 @@ int  TraceShot(float  ax, float  ay, float az,
         FillWGround(v[0], xx, zz);
         FillWGround(v[1], xx+1, zz);
         FillWGround(v[2], xx+1, zz+1);
-        if (TraceCheckPlane(v[0], v[1], v[2])) TraceRes = tresWater;
+		if (TraceCheckPlane(v[0], v[1], v[2])) TraceRes = tresWater;
         v[1] = v[2];
         FillWGround(v[2], xx, zz+1);
-        if (TraceCheckPlane(v[0], v[1], v[2])) TraceRes = tresWater;
+		if (TraceCheckPlane(v[0], v[1], v[2])) TraceRes = tresWater;
       }
 
       if (OMap[zz][xx] !=255)

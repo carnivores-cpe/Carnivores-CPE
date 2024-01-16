@@ -317,7 +317,7 @@ typedef struct _TWeapon
 typedef struct _TBullet
 {
 	Vector3d a,dif,rpos;
-	int parent;
+	int parent, state;
 	int FTime;
 	float alpha, beta;
 //	float power, speed, fall;
@@ -786,6 +786,7 @@ typedef struct _TWeapInfo
   char Name[48], FName[48], BFName[48], BLName[48], SFXName[48];
   bool MGSSound = FALSE;
   bool bullet = FALSE;
+  bool retrieve;
   float Power, Prec, Loud, Rate, Veloc, Fall;
   int Shots, Optic, TraceC, Reload, SFXIndex;
   int shtAnim, getAnim, putAnim, rldAnim;
@@ -1107,6 +1108,7 @@ _EXTORNOT   char    ProjectName[128];
 _EXTORNOT   int     _GameState, _MultiplayerState;//multiplayer
 _EXTORNOT   TSFX    fxBlip;
 _EXTORNOT   TSFX    fxClick[3];
+_EXTORNOT   TSFX    fxCollect[3];
 _EXTORNOT   TSFX    fxImpactGround[3];
 _EXTORNOT   TSFX    fxImpactModel[3];
 _EXTORNOT   TSFX    fxImpactWater[3];
@@ -1191,6 +1193,8 @@ _EXTORNOT TLandingList LandingList;
 
 _EXTORNOT TBullet bullet[256];
 _EXTORNOT int bulletCh;
+
+_EXTORNOT Vector3d TraceB;
 
 
 //======== MODEL ======================//
