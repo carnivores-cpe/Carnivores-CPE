@@ -5385,16 +5385,28 @@ void DrawHMap()
   CColor = 18<<GShift;
   DrawCircle(xx, yy, (ctViewR/4));
 
+  for (int b = 0; b < bulletCh; b++) {
+	  if (bullet[b].RTime) {
+		  xx = VideoCX - 128 + (int)bullet[b].a.x / 1024;
+		  yy = VideoCY - 128 + (int)bullet[b].a.z / 1024;
+		  if (yy > 0 && yy < WinH && xx > 0 && xx < WinW) {
+			  if (VMFORMAT565) DrawBox((WORD*)ddsd.lpSurface, lsw, xx, yy, WeapInfo[bullet[b].parent].radarColour565);
+			  else DrawBox((WORD*)ddsd.lpSurface, lsw, xx, yy, WeapInfo[bullet[b].parent].radarColour555);
+		  }
+	  }
+  }
   
     for (c=0; c<ChCount; c++)
     {
       //if (Characters[c].AI<10) continue;
       //if (! (TargetDino & (1<<Characters[c].AI)) ) continue;
 
-		if (!DinoInfo[Characters[c].CType].onRadar) continue;
+		if (!DinoInfo[Characters[c].CType].onRadar && !Characters[c].RTime) continue;
 
-      if (!Characters[c].Health) continue;
-	  if (!RadarMode && Characters[c].Clone != AI_HUNTDOG) continue;
+      if (!Characters[c].Health && !Characters[c].RTime) continue;
+
+	  //if (!RadarMode && Characters[c].Clone != AI_HUNTDOG && !Characters[c].RTime) continue;
+
       xx = VideoCX - 128 + (int)Characters[c].pos.x / 1024;
       yy = VideoCY - 128 + (int)Characters[c].pos.z / 1024;
       if (yy<=0 || yy>=WinH) goto endmap;
@@ -5406,14 +5418,18 @@ void DrawHMap()
 		  else DrawBox((WORD*)ddsd.lpSurface, lsw, xx, yy, DinoInfo[Characters[c].CType].radarColour555);
 	  }
 	  else {
-		  if (RadarMode) {
+		  if (RadarMode || Characters[c].RTime) {
+
+			  WORD *colour = &DinoInfo[Characters[c].CType].radarColour555;
+			  if (Characters[c].tracker >= 0) colour = &WeapInfo[Characters[c].tracker].radarColour555;
 			  if (VMFORMAT565) {
-				  if (DinoInfo[Characters[c].CType].Mystery) DrawBoxMystery((WORD*)ddsd.lpSurface, lsw, xx, yy, DinoInfo[Characters[c].CType].radarColour565);
-				  else DrawBox((WORD*)ddsd.lpSurface, lsw, xx, yy, DinoInfo[Characters[c].CType].radarColour565);
-			  } else {
-				  if (DinoInfo[Characters[c].CType].Mystery) DrawBoxMystery((WORD*)ddsd.lpSurface, lsw, xx, yy, DinoInfo[Characters[c].CType].radarColour555);
-				  else DrawBox((WORD*)ddsd.lpSurface, lsw, xx, yy, DinoInfo[Characters[c].CType].radarColour555);
+				  colour = &DinoInfo[Characters[c].CType].radarColour565;
+				  if (Characters[c].tracker >= 0) colour = &WeapInfo[Characters[c].tracker].radarColour565;
 			  }
+
+			  
+				if (DinoInfo[Characters[c].CType].Mystery) DrawBoxMystery((WORD*)ddsd.lpSurface, lsw, xx, yy, *colour);
+				  else DrawBox((WORD*)ddsd.lpSurface, lsw, xx, yy, *colour);
 		  }
 
 		  if (SonarMode) {
@@ -5433,7 +5449,7 @@ void DrawHMap()
 			  }
 			  else Characters[c].showSonar = FALSE;
 
-			  if (Characters[c].showSonar) {
+			  if (Characters[c].showSonar && !Characters[c].RTime) {
 				  if (VMFORMAT565) {
 					  if (DinoInfo[Characters[c].CType].Mystery) DrawBoxMystery((WORD*)ddsd.lpSurface, lsw, xx, yy, DinoInfo[Characters[c].CType].radarColour565);
 					  else DrawBox((WORD*)ddsd.lpSurface, lsw, xx, yy, DinoInfo[Characters[c].CType].radarColour565);

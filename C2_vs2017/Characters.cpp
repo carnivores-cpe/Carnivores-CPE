@@ -260,6 +260,9 @@ void ResetCharacter(TCharacter *cptr)
 	cptr->BloodTTime = 0;
 	cptr->BloodTime = 0;
 
+	cptr->tracker = -1;
+	cptr->RTime = 0;
+
 	if (cptr->Clone == AI_BRACH ||
 		cptr->Clone == AI_BRACHDANGER ||
 		cptr->Clone == AI_ICTH ||
@@ -7912,6 +7915,16 @@ void AnimateCharacters()
 		cptr = &Characters[CurDino];
 		if (cptr->StateF == 0xFF) continue;
 		cptr->tgtime += TimeDt;
+
+		// tracker bullets
+		if (cptr->RTime && WeapInfo[cptr->tracker].radarTime) {
+			cptr->RTime -= TimeDt;
+			if (cptr->RTime < 0) {
+				cptr->RTime = 0;
+				cptr->tracker = -1;
+			}
+		}
+
 
 		// replace pack leader
 		if (cptr->Health && cptr->packId >= 0) {

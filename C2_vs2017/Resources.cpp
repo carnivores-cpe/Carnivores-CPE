@@ -2963,6 +2963,11 @@ void ReadWeapons(FILE *stream)
       {
         if (strstr(line, "}"))
         {
+
+			WeapInfo[TotalW].radarColour565 = ((WeapInfo[TotalW].radarRed >> 3) << 11) | ((WeapInfo[TotalW].radarGreen >> 2) << 5) | (WeapInfo[TotalW].radarBlue >> 3);
+			WeapInfo[TotalW].radarColour555 = ((WeapInfo[TotalW].radarRed >> 3) << 10) | ((WeapInfo[TotalW].radarGreen >> 3) << 5) | (WeapInfo[TotalW].radarBlue >> 3);
+
+
           TotalW++;
           break;
         }
@@ -2990,6 +2995,13 @@ void ReadWeapons(FILE *stream)
         if (strstr(line, "optic"))  WeapInfo[TotalW].Optic =        atoi(value);
         if (strstr(line, "fall"))   WeapInfo[TotalW].Fall  = (float)atof(value);
         //if (strstr(line, "price")) WeapInfo[TotalW].Price =        atoi(value);
+
+		if (strstr(line, "radar")) readBool(value, WeapInfo[TotalW].onRadar);
+		if (strstr(line, "radR")) WeapInfo[TotalW].radarRed = atoi(value);
+		if (strstr(line, "radG")) WeapInfo[TotalW].radarGreen = atoi(value);
+		if (strstr(line, "radB")) WeapInfo[TotalW].radarBlue = atoi(value);
+		if (strstr(line, "radTime"))  WeapInfo[TotalW].radarTime = atoi(value);
+
 
 		if (strstr(line, "retrieve")) readBool(value, WeapInfo[TotalW].retrieve);
 

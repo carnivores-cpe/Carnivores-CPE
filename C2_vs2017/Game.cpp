@@ -1922,7 +1922,7 @@ void AddElementsA(float x, float y, float z, int etype, int cnt, int mag, bool a
 
 
 int AnimateBullet(float ax, float ay, float az,
-              float bx, float by, float bz)
+              float bx, float by, float bz, int b)
 {
   int sres;
     sres = TraceShot(ax, ay, az, bx, by, bz);
@@ -1966,6 +1966,11 @@ ENDTRACE:
 
 //======= character damage =========//
 
+  if (WeapInfo[bullet[b].parent].onRadar) {
+	  Characters[ShotDino].tracker = bullet[b].parent;
+	  Characters[ShotDino].RTime = bullet[b].RTime;
+  }
+
   if (Multiplayer && !Host) {
 	  if (mort) sendDamage[ShotDino] = Characters[ShotDino].Health;
 	  else sendDamage[ShotDino] += WeapInfo[CurrentWeapon].Power;
@@ -1994,11 +1999,20 @@ void AddBullet(float ax, float ay, float az,
 	bullet[bulletCh].dif.z = Dz;
 	bullet[bulletCh].parent = parent;
 	bullet[bulletCh].state = 0;
+	bullet[bulletCh].alpha = FindVectorAlpha(Dx, Dz);
+	bullet[bulletCh].beta = FindVectorAlpha(sqrt(Dz*Dz + Dx*Dx), Dy);
+	if (WeapInfo[parent].onRadar) bullet[bulletCh].RTime = 1;
+	if (WeapInfo[parent].radarTime) bullet[bulletCh].RTime = WeapInfo[parent].radarTime;
 	bulletCh++;
 }
 
 void AnimateBullets() {
 	for (int b=0; b < bulletCh; b++) {
+
+		if (bullet[b].RTime) {
+			if (WeapInfo[bullet[b].parent].radarTime) bullet[b].RTime -= TimeDt;
+			if (bullet[b].RTime < 0) bullet[b].RTime = 0;
+		}
 
 		if (bullet[b].state) {
 			if (VectorLength(SubVectors(PlayerPos, bullet[b].a)) < 300.f) {
@@ -2022,7 +2036,8 @@ void AnimateBullets() {
 				bullet[b].a.z,
 				bullet[b].a.x + bullet[b].dif.x,
 				bullet[b].a.y + bullet[b].dif.y,
-				bullet[b].a.z + bullet[b].dif.z);
+				bullet[b].a.z + bullet[b].dif.z,
+				b);
 
 			//this ought to be adjusted on frame time
 
@@ -2034,13 +2049,12 @@ void AnimateBullets() {
 				if (WeapInfo[bullet[b].parent].retrieve && (sres == 1 || sres == 3)) {
 					bullet[b].state = 1;
 					bullet[b].a = TraceB;
-				}
-				else {
+				} else {
 					memcpy(&bullet[b], &bullet[b + 1], (bulletCh + 1 - b) * sizeof(TBullet));
 					b--;
 					bulletCh--;
 				}
-			} else{
+			} else {
 
 				bullet[b].a.x += bullet[b].dif.x;
 				bullet[b].a.y += bullet[b].dif.y;

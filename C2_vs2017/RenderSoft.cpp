@@ -2825,6 +2825,15 @@ void DrawHMap()
 	  DrawCircle(xx, yy, sonarPos);
   }
   
+  for (int b = 0; b < bulletCh; b++) {
+	  if (bullet[b].RTime) {
+		  xx = VideoCX - 128 + (int)bullet[b].a.x / 1024;
+		  yy = VideoCY - 128 + (int)bullet[b].a.z / 1024;
+		  if (yy > 0 && yy < WinH && xx > 0 && xx < WinW)
+			  DrawBox((WORD*)lpVideoBuf,xx, yy, WeapInfo[bullet[b].parent].radarColour555);
+	  }
+  }
+
     for (int c=0; c<ChCount; c++)
     {
 
@@ -2832,10 +2841,11 @@ void DrawHMap()
 			//if (! (TargetDino & (1<<Characters[c].AI)) ) continue;
 			//if (Characters[c].AI > 0) continue;
 		
-		if (!DinoInfo[Characters[c].CType].onRadar) continue;
+		if (!DinoInfo[Characters[c].CType].onRadar && !Characters[c].RTime) continue;
 		
-		if (!Characters[c].Health) continue;
-		if (!RadarMode && Characters[c].Clone != AI_HUNTDOG) continue;
+		if (!Characters[c].Health && !Characters[c].RTime) continue;
+
+		//if (!RadarMode && Characters[c].Clone != AI_HUNTDOG && !Characters[c].RTime) continue;
 			xx = VideoCX - 128 + (int)Characters[c].pos.x / 1024;
 			yy = VideoCY - 128 + (int)Characters[c].pos.z / 1024;
 			if (yy <= 0 || yy >= WinH) continue;
@@ -2845,9 +2855,12 @@ void DrawHMap()
 				DrawBox((WORD*)lpVideoBuf, xx, yy, DinoInfo[Characters[c].CType].radarColour555);//31<<10
 			}
 			else {
-				if (RadarMode) {
-					if (DinoInfo[Characters[c].CType].Mystery) DrawBoxMystery((WORD*)lpVideoBuf, xx, yy, DinoInfo[Characters[c].CType].radarColour555);
-					else DrawBox((WORD*)lpVideoBuf, xx, yy, DinoInfo[Characters[c].CType].radarColour555); //30<<5
+				if (RadarMode || Characters[c].RTime) {
+					WORD *colour = &DinoInfo[Characters[c].CType].radarColour555;
+					if (Characters[c].tracker >= 0) colour = &WeapInfo[Characters[c].tracker].radarColour555;
+
+					if (DinoInfo[Characters[c].CType].Mystery) DrawBoxMystery((WORD*)lpVideoBuf, xx, yy, *colour);
+					else DrawBox((WORD*)lpVideoBuf, xx, yy, *colour); //30<<5
 				}
 
 				if (SonarMode) {
@@ -2867,7 +2880,7 @@ void DrawHMap()
 					}
 					else Characters[c].showSonar = FALSE;
 
-					if (Characters[c].showSonar) {
+					if (Characters[c].showSonar && !Characters[c].RTime) {
 						if (DinoInfo[Characters[c].CType].Mystery) DrawBoxMystery((WORD*)lpVideoBuf, Characters[c].sonar.x, Characters[c].sonar.y, DinoInfo[Characters[c].CType].radarColour555);
 						else DrawBox((WORD*)lpVideoBuf, Characters[c].sonar.x, Characters[c].sonar.y, DinoInfo[Characters[c].CType].radarColour555);
 					}

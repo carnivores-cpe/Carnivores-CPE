@@ -318,7 +318,7 @@ typedef struct _TBullet
 {
 	Vector3d a,dif,rpos;
 	int parent, state;
-	int FTime;
+	int FTime, RTime;
 	float alpha, beta;
 //	float power, speed, fall;
 } TBullet;
@@ -416,6 +416,9 @@ typedef struct _TCharacter
 //  int tropIndex;
 
   float packDensity;
+
+  int tracker;
+  int RTime;
 
 } TCharacter;
 
@@ -790,6 +793,12 @@ typedef struct _TWeapInfo
   float Power, Prec, Loud, Rate, Veloc, Fall;
   int Shots, Optic, TraceC, Reload, SFXIndex;
   int shtAnim, getAnim, putAnim, rldAnim;
+
+  bool onRadar;
+  byte radarRed, radarGreen, radarBlue;
+  WORD radarColour565, radarColour555;
+  int radarTime;
+
 } TWeapInfo;
 
 

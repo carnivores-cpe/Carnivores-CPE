@@ -168,6 +168,7 @@ weapons {
  name  = 'Pistol'
  file  = 'pistol.car'
  pic   = 'bullet1.tga'
+ bModel= 'pistolbullet1.car'
  gunshot = 'pistol.wav'
  getAnim = 0
  shtAnim = 1
@@ -185,6 +186,7 @@ weapons {
  name  = 'Shotgun'
  file  = 'shotgun.car'
  pic   = 'bullet2.tga'
+ bModel= 'shotgunbullet1.car'
  gunshot = 'shotgun.wav'
  getAnim = 0
  shtAnim = 1
@@ -204,6 +206,7 @@ weapons {
  name  = 'DB Shotgun'
  file  = 'dbsgun.car'
  pic   = 'bullet2.tga'
+ bModel= 'shotgunbullet1.car'
  gunshot = 'dbsgun.wav'
  getAnim = 0
  shtAnim = 1
@@ -230,19 +233,24 @@ weapons {
  putAnim = 2
  rldAnim = 3
  shots = 6
- fall = 1.6
+ fall = 0.6
  power = 6
  veloc = 4
  prec  = 2.0
  loud  = 0.4
  rate  = 1.0
  retrieve = TRUE
+ radar = TRUE
+ radB = 240
+ radG = 100
+ radTime = 30000
 }
 
 {
  name  = 'Rifle'
  file  = 'rifle.car'
  pic   = 'bullet3.tga'
+ bModel= 'riflebullet1.car'
  gunshot = 'rifle.wav'
  getAnim = 0
  shtAnim = 1
@@ -260,6 +268,7 @@ weapons {
  name  = 'Sniper rifle'
  file  = 'sniper.car'
  pic   = 'bullet3.tga'
+ bModel= 'riflebullet1.car'
  gunshot = 'sniper.wav'
  getAnim = 0
  shtAnim = 1
