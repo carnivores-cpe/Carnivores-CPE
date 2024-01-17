@@ -180,6 +180,7 @@ weapons {
  loud  = 0.8
  rate  = 1.6
  shots = 8
+ muzzflash = TRUE
 }
 
 {
@@ -199,6 +200,7 @@ weapons {
  rate  = 1.2
  trace = 6
  shots = 7
+ muzzflash = TRUE
 } 
 
 
@@ -220,6 +222,7 @@ weapons {
  trace = 6
  shots = 6
  reload = 2
+ muzzflash = TRUE
 } 
 
 
@@ -262,6 +265,7 @@ weapons {
  loud  = 1.5
  rate  = 1.0
  shots = 7
+ muzzflash = TRUE
 }
 
 {

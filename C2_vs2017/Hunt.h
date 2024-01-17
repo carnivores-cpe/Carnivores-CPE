@@ -799,6 +799,8 @@ typedef struct _TWeapInfo
   WORD radarColour565, radarColour555;
   int radarTime;
 
+  bool MuzzFlash;
+
 } TWeapInfo;
 
 
@@ -1244,6 +1246,9 @@ _EXTORNOT TAIInfo AIInfo[DINOINFO_MAX];
 //_EXTORNOT TRegion Region[256];
 //_EXTORNOT TRegion Avoid[256];
 _EXTORNOT TWeapInfo WeapInfo[10];
+_EXTORNOT bool Muzz;
+_EXTORNOT int MuzzFTime;
+_EXTORNOT TCharacterInfo MuzzModel;
 _EXTORNOT TCharacterInfo ShipModel;
 _EXTORNOT TCharacterInfo SShipModel;
 _EXTORNOT TCharacterInfo BagModel;

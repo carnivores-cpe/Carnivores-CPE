@@ -500,10 +500,19 @@ SKIPWIND:
   if (wptr->state == 2 && wptr->FTime>0)
   {
     wptr->FTime+=TimeDt;
+	if (Muzz) {
+		if (wptr->FTime > MuzzModel.Animation[0].AniTime) {
+			Muzz = false;
+			MuzzFTime = 0;
+		} else MuzzFTime = wptr->FTime;
+	}
+
     if (wptr->FTime >= wptr->chinfo[CurrentWeapon].Animation[WeapInfo[CurrentWeapon].shtAnim].AniTime)
     {
       wptr->FTime = 0;
       wptr->state = 2;
+	  Muzz = false;
+	  MuzzFTime = 0;
 
 	  /*
       if (WeapInfo[CurrentWeapon].Reload && !DEBUG)
@@ -605,6 +614,13 @@ SKIPWIND:
 
   if (HARD3D) wpnlight = 96 + GetLandLt(PlayerX, PlayerZ) / 4;
   else wpnlight = 200;
+
+  if (Muzz) {
+  CreateMorphedModel(MuzzModel.mptr,
+	  &MuzzModel.Animation[0], MuzzFTime, 1.0);
+  RenderNearModel(MuzzModel.mptr, 0, wpshy, wpshz, wpnlight,
+	  -wpnDAlpha, -wpnDBeta + wpnb);
+  }
 
   RenderNearModel(wptr->chinfo[CurrentWeapon].mptr, 0, wpshy, wpshz, wpnlight,
                   -wpnDAlpha, -wpnDBeta + wpnb);
@@ -1159,6 +1175,8 @@ void ProcessShoot()
     AddVoicev(wptr->chinfo[CurrentWeapon].SoundFX[1].length,
               wptr->chinfo[CurrentWeapon].SoundFX[1].lpData, 256);
     TrophyRoom.Last.smade++;
+
+	if (WeapInfo[CurrentWeapon].MuzzFlash) Muzz = true;
 
     for (int s=0; s<=WeapInfo[CurrentWeapon].TraceC; s++)
     {
@@ -2121,6 +2139,7 @@ int PASCAL WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
   LoadCharacterInfo(BagModel, "HUNTDAT\\bag1.car");
   LoadCharacterInfo(WindModel, "HUNTDAT\\WIND.CAR");
 
+  LoadCharacterInfo(MuzzModel, "HUNTDAT\\MUZZ4.CAR");
 
   LoadWav("HUNTDAT\\SOUNDFX\\a_underw.wav",  fxUnderwater);
 

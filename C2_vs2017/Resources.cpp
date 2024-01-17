@@ -1731,6 +1731,8 @@ void ReInitGame()
 {
   PrintLog("ReInitGame();\n");
   PlaceHunter();
+  Muzz = false;
+  MuzzFTime = 0;
   if (TrophyMode)	PlaceTrophy();
   else if (SurvivalMode) {
 	  SurvivalWave = 0;
@@ -3002,6 +3004,7 @@ void ReadWeapons(FILE *stream)
 		if (strstr(line, "radB")) WeapInfo[TotalW].radarBlue = atoi(value);
 		if (strstr(line, "radTime"))  WeapInfo[TotalW].radarTime = atoi(value);
 
+		if (strstr(line, "muzzflash")) readBool(value, WeapInfo[TotalW].MuzzFlash);
 
 		if (strstr(line, "retrieve")) readBool(value, WeapInfo[TotalW].retrieve);
 
