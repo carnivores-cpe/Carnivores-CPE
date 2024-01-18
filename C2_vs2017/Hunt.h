@@ -1248,6 +1248,7 @@ _EXTORNOT TAIInfo AIInfo[DINOINFO_MAX];
 _EXTORNOT TWeapInfo WeapInfo[10];
 _EXTORNOT bool Muzz;
 _EXTORNOT int MuzzFTime;
+_EXTORNOT float MuzzGamma;
 _EXTORNOT TCharacterInfo MuzzModel;
 _EXTORNOT TCharacterInfo ShipModel;
 _EXTORNOT TCharacterInfo SShipModel;

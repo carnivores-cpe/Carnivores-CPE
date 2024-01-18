@@ -616,8 +616,8 @@ SKIPWIND:
   else wpnlight = 200;
 
   if (Muzz) {
-  CreateMorphedModel(MuzzModel.mptr,
-	  &MuzzModel.Animation[0], MuzzFTime, 1.0);
+  CreateMorphedModelBetaGamma(MuzzModel.mptr,
+	  &MuzzModel.Animation[0], MuzzFTime, 1.0, 0, MuzzGamma);
   RenderNearModel(MuzzModel.mptr, 0, wpshy, wpshz, wpnlight,
 	  -wpnDAlpha, -wpnDBeta + wpnb);
   }
@@ -1176,7 +1176,12 @@ void ProcessShoot()
               wptr->chinfo[CurrentWeapon].SoundFX[1].lpData, 256);
     TrophyRoom.Last.smade++;
 
-	if (WeapInfo[CurrentWeapon].MuzzFlash) Muzz = true;
+	if (WeapInfo[CurrentWeapon].MuzzFlash) {
+		Muzz = true;
+		MuzzGamma = rRand(100);
+		MuzzGamma /= 50;
+		MuzzGamma *= pi;
+	}
 
     for (int s=0; s<=WeapInfo[CurrentWeapon].TraceC; s++)
     {
