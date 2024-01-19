@@ -207,7 +207,7 @@ background-size: 25% auto;
 </svg>
 
 <h1>Carnivores: Modders Edition - Manual</h1>
-Beta v1.0.6.1
+Beta v1.1.0
 
 
 <script>
@@ -255,12 +255,20 @@ function expand(n) {
 			</p>
 			
 			
-			<h3>Change Log v1.0.6.1</h3>
+			<h3>Change Log v1.1.0</h3>
 			
 			
 			<ul>
-				<li>Improvements to the pack system (see the guide to new trophy, spawning and packing systems)</li>
-				<li>Optional sleep animation for T-Rex</li>
+			    <li>Bullet travel time and modifiable velocity.</li>
+			    <li>Bullet models.</li>
+			    <li>Retrievable bullets (e.g. x-bow bolts) - res optional.</li>
+			    <li>Tracking bullets show hit dino on radar.</li>
+				<li>Custom tracking bullet radar colour.</li>
+				<li>Optional tracking bullet duration.</li>
+				<li>Weapon Fall now accepts any value.</li>
+				<li>Manual reloading - set the keybinding in the options menu to swap magazines at any time.</li>
+				<li>Optional muzzle flash.</li>
+			    <li>Supply Ship - adjust keybind in the options menu.</li>
 				<!--<li>You can now hide creatures on the hunt menu until the player can afford them</li>-->
 				<!--<li>10th huntable slot</li>
 				<li>10 selectable weapon slots (with numkey binding)</li>
@@ -301,7 +309,7 @@ function expand(n) {
 			</p>
 			
 			
-			<h3>Bug Fixes v1.0.6.1</h3>
+			<h3>Bug Fixes v1.1.0</h3>
 			
 			
 			<ul>
@@ -309,7 +317,7 @@ function expand(n) {
 			</ul>
 			
 			<p>
-			All known bugs for 1.0.6.1 are listed <a style="color: rgb(99,165,204);font-weight:bold"  href="https://docs.google.com/spreadsheets/d/1zqAZ0HrHivDk2EDMzUC6fbR-xT7ShiX7jB2z4ZU825c/#gid=1472407604">here</a>.
+			All known bugs for 1.1.0 are listed <a style="color: rgb(99,165,204);font-weight:bold"  href="https://docs.google.com/spreadsheets/d/1zqAZ0HrHivDk2EDMzUC6fbR-xT7ShiX7jB2z4ZU825c/#gid=1472407604">here</a>.
 			</p>
 			
 			
@@ -390,6 +398,16 @@ function expand(n) {
 				<li>Toggle crouch.</li>
 				<li>Customisable snow/weather settings for each map</li>
 				<li>Customisable survival mode</li>
+			    <li>Bullet travel time and modifiable velocity.</li>
+			    <li>Bullet models.</li>
+			    <li>Retrievable bullets (e.g. x-bow bolts) - res optional.</li>
+			    <li>Tracking bullets show hit dino on radar.</li>
+				<li>Custom tracking bullet radar colour.</li>
+				<li>Optional tracking bullet duration.</li>
+				<li>Weapon Fall now accepts any value.</li>
+				<li>Manual reloading - set the keybinding in the options menu to swap magazines at any time.</li>
+				<li>Optional muzzle flash.</li>
+			    <li>Supply Ship - adjust keybind in the options menu.</li>
 				<li>More detailed _RES error messages.</li>
 			</ul>
 									
@@ -2170,6 +2188,303 @@ reduced by the whole value of densityMulti. e.g. in the above screenshot, the ma
 
 
 
+<p style="margin-top:4%;">
+	<h2 id="arrow_171" unselectable="on" onclick="expand(171)"
+		style="float:left;margin-left:18%;margin-top:0;cursor:pointer;
+		-moz-user-select:none;
+		user-select:none;
+		-webkit-user-select: none;
+		-ms-user-select: none;"
+		>></h2>
+	<div class = "conbase">
+		<h2 onclick="expand(171)" style="cursor:pointer;">_RES Editing - weapons</h2>
+		<div id="content_171" style="display: none">
+			
+			
+<p style="margin-top:4%;">
+	<h2 id="arrow_172" unselectable="on" onclick="expand(172)"
+		style="float:left;margin-top:0;cursor:pointer;
+		-moz-user-select:none;
+		user-select:none;
+		-webkit-user-select: none;
+		-ms-user-select: none;"
+		>></h2>
+	<div class = "con" style="margin-left:4%">
+		<h2 onclick="expand(172)" style="cursor:pointer;">_RES value: veloc</h2>
+		<div id="content_172" style="display: none">
+		
+			<p><b>Data type: Decimal Number</b></p>
+			
+			Defines the speed of the bullet.<br>veloc = 1 is roughly equivalent to 32 metres/second.
+			
+			<div class="grid-container">
+				<div class="grid-item"><b>Weapon</b></div>
+				<div class="grid-item"><b>Vanilla Value</b></div>
+				<div class="grid-item">Pistol</div>
+				<div class="grid-item">12</div>
+				<div class="grid-item">Shotgun</div>
+				<div class="grid-item">12</div>
+				<div class="grid-item">Double-barreled Shotgun</div>
+				<div class="grid-item">12</div>
+				<div class="grid-item">X-Bow</div>
+				<div class="grid-item">4</div>
+				<div class="grid-item">Rifle</div>
+				<div class="grid-item">23</div>
+				<div class="grid-item">Sniper Rifle</div>
+				<div class="grid-item">23</div>
+			</div>
+		</div>
+	</div>
+</p>		
+			
+<p style="margin-top:4%;">
+	<h2 id="arrow_173" unselectable="on" onclick="expand(173)"
+		style="float:left;margin-top:0;cursor:pointer;
+		-moz-user-select:none;
+		user-select:none;
+		-webkit-user-select: none;
+		-ms-user-select: none;"
+		>></h2>
+	<div class = "con" style="margin-left:4%">
+		<h2 onclick="expand(173)" style="cursor:pointer;">_RES value: fall</h2>
+		<div id="content_173" style="display: none">
+		
+			<p><b>Data type: Decimal Number</b></p>
+			
+			Optional. Sets how quickly the bullet drops (also affected by veloc).
+
+		</div>
+	</div>
+</p>		
+			
+<p style="margin-top:4%;">
+	<h2 id="arrow_174" unselectable="on" onclick="expand(174)"
+		style="float:left;margin-top:0;cursor:pointer;
+		-moz-user-select:none;
+		user-select:none;
+		-webkit-user-select: none;
+		-ms-user-select: none;"
+		>></h2>
+	<div class = "con" style="margin-left:4%">
+		<h2 onclick="expand(174)" style="cursor:pointer;">_RES value: getAnim</h2>
+		<div id="content_174" style="display: none">
+		
+			<p><b>Data type: Whole Number</b></p>
+			
+			Position of the get animation in the CAR file (starting from 0).
+			
+		</div>
+	</div>
+</p>	
+			
+<p style="margin-top:4%;">
+	<h2 id="arrow_175" unselectable="on" onclick="expand(175)"
+		style="float:left;margin-top:0;cursor:pointer;
+		-moz-user-select:none;
+		user-select:none;
+		-webkit-user-select: none;
+		-ms-user-select: none;"
+		>></h2>
+	<div class = "con" style="margin-left:4%">
+		<h2 onclick="expand(175)" style="cursor:pointer;">_RES value: putAnim</h2>
+		<div id="content_175" style="display: none">
+		
+			<p><b>Data type: Whole Number</b></p>
+			
+			Position of the put animation in the CAR file (starting from 0).
+			
+		</div>
+	</div>
+</p>	
+			
+<p style="margin-top:4%;">
+	<h2 id="arrow_176" unselectable="on" onclick="expand(176)"
+		style="float:left;margin-top:0;cursor:pointer;
+		-moz-user-select:none;
+		user-select:none;
+		-webkit-user-select: none;
+		-ms-user-select: none;"
+		>></h2>
+	<div class = "con" style="margin-left:4%">
+		<h2 onclick="expand(176)" style="cursor:pointer;">_RES value: shtAnim</h2>
+		<div id="content_176" style="display: none">
+		
+			<p><b>Data type: Whole Number</b></p>
+			
+			Position of the fire animation in the CAR file (starting from 0).
+			
+		</div>
+	</div>
+</p>	
+			
+<p style="margin-top:4%;">
+	<h2 id="arrow_177" unselectable="on" onclick="expand(177)"
+		style="float:left;margin-top:0;cursor:pointer;
+		-moz-user-select:none;
+		user-select:none;
+		-webkit-user-select: none;
+		-ms-user-select: none;"
+		>></h2>
+	<div class = "con" style="margin-left:4%">
+		<h2 onclick="expand(177)" style="cursor:pointer;">_RES value: rldAnim</h2>
+		<div id="content_177" style="display: none">
+		
+			<p><b>Data type: Whole Number</b></p>
+			
+			Position of the reload animation in the CAR file (starting from 0).
+			
+		</div>
+	</div>
+</p>
+
+
+	
+			
+<p style="margin-top:4%;">
+	<h2 id="arrow_178" unselectable="on" onclick="expand(178)"
+		style="float:left;margin-top:0;cursor:pointer;
+		-moz-user-select:none;
+		user-select:none;
+		-webkit-user-select: none;
+		-ms-user-select: none;"
+		>></h2>
+	<div class = "con" style="margin-left:4%">
+		<h2 onclick="expand(178)" style="cursor:pointer;">_RES value: bModel</h2>
+		<div id="content_178" style="display: none">
+		
+			<p><b>Data type: File Name</b></p>
+			
+			Optional. File name of the bullet car file. The file should be placed in the HUNTDAT\WEAPONS folder and include an animation.
+			
+		</div>
+	</div>
+</p>
+
+
+	
+			
+<p style="margin-top:4%;">
+	<h2 id="arrow_179" unselectable="on" onclick="expand(179)"
+		style="float:left;margin-top:0;cursor:pointer;
+		-moz-user-select:none;
+		user-select:none;
+		-webkit-user-select: none;
+		-ms-user-select: none;"
+		>></h2>
+	<div class = "con" style="margin-left:4%">
+		<h2 onclick="expand(179)" style="cursor:pointer;">_RES value: retrieve</h2>
+		<div id="content_179" style="display: none">
+		
+			<p><b>Data type: TRUE/FALSE</b></p>
+			
+			If set to true, the bullet/arrow can be picked up and re-added to the hunters ammo (unless it hits water or a creature).
+			
+		</div>
+	</div>
+</p>
+
+
+	
+			
+<p style="margin-top:4%;">
+	<h2 id="arrow_180" unselectable="on" onclick="expand(180)"
+		style="float:left;margin-top:0;cursor:pointer;
+		-moz-user-select:none;
+		user-select:none;
+		-webkit-user-select: none;
+		-ms-user-select: none;"
+		>></h2>
+	<div class = "con" style="margin-left:4%">
+		<h2 onclick="expand(180)" style="cursor:pointer;">_RES value: radar</h2>
+		<div id="content_180" style="display: none">
+		
+			<p><b>Data type: TRUE/FALSE</b></p>
+			
+			If set to true, shot dinos (or retrievable ammo) will show on radar.
+			
+		</div>
+	</div>
+</p>
+
+
+<p style="margin-top:4%;">
+	<h2 id="arrow_181" unselectable="on" onclick="expand(181)"
+		style="float:left;margin-top:0;cursor:pointer;
+		-moz-user-select:none;
+		user-select:none;
+		-webkit-user-select: none;
+		-ms-user-select: none;"
+		>></h2>
+	<div class = "con" style="margin-left:4%">
+		<h2 onclick="expand(181)" style="cursor:pointer;">_RES value: radR, radG, radB</h2>
+		<div id="content_181" style="display: none">
+		
+			<p><b>Data type: Whole Number</b></p>
+			<p>
+			Sets the colour of the radar dot for shot creatures or retrievable ammo (RGB 0-255).
+		    </p>
+		</div>
+	</div>
+</p>
+
+
+	
+			
+<p style="margin-top:4%;">
+	<h2 id="arrow_182" unselectable="on" onclick="expand(182)"
+		style="float:left;margin-top:0;cursor:pointer;
+		-moz-user-select:none;
+		user-select:none;
+		-webkit-user-select: none;
+		-ms-user-select: none;"
+		>></h2>
+	<div class = "con" style="margin-left:4%">
+		<h2 onclick="expand(182)" style="cursor:pointer;">_RES value: radTime</h2>
+		<div id="content_182" style="display: none">
+		
+			<p><b>Data type: Whole Number</b></p>
+			
+			Optional. Defines the duration of time shot dinos will show on radar.
+			<p>
+			If no radTime value is set, then shot dinos will show on radar indefinitely. 
+			</p>
+			
+		</div>
+	</div>
+</p>
+
+
+	
+			
+<p style="margin-top:4%;">
+	<h2 id="arrow_183" unselectable="on" onclick="expand(183)"
+		style="float:left;margin-top:0;cursor:pointer;
+		-moz-user-select:none;
+		user-select:none;
+		-webkit-user-select: none;
+		-ms-user-select: none;"
+		>></h2>
+	<div class = "con" style="margin-left:4%">
+		<h2 onclick="expand(183)" style="cursor:pointer;">_RES value: muzzflash</h2>
+		<div id="content_183" style="display: none">
+		
+			<p><b>Data type: TRUE/FALSE</b></p>
+			
+			If set to true, weapon will have a muzzle flash effect when fired.
+			
+		</div>
+	</div>
+</p>
+
+
+
+		
+			
+			
+		</div>
+	</div>
+</p>
+
 		
 <p style="margin-top:4%;">
 	<h2 id="arrow_2" unselectable="on" onclick="expand(2)"
@@ -2180,7 +2495,7 @@ reduced by the whole value of densityMulti. e.g. in the above screenshot, the ma
 		-ms-user-select: none;"
 		>></h2>
 	<div class = "conbase">
-		<h2 onclick="expand(2)" style="cursor:pointer;">_RES Editing - Creatures</h2>
+		<h2 onclick="expand(2)" style="cursor:pointer;">_RES Editing - characters</h2>
 		<div id="content_2" style="display: none">
 		
 		

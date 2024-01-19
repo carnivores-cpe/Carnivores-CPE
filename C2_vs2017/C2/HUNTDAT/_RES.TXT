@@ -175,7 +175,7 @@ weapons {
  putAnim = 2
  rldAnim = 3
  power = 2
- veloc = 12
+ veloc = 12.0
  prec  = 0.8
  loud  = 0.8
  rate  = 1.6
@@ -194,7 +194,7 @@ weapons {
  putAnim = 2
  rldAnim = 3
  power = 1
- veloc = 12
+ veloc = 12.0
  prec  = 0.3
  loud  = 1.5
  rate  = 1.2
@@ -215,7 +215,7 @@ weapons {
  putAnim = 2
  rldAnim = 3
  power = 1
- veloc = 12
+ veloc = 12.0
  prec  = 0.2
  loud  = 1.9
  rate  = 1.2
@@ -238,7 +238,7 @@ weapons {
  shots = 6
  fall = 0.6
  power = 6
- veloc = 4
+ veloc = 4.0
  prec  = 2.0
  loud  = 0.4
  rate  = 1.0
@@ -260,7 +260,7 @@ weapons {
  putAnim = 2
  rldAnim = 3
  power = 4
- veloc = 23
+ veloc = 23.0
  prec  = 1.8
  loud  = 1.5
  rate  = 1.0
@@ -279,7 +279,7 @@ weapons {
  putAnim = 2
  rldAnim = 3
  power = 4
- veloc = 23
+ veloc = 23.0
  optic = 1
  prec  = 2.0
  loud  = 0.0

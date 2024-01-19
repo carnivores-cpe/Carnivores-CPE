@@ -601,7 +601,6 @@ void AddWCircle(float x, float z, float scale)
   WCCount++;
 }
 
-
 void AddShipTask(int cindex)
 {
 
@@ -2017,12 +2016,13 @@ void AnimateBullets() {
 		if (bullet[b].state) {
 			if (VectorLength(SubVectors(PlayerPos, bullet[b].a)) < 300.f) {
 
-				int collectNo = rRand(2);
-				AddVoicev(fxCollect[collectNo].length, fxCollect[collectNo].lpData, 256);
+				
 
 				int maxAm = WeapInfo[bullet[b].parent].Shots;
 				if (DoubleAmmo && WeapInfo[bullet[b].parent].Reload) maxAm *= 2;
 				if (ShotsLeft[bullet[b].parent] < maxAm) {
+					int collectNo = rRand(2);
+					AddVoicev(fxCollect[collectNo].length, fxCollect[collectNo].lpData, 256);
 					ShotsLeft[bullet[b].parent]++;
 					memcpy(&bullet[b], &bullet[b + 1], (bulletCh + 1 - b) * sizeof(TBullet));
 					b--;
