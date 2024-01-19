@@ -420,6 +420,12 @@ typedef struct _TCharacter
   int tracker;
   int RTime;
 
+  int tempScore; //stores killed stats
+  int tempTime;
+  int tempDate;
+  float tempRange;
+  bool claimed;
+
 } TCharacter;
 
 
@@ -1044,6 +1050,7 @@ void ShutDownEngine();
 void ProcessSyncro();
 void AddShipSupply(float,float);
 void AddShipTask(int);
+void SubmitDinoScore(int);
 void LoadTrophy();
 //void LoadPlayersInfo();
 void SaveTrophy();
@@ -1053,7 +1060,7 @@ void AddBullet(float ax, float ay, float az,
               float bx, float by, float bz,
 	int);
 int AnimateBullet(float ax, float ay, float az,
-	float bx, float by, float bz);
+	float bx, float by, float bz, int b);
 void AnimateBullets();
 void refillWeapons();
 void registerDamage(int);
@@ -1178,8 +1185,8 @@ _EXTORNOT float snow2_rad;//radius
 
 //========= GAME ====================//
 _EXTORNOT int TargetDino, TargetArea, TargetWeapon, WeaponPres, TargetCall,
-          TrophyTime, ObservMode, Tranq, ObjectsOnLook,
-          CurrentWeapon, ShotsLeft[10], AmmoMag[10], MagShotsLeft[10], Chambered[10];
+          ObservMode, Tranq, ObjectsOnLook,
+          CurrentWeapon, ShotsLeft[10], AmmoMag[10], MagShotsLeft[10], Chambered[10]; //TrophyTime, 
 
 _EXTORNOT bool alreadyFired;
 
@@ -1264,6 +1271,7 @@ _EXTORNOT int trophyTypeCount;
 _EXTORNOT int ChCount, WCCount, ElCount, SnCount,
           ShotDino, TrophyBody, HunterCount; //HunterCount is for multiplayer, up to 3 others
 _EXTORNOT bool TrophyDisplay;
+_EXTORNOT int TrophyDisplayC;
 _EXTORNOT TTrophyItem TrophyDisplayBody;
 _EXTORNOT TCharacterInfo WindModel;
 _EXTORNOT TCharacterInfo PlayerInfo;

@@ -693,7 +693,7 @@ SKIPWEAPON:
   if (PAUSE)
     DrawPicture( (WinW - PausePic.W) / 2, (WinH - PausePic.H) / 2, PausePic);
 
-  if (TrophyMode || TrophyTime)
+  if (TrophyMode || TrophyDisplay)
     if (TrophyBody!=-1 || TrophyDisplay)
     {
       int x0 = WinW - TrophyPic.W - 16;
@@ -704,6 +704,7 @@ SKIPWEAPON:
       DrawPicture( x0, y0, TrophyPic);
       DrawTrophyText(x0, y0);
 
+	  /*
       if (TrophyTime)
       {
         TrophyTime-=TimeDt;
@@ -714,6 +715,7 @@ SKIPWEAPON:
 		  TrophyDisplay = false;
         }
       }
+	  */
     }
 }
 
@@ -1420,6 +1422,8 @@ void ProcessPlayerMovement()
 		  }
 	  }
   }
+
+  if (KeyboardState[VK_RETURN] & 128) if (TrophyDisplay && !Tranq) AddShipTask(TrophyDisplayC);
 
   if (KeyboardState [KeyMap.fkShow] & 128) HideWeapon();
 

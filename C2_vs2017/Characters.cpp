@@ -260,6 +260,8 @@ void ResetCharacter(TCharacter *cptr)
 	cptr->BloodTTime = 0;
 	cptr->BloodTime = 0;
 
+	cptr->claimed = false;
+
 	cptr->tracker = -1;
 	cptr->RTime = 0;
 
@@ -7910,6 +7912,8 @@ void AnimateCharacters()
 
 	}
 
+	TrophyDisplay = false;
+
 	for (CurDino = 0; CurDino < ChCount; CurDino++)
 	{
 		cptr = &Characters[CurDino];
@@ -7978,6 +7982,24 @@ void AnimateCharacters()
 		if (cptr->AfraidTime <= 0) {
 			cptr->awareHunter = FALSE;
 			cptr->heardShot = FALSE;
+		}
+
+		BOOL TROPHYON = (GetLandUpH(cptr->pos.x, cptr->pos.z) - GetLandH(cptr->pos.x, cptr->pos.z) < 100);
+
+		//disp ship info
+		if (!cptr->Health && TROPHYON && DinoInfo[cptr->CType].trophy) {
+			if (fabs(VectorLength(SubVectors(PlayerPos, cptr->pos))) < 300.f && !cptr->claimed) {
+				TrophyDisplayBody.ctype = cptr->CType;
+				TrophyDisplayBody.scale = cptr->scale;
+				TrophyDisplayBody.weapon = CurrentWeapon;
+				TrophyDisplayBody.score = cptr->tempScore;
+				TrophyDisplayBody.phase = (RealTime & 3);
+				TrophyDisplayBody.time = cptr->tempTime;
+				TrophyDisplayBody.date = cptr->tempDate;
+				TrophyDisplayBody.range = cptr->tempRange;
+				TrophyDisplay = true;
+				TrophyDisplayC = CurDino;
+			}
 		}
 
 		switch (cptr->Clone)

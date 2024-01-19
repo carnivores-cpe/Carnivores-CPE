@@ -1580,7 +1580,8 @@ void LoadResources()
   GenerateMapImage();
 
   if (TrophyMode) LoadPictureTGA(TrophyPic, "HUNTDAT\\MENU\\trophy.tga");
-  else LoadPictureTGA(TrophyPic, "HUNTDAT\\MENU\\trophy_g.tga");
+  else if (Tranq) LoadPictureTGA(TrophyPic, "HUNTDAT\\MENU\\trophy_g.tga");
+  else LoadPictureTGA(TrophyPic, "HUNTDAT\\MENU\\collect.tga");
   conv_pic(TrophyPic);
 
 //    ReInitGame();
@@ -1812,7 +1813,7 @@ void ReInitGame()
 
   DemoPoint.DemoTime = 0;
   RestartMode = FALSE;
-  TrophyTime=0;
+  TrophyDisplay=false;
   answtime = 0;
   ExitTime = 0;
 

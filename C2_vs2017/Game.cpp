@@ -601,25 +601,40 @@ void AddWCircle(float x, float z, float scale)
   WCCount++;
 }
 
+void SubmitDinoScore (int cindex) {
+	float score = DinoInfo[Characters[cindex].CType].BaseScore;
+
+	if (TrophyRoom.Last.success > 1)
+		score *= (1.f + TrophyRoom.Last.success / 10.f);
+
+	//if (!(TargetDino & (1<<DinoInfo[Characters[cindex].CType].menuDino)) ) score/=2.f;
+
+	SYSTEMTIME st;
+	GetLocalTime(&st);
+	if (Tranq) score *= 1.25f;
+	if (RadarMode) score *= 0.70f;
+	if (ScentMode) score *= 0.80f;
+	if (CamoMode) score *= 0.85f;
+	TrophyRoom.Score += (int)score;
+	Characters[cindex].tempScore = (int)score;
+	Characters[cindex].tempDate = (st.wYear << 20) + (st.wMonth << 10) + st.wDay;
+	Characters[cindex].tempTime = (st.wHour << 10) + st.wMinute;
+	Characters[cindex].tempRange = VectorLength(SubVectors(Characters[cindex].pos, PlayerPos)) / 64.f;
+}
+
 void AddShipTask(int cindex)
 {
 
   TCharacter *cptr = &Characters[cindex];
+  cptr->claimed = true;
 
-  BOOL TROPHYON  = (GetLandUpH(cptr->pos.x, cptr->pos.z) - GetLandH(cptr->pos.x, cptr->pos.z) < 100) &&
-                   (!Tranq);
-
-  if (TROPHYON)
-  {
     ShipTask.clist[ShipTask.tcount] = cindex;
     ShipTask.tcount++;
     AddVoicev(ShipModel.SoundFX[3].length,
               ShipModel.SoundFX[3].lpData, 256);
-  }
 
   //===== trophy =======//
-  SYSTEMTIME st;
-  GetLocalTime(&st);
+  
   int t=0;
   bool foundSpareSlot = false;
   for (t = 0; t < TROPHY2_COUNT - 1; t++) {
@@ -633,51 +648,20 @@ void AddShipTask(int cindex)
 	  }
   }
 
-  //t += DinoInfo[Characters[cindex].CType].trophyFirstSlot;
-
-  float score = DinoInfo[Characters[cindex].CType].BaseScore;
-
-  if (TrophyRoom.Last.success>1)
-    score*=(1.f + TrophyRoom.Last.success / 10.f);
-
-  //if (!(TargetDino & (1<<DinoInfo[Characters[cindex].CType].menuDino)) ) score/=2.f;
-
-  if (Tranq    ) score *= 1.25f;
-  if (RadarMode) score *= 0.70f;
-  if (ScentMode) score *= 0.80f;
-  if (CamoMode ) score *= 0.85f;
-  TrophyRoom.Score+=(int)score;
-
-
-
-	  TrophyDisplayBody.ctype = Characters[cindex].CType; //0 is blank trophy
-	  TrophyDisplayBody.scale = Characters[cindex].scale;
-	  TrophyDisplayBody.weapon = CurrentWeapon;
-	  TrophyDisplayBody.score = (int)score;
-	  TrophyDisplayBody.phase = (RealTime & 3);
-	  TrophyDisplayBody.time = (st.wHour << 10) + st.wMinute;
-	  TrophyDisplayBody.date = (st.wYear << 20) + (st.wMonth << 10) + st.wDay;
-	  TrophyDisplayBody.range = VectorLength(SubVectors(Characters[cindex].pos, PlayerPos)) / 64.f;
-	  TrophyDisplay = true;
-	  TrophyTime = 20 * 1000; //display trophy information
-
-	if (!Tranq)
-	{
-
 	  if (foundSpareSlot) {
 		  TrophyBody = t;
 		  TrophyRoom2.Body[t].ctype = Characters[cindex].CType; //0 is blank trophy
 		  TrophyRoom2.Body[t].scale = Characters[cindex].scale;
 		  TrophyRoom2.Body[t].weapon = CurrentWeapon;
-		  TrophyRoom2.Body[t].score = (int)score;
+		  TrophyRoom2.Body[t].score = Characters[cindex].tempScore;
 		  TrophyRoom2.Body[t].phase = (RealTime & 3);
-		  TrophyRoom2.Body[t].time = (st.wHour << 10) + st.wMinute;
-		  TrophyRoom2.Body[t].date = (st.wYear << 20) + (st.wMonth << 10) + st.wDay;
-		  TrophyRoom2.Body[t].range = VectorLength(SubVectors(Characters[cindex].pos, PlayerPos)) / 64.f;
+		  TrophyRoom2.Body[t].time = Characters[cindex].tempTime;
+		  TrophyRoom2.Body[t].date = Characters[cindex].tempDate;
+		  TrophyRoom2.Body[t].range = Characters[cindex].tempRange;
 		  PrintLog("Trophy added: ");
 		  PrintLog(DinoInfo[Characters[cindex].CType].Name);
 		  PrintLog("\n");
-	  }
+	  
   }
 }
 
@@ -2087,7 +2071,7 @@ void registerDamage(int Dino) {
 		if (DinoInfo[Characters[Dino].CType].trophy && !Multiplayer && !SurvivalMode) //No trophies in multiplayer for now - update this at later date?
 		{
 			TrophyRoom.Last.success++;
-			AddShipTask(Dino);
+			SubmitDinoScore(Dino);
 		}
 
 		//No amb respawn in multiplayer for now - update this at later date?
@@ -2817,7 +2801,7 @@ void RemoveCurrentTrophy()
   ChCount--;
 
   
-  TrophyTime = 0;
+  TrophyDisplay = false;
   TrophyBody = -1;
 }
 
