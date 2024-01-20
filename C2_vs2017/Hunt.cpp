@@ -696,12 +696,16 @@ SKIPWEAPON:
   if (TrophyMode || TrophyDisplay)
     if (TrophyBody!=-1 || TrophyDisplay)
     {
-      int x0 = WinW - TrophyPic.W - 16;
-      int y0 = WinH - TrophyPic.H - 12;
+		TPicture *Pic = &TrophyPic;
+		if (!TrophyMode && (Tranq || Characters[TrophyDisplayC].claimed)) {
+			Pic = &TrophyNoCollectPic;
+		}
+      int x0 = WinW - Pic->W - 16;
+      int y0 = WinH - Pic->H - 12;
       if (!TrophyMode)
-        x0 = VideoCX - TrophyPic.W / 2;
+        x0 = VideoCX - Pic->W / 2;
 
-      DrawPicture( x0, y0, TrophyPic);
+      DrawPicture( x0, y0, *Pic);
       DrawTrophyText(x0, y0);
 
 	  /*
@@ -1423,7 +1427,7 @@ void ProcessPlayerMovement()
 	  }
   }
 
-  if (KeyboardState[VK_RETURN] & 128) if (TrophyDisplay && !Tranq) AddShipTask(TrophyDisplayC);
+  if (KeyboardState[VK_RETURN] & 128) if (TrophyDisplay && !Characters[TrophyDisplayC].claimed && !Tranq) AddShipTask(TrophyDisplayC);
 
   if (KeyboardState [KeyMap.fkShow] & 128) HideWeapon();
 

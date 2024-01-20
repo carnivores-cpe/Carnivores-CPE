@@ -2068,7 +2068,7 @@ void registerDamage(int Dino) {
 
 	if (!Characters[Dino].Health)
 	{
-		if (DinoInfo[Characters[Dino].CType].trophy && !Multiplayer && !SurvivalMode) //No trophies in multiplayer for now - update this at later date?
+		if ((DinoInfo[Characters[Dino].CType].BaseScore || DinoInfo[Characters[Dino].CType].trophy) && !Multiplayer && !SurvivalMode) //No trophies in multiplayer for now - update this at later date?
 		{
 			TrophyRoom.Last.success++;
 			SubmitDinoScore(Dino);

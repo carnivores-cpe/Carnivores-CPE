@@ -1230,7 +1230,7 @@ _EXTORNOT Vector2di *gScrp;
 _EXTORNOT int MaxObjectVCount; // Maximum VCount of any (loaded) object
 
 //============= Characters ==============//
-_EXTORNOT TPicture  PausePic, ExitPic, TrophyExit, TrophyPic;
+_EXTORNOT TPicture  PausePic, ExitPic, TrophyExit, TrophyPic, TrophyNoCollectPic;
 _EXTORNOT TModel *SunModel;
 _EXTORNOT TCharacterInfo WCircleModel;
 _EXTORNOT TModel *CompasModel;

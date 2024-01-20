@@ -1580,10 +1580,13 @@ void LoadResources()
   GenerateMapImage();
 
   if (TrophyMode) LoadPictureTGA(TrophyPic, "HUNTDAT\\MENU\\trophy.tga");
-  else if (Tranq) LoadPictureTGA(TrophyPic, "HUNTDAT\\MENU\\trophy_g.tga");
-  else LoadPictureTGA(TrophyPic, "HUNTDAT\\MENU\\collect.tga");
-  conv_pic(TrophyPic);
-
+  else
+  {
+	  LoadPictureTGA(TrophyPic, "HUNTDAT\\MENU\\collect.tga");
+	  conv_pic(TrophyPic);
+	  LoadPictureTGA(TrophyNoCollectPic, "HUNTDAT\\MENU\\trophy_g.tga");
+	  conv_pic(TrophyNoCollectPic);
+  }
 //    ReInitGame();
 }
 
