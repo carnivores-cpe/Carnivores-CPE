@@ -620,6 +620,10 @@ void SubmitDinoScore (int cindex) {
 	Characters[cindex].tempDate = (st.wYear << 20) + (st.wMonth << 10) + st.wDay;
 	Characters[cindex].tempTime = (st.wHour << 10) + st.wMinute;
 	Characters[cindex].tempRange = VectorLength(SubVectors(Characters[cindex].pos, PlayerPos)) / 64.f;
+
+	ScoreDispTime = 2500;
+	ScoreDisp = (int)score;
+
 }
 
 void AddShipTask(int cindex)

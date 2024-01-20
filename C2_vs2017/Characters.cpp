@@ -7988,7 +7988,7 @@ void AnimateCharacters()
 
 		//disp ship info
 		if (!cptr->Health && TROPHYON && DinoInfo[cptr->CType].trophy) {
-			if (fabs(VectorLength(SubVectors(PlayerPos, cptr->pos))) < 300.f) {
+			if (fabs(VectorLength(SubVectors(PlayerPos, cptr->pos))) < DinoInfo[cptr->CType].Radius) {
 				TrophyDisplayBody.ctype = cptr->CType;
 				TrophyDisplayBody.scale = cptr->scale;
 				TrophyDisplayBody.weapon = CurrentWeapon;

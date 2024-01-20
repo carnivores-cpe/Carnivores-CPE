@@ -2915,6 +2915,26 @@ void DrawSurvivalText(int x0, int y0)
 	SelectObject(hdcCMain, hbmpOld);
 }
 
+void DrawScoreText(int x0, int y0) {
+	int x;
+	HBITMAP hbmpOld = (HBITMAP)SelectObject(hdcCMain, hbmpVideoBuf);
+	HFONT oldfont = (HFONT)SelectObject(hdcMain, fnt_Small);
+
+	char t[32];
+
+	x0 += 14;
+	y0 += 18;
+	x = x0;
+
+	STTextOut(x - 5, y0, "Unclaimed Kill - Score Added: ", 0x00BFBFBF);
+	x += GetTextW(hdcMain, "Unclaimed Kill - Score Added: ");
+	wsprintf(t, "%d", ScoreDisp);
+	STTextOut(x - 5, y0, t, 0x0000BFBF);
+
+	SelectObject(hdcCMain, oldfont);
+	SelectObject(hdcCMain, hbmpOld);
+}
+
 
 
 void DrawTrophyText(int x0, int y0)

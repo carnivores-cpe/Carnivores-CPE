@@ -1587,6 +1587,9 @@ void LoadResources()
 	  LoadPictureTGA(TrophyNoCollectPic, "HUNTDAT\\MENU\\trophy_g.tga");
 	  conv_pic(TrophyNoCollectPic);
   }
+  LoadPictureTGA(ScorePic, "HUNTDAT\\MENU\\score.tga");
+  conv_pic(ScorePic);
+
 //    ReInitGame();
 }
 

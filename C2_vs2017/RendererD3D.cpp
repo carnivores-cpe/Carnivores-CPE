@@ -1777,6 +1777,26 @@ void DrawSurvivalText(int x0, int y0)
 	SelectObject(hdcMain, oldfont);
 }
 
+void DrawScoreText(int x0, int y0) {
+	int x;
+	SmallFont = TRUE;
+	HFONT oldfont = (HFONT)SelectObject(hdcMain, fnt_Small);
+
+	char t[32];
+
+	x0 += 14;
+	y0 += 18;
+	x = x0;
+
+	ddTextOut(x - 5, y0, "Unclaimed Kill - Score Added: ", 0x00BFBFBF);
+	x += GetTextW(hdcMain, "Unclaimed Kill - Score Added: ");
+	wsprintf(t, "%d", ScoreDisp);
+	ddTextOut(x - 5, y0, t, 0x0000BFBF);
+
+	SmallFont = FALSE;
+
+	SelectObject(hdcMain, oldfont);
+}
 
 void DrawTrophyText(int x0, int y0)
 {

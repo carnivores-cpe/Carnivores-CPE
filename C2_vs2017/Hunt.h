@@ -912,6 +912,7 @@ void ProcessMapW2(int x, int y, int r);
 void DrawTPlane(BOOL);
 void DrawTPlaneClip(BOOL);
 void ClearVideoBuf();
+void DrawScoreText(int, int);
 void DrawTrophyText(int, int);
 void DrawSurvivalText(int, int);
 void DrawHMap();
@@ -1230,7 +1231,7 @@ _EXTORNOT Vector2di *gScrp;
 _EXTORNOT int MaxObjectVCount; // Maximum VCount of any (loaded) object
 
 //============= Characters ==============//
-_EXTORNOT TPicture  PausePic, ExitPic, TrophyExit, TrophyPic, TrophyNoCollectPic;
+_EXTORNOT TPicture  PausePic, ExitPic, TrophyExit, TrophyPic, TrophyNoCollectPic, ScorePic;
 _EXTORNOT TModel *SunModel;
 _EXTORNOT TCharacterInfo WCircleModel;
 _EXTORNOT TModel *CompasModel;
@@ -1272,6 +1273,8 @@ _EXTORNOT int ChCount, WCCount, ElCount, SnCount,
           ShotDino, TrophyBody, HunterCount; //HunterCount is for multiplayer, up to 3 others
 _EXTORNOT bool TrophyDisplay;
 _EXTORNOT int TrophyDisplayC;
+_EXTORNOT int ScoreDispTime;
+_EXTORNOT int ScoreDisp;
 _EXTORNOT TTrophyItem TrophyDisplayBody;
 _EXTORNOT TCharacterInfo WindModel;
 _EXTORNOT TCharacterInfo PlayerInfo;

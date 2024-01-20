@@ -693,34 +693,40 @@ SKIPWEAPON:
   if (PAUSE)
     DrawPicture( (WinW - PausePic.W) / 2, (WinH - PausePic.H) / 2, PausePic);
 
-  if (TrophyMode || TrophyDisplay)
-    if (TrophyBody!=-1 || TrophyDisplay)
-    {
-		TPicture *Pic = &TrophyPic;
-		if (!TrophyMode && (Tranq || Characters[TrophyDisplayC].claimed)) {
-			Pic = &TrophyNoCollectPic;
-		}
-      int x0 = WinW - Pic->W - 16;
-      int y0 = WinH - Pic->H - 12;
-      if (!TrophyMode)
-        x0 = VideoCX - Pic->W / 2;
+  if (ScoreDispTime) {
 
-      DrawPicture( x0, y0, *Pic);
-      DrawTrophyText(x0, y0);
+	  int x0 = VideoCX - ScorePic.W /2;
+	  int y0 = WinH - ScorePic.H - 12;
+	  DrawPicture(x0, y0, ScorePic);
+	  DrawScoreText(x0, y0);
 
-	  /*
-      if (TrophyTime)
-      {
-        TrophyTime-=TimeDt;
-        if (TrophyTime<0)
-        {
-          TrophyTime=0;
-          TrophyBody = -1;
-		  TrophyDisplay = false;
-        }
-      }
-	  */
-    }
+	  if (ScoreDispTime)
+	  {
+		  ScoreDispTime -= TimeDt;
+		  if (ScoreDispTime < 0)
+			  ScoreDispTime = 0;
+	  }
+
+  } else {
+	  if (TrophyMode || TrophyDisplay)
+		  if (TrophyBody != -1 || TrophyDisplay)
+		  {
+			  TPicture *Pic = &TrophyPic;
+			  if (!TrophyMode && (Tranq || Characters[TrophyDisplayC].claimed)) {
+				  Pic = &TrophyNoCollectPic;
+			  }
+			  int x0 = WinW - Pic->W - 16;
+			  int y0 = WinH - Pic->H - 12;
+			  if (!TrophyMode)
+				  x0 = VideoCX - Pic->W / 2;
+
+			  DrawPicture(x0, y0, *Pic);
+			  DrawTrophyText(x0, y0);
+
+		  }
+  }
+
+  
 }
 
 
@@ -1427,7 +1433,7 @@ void ProcessPlayerMovement()
 	  }
   }
 
-  if (KeyboardState[VK_RETURN] & 128) if (TrophyDisplay && !Characters[TrophyDisplayC].claimed && !Tranq) AddShipTask(TrophyDisplayC);
+  if (KeyboardState[VK_RETURN] & 128) if (TrophyDisplay && !ScoreDispTime && !Characters[TrophyDisplayC].claimed && !Tranq) AddShipTask(TrophyDisplayC);
 
   if (KeyboardState [KeyMap.fkShow] & 128) HideWeapon();
 
