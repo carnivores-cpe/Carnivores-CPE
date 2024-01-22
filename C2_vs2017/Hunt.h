@@ -807,6 +807,8 @@ typedef struct _TWeapInfo
 
   bool MuzzFlash;
 
+  int recoil;
+
 } TWeapInfo;
 
 
@@ -1350,6 +1352,8 @@ _EXTORNOT   float   PlayerX, PlayerY, PlayerZ, PlayerAlpha, PlayerBeta,
             HeadY, HeadBackR, HeadBSpeed, HeadAlpha, HeadBeta,
             SSpeed,VSpeed,RSpeed,YSpeed;
 _EXTORNOT   Vector3d PlayerNv;
+
+_EXTORNOT	Vector3d Recoil;
 
 _EXTORNOT   float   ca,sa,cb,sb, wpnDAlpha, wpnDBeta;
 _EXTORNOT   void    *lpVideoBuf, *lpTextureAddr;

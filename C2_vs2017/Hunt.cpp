@@ -1182,7 +1182,12 @@ void ProcessShoot()
   {
     wptr->FTime = 1;
     HeadBackR=64;
-    //if (HeadBackR>64) HeadBackR=64;
+	Recoil.y = -(float)WeapInfo[CurrentWeapon].recoil / 100.f;
+	float rx = rRand(8);
+	rx -= 4;
+	rx /= 8;
+	rx *= (float)WeapInfo[CurrentWeapon].recoil / 100.f;
+	Recoil.x += rx;
 
     AddVoicev(wptr->chinfo[CurrentWeapon].SoundFX[1].length,
               wptr->chinfo[CurrentWeapon].SoundFX[1].lpData, 256);
@@ -1796,12 +1801,22 @@ SKIPYMOVE:
 
 //======== set camera pos ===================//
 
+  if (Recoil.y < 0) {
+	  Recoil.y += 0.005;
+	  if (Recoil.y > 0) Recoil.y = 0;
+  }
+  if (Recoil.x != 0) DeltaFunc(Recoil.x, 0, 0.005);
+
   if (!DemoPoint.DemoTime)
   {
+
+	PlayerAlpha += Recoil.x;
+	PlayerBeta += Recoil.y;
+
     CameraAlpha = PlayerAlpha + HeadAlpha;
     CameraBeta  = PlayerBeta  + HeadBeta;
 
-    CameraX = PlayerX - sa * HeadBackR;
+	CameraX = PlayerX - sa * HeadBackR;
     CameraY = PlayerY + HeadY + stepdy;// + 2024;
     CameraZ = PlayerZ + ca * HeadBackR;
   }

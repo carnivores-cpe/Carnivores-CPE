@@ -181,6 +181,7 @@ weapons {
  rate  = 1.6
  shots = 8
  muzzflash = TRUE
+ recoil = 2
 }
 
 {
@@ -201,6 +202,7 @@ weapons {
  trace = 6
  shots = 7
  muzzflash = TRUE
+ recoil = 6
 } 
 
 
@@ -223,6 +225,7 @@ weapons {
  shots = 6
  reload = 2
  muzzflash = TRUE
+ recoil = 6
 } 
 
 
@@ -247,6 +250,7 @@ weapons {
  radB = 240
  radG = 100
  radTime = 30000
+ recoil = 6
 }
 
 {
@@ -266,6 +270,7 @@ weapons {
  rate  = 1.0
  shots = 7
  muzzflash = TRUE
+ recoil = 4
 }
 
 {
@@ -285,6 +290,7 @@ weapons {
  loud  = 0.0
  rate  = 1.0
  shots = 7
+ recoil = 4
 }
 
 

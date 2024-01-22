@@ -3013,6 +3013,8 @@ void ReadWeapons(FILE *stream)
 
 		if (strstr(line, "muzzflash")) readBool(value, WeapInfo[TotalW].MuzzFlash);
 
+		if (strstr(line, "recoil"))  WeapInfo[TotalW].recoil = atoi(value);
+
 		if (strstr(line, "retrieve")) readBool(value, WeapInfo[TotalW].retrieve);
 
         if (strstr(line, "name"))
