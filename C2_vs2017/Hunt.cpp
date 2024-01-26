@@ -468,7 +468,13 @@ void DrawPostObjects()
 SKIPWIND:
 
 
-  if (wptr->state == 0) goto SKIPWEAPON;
+  if (wptr->state == 0) {
+	  if (Weapon.BTime) {
+		  Weapon.BTime -= TimeDt * 2;
+		  if (Weapon.BTime < 0) Weapon.BTime = 0;
+	  }
+	  goto SKIPWEAPON;
+  }
 
   MapMode = FALSE;
 
@@ -593,9 +599,29 @@ SKIPWIND:
   CreateMorphedModel(wptr->chinfo[CurrentWeapon].mptr,
                      &wptr->chinfo[CurrentWeapon].Animation[phas], wptr->FTime, 1.0);
 
+  if (Weapon.HoldBreath) {
+	  Weapon.BTime += TimeDt;
+	  if (Weapon.BTime >= 4000) {
+		  Weapon.BTime = 4000;
+		  Weapon.HoldBreath = false;
+		  if (Weapon.breathPressed==1) AddVoicev(fxBreathOut.length, fxBreathOut.lpData, 256);
+		  Weapon.breathPressed = 2;
+	  }
+  } else if (Weapon.BTime) {
+	  Weapon.BTime -= TimeDt*2;
+	  if (Weapon.BTime < 0) Weapon.BTime = 0;
+  }
+  if (Weapon.HoldBreath) Weapon.breath += 0.05;
+  else Weapon.breath -= 0.2;
+  if (Weapon.breath > 3.0f) Weapon.breath = 3.0f;
+  if (Weapon.breath < 0.f) Weapon.breath = 0.f;
+
   b = (float)sin((float)RealTime / 300.f) / 100.f;
-  wpnDAlpha = wptr->shakel * (float)sin((float)RealTime / 300.f+pi/2) / 200.f;
-  wpnDBeta  = wptr->shakel * (float)sin((float)RealTime / 300.f) / 400.f;
+  float temp = wptr->shakel - wptr->breath;
+  if (temp < 0.2f) temp = 0.2f;
+  if (temp > 4.0f) temp = 4.0f;
+  wpnDAlpha = temp * (float)sin((float)RealTime / 300.f+pi/2) / 200.f;
+  wpnDBeta  = temp * (float)sin((float)RealTime / 300.f) / 400.f;
   nv.z = 0;
 
   //==================== render weapon ===================//
@@ -1426,6 +1452,24 @@ void ProcessPlayerMovement()
   //menu option/already used check needed - TODO
   if (KeyboardState[KeyMap.fkDown] & 128) AddShipSupply(PlayerX,PlayerZ);
 
+  if (Weapon.state) {
+	  if (KeyboardState[KeyMap.fkLeft] & 128) {
+		  if (Weapon.breathPressed == 0) {
+			  AddVoicev(fxBreathIn.length, fxBreathIn.lpData, 256);
+			  Weapon.breathPressed = 1;
+		  }
+		  if (!Weapon.HoldBreath) {
+			  Weapon.HoldBreath = true;
+		  }
+	  }
+	  else {
+		  if (Weapon.HoldBreath) {
+			  Weapon.HoldBreath = false;
+			  if (Weapon.breathPressed == 1) AddVoicev(fxBreathOut.length, fxBreathOut.lpData, 256);
+		  }
+		  Weapon.breathPressed = 0;
+	  }
+  }
 
   if (Multiplayer && Host) {
 	  for (int c = 0; c < 6; c++) {
@@ -1665,6 +1709,7 @@ void ProcessControls()
 	//if (KeyboardState[KeyMap.fkCrouch] & 128) KeyFlags += kfDown;
 
 
+	/*
   if (KeyFlags & kfStrafe)
   {
     if (KeyboardState [KeyMap.fkLeft ] & 128)  KeyFlags+=kfSLeft;
@@ -1674,7 +1719,7 @@ void ProcessControls()
   {
     if (KeyboardState [KeyMap.fkLeft ] & 128)  KeyFlags+=kfLeft;
     if (KeyboardState [KeyMap.fkRight] & 128) KeyFlags+=kfRight;
-  }
+  }*/
 
   if (KeyboardState [KeyMap.fkSLeft]  & 128) KeyFlags+=kfSLeft;
   if (KeyboardState [KeyMap.fkSRight] & 128) KeyFlags+=kfSRight;
@@ -2182,6 +2227,9 @@ int PASCAL WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
   LoadWav("HUNTDAT\\SOUNDFX\\click1.wav", fxClick[0]);
   LoadWav("HUNTDAT\\SOUNDFX\\click2.wav", fxClick[1]);
   LoadWav("HUNTDAT\\SOUNDFX\\click3.wav", fxClick[2]);
+
+  LoadWav("HUNTDAT\\SOUNDFX\\breath1.wav", fxBreathIn);
+  LoadWav("HUNTDAT\\SOUNDFX\\breath2.wav", fxBreathOut);
 
   LoadWav("HUNTDAT\\SOUNDFX\\collect1.wav", fxCollect[0]);
   LoadWav("HUNTDAT\\SOUNDFX\\collect2.wav", fxCollect[1]);

@@ -696,8 +696,7 @@ void AddShipSupply(float tx, float tz) {
 	SShip.FTime = 0;
 }
 
-void InitShip(int cindex)
-{
+void InitShip(int cindex){
   TCharacter *cptr = &Characters[cindex];
 
   Ship.DeltaY = 2048.f + DinoInfo[cptr->CType].ShDelta * cptr->scale;
@@ -737,7 +736,10 @@ void HideWeapon()
     wptr->state = 1;
     BINMODE = FALSE;
     MapMode = FALSE;
-    wptr->shakel = 0.2f;
+    wptr->shakel = WeapInfo[CurrentWeapon].shake * 4.f;
+	wptr->breath = 0.f;
+	wptr->breathPressed = 0;
+	wptr->HoldBreath = false;
     return;
   }
 

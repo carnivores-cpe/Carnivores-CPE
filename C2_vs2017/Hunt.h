@@ -311,6 +311,10 @@ typedef struct _TWeapon
   Vector3d*       normals;
   int state, FTime;
   float shakel;
+  float breath;
+  int BTime;
+  bool HoldBreath;
+  int breathPressed;
 } TWeapon;
 
 
@@ -799,6 +803,7 @@ typedef struct _TWeapInfo
   float Power, Prec, Loud, Rate, Veloc, Fall;
   int Shots, Optic, TraceC, Reload, SFXIndex;
   int shtAnim, getAnim, putAnim, rldAnim;
+  float shake;
 
   bool onRadar;
   byte radarRed, radarGreen, radarBlue;
@@ -1129,6 +1134,8 @@ _EXTORNOT   char    ProjectName[128];
 _EXTORNOT   int     _GameState, _MultiplayerState;//multiplayer
 _EXTORNOT   TSFX    fxBlip;
 _EXTORNOT   TSFX    fxClick[3];
+_EXTORNOT   TSFX    fxBreathIn;
+_EXTORNOT   TSFX    fxBreathOut;
 _EXTORNOT   TSFX    fxCollect[3];
 _EXTORNOT   TSFX    fxImpactGround[3];
 _EXTORNOT   TSFX    fxImpactModel[3];

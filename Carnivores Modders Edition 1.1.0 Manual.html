@@ -269,6 +269,8 @@ function expand(n) {
 				<li>Weapon Fall now accepts any value.</li>
 				<li>Manual reloading - set the keybinding in the options menu to swap magazines at any time.</li>
 				<li>Optional muzzle flash.</li>
+				<li>Steady aim by holding breath - set the keybinding in the options menu.</li>
+				<li>Adjustable initial weapon shake.</li>
 			    <li>Supply Ship - adjust keybind in the options menu.</li>
 			    <li>Decide which trophies to take back to the trophy room.</li>
 			    <li>Non-trophy creatures can still give points using basescore.</li>
@@ -411,6 +413,8 @@ function expand(n) {
 				<li>Weapon Fall now accepts any value.</li>
 				<li>Manual reloading - set the keybinding in the options menu to swap magazines at any time.</li>
 				<li>Optional muzzle flash.</li>
+				<li>Steady aim by holding breath - set the keybinding in the options menu.</li>
+				<li>Adjustable initial weapon shake.</li>
 			    <li>Supply Ship - adjust keybind in the options menu.</li>
 			    <li>Decide which trophies to take back to the trophy room.</li>
 			    <li>Non-trophy creatures can still give points using basescore.</li>
@@ -2518,6 +2522,29 @@ reduced by the whole value of densityMulti. e.g. in the above screenshot, the ma
 				<div class="grid-item">Sniper Rifle</div>
 				<div class="grid-item">4</div>
 			</div>
+		</div>
+	</div>
+</p>
+
+<p style="margin-top:4%;">
+	<h2 id="arrow_185" unselectable="on" onclick="expand(185)"
+		style="float:left;margin-top:0;cursor:pointer;
+		-moz-user-select:none;
+		user-select:none;
+		-webkit-user-select: none;
+		-ms-user-select: none;"
+		>></h2>
+	<div class = "con" style="margin-left:4%">
+		<h2 onclick="expand(185)" style="cursor:pointer;">_RES value: shake</h2>
+		<div id="content_185" style="display: none">
+		
+			<p><b>Data type: Decimal Number</b></p>
+			
+			The initial amount of shake (between 0 and 1).
+			<p>
+			Note: The shake value will gradually increase to 1 overtime and can be reduced by holding breath.
+			</p>
+			
 		</div>
 	</div>
 </p>

@@ -1784,6 +1784,10 @@ void ReInitGame()
   Weapon.FTime = 0;
   PlayerAlpha = 0;
   PlayerBeta  = 0;
+  Weapon.breath = 0.f;
+  Weapon.BTime = 0;
+  Weapon.HoldBreath = false;
+  Weapon.breathPressed = 0;
 
   WCCount = 0;
   ElCount = 0;
@@ -3004,6 +3008,8 @@ void ReadWeapons(FILE *stream)
         if (strstr(line, "optic"))  WeapInfo[TotalW].Optic =        atoi(value);
         if (strstr(line, "fall"))   WeapInfo[TotalW].Fall  = (float)atof(value);
         //if (strstr(line, "price")) WeapInfo[TotalW].Price =        atoi(value);
+
+		if (strstr(line, "shake"))   WeapInfo[TotalW].shake = (float)atof(value);
 
 		if (strstr(line, "radar")) readBool(value, WeapInfo[TotalW].onRadar);
 		if (strstr(line, "radR")) WeapInfo[TotalW].radarRed = atoi(value);
