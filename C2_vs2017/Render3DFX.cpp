@@ -4966,8 +4966,28 @@ void RenderHealthBar()
 
 void Render_Cross(int sx, int sy)
 {
-
+	linfo.size = sizeof(GrLfbInfo_t);
+	if (!grLfbLock(
+		GR_LFB_WRITE_ONLY,
+		GR_BUFFER_BACKBUFFER,
+		GR_LFBWRITEMODE_565,
+		GR_ORIGIN_UPPER_LEFT,
+		FXFALSE,
+		&linfo)) return;
+	lsw = linfo.strideInBytes / 2;
+	_CRCOLOR = 0;
+	float w = (float)WinW / 12.f;
+	int wi = (int)(w*2.f);
+	int xx = sx - w;
+	int yy = sy;
+	for (int x = 0; x < wi; x++)PutPixel(xx + x, yy);
+	xx = sx;
+	yy = sy - w;
+	for (int y = 0; y < wi; y++)PutPixel(xx, yy + y);
+	grLfbUnlock(GR_LFB_WRITE_ONLY, GR_BUFFER_BACKBUFFER);
+	/*
   guColorCombineFunction( GR_COLORCOMBINE_CCRGB );
+  grConstantColorValue(0x60000000);
   grConstantColorValue(0x60000000);
 
   gvtx[0].tmuvtx[0].sow = 0.0;
@@ -4990,6 +5010,7 @@ void Render_Cross(int sx, int sy)
   gvtx[1].x = (float)(sx + w);
   gvtx[1].y = (float)sy;
 
+
   grDrawLine(&gvtx[0], &gvtx[1]);
 
   gvtx[0].x = (float)(sx );
@@ -4999,8 +5020,9 @@ void Render_Cross(int sx, int sy)
 
   grDrawLine(&gvtx[0], &gvtx[1]);
 
-  guColorCombineFunction( GR_COLORCOMBINE_TEXTURE_TIMES_ITRGB );
+  guColorCombineFunction(GR_COLORCOMBINE_TEXTURE_TIMES_ITRGB);
   grConstantColorValue(0xFF000000);
+  */
 }
 
 #endif
