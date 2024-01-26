@@ -4907,6 +4907,9 @@ void RenderSkyPlane()
 
 void RenderHealthBar()
 {
+	if (MyHealth >= 100000) return;
+	if (MyHealth == 000000) return;
+
 	linfo.size = sizeof(GrLfbInfo_t);
 	if (!grLfbLock(
 		GR_LFB_WRITE_ONLY,
@@ -4916,9 +4919,6 @@ void RenderHealthBar()
 		FXFALSE,
 		&linfo)) return;
 	lsw = linfo.strideInBytes / 2;
-
-  if (MyHealth >= 100000) return;
-  if (MyHealth == 000000) return;
 
   int L = WinW / 4;
   int x0 = WinW - (WinW / 20) - L;
