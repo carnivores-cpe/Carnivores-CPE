@@ -801,9 +801,9 @@ typedef struct _TWeapInfo
   bool bullet = FALSE;
   bool retrieve;
   float Power, Prec, Loud, Rate, Veloc, Fall;
-  int Shots, Optic, TraceC, Reload, SFXIndex;
+  int Shots, TraceC, Reload, SFXIndex;
   int shtAnim, getAnim, putAnim, rldAnim;
-  float shake;
+  float shake, Optic;
 
   bool onRadar;
   byte radarRed, radarGreen, radarBlue;

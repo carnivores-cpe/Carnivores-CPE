@@ -290,7 +290,7 @@ weapons {
  rldAnim = 3
  power = 4
  veloc = 23.0
- optic = 1
+ optic = 3.0
  prec  = 2.0
  loud  = 0.0
  rate  = 1.0

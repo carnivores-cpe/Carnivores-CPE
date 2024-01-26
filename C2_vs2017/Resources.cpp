@@ -3005,7 +3005,7 @@ void ReadWeapons(FILE *stream)
         if (strstr(line, "shots"))  WeapInfo[TotalW].Shots =        atoi(value);
         if (strstr(line, "reload")) WeapInfo[TotalW].Reload=        atoi(value);
         if (strstr(line, "trace"))  WeapInfo[TotalW].TraceC=        atoi(value)-1;
-        if (strstr(line, "optic"))  WeapInfo[TotalW].Optic =        atoi(value);
+        if (strstr(line, "optic"))  WeapInfo[TotalW].Optic = (float)atof(value);
         if (strstr(line, "fall"))   WeapInfo[TotalW].Fall  = (float)atof(value);
         //if (strstr(line, "price")) WeapInfo[TotalW].Price =        atoi(value);
 

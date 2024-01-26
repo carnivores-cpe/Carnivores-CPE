@@ -1953,8 +1953,8 @@ SKIPYMOVE:
   }
   else if (OPTICMODE)
   {
-    CameraW*=3.0f;
-    CameraH*=3.0f;
+	  CameraW *= WeapInfo[CurrentWeapon].Optic;
+	  CameraH *= WeapInfo[CurrentWeapon].Optic;
   }
 
   FOVK =  CameraW / (VideoCX*1.25f);
