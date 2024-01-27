@@ -811,6 +811,9 @@ typedef struct _TWeapInfo
   int radarTime;
 
   bool MuzzFlash;
+  bool cross;
+  byte crossRed, crossGreen, crossBlue;
+  WORD crossColour565, crossColour555;
 
   int recoil;
 

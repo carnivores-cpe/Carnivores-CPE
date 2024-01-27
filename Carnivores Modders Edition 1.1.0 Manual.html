@@ -272,6 +272,8 @@ function expand(n) {
 				<li>Optional muzzle flash.</li>
 				<li>Steady aim by holding breath - set the keybinding in the options menu.</li>
 				<li>Adjustable initial weapon shake.</li>
+				<li>Optional crosshair</li>
+				<li>Custom crosshair colour</li>
 			    <li>Supply Ship - adjust keybind in the options menu.</li>
 			    <li>Decide which trophies to take back to the trophy room.</li>
 			    <li>Non-trophy creatures can still give points using basescore.</li>
@@ -418,6 +420,8 @@ function expand(n) {
 				<li>Optional muzzle flash.</li>
 				<li>Steady aim by holding breath - set the keybinding in the options menu.</li>
 				<li>Adjustable initial weapon shake.</li>
+				<li>Optional crosshair</li>
+				<li>Custom crosshair colour</li>
 			    <li>Supply Ship - adjust keybind in the options menu.</li>
 			    <li>Decide which trophies to take back to the trophy room.</li>
 			    <li>Non-trophy creatures can still give points using basescore.</li>
@@ -2575,6 +2579,45 @@ reduced by the whole value of densityMulti. e.g. in the above screenshot, the ma
 			Note: The shake value will gradually increase to 1 overtime and can be reduced by holding breath.
 			</p>
 			
+		</div>
+	</div>
+</p>
+
+<p style="margin-top:4%;">
+	<h2 id="arrow_187" unselectable="on" onclick="expand(187)"
+		style="float:left;margin-top:0;cursor:pointer;
+		-moz-user-select:none;
+		user-select:none;
+		-webkit-user-select: none;
+		-ms-user-select: none;"
+		>></h2>
+	<div class = "con" style="margin-left:4%">
+		<h2 onclick="expand(187)" style="cursor:pointer;">_RES value: cross</h2>
+		<div id="content_187" style="display: none">
+		
+			<p><b>Data type: TRUE/FALSE</b></p>
+			
+			If set to true, a crosshair is rendered.
+			
+		</div>
+	</div>
+</p>
+
+<p style="margin-top:4%;">
+	<h2 id="arrow_188" unselectable="on" onclick="expand(188)"
+		style="float:left;margin-top:0;cursor:pointer;
+		-moz-user-select:none;
+		user-select:none;
+		-webkit-user-select: none;
+		-ms-user-select: none;"
+		>></h2>
+	<div class = "con" style="margin-left:4%">
+		<h2 onclick="expand(188)" style="cursor:pointer;">_RES value: croR, croG, croB</h2>
+		<div id="content_188" style="display: none">
+		
+			<p><b>Data type: Whole Number</b></p>
+			
+Sets the colour of the crosshair (RGB 0-255) (if cross = TRUE).
 		</div>
 	</div>
 </p>

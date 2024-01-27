@@ -6104,7 +6104,28 @@ void RenderHealthBar()
 
 void Render_Cross(int sx, int sy)
 {
+	ZeroMemory(&ddsd, sizeof(DDSURFACEDESC));
+	ddsd.dwSize = sizeof(DDSURFACEDESC);
+	if (lpddBack->Lock(NULL, &ddsd, DDLOCK_WAIT, NULL) != DD_OK) return;
 
+	lsw = ddsd.lPitch / 2;
+
+	if (VMFORMAT565) CColor = WeapInfo[CurrentWeapon].crossColour565;
+	else CColor = WeapInfo[CurrentWeapon].crossColour555;
+	float w = (float)WinW / 12.f;
+	int wi = (int)(w*2.f);
+	int xx = sx - w;
+	int yy = sy;
+	for (int x = 0; x < wi; x++)PutPixel(xx + x, yy);
+	xx = sx;
+	yy = sy - w;
+	for (int y = 0; y < wi; y++)PutPixel(xx, yy + y);
+
+	lpddBack->Unlock(ddsd.lpSurface);
+
+
+	
+	/*
   float w = (float) WinW / 12.f;
   d3dStartBuffer();
 
@@ -6200,7 +6221,7 @@ void Render_Cross(int sx, int sy)
   lpd3dExecuteBuffer->Unlock( );
 
   hRes = lpd3dDevice->Execute(lpd3dExecuteBuffer, lpd3dViewport, D3DEXECUTE_UNCLIPPED);
-
+  */
 
 }
 

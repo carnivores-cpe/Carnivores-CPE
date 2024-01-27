@@ -4953,8 +4953,7 @@ void Render_Cross(int sx, int sy)
 		FXFALSE,
 		&linfo)) return;
 	lsw = linfo.strideInBytes / 2;
-	//WeapInfo[TotalW].radarColour565 = ((R >> 3) << 11) | ((G >> 2) << 5) | (0 >> 3);
-	_CRCOLOR = 0;
+	_CRCOLOR = WeapInfo[CurrentWeapon].crossColour565;
 	float w = (float)WinW / 12.f;
 	int wi = (int)(w*2.f);
 	int xx = sx - w;

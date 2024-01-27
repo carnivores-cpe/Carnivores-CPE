@@ -2980,6 +2980,8 @@ void ReadWeapons(FILE *stream)
 			WeapInfo[TotalW].radarColour565 = ((WeapInfo[TotalW].radarRed >> 3) << 11) | ((WeapInfo[TotalW].radarGreen >> 2) << 5) | (WeapInfo[TotalW].radarBlue >> 3);
 			WeapInfo[TotalW].radarColour555 = ((WeapInfo[TotalW].radarRed >> 3) << 10) | ((WeapInfo[TotalW].radarGreen >> 3) << 5) | (WeapInfo[TotalW].radarBlue >> 3);
 
+			WeapInfo[TotalW].crossColour565 = ((WeapInfo[TotalW].crossRed >> 3) << 11) | ((WeapInfo[TotalW].crossGreen >> 2) << 5) | (WeapInfo[TotalW].crossBlue >> 3);
+			WeapInfo[TotalW].crossColour555 = ((WeapInfo[TotalW].crossRed >> 3) << 10) | ((WeapInfo[TotalW].crossGreen >> 3) << 5) | (WeapInfo[TotalW].crossBlue >> 3);
 
           TotalW++;
           break;
@@ -3008,6 +3010,11 @@ void ReadWeapons(FILE *stream)
         if (strstr(line, "optic"))  WeapInfo[TotalW].Optic = (float)atof(value);
         if (strstr(line, "fall"))   WeapInfo[TotalW].Fall  = (float)atof(value);
         //if (strstr(line, "price")) WeapInfo[TotalW].Price =        atoi(value);
+
+		if (strstr(line, "cross")) readBool(value, WeapInfo[TotalW].cross);
+		if (strstr(line, "croR")) WeapInfo[TotalW].crossRed = atoi(value);
+		if (strstr(line, "croG")) WeapInfo[TotalW].crossGreen = atoi(value);
+		if (strstr(line, "croB")) WeapInfo[TotalW].crossBlue = atoi(value);
 
 		if (strstr(line, "shake"))   WeapInfo[TotalW].shake = (float)atof(value);
 

@@ -671,7 +671,7 @@ SKIPWIND:
 
 
   //Render_Cross(VideoCX, VideoCY);
-  if (OPTICMODE) DrawOpticCross(wptr->chinfo[CurrentWeapon].mptr->VCount-1);
+  if ((!WeapInfo[CurrentWeapon].Optic || OPTICMODE) && WeapInfo[CurrentWeapon].cross) DrawOpticCross(wptr->chinfo[CurrentWeapon].mptr->VCount-1);
 
 
 

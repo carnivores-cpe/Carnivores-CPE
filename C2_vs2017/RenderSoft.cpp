@@ -3272,15 +3272,13 @@ void Render_Cross(int sx, int sy)
   for (int x=-w+1; x<w; x++)
   {
     int offset = (sy<<10) + (sx+x);
-    WORD C = *((WORD*)lpVideoBuf + offset);
-    *((WORD*)lpVideoBuf + offset) = (C & 0x7BDE) >> 1;
+	*((WORD*)lpVideoBuf + offset) = WeapInfo[CurrentWeapon].crossColour565;
   }
 
   for (int y=-w+1; y<w; y++)
   {
     int offset = ((sy+y)<<10) + sx;
-    WORD C = *((WORD*)lpVideoBuf + offset);
-    *((WORD*)lpVideoBuf + offset) = (C & 0x7BDE) >> 1;
+    *((WORD*)lpVideoBuf + offset) = WeapInfo[CurrentWeapon].crossColour565;
   }
 }
 

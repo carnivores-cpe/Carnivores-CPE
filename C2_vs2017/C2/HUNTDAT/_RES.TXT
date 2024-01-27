@@ -291,6 +291,8 @@ weapons {
  power = 4
  veloc = 23.0
  optic = 3.0
+ cross = TRUE
+ croB = 255
  prec  = 2.0
  loud  = 0.0
  rate  = 1.0
