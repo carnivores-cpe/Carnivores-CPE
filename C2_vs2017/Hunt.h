@@ -804,6 +804,7 @@ typedef struct _TWeapInfo
   int Shots, TraceC, Reload, SFXIndex;
   int shtAnim, getAnim, putAnim, rldAnim;
   float shake, Optic;
+  bool unzoom;
 
   bool onRadar;
   byte radarRed, radarGreen, radarBlue;

@@ -443,7 +443,7 @@ void DrawPostObjects()
   }
 
   //goto SKIPWIND;
-  if (BINMODE || OPTICMODE) goto SKIPWIND;
+  if (BINMODE || (OPTICMODE && (!WeapInfo[CurrentWeapon].unzoom || Weapon.state==2))) goto SKIPWIND;
 
   if (!TrophyMode && !SurvivalMode)
     if (!KeyboardState[VK_CAPITAL] & 1)
@@ -671,9 +671,9 @@ SKIPWIND:
 
 
   //Render_Cross(VideoCX, VideoCY);
-  if ((!WeapInfo[CurrentWeapon].Optic || OPTICMODE) && WeapInfo[CurrentWeapon].cross) DrawOpticCross(wptr->chinfo[CurrentWeapon].mptr->VCount-1);
-
-
+  if ((!WeapInfo[CurrentWeapon].Optic || OPTICMODE) && WeapInfo[CurrentWeapon].cross
+	  && (!WeapInfo[CurrentWeapon].unzoom || Weapon.state == 2))
+	  DrawOpticCross(wptr->chinfo[CurrentWeapon].mptr->VCount-1);
 
 SKIPWEAPON:
 
@@ -1950,7 +1950,7 @@ SKIPYMOVE:
     CameraW*=BinocularPower;
     CameraH*=BinocularPower;
   }
-  else if (OPTICMODE)
+  else if (OPTICMODE && (!WeapInfo[CurrentWeapon].unzoom || Weapon.state == 2))
   {
 	  CameraW *= WeapInfo[CurrentWeapon].Optic;
 	  CameraH *= WeapInfo[CurrentWeapon].Optic;

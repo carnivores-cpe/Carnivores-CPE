@@ -3011,6 +3011,8 @@ void ReadWeapons(FILE *stream)
         if (strstr(line, "fall"))   WeapInfo[TotalW].Fall  = (float)atof(value);
         //if (strstr(line, "price")) WeapInfo[TotalW].Price =        atoi(value);
 
+		if (strstr(line, "unzoom")) readBool(value, WeapInfo[TotalW].unzoom);
+
 		if (strstr(line, "cross")) readBool(value, WeapInfo[TotalW].cross);
 		if (strstr(line, "croR")) WeapInfo[TotalW].crossRed = atoi(value);
 		if (strstr(line, "croG")) WeapInfo[TotalW].crossGreen = atoi(value);

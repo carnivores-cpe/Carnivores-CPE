@@ -274,6 +274,7 @@ function expand(n) {
 				<li>Adjustable initial weapon shake.</li>
 				<li>Optional crosshair</li>
 				<li>Custom crosshair colour</li>
+				<li>Option to play get, put and reload animations without optic zoom.</li>
 			    <li>Supply Ship - adjust keybind in the options menu.</li>
 			    <li>Decide which trophies to take back to the trophy room.</li>
 			    <li>Non-trophy creatures can still give points using basescore.</li>
@@ -422,6 +423,7 @@ function expand(n) {
 				<li>Adjustable initial weapon shake.</li>
 				<li>Optional crosshair</li>
 				<li>Custom crosshair colour</li>
+				<li>Option to play get, put and reload animations without optic zoom.</li>
 			    <li>Supply Ship - adjust keybind in the options menu.</li>
 			    <li>Decide which trophies to take back to the trophy room.</li>
 			    <li>Non-trophy creatures can still give points using basescore.</li>
@@ -2599,7 +2601,7 @@ reduced by the whole value of densityMulti. e.g. in the above screenshot, the ma
 			
 			If set to true, a crosshair is rendered.
 			<p>
-			The crosshair will be rendered on the last vertice of the weapon model e.g. see sniper.car
+			The crosshair will be rendered on the last vertex of the weapon model e.g. see sniper.car
 			</p>
 			<p>
 			<img width=35% height=auto alt="" src="
@@ -2612,6 +2614,29 @@ reduced by the whole value of densityMulti. e.g. in the above screenshot, the ma
 		</div>
 	</div>
 </p>
+
+
+
+
+<p style="margin-top:4%;">
+	<h2 id="arrow_189" unselectable="on" onclick="expand(189)"
+		style="float:left;margin-top:0;cursor:pointer;
+		-moz-user-select:none;
+		user-select:none;
+		-webkit-user-select: none;
+		-ms-user-select: none;"
+		>></h2>
+	<div class = "con" style="margin-left:4%">
+		<h2 onclick="expand(189)" style="cursor:pointer;">_RES value: unzoom</h2>
+		<div id="content_189" style="display: none">
+		
+			<p><b>Data type: TRUE/FALSE</b></p>
+			If set to true, the scope will unzoom (if optic is set) and the crosshair will disappear during get, put and reload animations.
+		</div>
+	</div>
+</p>
+
+
 
 <p style="margin-top:4%;">
 	<h2 id="arrow_188" unselectable="on" onclick="expand(188)"
@@ -2631,7 +2656,6 @@ Sets the colour of the crosshair (RGB 0-255) (if cross = TRUE).
 		</div>
 	</div>
 </p>
-
 
 
 		
