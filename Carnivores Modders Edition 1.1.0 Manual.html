@@ -278,6 +278,8 @@ function expand(n) {
 			    <li>Supply Ship - adjust keybind in the options menu.</li>
 			    <li>Decide which trophies to take back to the trophy room.</li>
 			    <li>Non-trophy creatures can still give points using basescore.</li>
+				<li>Up to 32 active snow types per hunt.</li>
+				
 				<!--<li>You can now hide creatures on the hunt menu until the player can afford them</li>-->
 				<!--<li>10th huntable slot</li>
 				<li>10 selectable weapon slots (with numkey binding)</li>
@@ -407,6 +409,7 @@ function expand(n) {
 				<li>Jump range for mosasaurus ai</li>
 				<li>Toggle crouch.</li>
 				<li>Customisable snow/weather settings for each map</li>
+				<li>Up to 32 active snow types per hunt.</li>
 				<li>Customisable survival mode</li>
 			    <li>Bullet travel time and modifiable velocity.</li>
 			    <li>Bullet models.</li>
@@ -1134,41 +1137,13 @@ snow{</br>
 		-ms-user-select: none;"
 		>></h2>
 	<div class = "con" style="margin-left:4%">
-		<h2 onclick="expand(108)" style="cursor:pointer;">_RES value: snow1</h2>
+		<h2 onclick="expand(108)" style="cursor:pointer;">_RES subsection: snow</h2>
 		<div id="content_108" style="display: none">
 		
-			<p><b>Data type: TRUE/FALSE</b></p>
-
-			When set to true, snow/rain will be spawned on the map. When set to false (or not defined) no weather effects will be created.
+			Adds snow (or other particle effect) to the map. Each map can have up to 32 active snow groups.
 			
-			<p>Note: Setting this value to true will not automatically add Ice Age snow to the map unless the other values are properly configured, see the Ice Age snow preset above.</p>
 
-			
-		</div>
-	</div>
-</p>
-		
-<p style="margin-top:4%;">
-	<h2 id="arrow_112" unselectable="on" onclick="expand(112)"
-		style="float:left;margin-top:0;cursor:pointer;
-		-moz-user-select:none;
-		user-select:none;
-		-webkit-user-select: none;
-		-ms-user-select: none;"
-		>></h2>
-	<div class = "con" style="margin-left:4%">
-		<h2 onclick="expand(112)" style="cursor:pointer;">_RES value: snow2</h2>
-		<div id="content_112" style="display: none">
-		
-			<p><b>Data type: TRUE/FALSE</b></p>
-
-			When set to true, a second particle is added to each snowdrop which can be configured individually.
-			
-		</div>
-	</div>
-</p>
-	
-<p style="margin-top:4%;">
+			<p style="margin-top:4%;">
 	<h2 id="arrow_113" unselectable="on" onclick="expand(113)"
 		style="float:left;margin-top:0;cursor:pointer;
 		-moz-user-select:none;
@@ -1226,8 +1201,6 @@ snow{</br>
 
 			The number of snow particles rendered at any time.
 			
-			<p>Note: cannot exceed 16000.</p>
-			
 		</div>
 	</div>
 </p>
@@ -1241,7 +1214,7 @@ snow{</br>
 		-ms-user-select: none;"
 		>></h2>
 	<div class = "con" style="margin-left:4%">
-		<h2 onclick="expand(116)" style="cursor:pointer;">_RES value: red1/red2, gre1/gre2, blu1/blu2</h2>
+		<h2 onclick="expand(116)" style="cursor:pointer;">_RES value: red, gre, blu</h2>
 		<div id="content_116" style="display: none">
 		
 			<p><b>Data type: Whole Number</b></p>
@@ -1262,7 +1235,7 @@ snow{</br>
 		-ms-user-select: none;"
 		>></h2>
 	<div class = "con" style="margin-left:4%">
-		<h2 onclick="expand(117)" style="cursor:pointer;">_RES value: alp1/alp2</h2>
+		<h2 onclick="expand(117)" style="cursor:pointer;">_RES value: alp</h2>
 		<div id="content_117" style="display: none">
 		
 			<p><b>Data type: Whole Number</b></p>
@@ -1283,7 +1256,7 @@ snow{</br>
 		-ms-user-select: none;"
 		>></h2>
 	<div class = "con" style="margin-left:4%">
-		<h2 onclick="expand(118)" style="cursor:pointer;">_RES value: rad1/rad2</h2>
+		<h2 onclick="expand(118)" style="cursor:pointer;">_RES value: rad</h2>
 		<div id="content_118" style="display: none">
 		
 			<p><b>Data type: Whole Number</b></p>
@@ -1295,7 +1268,10 @@ snow{</br>
 	</div>
 </p>
 
-<br>
+			
+		</div>
+	</div>
+</p>
 
 		
 <p style="margin-top:4%;">
