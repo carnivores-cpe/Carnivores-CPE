@@ -3966,8 +3966,8 @@ void RenderElements()
 	);
   }
 
-  if (SNOW)
-	  for (int s = 0; s < SnCount; s++) {
+  for (int st = 0; st < SnowCh; st++) {
+	  for (int s = SnowInfo[st].addr; s < SnowInfo[st].addr + SnowInfo[st].SnCount; s++) {
 		  Vector3d rpos = Snow[s].pos;
 
 
@@ -3984,45 +3984,30 @@ void RenderElements()
 		  float sx = VideoCX - (int)(CameraW * rpos.x / rpos.z * 16) / 16.f;
 		  float sy = VideoCY + (int)(CameraH * rpos.y / rpos.z * 16) / 16.f;
 
-		  DWORD A11 = snow1_a;
-		  DWORD A12 = snow2_a;
+		  DWORD A11 = SnowInfo[st].snow_a;
 		  if (Snow[s].ftime) {
 			  A11 = A11 * (2000 - Snow[s].ftime) / 2000;
-			  A12 = A12 * (2000 - Snow[s].ftime) / 2000;
 		  }
 
-		  RenderCircle(sx, sy, rpos.z, -8 * CameraW*0.64 / rpos.z * snow1_rad, //1 
-			(A11 << 24) +
-			conv_xGx(0x000000 |
-			(snow1_b << 16) |
-			(snow1_g << 8) |
-			snow1_r)
-			,
-			((A11/7) << 24) +
-			conv_xGx(0x000000 |
-			(snow1_b / 2 << 16) |
-			(snow1_g / 2 << 8) |
-			snow1_r / 2)
-			  );
-		  RenderCircle(sx, sy, rpos.z, -8 * CameraW*0.64 / rpos.z * snow2_rad, //1 
-			  (A12 << 24) +
+		  RenderCircle(sx, sy, rpos.z, -8 * CameraW*0.64 / rpos.z * SnowInfo[st].snow_rad,
+			  (A11 << 24) +
 			  conv_xGx(0x000000 |
-			  (snow2_b << 16) |
-				  (snow2_g << 8) |
-				  snow2_r)
+			  (SnowInfo[st].snow_b << 16) |
+				  (SnowInfo[st].snow_g << 8) |
+				  SnowInfo[st].snow_r)
 			  ,
-			  ((A12/7) << 24) +
+			  ((A11 / 7) << 24) +
 			  conv_xGx(0x000000 |
-			  (snow2_b / 2 << 16) |
-				  (snow2_g / 2 << 8) |
-				  snow2_r / 2)
+			  (SnowInfo[st].snow_b / 2 << 16) |
+				  (SnowInfo[st].snow_g / 2 << 8) |
+				  SnowInfo[st].snow_r / 2)
 		  );
-			  //(A1 << 24) + conv_xGx(0xF0F0F0), (A2 << 24) + conv_xGx(0xB0B0B0));
+		  //(A1 << 24) + conv_xGx(0xF0F0F0), (A2 << 24) + conv_xGx(0xB0B0B0));
 
 
 
 	  }
-
+  }
 
   guAlphaSource(GR_ALPHASOURCE_CC_ALPHA);
   guColorCombineFunction( GR_COLORCOMBINE_TEXTURE_TIMES_ITRGB );

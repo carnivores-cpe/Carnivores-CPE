@@ -2901,9 +2901,42 @@ void ReadTrophyTable(FILE *stream)
 	}
 }
 
+
+void ReadSnowType(FILE *stream)
+{
+	char *value;
+	char line[256];
+
+	while (fgets(line, 255, stream)) {
+		if (strstr(line, "}")) {
+			SnowCh++;
+			break;
+		}
+		value = strstr(line, "=");
+		if (!value) {
+			char errorBuff[100];
+			sprintf(errorBuff, "Script loading error: snowtype: %i", SnowCh);
+			DoHalt(errorBuff);
+		}
+		value++;
+
+		if (strstr(line, "vSpd"))  SnowInfo[SnowCh].snow_vSpd = atoi(value);
+		if (strstr(line, "hSpd"))  SnowInfo[SnowCh].snow_hSpd = atoi(value);
+		if (strstr(line, "dens"))  SnowInfo[SnowCh].snow_dens = atoi(value);
+
+		if (strstr(line, "red"))  SnowInfo[SnowCh].snow_r = atoi(value);
+		if (strstr(line, "gre"))  SnowInfo[SnowCh].snow_g = atoi(value);
+		if (strstr(line, "blu"))  SnowInfo[SnowCh].snow_b = atoi(value);
+		if (strstr(line, "alp"))  SnowInfo[SnowCh].snow_a = atoi(value);
+		if (strstr(line, "rad"))  SnowInfo[SnowCh].snow_rad = atof(value);
+
+	}
+}
+
+
 void ReadAreaTable (FILE *stream, int areaNumber)
 {
-	SNOW = FALSE;
+	SnowCh = 0;
 
 	TotalAreaInfo = 0;
 	char line[256], *value;
@@ -2915,31 +2948,33 @@ void ReadAreaTable (FILE *stream, int areaNumber)
 			{
 				if (strstr(line, "}"))
 				{
+					if (SnowCh){
+						int totalSnowTemp=0;
+						for (int st = 0; st < SnowCh; st++) {
+							SnowInfo[st].addr = totalSnowTemp;
+							totalSnowTemp += SnowInfo[st].snow_dens;
+						}
+						Snow = new TSnowElement[totalSnowTemp];
+					}
 					TotalAreaInfo++;
 					break;
 				}
 				value = strstr(line, "=");
-				if (!value) DoHalt("Script loading error: AreaTable");
+				if (!value && !strstr(line, "snow")) DoHalt("Script loading error: AreaTable");
 				value++;
 
+				char testBuff[100];
+				sprintf(testBuff, "\n TEST: %i", TotalAreaInfo);
+				PrintLog(testBuff);
+				sprintf(testBuff, "\n TES2: %i", areaNumber);
+				PrintLog(testBuff);
+
+
 				if (TotalAreaInfo == areaNumber) {
-					if (strstr(line, "vSpd"))  snow_vSpd = atoi(value);
-					if (strstr(line, "hSpd"))  snow_hSpd = atoi(value);
-					if (strstr(line, "dens"))  snow_dens = atoi(value);
 
-					if (strstr(line, "snow1"))  readBool(value, SNOW);
-					if (strstr(line, "red1"))  snow1_r = atoi(value);
-					if (strstr(line, "gre1"))  snow1_g = atoi(value);
-					if (strstr(line, "blu1"))  snow1_b = atoi(value);
-					if (strstr(line, "alp1"))  snow1_a = atoi(value);
-					if (strstr(line, "rad1"))  snow1_rad = atof(value);
-
-					if (strstr(line, "snow2"))  readBool(value, SNOW2);
-					if (strstr(line, "red2"))  snow2_r = atoi(value);
-					if (strstr(line, "gre2"))  snow2_g = atoi(value);
-					if (strstr(line, "blu2"))  snow2_b = atoi(value);
-					if (strstr(line, "alp2"))  snow2_a = atoi(value);
-					if (strstr(line, "rad2"))  snow2_rad = atof(value);
+					if (strstr(line, "snow")) {
+						ReadSnowType(stream);
+					}
 
 					if (strstr(line, "tree")) TreeTable[atoi(value)] = TRUE;
 
@@ -2951,13 +2986,13 @@ void ReadAreaTable (FILE *stream, int areaNumber)
 					if (strstr(line, "survivalDinoXMin")) SurvivalDinoSpawn.XMin = atoi(value);
 					if (strstr(line, "survivalDinoYMin")) SurvivalDinoSpawn.YMin = atoi(value);
 
+				} else {
+					if (strstr(line, "snow")) SkipSector(stream);
 				}
 
 			}
 
 	}
-
-	if (snow_dens > 16000) DoHalt("snow density cannot exceed 16000");
 
 }
 
@@ -3012,6 +3047,8 @@ void ReadWeapons(FILE *stream)
         //if (strstr(line, "price")) WeapInfo[TotalW].Price =        atoi(value);
 
 		if (strstr(line, "unzoom")) readBool(value, WeapInfo[TotalW].unzoom);
+
+		if (strstr(line, "harpoon")) readBool(value, WeapInfo[TotalW].harpoon);
 
 		if (strstr(line, "cross")) readBool(value, WeapInfo[TotalW].cross);
 		if (strstr(line, "croR")) WeapInfo[TotalW].crossRed = atoi(value);

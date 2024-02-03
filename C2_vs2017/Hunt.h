@@ -334,7 +334,16 @@ typedef struct _TWCircle
   int FTime;
 } TWCircle;
 
+typedef struct _TSnowType {
+	int snow_vSpd;//vertical
+	int snow_hSpd;//horizontal
+	int snow_dens;//density
 
+	byte snow_r, snow_g, snow_b, snow_a;
+	float snow_rad;//radius
+	int addr; //start address in snow particle array
+	int SnCount;//total number of snow particles
+} TSnowType;
 
 
 typedef struct _TSnowElement {
@@ -804,7 +813,7 @@ typedef struct _TWeapInfo
   int Shots, TraceC, Reload, SFXIndex;
   int shtAnim, getAnim, putAnim, rldAnim;
   float shake, Optic;
-  bool unzoom;
+  bool unzoom, harpoon;
 
   bool onRadar;
   byte radarRed, radarGreen, radarBlue;
@@ -1185,17 +1194,8 @@ _EXTORNOT   TSFX     RandSound[256];
 
 //========= WEATHER =================//
 
-_EXTORNOT BOOL SNOW;
-_EXTORNOT int snow_vSpd;//vertical
-_EXTORNOT int snow_hSpd;//horizontal
-_EXTORNOT int snow_dens;//density
-
-_EXTORNOT byte snow1_r, snow1_g, snow1_b, snow1_a;//density
-_EXTORNOT float snow1_rad;//radius
-
-_EXTORNOT BOOL SNOW2;
-_EXTORNOT byte snow2_r, snow2_g, snow2_b, snow2_a;//density
-_EXTORNOT float snow2_rad;//radius
+_EXTORNOT TSnowType SnowInfo[32];
+_EXTORNOT int SnowCh;
 
 //========= GAME ====================//
 _EXTORNOT int TargetDino, TargetArea, TargetWeapon, WeaponPres, TargetCall,
@@ -1282,7 +1282,7 @@ _EXTORNOT TPackType packType[1024];
 _EXTORNOT int packTypeCount;
 _EXTORNOT TTrophyType trophyType[TROPHY2_COUNT];
 _EXTORNOT int trophyTypeCount;
-_EXTORNOT int ChCount, WCCount, ElCount, SnCount,
+_EXTORNOT int ChCount, WCCount, ElCount,
           ShotDino, TrophyBody, HunterCount; //HunterCount is for multiplayer, up to 3 others
 _EXTORNOT bool TrophyDisplay;
 _EXTORNOT int TrophyDisplayC;
@@ -1312,7 +1312,7 @@ _EXTORNOT int SurvivalIndexCh;
 
 _EXTORNOT TWCircle       WCircles[2096]; //increased
 
-_EXTORNOT TSnowElement   Snow[16048];
+_EXTORNOT TSnowElement*  Snow;
 
 _EXTORNOT TDemoPoint     DemoPoint;
 _EXTORNOT TCharacter     *killerDino;

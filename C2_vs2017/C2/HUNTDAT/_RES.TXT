@@ -7,15 +7,26 @@ common {
 
 areatable {
 {
- snow1 = FALSE
- hSpd = 4
- vSpd = 192
- dens = 2000
- red1 = 240
- gre1 = 240
- blu1 = 240
- alp1 = 255
- rad1 = 1
+snow {
+hSpd = 4
+vSpd = 192
+dens = 2000
+red = 240
+gre = 240
+blu = 240
+alp = 255
+rad = 1
+}
+snow {
+hSpd = 200
+vSpd = 192
+dens = 2000
+red = 168
+gre = 132
+blu = 97
+alp = 25
+rad = 200
+}
  tree = 7
  tree = 8
  tree = 11
@@ -24,15 +35,6 @@ areatable {
 }
 
 {
- snow1 = FALSE
- hSpd = 4
- vSpd = 192
- dens = 2000
- red1 = 240
- gre1 = 240
- blu1 = 240
- alp1 = 255
- rad1 = 1
  tree = 6
  tree = 11
  tree = 12
@@ -44,29 +46,11 @@ areatable {
 }
 
 {
- snow1 = FALSE
- hSpd = 4
- vSpd = 192
- dens = 2000
- red1 = 240
- gre1 = 240
- blu1 = 240
- alp1 = 255
- rad1 = 1
  tree = 10
  tree = 18
 }
 
 {
- snow1 = FALSE
- hSpd = 4
- vSpd = 192
- dens = 2000
- red1 = 240
- gre1 = 240
- blu1 = 240
- alp1 = 255
- rad1 = 1
  tree = 4
  tree = 5
  tree = 6
@@ -77,15 +61,6 @@ areatable {
 }
 
 {
- snow1 = FALSE
- hSpd = 4
- vSpd = 192
- dens = 2000
- red1 = 240
- gre1 = 240
- blu1 = 240
- alp1 = 255
- rad1 = 1
  tree = 9
  tree = 10
  tree = 11
@@ -299,6 +274,30 @@ weapons {
  shots = 7
  recoil = 4
  shake = 0.65
+}
+
+
+
+
+{
+ name  = 'Harpoon'
+ file  = 'x_bow.car'
+ pic   = 'bullet6.tga'
+ bModel= 'harpoon2.car'
+ getAnim = 0
+ shtAnim = 1
+ putAnim = 2
+ rldAnim = 3
+ shots = 6
+ fall = 0.6
+ power = 6
+ veloc = 4.0
+ prec  = 2.0
+ loud  = 0.4
+ rate  = 1.0
+ retrieve = TRUE
+ recoil = 6
+ shake = 0.05
 }
 
 

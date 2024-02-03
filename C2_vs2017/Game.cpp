@@ -2523,7 +2523,8 @@ void ProcessTrophy()
   //TrophyBody = Characters[TrophyBody].State;
 }
 
-void RespawnSnow(int s, BOOL rand)
+
+void RespawnSnow(int st, int s, BOOL rand)
 {
 	Snow[s].pos.x = PlayerX + nv.x + siRand(12 * 256);//12
 	Snow[s].pos.z = PlayerZ + nv.z + siRand(12 * 256);//12
@@ -2642,48 +2643,52 @@ void AnimateElements()
   }
 
 
-  nv = Wind.nv;
-  NormVector(nv, (4 + Wind.speed) * snow_hSpd * TimeDt / 1000);//4
+  
+  
+  for (int st = 0; st < SnowCh; st++) {
+	  nv = Wind.nv;
+	  NormVector(nv, (4 + Wind.speed) * SnowInfo[st].snow_hSpd * TimeDt / 1000);//4
 
-  if (!SNOW) return;
-  while (SnCount < snow_dens) {//2000
-	  RespawnSnow(SnCount, TRUE);
-	  SnCount++;
-  }
-
-  for (int s = 0; s < SnCount; s++) {
-
-	  if ((fabs(Snow[s].pos.x - PlayerX) > 14 * 256) ||
-		  (fabs(Snow[s].pos.z - PlayerZ) > 14 * 256)) {
-		  Snow[s].pos.x = PlayerX + siRand(12 * 256);
-		  Snow[s].pos.z = PlayerZ + siRand(12 * 256);
-		  Snow[s].pos.y = Snow[s].pos.y - Snow[s].hl;
-		  Snow[s].hl = GetLandUpH(Snow[s].pos.x, Snow[s].pos.z);
-		  Snow[s].pos.y += Snow[s].hl;
+	  while (SnowInfo[st].SnCount < SnowInfo[st].snow_dens) {//2000
+		  RespawnSnow(st, SnowInfo[st].addr + SnowInfo[st].SnCount, TRUE);
+		  SnowInfo[st].SnCount++;
 	  }
 
-	  if (!Snow[s].ftime) {
-		  float v = (((RealTime + s * 23) % 800) - 400) * TimeDt / 16000;
-		  Snow[s].pos.x += ca * v;
-		  Snow[s].pos.z += sa * v;
+	  for (int s = SnowInfo[st].addr; s < SnowInfo[st].addr+SnowInfo[st].SnCount; s++) {
 
-		  Snow[s].pos = AddVectors(Snow[s].pos, nv);
-		  Snow[s].hl = GetLandUpH(Snow[s].pos.x, Snow[s].pos.z);
-		  Snow[s].pos.y -= TimeDt * snow_vSpd / 1000.f; //192
-		  if (Snow[s].pos.y < Snow[s].hl + 8) {
-			  Snow[s].pos.y = Snow[s].hl + 8;
-			  Snow[s].ftime = 1;
+		  if ((fabs(Snow[s].pos.x - PlayerX) > 14 * 256) ||
+			  (fabs(Snow[s].pos.z - PlayerZ) > 14 * 256)) {
+			  Snow[s].pos.x = PlayerX + siRand(12 * 256);
+			  Snow[s].pos.z = PlayerZ + siRand(12 * 256);
+			  Snow[s].pos.y = Snow[s].pos.y - Snow[s].hl;
+			  Snow[s].hl = GetLandUpH(Snow[s].pos.x, Snow[s].pos.z);
+			  Snow[s].pos.y += Snow[s].hl;
 		  }
+
+		  if (!Snow[s].ftime) {
+			  float v = (((RealTime + s * 23) % 800) - 400) * TimeDt / 16000;
+			  Snow[s].pos.x += ca * v;
+			  Snow[s].pos.z += sa * v;
+
+			  Snow[s].pos = AddVectors(Snow[s].pos, nv);
+			  Snow[s].hl = GetLandUpH(Snow[s].pos.x, Snow[s].pos.z);
+			  Snow[s].pos.y -= TimeDt * SnowInfo[st].snow_vSpd / 1000.f; //192
+			  if (Snow[s].pos.y < Snow[s].hl + 8) {
+				  Snow[s].pos.y = Snow[s].hl + 8;
+				  Snow[s].ftime = 1;
+			  }
+		  }
+		  else {
+			  Snow[s].ftime += TimeDt;
+			  Snow[s].pos.y -= TimeDt * (SnowInfo[st].snow_vSpd / 64) / 1000.f; //3
+			  if (Snow[s].ftime > (2000 / (SnowInfo[st].snow_vSpd / 192)))  RespawnSnow(st, s, FALSE); //2000
+		  }
+
 	  }
-	  else {
-		  Snow[s].ftime += TimeDt;
-		  Snow[s].pos.y -= TimeDt * (snow_vSpd / 64) / 1000.f; //3
-			  if (Snow[s].ftime > (2000/(snow_vSpd/192)))  RespawnSnow(s, FALSE); //2000
-	  }
+
 
   }
-
-  //do not place anything after SNOW in this procedure - there's a return
+  
 
 }
 

@@ -4877,9 +4877,9 @@ void RenderElements()
   }
 
 
-
-  if (SNOW)
-	  for (int s = 0; s < SnCount; s++) {
+  
+  for (int st = 0; st < SnowCh; st++) {
+	  for (int s = SnowInfo[st].addr; s < SnowInfo[st].addr + SnowInfo[st].SnCount; s++) {
 		  Vector3d rpos = Snow[s].pos;
 
 
@@ -4896,45 +4896,30 @@ void RenderElements()
 		  float sx = VideoCX - (int)(CameraW * rpos.x / rpos.z * 16) / 16.f;
 		  float sy = VideoCY + (int)(CameraH * rpos.y / rpos.z * 16) / 16.f;
 
-		  DWORD A11 = snow1_a;
-		  DWORD A12 = snow2_a;
+		  DWORD A11 = SnowInfo[st].snow_a;
 		  if (Snow[s].ftime) {
 			  A11 = A11 * (2000 - Snow[s].ftime) / 2000;
-			  A12 = A12 * (2000 - Snow[s].ftime) / 2000;
 		  }
 
-		  RenderCircle(sx, sy, rpos.z, -8 * CameraW*0.64 / rpos.z * snow1_rad, //1 
+		  RenderCircle(sx, sy, rpos.z, -8 * CameraW*0.64 / rpos.z * SnowInfo[st].snow_rad, //1 
 			  (A11 << 24) +
 			  conv_xGx(0x000000 |
-			  (snow1_r << 16) |
-				  (snow1_g << 8) |
-				  snow1_b)
+			  (SnowInfo[st].snow_r << 16) |
+				  (SnowInfo[st].snow_g << 8) |
+				  SnowInfo[st].snow_b)
 			  ,
 			  ((A11 / 7) << 24) +
 			  conv_xGx(0x000000 |
-			  (snow1_r / 2 << 16) |
-				  (snow1_g / 2 << 8) |
-				  snow1_b / 2)
-		  );
-		  RenderCircle(sx, sy, rpos.z, -8 * CameraW*0.64 / rpos.z * snow2_rad, //1 
-			  (A12 << 24) +
-			  conv_xGx(0x000000 |
-			  (snow2_r << 16) |
-				  (snow2_g << 8) |
-				  snow2_b)
-			  ,
-			  ((A12 / 7) << 24) +
-			  conv_xGx(0x000000 |
-			  (snow2_r / 2 << 16) |
-				  (snow2_g / 2 << 8) |
-				  snow2_b / 2)
+			  (SnowInfo[st].snow_r / 2 << 16) |
+				  (SnowInfo[st].snow_g / 2 << 8) |
+				  SnowInfo[st].snow_b / 2)
 		  );
 
 
 
 	  }
-
-
+  }
+  
 
 
   if (fproc1) d3dFlushBuffer(fproc1, 0);
