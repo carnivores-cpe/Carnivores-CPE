@@ -485,7 +485,8 @@ SKIPWIND:
 
   if (wptr->state == 1)
   {
-    wptr->FTime+=TimeDt;
+	  if (UNDERWATER) wptr->FTime += TimeDt/2.f;
+	  else wptr->FTime+=TimeDt;
     if (wptr->FTime >= wptr->chinfo[CurrentWeapon].Animation[WeapInfo[CurrentWeapon].getAnim].AniTime)
     {
       wptr->FTime = 0;
@@ -495,8 +496,9 @@ SKIPWIND:
 
   if (wptr->state == 4)
   {
-    wptr->FTime+=TimeDt;
-    if (wptr->FTime >= wptr->chinfo[CurrentWeapon].Animation[WeapInfo[CurrentWeapon].rldAnim].AniTime)
+	  if (UNDERWATER) wptr->FTime += TimeDt / 2.f;
+	  else wptr->FTime += TimeDt;
+	  if (wptr->FTime >= wptr->chinfo[CurrentWeapon].Animation[WeapInfo[CurrentWeapon].rldAnim].AniTime)
     {
       wptr->FTime = 0;
       wptr->state = 2;
@@ -505,8 +507,9 @@ SKIPWIND:
 
   if (wptr->state == 2 && wptr->FTime>0)
   {
-    wptr->FTime+=TimeDt;
-	if (Muzz) {
+	  if (UNDERWATER) wptr->FTime += TimeDt / 2.f;
+	  else wptr->FTime += TimeDt;
+	  if (Muzz && !UNDERWATER) {
 		if (wptr->FTime > MuzzModel.Animation[0].AniTime) {
 			Muzz = false;
 			MuzzFTime = 0;
@@ -641,7 +644,7 @@ SKIPWIND:
   if (HARD3D) wpnlight = 96 + GetLandLt(PlayerX, PlayerZ) / 4;
   else wpnlight = 200;
 
-  if (Muzz) {
+  if (Muzz && !UNDERWATER) {
   CreateMorphedModelBetaGamma(MuzzModel.mptr,
 	  &MuzzModel.Animation[0], MuzzFTime, 1.0, 0, MuzzGamma);
   RenderNearModel(MuzzModel.mptr, 0, wpshy, wpshz, wpnlight,
