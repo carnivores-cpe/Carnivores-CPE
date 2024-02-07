@@ -722,7 +722,7 @@ void InitShip(int cindex){
 void HideWeapon()
 {
   TWeapon *wptr = &Weapon;
-  if (UNDERWATER && !wptr->state) return;
+  if (UNDERWATER && !wptr->state && !WeapInfo[CurrentWeapon].harpoon) return;
   if (ObservMode || TrophyMode) return;
   if (SurvivalMode) return;
 
@@ -1914,9 +1914,14 @@ int AnimateBullet(float ax, float ay, float az,
               float bx, float by, float bz, int b)
 {
   int sres;
-    sres = TraceShot(ax, ay, az, bx, by, bz);
+    sres = TraceShot(ax, ay, az, bx, by, bz, b);
 
 ENDTRACE:
+	if (WeapInfo[bullet[b].parent].harpoon &&
+		GetLandUpH(bx, bz) > GetLandH(bx, bz) &&
+		GetLandUpH(bx, bz) > by)
+	if (!bullet[b].state) AddElements(bx, by, bz, partBubble, 1);
+
   if (sres==-1) return sres;
 
   int mort = (sres & 0xFF00) && (Characters[ShotDino].Health);
@@ -1924,6 +1929,12 @@ ENDTRACE:
 
   int powerL = WeapInfo[CurrentWeapon].Power;
   if (powerL > 100) powerL = 100;
+
+  if (WeapInfo[bullet[b].parent].harpoon &&
+	  GetLandUpH(bx, bz) > GetLandH(bx, bz)) {
+	  
+	  goto SKIPELEMENTS;
+  }
 
   if (sres == tresGround) {
 	  AddElements(bx, by, bz, partGround, 6 + powerL * 4);
@@ -1952,6 +1963,8 @@ ENDTRACE:
   int sNo = rRand(2);
   AddVoice3dv(fxImpactChar[sNo].length, fxImpactChar[sNo].lpData, bx, by, bz, 256);
   if (!Characters[ShotDino].Health) return sres;
+
+SKIPELEMENTS:
 
 //======= character damage =========//
 
@@ -1992,6 +2005,7 @@ void AddBullet(float ax, float ay, float az,
 	bullet[bulletCh].beta = FindVectorAlpha(sqrt(Dz*Dz + Dx*Dx), Dy);
 	if (WeapInfo[parent].onRadar) bullet[bulletCh].RTime = 1;
 	if (WeapInfo[parent].radarTime) bullet[bulletCh].RTime = WeapInfo[parent].radarTime;
+	bullet[bulletCh].submerged = false;
 	bulletCh++;
 }
 
@@ -2020,13 +2034,26 @@ void AnimateBullets() {
 				}
 			}
 		} else {
+
+			Vector3d d = bullet[b].dif;
+			if (!bullet[b].submerged) 
+				if(WeapInfo[bullet[b].parent].harpoon &&
+					GetLandUpH(bullet[b].a.x, bullet[b].a.z) > GetLandH(bullet[b].a.x, bullet[b].a.z) &&
+					GetLandUpH(bullet[b].a.x, bullet[b].a.z) > bullet[b].a.y) bullet[b].submerged = true;
+
+			if (bullet[b].submerged) {
+				d.x /= 2;
+				d.z /= 2;
+				d.y /= 2;
+			}
+
 			int sres = AnimateBullet(
 				bullet[b].a.x,
 				bullet[b].a.y,
 				bullet[b].a.z,
-				bullet[b].a.x + bullet[b].dif.x,
-				bullet[b].a.y + bullet[b].dif.y,
-				bullet[b].a.z + bullet[b].dif.z,
+				bullet[b].a.x + d.x,
+				bullet[b].a.y + d.y,
+				bullet[b].a.z + d.z,
 				b);
 
 			//this ought to be adjusted on frame time
@@ -2045,11 +2072,14 @@ void AnimateBullets() {
 					bulletCh--;
 				}
 			} else {
-
-				bullet[b].a.x += bullet[b].dif.x;
-				bullet[b].a.y += bullet[b].dif.y;
-				bullet[b].a.z += bullet[b].dif.z;
+				bullet[b].a.x += d.x;
+				bullet[b].a.y += d.y;
+				bullet[b].a.z += d.z;
 				bullet[b].dif.y -= WeapInfo[bullet[b].parent].Fall;// / WeapInfo[bullet[b].parent].Veloc;
+				if (WeapInfo[bullet[b].parent].harpoon &&
+					GetLandUpH(bullet[b].a.x, bullet[b].a.z) > GetLandH(bullet[b].a.x, bullet[b].a.z) &&
+					GetLandUpH(bullet[b].a.x, bullet[b].a.z) < bullet[b].a.y)
+					bullet[b].dif.y -= WeapInfo[bullet[b].parent].Fall;
 
 				if (WeapInfo[bullet[b].parent].bullet) {
 					bullet[b].FTime += TimeDt;

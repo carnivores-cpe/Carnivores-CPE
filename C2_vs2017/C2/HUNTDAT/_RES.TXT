@@ -7,26 +7,6 @@ common {
 
 areatable {
 {
-snow {
-hSpd = 4
-vSpd = 192
-dens = 2000
-red = 240
-gre = 240
-blu = 240
-alp = 255
-rad = 1
-}
-snow {
-hSpd = 200
-vSpd = 192
-dens = 2000
-red = 168
-gre = 132
-blu = 97
-alp = 25
-rad = 200
-}
  tree = 7
  tree = 8
  tree = 11
@@ -230,6 +210,7 @@ weapons {
  radTime = 30000
  recoil = 6
  shake = 0.05
+ harpoon = TRUE
 }
 
 {
@@ -289,15 +270,16 @@ weapons {
  putAnim = 2
  rldAnim = 3
  shots = 6
- fall = 0.6
  power = 6
- veloc = 4.0
  prec  = 2.0
  loud  = 0.4
  rate  = 1.0
  retrieve = TRUE
  recoil = 6
  shake = 0.05
+ harpoon = TRUE
+ veloc = 3.0
+ fall = 0.4
 }
 
 

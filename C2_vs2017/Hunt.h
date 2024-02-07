@@ -320,6 +320,7 @@ typedef struct _TWeapon
 
 typedef struct _TBullet
 {
+	bool submerged;
 	Vector3d a,dif,rpos;
 	int parent, state;
 	int FTime, RTime;
@@ -1005,7 +1006,7 @@ float FindVectorAlpha(float, float);
 float AngleDifference(float a, float b);
 
 int   TraceShot(float ax, float ay, float az,
-                float &bx, float &by, float &bz);
+                float &bx, float &by, float &bz, int b);
 int   TraceLook(float ax, float ay, float az,
                 float bx, float by, float bz);
 

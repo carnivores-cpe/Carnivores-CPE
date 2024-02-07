@@ -927,9 +927,11 @@ LONG APIENTRY MainWndProc( HWND hWnd, UINT message, UINT wParam, LONG lParam)
         break;
       }
       TargetWeapon = w;
-      if (!Weapon.state)
-        CurrentWeapon = TargetWeapon;
-      HideWeapon();
+	  if (!UNDERWATER || WeapInfo[TargetWeapon].harpoon) {
+		  if (!Weapon.state)
+			  CurrentWeapon = TargetWeapon;
+		  HideWeapon();
+	  }
       break;
     }
 
@@ -1197,7 +1199,7 @@ void ProcessShoot()
 	  }
 
   TWeapon *wptr = &Weapon;
-  if (UNDERWATER)
+  if (UNDERWATER && !WeapInfo[CurrentWeapon].harpoon)
   {
     HideWeapon();
     return;
@@ -1915,7 +1917,7 @@ SKIPYMOVE:
         AddDeadBody(NULL, HUNT_BREATH, TRUE);
     }
 
-  if (UNDERWATER)
+  if (UNDERWATER && !WeapInfo[CurrentWeapon].harpoon)
     if (Weapon.state) HideWeapon();
 
   if (!UNDERWATER) UnderWaterT = 0;
