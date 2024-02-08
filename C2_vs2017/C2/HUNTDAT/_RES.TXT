@@ -138,6 +138,7 @@ weapons {
  muzzflash = TRUE
  recoil = 2
  shake = 0.05
+ harpoon = TRUE
 }
 
 {
@@ -1518,6 +1519,71 @@ killtype{
  dontWeave = TRUE
 }
 
+{
+ name = 'Mosasaurus'
+ file = 'mosa30ss.car'
+ ai  = 33
+ overwrite area1 {
+ spawngroup{
+  spawnmax = 3
+  spawnmin = 0
+  spawnrate = 0.5
+ }
+ }
+ DangerFish = TRUE
+ aggress   = 200
+ killdist  = 380
+ radius    = 256
+ health    = 16
+ scale0    = 1000
+ scaleA    = 600
+ shipdelta = 0
+ maxdepth = 10000
+ mindepth = 800
+ spcdepth = 400
+ walkAnim = 0
+ wlkspd = 0.428
+ runAnim = 1
+ runspd = 1.2
+ JumpRange = 1424
+ jumpAnim = 3
+ jmpspd = 1.0
+ jumpPartFrame1 = 1
+ jumpPartFrame2 = 11
+ jumpPartDist = 240
+ jumpPartCnt = 500
+ jumpPartMag = 40
+ jumpPartAngled = TRUE
+ jumpPartCircle = TRUE
+ fishIdleAnim = 4
+ idlePartFrame1 = 12
+ idlePartFrame2 = 13
+ idlePartDist = 22
+ idlePartCnt = 3
+ idlePartMag = 20
+ idlePartOffset = 320
+killtype{
+ hunterAnim = 5
+ hunterCarryAnim = 6
+ eatAnim = 2
+ hunterOffset = 0
+ hunterSync = TRUE
+ dontloop = TRUE
+ carryCorpse = TRUE
+}
+ CamYLand = 256
+ CamYWater = 256
+ CamBaseLand = 824
+ CamBaseWater = 824
+ bloR = 112
+ bloG = 0
+ bloB = 0
+ dontWeave = TRUE
+ radar = TRUE
+ radR = 240
+ radG = 100
+ radB = 100
+}
 
 
 

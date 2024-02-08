@@ -1933,38 +1933,40 @@ ENDTRACE:
   if (WeapInfo[bullet[b].parent].harpoon &&
 	  GetLandUpH(bx, bz) > GetLandH(bx, bz)) {
 	  
-	  goto SKIPELEMENTS;
-  }
+	  //underwater model/ground impact sounds?
 
-  if (sres == tresGround) {
-	  AddElements(bx, by, bz, partGround, 6 + powerL * 4);
+	  if (sres != tresChar) return sres;
+	  // add in underwater body impact sounds
+	  if (!Characters[ShotDino].Health) return sres;
+
+  } else {
+	  if (sres == tresGround) {
+		  AddElements(bx, by, bz, partGround, 6 + powerL * 4);
+		  int sNo = rRand(2);
+		  AddVoice3dv(fxImpactGround[sNo].length, fxImpactGround[sNo].lpData, bx, by, bz, 256);
+	  }
+	  if (sres == tresModel) {
+		  AddElements(bx, by, bz, partGround, 6 + powerL * 4);
+		  int sNo = rRand(2);
+		  AddVoice3dv(fxImpactModel[sNo].length, fxImpactModel[sNo].lpData, bx, by, bz, 256);
+	  }
+
+	  if (sres == tresWater)
+	  {
+		  AddElements(bx, by, bz, partWater, 4 + powerL * 3);
+		  //AddElements(bx, GetLandH(bx, bz), bz, partBubble);
+		  //AddWCircle(bx, bz, 1.2);
+		  AddWCircle(bx, bz, 1.2);
+		  int sNo = rRand(2);
+		  AddVoice3dv(fxImpactWater[sNo].length, fxImpactWater[sNo].lpData, bx, by, bz, 256);
+	  }
+
+	  if (sres != tresChar) return sres;
+	  AddElements(bx, by, bz, partBlood, 4 + powerL * 4);
 	  int sNo = rRand(2);
-	  AddVoice3dv(fxImpactGround[sNo].length, fxImpactGround[sNo].lpData, bx, by, bz, 256);
+	  AddVoice3dv(fxImpactChar[sNo].length, fxImpactChar[sNo].lpData, bx, by, bz, 256);
+	  if (!Characters[ShotDino].Health) return sres;
   }
-  if (sres == tresModel){
-    AddElements(bx, by, bz, partGround, 6 + powerL *4);
-	int sNo = rRand(2);
-	AddVoice3dv(fxImpactModel[sNo].length, fxImpactModel[sNo].lpData, bx, by, bz, 256);
-  }
-
-  if (sres == tresWater)
-  {
-    AddElements(bx, by, bz, partWater, 4 + powerL *3);
-    //AddElements(bx, GetLandH(bx, bz), bz, partBubble);
-    //AddWCircle(bx, bz, 1.2);
-    AddWCircle(bx, bz, 1.2);
-	int sNo = rRand(2);
-	AddVoice3dv(fxImpactWater[sNo].length, fxImpactWater[sNo].lpData, bx, by, bz, 256);
-  }
-
-
-  if (sres!=tresChar) return sres;
-  AddElements(bx, by, bz, partBlood, 4 + powerL *4);
-  int sNo = rRand(2);
-  AddVoice3dv(fxImpactChar[sNo].length, fxImpactChar[sNo].lpData, bx, by, bz, 256);
-  if (!Characters[ShotDino].Health) return sres;
-
-SKIPELEMENTS:
 
 //======= character damage =========//
 

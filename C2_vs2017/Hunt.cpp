@@ -1268,7 +1268,7 @@ void ProcessShoot()
     v.x = PlayerX;
     v.y = PlayerY;
     v.z = PlayerZ;
-    MakeNoise(v, ctViewR*200 * WeapInfo[CurrentWeapon].Loud);
+    if (!UNDERWATER) MakeNoise(v, ctViewR*200 * WeapInfo[CurrentWeapon].Loud);
 	if (WeapInfo[CurrentWeapon].Reload) Chambered[CurrentWeapon]--;
     if (!SurvivalMode) ShotsLeft[CurrentWeapon]--;
 	else if (WeapInfo[CurrentWeapon].Reload) {
