@@ -1914,14 +1914,16 @@ int AnimateBullet(float ax, float ay, float az,
               float bx, float by, float bz, int b)
 {
   int sres;
-    sres = TraceShot(ax, ay, az, bx, by, bz, b);
+    sres = TraceShot(ax, ay, az, bx, by, bz);
 
 ENDTRACE:
+	bool poon = FALSE;
 	if (WeapInfo[bullet[b].parent].harpoon &&
 		GetLandUpH(bx, bz) > GetLandH(bx, bz) &&
-		GetLandUpH(bx, bz) > by)
-	if (!bullet[b].state) AddElements(bx, by, bz, partBubble, 1);
-
+		GetLandUpH(bx, bz) > by) {
+		poon = TRUE;
+		if (!bullet[b].state) AddElements(bx, by, bz, partBubble, 1);
+	}
   if (sres==-1) return sres;
 
   int mort = (sres & 0xFF00) && (Characters[ShotDino].Health);
@@ -1929,26 +1931,25 @@ ENDTRACE:
 
   int powerL = WeapInfo[CurrentWeapon].Power;
   if (powerL > 100) powerL = 100;
-
-  if (WeapInfo[bullet[b].parent].harpoon &&
-	  GetLandUpH(bx, bz) > GetLandH(bx, bz)) {
 	  
 	  //underwater model/ground impact sounds?
 
-	  if (sres != tresChar) return sres;
+	  //if (sres != tresChar) return sres;
 	  // add in underwater body impact sounds
-	  if (!Characters[ShotDino].Health) return sres;
+	  //if (!Characters[ShotDino].Health) return sres;
 
-  } else {
+  
 	  if (sres == tresGround) {
-		  AddElements(bx, by, bz, partGround, 6 + powerL * 4);
+		  if (!poon) AddElements(bx, by, bz, partGround, 6 + powerL * 4);
 		  int sNo = rRand(2);
-		  AddVoice3dv(fxImpactGround[sNo].length, fxImpactGround[sNo].lpData, bx, by, bz, 256);
+		  if (!UNDERWATER && !poon) AddVoice3dv(fxImpactGround[sNo].length, fxImpactGround[sNo].lpData, bx, by, bz, 256);
+		  if (UNDERWATER && poon) AddVoice3dv(fxImpactGround[sNo].length, fxImpactGround[sNo].lpData, bx, by, bz, 256); //change this to aquatic sound
 	  }
 	  if (sres == tresModel) {
-		  AddElements(bx, by, bz, partGround, 6 + powerL * 4);
+		  if (!poon) AddElements(bx, by, bz, partGround, 6 + powerL * 4);
 		  int sNo = rRand(2);
-		  AddVoice3dv(fxImpactModel[sNo].length, fxImpactModel[sNo].lpData, bx, by, bz, 256);
+		  if (!UNDERWATER && !poon) AddVoice3dv(fxImpactModel[sNo].length, fxImpactModel[sNo].lpData, bx, by, bz, 256);
+		  if (UNDERWATER && poon) AddVoice3dv(fxImpactModel[sNo].length, fxImpactModel[sNo].lpData, bx, by, bz, 256); //change this to aquatic sound
 	  }
 
 	  if (sres == tresWater)
@@ -1962,11 +1963,12 @@ ENDTRACE:
 	  }
 
 	  if (sres != tresChar) return sres;
-	  AddElements(bx, by, bz, partBlood, 4 + powerL * 4);
+	  if (!poon) AddElements(bx, by, bz, partBlood, 4 + powerL * 4);
 	  int sNo = rRand(2);
-	  AddVoice3dv(fxImpactChar[sNo].length, fxImpactChar[sNo].lpData, bx, by, bz, 256);
+	  if (!UNDERWATER && !poon) AddVoice3dv(fxImpactChar[sNo].length, fxImpactChar[sNo].lpData, bx, by, bz, 256);
+	  if (UNDERWATER && poon) AddVoice3dv(fxImpactChar[sNo].length, fxImpactChar[sNo].lpData, bx, by, bz, 256); //change this to aquatic sound
 	  if (!Characters[ShotDino].Health) return sres;
-  }
+  
 
 //======= character damage =========//
 
@@ -2038,11 +2040,12 @@ void AnimateBullets() {
 		} else {
 
 			Vector3d d = bullet[b].dif;
-			if (!bullet[b].submerged) 
-				if(WeapInfo[bullet[b].parent].harpoon &&
-					GetLandUpH(bullet[b].a.x, bullet[b].a.z) > GetLandH(bullet[b].a.x, bullet[b].a.z) &&
-					GetLandUpH(bullet[b].a.x, bullet[b].a.z) > bullet[b].a.y) bullet[b].submerged = true;
+			bool poon = FALSE;
+			if (WeapInfo[bullet[b].parent].harpoon &&
+				GetLandUpH(bullet[b].a.x, bullet[b].a.z) > GetLandH(bullet[b].a.x, bullet[b].a.z) &&
+				GetLandUpH(bullet[b].a.x, bullet[b].a.z) > bullet[b].a.y) poon = TRUE;
 
+			if (!bullet[b].submerged && poon) bullet[b].submerged = true;
 			if (bullet[b].submerged) {
 				d.x /= 2;
 				d.z /= 2;
@@ -2064,7 +2067,8 @@ void AnimateBullets() {
 			float pdz = PlayerZ - bullet[b].a.z;
 			float pd = pdx * pdx + pdz * pdz;
 
-			if (sres > 0 || pd > (256 * ctViewR) * (256 * ctViewR)) {
+			if ((sres > 0 && (!WeapInfo[bullet[b].parent].harpoon || sres!=tresWater)) || 
+				pd > (256 * ctViewR) * (256 * ctViewR)) {
 				if (WeapInfo[bullet[b].parent].retrieve && (sres == 1 || sres == 3)) {
 					bullet[b].state = 1;
 					bullet[b].a = TraceB;
@@ -2078,10 +2082,7 @@ void AnimateBullets() {
 				bullet[b].a.y += d.y;
 				bullet[b].a.z += d.z;
 				bullet[b].dif.y -= WeapInfo[bullet[b].parent].Fall;// / WeapInfo[bullet[b].parent].Veloc;
-				if (WeapInfo[bullet[b].parent].harpoon &&
-					GetLandUpH(bullet[b].a.x, bullet[b].a.z) > GetLandH(bullet[b].a.x, bullet[b].a.z) &&
-					GetLandUpH(bullet[b].a.x, bullet[b].a.z) < bullet[b].a.y)
-					bullet[b].dif.y -= WeapInfo[bullet[b].parent].Fall;
+				if (poon) bullet[b].dif.y -= WeapInfo[bullet[b].parent].Fall;
 
 				if (WeapInfo[bullet[b].parent].bullet) {
 					bullet[b].FTime += TimeDt;

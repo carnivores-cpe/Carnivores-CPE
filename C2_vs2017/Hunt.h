@@ -1006,7 +1006,7 @@ float FindVectorAlpha(float, float);
 float AngleDifference(float a, float b);
 
 int   TraceShot(float ax, float ay, float az,
-                float &bx, float &by, float &bz, int b);
+                float &bx, float &by, float &bz);
 int   TraceLook(float ax, float ay, float az,
                 float bx, float by, float bz);
 

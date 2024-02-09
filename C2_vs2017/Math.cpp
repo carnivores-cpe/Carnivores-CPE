@@ -510,7 +510,7 @@ int  TraceLook(float ax, float ay, float az,
 
 
 int  TraceShot(float  ax, float  ay, float az,
-               float &bx, float &by, float &bz, int b)
+               float &bx, float &by, float &bz)
 {
   TraceA.x = ax;
   TraceA.y = ay;
@@ -561,7 +561,6 @@ int  TraceShot(float  ax, float  ay, float az,
       }
       if (TraceCheckPlane(v[0], v[1], v[2])) TraceRes = tresGround;
 
-	  if (!WeapInfo[bullet[b].parent].harpoon)
       if ( (FMap[zz][xx] & fmWaterA)>0)
       {
         FillWGround(v[0], xx, zz);
