@@ -2128,7 +2128,6 @@ void registerDamage(int Dino) {
 		if (Characters[Dino].Clone != AI_TREX || Characters[Dino].State == 0)
 			Characters[Dino].State = 2;
 
-		if (GetLandUpH(Characters[Dino].pos.x, Characters[Dino].pos.z)== GetLandH(Characters[Dino].pos.x, Characters[Dino].pos.z))
 		Characters[Dino].BloodTTime += 90000;
 
 	}

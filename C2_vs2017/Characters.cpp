@@ -6861,7 +6861,6 @@ SKIPROT:
 
 void AnimateDeadFish(TCharacter *cptr)
 {
-	cptr->bend = 0;
 
 	if (cptr->Phase != DinoInfo[cptr->CType].deathType[cptr->deathType].fall && cptr->Phase != DinoInfo[cptr->CType].deathType[cptr->deathType].die)
 	{
@@ -6891,8 +6890,13 @@ void AnimateDeadFish(TCharacter *cptr)
 	//======= movement ===========//
 	if (cptr->Phase == DinoInfo[cptr->CType].deathType[cptr->deathType].die)
 		DeltaFunc(cptr->vspeed, 0, TimeDt / 400.f);
-	else
+	else {
 		DeltaFunc(cptr->vspeed, 0, TimeDt / 1200.f);
+		DeltaFunc(cptr->beta, 0, TimeDt / 1200.f);
+		DeltaFunc(cptr->gamma, 0, TimeDt / 1200.f);
+		DeltaFunc(cptr->bend, 0, TimeDt / 1200.f);
+	}
+
 
 	cptr->pos.x += cptr->lookx * cptr->vspeed * TimeDt;
 	cptr->pos.z += cptr->lookz * cptr->vspeed * TimeDt;
@@ -8028,8 +8032,8 @@ void AnimateCharacters()
 
 
 
-
-		if (cptr->Health)
+		if (GetLandUpH(cptr->pos.x, cptr->pos.z) == GetLandH(cptr->pos.x, cptr->pos.z))
+		  if (cptr->Health)
 			if (cptr->BloodTTime)
 			{
 				cptr->BloodTTime -= TimeDt;
