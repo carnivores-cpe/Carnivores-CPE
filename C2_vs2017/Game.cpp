@@ -632,10 +632,14 @@ void AddShipTask(int cindex)
   TCharacter *cptr = &Characters[cindex];
   cptr->claimed = true;
 
+  if (GetLandUpH(cptr->pos.x, cptr->pos.z) - GetLandH(cptr->pos.x, cptr->pos.z) < 100) {
+
     ShipTask.clist[ShipTask.tcount] = cindex;
     ShipTask.tcount++;
     AddVoicev(ShipModel.SoundFX[3].length,
               ShipModel.SoundFX[3].lpData, 256);
+
+  }
 
   //===== trophy =======//
   
@@ -2124,7 +2128,7 @@ void registerDamage(int Dino) {
 		if (Characters[Dino].Clone != AI_TREX || Characters[Dino].State == 0)
 			Characters[Dino].State = 2;
 
-		//if (Characters[Dino].AI != AI_BRACH) // I removed this :)
+		if (GetLandUpH(Characters[Dino].pos.x, Characters[Dino].pos.z)== GetLandH(Characters[Dino].pos.x, Characters[Dino].pos.z))
 		Characters[Dino].BloodTTime += 90000;
 
 	}

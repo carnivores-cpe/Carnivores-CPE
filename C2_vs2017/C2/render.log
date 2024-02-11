@@ -4,71 +4,71 @@ Checking 3dfx:
 Voodoo card.
 
  TEST: 0
- TES2: 0
+ TES2: -1
  TEST: 0
- TES2: 0
+ TES2: -1
  TEST: 0
- TES2: 0
+ TES2: -1
  TEST: 0
- TES2: 0
+ TES2: -1
  TEST: 0
- TES2: 0
+ TES2: -1
  TEST: 1
- TES2: 0
+ TES2: -1
  TEST: 1
- TES2: 0
+ TES2: -1
  TEST: 1
- TES2: 0
+ TES2: -1
  TEST: 1
- TES2: 0
+ TES2: -1
  TEST: 1
- TES2: 0
+ TES2: -1
  TEST: 1
- TES2: 0
+ TES2: -1
  TEST: 1
- TES2: 0
+ TES2: -1
  TEST: 1
- TES2: 0
+ TES2: -1
  TEST: 2
- TES2: 0
+ TES2: -1
  TEST: 2
- TES2: 0
+ TES2: -1
  TEST: 3
- TES2: 0
+ TES2: -1
  TEST: 3
- TES2: 0
+ TES2: -1
  TEST: 3
- TES2: 0
+ TES2: -1
  TEST: 3
- TES2: 0
+ TES2: -1
  TEST: 3
- TES2: 0
+ TES2: -1
  TEST: 3
- TES2: 0
+ TES2: -1
  TEST: 3
- TES2: 0
+ TES2: -1
  TEST: 4
- TES2: 0
+ TES2: -1
  TEST: 4
- TES2: 0
+ TES2: -1
  TEST: 4
- TES2: 0
+ TES2: -1
  TEST: 4
- TES2: 0
+ TES2: -1
  TEST: 4
- TES2: 0
+ TES2: -1
  TEST: 4
- TES2: 0
+ TES2: -1
  TEST: 4
- TES2: 0
+ TES2: -1
  TEST: 4
- TES2: 0
+ TES2: -1
  TEST: 4
- TES2: 0
+ TES2: -1
  TEST: 4
- TES2: 0
+ TES2: -1
  TEST: 4
- TES2: 0Trophy Loaded.
+ TES2: -1Trophy Loaded.
 TrophyB Loaded.
 Init Engine: Ok.
 
@@ -109,20 +109,15 @@ Loading area: Done.
 Entering messages loop.
 Entered game
 ReInitGame();
-Placing...
-Loading: HUNTDAT\hunter1_brach_mosa12.car
-Loading: HUNTDAT\mosh.car
-Loading: HUNTDAT\gall.car
-Loading: HUNTDAT\dimor2.car
-Loading: HUNTDAT\ptera.car
-Loading: HUNTDAT\dimet.car
-Loading: HUNTDAT\par9.car
+Placing Trophies...Loading: HUNTDAT\hunter1_brach_mosa12.car
+Loading: HUNTDAT\anky_tt.car
 Loading: HUNTDAT\stego_tt.car
+Loading: HUNTDAT\allot_iictt.car
+Loading: HUNTDAT\chasmosa_tt.car
 Loading: HUNTDAT\alpharaptor.car
 Loading: HUNTDAT\veloteeth5_iidct2.car
 Loading: HUNTDAT\spino_stt.car
-Loading: HUNTDAT\dangerbrachikiller9.car
-Loading: HUNTDAT\mosa30ss.car
+Loading: HUNTDAT\mosa32.car
 Loading: HUNTDAT\WEAPONS\pistol.car
 Loading: HUNTDAT\WEAPONS\pistolbullet1.car
 Loading: HUNTDAT\WEAPONS\bullet1.tga
@@ -148,6 +143,9 @@ Voodoo: Can't set selected video mode
 Start Address: 0
 End   Address: 8388592
 Audio_UpdateGeometry: 324 faces uploaded
+Trophy removed: Mosasaurus
+Trophy Saved.
+TrophyB Saved.
 Trophy Saved.
 TrophyB Saved.
   AudioStop ()

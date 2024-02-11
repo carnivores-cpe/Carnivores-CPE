@@ -1521,7 +1521,7 @@ killtype{
 
 {
  name = 'Mosasaurus'
- file = 'mosa30ss.car'
+ file = 'mosa32.car'
  ai  = 33
  overwrite area1 {
  spawngroup{
@@ -1530,6 +1530,10 @@ killtype{
   spawnrate = 0.5
  }
  }
+deathtype{
+ fallAnim = 5
+ dieAnim = 6
+}
  DangerFish = TRUE
  aggress   = 200
  killdist  = 380

@@ -2181,6 +2181,7 @@ void AnimateDimorDead(TCharacter *cptr)
 */
 
 
+
 //universal animate dead proc
 void AnimateDeadCommon(TCharacter *cptr)
 {
@@ -6858,6 +6859,72 @@ SKIPROT:
 
 
 
+void AnimateDeadFish(TCharacter *cptr)
+{
+	cptr->bend = 0;
+
+	if (cptr->Phase != DinoInfo[cptr->CType].deathType[cptr->deathType].fall && cptr->Phase != DinoInfo[cptr->CType].deathType[cptr->deathType].die)
+	{
+		cptr->deathPhase = cptr->Phase;
+		if (cptr->PPMorphTime > 128)
+		{
+			cptr->PrevPhase = cptr->Phase;
+			cptr->PrevPFTime = cptr->FTime;
+			cptr->PPMorphTime = 0;
+		}
+
+		cptr->FTime = 0;
+		cptr->Phase = DinoInfo[cptr->CType].deathType[cptr->deathType].fall;
+		cptr->rspeed = 0;
+		ActivateCharacterFx(cptr);
+		return;
+	}
+
+	ProcessPrevPhase(cptr);
+
+	float lh = GetLandH(cptr->pos.x, cptr->pos.z);
+
+	cptr->FTime += TimeDt;
+	if (cptr->FTime >= cptr->pinfo->Animation[cptr->Phase].AniTime) cptr->FTime = cptr->pinfo->Animation[cptr->Phase].AniTime - 1;
+
+
+	//======= movement ===========//
+	if (cptr->Phase == DinoInfo[cptr->CType].deathType[cptr->deathType].die)
+		DeltaFunc(cptr->vspeed, 0, TimeDt / 400.f);
+	else
+		DeltaFunc(cptr->vspeed, 0, TimeDt / 1200.f);
+
+	cptr->pos.x += cptr->lookx * cptr->vspeed * TimeDt;
+	cptr->pos.z += cptr->lookz * cptr->vspeed * TimeDt;
+
+	if (cptr->Phase == DinoInfo[cptr->CType].deathType[cptr->deathType].fall)
+	{
+		cptr->pos.y += cptr->rspeed * TimeDt / 30000;
+		cptr->rspeed -= TimeDt * 2.56;
+
+		if (cptr->pos.y <= lh)
+		{
+			cptr->pos.y = lh;
+
+			//if (cptr->PPMorphTime > 128)
+			//{
+			//	cptr->PrevPhase = cptr->Phase;
+			//	cptr->PrevPFTime = cptr->FTime;
+			//	cptr->PPMorphTime = 0;
+			//}
+			
+			cptr->Phase = DinoInfo[cptr->CType].deathType[cptr->deathType].die;
+			cptr->FTime = 0;
+			ActivateCharacterFx(cptr);
+		}
+	}
+	else
+	{
+		ThinkY_Beta_Gamma(cptr, 140, 126, 0.6f, 0.5f);
+		DeltaFunc(cptr->gamma, cptr->tggamma, TimeDt / 1600.f);
+	}
+
+}
 
 
 
@@ -7984,10 +8051,10 @@ void AnimateCharacters()
 			cptr->heardShot = FALSE;
 		}
 
-		BOOL TROPHYON = (GetLandUpH(cptr->pos.x, cptr->pos.z) - GetLandH(cptr->pos.x, cptr->pos.z) < 100);
+		
 
 		//disp ship info
-		if (!cptr->Health && TROPHYON && DinoInfo[cptr->CType].trophy) {
+		if (!cptr->Health && DinoInfo[cptr->CType].trophy) {
 			if (fabs(VectorLength(SubVectors(PlayerPos, cptr->pos))) < DinoInfo[cptr->CType].Radius) {
 				TrophyDisplayBody.ctype = cptr->CType;
 				TrophyDisplayBody.scale = cptr->scale;
@@ -8006,7 +8073,8 @@ void AnimateCharacters()
 		{
 		case AI_MOSA:
 		case AI_FISH:
-			AnimateFish(cptr);
+			if (cptr->Health) AnimateFish(cptr);
+			else AnimateDeadFish(cptr);
 			break;
 		case AI_BRACH:
 			if (cptr->Health) AnimateBrahiOld(cptr);
