@@ -6875,7 +6875,7 @@ void AnimateDeadFish(TCharacter *cptr)
 		cptr->FTime = 0;
 		cptr->Phase = DinoInfo[cptr->CType].deathType[cptr->deathType].fall;
 		cptr->rspeed = 0;
-		ActivateCharacterFx(cptr);
+		ActivateCharacterFxAquatic(cptr);
 		return;
 	}
 
@@ -6919,7 +6919,7 @@ void AnimateDeadFish(TCharacter *cptr)
 			
 			cptr->Phase = DinoInfo[cptr->CType].deathType[cptr->deathType].die;
 			cptr->FTime = 0;
-			ActivateCharacterFx(cptr);
+			ActivateCharacterFxAquatic(cptr);
 		}
 	}
 	else

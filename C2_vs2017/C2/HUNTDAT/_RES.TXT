@@ -1521,7 +1521,7 @@ killtype{
 
 {
  name = 'Mosasaurus'
- file = 'mosa32.car'
+ file = 'mosa36.car'
  ai  = 33
  overwrite area1 {
  spawngroup{
@@ -1587,6 +1587,129 @@ killtype{
  radR = 240
  radG = 100
  radB = 100
+}
+
+{
+ name = 'Climatius'
+ file = 'climatius4.car'
+ ai  = 32
+ overwrite area1 {
+ spawngroup{
+  spawnmax = 4
+  spawnmin = 2
+  spawnrate = 0.5
+  moveForward = TRUE
+ }
+}
+deathtype{
+ fallAnim = 2
+ dieAnim = 3
+}
+ aggress   = 7
+ radius    = 256
+ health    = 1
+ scale0    = 1000
+ scaleA    = 600
+ shipdelta = 0
+ maxdepth = 10000
+ mindepth = 2500
+ spcdepth = 100
+ wlkspd = 0.25
+ runspd = 0.55
+ runAnim = 1
+ walkAnim = 0
+ bloR = 112
+ bloG = 0
+ bloB = 0
+ weaveRange = 0
+}
+
+{
+ name = 'Parexus'
+ file = 'parexusn5.car'
+ ai  = 32
+ overwrite area1 {
+  spawngroup{
+   spawnmax = 3
+   spawnmin = 1
+   spawnrate = 0.4
+   moveForward = TRUE
+   styInRgn = TRUE
+   region{
+    xmin = 322
+    ymin = 277
+    xmax = 493
+    ymax = 411
+   }
+   region{
+    xmin = 285
+    ymin = 586
+    xmax = 391
+    ymax = 691
+   }
+  } 
+ }
+deathtype{
+ fallAnim = 2
+ dieAnim = 3
+}
+ aggress   = 7
+ radius    = 256
+ health    = 1
+ scale0    = 1000
+ scaleA    = 600
+ shipdelta = 0
+ maxdepth = 1000
+ mindepth = 450
+ spcdepth = 73
+ wlkspd = 0.25
+ runspd = 0.55
+ runAnim = 1
+ walkAnim = 0
+ bloR = 112
+ bloG = 0
+ bloB = 0
+ weaveRange = 0
+}
+
+{
+ name = 'Pink Parexus'
+ file = 'parexusn5_pink.car'
+ ai  = 32
+ overwrite area1 {
+  spawngroup{
+   spawnmax = 7
+   spawnmin = 4
+   spawnrate = 0.4
+   region{
+    xmax = 757
+    xmin = 718
+    ymax = 133
+    ymin = 94
+   }
+  } 
+ }
+deathtype{
+ fallAnim = 2
+ dieAnim = 3
+}
+ aggress   = 7
+ radius    = 256
+ health    = 1
+ scale0    = 1000
+ scaleA    = 600
+ shipdelta = 0
+ maxdepth = 10000
+ mindepth = 200
+ spcdepth = 100
+ wlkspd = 0.25
+ runspd = 0.55
+ runAnim = 1
+ walkAnim = 0
+ bloR = 112
+ bloG = 0
+ bloB = 0
+ weaveRange = 0
 }
 
 

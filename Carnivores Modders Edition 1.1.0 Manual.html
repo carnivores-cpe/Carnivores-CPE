@@ -279,6 +279,7 @@ function expand(n) {
 			    <li>Supply Ship - adjust keybind in the options menu.</li>
 			    <li>Decide which trophies to take back to the trophy room.</li>
 			    <li>Non-trophy creatures can still give points using basescore.</li>
+				<li>Killable fish/mosasaurus.</li>
 				<li>Up to 32 active snow types per hunt.</li>
 				
 				<!--<li>You can now hide creatures on the hunt menu until the player can afford them</li>-->
@@ -6239,7 +6240,7 @@ idlegroup{
 		Defines the death animations for a creature.
 		</p>
 		<p>
-		This subsection can be defined multiple times, a deathType will be randomly picked when the creature dies. Each creature can have up to 32 deathTypes, and must have at least 1 (except fish and mosasaurus AI).		
+		This subsection can be defined multiple times, a deathType will be randomly picked when the creature dies. Each creature can have up to 32 deathTypes, and must have at least 1.
 		</p>
 		
 		
@@ -6288,7 +6289,9 @@ idlegroup{
 				<div class="grid-item">Ichthyornis</div>
 				<div class="grid-item">7</div>
 				<div class="grid-item">Fish</div>
-				<div class="grid-item">N/A</div>
+				<div class="grid-item">3</div>
+				<div class="grid-item">Mosasaurus</div>
+				<div class="grid-item">6</div>
 				
 				<div class="grid-item">Parasaurolophus</div>
 				<div class="grid-item">4</div>
@@ -6353,7 +6356,8 @@ idlegroup{
 			Position of a sleep animation in the CAR file (starting from 0).
 			</p>
 			<p>
-			Note: Ichthyornis AI creatures will not play the sleep animation if they are shot in flight.
+			Note: Dimorphodon, Pteranodon, Mosasaurus and Fish AI creatures will not play a sleep animation. 
+			Ichthyornis AI creatures will not play the sleep animation if they are shot in flight.
 			</p>
 			
 			<div class="grid-container">
@@ -6381,6 +6385,8 @@ idlegroup{
 				<div class="grid-item">Ichthyornis</div>
 				<div class="grid-item">8</div>
 				<div class="grid-item">Fish</div>
+				<div class="grid-item">N/A</div>
+				<div class="grid-item">Mosasaurus</div>
 				<div class="grid-item">N/A</div>
 				
 				<div class="grid-item">Parasaurolophus</div>
@@ -6443,7 +6449,7 @@ idlegroup{
 		
 			<p><b>Data type: Whole Number</b></p>
 			<p>
-			Position of a fall animation in the CAR file (starting from 0) (Only for dimorphodon, pteranodon and ichthyornis AI).
+			Position of a fall animation in the CAR file (starting from 0) (Only for mosasaurus, fish and dimorphodon, pteranodon and ichthyornis AI).
 			</p>
 			
 			<div class="grid-container">
@@ -6455,6 +6461,10 @@ idlegroup{
 				<div class="grid-item">2</div>
 				<div class="grid-item">Ichthyornis</div>
 				<div class="grid-item">6</div>
+				<div class="grid-item">Fish</div>
+				<div class="grid-item">2</div>
+				<div class="grid-item">Mosasaurus</div>
+				<div class="grid-item">5</div>
 			</div>
 		
 		</div>
@@ -6476,6 +6486,10 @@ idlegroup{
 			<p><b>Data type: TRUE/FALSE</b></p>
 			<p>
 			If set to TRUE the creature will not play a sleep animation.
+			</p>
+			<p>
+			Note: Dimorphodon, Pteranodon, Mosasaurus and Fish AI creatures will not play a sleep animation. 
+			Ichthyornis AI creatures will not play the sleep animation if they are shot in flight.
 			</p>
 			
 		
