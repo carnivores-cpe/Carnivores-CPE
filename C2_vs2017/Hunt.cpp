@@ -607,10 +607,10 @@ SKIPWIND:
 	  if (Weapon.BTime >= 4000) {
 		  Weapon.BTime = 4000;
 		  Weapon.HoldBreath = false;
-		  if (Weapon.breathPressed==1) AddVoicev(fxBreathOut.length, fxBreathOut.lpData, 256);
+		  if (Weapon.breathPressed==1 && !UNDERWATER) AddVoicev(fxBreathOut.length, fxBreathOut.lpData, 256);
 		  Weapon.breathPressed = 2;
 	  }
-  } else if (Weapon.BTime) {
+  } else if (Weapon.BTime && !UNDERWATER) {
 	  Weapon.BTime -= TimeDt*2;
 	  if (Weapon.BTime < 0) Weapon.BTime = 0;
   }
@@ -1192,12 +1192,12 @@ void ProcessShoot()
   //if (HeadBackR) return;
 	int clickNo = rRand(2);
 	if (!ShotsLeft[CurrentWeapon]) {
-		if (!alreadyFired) AddVoicev(fxClick[clickNo].length, fxClick[clickNo].lpData, 256);
+		if (!alreadyFired && !UNDERWATER) AddVoicev(fxClick[clickNo].length, fxClick[clickNo].lpData, 256);
 		return;
 	}
   if (WeapInfo[CurrentWeapon].Reload && !DEBUG)
 	  if (!Chambered[CurrentWeapon]) {
-		  if (!alreadyFired) AddVoicev(fxClick[clickNo].length, fxClick[clickNo].lpData, 256);
+		  if (!alreadyFired && !UNDERWATER) AddVoicev(fxClick[clickNo].length, fxClick[clickNo].lpData, 256);
 		  return;
 	  }
 
@@ -1457,7 +1457,7 @@ void ProcessPlayerMovement()
   if (KeyboardState[KeyMap.fkDown] & 128) AddShipSupply(PlayerX,PlayerZ);
 
   if (Weapon.state) {
-	  if (KeyboardState[KeyMap.fkLeft] & 128) {
+	  if (KeyboardState[KeyMap.fkLeft] & 128 && !UNDERWATER) {
 		  if (Weapon.breathPressed == 0) {
 			  AddVoicev(fxBreathIn.length, fxBreathIn.lpData, 256);
 			  Weapon.breathPressed = 1;
@@ -1469,7 +1469,7 @@ void ProcessPlayerMovement()
 	  else {
 		  if (Weapon.HoldBreath) {
 			  Weapon.HoldBreath = false;
-			  if (Weapon.breathPressed == 1) AddVoicev(fxBreathOut.length, fxBreathOut.lpData, 256);
+			  if (Weapon.breathPressed == 1 && !UNDERWATER) AddVoicev(fxBreathOut.length, fxBreathOut.lpData, 256);
 		  }
 		  Weapon.breathPressed = 0;
 	  }

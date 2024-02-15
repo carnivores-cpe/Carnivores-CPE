@@ -211,7 +211,6 @@ weapons {
  radTime = 30000
  recoil = 6
  shake = 0.05
- harpoon = TRUE
 }
 
 {
@@ -262,8 +261,8 @@ weapons {
 
 
 {
- name  = 'Harpoon'
- file  = 'x_bow.car'
+ name  = 'Speargun'
+ file  = 'speargun12.car'
  pic   = 'bullet6.tga'
  bModel= 'harpoon2.car'
  getAnim = 0
@@ -1538,6 +1537,8 @@ deathtype{
  aggress   = 200
  killdist  = 380
  radius    = 256
+ mass      = 0.3
+ length    = 4.0
  health    = 16
  scale0    = 1000
  scaleA    = 600
@@ -1607,6 +1608,8 @@ deathtype{
 }
  aggress   = 7
  radius    = 256
+ mass      = 0.1
+ length    = 0.8
  health    = 1
  scale0    = 1000
  scaleA    = 600
@@ -1655,6 +1658,8 @@ deathtype{
 }
  aggress   = 7
  radius    = 256
+ mass      = 0.1
+ length    = 0.8
  health    = 1
  scale0    = 1000
  scaleA    = 600
@@ -1695,6 +1700,8 @@ deathtype{
 }
  aggress   = 7
  radius    = 256
+ mass      = 0.1
+ length    = 0.8
  health    = 1
  scale0    = 1000
  scaleA    = 600
