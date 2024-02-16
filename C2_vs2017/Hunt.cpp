@@ -554,7 +554,8 @@ SKIPWIND:
 
   if (wptr->state == 3)
   {
-    wptr->FTime+=TimeDt;
+	  if (UNDERWATER) wptr->FTime += TimeDt / 2.f;
+	  else wptr->FTime+=TimeDt;
     if (wptr->FTime >= wptr->chinfo[CurrentWeapon].Animation[WeapInfo[CurrentWeapon].putAnim].AniTime)
     {
       wptr->FTime = 0;
@@ -1162,8 +1163,16 @@ void ProcessReload() {
 				{
 					wptr->state = 4;
 					wptr->FTime = 1;
-					AddVoicev(wptr->chinfo[CurrentWeapon].SoundFX[3].length,
-						wptr->chinfo[CurrentWeapon].SoundFX[3].lpData, 256);
+					if (UNDERWATER) {
+						if (WeapInfo[CurrentWeapon].rldAqSnd >= 0)
+							AddVoicev(wptr->chinfo[CurrentWeapon].SoundFX[WeapInfo[CurrentWeapon].rldAqSnd].length,
+								wptr->chinfo[CurrentWeapon].SoundFX[WeapInfo[CurrentWeapon].rldAqSnd].lpData, 256);
+					}
+					else {
+						int fx = wptr->chinfo[CurrentWeapon].Anifx[WeapInfo[CurrentWeapon].rldAnim];
+						if (fx) AddVoicev(wptr->chinfo[CurrentWeapon].SoundFX[fx].length,
+							wptr->chinfo[CurrentWeapon].SoundFX[fx].lpData, 256);
+					}
 				}
 			}
 			
@@ -1178,8 +1187,16 @@ void ProcessReload() {
 			{
 				wptr->state = 4;
 				wptr->FTime = 1;
-				AddVoicev(wptr->chinfo[CurrentWeapon].SoundFX[3].length,
-					wptr->chinfo[CurrentWeapon].SoundFX[3].lpData, 256);
+				if (UNDERWATER) {
+					if (WeapInfo[CurrentWeapon].rldAqSnd >= 0)
+						AddVoicev(wptr->chinfo[CurrentWeapon].SoundFX[WeapInfo[CurrentWeapon].rldAqSnd].length,
+							wptr->chinfo[CurrentWeapon].SoundFX[WeapInfo[CurrentWeapon].rldAqSnd].lpData, 256);
+				}
+				else {
+					int fx = wptr->chinfo[CurrentWeapon].Anifx[WeapInfo[CurrentWeapon].rldAnim];
+					if (fx) AddVoicev(wptr->chinfo[CurrentWeapon].SoundFX[fx].length,
+						wptr->chinfo[CurrentWeapon].SoundFX[fx].lpData, 256);
+				}
 			}
 		}
 
@@ -1219,9 +1236,18 @@ void ProcessShoot()
 	rx *= (float)WeapInfo[CurrentWeapon].recoil / 100.f;
 	Recoil.x += rx;
 
-    AddVoicev(wptr->chinfo[CurrentWeapon].SoundFX[1].length,
-              wptr->chinfo[CurrentWeapon].SoundFX[1].lpData, 256);
-    TrophyRoom.Last.smade++;
+	if (UNDERWATER) {
+		if (WeapInfo[CurrentWeapon].shtAqSnd >= 0)
+			AddVoicev(wptr->chinfo[CurrentWeapon].SoundFX[WeapInfo[CurrentWeapon].shtAqSnd].length,
+				wptr->chinfo[CurrentWeapon].SoundFX[WeapInfo[CurrentWeapon].shtAqSnd].lpData, 256);
+	}
+	else {
+		int fx = wptr->chinfo[CurrentWeapon].Anifx[WeapInfo[CurrentWeapon].shtAnim];
+		if (fx) AddVoicev(wptr->chinfo[CurrentWeapon].SoundFX[fx].length,
+			wptr->chinfo[CurrentWeapon].SoundFX[fx].lpData, 256);
+	}
+	
+	TrophyRoom.Last.smade++;
 
 	if (WeapInfo[CurrentWeapon].MuzzFlash) {
 		Muzz = true;

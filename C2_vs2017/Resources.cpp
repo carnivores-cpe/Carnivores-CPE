@@ -3033,6 +3033,11 @@ void ReadWeapons(FILE *stream)
 		if (strstr(line, "shtAnim"))  WeapInfo[TotalW].shtAnim = atoi(value);
 		if (strstr(line, "rldAnim"))  WeapInfo[TotalW].rldAnim = atoi(value);
 
+		if (strstr(line, "getAqSnd"))  WeapInfo[TotalW].getAqSnd = atoi(value);
+		if (strstr(line, "putAqSnd"))  WeapInfo[TotalW].putAqSnd = atoi(value);
+		if (strstr(line, "shtAqSnd"))  WeapInfo[TotalW].shtAqSnd = atoi(value);
+		if (strstr(line, "rldAqSnd"))  WeapInfo[TotalW].rldAqSnd = atoi(value);
+
         if (strstr(line, "power"))  WeapInfo[TotalW].Power = (float)atof(value);
 		if (strstr(line, "veloc"))  WeapInfo[TotalW].Veloc = (float)atof(value);
         if (strstr(line, "prec"))   WeapInfo[TotalW].Prec  = (float)atof(value);

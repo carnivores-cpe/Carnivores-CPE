@@ -813,6 +813,10 @@ typedef struct _TWeapInfo
   float Power, Prec, Loud, Rate, Veloc, Fall;
   int Shots, TraceC, Reload, SFXIndex;
   int shtAnim, getAnim, putAnim, rldAnim;
+  int shtAqSnd = -1;
+  int getAqSnd = -1;
+  int putAqSnd = -1;
+  int rldAqSnd = -1;
   float shake, Optic;
   bool unzoom, harpoon;
 

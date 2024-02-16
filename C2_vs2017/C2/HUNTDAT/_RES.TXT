@@ -196,7 +196,6 @@ weapons {
  getAnim = 0
  shtAnim = 1
  putAnim = 2
- rldAnim = 3
  shots = 6
  fall = 0.6
  power = 6
@@ -262,13 +261,13 @@ weapons {
 
 {
  name  = 'Speargun'
- file  = 'speargun12.car'
+ file  = 'speargun14.car'
  pic   = 'bullet6.tga'
  bModel= 'harpoon2.car'
  getAnim = 0
  shtAnim = 1
  putAnim = 2
- rldAnim = 3
+ shtAqSnd = 3
  shots = 6
  power = 6
  prec  = 2.0
