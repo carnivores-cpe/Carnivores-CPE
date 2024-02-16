@@ -1720,7 +1720,7 @@ void refillWeapons() {
 		{
 			ShotsLeft[w] = WeapInfo[w].Shots;
 			if (DoubleAmmo) {
-				if (WeapInfo[w].Reload) {
+				if (WeapInfo[w].Reload || WeapInfo[w].rldAnim < 0) {
 					ShotsLeft[w] *= 2;
 					Chambered[w] = WeapInfo[w].Reload;
 				}

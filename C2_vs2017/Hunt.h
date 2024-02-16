@@ -812,7 +812,10 @@ typedef struct _TWeapInfo
   bool retrieve;
   float Power, Prec, Loud, Rate, Veloc, Fall;
   int Shots, TraceC, Reload, SFXIndex;
-  int shtAnim, getAnim, putAnim, rldAnim;
+  int shtAnim = -1;
+  int getAnim = -1;
+  int putAnim = -1;
+  int rldAnim = -1;
   int shtAqSnd = -1;
   int getAqSnd = -1;
   int putAqSnd = -1;
