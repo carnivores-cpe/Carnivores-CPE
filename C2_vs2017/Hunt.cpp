@@ -1261,8 +1261,13 @@ void ProcessShoot()
       float rA = 0;
       float rB = 0;
 
-      rA = siRand(128) * 0.00010 * (2.f - WeapInfo[CurrentWeapon].Prec);
-      rB = siRand(128) * 0.00010 * (2.f - WeapInfo[CurrentWeapon].Prec);
+	  if (UNDERWATER) {
+		  rA = siRand(128) * 0.00010 * (2.f - WeapInfo[CurrentWeapon].PrecAq);
+		  rB = siRand(128) * 0.00010 * (2.f - WeapInfo[CurrentWeapon].PrecAq);
+	  }else{
+		  rA = siRand(128) * 0.00010 * (2.f - WeapInfo[CurrentWeapon].Prec);
+		  rB = siRand(128) * 0.00010 * (2.f - WeapInfo[CurrentWeapon].Prec);
+	  }
 
 
       float ca = (float)cos(PlayerAlpha + wpnDAlpha + rA);
@@ -1278,10 +1283,18 @@ void ProcessShoot()
       nv.y=-sb;
       nv.z*=cb;
 
+	  float v = WeapInfo[CurrentWeapon].Veloc;
+	  if (UNDERWATER) v = WeapInfo[CurrentWeapon].VelocAq;
+	  float l = WeapInfo[CurrentWeapon].Veloc;
+	  if (WeapInfo[CurrentWeapon].aqLow) l = WeapInfo[CurrentWeapon].VelocAq;
+
       AddBullet(PlayerX, PlayerY+HeadY, PlayerZ,
-               nv.x * 64* WeapInfo[CurrentWeapon].Veloc,
-               nv.y * 64* WeapInfo[CurrentWeapon].Veloc,
-               nv.z * 64* WeapInfo[CurrentWeapon].Veloc,
+               nv.x * 64* v,
+               nv.y * 64* v,
+	           nv.z * 64* v,
+		  nv.x * 64 * l,
+		  nv.y * 64 * l,
+		  nv.z * 64 * l,
 			   CurrentWeapon
 			   );
     }

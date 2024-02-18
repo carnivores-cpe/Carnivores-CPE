@@ -320,8 +320,9 @@ typedef struct _TWeapon
 
 typedef struct _TBullet
 {
-	bool submerged;
-	Vector3d a,dif,rpos;
+	float fallTotal;
+	byte aqState; //0 land //1 aqua //2 min
+	Vector3d a,dif,ldif,rpos;
 	int parent, state;
 	int FTime, RTime;
 	float alpha, beta;
@@ -823,6 +824,13 @@ typedef struct _TWeapInfo
   float shake, Optic;
   bool unzoom, harpoon;
 
+  bool aqLow; //parent velocAq < veloc
+
+  float PowerAq = -1;
+  float PrecAq = -1;
+  float VelocAq = -1;
+  float FallAq = -1;
+
   bool onRadar;
   byte radarRed, radarGreen, radarBlue;
   WORD radarColour565, radarColour555;
@@ -1087,6 +1095,7 @@ void RemoveCurrentTrophy();
 void MakeCall();
 void AddBullet(float ax, float ay, float az,
               float bx, float by, float bz,
+			  float blx, float bly, float blz,
 	int);
 int AnimateBullet(float ax, float ay, float az,
 	float bx, float by, float bz, int b);

@@ -117,6 +117,8 @@ Loading: HUNTDAT\dimor2.car
 Loading: HUNTDAT\ptera.car
 Loading: HUNTDAT\dimet.car
 Loading: HUNTDAT\par9.car
+Loading: HUNTDAT\stego_tt.car
+Loading: HUNTDAT\allot_iictt.car
 Loading: HUNTDAT\chasmosa_tt.car
 Loading: HUNTDAT\alpharaptor.car
 Loading: HUNTDAT\veloteeth5_iidct2.car
@@ -143,13 +145,30 @@ Loading: HUNTDAT\WEAPONS\bullet3.tga
 Loading: HUNTDAT\WEAPONS\sniper.car
 Loading: HUNTDAT\WEAPONS\riflebullet1.car
 Loading: HUNTDAT\WEAPONS\bullet3.tga
-Loading: HUNTDAT\WEAPONS\speargun14.car
+Loading: HUNTDAT\WEAPONS\speargun15.car
 Loading: HUNTDAT\WEAPONS\harpoon2.car
 Loading: HUNTDAT\WEAPONS\bullet6.tga
 Voodoo: Can't set selected video mode
 Start Address: 0
 End   Address: 8388592
 Audio_UpdateGeometry: 324 faces uploaded
+Trophy Loaded.
+TrophyB Loaded.
+  AudioStop ()
+Entered game
+ReInitGame();
+Placing...
+Loading: HUNTDAT\anky_tt.car
+Loading: HUNTDAT\WEAPONS\pistolbullet1.car
+Loading: HUNTDAT\WEAPONS\shotgunbullet1.car
+Loading: HUNTDAT\WEAPONS\shotgunbullet1.car
+Loading: HUNTDAT\WEAPONS\arrow9.car
+Loading: HUNTDAT\WEAPONS\riflebullet1.car
+Loading: HUNTDAT\WEAPONS\riflebullet1.car
+Loading: HUNTDAT\WEAPONS\harpoon2.car
+Voodoo: Can't set selected video mode
+Start Address: 0
+End   Address: 8388592
 Trophy Saved.
 TrophyB Saved.
   AudioStop ()

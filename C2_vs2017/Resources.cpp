@@ -3017,6 +3017,9 @@ void ReadWeapons(FILE *stream)
 			WeapInfo[TotalW].crossColour565 = ((WeapInfo[TotalW].crossRed >> 3) << 11) | ((WeapInfo[TotalW].crossGreen >> 2) << 5) | (WeapInfo[TotalW].crossBlue >> 3);
 			WeapInfo[TotalW].crossColour555 = ((WeapInfo[TotalW].crossRed >> 3) << 10) | ((WeapInfo[TotalW].crossGreen >> 3) << 5) | (WeapInfo[TotalW].crossBlue >> 3);
 
+			if (WeapInfo[TotalW].Veloc > WeapInfo[TotalW].VelocAq) WeapInfo[TotalW].aqLow = TRUE;
+			else WeapInfo[TotalW].aqLow = FALSE;
+
           TotalW++;
           break;
         }
@@ -3038,16 +3041,22 @@ void ReadWeapons(FILE *stream)
 		if (strstr(line, "shtAqSnd"))  WeapInfo[TotalW].shtAqSnd = atoi(value);
 		if (strstr(line, "rldAqSnd"))  WeapInfo[TotalW].rldAqSnd = atoi(value);
 
-        if (strstr(line, "power"))  WeapInfo[TotalW].Power = (float)atof(value);
-		if (strstr(line, "veloc"))  WeapInfo[TotalW].Veloc = (float)atof(value);
-        if (strstr(line, "prec"))   WeapInfo[TotalW].Prec  = (float)atof(value);
+		if (strstr(line, "land_power"))  WeapInfo[TotalW].Power = (float)atof(value);
+		if (strstr(line, "land_veloc"))  WeapInfo[TotalW].Veloc = (float)atof(value);
+		if (strstr(line, "land_prec"))   WeapInfo[TotalW].Prec  = (float)atof(value);
+		if (strstr(line, "land_fall"))   WeapInfo[TotalW].Fall = (float)atof(value);
+
+		if (strstr(line, "aqua_power"))  WeapInfo[TotalW].PowerAq = (float)atof(value);
+		if (strstr(line, "aqua_veloc"))  WeapInfo[TotalW].VelocAq = (float)atof(value);
+		if (strstr(line, "aqua_prec"))   WeapInfo[TotalW].PrecAq = (float)atof(value);
+		if (strstr(line, "aqua_fall"))   WeapInfo[TotalW].FallAq = (float)atof(value);
+
         if (strstr(line, "loud"))   WeapInfo[TotalW].Loud  = (float)atof(value);
         if (strstr(line, "rate"))   WeapInfo[TotalW].Rate  = (float)atof(value);
         if (strstr(line, "shots"))  WeapInfo[TotalW].Shots =        atoi(value);
         if (strstr(line, "reload")) WeapInfo[TotalW].Reload=        atoi(value);
         if (strstr(line, "trace"))  WeapInfo[TotalW].TraceC=        atoi(value)-1;
         if (strstr(line, "optic"))  WeapInfo[TotalW].Optic = (float)atof(value);
-        if (strstr(line, "fall"))   WeapInfo[TotalW].Fall  = (float)atof(value);
         //if (strstr(line, "price")) WeapInfo[TotalW].Price =        atoi(value);
 
 		if (strstr(line, "unzoom")) readBool(value, WeapInfo[TotalW].unzoom);

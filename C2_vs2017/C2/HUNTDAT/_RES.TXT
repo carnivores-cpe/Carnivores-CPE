@@ -129,9 +129,9 @@ weapons {
  shtAnim = 1
  putAnim = 2
  rldAnim = 3
- power = 2
- veloc = 12.0
- prec  = 0.8
+ land_power = 2
+ land_veloc = 12.0
+ land_prec  = 0.8
  loud  = 0.8
  rate  = 1.6
  shots = 8
@@ -151,9 +151,9 @@ weapons {
  shtAnim = 1
  putAnim = 2
  rldAnim = 3
- power = 1
- veloc = 12.0
- prec  = 0.3
+ land_power = 1
+ land_veloc = 12.0
+ land_prec  = 0.3
  loud  = 1.5
  rate  = 1.2
  trace = 6
@@ -174,9 +174,9 @@ weapons {
  shtAnim = 1
  putAnim = 2
  rldAnim = 3
- power = 1
- veloc = 12.0
- prec  = 0.2
+ land_power = 1
+ land_veloc = 12.0
+ land_prec  = 0.2
  loud  = 1.9
  rate  = 1.2
  trace = 6
@@ -197,10 +197,10 @@ weapons {
  shtAnim = 1
  putAnim = 2
  shots = 6
- fall = 0.6
- power = 6
- veloc = 4.0
- prec  = 2.0
+ land_fall = 0.6
+ land_power = 6
+ land_veloc = 4.0
+ land_prec  = 2.0
  loud  = 0.4
  rate  = 1.0
  retrieve = TRUE
@@ -222,9 +222,9 @@ weapons {
  shtAnim = 1
  putAnim = 2
  rldAnim = 3
- power = 4
- veloc = 23.0
- prec  = 1.8
+ land_power = 4
+ land_veloc = 23.0
+ land_prec  = 1.8
  loud  = 1.5
  rate  = 1.0
  shots = 7
@@ -243,12 +243,12 @@ weapons {
  shtAnim = 1
  putAnim = 2
  rldAnim = 3
- power = 4
- veloc = 23.0
+ land_power = 4
+ land_veloc = 23.0
  optic = 3.0
  cross = TRUE
  croB = 255
- prec  = 2.0
+ land_prec  = 2.0
  loud  = 0.0
  rate  = 1.0
  shots = 7
@@ -261,7 +261,7 @@ weapons {
 
 {
  name  = 'Speargun'
- file  = 'speargun14.car'
+ file  = 'speargun15.car'
  pic   = 'bullet6.tga'
  bModel= 'harpoon2.car'
  getAnim = 0
@@ -269,16 +269,20 @@ weapons {
  putAnim = 2
  shtAqSnd = 3
  shots = 6
- power = 6
- prec  = 2.0
+ land_power = 9
+ land_prec  = 1.0
+ land_veloc = 3.0
+ land_fall = 0.9
  loud  = 0.4
  rate  = 1.0
  retrieve = TRUE
- recoil = 6
+ recoil = 3
  shake = 0.05
  harpoon = TRUE
- veloc = 3.0
- fall = 0.4
+ aqua_power = 6
+ aqua_prec  = 1.8
+ aqua_veloc = 1.8
+ aqua_fall = 0.05
 }
 
 
@@ -1538,7 +1542,7 @@ deathtype{
  radius    = 256
  mass      = 0.3
  length    = 4.0
- health    = 16
+ health    = 12
  scale0    = 1000
  scaleA    = 600
  shipdelta = 0

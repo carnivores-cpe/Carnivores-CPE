@@ -293,33 +293,37 @@ function expand(n) {
 			</p>-->
 			
 						</p>
-			<b>Note: Save files from Modders Edition prior to 1.0.3 or from vanilla Carnivores 2 are not compatible with this version.
-			As of 1.0.5 reordering trophy information in the _RES will cause problems with trophies in existing saves.</b>
+						<p>
+						<b>Note: As of 1.1.0, power, prec and fall in the RES have been renamed to land_power, land_prec and land_fall</b>
+						</p>
+			Note: Save files from Modders Edition prior to 1.0.3 or from vanilla Carnivores 2 are not compatible with this version.
+			As of 1.0.5 reordering trophy information in the _RES will cause problems with trophies in existing saves.
 			<p>
 			
-			<b>Note: As of 1.0.5, AI should be used to set a creatures AI, not Clone.</b>
+			Note: As of 1.0.5, AI should be used to set a creatures AI, not Clone.
 			
 			<p>
-			<b>Note: As of 1.0.5, all creatures are defined within the characters section of the _RES.</b>
+			Note: As of 1.0.5, all creatures are defined within the characters section of the _RES.
 			</p>
 			
-			<b>Note: As of 1.0.5, radar should now be set to TRUE or FALSE (a char overwrite can be used for huntables).</b>
+			Note: As of 1.0.5, radar should now be set to TRUE or FALSE (a char overwrite can be used for huntables).
 
 			<p>
-			<b>Note: As of 1.0.5, fearCall should now use numbers 0-8 (or 0-9) to specify which call to fear.</b>
+			Note: As of 1.0.5, fearCall should now use numbers 0-8 (or 0-9) to specify which call to fear.
 			</p>
 			
-			<b>Note: As of 1.0.5, all creatures need a hearK value to react to gunshots (default 0.5).</b>
+			Note: As of 1.0.5, all creatures need a hearK value to react to gunshots (default 0.5).
 			
 			<p>
 	
-			<b>Note: An account must be created with the Carn2 menu before you can run survival mode.</b>
+			Note: An account must be created with the Carn2 menu before you can run survival mode.
 			
 </p><p>
 			
 			
-			<b>Note: smell, hear and look in the RES have been renamed to smellK, hearK and lookK</b>
+			Note: smell, hear and look in the RES have been renamed to smellK, hearK and lookK
 			</p>
+			
 			
 			
 			<h3>Bug Fixes v1.1.0</h3>
@@ -2218,7 +2222,7 @@ reduced by the whole value of densityMulti. e.g. in the above screenshot, the ma
 		-ms-user-select: none;"
 		>></h2>
 	<div class = "con" style="margin-left:4%">
-		<h2 onclick="expand(172)" style="cursor:pointer;">_RES value: veloc</h2>
+		<h2 onclick="expand(172)" style="cursor:pointer;">_RES value: land_veloc</h2>
 		<div id="content_172" style="display: none">
 		
 			<p><b>Data type: Decimal Number</b></p>
@@ -2254,7 +2258,7 @@ reduced by the whole value of densityMulti. e.g. in the above screenshot, the ma
 		-ms-user-select: none;"
 		>></h2>
 	<div class = "con" style="margin-left:4%">
-		<h2 onclick="expand(173)" style="cursor:pointer;">_RES value: fall</h2>
+		<h2 onclick="expand(173)" style="cursor:pointer;">_RES value: land_fall</h2>
 		<div id="content_173" style="display: none">
 		
 			<p><b>Data type: Decimal Number</b></p>
@@ -2263,7 +2267,7 @@ reduced by the whole value of densityMulti. e.g. in the above screenshot, the ma
 
 		</div>
 	</div>
-</p>		
+</p>
 
 <p style="margin-top:4%;">
 	<h2 id="arrow_186" unselectable="on" onclick="expand(186)"
@@ -2509,6 +2513,30 @@ reduced by the whole value of densityMulti. e.g. in the above screenshot, the ma
 
 
 
+		
+			
+<p style="margin-top:4%;">
+	<h2 id="arrow_195" unselectable="on" onclick="expand(195)"
+		style="float:left;margin-top:0;cursor:pointer;
+		-moz-user-select:none;
+		user-select:none;
+		-webkit-user-select: none;
+		-ms-user-select: none;"
+		>></h2>
+	<div class = "con" style="margin-left:4%">
+		<h2 onclick="expand(195)" style="cursor:pointer;">_RES value: aqua_power, aqua_veloc, aqua_prec, aqua_fall</h2>
+		<div id="content_195" style="display: none">
+		
+		Required for harpoon weapons. These are equivalent to land_ values but affect the weapon underwater.
+		<br>
+		Note: Bullets cannot accelerate if they leave/enter the water.
+
+		</div>
+	</div>
+</p>
+
+
+
 
 <p style="margin-top:4%;">
 	<h2 id="arrow_191" unselectable="on" onclick="expand(191)"
@@ -2523,7 +2551,7 @@ reduced by the whole value of densityMulti. e.g. in the above screenshot, the ma
 		<div id="content_191" style="display: none">
 		
 			<p><b>Data type: Whole Number</b></p>
-			Optional. The position of the get sound to play when underwater. If not defined, then no sound will play.
+			Optional. The position in the car file of the get sound to play when underwater. If not defined, then no sound will play.
 			</div>
 	</div>
 </p>
@@ -2544,7 +2572,7 @@ reduced by the whole value of densityMulti. e.g. in the above screenshot, the ma
 		<div id="content_192" style="display: none">
 		
 			<p><b>Data type: Whole Number</b></p>
-			Optional. The position of the fire sound to play when underwater. If not defined, then no sound will play.
+			Optional. The position in the car file of the fire sound to play when underwater. If not defined, then no sound will play.
 			</div>
 	</div>
 </p>
@@ -2565,7 +2593,7 @@ reduced by the whole value of densityMulti. e.g. in the above screenshot, the ma
 		<div id="content_193" style="display: none">
 		
 			<p><b>Data type: Whole Number</b></p>
-			Optional. The position of the put sound to play when underwater. If not defined, then no sound will play.
+			Optional. The position in the car file of the put sound to play when underwater. If not defined, then no sound will play.
 			</div>
 	</div>
 </p>
@@ -2586,7 +2614,7 @@ reduced by the whole value of densityMulti. e.g. in the above screenshot, the ma
 		<div id="content_194" style="display: none">
 		
 			<p><b>Data type: Whole Number</b></p>
-			Optional. The position of the reload sound to play when underwater. If not defined, then no sound will play.
+			Optional. The position in the car file of the reload sound to play when underwater. If not defined, then no sound will play.
 			</div>
 	</div>
 </p>
@@ -2607,6 +2635,8 @@ reduced by the whole value of densityMulti. e.g. in the above screenshot, the ma
 			<p><b>Data type: TRUE/FALSE</b></p>
 			
 			If set to true, weapon will have a muzzle flash effect when fired.
+			<br>
+			Note: Will not appear on harpoon weapons when submerged.
 			
 		</div>
 	</div>

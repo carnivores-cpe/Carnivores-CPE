@@ -1949,6 +1949,7 @@ ENDTRACE:
   sres &= 0xFF;
 
   int powerL = WeapInfo[CurrentWeapon].Power;
+  if (poon) powerL = WeapInfo[CurrentWeapon].PowerAq;
   if (powerL > 100) powerL = 100;
 	  
 	  //underwater model/ground impact sounds?
@@ -1998,10 +1999,16 @@ ENDTRACE:
 
   if (Multiplayer && !Host) {
 	  if (mort) sendDamage[ShotDino] = Characters[ShotDino].Health;
-	  else sendDamage[ShotDino] += WeapInfo[CurrentWeapon].Power;
+	  else {
+		  if (poon) sendDamage[ShotDino] += WeapInfo[CurrentWeapon].PowerAq;
+		  else sendDamage[ShotDino] += WeapInfo[CurrentWeapon].Power;
+	  }
   } else {
 	  if (mort) Characters[ShotDino].Health = 0;
-	  else Characters[ShotDino].Health -= WeapInfo[CurrentWeapon].Power;
+	  else {
+		  if (poon) Characters[ShotDino].Health -= WeapInfo[CurrentWeapon].PowerAq;
+		  else Characters[ShotDino].Health -= WeapInfo[CurrentWeapon].Power;
+	  }
 	  if (Characters[ShotDino].Health < 0) Characters[ShotDino].Health = 0;
 	  registerDamage(ShotDino);
   }
@@ -2014,6 +2021,7 @@ ENDTRACE:
 
 void AddBullet(float ax, float ay, float az,
 	float Dx, float Dy, float Dz,
+	float Dlx, float Dly, float Dlz,
 	int parent)
 {
 	bullet[bulletCh].a.x = ax;
@@ -2022,13 +2030,18 @@ void AddBullet(float ax, float ay, float az,
 	bullet[bulletCh].dif.x = Dx;
 	bullet[bulletCh].dif.y = Dy;
 	bullet[bulletCh].dif.z = Dz;
+	bullet[bulletCh].ldif.x = Dlx;
+	bullet[bulletCh].ldif.y = Dly;
+	bullet[bulletCh].ldif.z = Dlz;
 	bullet[bulletCh].parent = parent;
+	bullet[bulletCh].fallTotal = 0;
 	bullet[bulletCh].state = 0;
 	bullet[bulletCh].alpha = FindVectorAlpha(Dx, Dz);
 	bullet[bulletCh].beta = FindVectorAlpha(sqrt(Dz*Dz + Dx*Dx), Dy);
 	if (WeapInfo[parent].onRadar) bullet[bulletCh].RTime = 1;
 	if (WeapInfo[parent].radarTime) bullet[bulletCh].RTime = WeapInfo[parent].radarTime;
-	bullet[bulletCh].submerged = false;
+	if (UNDERWATER) bullet[bulletCh].aqState = 1;
+	else bullet[bulletCh].aqState = 0;
 	bulletCh++;
 }
 
@@ -2061,14 +2074,26 @@ void AnimateBullets() {
 			bool poon = FALSE;
 			if (WeapInfo[bullet[b].parent].harpoon &&
 				GetLandUpH(bullet[b].a.x, bullet[b].a.z) > GetLandH(bullet[b].a.x, bullet[b].a.z) &&
-				GetLandUpH(bullet[b].a.x, bullet[b].a.z) > bullet[b].a.y) poon = TRUE;
+				GetLandUpH(bullet[b].a.x, bullet[b].a.z) > bullet[b].a.y)
+				poon = TRUE;
 
-			if (!bullet[b].submerged && poon) bullet[b].submerged = true;
+			if (bullet[b].aqState<2)
+				if ((poon && bullet[b].aqState == 0) ||
+					(!poon && bullet[b].aqState == 1)) {
+					bullet[b].aqState = 2;
+					bullet[b].dif = bullet[b].ldif;
+					bullet[b].dif.y -= bullet[b].fallTotal;
+					d = bullet[b].dif;
+				}
+
+			/*
 			if (bullet[b].submerged) {
-				d.x /= 2;
-				d.z /= 2;
-				d.y /= 2;
+
+			//	d.x /= 2;
+			//	d.z /= 2;
+			//	d.y /= 2;
 			}
+   		    */
 
 			int sres = AnimateBullet(
 				bullet[b].a.x,
@@ -2099,9 +2124,13 @@ void AnimateBullets() {
 				bullet[b].a.x += d.x;
 				bullet[b].a.y += d.y;
 				bullet[b].a.z += d.z;
-				bullet[b].dif.y -= WeapInfo[bullet[b].parent].Fall;// / WeapInfo[bullet[b].parent].Veloc;
-				if (poon) bullet[b].dif.y -= WeapInfo[bullet[b].parent].Fall;
-
+				if (poon) {
+					bullet[b].dif.y -= WeapInfo[bullet[b].parent].FallAq;
+					if (bullet[b].aqState<2) bullet[b].fallTotal += WeapInfo[bullet[b].parent].FallAq;
+				} else {
+					bullet[b].dif.y -= WeapInfo[bullet[b].parent].Fall;
+					if (bullet[b].aqState < 2) bullet[b].fallTotal += WeapInfo[bullet[b].parent].Fall;
+				}
 				if (WeapInfo[bullet[b].parent].bullet) {
 					bullet[b].FTime += TimeDt;
 					if (bullet[b].FTime >= Weapon.Bullet[bullet[b].parent].Animation[0].AniTime)
