@@ -6039,12 +6039,10 @@ SKIPROT:
 	float tbeta = -atan((cptr->tdepth - cptr->depth) / tdist22);
 
 	if (cptr->turny < (pi)) {
-		cptr->beta = (((cos(cptr->turny) + 1) / 2) * (cptr->lastTBeta - tbeta)) + tbeta;
+		tbeta = (((cos(cptr->turny) + 1) / 2) * (cptr->lastTBeta - tbeta)) + tbeta;
 		cptr->turny += pi / 100;
 	}
-	else {
-		cptr->beta = tbeta;
-	}
+	DeltaFunc(cptr->beta,tbeta, cptr->vspeed * TimeDt * cptr->scale*(pi/5000));
 
 	if (cptr->Clone == AI_MOSA && cptr->Phase == DinoInfo[cptr->CType].walkAnim) {
 		//cptr->depth -= cptr->beta * 10;
