@@ -139,6 +139,11 @@ weapons {
  recoil = 2
  shake = 0.05
  harpoon = TRUE
+ aqua_power = 2
+ aqua_veloc = 12.0
+ aqua_prec  = 0.8
+ harpoon = TRUE
+ recoil = 0
 }
 
 {
@@ -1597,6 +1602,8 @@ killtype{
  name = 'Climatius'
  file = 'climatius4.car'
  ai  = 32
+ radar = TRUE
+ radG = 130
  overwrite area1 {
  spawngroup{
   spawnmax = 4

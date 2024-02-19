@@ -1749,7 +1749,10 @@ void Characters_AddSecondaryOne(TCharacter *cptr)
 	if (!spawnGroup[cptr->SpawnGroupType].moveForward) return;
 
 	if (ChCount > 64) return;
-	Characters[ChCount].CType = cptr->CType;;
+	Characters[ChCount].CType = cptr->CType;
+	Characters[ChCount].SpawnGroupType = cptr->SpawnGroupType;
+	Characters[ChCount].Clone = cptr->Clone;
+	Characters[ChCount].cpcpAquatic = cptr->cpcpAquatic;
 	int tr = 0;
 replace1:
 	tr++;
@@ -1761,29 +1764,29 @@ replace1:
 
 	
 	BOOL outside = true;
-	for (int sr = 0; sr < spawnGroup[cptr->SpawnGroupType].spawnRegionCh; sr++) {
-		if (cptr->pos.x > spawnGroup[cptr->SpawnGroupType].spawnRegion[sr].XMin * 256 &&
-			cptr->pos.x < spawnGroup[cptr->SpawnGroupType].spawnRegion[sr].XMax * 256 &&
-			cptr->pos.z > spawnGroup[cptr->SpawnGroupType].spawnRegion[sr].YMin * 256 &&
-			cptr->pos.z < spawnGroup[cptr->SpawnGroupType].spawnRegion[sr].YMax * 256) outside = false;
+	for (int sr = 0; sr < spawnGroup[Characters[ChCount].SpawnGroupType].spawnRegionCh; sr++) {
+		if (Characters[ChCount].pos.x > spawnGroup[Characters[ChCount].SpawnGroupType].spawnRegion[sr].XMin * 256 &&
+			Characters[ChCount].pos.x < spawnGroup[Characters[ChCount].SpawnGroupType].spawnRegion[sr].XMax * 256 &&
+			Characters[ChCount].pos.z > spawnGroup[Characters[ChCount].SpawnGroupType].spawnRegion[sr].YMin * 256 &&
+			Characters[ChCount].pos.z < spawnGroup[Characters[ChCount].SpawnGroupType].spawnRegion[sr].YMax * 256) outside = false;
 	}
 	if (outside) goto replace1;
-	if (spawnGroup[cptr->SpawnGroupType].avoidRegionCh) {
-		for (int ar = 0; ar < spawnGroup[cptr->SpawnGroupType].avoidRegionCh; ar++) {
-			if (cptr->pos.x > spawnGroup[cptr->SpawnGroupType].avoidRegion[ar].XMin * 256 &&
-				cptr->pos.x < spawnGroup[cptr->SpawnGroupType].avoidRegion[ar].XMax * 256 &&
-				cptr->pos.z > spawnGroup[cptr->SpawnGroupType].avoidRegion[ar].YMin * 256 &&
-				cptr->pos.z < spawnGroup[cptr->SpawnGroupType].avoidRegion[ar].YMax * 256) goto replace1;
+	if (spawnGroup[Characters[ChCount].SpawnGroupType].avoidRegionCh) {
+		for (int ar = 0; ar < spawnGroup[Characters[ChCount].SpawnGroupType].avoidRegionCh; ar++) {
+			if (Characters[ChCount].pos.x > spawnGroup[Characters[ChCount].SpawnGroupType].avoidRegion[ar].XMin * 256 &&
+				Characters[ChCount].pos.x < spawnGroup[Characters[ChCount].SpawnGroupType].avoidRegion[ar].XMax * 256 &&
+				Characters[ChCount].pos.z > spawnGroup[Characters[ChCount].SpawnGroupType].avoidRegion[ar].YMin * 256 &&
+				Characters[ChCount].pos.z < spawnGroup[Characters[ChCount].SpawnGroupType].avoidRegion[ar].YMax * 256) goto replace1;
 		}
 	}
 
-	if (cptr->Clone == AI_BRACH || cptr->Clone == AI_BRACHDANGER || cptr->Clone == AI_ICTH) {
+	if (Characters[ChCount].Clone == AI_BRACH || Characters[ChCount].Clone == AI_BRACHDANGER || Characters[ChCount].Clone == AI_ICTH) {
 		if (CheckPlaceCollisionBrahiP(Characters[ChCount].pos))goto replace1;
-	} else if (cptr->Clone == AI_FISH || cptr->Clone == AI_MOSA) {
+	} else if (Characters[ChCount].Clone == AI_FISH || Characters[ChCount].Clone == AI_MOSA) {
 		if (CheckPlaceCollisionFishP(Characters[ChCount].pos,
-			DinoInfo[cptr->CType].minDepth,
-			DinoInfo[cptr->CType].maxDepth)) goto replace1;
-	} else if (CheckPlaceCollisionP(Characters[ChCount].pos, cptr->cpcpAquatic)) goto replace1;
+			DinoInfo[Characters[ChCount].CType].minDepth,
+			DinoInfo[Characters[ChCount].CType].maxDepth)) goto replace1;
+	} else if (CheckPlaceCollisionP(Characters[ChCount].pos, Characters[ChCount].cpcpAquatic)) goto replace1;
 	
 
 	if (fabs(Characters[ChCount].pos.x - PlayerX) +
@@ -1794,8 +1797,9 @@ replace1:
 	Characters[ChCount].tgz = Characters[ChCount].pos.z;
 	Characters[ChCount].tgtime = 0;
 
-	if (cptr->Clone == AI_FISH || cptr->Clone == AI_MOSA) {
-		cptr->pos.y = GetLandUpH(cptr->pos.x, cptr->pos.z) - ((GetLandUpH(cptr->pos.x, cptr->pos.z) - GetLandH(cptr->pos.x, cptr->pos.z)) / 2);
+	if (Characters[ChCount].Clone == AI_FISH || Characters[ChCount].Clone == AI_MOSA) {
+		Characters[ChCount].pos.y = GetLandUpH(Characters[ChCount].pos.x, Characters[ChCount].pos.z) -
+			((GetLandUpH(Characters[ChCount].pos.x, Characters[ChCount].pos.z) - GetLandH(Characters[ChCount].pos.x, Characters[ChCount].pos.z)) / 2);
 	}
 
 	Characters[ChCount].packId = -1;	//Classic ambient- no pack hunting
@@ -8058,7 +8062,7 @@ void AnimateCharacters()
 		
 
 		//disp ship info
-		if (!cptr->Health && DinoInfo[cptr->CType].trophy) {
+		if (!cptr->Health && DinoInfo[cptr->CType].trophy && !SurvivalMode) {
 			if (fabs(VectorLength(SubVectors(PlayerPos, cptr->pos))) < DinoInfo[cptr->CType].Radius) {
 				TrophyDisplayBody.ctype = cptr->CType;
 				TrophyDisplayBody.scale = cptr->scale;
