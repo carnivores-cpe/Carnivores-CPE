@@ -1963,13 +1963,13 @@ ENDTRACE:
 		  if (!poon) AddElements(bx, by, bz, partGround, 6 + powerL * 4);
 		  int sNo = rRand(2);
 		  if (!UNDERWATER && !poon) AddVoice3dv(fxImpactGround[sNo].length, fxImpactGround[sNo].lpData, bx, by, bz, 256);
-		  if (UNDERWATER && poon) AddVoice3dv(fxImpactGround[sNo].length, fxImpactGround[sNo].lpData, bx, by, bz, 256); //change this to aquatic sound
+		  if (UNDERWATER && poon) AddVoice3dv(fxImpactAquatic[sNo].length, fxImpactAquatic[sNo].lpData, bx, by, bz, 256);
 	  }
 	  if (sres == tresModel) {
 		  if (!poon) AddElements(bx, by, bz, partGround, 6 + powerL * 4);
 		  int sNo = rRand(2);
 		  if (!UNDERWATER && !poon) AddVoice3dv(fxImpactModel[sNo].length, fxImpactModel[sNo].lpData, bx, by, bz, 256);
-		  if (UNDERWATER && poon) AddVoice3dv(fxImpactModel[sNo].length, fxImpactModel[sNo].lpData, bx, by, bz, 256); //change this to aquatic sound
+		  if (UNDERWATER && poon) AddVoice3dv(fxImpactAquatic[sNo].length, fxImpactAquatic[sNo].lpData, bx, by, bz, 256); //change this to aquatic sound
 	  }
 
 	  if (sres == tresWater)
@@ -1986,7 +1986,7 @@ ENDTRACE:
 	  if (!poon) AddElements(bx, by, bz, partBlood, 4 + powerL * 4);
 	  int sNo = rRand(2);
 	  if (!UNDERWATER && !poon) AddVoice3dv(fxImpactChar[sNo].length, fxImpactChar[sNo].lpData, bx, by, bz, 256);
-	  if (UNDERWATER && poon) AddVoice3dv(fxImpactChar[sNo].length, fxImpactChar[sNo].lpData, bx, by, bz, 256); //change this to aquatic sound
+	  if (UNDERWATER && poon) AddVoice3dv(fxImpactAquatic[sNo].length, fxImpactAquatic[sNo].lpData, bx, by, bz, 256); //change this to aquatic sound
 	  if (!Characters[ShotDino].Health) return sres;
   
 

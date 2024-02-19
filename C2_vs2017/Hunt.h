@@ -1167,6 +1167,7 @@ _EXTORNOT   TSFX    fxClick[3];
 _EXTORNOT   TSFX    fxBreathIn;
 _EXTORNOT   TSFX    fxBreathOut;
 _EXTORNOT   TSFX    fxCollect[3];
+_EXTORNOT   TSFX    fxImpactAquatic[3];
 _EXTORNOT   TSFX    fxImpactGround[3];
 _EXTORNOT   TSFX    fxImpactModel[3];
 _EXTORNOT   TSFX    fxImpactWater[3];
