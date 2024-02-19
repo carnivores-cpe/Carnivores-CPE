@@ -2490,7 +2490,7 @@ void RenderModel(TModel* _mptr, float x0, float y0, float z0, int light, int VT,
 {
   int f;
 
-  if (fabs(y0) > -(z0-256*6)) return;
+//  if (fabs(y0) > -(z0-256*6)) return;
 
   mptr = _mptr;
 
@@ -2664,7 +2664,7 @@ void RenderBMPModel(TBMPModel* mptr, float x0, float y0, float z0, int light)
 {
   int f;
 
-  if (fabs(y0) > -(z0-256*6)) return;
+//  if (fabs(y0) > -(z0-256*6)) return;
 
   int minx = 10241024;
   int maxx =-10241024;

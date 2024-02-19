@@ -212,6 +212,9 @@ weapons {
  radar = TRUE
  radB = 240
  radG = 100
+ radR = 0
+ radG = 240
+ radB = 0
  radTime = 30000
  recoil = 6
  shake = 0.05
@@ -252,9 +255,8 @@ weapons {
  land_veloc = 23.0
  optic = 3.0
  cross = TRUE
- croB = 255
  land_prec  = 2.0
- loud  = 0.0
+ loud  = 1.5
  rate  = 1.0
  shots = 7
  recoil = 4
