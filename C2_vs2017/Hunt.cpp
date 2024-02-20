@@ -702,7 +702,7 @@ SKIPWEAPON:
 	  
 	  if (AmmoMag[CurrentWeapon])
 		  for (int bl=0; bl< MagShotsLeft[CurrentWeapon]; bl++)
-			  DrawPicture(6 + bl*Weapon.BulletPic[CurrentWeapon].W, y0, Weapon.BulletPic[CurrentWeapon]);
+			  DrawPicture(6 + bl*Weapon.BulletPic2[CurrentWeapon].W, y0, Weapon.BulletPic2[CurrentWeapon]);
 	}
   }
 

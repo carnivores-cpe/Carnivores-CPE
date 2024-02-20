@@ -306,6 +306,7 @@ typedef struct _TWeapon
 {
   TCharacterInfo chinfo[10];
   TPicture       BulletPic[10];
+  TPicture       BulletPic2[10];
   TCharacterInfo Bullet[10];
 
   Vector3d*       normals;
@@ -807,7 +808,8 @@ typedef struct _TSpawnGroup
 
 typedef struct _TWeapInfo
 {
-  char Name[48], FName[48], BFName[48], BLName[48], SFXName[48];
+	bool pic2b = false;
+  char Name[48], FName[48], BFName[48], BF2Name[48], BLName[48], SFXName[48];
   bool MGSSound = FALSE;
   bool bullet = FALSE;
   bool retrieve;
