@@ -2996,11 +2996,132 @@ void ReadAreaTable (FILE *stream, int areaNumber)
 }
 
 
+void ReadWeaponLine(FILE *stream, char *_value, char line[256]) {
+	char *value = _value;
+
+	if (strstr(line, "getAnim"))  WeapInfo[TotalW].getAnim = atoi(value);
+	if (strstr(line, "putAnim"))  WeapInfo[TotalW].putAnim = atoi(value);
+	if (strstr(line, "shtAnim"))  WeapInfo[TotalW].shtAnim = atoi(value);
+	if (strstr(line, "rldAnim"))  WeapInfo[TotalW].rldAnim = atoi(value);
+
+	if (strstr(line, "getAqSnd"))  WeapInfo[TotalW].getAqSnd = atoi(value);
+	if (strstr(line, "putAqSnd"))  WeapInfo[TotalW].putAqSnd = atoi(value);
+	if (strstr(line, "shtAqSnd"))  WeapInfo[TotalW].shtAqSnd = atoi(value);
+	if (strstr(line, "rldAqSnd"))  WeapInfo[TotalW].rldAqSnd = atoi(value);
+
+	if (strstr(line, "land_power"))  WeapInfo[TotalW].Power = (float)atof(value);
+	if (strstr(line, "land_veloc"))  WeapInfo[TotalW].Veloc = (float)atof(value);
+	if (strstr(line, "land_prec"))   WeapInfo[TotalW].Prec = (float)atof(value);
+	if (strstr(line, "land_fall"))   WeapInfo[TotalW].Fall = (float)atof(value);
+
+	if (strstr(line, "aqua_power"))  WeapInfo[TotalW].PowerAq = (float)atof(value);
+	if (strstr(line, "aqua_veloc"))  WeapInfo[TotalW].VelocAq = (float)atof(value);
+	if (strstr(line, "aqua_prec"))   WeapInfo[TotalW].PrecAq = (float)atof(value);
+	if (strstr(line, "aqua_fall"))   WeapInfo[TotalW].FallAq = (float)atof(value);
+
+	if (strstr(line, "loud"))   WeapInfo[TotalW].Loud = (float)atof(value);
+	if (strstr(line, "rate"))   WeapInfo[TotalW].Rate = (float)atof(value);
+	if (strstr(line, "shots"))  WeapInfo[TotalW].Shots = atoi(value);
+	if (strstr(line, "reload")) WeapInfo[TotalW].Reload = atoi(value);
+	if (strstr(line, "trace"))  WeapInfo[TotalW].TraceC = atoi(value) - 1;
+	if (strstr(line, "optic"))  WeapInfo[TotalW].Optic = (float)atof(value);
+	//if (strstr(line, "price")) WeapInfo[TotalW].Price =        atoi(value);
+
+	if (strstr(line, "unzoom")) readBool(value, WeapInfo[TotalW].unzoom);
+
+	if (strstr(line, "harpoon")) readBool(value, WeapInfo[TotalW].harpoon);
+
+	if (strstr(line, "cross")) readBool(value, WeapInfo[TotalW].cross);
+	if (strstr(line, "croR")) WeapInfo[TotalW].crossRed = atoi(value);
+	if (strstr(line, "croG")) WeapInfo[TotalW].crossGreen = atoi(value);
+	if (strstr(line, "croB")) WeapInfo[TotalW].crossBlue = atoi(value);
+
+	if (strstr(line, "shake"))   WeapInfo[TotalW].shake = (float)atof(value);
+
+	if (strstr(line, "radar")) readBool(value, WeapInfo[TotalW].onRadar);
+	if (strstr(line, "radR")) WeapInfo[TotalW].radarRed = atoi(value);
+	if (strstr(line, "radG")) WeapInfo[TotalW].radarGreen = atoi(value);
+	if (strstr(line, "radB")) WeapInfo[TotalW].radarBlue = atoi(value);
+	if (strstr(line, "radTime"))  WeapInfo[TotalW].radarTime = atoi(value);
+
+	if (strstr(line, "muzzflash")) readBool(value, WeapInfo[TotalW].MuzzFlash);
+
+	if (strstr(line, "recoil"))  WeapInfo[TotalW].recoil = atoi(value);
+
+	if (strstr(line, "retrieve")) readBool(value, WeapInfo[TotalW].retrieve);
+
+	if (strstr(line, "name"))
+	{
+		value = strstr(line, "'");
+		if (!value) DoHalt("Script loading error: Weapons name");
+		value[strlen(value) - 2] = 0;
+		strcpy(WeapInfo[TotalW].Name, &value[1]);
+	}
+
+	if (strstr(line, "file"))
+	{
+		value = strstr(line, "'");
+		if (!value) DoHalt("Script loading error: Weapons file");
+		value[strlen(value) - 2] = 0;
+		strcpy(WeapInfo[TotalW].FName, &value[1]);
+	}
+
+	if (strstr(line, "gunshot"))
+	{
+		value = strstr(line, "'");
+		if (!value) DoHalt("Script loading error: Weapons gunshot");
+		value[strlen(value) - 2] = 0;
+		strcpy(WeapInfo[TotalW].SFXName, &value[1]);
+		WeapInfo[TotalW].MGSSound = TRUE;
+	}
+
+
+	if (strstr(line, "pic"))
+	{
+		value = strstr(line, "'");
+		if (!value) DoHalt("Script loading error: Weapons pic");
+		value[strlen(value) - 2] = 0;
+		strcpy(WeapInfo[TotalW].BFName, &value[1]);
+	}
+
+
+	if (strstr(line, "bModel"))
+	{
+		value = strstr(line, "'");
+		if (!value) DoHalt("Script loading error: Weapons bullet");
+		value[strlen(value) - 2] = 0;
+		strcpy(WeapInfo[TotalW].BLName, &value[1]);
+		WeapInfo[TotalW].bullet = TRUE;
+	}
+
+}
 
 
 void ReadWeapons(FILE *stream)
 {
+
+	//area
+	char tempProjectName[128];
+	int timeOfDay, dinSelect;
+	for (int a = 0; a < __argc; a++)
+	{
+		LPSTR s = __argv[a];
+		if (strstr(s, "prj="))
+		{
+			strcpy(tempProjectName, (s + 4));
+		}
+		if (strstr(s, "dtm=")) timeOfDay = atoi(&s[4]);
+		if (strstr(s, "din=")) dinSelect = (atoi(&s[4]) * 1024);
+	}
+
+	//time
+	for (int a = 0; a < __argc; a++)
+	{
+		LPSTR s = __argv[a];
+	}
+
   TotalW = 0;
+
   char line[256], *value;
   while (fgets( line, 255, stream))
   {
@@ -3024,107 +3145,128 @@ void ReadWeapons(FILE *stream)
           break;
         }
         value = strstr(line, "=");
-		if (!value) {
+
+		if (!value &&
+			!strstr(line, "overwrite") &&
+			!strstr(line, "addition")) {
 			char errorBuff[100];
 			sprintf(errorBuff, "Script loading error: Weapons: %s", WeapInfo[TotalW].Name);
 			DoHalt(errorBuff);
 		}
         value++;
 
-		if (strstr(line, "getAnim"))  WeapInfo[TotalW].getAnim = atoi(value);
-		if (strstr(line, "putAnim"))  WeapInfo[TotalW].putAnim = atoi(value);
-		if (strstr(line, "shtAnim"))  WeapInfo[TotalW].shtAnim = atoi(value);
-		if (strstr(line, "rldAnim"))  WeapInfo[TotalW].rldAnim = atoi(value);
+		ReadWeaponLine(stream, value, line);
 
-		if (strstr(line, "getAqSnd"))  WeapInfo[TotalW].getAqSnd = atoi(value);
-		if (strstr(line, "putAqSnd"))  WeapInfo[TotalW].putAqSnd = atoi(value);
-		if (strstr(line, "shtAqSnd"))  WeapInfo[TotalW].shtAqSnd = atoi(value);
-		if (strstr(line, "rldAqSnd"))  WeapInfo[TotalW].rldAqSnd = atoi(value);
 
-		if (strstr(line, "land_power"))  WeapInfo[TotalW].Power = (float)atof(value);
-		if (strstr(line, "land_veloc"))  WeapInfo[TotalW].Veloc = (float)atof(value);
-		if (strstr(line, "land_prec"))   WeapInfo[TotalW].Prec  = (float)atof(value);
-		if (strstr(line, "land_fall"))   WeapInfo[TotalW].Fall = (float)atof(value);
 
-		if (strstr(line, "aqua_power"))  WeapInfo[TotalW].PowerAq = (float)atof(value);
-		if (strstr(line, "aqua_veloc"))  WeapInfo[TotalW].VelocAq = (float)atof(value);
-		if (strstr(line, "aqua_prec"))   WeapInfo[TotalW].PrecAq = (float)atof(value);
-		if (strstr(line, "aqua_fall"))   WeapInfo[TotalW].FallAq = (float)atof(value);
+		if (strstr(line, "overwrite") || strstr(line, "addition")) {
 
-        if (strstr(line, "loud"))   WeapInfo[TotalW].Loud  = (float)atof(value);
-        if (strstr(line, "rate"))   WeapInfo[TotalW].Rate  = (float)atof(value);
-        if (strstr(line, "shots"))  WeapInfo[TotalW].Shots =        atoi(value);
-        if (strstr(line, "reload")) WeapInfo[TotalW].Reload=        atoi(value);
-        if (strstr(line, "trace"))  WeapInfo[TotalW].TraceC=        atoi(value)-1;
-        if (strstr(line, "optic"))  WeapInfo[TotalW].Optic = (float)atof(value);
-        //if (strstr(line, "price")) WeapInfo[TotalW].Price =        atoi(value);
 
-		if (strstr(line, "unzoom")) readBool(value, WeapInfo[TotalW].unzoom);
 
-		if (strstr(line, "harpoon")) readBool(value, WeapInfo[TotalW].harpoon);
+			bool readThis = true;
+			char mapNo1 = tempProjectName[18];
+			while (readThis == true) {
 
-		if (strstr(line, "cross")) readBool(value, WeapInfo[TotalW].cross);
-		if (strstr(line, "croR")) WeapInfo[TotalW].crossRed = atoi(value);
-		if (strstr(line, "croG")) WeapInfo[TotalW].crossGreen = atoi(value);
-		if (strstr(line, "croB")) WeapInfo[TotalW].crossBlue = atoi(value);
+				//trophy
+				if (tempProjectName[18] == 'h') break;
 
-		if (strstr(line, "shake"))   WeapInfo[TotalW].shake = (float)atof(value);
+				if (strstr(line, "area")) {
 
-		if (strstr(line, "radar")) readBool(value, WeapInfo[TotalW].onRadar);
-		if (strstr(line, "radR")) WeapInfo[TotalW].radarRed = atoi(value);
-		if (strstr(line, "radG")) WeapInfo[TotalW].radarGreen = atoi(value);
-		if (strstr(line, "radB")) WeapInfo[TotalW].radarBlue = atoi(value);
-		if (strstr(line, "radTime"))  WeapInfo[TotalW].radarTime = atoi(value);
+					switch ((char)tempProjectName[18]) {
+					case '1':
+						if (tempProjectName[19]) {
+							if (!strstr(line, "area0")) readThis = false;//area10
+						}
+						else if (!strstr(line, "area1")) readThis = false;
+						break;
+					case '2':
+						if (!strstr(line, "area2")) readThis = false;
+						break;
+					case '3':
+						if (!strstr(line, "area3")) readThis = false;
+						break;
+					case '4':
+						if (!strstr(line, "area4")) readThis = false;
+						break;
+					case '5':
+						if (!strstr(line, "area5")) readThis = false;
+						break;
+					case '6':
+						if (!strstr(line, "area6")) readThis = false;
+						break;
+					case '7':
+						if (!strstr(line, "area7")) readThis = false;
+						break;
+					case '8':
+						if (!strstr(line, "area8")) readThis = false;
+						break;
+					case '9':
+						if (!strstr(line, "area9")) readThis = false;
+						break;
+					}
+				}
 
-		if (strstr(line, "muzzflash")) readBool(value, WeapInfo[TotalW].MuzzFlash);
+				if (strstr(line, "time")) {
+					switch (timeOfDay) {
+					case 0:
+						if (!strstr(line, "time0")) readThis = false;
+						break;
+					case 1:
+						if (!strstr(line, "time1")) readThis = false;
+						break;
+					case 2:
+						if (!strstr(line, "time2")) readThis = false;
+						break;
+					}
+				}
 
-		if (strstr(line, "recoil"))  WeapInfo[TotalW].recoil = atoi(value);
 
-		if (strstr(line, "retrieve")) readBool(value, WeapInfo[TotalW].retrieve);
+				if (strstr(line, "char")) {
+					bool readChar = false;
+					if (strstr(line, "char0") && (dinSelect & (1 << 10))) readChar = true;
+					if (strstr(line, "char1") && (dinSelect & (1 << 11))) readChar = true;
+					if (strstr(line, "char2") && (dinSelect & (1 << 12))) readChar = true;
+					if (strstr(line, "char3") && (dinSelect & (1 << 13))) readChar = true;
+					if (strstr(line, "char4") && (dinSelect & (1 << 14))) readChar = true;
+					if (strstr(line, "char5") && (dinSelect & (1 << 15))) readChar = true;
+					if (strstr(line, "char6") && (dinSelect & (1 << 16))) readChar = true;
+					if (strstr(line, "char7") && (dinSelect & (1 << 17))) readChar = true;
+					if (strstr(line, "char8") && (dinSelect & (1 << 18))) readChar = true;
+					if (strstr(line, "char9") && (dinSelect & (1 << 19))) readChar = true;
+					if (!readChar) readThis = false;
+				}
 
-        if (strstr(line, "name"))
-        {
-          value = strstr(line, "'");
-          if (!value) DoHalt("Script loading error: Weapons name");
-          value[strlen(value)-2] = 0;
-          strcpy(WeapInfo[TotalW].Name, &value[1]);
-        }
+				break;
+			}
 
-		if (strstr(line, "file"))
-		{
-			value = strstr(line, "'");
-			if (!value) DoHalt("Script loading error: Weapons file");
-			value[strlen(value) - 2] = 0;
-			strcpy(WeapInfo[TotalW].FName, &value[1]);
+
+
+
+			if (readThis) {
+
+				while (fgets(line, 255, stream)) {
+					if (strstr(line, "}")) break;
+
+					value = strstr(line, "=");
+					if (!value){
+						char errorBuff[100];
+						sprintf(errorBuff, "Script loading error: Weapons: %s", WeapInfo[TotalW].Name);
+						DoHalt(errorBuff);
+					}
+					value++;
+
+					ReadWeaponLine(stream, value, line);
+
+				}
+
+			}
+			else {
+				SkipSector(stream);
+			}
 		}
 
-        if (strstr(line, "gunshot"))
-        {
-          value = strstr(line, "'");
-          if (!value) DoHalt("Script loading error: Weapons gunshot");
-          value[strlen(value)-2] = 0;
-          strcpy(WeapInfo[TotalW].SFXName, &value[1]);
-		  WeapInfo[TotalW].MGSSound = TRUE;
-        }
 
 		
-        if (strstr(line, "pic"))
-        {
-          value = strstr(line, "'");
-          if (!value) DoHalt("Script loading error: Weapons pic");
-          value[strlen(value)-2] = 0;
-          strcpy(WeapInfo[TotalW].BFName, &value[1]);
-        }
-
-
-		if (strstr(line, "bModel"))
-		{
-			value = strstr(line, "'");
-			if (!value) DoHalt("Script loading error: Weapons bullet");
-			value[strlen(value) - 2] = 0;
-			strcpy(WeapInfo[TotalW].BLName, &value[1]);
-			WeapInfo[TotalW].bullet = TRUE;
-		}
 		
       }
 
