@@ -3013,12 +3013,14 @@ void ReadWeaponLine(FILE *stream, char *_value, char line[256]) {
 	if (strstr(line, "getAnim"))  WeapInfo[TotalW].getAnim = atoi(value);
 	if (strstr(line, "putAnim"))  WeapInfo[TotalW].putAnim = atoi(value);
 	if (strstr(line, "shtAnim"))  WeapInfo[TotalW].shtAnim = atoi(value);
-	if (strstr(line, "rldAnim"))  WeapInfo[TotalW].rldAnim = atoi(value);
+	if (strstr(line, "rldAnimFull"))  WeapInfo[TotalW].rldAnim = atoi(value);
+	if (strstr(line, "rldAnimPart"))  WeapInfo[TotalW].rldAnimPart = atoi(value);
 
 	if (strstr(line, "getAqSnd"))  WeapInfo[TotalW].getAqSnd = atoi(value);
 	if (strstr(line, "putAqSnd"))  WeapInfo[TotalW].putAqSnd = atoi(value);
 	if (strstr(line, "shtAqSnd"))  WeapInfo[TotalW].shtAqSnd = atoi(value);
-	if (strstr(line, "rldAqSnd"))  WeapInfo[TotalW].rldAqSnd = atoi(value);
+	if (strstr(line, "rldAqSndFull"))  WeapInfo[TotalW].rldAqSnd = atoi(value);
+	if (strstr(line, "rldAqSndPart"))  WeapInfo[TotalW].rldAqSndPart = atoi(value);
 
 	if (strstr(line, "land_power"))  WeapInfo[TotalW].Power = (float)atof(value);
 	if (strstr(line, "land_veloc"))  WeapInfo[TotalW].Veloc = (float)atof(value);

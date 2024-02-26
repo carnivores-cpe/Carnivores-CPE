@@ -129,7 +129,7 @@ weapons {
  getAnim = 0
  shtAnim = 1
  putAnim = 2
- rldAnim = 3
+ rldAnimFull = 3
  land_power = 2
  land_veloc = 12.0
  land_prec  = 0.8
@@ -143,13 +143,12 @@ weapons {
  aqua_power = 2
  aqua_veloc = 12.0
  aqua_prec  = 0.8
- harpoon = TRUE
  recoil = 0
 }
 
 {
  name  = 'Shotgun'
- file  = 'shotgun.car'
+ file  = 'shotgun3.car'
  pic1   = 'bullet2.tga'
  pic2   = 'bullet2s.tga'
  bModel= 'shotgunbullet1.car'
@@ -157,7 +156,8 @@ weapons {
  getAnim = 0
  shtAnim = 1
  putAnim = 2
- rldAnim = 3
+ rldAnimPart = 3
+ rldAnimFull = 4
  land_power = 1
  land_veloc = 12.0
  land_prec  = 0.3
@@ -173,7 +173,7 @@ weapons {
 
 {
  name  = 'DB Shotgun'
- file  = 'dbsgun.car'
+ file  = 'dbsgun3.car'
  pic1   = 'bullet2.tga'
  pic2   = 'bullet2s.tga'
  bModel= 'shotgunbullet1.car'
@@ -181,7 +181,8 @@ weapons {
  getAnim = 0
  shtAnim = 1
  putAnim = 2
- rldAnim = 3
+ rldAnimFull = 3
+ rldAnimPart = 4
  land_power = 1
  land_veloc = 12.0
  land_prec  = 0.2
@@ -231,7 +232,7 @@ weapons {
  getAnim = 0
  shtAnim = 1
  putAnim = 2
- rldAnim = 3
+ rldAnimFull = 3
  land_power = 4
  land_veloc = 23.0
  land_prec  = 1.8
@@ -253,7 +254,7 @@ weapons {
  getAnim = 0
  shtAnim = 1
  putAnim = 2
- rldAnim = 3
+ rldAnimFull = 3
  land_power = 4
  land_veloc = 23.0
  optic = 3.0

@@ -270,6 +270,7 @@ function expand(n) {
 				<li>Weapon Fall now accepts any value.</li>
 				<li>Weapon Optic now accepts any value.</li>
 				<li>Manual reloading - set the keybinding in the options menu to swap magazines at any time.</li>
+				<li>Optional partial reload animation.</li>
 				<li>Optional muzzle flash.</li>
 				<li>Steady aim by holding breath - set the keybinding in the options menu.</li>
 				<li>Adjustable initial weapon shake.</li>
@@ -434,6 +435,7 @@ function expand(n) {
 				<li>Weapon Fall now accepts any value.</li>
 				<li>Weapon Optic now accepts any value.</li>
 				<li>Manual reloading - set the keybinding in the options menu to swap magazines at any time.</li>
+				<li>Optional partial reload animation.</li>
 				<li>Optional muzzle flash.</li>
 				<li>Steady aim by holding breath - set the keybinding in the options menu.</li>
 				<li>Adjustable initial weapon shake.</li>
@@ -2372,12 +2374,34 @@ reduced by the whole value of densityMulti. e.g. in the above screenshot, the ma
 		-ms-user-select: none;"
 		>></h2>
 	<div class = "con" style="margin-left:4%">
-		<h2 onclick="expand(177)" style="cursor:pointer;">_RES value: rldAnim</h2>
+		<h2 onclick="expand(177)" style="cursor:pointer;">_RES value: rldAnimFull</h2>
 		<div id="content_177" style="display: none">
 		
 			<p><b>Data type: Whole Number</b></p>
 			
 			Position of the reload animation in the CAR file (starting from 0).
+			
+		</div>
+	</div>
+</p>	
+			
+<p style="margin-top:4%;">
+	<h2 id="arrow_197" unselectable="on" onclick="expand(197)"
+		style="float:left;margin-top:0;cursor:pointer;
+		-moz-user-select:none;
+		user-select:none;
+		-webkit-user-select: none;
+		-ms-user-select: none;"
+		>></h2>
+	<div class = "con" style="margin-left:4%">
+		<h2 onclick="expand(197)" style="cursor:pointer;">_RES value: rldAnimPart</h2>
+		<div id="content_197" style="display: none">
+		
+			<p><b>Data type: Whole Number</b></p>
+			
+			(Optional) Position of the partial reload animation in the CAR file (starting from 0).
+			<br>
+			The partial reload animation will play instead of the full reload animation if the current magazine isn't empty.
 			
 		</div>
 	</div>
@@ -2640,11 +2664,32 @@ reduced by the whole value of densityMulti. e.g. in the above screenshot, the ma
 		-ms-user-select: none;"
 		>></h2>
 	<div class = "con" style="margin-left:4%">
-		<h2 onclick="expand(194)" style="cursor:pointer;">_RES value: rldAqSnd</h2>
+		<h2 onclick="expand(194)" style="cursor:pointer;">_RES value: rldAqSndFull</h2>
 		<div id="content_194" style="display: none">
 		
 			<p><b>Data type: Whole Number</b></p>
 			Optional. The position in the car file of the reload sound to play when underwater. If not defined, then no sound will play.
+			</div>
+	</div>
+</p>
+
+
+
+
+<p style="margin-top:4%;">
+	<h2 id="arrow_198" unselectable="on" onclick="expand(198)"
+		style="float:left;margin-top:0;cursor:pointer;
+		-moz-user-select:none;
+		user-select:none;
+		-webkit-user-select: none;
+		-ms-user-select: none;"
+		>></h2>
+	<div class = "con" style="margin-left:4%">
+		<h2 onclick="expand(198)" style="cursor:pointer;">_RES value: rldAqSndPart</h2>
+		<div id="content_198" style="display: none">
+		
+			<p><b>Data type: Whole Number</b></p>
+			Optional. The position in the car file of the partial reload sound to play when underwater. If not defined, then no sound will play.
 			</div>
 	</div>
 </p>

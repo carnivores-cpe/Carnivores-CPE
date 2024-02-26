@@ -819,10 +819,12 @@ typedef struct _TWeapInfo
   int getAnim = -1;
   int putAnim = -1;
   int rldAnim = -1;
+  int rldAnimPart = -1;
   int shtAqSnd = -1;
   int getAqSnd = -1;
   int putAqSnd = -1;
   int rldAqSnd = -1;
+  int rldAqSndPart = -1;
   float shake, Optic;
   bool unzoom, harpoon;
 

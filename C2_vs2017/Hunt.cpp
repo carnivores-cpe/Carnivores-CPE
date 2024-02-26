@@ -505,6 +505,17 @@ SKIPWIND:
     }
   }
 
+  if (wptr->state == 5)
+  {
+	  if (UNDERWATER) wptr->FTime += TimeDt / 2.f;
+	  else wptr->FTime += TimeDt;
+	  if (wptr->FTime >= wptr->chinfo[CurrentWeapon].Animation[WeapInfo[CurrentWeapon].rldAnimPart].AniTime)
+	  {
+		  wptr->FTime = 0;
+		  wptr->state = 2;
+	  }
+  }
+
   if (wptr->state == 2 && wptr->FTime>0)
   {
 	  if (UNDERWATER) wptr->FTime += TimeDt / 2.f;
@@ -597,6 +608,9 @@ SKIPWIND:
 	  break;
   case 4:
 	  phas = WeapInfo[CurrentWeapon].rldAnim;
+	  break;
+  case 5:
+	  phas = WeapInfo[CurrentWeapon].rldAnimPart;
 	  break;
   }
 
@@ -1157,10 +1171,85 @@ void ProcessReload() {
 		if (WeapInfo[CurrentWeapon].Reload) {
 			if (Chambered[CurrentWeapon] < WeapInfo[CurrentWeapon].Reload &&
 				ShotsLeft[CurrentWeapon]) {
+				
+
+				if (Chambered[CurrentWeapon] && WeapInfo[CurrentWeapon].rldAnimPart >= 0) {
+
+					//state 5
+					if (wptr->chinfo[CurrentWeapon].Animation[WeapInfo[CurrentWeapon].rldAnimPart].AniTime)
+					{
+						wptr->state = 5;
+						wptr->FTime = 1;
+						if (UNDERWATER) {
+							if (WeapInfo[CurrentWeapon].rldAqSndPart >= 0)
+								AddVoicev(wptr->chinfo[CurrentWeapon].SoundFX[WeapInfo[CurrentWeapon].rldAqSndPart].length,
+									wptr->chinfo[CurrentWeapon].SoundFX[WeapInfo[CurrentWeapon].rldAqSndPart].lpData, 256);
+						}
+						else {
+							int fx = wptr->chinfo[CurrentWeapon].Anifx[WeapInfo[CurrentWeapon].rldAnimPart];
+							if (fx) AddVoicev(wptr->chinfo[CurrentWeapon].SoundFX[fx].length,
+								wptr->chinfo[CurrentWeapon].SoundFX[fx].lpData, 256);
+						}
+					}
+
+				} else {
+
+					//state 4
+					if (wptr->chinfo[CurrentWeapon].Animation[WeapInfo[CurrentWeapon].rldAnim].AniTime)
+					{
+						wptr->state = 4;
+						wptr->FTime = 1;
+						if (UNDERWATER) {
+							if (WeapInfo[CurrentWeapon].rldAqSnd >= 0)
+								AddVoicev(wptr->chinfo[CurrentWeapon].SoundFX[WeapInfo[CurrentWeapon].rldAqSnd].length,
+									wptr->chinfo[CurrentWeapon].SoundFX[WeapInfo[CurrentWeapon].rldAqSnd].lpData, 256);
+						}
+						else {
+							int fx = wptr->chinfo[CurrentWeapon].Anifx[WeapInfo[CurrentWeapon].rldAnim];
+							if (fx) AddVoicev(wptr->chinfo[CurrentWeapon].SoundFX[fx].length,
+								wptr->chinfo[CurrentWeapon].SoundFX[fx].lpData, 256);
+						}
+					}
+
+				}
+
 				Chambered[CurrentWeapon] = WeapInfo[CurrentWeapon].Reload;
 
-				if (wptr->chinfo[CurrentWeapon].Animation[3].AniTime)
+				
+			}
+			
+		} else if (AmmoMag[CurrentWeapon]) {
+			int temp = MagShotsLeft[CurrentWeapon];
+			MagShotsLeft[CurrentWeapon] = ShotsLeft[CurrentWeapon];
+			ShotsLeft[CurrentWeapon] = temp;
+
+			if (!MagShotsLeft[CurrentWeapon]) AmmoMag[CurrentWeapon]--;
+
+
+			if (MagShotsLeft[CurrentWeapon] && WeapInfo[CurrentWeapon].rldAnimPart >= 0) {
+
+				if (wptr->chinfo[CurrentWeapon].Animation[WeapInfo[CurrentWeapon].rldAnimPart].AniTime)
 				{
+
+					wptr->state = 5;
+					wptr->FTime = 1;
+					if (UNDERWATER) {
+						if (WeapInfo[CurrentWeapon].rldAqSndPart >= 0)
+							AddVoicev(wptr->chinfo[CurrentWeapon].SoundFX[WeapInfo[CurrentWeapon].rldAqSndPart].length,
+								wptr->chinfo[CurrentWeapon].SoundFX[WeapInfo[CurrentWeapon].rldAqSndPart].lpData, 256);
+					}
+					else {
+						int fx = wptr->chinfo[CurrentWeapon].Anifx[WeapInfo[CurrentWeapon].rldAnimPart];
+						if (fx) AddVoicev(wptr->chinfo[CurrentWeapon].SoundFX[fx].length,
+							wptr->chinfo[CurrentWeapon].SoundFX[fx].lpData, 256);
+					}
+				}
+			}
+			else {
+
+				if (wptr->chinfo[CurrentWeapon].Animation[WeapInfo[CurrentWeapon].rldAnim].AniTime)
+				{
+
 					wptr->state = 4;
 					wptr->FTime = 1;
 					if (UNDERWATER) {
@@ -1173,31 +1262,14 @@ void ProcessReload() {
 						if (fx) AddVoicev(wptr->chinfo[CurrentWeapon].SoundFX[fx].length,
 							wptr->chinfo[CurrentWeapon].SoundFX[fx].lpData, 256);
 					}
-				}
-			}
-			
-		} else if (AmmoMag[CurrentWeapon]) {
-			int temp = MagShotsLeft[CurrentWeapon];
-			MagShotsLeft[CurrentWeapon] = ShotsLeft[CurrentWeapon];
-			ShotsLeft[CurrentWeapon] = temp;
 
-			if (!MagShotsLeft[CurrentWeapon]) AmmoMag[CurrentWeapon]--;
+				}
 
-			if (wptr->chinfo[CurrentWeapon].Animation[3].AniTime)
-			{
-				wptr->state = 4;
-				wptr->FTime = 1;
-				if (UNDERWATER) {
-					if (WeapInfo[CurrentWeapon].rldAqSnd >= 0)
-						AddVoicev(wptr->chinfo[CurrentWeapon].SoundFX[WeapInfo[CurrentWeapon].rldAqSnd].length,
-							wptr->chinfo[CurrentWeapon].SoundFX[WeapInfo[CurrentWeapon].rldAqSnd].lpData, 256);
-				}
-				else {
-					int fx = wptr->chinfo[CurrentWeapon].Anifx[WeapInfo[CurrentWeapon].rldAnim];
-					if (fx) AddVoicev(wptr->chinfo[CurrentWeapon].SoundFX[fx].length,
-						wptr->chinfo[CurrentWeapon].SoundFX[fx].lpData, 256);
-				}
 			}
+
+
+
+				
 		}
 
 }
