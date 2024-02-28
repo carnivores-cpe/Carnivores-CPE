@@ -3038,12 +3038,18 @@ void ReadWeaponLine(FILE *stream, char *_value, char line[256]) {
 	if (strstr(line, "shtAnim"))  WeapInfo[TotalW].shtAnim = atoi(value);
 	if (strstr(line, "rldAnimFull"))  WeapInfo[TotalW].rldAnim = atoi(value);
 	if (strstr(line, "rldAnimPart"))  WeapInfo[TotalW].rldAnimPart = atoi(value);
+	if (strstr(line, "rckAnim"))  WeapInfo[TotalW].pmpAnim = atoi(value);
 
 	if (strstr(line, "getAqSnd"))  WeapInfo[TotalW].getAqSnd = atoi(value);
 	if (strstr(line, "putAqSnd"))  WeapInfo[TotalW].putAqSnd = atoi(value);
 	if (strstr(line, "shtAqSnd"))  WeapInfo[TotalW].shtAqSnd = atoi(value);
 	if (strstr(line, "rldAqSndFull"))  WeapInfo[TotalW].rldAqSnd = atoi(value);
 	if (strstr(line, "rldAqSndPart"))  WeapInfo[TotalW].rldAqSndPart = atoi(value);
+	if (strstr(line, "rckAqSnd"))  WeapInfo[TotalW].pmpAqSnd = atoi(value);
+
+	if (strstr(line, "mustRack")) readBool(value, WeapInfo[TotalW].mustPump);
+	if (strstr(line, "autoRack")) readBool(value, WeapInfo[TotalW].autoPump);
+	if (strstr(line, "autoReload")) readBool(value, WeapInfo[TotalW].autoReload);
 
 	if (strstr(line, "land_power"))  WeapInfo[TotalW].Power = (float)atof(value);
 	if (strstr(line, "land_veloc"))  WeapInfo[TotalW].Veloc = (float)atof(value);
@@ -3081,6 +3087,7 @@ void ReadWeaponLine(FILE *stream, char *_value, char line[256]) {
 	if (strstr(line, "radTime"))  WeapInfo[TotalW].radarTime = atoi(value);
 
 	if (strstr(line, "muzzflash")) readBool(value, WeapInfo[TotalW].MuzzFlash);
+	if (strstr(line, "chamflash")) readBool(value, WeapInfo[TotalW].ChamFlash);
 
 	if (strstr(line, "recoil"))  WeapInfo[TotalW].recoil = atoi(value);
 

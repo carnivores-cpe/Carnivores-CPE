@@ -825,15 +825,21 @@ typedef struct _TWeapInfo
   int putAnim = -1;
   int rldAnim = -1;
   int rldAnimPart = -1;
+  int pmpAnim = -1;
   int shtAqSnd = -1;
   int getAqSnd = -1;
   int putAqSnd = -1;
   int rldAqSnd = -1;
   int rldAqSndPart = -1;
+  int pmpAqSnd = -1;
   float shake, Optic;
   bool unzoom, harpoon;
 
   bool aqLow; //parent velocAq < veloc
+
+  bool mustPump;
+  bool autoPump;
+  bool autoReload;
 
   float PowerAq = -1;
   float PrecAq = -1;
@@ -845,7 +851,7 @@ typedef struct _TWeapInfo
   WORD radarColour565, radarColour555;
   int radarTime;
 
-  bool MuzzFlash;
+  bool MuzzFlash, ChamFlash;
   bool cross;
   byte crossRed, crossGreen, crossBlue;
   WORD crossColour565, crossColour555;

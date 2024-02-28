@@ -149,7 +149,7 @@ weapons {
 
 {
  name  = 'Shotgun'
- file  = 'shotgun3.car'
+ file  = 'shotgun5.car'
  pic1   = 'bullet2.tga'
  pic2   = 'bullet2s.tga'
  picc   = 'chamb2.tga'
@@ -158,8 +158,10 @@ weapons {
  getAnim = 0
  shtAnim = 1
  putAnim = 2
- rldAnimPart = 3
- rldAnimFull = 4
+ rldAnimFull = 3
+ rckAnim = 4
+ mustRack = TRUE
+ autoRack = TRUE
  land_power = 1
  land_veloc = 12.0
  land_prec  = 0.3
@@ -270,6 +272,7 @@ weapons {
  shots = 7
  recoil = 4
  shake = 0.65
+ chamflash = TRUE
 }
 
 
