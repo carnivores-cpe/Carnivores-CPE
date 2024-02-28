@@ -812,6 +812,59 @@ void DrawPicture(int x, int y, TPicture &pic)
   FXPutBitMap(x, y, pic.W, pic.H, pic.W, pic.lpImage);
 }
 
+void DrawFlash(int x0, int y0, int w, int h, TPicture &pic)
+{
+	int smw = pic.W;
+	LPVOID lpData = pic.lpImage;
+
+	linfo.size = sizeof(GrLfbInfo_t);
+	if (!grLfbLock(
+		GR_LFB_WRITE_ONLY,
+		GR_BUFFER_BACKBUFFER,
+		GR_LFBWRITEMODE_565,
+		GR_ORIGIN_UPPER_LEFT,
+		FXFALSE,
+		&linfo)) return;
+
+	smw *= 2;
+	w *= 2;
+	linfo.lfbPtr = (void*)((WORD*)linfo.lfbPtr + x0);
+	for (int y = 0; y < h; y++)
+		memcpy((BYTE*)linfo.lfbPtr + (y + y0)*(linfo.strideInBytes),
+		(BYTE*)lpData + y * smw,
+			w);
+
+
+	grLfbUnlock(GR_LFB_WRITE_ONLY, GR_BUFFER_BACKBUFFER);
+}
+
+/*
+void DrawFlash(int x0, int y0, int w, int h, TPicture &pic)
+{
+	int smw = w;
+	LPVOID lpData = pic.lpImage;
+
+	linfo.size = sizeof(GrLfbInfo_t);
+	if (!grLfbLock(
+		GR_LFB_WRITE_ONLY,
+		GR_BUFFER_BACKBUFFER,
+		GR_LFBWRITEMODE_565,
+		GR_ORIGIN_UPPER_LEFT,
+		FXFALSE,
+		&linfo)) return;
+
+	smw *= 2;
+	w *= 2;
+	linfo.lfbPtr = (void*)((WORD*)linfo.lfbPtr + x0);
+	for (int y = 0; y < h; y++)
+		memcpy((BYTE*)linfo.lfbPtr + (y + y0)*(linfo.strideInBytes),
+		(BYTE*)lpData + (y + (pic.H-h)) * smw,
+			w);
+
+	grLfbUnlock(GR_LFB_WRITE_ONLY, GR_BUFFER_BACKBUFFER);
+
+}
+*/
 
 
 void FXTextOut(int x, int y, LPSTR t, int color)

@@ -307,7 +307,10 @@ typedef struct _TWeapon
   TCharacterInfo chinfo[10];
   TPicture       BulletPic[10];
   TPicture       BulletPic2[10];
+  TPicture       ChambPic[10];
   TCharacterInfo Bullet[10];
+  TPicture		 Flash[4];
+  int FlashP;
 
   Vector3d*       normals;
   int state, FTime;
@@ -316,6 +319,7 @@ typedef struct _TWeapon
   int BTime;
   bool HoldBreath;
   int breathPressed;
+  int ammoIn;
 } TWeapon;
 
 
@@ -809,7 +813,8 @@ typedef struct _TSpawnGroup
 typedef struct _TWeapInfo
 {
 	bool pic2b = false;
-  char Name[48], FName[48], BFName[48], BF2Name[48], BLName[48], SFXName[48];
+	bool picch = false;
+  char Name[48], FName[48], BFName[48], BF2Name[48], CFName[48], BLName[48], SFXName[48];
   bool MGSSound = FALSE;
   bool bullet = FALSE;
   bool retrieve;
@@ -976,6 +981,7 @@ void RenderModelClipWater(TModel*, float, float, float, int, int, float, float);
 void RenderModelClip     (TModel*, float, float, float, int, int, float, float);
 void RenderNearModel     (TModel*, float, float, float, int, float, float);
 void DrawPicture         (int x, int y, TPicture &pic);
+void DrawFlash		 (int x, int y, int w, int h, TPicture &pic);
 
 void InitClips();
 void InitDirectDraw();
@@ -1104,7 +1110,7 @@ void AddBullet(float ax, float ay, float az,
 int AnimateBullet(float ax, float ay, float az,
 	float bx, float by, float bz, int b);
 void AnimateBullets();
-void refillWeapons();
+void refillWeapons(bool);
 void registerDamage(int);
 
 void AddBloodTrail(TCharacter *cptr);

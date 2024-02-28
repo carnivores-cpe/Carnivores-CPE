@@ -499,10 +499,24 @@ SKIPWIND:
 	  if (UNDERWATER) wptr->FTime += TimeDt / 2.f;
 	  else wptr->FTime += TimeDt;
 	  if (wptr->FTime >= wptr->chinfo[CurrentWeapon].Animation[WeapInfo[CurrentWeapon].rldAnim].AniTime)
-    {
-      wptr->FTime = 0;
-      wptr->state = 2;
-    }
+	  {
+		wptr->FTime = 0;
+		wptr->state = 2;
+		if (WeapInfo[CurrentWeapon].Reload) {
+		  ShotsLeft[CurrentWeapon] -= wptr->ammoIn;
+		  Chambered[CurrentWeapon] += wptr->ammoIn;
+		}
+		else {
+		  int temp = MagShotsLeft[CurrentWeapon];
+		  MagShotsLeft[CurrentWeapon] = ShotsLeft[CurrentWeapon];
+		  ShotsLeft[CurrentWeapon] = temp;
+		  if (!MagShotsLeft[CurrentWeapon]) AmmoMag[CurrentWeapon]--;
+		  if (!Chambered[CurrentWeapon]) {
+			  Chambered[CurrentWeapon] = 1;
+			  ShotsLeft[CurrentWeapon]--;
+		  }
+		}
+	  }
   }
 
   if (wptr->state == 5)
@@ -513,6 +527,15 @@ SKIPWIND:
 	  {
 		  wptr->FTime = 0;
 		  wptr->state = 2;
+		  if (WeapInfo[CurrentWeapon].Reload) {
+			  ShotsLeft[CurrentWeapon] -= wptr->ammoIn;
+			  Chambered[CurrentWeapon] += wptr->ammoIn;
+		  } else {
+			  int temp = MagShotsLeft[CurrentWeapon];
+			  MagShotsLeft[CurrentWeapon] = ShotsLeft[CurrentWeapon];
+			  ShotsLeft[CurrentWeapon] = temp;
+			  if (!MagShotsLeft[CurrentWeapon]) AmmoMag[CurrentWeapon]--;
+		  }
 	  }
   }
 
@@ -533,7 +556,14 @@ SKIPWIND:
       wptr->state = 2;
 	  Muzz = false;
 	  MuzzFTime = 0;
+	  if (!WeapInfo[CurrentWeapon].Reload) 
+		  if (ShotsLeft[CurrentWeapon]) {
+			  Chambered[CurrentWeapon] = 1;
+			  ShotsLeft[CurrentWeapon]--;
+		  }
+	  
 
+	  // keep this here for auto reload
 	  /*
       if (WeapInfo[CurrentWeapon].Reload && !DEBUG)
         if ( (ShotsLeft[CurrentWeapon] % WeapInfo[CurrentWeapon].Reload) == 0 )
@@ -710,13 +740,65 @@ SKIPWEAPON:
     int y0 = 5;
     if (!SurvivalMode)
     {
-      for (int bl=0; bl< ShotsLeft[CurrentWeapon]; bl++)
-		  DrawPicture(6 + bl*Weapon.BulletPic[CurrentWeapon].W, y0, Weapon.BulletPic[CurrentWeapon]);
-	  y0+=Weapon.BulletPic[CurrentWeapon].H+4;
-	  
+
+		
+		/*
+		if (WeapInfo[w].Reload || WeapInfo[w].rldAnim < 0) {
+					Chambered[w] = WeapInfo[w].Reload;
+		*/
+
+		int ind = 9;
+		int ch = 1;
+		if (WeapInfo[CurrentWeapon].Reload) ch = WeapInfo[CurrentWeapon].Reload;
+		int y1 = 5;
+		int y2 = Weapon.BulletPic[CurrentWeapon].H + 9;
+		int x1 = 0;
+		int x2 = 0;
+
+		if (wptr->state == 4 || wptr->state == 5) {
+			float d = -cos(pi/2+(pi/2 * ((float)wptr->FTime / (float)wptr->chinfo[CurrentWeapon].Animation[phas].AniTime)));
+			if (WeapInfo[CurrentWeapon].Reload) {
+				x1 -= d * Weapon.BulletPic[CurrentWeapon].W * wptr->ammoIn;
+				x2 -= d * ((Weapon.BulletPic[CurrentWeapon].W * wptr->ammoIn) + 3);
+			} else {
+				d *= (y2 - y1);
+				y1 += d;
+				y2 -= d;
+			}
+		}
+		if (wptr->state == 2 && !WeapInfo[CurrentWeapon].Reload) {
+			float d = ((float)wptr->FTime / (float)wptr->chinfo[CurrentWeapon].Animation[phas].AniTime);
+			d = 0.5*(1 - cos(pi * ((float)wptr->FTime / (float)wptr->chinfo[CurrentWeapon].Animation[phas].AniTime)));
+			wptr->ammoIn = 1;
+			x1 -= d * Weapon.BulletPic[CurrentWeapon].W * wptr->ammoIn;
+			x2 -= d * ((Weapon.BulletPic[CurrentWeapon].W * wptr->ammoIn) + 3);
+		}
+
+		if (WeapInfo[CurrentWeapon].picch)
+			DrawPicture(5, y0-1, Weapon.ChambPic[CurrentWeapon]);
+
+		if (wptr->FlashP) {
+			wptr->FlashP++;
+			if (wptr->FlashP > 4)wptr->FlashP = 0;
+			else DrawFlash(6 + Chambered[CurrentWeapon] * Weapon.BulletPic[CurrentWeapon].W,
+					y0,
+					Weapon.BulletPic[CurrentWeapon].W,
+					Weapon.BulletPic[CurrentWeapon].H,
+					wptr->Flash[wptr->FlashP - 1]
+				);
+		}
+
+		for (int bl = 0; bl < Chambered[CurrentWeapon]; bl++)
+			DrawPicture(6 + bl * Weapon.BulletPic[CurrentWeapon].W, y0, Weapon.BulletPic[CurrentWeapon]);
+
+		for (int bl = 0; bl < ShotsLeft[CurrentWeapon]; bl++) {
+			if (bl < wptr->ammoIn) DrawPicture(ind + x2 + ch * Weapon.BulletPic[CurrentWeapon].W + bl * Weapon.BulletPic[CurrentWeapon].W, y1, Weapon.BulletPic[CurrentWeapon]);
+			else DrawPicture(ind + x1 + ch * Weapon.BulletPic[CurrentWeapon].W + bl * Weapon.BulletPic[CurrentWeapon].W, y1, Weapon.BulletPic[CurrentWeapon]);
+		}
+
 	  if (AmmoMag[CurrentWeapon])
 		  for (int bl=0; bl< MagShotsLeft[CurrentWeapon]; bl++)
-			  DrawPicture(6 + bl*Weapon.BulletPic2[CurrentWeapon].W, y0, Weapon.BulletPic2[CurrentWeapon]);
+			  DrawPicture(ind + ch * Weapon.BulletPic[CurrentWeapon].W + bl*Weapon.BulletPic2[CurrentWeapon].W, y2, Weapon.BulletPic2[CurrentWeapon]);
 	}
   }
 
@@ -1172,8 +1254,11 @@ void ProcessReload() {
 			if (Chambered[CurrentWeapon] < WeapInfo[CurrentWeapon].Reload &&
 				ShotsLeft[CurrentWeapon]) {
 				
+				wptr->ammoIn = WeapInfo[CurrentWeapon].Reload - Chambered[CurrentWeapon];
+				if (ShotsLeft[CurrentWeapon] < WeapInfo[CurrentWeapon].Reload) wptr->ammoIn = ShotsLeft[CurrentWeapon];
 
-				if (Chambered[CurrentWeapon] && WeapInfo[CurrentWeapon].rldAnimPart >= 0) {
+				if ((Chambered[CurrentWeapon] || ShotsLeft[CurrentWeapon] < WeapInfo[CurrentWeapon].Reload)
+					&& WeapInfo[CurrentWeapon].rldAnimPart >= 0) {
 
 					//state 5
 					if (wptr->chinfo[CurrentWeapon].Animation[WeapInfo[CurrentWeapon].rldAnimPart].AniTime)
@@ -1213,20 +1298,26 @@ void ProcessReload() {
 
 				}
 
-				Chambered[CurrentWeapon] = WeapInfo[CurrentWeapon].Reload;
-
 				
 			}
 			
 		} else if (AmmoMag[CurrentWeapon]) {
+
+			/*
 			int temp = MagShotsLeft[CurrentWeapon];
 			MagShotsLeft[CurrentWeapon] = ShotsLeft[CurrentWeapon];
 			ShotsLeft[CurrentWeapon] = temp;
 
 			if (!MagShotsLeft[CurrentWeapon]) AmmoMag[CurrentWeapon]--;
 
+			if (!Chambered[CurrentWeapon]) {
+				Chambered[CurrentWeapon] = 1;
+				ShotsLeft[CurrentWeapon]--;
+			}
+			*/
 
-			if (MagShotsLeft[CurrentWeapon] && WeapInfo[CurrentWeapon].rldAnimPart >= 0) {
+			if (Chambered[CurrentWeapon] && WeapInfo[CurrentWeapon].rldAnimPart >= 0) {
+
 
 				if (wptr->chinfo[CurrentWeapon].Animation[WeapInfo[CurrentWeapon].rldAnimPart].AniTime)
 				{
@@ -1280,15 +1371,10 @@ void ProcessShoot()
 {
   //if (HeadBackR) return;
 	int clickNo = rRand(2);
-	if (!ShotsLeft[CurrentWeapon]) {
-		if (!alreadyFired && !UNDERWATER) AddVoicev(fxClick[clickNo].length, fxClick[clickNo].lpData, 256);
-		return;
-	}
-  if (WeapInfo[CurrentWeapon].Reload && !DEBUG)
-	  if (!Chambered[CurrentWeapon]) {
-		  if (!alreadyFired && !UNDERWATER) AddVoicev(fxClick[clickNo].length, fxClick[clickNo].lpData, 256);
+	if (!Chambered[CurrentWeapon]) {
+	  if (!alreadyFired && !UNDERWATER) AddVoicev(fxClick[clickNo].length, fxClick[clickNo].lpData, 256);
 		  return;
-	  }
+	 }
 
   TWeapon *wptr = &Weapon;
   if (UNDERWATER && !WeapInfo[CurrentWeapon].harpoon)
@@ -1322,6 +1408,7 @@ void ProcessShoot()
 	TrophyRoom.Last.smade++;
 
 	if (WeapInfo[CurrentWeapon].MuzzFlash) {
+		wptr->FlashP = 1;
 		Muzz = true;
 		MuzzGamma = rRand(100);
 		MuzzGamma /= 50;
@@ -1380,12 +1467,10 @@ void ProcessShoot()
     v.y = PlayerY;
     v.z = PlayerZ;
     if (!UNDERWATER) MakeNoise(v, ctViewR*200 * WeapInfo[CurrentWeapon].Loud);
-	if (WeapInfo[CurrentWeapon].Reload) Chambered[CurrentWeapon]--;
-    if (!SurvivalMode) ShotsLeft[CurrentWeapon]--;
-	else if (WeapInfo[CurrentWeapon].Reload) {
-		ShotsLeft[CurrentWeapon]--;
-		if (!ShotsLeft[CurrentWeapon]) ShotsLeft[CurrentWeapon] = WeapInfo[CurrentWeapon].Shots;
-	}
+    if (!SurvivalMode) Chambered[CurrentWeapon]-=1;
+//	else if (WeapInfo[CurrentWeapon].Reload) {
+//		if (!Chambered[CurrentWeapon]) Chambered[CurrentWeapon] = WeapInfo[CurrentWeapon].Reload;
+//	}
   }
 }
 

@@ -1579,6 +1579,13 @@ void LoadResources()
 
   GenerateMapImage();
 
+  for (int i = 0; i < 4;i++) {
+	  char buff[100];
+	  sprintf(buff, "HUNTDAT\\WEAPONS\\flash%i.tga", i+1);
+	  LoadPictureTGA(Weapon.Flash[i], buff);
+	  conv_pic(Weapon.Flash[i]);
+  }
+
   if (TrophyMode) LoadPictureTGA(TrophyPic, "HUNTDAT\\MENU\\trophy.tga");
   else {
 	  LoadPictureTGA(TrophyPic, "HUNTDAT\\MENU\\collect.tga");
@@ -1661,12 +1668,21 @@ void LoadCharacters()
         PrintLog("\n");
       }
 
-
 	  if (!Weapon.BulletPic2[c].lpImage && WeapInfo[c].pic2b)
 	  {
 		  wsprintf(logt, "HUNTDAT\\WEAPONS\\%s", WeapInfo[c].BF2Name);
 		  LoadPictureTGA(Weapon.BulletPic2[c], logt);
 		  conv_pic(Weapon.BulletPic2[c]);
+		  PrintLog("Loading: ");
+		  PrintLog(logt);
+		  PrintLog("\n");
+	  }
+
+	  if (!Weapon.ChambPic[c].lpImage && WeapInfo[c].picch)
+	  {
+		  wsprintf(logt, "HUNTDAT\\WEAPONS\\%s", WeapInfo[c].CFName);
+		  LoadPictureTGA(Weapon.ChambPic[c], logt);
+		  conv_pic(Weapon.ChambPic[c]);
 		  PrintLog("Loading: ");
 		  PrintLog(logt);
 		  PrintLog("\n");
@@ -1725,7 +1741,7 @@ void resetBullets() {
 	bulletCh = 0;
 }
 
-void refillWeapons() {
+void refillWeapons(bool init) {
 	for (int w = 0; w < TotalW; w++)
 		if (WeaponPres & (1 << w))
 		{
@@ -1733,11 +1749,18 @@ void refillWeapons() {
 			if (DoubleAmmo) {
 				if (WeapInfo[w].Reload || WeapInfo[w].rldAnim < 0) {
 					ShotsLeft[w] *= 2;
-					Chambered[w] = WeapInfo[w].Reload;
-				}
-				else {
+				} else {
 					AmmoMag[w] = 1;
 					MagShotsLeft[w] = WeapInfo[w].Shots;
+				}
+			}
+			if (init) {
+				if (WeapInfo[w].Reload) {
+					Chambered[w] = WeapInfo[w].Reload;
+					ShotsLeft[w] -= WeapInfo[w].Reload;
+				} else {
+					Chambered[w] = 1;
+					ShotsLeft[w] -= 1;
 				}
 			}
 			if (TargetWeapon == -1) TargetWeapon = w;
@@ -1786,7 +1809,7 @@ void ReInitGame()
   MyHealth = MAX_HEALTH;
   TargetWeapon = -1;
 
-  refillWeapons();
+  refillWeapons(true);
 
   CurrentWeapon = TargetWeapon;
 
@@ -3095,6 +3118,16 @@ void ReadWeaponLine(FILE *stream, char *_value, char line[256]) {
 		if (!value) DoHalt("Script loading error: Weapons pic");
 		value[strlen(value) - 2] = 0;
 		strcpy(WeapInfo[TotalW].BFName, &value[1]);
+	}
+
+
+	if (strstr(line, "picc"))
+	{
+		value = strstr(line, "'");
+		if (!value) DoHalt("Script loading error: Chamber pic");
+		value[strlen(value) - 2] = 0;
+		strcpy(WeapInfo[TotalW].CFName, &value[1]);
+		WeapInfo[TotalW].picch = TRUE;
 	}
 
 

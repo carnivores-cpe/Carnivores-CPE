@@ -2712,6 +2712,15 @@ void DrawPicture(int x, int y, TPicture &pic)
               pic.W<<1);
 }
 
+void DrawFlash(int x, int y, int w, int h, TPicture &pic)
+{
+	for (int yy = 0; yy < h; yy++)
+		if ((yy + y >= 0) && (yy + y < WinH))
+			memcpy((WORD*)lpVideoBuf + ((yy + y) << 10) + x,
+				pic.lpImage + yy * pic.W,
+				w << 1);
+}
+
 
 void ClearVideoBuf()
 {

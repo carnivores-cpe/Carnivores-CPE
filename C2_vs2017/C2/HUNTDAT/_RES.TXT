@@ -124,6 +124,7 @@ weapons {
  file  = 'pistol.car'
  pic1   = 'bullet1.tga'
  pic2   = 'bullet1s.tga'
+ picc   = 'chamb1.tga'
  bModel= 'pistolbullet1.car'
  gunshot = 'pistol.wav'
  getAnim = 0
@@ -151,6 +152,7 @@ weapons {
  file  = 'shotgun3.car'
  pic1   = 'bullet2.tga'
  pic2   = 'bullet2s.tga'
+ picc   = 'chamb2.tga'
  bModel= 'shotgunbullet1.car'
  gunshot = 'shotgun.wav'
  getAnim = 0
@@ -176,6 +178,7 @@ weapons {
  file  = 'dbsgun3.car'
  pic1   = 'bullet2.tga'
  pic2   = 'bullet2s.tga'
+ picc   = 'chamb4.tga'
  bModel= 'shotgunbullet1.car'
  gunshot = 'dbsgun.wav'
  getAnim = 0
@@ -227,6 +230,7 @@ weapons {
  file  = 'rifle.car'
  pic1   = 'bullet3.tga'
  pic2   = 'bullet3s.tga'
+ picc   = 'chamb3.tga'
  bModel= 'riflebullet1.car'
  gunshot = 'rifle.wav'
  getAnim = 0
@@ -249,6 +253,7 @@ weapons {
  file  = 'sniper.car'
  pic1   = 'bullet3.tga'
  pic2   = 'bullet3s.tga'
+ picc   = 'chamb3.tga'
  bModel= 'riflebullet1.car'
  gunshot = 'sniper.wav'
  getAnim = 0

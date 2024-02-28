@@ -2220,7 +2220,7 @@ void AnimateBag() {
 		AddVoicev(BagModel.SoundFX[1].length,
 			BagModel.SoundFX[1].lpData, 256);
 		AmmoBag.State = -1;
-		refillWeapons();
+		refillWeapons(false);
 	}
 
 }

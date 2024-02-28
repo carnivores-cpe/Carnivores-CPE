@@ -1734,6 +1734,29 @@ void DrawPicture(int x, int y, TPicture &pic)
 }
 
 
+void DrawFlash(int x0, int y0, int w, int h, TPicture &pic)
+{
+	//FXPutBitMap(x, y, pic.W, pic.H, pic.W, pic.lpImage);
+
+	int smw = pic.W;
+	LPVOID lpData = pic.lpImage;
+
+	DDSURFACEDESC ddsd;
+	ZeroMemory(&ddsd, sizeof(DDSURFACEDESC));
+	ddsd.dwSize = sizeof(DDSURFACEDESC);
+	if (lpddBack->Lock(NULL, &ddsd, DDLOCK_WAIT, NULL) != DD_OK) return;
+
+	WORD *lpVMem = (WORD*)ddsd.lpSurface;
+	ddsd.lPitch /= 2;
+	lpVMem += x0 + y0 * ddsd.lPitch;
+
+	for (int y = 0; y < h; y++)
+		CopyMemory(lpVMem + y * ddsd.lPitch, ((WORD*)lpData) + y * smw, w * 2);
+
+	lpddBack->Unlock(ddsd.lpSurface);
+}
+
+
 
 void ddTextOut(int x, int y, LPSTR t, int color)
 {
