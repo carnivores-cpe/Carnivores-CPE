@@ -650,7 +650,7 @@ SKIPWIND:
 		wptr->FTime = 0;
 		wptr->state = 2;
 		if (WeapInfo[CurrentWeapon].Reload) {
-			ShotsLeft[CurrentWeapon] -= wptr->ammoIn;
+			if (!SurvivalMode) ShotsLeft[CurrentWeapon] -= wptr->ammoIn;
 			Chambered[CurrentWeapon] += wptr->ammoIn;
 		} else {
 		  int temp = MagShotsLeft[CurrentWeapon];
@@ -677,7 +677,7 @@ SKIPWIND:
 		  wptr->FTime = 0;
 		  wptr->state = 2;
 		  if (WeapInfo[CurrentWeapon].Reload) {
-			ShotsLeft[CurrentWeapon] -= wptr->ammoIn;
+			if (!SurvivalMode) ShotsLeft[CurrentWeapon] -= wptr->ammoIn;
 			Chambered[CurrentWeapon] += wptr->ammoIn;
 		  } else {
 			  int temp = MagShotsLeft[CurrentWeapon];
@@ -703,16 +703,17 @@ SKIPWIND:
     {
       wptr->FTime = 0;
       wptr->state = 2;
-	  if (WeapInfo[CurrentWeapon].mustPump && WeapInfo[CurrentWeapon].autoPump && ShotsLeft[CurrentWeapon]) ProcessPump();
 	  Muzz = false;
 	  MuzzFTime = 0;
 	  if (!WeapInfo[CurrentWeapon].Reload && !WeapInfo[CurrentWeapon].mustPump)
 		  if (ShotsLeft[CurrentWeapon]) {
 			  Chambered[CurrentWeapon] = 1;
-			  ShotsLeft[CurrentWeapon]--;
+			  if (!SurvivalMode) ShotsLeft[CurrentWeapon]--;
 		  }
+	  if (WeapInfo[CurrentWeapon].mustPump && WeapInfo[CurrentWeapon].autoPump && ShotsLeft[CurrentWeapon]) ProcessPump();
 
-	  if (WeapInfo[CurrentWeapon].autoReload && !Chambered[CurrentWeapon]) ProcessReload();
+	  if (WeapInfo[CurrentWeapon].autoReload && !Chambered[CurrentWeapon]
+		  && (WeapInfo[CurrentWeapon].Reload || !ShotsLeft[CurrentWeapon])) ProcessReload();
 
     }
   }
@@ -727,7 +728,7 @@ SKIPWIND:
 		  wptr->state = 2;
 		  if (ShotsLeft[CurrentWeapon]){
 			Chambered[CurrentWeapon] = 1;
-			ShotsLeft[CurrentWeapon]--;
+			if (!SurvivalMode) ShotsLeft[CurrentWeapon]--;
 		  }
 	  }
   }
@@ -1491,7 +1492,7 @@ void ProcessShoot()
     v.y = PlayerY;
     v.z = PlayerZ;
     if (!UNDERWATER) MakeNoise(v, ctViewR*200 * WeapInfo[CurrentWeapon].Loud);
-    if (!SurvivalMode) Chambered[CurrentWeapon]-=1;
+    Chambered[CurrentWeapon]-=1;
 //	else if (WeapInfo[CurrentWeapon].Reload) {
 //		if (!Chambered[CurrentWeapon]) Chambered[CurrentWeapon] = WeapInfo[CurrentWeapon].Reload;
 //	}
