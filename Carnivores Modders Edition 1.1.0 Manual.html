@@ -271,13 +271,16 @@ function expand(n) {
 				<li>Weapon Optic now accepts any value.</li>
 				<li>Manual reloading - set the keybinding in the options menu to swap magazines at any time.</li>
 				<li>Optional partial reload animation.</li>
+				<li>Manual racking - set the keybinding in the options menu.</li>
+				<li>Optional automatic reloading/racking.</li>
 				<li>Optional muzzle flash.</li>
 				<li>Steady aim by holding breath - set the keybinding in the options menu.</li>
 				<li>Adjustable initial weapon shake.</li>
 				<li>Optional crosshair</li>
 				<li>Custom crosshair colour</li>
 				<li>Option to play get, put and reload animations without optic zoom.</li>
-			    <li>Weapon overwrites</li>
+			    <li>Animated bullet pictures</li>
+				<li>Weapon overwrites</li>
 				<li>Supply Ship - adjust keybind in the options menu.</li>
 			    <li>Decide which trophies to take back to the trophy room.</li>
 			    <li>Non-trophy creatures can still give points using basescore.</li>
@@ -436,12 +439,15 @@ function expand(n) {
 				<li>Weapon Optic now accepts any value.</li>
 				<li>Manual reloading - set the keybinding in the options menu to swap magazines at any time.</li>
 				<li>Optional partial reload animation.</li>
+				<li>Manual racking - set the keybinding in the options menu.</li>
+				<li>Optional automatic reloading/racking.</li>
 				<li>Optional muzzle flash.</li>
 				<li>Steady aim by holding breath - set the keybinding in the options menu.</li>
 				<li>Adjustable initial weapon shake.</li>
 				<li>Optional crosshair</li>
 				<li>Custom crosshair colour</li>
 				<li>Option to play get, put and reload animations without optic zoom.</li>
+			    <li>Animated bullet pictures</li>
 			    <li>Supply Ship - adjust keybind in the options menu.</li>
 			    <li>Decide which trophies to take back to the trophy room.</li>
 			    <li>Non-trophy creatures can still give points using basescore.</li>
@@ -2405,6 +2411,98 @@ reduced by the whole value of densityMulti. e.g. in the above screenshot, the ma
 			
 		</div>
 	</div>
+</p>	
+			
+<p style="margin-top:4%;">
+	<h2 id="arrow_200" unselectable="on" onclick="expand(200)"
+		style="float:left;margin-top:0;cursor:pointer;
+		-moz-user-select:none;
+		user-select:none;
+		-webkit-user-select: none;
+		-ms-user-select: none;"
+		>></h2>
+	<div class = "con" style="margin-left:4%">
+		<h2 onclick="expand(200)" style="cursor:pointer;">_RES value: rckAnim</h2>
+		<div id="content_200" style="display: none">
+		
+			<p><b>Data type: Whole Number</b></p>
+			
+			(Optional) Position of the rack animation in the CAR file (starting from 0).
+			<br>
+			Racking (adding a round to the chamber) is done after a full reload (or after every shot if mustRack is true).
+			The racking keybind can be set in the options menu. Racking must be done manually unless autoRack = TRUE.
+			
+		</div>
+	</div>
+</p>
+
+
+	
+			
+<p style="margin-top:4%;">
+	<h2 id="arrow_201" unselectable="on" onclick="expand(201)"
+		style="float:left;margin-top:0;cursor:pointer;
+		-moz-user-select:none;
+		user-select:none;
+		-webkit-user-select: none;
+		-ms-user-select: none;"
+		>></h2>
+	<div class = "con" style="margin-left:4%">
+		<h2 onclick="expand(201)" style="cursor:pointer;">_RES value: mustRack</h2>
+		<div id="content_201" style="display: none">
+		
+			<p><b>Data type: TRUE/FALSE</b></p>
+			
+			If set to true, the weapon must be racked after every shot. Requires a rckAnim value.
+			
+		</div>
+	</div>
+</p>
+
+
+	
+			
+<p style="margin-top:4%;">
+	<h2 id="arrow_202" unselectable="on" onclick="expand(202)"
+		style="float:left;margin-top:0;cursor:pointer;
+		-moz-user-select:none;
+		user-select:none;
+		-webkit-user-select: none;
+		-ms-user-select: none;"
+		>></h2>
+	<div class = "con" style="margin-left:4%">
+		<h2 onclick="expand(202)" style="cursor:pointer;">_RES value: autoRack</h2>
+		<div id="content_202" style="display: none">
+		
+			<p><b>Data type: TRUE/FALSE</b></p>
+			
+			If set to true, the weapon will automatically rack after reloading (or after every shot if mustRack = TRUE). Requires a rckAnim value.
+			
+		</div>
+	</div>
+</p>
+
+
+	
+			
+<p style="margin-top:4%;">
+	<h2 id="arrow_204" unselectable="on" onclick="expand(204)"
+		style="float:left;margin-top:0;cursor:pointer;
+		-moz-user-select:none;
+		user-select:none;
+		-webkit-user-select: none;
+		-ms-user-select: none;"
+		>></h2>
+	<div class = "con" style="margin-left:4%">
+		<h2 onclick="expand(204)" style="cursor:pointer;">_RES value: autoReload</h2>
+		<div id="content_204" style="display: none">
+		
+			<p><b>Data type: TRUE/FALSE</b></p>
+			
+			If set to true, the weapon will automatically reload when it runs out of ammunition.
+			
+		</div>
+	</div>
 </p>
 
 
@@ -2540,7 +2638,30 @@ reduced by the whole value of densityMulti. e.g. in the above screenshot, the ma
 		
 			<p><b>Data type: Text</b></p>
 			
-			Bullet pictures in the Weapon folder. pic1 defines the main bullet picture, pic2 defines the bullet picture in the secondary magazine.
+			Bullet pictures in the Weapon folder. pic1 defines the main bullet picture, pic2 defines the bullet picture in the secondary magazine (only if a rldAnimFull value is set).
+			
+		</div>
+	</div>
+</p>
+
+
+	
+			
+<p style="margin-top:4%;">
+	<h2 id="arrow_199" unselectable="on" onclick="expand(199)"
+		style="float:left;margin-top:0;cursor:pointer;
+		-moz-user-select:none;
+		user-select:none;
+		-webkit-user-select: none;
+		-ms-user-select: none;"
+		>></h2>
+	<div class = "con" style="margin-left:4%">
+		<h2 onclick="expand(199)" style="cursor:pointer;">_RES value: picc</h2>
+		<div id="content_199" style="display: none">
+		
+			<p><b>Data type: Text</b></p>
+			
+			Optional. Chamber pictures in the Weapon folder.
 			
 		</div>
 	</div>
@@ -2693,6 +2814,27 @@ reduced by the whole value of densityMulti. e.g. in the above screenshot, the ma
 			</div>
 	</div>
 </p>
+
+
+
+
+<p style="margin-top:4%;">
+	<h2 id="arrow_203" unselectable="on" onclick="expand(203)"
+		style="float:left;margin-top:0;cursor:pointer;
+		-moz-user-select:none;
+		user-select:none;
+		-webkit-user-select: none;
+		-ms-user-select: none;"
+		>></h2>
+	<div class = "con" style="margin-left:4%">
+		<h2 onclick="expand(203)" style="cursor:pointer;">_RES value: rckAqSnd</h2>
+		<div id="content_203" style="display: none">
+		
+			<p><b>Data type: Whole Number</b></p>
+			Optional. The position in the car file of the rack sound to play when underwater. If not defined, then no sound will play.
+			</div>
+	</div>
+</p>
 	
 			
 <p style="margin-top:4%;">
@@ -2709,9 +2851,30 @@ reduced by the whole value of densityMulti. e.g. in the above screenshot, the ma
 		
 			<p><b>Data type: TRUE/FALSE</b></p>
 			
-			If set to true, weapon will have a muzzle flash effect when fired.
+			If set to true, weapon will have a muzzle flash effect when fired and the bullet image will flash.
 			<br>
 			Note: Will not appear on harpoon weapons when submerged.
+			
+		</div>
+	</div>
+</p>
+	
+			
+<p style="margin-top:4%;">
+	<h2 id="arrow_205" unselectable="on" onclick="expand(205)"
+		style="float:left;margin-top:0;cursor:pointer;
+		-moz-user-select:none;
+		user-select:none;
+		-webkit-user-select: none;
+		-ms-user-select: none;"
+		>></h2>
+	<div class = "con" style="margin-left:4%">
+		<h2 onclick="expand(205)" style="cursor:pointer;">_RES value: chamflash</h2>
+		<div id="content_205" style="display: none">
+		
+			<p><b>Data type: TRUE/FALSE</b></p>
+			
+			If set to true, the bullet image will flash when fired without the muzzle flash effect on the model.
 			
 		</div>
 	</div>
