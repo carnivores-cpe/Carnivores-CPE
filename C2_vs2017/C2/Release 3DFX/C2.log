@@ -10,23 +10,23 @@ c:\users\ojm14\documents\github\carnivores-cpe\c2_vs2017\hunt.cpp(806): warning 
 c:\users\ojm14\documents\github\carnivores-cpe\c2_vs2017\hunt.cpp(832): warning C4244: '=': conversion from 'float' to 'int', possible loss of data
 c:\users\ojm14\documents\github\carnivores-cpe\c2_vs2017\hunt.cpp(902): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
 c:\users\ojm14\documents\github\carnivores-cpe\c2_vs2017\hunt.cpp(904): warning C4244: '-=': conversion from 'float' to 'int', possible loss of data
-c:\users\ojm14\documents\github\carnivores-cpe\c2_vs2017\hunt.cpp(905): warning C4244: '-=': conversion from 'float' to 'int', possible loss of data
-c:\users\ojm14\documents\github\carnivores-cpe\c2_vs2017\hunt.cpp(908): warning C4244: '+=': conversion from 'float' to 'int', possible loss of data
-c:\users\ojm14\documents\github\carnivores-cpe\c2_vs2017\hunt.cpp(909): warning C4244: '-=': conversion from 'float' to 'int', possible loss of data
-c:\users\ojm14\documents\github\carnivores-cpe\c2_vs2017\hunt.cpp(915): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
-c:\users\ojm14\documents\github\carnivores-cpe\c2_vs2017\hunt.cpp(917): warning C4244: '-=': conversion from 'float' to 'int', possible loss of data
+c:\users\ojm14\documents\github\carnivores-cpe\c2_vs2017\hunt.cpp(906): warning C4244: '-=': conversion from 'float' to 'int', possible loss of data
+c:\users\ojm14\documents\github\carnivores-cpe\c2_vs2017\hunt.cpp(909): warning C4244: '+=': conversion from 'float' to 'int', possible loss of data
+c:\users\ojm14\documents\github\carnivores-cpe\c2_vs2017\hunt.cpp(910): warning C4244: '-=': conversion from 'float' to 'int', possible loss of data
+c:\users\ojm14\documents\github\carnivores-cpe\c2_vs2017\hunt.cpp(916): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
 c:\users\ojm14\documents\github\carnivores-cpe\c2_vs2017\hunt.cpp(918): warning C4244: '-=': conversion from 'float' to 'int', possible loss of data
-c:\users\ojm14\documents\github\carnivores-cpe\c2_vs2017\hunt.cpp(1415): warning C4244: 'initializing': conversion from 'int' to 'float', possible loss of data
-c:\users\ojm14\documents\github\carnivores-cpe\c2_vs2017\hunt.cpp(1438): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
-c:\users\ojm14\documents\github\carnivores-cpe\c2_vs2017\hunt.cpp(1449): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+c:\users\ojm14\documents\github\carnivores-cpe\c2_vs2017\hunt.cpp(919): warning C4244: '-=': conversion from 'float' to 'int', possible loss of data
+c:\users\ojm14\documents\github\carnivores-cpe\c2_vs2017\hunt.cpp(1416): warning C4244: 'initializing': conversion from 'int' to 'float', possible loss of data
+c:\users\ojm14\documents\github\carnivores-cpe\c2_vs2017\hunt.cpp(1439): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
 c:\users\ojm14\documents\github\carnivores-cpe\c2_vs2017\hunt.cpp(1450): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
-c:\users\ojm14\documents\github\carnivores-cpe\c2_vs2017\hunt.cpp(1452): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+c:\users\ojm14\documents\github\carnivores-cpe\c2_vs2017\hunt.cpp(1451): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
 c:\users\ojm14\documents\github\carnivores-cpe\c2_vs2017\hunt.cpp(1453): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
-c:\users\ojm14\documents\github\carnivores-cpe\c2_vs2017\hunt.cpp(2063): warning C4305: 'argument': truncation from 'double' to 'float'
-c:\users\ojm14\documents\github\carnivores-cpe\c2_vs2017\hunt.cpp(2079): warning C4305: '+=': truncation from 'double' to 'float'
-c:\users\ojm14\documents\github\carnivores-cpe\c2_vs2017\hunt.cpp(2082): warning C4305: 'argument': truncation from 'double' to 'float'
-c:\users\ojm14\documents\github\carnivores-cpe\c2_vs2017\hunt.cpp(2227): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
-c:\users\ojm14\documents\github\carnivores-cpe\c2_vs2017\hunt.cpp(2234): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+c:\users\ojm14\documents\github\carnivores-cpe\c2_vs2017\hunt.cpp(1454): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+c:\users\ojm14\documents\github\carnivores-cpe\c2_vs2017\hunt.cpp(2064): warning C4305: 'argument': truncation from 'double' to 'float'
+c:\users\ojm14\documents\github\carnivores-cpe\c2_vs2017\hunt.cpp(2080): warning C4305: '+=': truncation from 'double' to 'float'
+c:\users\ojm14\documents\github\carnivores-cpe\c2_vs2017\hunt.cpp(2083): warning C4305: 'argument': truncation from 'double' to 'float'
+c:\users\ojm14\documents\github\carnivores-cpe\c2_vs2017\hunt.cpp(2228): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+c:\users\ojm14\documents\github\carnivores-cpe\c2_vs2017\hunt.cpp(2235): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
   Generating code
   2 of 376 functions ( 0.5%) were compiled, the rest were copied from previous compilation.
     0 functions were new in current compilation

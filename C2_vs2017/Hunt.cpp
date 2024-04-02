@@ -660,7 +660,7 @@ SKIPWIND:
 		  if (!Chambered[CurrentWeapon])
 			  if (WeapInfo[CurrentWeapon].pmpAnim < 0) {
 				  Chambered[CurrentWeapon] = 1;
-				  ShotsLeft[CurrentWeapon]--;
+				  ShotsLeft[CurrentWeapon]--;  
 			  } else {
 				  if (WeapInfo[CurrentWeapon].autoPump) ProcessPump();
 			  }
@@ -902,7 +902,8 @@ SKIPWEAPON:
 			float d = -cos(pi/2+(pi/2 * ((float)wptr->FTime / (float)wptr->chinfo[CurrentWeapon].Animation[phas].AniTime)));
 			if (WeapInfo[CurrentWeapon].Reload) {
 				x1 -= d * Weapon.BulletPic[CurrentWeapon].W * wptr->ammoIn;
-				x2 -= d * ((Weapon.BulletPic[CurrentWeapon].W * wptr->ammoIn) + 3);
+				//x2 -= d * ((Weapon.BulletPic[CurrentWeapon].W * wptr->ammoIn) + 3);
+				x2 -= d * ((Weapon.BulletPic[CurrentWeapon].W * (WeapInfo[CurrentWeapon].Reload - Chambered[CurrentWeapon])) + 3);
 			} else {
 				d *= (y2 - y1);
 				y1 += d;
