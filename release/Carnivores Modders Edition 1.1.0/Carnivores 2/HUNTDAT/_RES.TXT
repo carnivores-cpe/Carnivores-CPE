@@ -182,6 +182,7 @@ weapons {
  name  = 'X-Bow'
  file  = 'x_bow.car'
  pic1   = 'bullet4.tga'
+ picc   = 'chambxbow.tga'
  bModel= 'arrow9.car'
  getAnim = 0
  shtAnim = 1

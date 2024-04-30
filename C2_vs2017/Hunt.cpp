@@ -920,7 +920,8 @@ SKIPWEAPON:
 		}
 
 		if (WeapInfo[CurrentWeapon].picch)
-			DrawPicture(5, y0-1, Weapon.ChambPic[CurrentWeapon]);
+			DrawPicture(5, (y0-1) + (Weapon.BulletPic[CurrentWeapon].H-(Weapon.ChambPic[CurrentWeapon].H-2)),
+				Weapon.ChambPic[CurrentWeapon]);
 
 		if (wptr->FlashP) {
 			wptr->FlashP++;
