@@ -2062,7 +2062,8 @@ void AnimateBullets() {
 				if (ShotsLeft[bullet[b].parent] < maxAm) {
 					int collectNo = rRand(2);
 					AddVoicev(fxCollect[collectNo].length, fxCollect[collectNo].lpData, 256);
-					ShotsLeft[bullet[b].parent]++;
+					if (!Chambered[bullet[b].parent] && WeapInfo[bullet[b].parent].pmpAnim <= 0) Chambered[bullet[b].parent]++;
+					else ShotsLeft[bullet[b].parent]++;
 					memcpy(&bullet[b], &bullet[b + 1], (bulletCh + 1 - b) * sizeof(TBullet));
 					b--;
 					bulletCh--;

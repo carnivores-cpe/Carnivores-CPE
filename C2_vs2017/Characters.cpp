@@ -194,7 +194,7 @@ void ProcessPrevPhase(TCharacter *cptr)
 	if (cptr->PPMorphTime > PMORPHTIME) cptr->PrevPhase = cptr->Phase;
 
 	cptr->PrevPFTime += TimeDt;
-	cptr->PrevPFTime %= cptr->pinfo->Animation[cptr->PrevPhase].AniTime;
+ 	cptr->PrevPFTime %= cptr->pinfo->Animation[cptr->PrevPhase].AniTime;
 	cptr->PrevPFTime %= cptr->pinfo->Animation[cptr->PrevPhase].AniTime;
 }
 

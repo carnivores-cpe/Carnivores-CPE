@@ -550,7 +550,7 @@ void ProcessReload() {
 void ProcessPump() {
 	TWeapon *wptr = &Weapon;
 
-	if (WeapInfo[CurrentWeapon].pmpAnim < 0) return;
+	if (WeapInfo[CurrentWeapon].pmpAnim <= 0) return;
 
 	if (wptr->state == 2 && wptr->FTime == 0)
 		if (!WeapInfo[CurrentWeapon].Reload) {
@@ -658,7 +658,7 @@ SKIPWIND:
 		  ShotsLeft[CurrentWeapon] = temp;
 		  if (!MagShotsLeft[CurrentWeapon]) AmmoMag[CurrentWeapon]--;
 		  if (!Chambered[CurrentWeapon])
-			  if (WeapInfo[CurrentWeapon].pmpAnim < 0) {
+			  if (WeapInfo[CurrentWeapon].pmpAnim <= 0) {
 				  Chambered[CurrentWeapon] = 1;
 				  ShotsLeft[CurrentWeapon]--;  
 			  } else {
