@@ -2056,7 +2056,6 @@ void AnimateBullets() {
 		if (bullet[b].state) {
 			if (VectorLength(SubVectors(PlayerPos, bullet[b].a)) < 300.f) {
 
-
 				int maxAm = WeapInfo[bullet[b].parent].Shots;
 				if (DoubleAmmo && (WeapInfo[bullet[b].parent].Reload || WeapInfo[bullet[b].parent].rldAnim < 0)) maxAm *= 2;
 				if (ShotsLeft[bullet[b].parent] < maxAm) {

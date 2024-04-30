@@ -1668,16 +1668,6 @@ void LoadCharacters()
         PrintLog("\n");
       }
 
-	  if (!Weapon.BulletPic2[c].lpImage && WeapInfo[c].pic2b)
-	  {
-		  wsprintf(logt, "HUNTDAT\\WEAPONS\\%s", WeapInfo[c].BF2Name);
-		  LoadPictureTGA(Weapon.BulletPic2[c], logt);
-		  conv_pic(Weapon.BulletPic2[c]);
-		  PrintLog("Loading: ");
-		  PrintLog(logt);
-		  PrintLog("\n");
-	  }
-
 	  if (!Weapon.ChambPic[c].lpImage && WeapInfo[c].picch)
 	  {
 		  wsprintf(logt, "HUNTDAT\\WEAPONS\\%s", WeapInfo[c].CFName);
@@ -3135,16 +3125,6 @@ void ReadWeaponLine(FILE *stream, char *_value, char line[256]) {
 		value[strlen(value) - 2] = 0;
 		strcpy(WeapInfo[TotalW].CFName, &value[1]);
 		WeapInfo[TotalW].picch = TRUE;
-	}
-
-
-	if (strstr(line, "pic2"))
-	{
-		value = strstr(line, "'");
-		if (!value) DoHalt("Script loading error: Weapons pic");
-		value[strlen(value) - 2] = 0;
-		strcpy(WeapInfo[TotalW].BF2Name, &value[1]);
-		WeapInfo[TotalW].pic2b = TRUE;
 	}
 
 
