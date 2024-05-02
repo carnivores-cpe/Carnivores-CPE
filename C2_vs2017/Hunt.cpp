@@ -1451,6 +1451,7 @@ void ProcessShoot()
 		  return;
 	  }
 
+	  if (alreadyFired && FiringMode[CurrentWeapon] == 0) return;
 
     wptr->FTime = 1;
     HeadBackR=64;
