@@ -252,7 +252,7 @@ weapons {
 
 {
  name  = 'Sniper rifle'
- file  = 'sniper.car'
+ file  = 'sniper_r.car'
  pic1   = 'bullet3.tga'
  picc   = 'chamb3.tga'
  bModel= 'riflebullet1.car'
@@ -261,6 +261,8 @@ weapons {
  shtAnim = 1
  putAnim = 2
  rldAnimFull = 3
+ rckAnim = 4
+ autoRack = TRUE
  land_power = 4
  land_veloc = 23.0
  optic = 3.0

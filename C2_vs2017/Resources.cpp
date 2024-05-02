@@ -3046,9 +3046,7 @@ void ReadWeaponLine(FILE *stream, char *_value, char line[256]) {
 	if (strstr(line, "autoReload")) readBool(value, WeapInfo[TotalW].autoReload);
 
 	if (strstr(line, "semiAuto")) readBool(value, WeapInfo[TotalW].semiauto);
-	if (strstr(line, "fullAuto")) {
-		readBool(value, WeapInfo[TotalW].fullauto);
-	}
+	if (strstr(line, "fullAuto")) readBool(value, WeapInfo[TotalW].fullauto);
 
 	if (strstr(line, "land_power"))  WeapInfo[TotalW].Power = (float)atof(value);
 	if (strstr(line, "land_veloc"))  WeapInfo[TotalW].Veloc = (float)atof(value);
