@@ -1735,6 +1735,8 @@ void refillWeapons(bool init) {
 	for (int w = 0; w < TotalW; w++)
 		if (WeaponPres & (1 << w))
 		{
+			if (WeapInfo[w].fullauto) FiringMode[w] = 1; else FiringMode[w] = 0;
+
 			ShotsLeft[w] = WeapInfo[w].Shots;
 			if (DoubleAmmo) {
 				if (WeapInfo[w].Reload || WeapInfo[w].rldAnim < 0) {
@@ -3029,6 +3031,7 @@ void ReadWeaponLine(FILE *stream, char *_value, char line[256]) {
 	if (strstr(line, "rldAnimFull"))  WeapInfo[TotalW].rldAnim = atoi(value);
 	if (strstr(line, "rldAnimPart"))  WeapInfo[TotalW].rldAnimPart = atoi(value);
 	if (strstr(line, "rckAnim"))  WeapInfo[TotalW].pmpAnim = atoi(value);
+	if (strstr(line, "modAnim"))  WeapInfo[TotalW].modAnim = atoi(value);
 
 	if (strstr(line, "getAqSnd"))  WeapInfo[TotalW].getAqSnd = atoi(value);
 	if (strstr(line, "putAqSnd"))  WeapInfo[TotalW].putAqSnd = atoi(value);
@@ -3036,10 +3039,16 @@ void ReadWeaponLine(FILE *stream, char *_value, char line[256]) {
 	if (strstr(line, "rldAqSndFull"))  WeapInfo[TotalW].rldAqSnd = atoi(value);
 	if (strstr(line, "rldAqSndPart"))  WeapInfo[TotalW].rldAqSndPart = atoi(value);
 	if (strstr(line, "rckAqSnd"))  WeapInfo[TotalW].pmpAqSnd = atoi(value);
+	if (strstr(line, "modAqSnd"))  WeapInfo[TotalW].modAqSnd = atoi(value);
 
 	if (strstr(line, "mustRack")) readBool(value, WeapInfo[TotalW].mustPump);
 	if (strstr(line, "autoRack")) readBool(value, WeapInfo[TotalW].autoPump);
 	if (strstr(line, "autoReload")) readBool(value, WeapInfo[TotalW].autoReload);
+
+	if (strstr(line, "semiAuto")) readBool(value, WeapInfo[TotalW].semiauto);
+	if (strstr(line, "fullAuto")) {
+		readBool(value, WeapInfo[TotalW].fullauto);
+	}
 
 	if (strstr(line, "land_power"))  WeapInfo[TotalW].Power = (float)atof(value);
 	if (strstr(line, "land_veloc"))  WeapInfo[TotalW].Veloc = (float)atof(value);

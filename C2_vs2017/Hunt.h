@@ -825,14 +825,19 @@ typedef struct _TWeapInfo
   int rldAnim = -1;
   int rldAnimPart = -1;
   int pmpAnim = -1;
+  int modAnim = -1;
   int shtAqSnd = -1;
   int getAqSnd = -1;
   int putAqSnd = -1;
   int rldAqSnd = -1;
   int rldAqSndPart = -1;
   int pmpAqSnd = -1;
+  int modAqSnd = -1;
   float shake, Optic;
   bool unzoom, harpoon;
+
+  bool fullauto = false;
+  bool semiauto = false;
 
   bool aqLow; //parent velocAq < veloc
 
@@ -1233,7 +1238,10 @@ _EXTORNOT int SnowCh;
 //========= GAME ====================//
 _EXTORNOT int TargetDino, TargetArea, TargetWeapon, WeaponPres, TargetCall,
           ObservMode, Tranq, ObjectsOnLook,
-          CurrentWeapon, ShotsLeft[10], AmmoMag[10], MagShotsLeft[10], Chambered[10]; //TrophyTime, 
+          CurrentWeapon, ShotsLeft[10], AmmoMag[10],
+	MagShotsLeft[10], Chambered[10], FiringMode[10]; //TrophyTime, 
+
+//firing mode 0-semiauto 1-fullauto
 
 _EXTORNOT bool alreadyFired;
 

@@ -201,7 +201,7 @@ weapons {
 
 {
  name  = 'Rifle'
- file  = 'rifle.car'
+ file  = 'rifle2arm10.car'
  pic1   = 'bullet3.tga'
  picc   = 'chamb3.tga'
  bModel= 'riflebullet1.car'
@@ -210,6 +210,11 @@ weapons {
  shtAnim = 1
  putAnim = 2
  rldAnimFull = 3
+ rckAnim = 4
+ modAnim = 5
+ fullAuto = TRUE
+ semiAuto = TRUE
+ autoRack = TRUE
  land_power = 4
  land_veloc = 23.0
  land_prec  = 1.8

@@ -547,6 +547,31 @@ void ProcessReload() {
 
 }
 
+void ProcessFireMode() {
+	TWeapon *wptr = &Weapon;
+
+	if (!WeapInfo[CurrentWeapon].semiauto) return;
+	if (!WeapInfo[CurrentWeapon].fullauto) return;
+	if (WeapInfo[CurrentWeapon].modAnim <= 0) return;
+
+	if (wptr->state == 2 && wptr->FTime == 0) {
+		wptr->state = 7;
+		wptr->FTime = 1;
+		if (UNDERWATER) {
+			if (WeapInfo[CurrentWeapon].modAqSnd >= 0)
+				AddVoicev(wptr->chinfo[CurrentWeapon].SoundFX[WeapInfo[CurrentWeapon].modAqSnd].length,
+					wptr->chinfo[CurrentWeapon].SoundFX[WeapInfo[CurrentWeapon].modAqSnd].lpData, 256);
+		}
+		else {
+			int fx = wptr->chinfo[CurrentWeapon].Anifx[WeapInfo[CurrentWeapon].modAnim];
+			if (fx) AddVoicev(wptr->chinfo[CurrentWeapon].SoundFX[fx].length,
+				wptr->chinfo[CurrentWeapon].SoundFX[fx].lpData, 256);
+		}
+	}
+
+}
+
+
 void ProcessPump() {
 	TWeapon *wptr = &Weapon;
 
@@ -733,6 +758,19 @@ SKIPWIND:
 	  }
   }
 
+
+  if (wptr->state == 7)
+  {
+	  if (UNDERWATER) wptr->FTime += TimeDt / 2.f;
+	  else wptr->FTime += TimeDt;
+	  if (wptr->FTime >= wptr->chinfo[CurrentWeapon].Animation[WeapInfo[CurrentWeapon].modAnim].AniTime)
+	  {
+		  if (!FiringMode[CurrentWeapon]) FiringMode[CurrentWeapon] = 1; else FiringMode[CurrentWeapon] = 0;
+		  wptr->FTime = 0;
+		  wptr->state = 2;
+	  }
+  }
+
   if (wptr->state == 3)
   {
 	  if (UNDERWATER) wptr->FTime += TimeDt / 2.f;
@@ -784,6 +822,9 @@ SKIPWIND:
 	  break;
   case 6:
 	  phas = WeapInfo[CurrentWeapon].pmpAnim;
+	  break;
+  case 7:
+	  phas = WeapInfo[CurrentWeapon].modAnim;
 	  break;
   }
 
@@ -1616,9 +1657,9 @@ void ProcessPlayerMovement()
   if (REVERSEMS) ms.y = -ms.y+VideoCY*2;
   rav += (float)(ms.x-VideoCX) * (OptMsSens+64) / 600.f / 192.f;
   rbv += (float)(ms.y-VideoCY) * (OptMsSens+64) / 600.f / 192.f;
-  if (KeyFlags & kfStrafe)
-    SSpeed+= (float)rav * 10;
-  else
+//  if (KeyFlags & kfStrafe)
+//    SSpeed+= (float)rav * 10;
+//  else
     PlayerAlpha += rav;
   PlayerBeta  += rbv;
 
@@ -1675,6 +1716,9 @@ void ProcessPlayerMovement()
   } else alreadyFired = false;
 
   //STRAFE - CHANGE FIRING MODE
+//  if (KeyFlags & kfStrafe)
+  if (KeyboardState[KeyMap.fkStrafe] & 128) ProcessFireMode();
+  //AddMessage("Change Firing Mode"); //STRAFE - CHANGE FIRING MODE
 
   if (KeyboardState[KeyMap.fkRight] & 128) ProcessPump(); //RIGHT - PUMP
 
@@ -1933,7 +1977,7 @@ void ProcessControls()
   if (KeyboardState[KeyMap.fkDown] & 128)  KeyFlags += kfLookDn;
 
   if (!SurvivalMode) {
-  if (KeyboardState [KeyMap.fkStrafe] & 128) KeyFlags+=kfStrafe;
+    if (KeyboardState [KeyMap.fkStrafe] & 128) KeyFlags+=kfStrafe;
 
 	if (KeyboardState [KeyMap.fkForward ] & 128) KeyFlags+=kfForward;
 	if (KeyboardState [KeyMap.fkBackward] & 128) KeyFlags+=kfBackward;

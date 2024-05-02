@@ -273,6 +273,8 @@ function expand(n) {
 				<li>Optional partial reload animation.</li>
 				<li>Manual racking - set the keybinding in the options menu.</li>
 				<li>Optional automatic reloading/racking.</li>
+				<li>Semi-auto and full-auto firing modes.</li>
+				<li>Change between firing modes - set the keybinding in the options menu.</li>
 				<li>Optional muzzle flash.</li>
 				<li>Steady aim by holding breath - set the keybinding in the options menu.</li>
 				<li>Adjustable initial weapon shake.</li>
@@ -441,6 +443,8 @@ function expand(n) {
 				<li>Optional partial reload animation.</li>
 				<li>Manual racking - set the keybinding in the options menu.</li>
 				<li>Optional automatic reloading/racking.</li>
+				<li>Semi-auto and full-auto firing modes.</li>
+				<li>Change between firing modes - set the keybinding in the options menu.</li>
 				<li>Optional muzzle flash.</li>
 				<li>Steady aim by holding breath - set the keybinding in the options menu.</li>
 				<li>Adjustable initial weapon shake.</li>
@@ -2434,6 +2438,27 @@ reduced by the whole value of densityMulti. e.g. in the above screenshot, the ma
 			
 		</div>
 	</div>
+</p>	
+			
+<p style="margin-top:4%;">
+	<h2 id="arrow_207" unselectable="on" onclick="expand(207)"
+		style="float:left;margin-top:0;cursor:pointer;
+		-moz-user-select:none;
+		user-select:none;
+		-webkit-user-select: none;
+		-ms-user-select: none;"
+		>></h2>
+	<div class = "con" style="margin-left:4%">
+		<h2 onclick="expand(207)" style="cursor:pointer;">_RES value: modAnim</h2>
+		<div id="content_207" style="display: none">
+		
+			<p><b>Data type: Whole Number</b></p>
+			
+			(Optional) Position of the change firing mode animation in the CAR file (starting from 0).
+			<br>
+			
+		</div>
+	</div>
 </p>
 
 
@@ -2500,6 +2525,33 @@ reduced by the whole value of densityMulti. e.g. in the above screenshot, the ma
 			<p><b>Data type: TRUE/FALSE</b></p>
 			
 			If set to true, the weapon will automatically reload when it runs out of ammunition.
+			
+		</div>
+	</div>
+</p>
+
+
+	
+			
+<p style="margin-top:4%;">
+	<h2 id="arrow_208" unselectable="on" onclick="expand(208)"
+		style="float:left;margin-top:0;cursor:pointer;
+		-moz-user-select:none;
+		user-select:none;
+		-webkit-user-select: none;
+		-ms-user-select: none;"
+		>></h2>
+	<div class = "con" style="margin-left:4%">
+		<h2 onclick="expand(208)" style="cursor:pointer;">_RES value: semiAuto, fullAuto</h2>
+		<div id="content_208" style="display: none">
+		
+			<p><b>Data type: TRUE/FALSE</b></p>
+			
+			If fullAuto is set to true, the weapon will fire continually when the fire key is held down.
+			<p>
+			If not, then the fire key will have to be release and pressed again every shot (all weapons are semiAuto by default).
+			</p>
+			If both semiAuto and fullAuto are true, and a modAnim is defined, then hunter can swap between firing modes using the change firing modes keybind.
 			
 		</div>
 	</div>
@@ -2623,7 +2675,7 @@ reduced by the whole value of densityMulti. e.g. in the above screenshot, the ma
 
 
 	
-	<!--		
+			
 <p style="margin-top:4%;">
 	<h2 id="arrow_196" unselectable="on" onclick="expand(196)"
 		style="float:left;margin-top:0;cursor:pointer;
@@ -2633,17 +2685,17 @@ reduced by the whole value of densityMulti. e.g. in the above screenshot, the ma
 		-ms-user-select: none;"
 		>></h2>
 	<div class = "con" style="margin-left:4%">
-		<h2 onclick="expand(196)" style="cursor:pointer;">_RES value: pic1, pic2</h2>
+		<h2 onclick="expand(196)" style="cursor:pointer;">_RES value: pic1</h2>
 		<div id="content_196" style="display: none">
 		
 			<p><b>Data type: Text</b></p>
 			
-			Bullet pictures in the Weapon folder. pic1 defines the main bullet picture, pic2 defines the bullet picture in the secondary magazine (only if a rldAnimFull value is set).
+			Bullet pictures in the Weapon folder. <!--pic1 defines the main bullet picture, pic2 defines the bullet picture in the secondary magazine (only if a rldAnimFull value is set).-->
 			
 		</div>
 	</div>
 </p>
--->
+
 
 	
 			
@@ -2835,6 +2887,28 @@ reduced by the whole value of densityMulti. e.g. in the above screenshot, the ma
 			</div>
 	</div>
 </p>
+
+
+
+
+
+<p style="margin-top:4%;">
+	<h2 id="arrow_206" unselectable="on" onclick="expand(206)"
+		style="float:left;margin-top:0;cursor:pointer;
+		-moz-user-select:none;
+		user-select:none;
+		-webkit-user-select: none;
+		-ms-user-select: none;"
+		>></h2>
+	<div class = "con" style="margin-left:4%">
+		<h2 onclick="expand(206)" style="cursor:pointer;">_RES value: modAqSnd</h2>
+		<div id="content_206" style="display: none">
+		
+			<p><b>Data type: Whole Number</b></p>
+			Optional. The position in the car file of the change firing mode sound to play when underwater. If not defined, then no sound will play.
+			</div>
+	</div>
+</p>
 	
 			
 <p style="margin-top:4%;">
@@ -2909,7 +2983,7 @@ reduced by the whole value of densityMulti. e.g. in the above screenshot, the ma
 				<div class="grid-item">Double-barreled Shotgun</div>
 				<div class="grid-item">6</div>
 				<div class="grid-item">X-Bow</div>
-				<div class="grid-item">6</div>
+				<div class="grid-item">3</div>
 				<div class="grid-item">Rifle</div>
 				<div class="grid-item">4</div>
 				<div class="grid-item">Sniper Rifle</div>
