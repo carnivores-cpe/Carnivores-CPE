@@ -143,6 +143,7 @@ weapons {
  aqua_power = 2
  aqua_veloc = 12.0
  aqua_prec  = 0.8
+ canRun = TRUE
 }
 
 {

@@ -839,6 +839,8 @@ typedef struct _TWeapInfo
   float shake, Optic;
   bool unzoom, harpoon;
 
+  bool canRun;
+
   bool fullauto = false;
   bool semiauto = false;
 

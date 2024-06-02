@@ -1703,7 +1703,7 @@ void ProcessPlayerMovement()
     if (SSpeed > 0.25f) SSpeed = 0.25f;
     if (SSpeed <-0.25f) SSpeed =-0.25f;
   }
-  if ( RunMode && (HeadY == 220.f) && (Weapon.state==0))
+  if ( RunMode && (HeadY == 220.f) && (Weapon.state==0 || WeapInfo[CurrentWeapon].canRun))
   {
     if (VSpeed > 0.7f) VSpeed = 0.7f;
     if (VSpeed <-0.7f) VSpeed =-0.7f;
