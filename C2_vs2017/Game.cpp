@@ -1733,7 +1733,10 @@ void MakeCall()
 	float d = VectorLength(SubVectors(PlayerPos, cptr->pos));
 	bool canHear = d < (ctViewR * 400)  * (DinoInfo[cptr->CType].HearK * 2);
 
-	if (DinoInfo[cptr->CType].fearCall[TargetCall-10] && canHear) {
+	if (DinoInfo[cptr->CType].fearCall[TargetCall-10] && canHear
+		&& DinoInfo[cptr->CType].Clone != AI_DIMOR && DinoInfo[cptr->CType].Clone != AI_PTERA
+		&& DinoInfo[cptr->CType].Clone != AI_BRACH
+		) { //ai that cannot flee, state always 0
 		cptr->State = 2;
 		cptr->AfraidTime = (10 + rRand(5)) * 1024;
 	}
@@ -2061,7 +2064,10 @@ void AnimateBullets() {
 				if (ShotsLeft[bullet[b].parent] < maxAm) {
 					int collectNo = rRand(2);
 					AddVoicev(fxCollect[collectNo].length, fxCollect[collectNo].lpData, 256);
-					if (!Chambered[bullet[b].parent] && WeapInfo[bullet[b].parent].pmpAnim <= 0) Chambered[bullet[b].parent]++;
+					if (!Chambered[bullet[b].parent] &&
+						((WeapInfo[bullet[b].parent].pmpAnim < 0 && !WeapInfo[bullet[b].parent].Reload) ||
+						(WeapInfo[bullet[b].parent].rldAnim < 0 && WeapInfo[bullet[b].parent].Reload)))
+						Chambered[bullet[b].parent]++;
 					else ShotsLeft[bullet[b].parent]++;
 					memcpy(&bullet[b], &bullet[b + 1], (bulletCh + 1 - b) * sizeof(TBullet));
 					b--;

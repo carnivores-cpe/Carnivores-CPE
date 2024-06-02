@@ -271,6 +271,7 @@ function expand(n) {
 				<li>Weapon Optic now accepts any value.</li>
 				<li>Manual reloading - set the keybinding in the options menu to swap magazines at any time.</li>
 				<li>Optional partial reload animation.</li>
+				<li>Optional unloaded animations.</li>
 				<li>Manual racking - set the keybinding in the options menu.</li>
 				<li>Optional automatic reloading/racking.</li>
 				<li>Semi-auto and full-auto firing modes.</li>
@@ -441,6 +442,7 @@ function expand(n) {
 				<li>Weapon Optic now accepts any value.</li>
 				<li>Manual reloading - set the keybinding in the options menu to swap magazines at any time.</li>
 				<li>Optional partial reload animation.</li>
+				<li>Optional unloaded animations.</li>
 				<li>Manual racking - set the keybinding in the options menu.</li>
 				<li>Optional automatic reloading/racking.</li>
 				<li>Semi-auto and full-auto firing modes.</li>
@@ -2455,7 +2457,72 @@ reduced by the whole value of densityMulti. e.g. in the above screenshot, the ma
 			<p><b>Data type: Whole Number</b></p>
 			
 			(Optional) Position of the change firing mode animation in the CAR file (starting from 0).
+			
+		</div>
+	</div>
+</p>
+			
+<p style="margin-top:4%;">
+	<h2 id="arrow_209" unselectable="on" onclick="expand(209)"
+		style="float:left;margin-top:0;cursor:pointer;
+		-moz-user-select:none;
+		user-select:none;
+		-webkit-user-select: none;
+		-ms-user-select: none;"
+		>></h2>
+	<div class = "con" style="margin-left:4%">
+		<h2 onclick="expand(209)" style="cursor:pointer;">_RES value: emptyAnim</h2>
+		<div id="content_209" style="display: none">
+		
+			<p><b>Data type: Whole Number</b></p>
+			
+			(Optional) Position of the empty animation in the CAR file (starting from 0).
 			<br>
+			The first frame of this animation will be shown while holding the weapon with no chambered rounds (instead of the first frame of the fire animation).
+			
+		</div>
+	</div>
+</p>
+			
+<p style="margin-top:4%;">
+	<h2 id="arrow_210" unselectable="on" onclick="expand(210)"
+		style="float:left;margin-top:0;cursor:pointer;
+		-moz-user-select:none;
+		user-select:none;
+		-webkit-user-select: none;
+		-ms-user-select: none;"
+		>></h2>
+	<div class = "con" style="margin-left:4%">
+		<h2 onclick="expand(210)" style="cursor:pointer;">_RES value: getEmpAnim</h2>
+		<div id="content_210" style="display: none">
+		
+			<p><b>Data type: Whole Number</b></p>
+			
+			(Optional) Position of the empty get animation in the CAR file (starting from 0).
+			<br>
+			This animation will play instead of the get animation if no rounds are chambered.
+			
+		</div>
+	</div>
+</p>
+			
+<p style="margin-top:4%;">
+	<h2 id="arrow_211" unselectable="on" onclick="expand(211)"
+		style="float:left;margin-top:0;cursor:pointer;
+		-moz-user-select:none;
+		user-select:none;
+		-webkit-user-select: none;
+		-ms-user-select: none;"
+		>></h2>
+	<div class = "con" style="margin-left:4%">
+		<h2 onclick="expand(211)" style="cursor:pointer;">_RES value: putEmpAnim</h2>
+		<div id="content_211" style="display: none">
+		
+			<p><b>Data type: Whole Number</b></p>
+			
+			(Optional) Position of the empty put animation in the CAR file (starting from 0).
+			<br>
+			This animation will play instead of the put animation if no rounds are chambered.
 			
 		</div>
 	</div>

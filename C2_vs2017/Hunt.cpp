@@ -806,13 +806,20 @@ SKIPWIND:
   switch (wptr->state)
   {
   case 1:
-	  phas = WeapInfo[CurrentWeapon].getAnim;
+	  if (WeapInfo[CurrentWeapon].getEmpAnim > 0 && !Chambered[CurrentWeapon])
+		  phas = WeapInfo[CurrentWeapon].getEmpAnim;
+	  else phas = WeapInfo[CurrentWeapon].getAnim;
 	  break;
   case 2:
-	  phas = WeapInfo[CurrentWeapon].shtAnim;
+
+	  if (WeapInfo[CurrentWeapon].emptyAnim > 0 && !Chambered[CurrentWeapon] && !wptr->FTime)
+		  phas = WeapInfo[CurrentWeapon].emptyAnim;
+	  else phas = WeapInfo[CurrentWeapon].shtAnim;
 	  break;
   case 3:
-	  phas = WeapInfo[CurrentWeapon].putAnim;
+	  if (WeapInfo[CurrentWeapon].putEmpAnim > 0 && !Chambered[CurrentWeapon])
+		  phas = WeapInfo[CurrentWeapon].putEmpAnim;
+	  else phas = WeapInfo[CurrentWeapon].putAnim;
 	  break;
   case 4:
 	  phas = WeapInfo[CurrentWeapon].rldAnim;

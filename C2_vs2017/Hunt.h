@@ -826,6 +826,9 @@ typedef struct _TWeapInfo
   int rldAnimPart = -1;
   int pmpAnim = -1;
   int modAnim = -1;
+  int emptyAnim = -1;
+  int getEmpAnim = -1;
+  int putEmpAnim = -1;
   int shtAqSnd = -1;
   int getAqSnd = -1;
   int putAqSnd = -1;

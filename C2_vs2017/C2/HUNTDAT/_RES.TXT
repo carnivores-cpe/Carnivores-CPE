@@ -281,13 +281,17 @@ weapons {
 
 {
  name  = 'Speargun'
- file  = 'speargun15.car'
+ file  = 'speargun15e20.car'
  pic1   = 'bullet6.tga'
  picc   = 'chambpoon.tga'
  bModel= 'harpoon2.car'
  getAnim = 0
+ getEmpAnim = 4
  shtAnim = 1
  putAnim = 2
+ putEmpAnim = 5
+ rldAnimFull = 3
+ emptyAnim = 6
  shtAqSnd = 3
  shots = 6
  land_power = 9
@@ -296,6 +300,8 @@ weapons {
  land_fall = 0.9
  loud  = 0.4
  rate  = 1.0
+ autoReload = TRUE
+ reload = 1
  retrieve = TRUE
  recoil = 3
  shake = 0.05

@@ -3033,6 +3033,10 @@ void ReadWeaponLine(FILE *stream, char *_value, char line[256]) {
 	if (strstr(line, "rckAnim"))  WeapInfo[TotalW].pmpAnim = atoi(value);
 	if (strstr(line, "modAnim"))  WeapInfo[TotalW].modAnim = atoi(value);
 
+	if (strstr(line, "emptyAnim")) WeapInfo[TotalW].emptyAnim = atoi(value);
+	if (strstr(line, "getEmpAnim")) WeapInfo[TotalW].getEmpAnim = atoi(value);
+	if (strstr(line, "putEmpAnim")) WeapInfo[TotalW].putEmpAnim = atoi(value);
+
 	if (strstr(line, "getAqSnd"))  WeapInfo[TotalW].getAqSnd = atoi(value);
 	if (strstr(line, "putAqSnd"))  WeapInfo[TotalW].putAqSnd = atoi(value);
 	if (strstr(line, "shtAqSnd"))  WeapInfo[TotalW].shtAqSnd = atoi(value);
@@ -3044,6 +3048,7 @@ void ReadWeaponLine(FILE *stream, char *_value, char line[256]) {
 	if (strstr(line, "mustRack")) readBool(value, WeapInfo[TotalW].mustPump);
 	if (strstr(line, "autoRack")) readBool(value, WeapInfo[TotalW].autoPump);
 	if (strstr(line, "autoReload")) readBool(value, WeapInfo[TotalW].autoReload);
+
 
 	if (strstr(line, "semiAuto")) readBool(value, WeapInfo[TotalW].semiauto);
 	if (strstr(line, "fullAuto")) readBool(value, WeapInfo[TotalW].fullauto);
