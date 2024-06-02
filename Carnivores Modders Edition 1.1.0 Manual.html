@@ -283,6 +283,7 @@ function expand(n) {
 				<li>Custom crosshair colour</li>
 				<li>Option to play get, put and reload animations without optic zoom.</li>
 				<li>Option to allow running with certain weapons.</li>
+				<li>Option to disable mortal zones with specific weapons.</li>
 			    <li>Animated bullet pictures</li>
 				<li>Weapon overwrites</li>
 				<li>Supply Ship - adjust keybind in the options menu.</li>
@@ -455,6 +456,7 @@ function expand(n) {
 				<li>Custom crosshair colour</li>
 				<li>Option to play get, put and reload animations without optic zoom.</li>
 				<li>Option to allow running with certain weapons.</li>
+				<li>Option to disable mortal zones with specific weapons.</li>
 			    <li>Animated bullet pictures</li>
 			    <li>Supply Ship - adjust keybind in the options menu.</li>
 			    <li>Decide which trophies to take back to the trophy room.</li>
@@ -3177,6 +3179,31 @@ Sets the colour of the crosshair (RGB 0-255) (if cross = TRUE).
 			<p><b>Data type: TRUE/FALSE</b></p>
 			
 			If set to true, the hunter can run with the weapon drawn.
+			
+		</div>
+	</div>
+</p>
+
+
+
+
+	
+			
+<p style="margin-top:4%;">
+	<h2 id="arrow_213" unselectable="on" onclick="expand(213)"
+		style="float:left;margin-top:0;cursor:pointer;
+		-moz-user-select:none;
+		user-select:none;
+		-webkit-user-select: none;
+		-ms-user-select: none;"
+		>></h2>
+	<div class = "con" style="margin-left:4%">
+		<h2 onclick="expand(213)" style="cursor:pointer;">_RES value: cannotMortal</h2>
+		<div id="content_213" style="display: none">
+		
+			<p><b>Data type: TRUE/FALSE</b></p>
+			
+			If set to true, bullets from the weapon will not register mortal zones.
 			
 		</div>
 	</div>

@@ -926,7 +926,7 @@ SKIPWEAPON:
 
   Hardware_ZBuffer(TRUE);
 
-  if (Weapon.state)
+  if (Weapon.state && MyHealth)
   {
     int y0 = 5;
     if (!SurvivalMode)

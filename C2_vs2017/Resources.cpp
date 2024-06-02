@@ -3050,6 +3050,7 @@ void ReadWeaponLine(FILE *stream, char *_value, char line[256]) {
 	if (strstr(line, "autoReload")) readBool(value, WeapInfo[TotalW].autoReload);
 
 	if (strstr(line, "canRun")) readBool(value, WeapInfo[TotalW].canRun);
+	if (strstr(line, "cannotMortal")) readBool(value, WeapInfo[TotalW].cannotMortal);
 
 
 	if (strstr(line, "semiAuto")) readBool(value, WeapInfo[TotalW].semiauto);

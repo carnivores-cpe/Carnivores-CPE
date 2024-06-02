@@ -840,6 +840,7 @@ typedef struct _TWeapInfo
   bool unzoom, harpoon;
 
   bool canRun;
+  bool cannotMortal;
 
   bool fullauto = false;
   bool semiauto = false;

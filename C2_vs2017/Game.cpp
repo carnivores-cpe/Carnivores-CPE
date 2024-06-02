@@ -2001,13 +2001,13 @@ ENDTRACE:
   }
 
   if (Multiplayer && !Host) {
-	  if (mort) sendDamage[ShotDino] = Characters[ShotDino].Health;
+	  if (mort && !WeapInfo[bullet[b].parent].cannotMortal) sendDamage[ShotDino] = Characters[ShotDino].Health;
 	  else {
 		  if (poon) sendDamage[ShotDino] += WeapInfo[CurrentWeapon].PowerAq;
 		  else sendDamage[ShotDino] += WeapInfo[CurrentWeapon].Power;
 	  }
   } else {
-	  if (mort) Characters[ShotDino].Health = 0;
+	  if (mort && !WeapInfo[bullet[b].parent].cannotMortal) Characters[ShotDino].Health = 0;
 	  else {
 		  if (poon) Characters[ShotDino].Health -= WeapInfo[CurrentWeapon].PowerAq;
 		  else Characters[ShotDino].Health -= WeapInfo[CurrentWeapon].Power;
