@@ -1723,12 +1723,12 @@ void ProcessPlayerMovement()
 	  alreadyFired = true;
   } else alreadyFired = false;
 
-  //STRAFE - CHANGE FIRING MODE
+  //STRAFE - PUMP
 //  if (KeyFlags & kfStrafe)
-  if (KeyboardState[KeyMap.fkStrafe] & 128) ProcessFireMode();
-  //AddMessage("Change Firing Mode"); //STRAFE - CHANGE FIRING MODE
+  if (KeyboardState[KeyMap.fkStrafe] & 128) ProcessPump(); 
 
-  if (KeyboardState[KeyMap.fkRight] & 128) ProcessPump(); //RIGHT - PUMP
+  //RIGHT - CHANGE FIRING MODE
+  if (KeyboardState[KeyMap.fkRight] & 128) ProcessFireMode();
 
   if (KeyboardState[KeyMap.fkUp] & 128) ProcessReload(); //UP - RELOAD
 
