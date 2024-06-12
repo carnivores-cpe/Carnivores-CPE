@@ -1746,11 +1746,14 @@ void refillWeapons(bool init) {
 					MagShotsLeft[w] = WeapInfo[w].Shots;
 				}
 			}
-			if (init) {
-				if (WeapInfo[w].Reload) {
+			
+			if (WeapInfo[w].Reload) {
+				if (init || WeapInfo[w].rldAnim < 0) {
 					Chambered[w] = WeapInfo[w].Reload;
 					ShotsLeft[w] -= WeapInfo[w].Reload;
-				} else {
+				}
+			} else {
+				if (init || WeapInfo[w].pmpAnim < 0) {
 					Chambered[w] = 1;
 					ShotsLeft[w] -= 1;
 				}
