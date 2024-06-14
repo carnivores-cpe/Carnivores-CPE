@@ -1,0 +1,65 @@
+CarnivoresII 3DFX video driver. Build v2.03. Sep.17 1999.
+Creating main window...Ok.
+Checking 3dfx:
+Voodoo card.
+Trophy Loaded.
+Init Engine: Ok.
+DirectSound3D(native) audio driver Beta build v1.2
+
+No Device Enumerating implemented.. 
+Using native DirectSound 3D (Software emulation mode)
+DSCAPS:
+ dwFreeHw3DAllBuffers 0 
+ dwFreeHw3DStaticBuffers 0 
+ dwFreeHw3DStreamingBuffers 0 
+ dwFreeHwMemBytes 0 
+ dwTotalHwMemBytes 0 
+ dwFreeHwMixingAllBuffers 0 
+ dwFreeHwMixingStaticBuffers 0 
+ dwFreeHwMixingStreamingBuffers 0 
+ dwMaxContigFreeHwMemBytes 0 
+ dwMinSecondarySampleRate 100 
+ dwMaxSecondarySampleRate 200000 
+ dwMaxHw3DAllBuffers 0 
+ dwMaxHw3DStaticBuffers 0 
+ dwMaxHw3DStreamingBuffers 0 
+ dwMaxHwMixingAllBuffers 1 
+ dwMaxHwMixingStaticBuffers 1 
+ dwMaxHwMixingStreamingBuffers 1 
+CreatePrimaryBuffer Ok
+Primary SetFormat() Ok
+Create audio thread #1..ok
+Create Listener3D()
+InitAudioSystem ok
+== Loading resources ==
+Loading common resources: Done.
+Loading textures: Done.
+Loading models: Done.
+Finishing with .res: Done.
+Loading .map: Done.
+Loading area: Done.
+Entering messages loop.
+Entered game
+ReInitGame();
+Placing...
+Loading: HUNTDAT\hunter1.car
+Loading: HUNTDAT\mosh.car
+Loading: HUNTDAT\gall.car
+Loading: HUNTDAT\dimor2.car
+Loading: HUNTDAT\ptera.car
+Loading: HUNTDAT\dimet.car
+Loading: HUNTDAT\brachi1.car
+Loading: HUNTDAT\par2.car
+Loading: HUNTDAT\ankylo1.car
+Loading: HUNTDAT\chasmosa.car
+Loading: HUNTDAT\spino.car
+Loading: HUNTDAT\WEAPONS\pistol.car
+Loading: HUNTDAT\WEAPONS\bullet1.tga
+Start Address: 0
+End   Address: 8388592
+Trophy Saved.
+ Releasing Listener3D
+ Releasing PrimaryBuffer
+ Releasing DirectSoundObject
+ Terminate thread 1
+ AudioShutdown()
