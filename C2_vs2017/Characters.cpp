@@ -2853,7 +2853,9 @@ SKIPROT:
 
 }
 
+void AnimatePoacher(TCharacter *cptr) {
 
+}
 
 void AnimateHuntable(TCharacter *cptr)
 {
@@ -8119,6 +8121,10 @@ void AnimateCharacters()
 			else AnimateDeadCommon(cptr);*/
 			break;
 
+		case AI_POACHER:
+			if (cptr->Health) AnimatePoacher(cptr);
+			else AnimateDeadCommon(cptr);
+			break;
 
 		case AI_PARA:
 		case AI_ANKY:

@@ -691,7 +691,7 @@ typedef struct _TDinoInfo
   int jumpRange;
 
   int runAnim, jumpAnim, walkAnim, swimAnim, flyAnim, diveAnim, glideAnim, takeoffAnim, landAnim,
-	  slideAnim, shakeLandAnim, shakeWaterAnim, climbAnim;
+	  slideAnim, shakeLandAnim, shakeWaterAnim, climbAnim, fireAnim, reloadAnim;
 
   TDinoDeathType deathType[32];
   int deathTypeCount;
@@ -1513,6 +1513,7 @@ _EXTORNOT   struct _t
 #define AI_DIMET      5
 #define AI_PIG        6
 
+
 #define AI_HUNTDOG    9
 
 #define AI_PARA       10
@@ -1547,6 +1548,9 @@ _EXTORNOT   struct _t
 #define AI_MOSA        33
 #define AI_BRACHDANGER 34
 #define AI_LANDBRACH   35
+
+
+#define AI_POACHER     8
 
 //#define AI_FINAL	  29 //Last AI of max huntable roster (menu can only display 10)
 

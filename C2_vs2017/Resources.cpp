@@ -3770,6 +3770,8 @@ void ReadCharacterLine(FILE *stream, char *_value, char line[256], bool &spawnIn
 	if (strstr(line, "shakeLAnim")) DinoInfo[TotalC].shakeLandAnim = atoi(value);
 	if (strstr(line, "shakeWAnim")) DinoInfo[TotalC].shakeWaterAnim = atoi(value);
 	if (strstr(line, "climbAnim")) DinoInfo[TotalC].climbAnim = atoi(value);
+	if (strstr(line, "fireAnim")) DinoInfo[TotalC].fireAnim = atoi(value);
+	if (strstr(line, "reloadAnim")) DinoInfo[TotalC].reloadAnim = atoi(value);
 
 	
 	if (strstr(line, "lookAnim") || strstr(line, "fishIdleAnim")) {
