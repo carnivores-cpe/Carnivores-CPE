@@ -448,6 +448,9 @@ typedef struct _TCharacter
   float tempRange;
   bool claimed;
 
+  //poacher
+  int ammo;
+
 } TCharacter;
 
 
@@ -758,7 +761,9 @@ typedef struct _TDinoInfo
   int packMember2Ch = 0;
   TPackMember2 packMember2[32];
 
-  int Weapon;//poacher
+  //poacher
+  int Weapon;
+  int Reload;
 
 } TDinoInfo;
 

@@ -3756,7 +3756,12 @@ void ReadCharacterLine(FILE *stream, char *_value, char line[256], bool &spawnIn
 
 	if (strstr(line, "JumpRange")) DinoInfo[TotalC].jumpRange = atoi(value);
 
-	if (strstr(line, "Weapon")) DinoInfo[TotalC].Weapon = atoi(value);
+	if (strstr(line, "Weapon")) {
+		DinoInfo[TotalC].Weapon = atoi(value);
+		DinoInfo[TotalC].Reload = WeapInfo[DinoInfo[TotalC].Weapon].Shots;
+		if (WeapInfo[DinoInfo[TotalC].Weapon].Reload)
+			DinoInfo[TotalC].Reload = WeapInfo[DinoInfo[TotalC].Weapon].Reload;
+	}
 
 	if (strstr(line, "runAnim")) DinoInfo[TotalC].runAnim = atoi(value);
 	if (strstr(line, "jumpAnim")) DinoInfo[TotalC].jumpAnim = atoi(value);

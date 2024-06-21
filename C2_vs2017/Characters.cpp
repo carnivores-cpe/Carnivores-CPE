@@ -319,6 +319,9 @@ void ResetCharacter(TCharacter *cptr)
 
 	cptr->showSonar = FALSE;
 
+	//poacher
+	cptr->ammo = DinoInfo[cptr->CType].Reload;
+
 }
 
 
@@ -2874,8 +2877,13 @@ void AnimatePoacher(TCharacter *cptr)
 
 
 
-
-	cptr->Phase = DinoInfo[cptr->CType].fireAnim;
+	if (NewPhase) {
+		if (!cptr->ammo) {
+			cptr->Phase = DinoInfo[cptr->CType].reloadAnim;
+		} else {
+			cptr->Phase = DinoInfo[cptr->CType].fireAnim;
+		}
+	}
 
 	cptr->alpha += pi/650;
 	if (cptr->alpha > 2 * pi) cptr->alpha -= 2 * pi;
@@ -2887,7 +2895,11 @@ ENDPSELECT:
 	//====== process phase changing ===========//
 	if ((_Phase != cptr->Phase) || NewPhase) {
 		ActivateCharacterFx(cptr);
-		if (cptr->Phase == DinoInfo[cptr->CType].fireAnim) {
+		if (cptr->Phase == DinoInfo[cptr->CType].reloadAnim) {
+		
+			cptr->ammo = DinoInfo[cptr->CType].Reload;
+		
+		} else if (cptr->Phase == DinoInfo[cptr->CType].fireAnim) {
 			Vector3d shotpos = SubVectors(cptr->pos, PlayerPos);
 			shotpos.x /= -3.f;
 			shotpos.y /= -3.f;
@@ -2896,6 +2908,8 @@ ENDPSELECT:
 			AddVoice3d(cptr->pinfo->SoundFX[cptr->pinfo->Anifx[cptr->Phase]].length,
 				cptr->pinfo->SoundFX[cptr->pinfo->Anifx[cptr->Phase]].lpData,
 				shotpos.x, shotpos.y, shotpos.z);
+
+			cptr->ammo -= 1;
 
 			for (int s = 0; s <= WeapInfo[DinoInfo[cptr->CType].Weapon].TraceC; s++)
 			{
