@@ -2019,7 +2019,7 @@ int AnimateBullet(float ax, float ay, float az,
 		  else Characters[ShotDino].Health -= WeapInfo[CurrentWeapon].Power;
 	  }
 	  if (Characters[ShotDino].Health < 0) Characters[ShotDino].Health = 0;
-	  registerDamage(ShotDino);
+	  registerDamage(ShotDino, bullet[b].enemy);
   }
   
   return sres;
@@ -2031,7 +2031,7 @@ int AnimateBullet(float ax, float ay, float az,
 void AddBullet(float ax, float ay, float az,
 	float Dx, float Dy, float Dz,
 	float Dlx, float Dly, float Dlz,
-	int parent, bool danger, bool cDanger)
+	int parent, bool enemy)
 {
 	bullet[bulletCh].a.x = ax;
 	bullet[bulletCh].a.y = ay;
@@ -2048,8 +2048,9 @@ void AddBullet(float ax, float ay, float az,
 	bullet[bulletCh].parent = parent;
 	bullet[bulletCh].fallTotal = 0;
 	bullet[bulletCh].state = 0;
-	bullet[bulletCh].Danger = danger;
-	bullet[bulletCh].cDanger = cDanger;
+	bullet[bulletCh].Danger = enemy;
+	bullet[bulletCh].cDanger = !enemy;
+	bullet[bulletCh].enemy = enemy;
 	bullet[bulletCh].alpha = FindVectorAlpha(Dx, Dz);
 	bullet[bulletCh].beta = FindVectorAlpha(sqrt(Dz*Dz + Dx*Dx), Dy);
 	if (WeapInfo[parent].onRadar) bullet[bulletCh].RTime = 1;
@@ -2177,11 +2178,11 @@ void AnimateBullets() {
 
 
 
-void registerDamage(int Dino) {
+void registerDamage(int Dino, bool enemyBullet) {
 
 	if (!Characters[Dino].Health)
 	{
-		if ((DinoInfo[Characters[Dino].CType].BaseScore || DinoInfo[Characters[Dino].CType].trophy) && !Multiplayer && !SurvivalMode) //No trophies in multiplayer for now - update this at later date?
+		if ((DinoInfo[Characters[Dino].CType].BaseScore || DinoInfo[Characters[Dino].CType].trophy) && !Multiplayer && !SurvivalMode && !enemyBullet) //No trophies in multiplayer for now - update this at later date?
 		{
 			TrophyRoom.Last.success++;
 			SubmitDinoScore(Dino);

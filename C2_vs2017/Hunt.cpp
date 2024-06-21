@@ -1539,7 +1539,7 @@ void ProcessShoot()
 		  nv.y * 64 * l,
 		  nv.z * 64 * l,
 			   CurrentWeapon,
-			   false, true);
+			   false);
     }
 
 	//Multiplayer)
@@ -1768,7 +1768,7 @@ void ProcessPlayerMovement()
 			  Characters[c].Health -= mDamage[0][c];
 			  mDamage[0][c] = 0;
 			  if (Characters[c].Health < 0) Characters[c].Health = 0;
-			  registerDamage(c);
+			  registerDamage(c, false);// this needs to register enemy damage!
 		  }
 	  }
   }

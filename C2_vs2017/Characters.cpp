@@ -2897,38 +2897,40 @@ ENDPSELECT:
 				cptr->pinfo->SoundFX[cptr->pinfo->Anifx[cptr->Phase]].lpData,
 				shotpos.x, shotpos.y, shotpos.z);
 
-			float rA = siRand(128) * 0.00010 * (2.f - WeapInfo[DinoInfo[cptr->CType].Weapon].Prec);
-			float rB = siRand(128) * 0.00010 * (2.f - WeapInfo[DinoInfo[cptr->CType].Weapon].Prec);
+			for (int s = 0; s <= WeapInfo[DinoInfo[cptr->CType].Weapon].TraceC; s++)
+			{
+				float rA = siRand(128) * 0.00010 * (2.f - WeapInfo[DinoInfo[cptr->CType].Weapon].Prec);
+				float rB = siRand(128) * 0.00010 * (2.f - WeapInfo[DinoInfo[cptr->CType].Weapon].Prec);
 
 
-			float ca = (float)cos(cptr->alpha + rA + pi/2);
-			float sa = (float)sin(cptr->alpha + rA + pi/2);
-			float cb = (float)cos(cptr->beta + rB);
-			float sb = (float)sin(cptr->beta + rB);
+				float ca = (float)cos(cptr->alpha + rA + pi / 2);
+				float sa = (float)sin(cptr->alpha + rA + pi / 2);
+				float cb = (float)cos(cptr->beta + rB);
+				float sb = (float)sin(cptr->beta + rB);
 
-			nv.x = sa;
-			nv.y = 0;
-			nv.z = -ca;
+				nv.x = sa;
+				nv.y = 0;
+				nv.z = -ca;
 
-			nv.x *= cb;
-			nv.y = -sb;
-			nv.z *= cb;
+				nv.x *= cb;
+				nv.y = -sb;
+				nv.z *= cb;
 
-			float v = WeapInfo[DinoInfo[cptr->CType].Weapon].Veloc;
-			if (UNDERWATER) v = WeapInfo[DinoInfo[cptr->CType].Weapon].VelocAq;
-			float l = WeapInfo[DinoInfo[cptr->CType].Weapon].Veloc;
-			if (WeapInfo[DinoInfo[cptr->CType].Weapon].aqLow) l = WeapInfo[DinoInfo[cptr->CType].Weapon].VelocAq;
+				float v = WeapInfo[DinoInfo[cptr->CType].Weapon].Veloc;
+				if (UNDERWATER) v = WeapInfo[DinoInfo[cptr->CType].Weapon].VelocAq;
+				float l = WeapInfo[DinoInfo[cptr->CType].Weapon].Veloc;
+				if (WeapInfo[DinoInfo[cptr->CType].Weapon].aqLow) l = WeapInfo[DinoInfo[cptr->CType].Weapon].VelocAq;
 
-			AddBullet(cptr->pos.x, cptr->pos.y + (170*cptr->scale), cptr->pos.z,
-				nv.x * 64 * v,
-				nv.y * 64 * v,
-				nv.z * 64 * v,
-				nv.x * 64 * l,
-				nv.y * 64 * l,
-				nv.z * 64 * l,
-				DinoInfo[cptr->CType].Weapon,
-				true, false);
-
+				AddBullet(cptr->pos.x, cptr->pos.y + (170 * cptr->scale), cptr->pos.z,
+					nv.x * 64 * v,
+					nv.y * 64 * v,
+					nv.z * 64 * v,
+					nv.x * 64 * l,
+					nv.y * 64 * l,
+					nv.z * 64 * l,
+					DinoInfo[cptr->CType].Weapon,
+					true);
+			}
 		}
 	}
 

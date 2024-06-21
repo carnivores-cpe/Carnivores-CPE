@@ -620,7 +620,7 @@ int  TraceShot(float  ax, float  ay, float az,
 	    TraceCharacter(c);
 
 
-  if (bDanger) TraceHitBox();
+  if (bDanger && MyHealth) TraceHitBox();
 
   float l;
   if ((TraceRes & 0xFF)==tresChar || TraceRes == tresHunter) l = 32.f;

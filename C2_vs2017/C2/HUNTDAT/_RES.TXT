@@ -1793,7 +1793,7 @@ deathtype{
  bloB = 0
  weaveRange = 0
  HideBinoc = TRUE
- Weapon = 4
+ Weapon = 2
  radar = TRUE
  radR = 240
  radG = 0

@@ -332,6 +332,7 @@ typedef struct _TBullet
 	float alpha, beta;
 	bool Danger;//damage hunter
 	bool cDanger;//damage creature
+	bool enemy;//damage creature
 //	float power, speed, fall;
 } TBullet;
 
@@ -1134,12 +1135,12 @@ void MakeCall();
 void AddBullet(float ax, float ay, float az,
               float bx, float by, float bz,
 			  float blx, float bly, float blz,
-	int, bool, bool);
+	int, bool);
 int AnimateBullet(float ax, float ay, float az,
 	float bx, float by, float bz, int b);
 void AnimateBullets();
 void refillWeapons(bool);
-void registerDamage(int);
+void registerDamage(int, bool);
 
 void AddBloodTrail(TCharacter *cptr);
 void AddElements(float, float, float, int, int);
