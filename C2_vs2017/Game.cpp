@@ -1936,9 +1936,10 @@ int AnimateBullet(float ax, float ay, float az,
               float bx, float by, float bz, int b)
 {
   int sres;
-    sres = TraceShot(ax, ay, az, bx, by, bz);
+    sres = TraceShot(ax, ay, az, bx, by, bz, bullet[b].Danger);
 
-ENDTRACE:
+//ENDTRACE:
+
 	bool poon = FALSE;
 	if (WeapInfo[bullet[b].parent].harpoon &&
 		GetLandUpH(bx, bz) > GetLandH(bx, bz) &&
@@ -1960,7 +1961,6 @@ ENDTRACE:
 	  //if (sres != tresChar) return sres;
 	  // add in underwater body impact sounds
 	  //if (!Characters[ShotDino].Health) return sres;
-
   
 	  if (sres == tresGround) {
 		  if (!poon) AddElements(bx, by, bz, partGround, 6 + powerL * 4);
@@ -1984,14 +1984,20 @@ ENDTRACE:
 		  int sNo = rRand(2);
 		  AddVoice3dv(fxImpactWater[sNo].length, fxImpactWater[sNo].lpData, bx, by, bz, 256);
 	  }
+	  
 
-	  if (sres != tresChar) return sres;
+
+	  if (sres != tresChar && sres != tresHunter) return sres;
 	  if (!poon) AddElements(bx, by, bz, partBlood, 4 + powerL * 4);
 	  int sNo = rRand(2);
 	  if (!UNDERWATER && !poon) AddVoice3dv(fxImpactChar[sNo].length, fxImpactChar[sNo].lpData, bx, by, bz, 256);
 	  if (UNDERWATER && poon) AddVoice3dv(fxImpactAquatic[sNo].length, fxImpactAquatic[sNo].lpData, bx, by, bz, 256); //change this to aquatic sound
-	  if (!Characters[ShotDino].Health) return sres;
-  
+
+	  if (sres == tresHunter) {
+		AddDeadBody(NULL, HUNT_EAT, TRUE);
+		Characters[ChCount - 1].alpha = PlayerAlpha - pi / 2;
+		return sres;
+	  } else if (!Characters[ShotDino].Health) return sres;
 
 //======= character damage =========//
 
@@ -2025,7 +2031,7 @@ ENDTRACE:
 void AddBullet(float ax, float ay, float az,
 	float Dx, float Dy, float Dz,
 	float Dlx, float Dly, float Dlz,
-	int parent)
+	int parent, bool danger)
 {
 	bullet[bulletCh].a.x = ax;
 	bullet[bulletCh].a.y = ay;
@@ -2039,6 +2045,7 @@ void AddBullet(float ax, float ay, float az,
 	bullet[bulletCh].parent = parent;
 	bullet[bulletCh].fallTotal = 0;
 	bullet[bulletCh].state = 0;
+	bullet[bulletCh].Danger = danger;
 	bullet[bulletCh].alpha = FindVectorAlpha(Dx, Dz);
 	bullet[bulletCh].beta = FindVectorAlpha(sqrt(Dz*Dz + Dx*Dx), Dy);
 	if (WeapInfo[parent].onRadar) bullet[bulletCh].RTime = 1;
@@ -2057,6 +2064,7 @@ void AnimateBullets() {
 		}
 
 		if (bullet[b].state) {
+			bullet[b].Danger = FALSE;
 			if (VectorLength(SubVectors(PlayerPos, bullet[b].a)) < 300.f) {
 
 				int maxAm = WeapInfo[bullet[b].parent].Shots;
@@ -2075,6 +2083,14 @@ void AnimateBullets() {
 				}
 			}
 		} else {
+
+			if (!bullet[b].Danger) {
+				Vector3d st;
+				st.x = PlayerX;
+				st.y = PlayerY + HeadY;
+				st.z = PlayerZ;
+				if (VectorLength(SubVectors(bullet[b].a, st)) > 128.f) bullet[b].Danger = TRUE;
+			}
 
 			Vector3d d = bullet[b].dif;
 			bool poon = FALSE;

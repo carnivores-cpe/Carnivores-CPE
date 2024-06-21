@@ -651,8 +651,9 @@ SKIPWIND:
   MapMode = FALSE;
 
   if (!SurvivalMode) {
-	wptr->shakel+= TimeDt / 10000.f;
-	if (wptr->shakel > 4.0f) wptr->shakel = 4.0f;
+	  float tempT = (float)TimeDt / 10000.f;
+	  wptr->shakel += tempT;
+	  if (wptr->shakel > 4.0f) wptr->shakel = 4.0f;
   }
 
   if (wptr->state == 1)
@@ -856,11 +857,17 @@ SKIPWIND:
   if (Weapon.breath < 0.f) Weapon.breath = 0.f;
 
   b = (float)sin((float)RealTime / 300.f) / 100.f;
-  float temp = wptr->shakel - wptr->breath;
+  float temp = wptr->shakel -wptr->breath;
   if (temp < 0.2f) temp = 0.2f;
   if (temp > 4.0f) temp = 4.0f;
-  wpnDAlpha = temp * (float)sin((float)RealTime / 300.f+pi/2) / 200.f;
-  wpnDBeta  = temp * (float)sin((float)RealTime / 300.f) / 400.f;
+  wpnDAlpha = temp * (float)sin(((float)RealTime) / 300.f+pi/2) / 200.f;
+  wpnDBeta  = temp * (float)sin(((float)RealTime) / 300.f) / 400.f;
+
+  //if (wptr->shakel < 0.2f) wptr->shakel = 0.2f;
+  //if (wptr->shakel > 4.0f) wptr->shakel = 4.0f;
+  //wpnDAlpha = wptr->shakel * (float)sin(((float)RealTime) / 300.f + pi / 2) / 200.f;
+  //wpnDBeta = wptr->shakel * (float)sin(((float)RealTime) / 300.f) / 400.f;
+
   nv.z = 0;
 
   //==================== render weapon ===================//
@@ -1120,6 +1127,7 @@ void ToggleRunMode()
 void ToggleCrouchMode()
 {
 	CrouchMode = !CrouchMode;
+	HitBox.phase = CrouchMode;
 	if (CrouchMode) AddMessage("Crouch mode is ON");
 	else AddMessage("Crouch mode is OFF");
 }
@@ -1530,8 +1538,8 @@ void ProcessShoot()
 		  nv.x * 64 * l,
 		  nv.y * 64 * l,
 		  nv.z * 64 * l,
-			   CurrentWeapon
-			   );
+			   CurrentWeapon,
+			   false);
     }
 
 	//Multiplayer)

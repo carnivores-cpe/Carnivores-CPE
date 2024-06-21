@@ -7929,6 +7929,12 @@ void AnimateCharacters()
 {
 	//if (!RunMode) return;
 	TCharacter *cptr;
+
+	HitBox.pos.x = PlayerX;
+	HitBox.pos.y = PlayerY;
+	HitBox.pos.z = PlayerZ;
+	HitBox.alpha = PlayerAlpha;
+
 	if (TrophyMode) {
 
 		for (CurDino = 0; CurDino < ChCount; CurDino++)

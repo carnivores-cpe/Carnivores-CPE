@@ -330,6 +330,7 @@ typedef struct _TBullet
 	int parent, state;
 	int FTime, RTime;
 	float alpha, beta;
+	bool Danger;
 //	float power, speed, fall;
 } TBullet;
 
@@ -494,6 +495,13 @@ typedef struct _TBag
 	int State;
 	int FTime;
 } TBag;
+
+typedef struct _THitBox
+{
+	Vector3d pos, rpos;
+	float alpha;
+	int phase;
+} THitBox;
 
 
 typedef struct tagLandingList
@@ -1047,7 +1055,8 @@ float FindVectorAlpha(float, float);
 float AngleDifference(float a, float b);
 
 int   TraceShot(float ax, float ay, float az,
-                float &bx, float &by, float &bz);
+                float &bx, float &by, float &bz,
+	bool);
 int   TraceLook(float ax, float ay, float az,
                 float bx, float by, float bz);
 
@@ -1122,7 +1131,7 @@ void MakeCall();
 void AddBullet(float ax, float ay, float az,
               float bx, float by, float bz,
 			  float blx, float bly, float blz,
-	int);
+	int, bool);
 int AnimateBullet(float ax, float ay, float az,
 	float bx, float by, float bz, int b);
 void AnimateBullets();
@@ -1243,7 +1252,7 @@ _EXTORNOT int SnowCh;
 
 //========= GAME ====================//
 _EXTORNOT int TargetDino, TargetArea, TargetWeapon, WeaponPres, TargetCall,
-          ObservMode, Tranq, ObjectsOnLook,
+          ObservMode, Tranq, ObjectsOnLook, RenderHitBox,
           CurrentWeapon, ShotsLeft[10], AmmoMag[10],
 	MagShotsLeft[10], Chambered[10], FiringMode[10]; //TrophyTime, 
 
@@ -1340,10 +1349,12 @@ _EXTORNOT TCharacterInfo WindModel;
 _EXTORNOT TCharacterInfo PlayerInfo;
 _EXTORNOT TCharacterInfo ChInfo[DINOINFO_MAX];
 _EXTORNOT TCharacterInfo MPlayerInfo[3]; //multiplayer
+_EXTORNOT TCharacterInfo HitBoxModel;
 _EXTORNOT TPack          Packs[256];
 _EXTORNOT int PackCount;
 _EXTORNOT TCharacter     Characters[256];
 _EXTORNOT TCharacter     MPlayers[3]; //multiplayer
+_EXTORNOT THitBox     HitBox;
 
 _EXTORNOT int SurvivalSpawnX; //survival
 _EXTORNOT int SurvivalSpawnZ;
@@ -1456,7 +1467,8 @@ _EXTORNOT   struct _t
 #define tresGround 1
 #define tresWater  2
 #define tresModel  3
-#define tresChar   4
+#define tresHunter  4
+#define tresChar   5
 
 #define sfDoubleSide         1
 #define sfDarkBack           2

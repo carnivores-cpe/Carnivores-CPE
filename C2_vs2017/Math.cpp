@@ -372,6 +372,39 @@ void TraceModel(int xx, int zz, int o)
 
 
 
+void TraceHitBox()
+{
+	THitBox *cptr = &HitBox;
+
+	if (PointToVectorD(TraceA, TraceNv, cptr->pos) > 1024.f) return;
+
+	TModel *mptr = HitBoxModel.mptr;
+	CreateMorphedModel(HitBoxModel.mptr, &HitBoxModel.Animation[HitBox.phase], 0, 1.0);
+	float ca = (float)cos(-cptr->alpha + pi / 2.f);
+	float sa = (float)sin(-cptr->alpha + pi / 2.f);
+	for (int vv = 0; vv < mptr->VCount; vv++)
+	{
+		rVertex[vv].x = mptr->gVertex[vv].x * ca + mptr->gVertex[vv].z * sa + cptr->pos.x;
+		rVertex[vv].y = mptr->gVertex[vv].y + cptr->pos.y;
+		rVertex[vv].z = mptr->gVertex[vv].z * ca - mptr->gVertex[vv].x * sa + cptr->pos.z;
+	}
+
+	for (int f = 0; f < mptr->FCount; f++)
+	{
+		TFace *fptr = &mptr->gFace[f];
+		//if (fptr->Flags & (sfOpacity + sfTransparent)) continue;
+		v[0] = rVertex[fptr->v1];
+		v[1] = rVertex[fptr->v2];
+		v[2] = rVertex[fptr->v3];
+		if (TraceCheckPlane(v[0], v[1], v[2]))
+		{
+			TraceRes = tresHunter;
+		}
+
+	}
+}
+
+
 
 void TraceCharacter(int c)
 {
@@ -510,7 +543,7 @@ int  TraceLook(float ax, float ay, float az,
 
 
 int  TraceShot(float  ax, float  ay, float az,
-               float &bx, float &by, float &bz)
+               float &bx, float &by, float &bz, bool bDanger)
 {
   TraceA.x = ax;
   TraceA.y = ay;
@@ -542,6 +575,10 @@ int  TraceShot(float  ax, float  ay, float az,
       if (zz<2 || zz>1010) continue;
 
       BOOL ReverseOn = (FMap[zz][xx] & fmReverse);
+
+	  // hunter shot
+
+
 
       FillVGround(v[0], xx, zz);
       FillVGround(v[1], xx+1, zz);
@@ -580,8 +617,11 @@ int  TraceShot(float  ax, float  ay, float az,
   for (int c=0; c<ChCount; c++)
     TraceCharacter(c);
 
+
+  if (bDanger) TraceHitBox();
+
   float l;
-  if ((TraceRes & 0xFF)==tresChar) l = 32.f;
+  if ((TraceRes & 0xFF)==tresChar || TraceRes == tresHunter) l = 32.f;
   else l=16.f;
   bx = TraceB.x - TraceNv.x * l;
   by = TraceB.y - TraceNv.y * l;

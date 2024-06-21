@@ -1703,6 +1703,13 @@ void LoadCharacters()
         LoadWav(logt, fxCall[c-10][2]);
       }
 
+
+  wsprintf(logt, "MULTIPLAYER\\AVATARS\\Hitbox.car");
+  LoadCharacterInfo(HitBoxModel, logt);
+  PrintLog("Loading: ");
+  PrintLog(logt);
+  PrintLog("\n");
+
   //multiplayer hunter models
   //test - 1 other player
   //test - add custom models at some point?

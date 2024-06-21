@@ -3706,6 +3706,31 @@ void RenderCharacterPost(TCharacter *cptr)
   grConstantColorValue(0xFF000000);
 }
 
+//testing purposes
+void RenderHitBoxPost()
+{
+	GlassL = 0;
+	zs = (int)VectorLength(HitBox.rpos);
+	if (zs > 256 * (ctViewR)) return;
+
+	if (zs > 256 * (ctViewR - 4))
+		GlassL = min(255, (int)(zs - 256 * (ctViewR - 4)) / 4);
+
+
+	grConstantColorValue((255 - GlassL) << 24);
+
+	CreateMorphedModel(HitBoxModel.mptr, &HitBoxModel.Animation[HitBox.phase], 0, 1.0);
+
+	if (fabs(HitBox.rpos.z) < 4000)
+		RenderModelClip(HitBoxModel.mptr,
+			HitBox.rpos.x, HitBox.rpos.y, HitBox.rpos.z, 210, 0, -HitBox.alpha - pi / 2 + CameraAlpha, CameraBeta);
+	else
+		RenderModel(HitBoxModel.mptr,
+			HitBox.rpos.x, HitBox.rpos.y, HitBox.rpos.z, 210, 0, -HitBox.alpha - pi / 2 + CameraAlpha, CameraBeta);
+	grConstantColorValue(0xFF000000);
+
+}
+
 
 void RenderBagPost()
 {
@@ -4072,163 +4097,187 @@ void RenderElements()
 
 void Render3DHardwarePosts()
 {
-  TCharacter *cptr;
+	TCharacter *cptr;
 
-  for (int c=0; c<ChCount; c++)
-  {
-    //if (!RunMode) continue;
-    cptr = &Characters[c];
-    cptr->rpos.x = cptr->pos.x - CameraX;
-    cptr->rpos.y = cptr->pos.y - CameraY;
-    cptr->rpos.z = cptr->pos.z - CameraZ;
-
-
-    float r = (float)max( fabs(cptr->rpos.x), fabs(cptr->rpos.z) );
-    int ri = -1 + (int)(r / 256.f + 0.5f);
-    if (ri < 0) ri = 0;
-    if (ri > ctViewR) continue;
-
-    if (FOGON)
-    {
-      CalcFogLevel_Gradient(cptr->rpos);
-      grFogColorValue(CurFogColor);
-    }
-
-    cptr->rpos = RotateVector(cptr->rpos);
-
-    float br = BackViewR + DinoInfo[cptr->CType].Radius;
-    if (cptr->rpos.z > br) continue;
-    if ( fabs(cptr->rpos.x) > -cptr->rpos.z + br ) continue;
-    if ( fabs(cptr->rpos.y) > -cptr->rpos.z + br ) continue;
-
-    RenderCharacterPost(cptr);
-  }
+	for (int c = 0; c < ChCount; c++)
+	{
+		//if (!RunMode) continue;
+		cptr = &Characters[c];
+		cptr->rpos.x = cptr->pos.x - CameraX;
+		cptr->rpos.y = cptr->pos.y - CameraY;
+		cptr->rpos.z = cptr->pos.z - CameraZ;
 
 
-  //multiplayer
-  //test just the 1 other player
-  if (Multiplayer) {
-	for (int c = 0; c < 1; c++){// 1 player, not playercount
-	  cptr = &MPlayers[c];
-	  cptr->rpos.x = cptr->pos.x - CameraX;
-	  cptr->rpos.y = cptr->pos.y - CameraY;
-	  cptr->rpos.z = cptr->pos.z - CameraZ;
+		float r = (float)max(fabs(cptr->rpos.x), fabs(cptr->rpos.z));
+		int ri = -1 + (int)(r / 256.f + 0.5f);
+		if (ri < 0) ri = 0;
+		if (ri > ctViewR) continue;
 
+		if (FOGON)
+		{
+			CalcFogLevel_Gradient(cptr->rpos);
+			grFogColorValue(CurFogColor);
+		}
 
-	  float r = (float)max(fabs(cptr->rpos.x), fabs(cptr->rpos.z));
-	  int ri = -1 + (int)(r / 256.f + 0.5f);
-	  if (ri < 0) ri = 0;
-	  if (ri > ctViewR) continue;
+		cptr->rpos = RotateVector(cptr->rpos);
 
-	  if (FOGON)
-	  {
-		  CalcFogLevel_Gradient(cptr->rpos);
-		  grFogColorValue(CurFogColor);
-	  }
+		float br = BackViewR + DinoInfo[cptr->CType].Radius;
+		if (cptr->rpos.z > br) continue;
+		if (fabs(cptr->rpos.x) > -cptr->rpos.z + br) continue;
+		if (fabs(cptr->rpos.y) > -cptr->rpos.z + br) continue;
 
-	  cptr->rpos = RotateVector(cptr->rpos);
-
-	  float br = BackViewR + DinoInfo[cptr->CType].Radius;
-	  if (cptr->rpos.z > br) continue;
-	  if (fabs(cptr->rpos.x) > -cptr->rpos.z + br) continue;
-	  if (fabs(cptr->rpos.y) > -cptr->rpos.z + br) continue;
-
-	  RenderCharacterPost(cptr);
+		RenderCharacterPost(cptr);
 	}
-  }
+
+
+	//multiplayer
+	//test just the 1 other player
+	if (Multiplayer) {
+		for (int c = 0; c < 1; c++) {// 1 player, not playercount
+			cptr = &MPlayers[c];
+			cptr->rpos.x = cptr->pos.x - CameraX;
+			cptr->rpos.y = cptr->pos.y - CameraY;
+			cptr->rpos.z = cptr->pos.z - CameraZ;
+
+
+			float r = (float)max(fabs(cptr->rpos.x), fabs(cptr->rpos.z));
+			int ri = -1 + (int)(r / 256.f + 0.5f);
+			if (ri < 0) ri = 0;
+			if (ri > ctViewR) continue;
+
+			if (FOGON)
+			{
+				CalcFogLevel_Gradient(cptr->rpos);
+				grFogColorValue(CurFogColor);
+			}
+
+			cptr->rpos = RotateVector(cptr->rpos);
+
+			float br = BackViewR + DinoInfo[cptr->CType].Radius;
+			if (cptr->rpos.z > br) continue;
+			if (fabs(cptr->rpos.x) > -cptr->rpos.z + br) continue;
+			if (fabs(cptr->rpos.y) > -cptr->rpos.z + br) continue;
+
+			RenderCharacterPost(cptr);
+		}
+	}
 
 
 
 
-  Ship.rpos.x = Ship.pos.x - CameraX;
-  Ship.rpos.y = Ship.pos.y - CameraY;
-  Ship.rpos.z = Ship.pos.z - CameraZ;
-  float r = (float)max( fabs(Ship.rpos.x), fabs(Ship.rpos.z) );
+	Ship.rpos.x = Ship.pos.x - CameraX;
+	Ship.rpos.y = Ship.pos.y - CameraY;
+	Ship.rpos.z = Ship.pos.z - CameraZ;
+	float r = (float)max(fabs(Ship.rpos.x), fabs(Ship.rpos.z));
 
-  int ri = -1 + (int)(r / 256.f + 0.2f);
-  if (ri < 0) ri = 0;
-  if (ri < ctViewR)
-  {
+	int ri = -1 + (int)(r / 256.f + 0.2f);
+	if (ri < 0) ri = 0;
+	if (ri < ctViewR)
+	{
 
-    if (FOGON)
-    {
-      CalcFogLevel_Gradient(Ship.rpos);
-      grFogColorValue(CurFogColor);
-    }
+		if (FOGON)
+		{
+			CalcFogLevel_Gradient(Ship.rpos);
+			grFogColorValue(CurFogColor);
+		}
 
-    Ship.rpos = RotateVector(Ship.rpos);
-    if (Ship.rpos.z > BackViewR) goto NOSHIP;
-    if ( fabs(Ship.rpos.x) > -Ship.rpos.z + BackViewR ) goto NOSHIP;
+		Ship.rpos = RotateVector(Ship.rpos);
+		if (Ship.rpos.z > BackViewR) goto NOSHIP;
+		if (fabs(Ship.rpos.x) > -Ship.rpos.z + BackViewR) goto NOSHIP;
 
-    RenderShipPost();
-  }
+		RenderShipPost();
+	}
 NOSHIP:
-  ;
+	;
 
-  SShip.rpos.x = SShip.pos.x - CameraX;
-  SShip.rpos.y = SShip.pos.y - CameraY;
-  SShip.rpos.z = SShip.pos.z - CameraZ;
-  r = (float)max(fabs(SShip.rpos.x), fabs(SShip.rpos.z));
+	SShip.rpos.x = SShip.pos.x - CameraX;
+	SShip.rpos.y = SShip.pos.y - CameraY;
+	SShip.rpos.z = SShip.pos.z - CameraZ;
+	r = (float)max(fabs(SShip.rpos.x), fabs(SShip.rpos.z));
 
-  ri = -1 + (int)(r / 256.f + 0.2f);
-  if (ri < 0) ri = 0;
-  if (ri < ctViewR)
-  {
+	ri = -1 + (int)(r / 256.f + 0.2f);
+	if (ri < 0) ri = 0;
+	if (ri < ctViewR)
+	{
 
-	  if (FOGON)
-	  {
-		  CalcFogLevel_Gradient(SShip.rpos);
-		  grFogColorValue(CurFogColor);
-	  }
+		if (FOGON)
+		{
+			CalcFogLevel_Gradient(SShip.rpos);
+			grFogColorValue(CurFogColor);
+		}
 
-	  SShip.rpos = RotateVector(SShip.rpos);
-	  if (SShip.rpos.z > BackViewR) goto NOSSHIP;
-	  if (fabs(SShip.rpos.x) > -SShip.rpos.z + BackViewR) goto NOSSHIP;
+		SShip.rpos = RotateVector(SShip.rpos);
+		if (SShip.rpos.z > BackViewR) goto NOSSHIP;
+		if (fabs(SShip.rpos.x) > -SShip.rpos.z + BackViewR) goto NOSSHIP;
 
-	  RenderSShipPost();
-  }
+		RenderSShipPost();
+	}
 NOSSHIP:
-  ;
+	;
 
-  for (int b = 0; b < bulletCh; b++) {
-	  if (WeapInfo[bullet[b].parent].bullet) {
-
-
-		  bullet[b].rpos.x = bullet[b].a.x - CameraX;
-		  bullet[b].rpos.y = bullet[b].a.y - CameraY;
-		  bullet[b].rpos.z = bullet[b].a.z - CameraZ;
-		  r = (float)max(fabs(bullet[b].rpos.x), fabs(bullet[b].rpos.z));
-
-		  ri = -1 + (int)(r / 256.f + 0.2f);
-		  if (ri < 0) ri = 0;
-		  if (ri < ctViewR)
-		  {
-
-			  if (FOGON)
-			  {
-				  CalcFogLevel_Gradient(bullet[b].rpos);
-				  grFogColorValue(CurFogColor);
-			  }
-
-			  bullet[b].rpos = RotateVector(bullet[b].rpos);
-			  if (bullet[b].rpos.z > BackViewR) goto NOBULLET;
-			  if (fabs(bullet[b].rpos.x) > -bullet[b].rpos.z + BackViewR) goto NOBULLET;
-
-			  RenderBulletPost(b);
-		  }
-	  NOBULLET:
-		  ;
+	for (int b = 0; b < bulletCh; b++) {
+		if (WeapInfo[bullet[b].parent].bullet) {
 
 
+			bullet[b].rpos.x = bullet[b].a.x - CameraX;
+			bullet[b].rpos.y = bullet[b].a.y - CameraY;
+			bullet[b].rpos.z = bullet[b].a.z - CameraZ;
+			r = (float)max(fabs(bullet[b].rpos.x), fabs(bullet[b].rpos.z));
 
-	  }
-  }
+			ri = -1 + (int)(r / 256.f + 0.2f);
+			if (ri < 0) ri = 0;
+			if (ri < ctViewR)
+			{
 
-  
+				if (FOGON)
+				{
+					CalcFogLevel_Gradient(bullet[b].rpos);
+					grFogColorValue(CurFogColor);
+				}
+
+				bullet[b].rpos = RotateVector(bullet[b].rpos);
+				if (bullet[b].rpos.z > BackViewR) goto NOBULLET;
+				if (fabs(bullet[b].rpos.x) > -bullet[b].rpos.z + BackViewR) goto NOBULLET;
+
+				RenderBulletPost(b);
+			}
+		NOBULLET:
+			;
 
 
 
+		}
+	}
 
+	//RenderHitBox = true;
+	if (RenderHitBox) {
+
+		HitBox.rpos.x = HitBox.pos.x - CameraX;
+		HitBox.rpos.y = HitBox.pos.y - CameraY;
+		HitBox.rpos.z = HitBox.pos.z - CameraZ;
+		r = (float)max(fabs(HitBox.rpos.x), fabs(HitBox.rpos.z));
+	
+		ri = -1 + (int)(r / 256.f + 0.2f);
+		if (ri < 0) ri = 0;
+		if (ri < ctViewR)
+		{
+	
+			if (FOGON)
+			{
+				CalcFogLevel_Gradient(HitBox.rpos);
+				grFogColorValue(CurFogColor);
+			}
+	
+			HitBox.rpos = RotateVector(HitBox.rpos);
+			if (HitBox.rpos.z > BackViewR) goto NOHitBox;
+			if (fabs(HitBox.rpos.x) > -HitBox.rpos.z + BackViewR) goto NOHitBox;
+	
+			RenderHitBoxPost();
+		}
+	NOHitBox:
+		;
+	
+	}
 
   AmmoBag.rpos.x = AmmoBag.pos.x - CameraX;
   AmmoBag.rpos.y = AmmoBag.pos.y - CameraY;

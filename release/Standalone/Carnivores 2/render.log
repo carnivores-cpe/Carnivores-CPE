@@ -1,11 +1,77 @@
-CarnivoresII 3DFX video driver. Build v2.03. Sep.17 1999.
+CarnivoresII 3DFX video driver. Build v2.04. Sep.24 1999.
 Creating main window...Ok.
 Checking 3dfx:
 Voodoo card.
-Trophy Loaded.
-Init Engine: Ok.
-DirectSound3D(native) audio driver Beta build v1.2
 
+ TEST: 0
+ TES2: 0
+ TEST: 0
+ TES2: 0
+ TEST: 0
+ TES2: 0
+ TEST: 0
+ TES2: 0
+ TEST: 0
+ TES2: 0
+ TEST: 1
+ TES2: 0
+ TEST: 1
+ TES2: 0
+ TEST: 1
+ TES2: 0
+ TEST: 1
+ TES2: 0
+ TEST: 1
+ TES2: 0
+ TEST: 1
+ TES2: 0
+ TEST: 1
+ TES2: 0
+ TEST: 1
+ TES2: 0
+ TEST: 2
+ TES2: 0
+ TEST: 2
+ TES2: 0
+ TEST: 3
+ TES2: 0
+ TEST: 3
+ TES2: 0
+ TEST: 3
+ TES2: 0
+ TEST: 3
+ TES2: 0
+ TEST: 3
+ TES2: 0
+ TEST: 3
+ TES2: 0
+ TEST: 3
+ TES2: 0
+ TEST: 4
+ TES2: 0
+ TEST: 4
+ TES2: 0
+ TEST: 4
+ TES2: 0
+ TEST: 4
+ TES2: 0
+ TEST: 4
+ TES2: 0
+ TEST: 4
+ TES2: 0
+ TEST: 4
+ TES2: 0
+ TEST: 4
+ TES2: 0
+ TEST: 4
+ TES2: 0
+ TEST: 4
+ TES2: 0
+ TEST: 4
+ TES2: 0Trophy Loaded.
+Init Engine: Ok.
+
+DirectSound3D(native) audio driver (Beta 4) v1.2
 No Device Enumerating implemented.. 
 Using native DirectSound 3D (Software emulation mode)
 DSCAPS:
@@ -31,6 +97,7 @@ Primary SetFormat() Ok
 Create audio thread #1..ok
 Create Listener3D()
 InitAudioSystem ok
+
 == Loading resources ==
 Loading common resources: Done.
 Loading textures: Done.
@@ -42,22 +109,32 @@ Entering messages loop.
 Entered game
 ReInitGame();
 Placing...
-Loading: HUNTDAT\hunter1.car
+Loading: HUNTDAT\hunter1_brach_mosa12.car
 Loading: HUNTDAT\mosh.car
 Loading: HUNTDAT\gall.car
 Loading: HUNTDAT\dimor2.car
 Loading: HUNTDAT\ptera.car
 Loading: HUNTDAT\dimet.car
-Loading: HUNTDAT\brachi1.car
-Loading: HUNTDAT\par2.car
-Loading: HUNTDAT\ankylo1.car
-Loading: HUNTDAT\chasmosa.car
-Loading: HUNTDAT\spino.car
+Loading: HUNTDAT\par9.car
+Loading: HUNTDAT\stego_tt.car
+Loading: HUNTDAT\allot_iictt.car
+Loading: HUNTDAT\chasmosa_tt.car
+Loading: HUNTDAT\dangerbrachikiller9.car
 Loading: HUNTDAT\WEAPONS\pistol.car
+Loading: HUNTDAT\WEAPONS\pistolbullet1.car
 Loading: HUNTDAT\WEAPONS\bullet1.tga
+Loading: HUNTDAT\WEAPONS\chamb1.tga
+Loading: HUNTDAT\WEAPONS\sniper_r.car
+Loading: HUNTDAT\WEAPONS\riflebullet1.car
+Loading: HUNTDAT\WEAPONS\bullet3.tga
+Loading: HUNTDAT\WEAPONS\chamb3.tga
+Voodoo: Can't set selected video mode
 Start Address: 0
 End   Address: 8388592
+Audio_UpdateGeometry: 324 faces uploaded
 Trophy Saved.
+TrophyB Saved.
+  AudioStop ()
  Releasing Listener3D
  Releasing PrimaryBuffer
  Releasing DirectSoundObject
