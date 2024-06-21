@@ -1539,7 +1539,7 @@ void ProcessShoot()
 		  nv.y * 64 * l,
 		  nv.z * 64 * l,
 			   CurrentWeapon,
-			   false);
+			   false, true);
     }
 
 	//Multiplayer)

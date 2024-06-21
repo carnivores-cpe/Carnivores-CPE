@@ -2853,9 +2853,112 @@ SKIPROT:
 
 }
 
-void AnimatePoacher(TCharacter *cptr) {
+void AnimatePoacher(TCharacter *cptr)
+{
+	NewPhase = FALSE;
+	int _Phase = cptr->Phase;
+	int _FTime = cptr->FTime;
+	float _tgalpha = cptr->tgalpha;
+
+	cptr->FTime += TimeDt;
+
+	ProcessPrevPhase(cptr);
+
+	//======== select new phase =======================//
+	if (cptr->FTime >= cptr->pinfo->Animation[cptr->Phase].AniTime)
+	{
+		cptr->FTime %= cptr->pinfo->Animation[cptr->Phase].AniTime;
+
+		NewPhase = TRUE;
+	}
+
+
+
+
+	cptr->Phase = DinoInfo[cptr->CType].fireAnim;
+
+	cptr->alpha += pi/650;
+	if (cptr->alpha > 2 * pi) cptr->alpha -= 2 * pi;
+
+
+
+ENDPSELECT:
+
+	//====== process phase changing ===========//
+	if ((_Phase != cptr->Phase) || NewPhase) {
+		ActivateCharacterFx(cptr);
+		if (cptr->Phase == DinoInfo[cptr->CType].fireAnim) {
+			Vector3d shotpos = SubVectors(cptr->pos, PlayerPos);
+			shotpos.x /= -3.f;
+			shotpos.y /= -3.f;
+			shotpos.z /= -3.f;
+			shotpos = SubVectors(PlayerPos, shotpos);
+			AddVoice3d(cptr->pinfo->SoundFX[cptr->pinfo->Anifx[cptr->Phase]].length,
+				cptr->pinfo->SoundFX[cptr->pinfo->Anifx[cptr->Phase]].lpData,
+				shotpos.x, shotpos.y, shotpos.z);
+
+			float rA = siRand(128) * 0.00010 * (2.f - WeapInfo[DinoInfo[cptr->CType].Weapon].Prec);
+			float rB = siRand(128) * 0.00010 * (2.f - WeapInfo[DinoInfo[cptr->CType].Weapon].Prec);
+
+
+			float ca = (float)cos(cptr->alpha + rA + pi/2);
+			float sa = (float)sin(cptr->alpha + rA + pi/2);
+			float cb = (float)cos(cptr->beta + rB);
+			float sb = (float)sin(cptr->beta + rB);
+
+			nv.x = sa;
+			nv.y = 0;
+			nv.z = -ca;
+
+			nv.x *= cb;
+			nv.y = -sb;
+			nv.z *= cb;
+
+			float v = WeapInfo[DinoInfo[cptr->CType].Weapon].Veloc;
+			if (UNDERWATER) v = WeapInfo[DinoInfo[cptr->CType].Weapon].VelocAq;
+			float l = WeapInfo[DinoInfo[cptr->CType].Weapon].Veloc;
+			if (WeapInfo[DinoInfo[cptr->CType].Weapon].aqLow) l = WeapInfo[DinoInfo[cptr->CType].Weapon].VelocAq;
+
+			AddBullet(cptr->pos.x, cptr->pos.y + (170*cptr->scale), cptr->pos.z,
+				nv.x * 64 * v,
+				nv.y * 64 * v,
+				nv.z * 64 * v,
+				nv.x * 64 * l,
+				nv.y * 64 * l,
+				nv.z * 64 * l,
+				DinoInfo[cptr->CType].Weapon,
+				true, false);
+
+		}
+	}
+
+	if (_Phase != cptr->Phase)
+	{
+		//==== set proportional FTime for better morphing =//
+
+		if (MORPHP || !AIInfo[cptr->Clone].carnivore || AIInfo[cptr->Clone].iceAge) {
+			if ((_Phase == DinoInfo[cptr->CType].runAnim ||
+				_Phase == DinoInfo[cptr->CType].walkAnim) &&
+				(cptr->Phase == DinoInfo[cptr->CType].runAnim ||
+					cptr->Phase == DinoInfo[cptr->CType].walkAnim))
+				cptr->FTime = _FTime * cptr->pinfo->Animation[cptr->Phase].AniTime / cptr->pinfo->Animation[_Phase].AniTime + 64;
+			else if (!NewPhase) cptr->FTime = 0;
+		}
+
+		if (cptr->PPMorphTime > 128)
+		{
+			cptr->PrevPhase = _Phase;
+			cptr->PrevPFTime = _FTime;
+			cptr->PPMorphTime = 0;
+		}
+	}
+
+	cptr->FTime %= cptr->pinfo->Animation[cptr->Phase].AniTime;
 
 }
+
+
+
 
 void AnimateHuntable(TCharacter *cptr)
 {
@@ -3038,7 +3141,7 @@ TBEGIN:
 		if (pdist < 1024.f && cptr->Clone == AI_DEER && !ObservMode && !DEBUG) {
 			cptr->State = 1;
 			cptr->AfraidTime = (6 + rRand(8)) * 1024;
-			cptr->Phase = cptr->Phase = DinoInfo[cptr->CType].runAnim;
+			cptr->Phase = DinoInfo[cptr->CType].runAnim;
 			goto TBEGIN;
 		}
 

@@ -326,11 +326,12 @@ typedef struct _TBullet
 {
 	float fallTotal;
 	byte aqState; //0 land //1 aqua //2 min
-	Vector3d a,dif,ldif,rpos;
+	Vector3d a,dif,ldif,rpos,orig;
 	int parent, state;
 	int FTime, RTime;
 	float alpha, beta;
-	bool Danger;
+	bool Danger;//damage hunter
+	bool cDanger;//damage creature
 //	float power, speed, fall;
 } TBullet;
 
@@ -756,6 +757,8 @@ typedef struct _TDinoInfo
   int packMember2Ch = 0;
   TPackMember2 packMember2[32];
 
+  int Weapon;//poacher
+
 } TDinoInfo;
 
 typedef struct _TPack
@@ -1056,7 +1059,7 @@ float AngleDifference(float a, float b);
 
 int   TraceShot(float ax, float ay, float az,
                 float &bx, float &by, float &bz,
-	bool);
+	bool,bool);
 int   TraceLook(float ax, float ay, float az,
                 float bx, float by, float bz);
 
@@ -1131,7 +1134,7 @@ void MakeCall();
 void AddBullet(float ax, float ay, float az,
               float bx, float by, float bz,
 			  float blx, float bly, float blz,
-	int, bool);
+	int, bool, bool);
 int AnimateBullet(float ax, float ay, float az,
 	float bx, float by, float bz, int b);
 void AnimateBullets();

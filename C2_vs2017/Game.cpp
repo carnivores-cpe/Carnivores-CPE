@@ -1936,7 +1936,7 @@ int AnimateBullet(float ax, float ay, float az,
               float bx, float by, float bz, int b)
 {
   int sres;
-    sres = TraceShot(ax, ay, az, bx, by, bz, bullet[b].Danger);
+    sres = TraceShot(ax, ay, az, bx, by, bz, bullet[b].Danger, bullet[b].cDanger);
 
 //ENDTRACE:
 
@@ -2031,11 +2031,14 @@ int AnimateBullet(float ax, float ay, float az,
 void AddBullet(float ax, float ay, float az,
 	float Dx, float Dy, float Dz,
 	float Dlx, float Dly, float Dlz,
-	int parent, bool danger)
+	int parent, bool danger, bool cDanger)
 {
 	bullet[bulletCh].a.x = ax;
 	bullet[bulletCh].a.y = ay;
 	bullet[bulletCh].a.z = az;
+	bullet[bulletCh].orig.x = ax;
+	bullet[bulletCh].orig.y = ay;
+	bullet[bulletCh].orig.z = az;
 	bullet[bulletCh].dif.x = Dx;
 	bullet[bulletCh].dif.y = Dy;
 	bullet[bulletCh].dif.z = Dz;
@@ -2046,6 +2049,7 @@ void AddBullet(float ax, float ay, float az,
 	bullet[bulletCh].fallTotal = 0;
 	bullet[bulletCh].state = 0;
 	bullet[bulletCh].Danger = danger;
+	bullet[bulletCh].cDanger = cDanger;
 	bullet[bulletCh].alpha = FindVectorAlpha(Dx, Dz);
 	bullet[bulletCh].beta = FindVectorAlpha(sqrt(Dz*Dz + Dx*Dx), Dy);
 	if (WeapInfo[parent].onRadar) bullet[bulletCh].RTime = 1;
@@ -2065,6 +2069,7 @@ void AnimateBullets() {
 
 		if (bullet[b].state) {
 			bullet[b].Danger = FALSE;
+			bullet[b].cDanger = FALSE;
 			if (VectorLength(SubVectors(PlayerPos, bullet[b].a)) < 300.f) {
 
 				int maxAm = WeapInfo[bullet[b].parent].Shots;
@@ -2084,13 +2089,13 @@ void AnimateBullets() {
 			}
 		} else {
 
-			if (!bullet[b].Danger) {
-				Vector3d st;
-				st.x = PlayerX;
-				st.y = PlayerY + HeadY;
-				st.z = PlayerZ;
-				if (VectorLength(SubVectors(bullet[b].a, st)) > 128.f) bullet[b].Danger = TRUE;
-			}
+			if (!bullet[b].Danger)
+				if (VectorLength(SubVectors(bullet[b].a, bullet[b].orig)) > 128.f)
+					bullet[b].Danger = TRUE;
+			
+			if (!bullet[b].cDanger)
+				if (VectorLength(SubVectors(bullet[b].a, bullet[b].orig)) > 128.f)
+					bullet[b].cDanger = TRUE;
 
 			Vector3d d = bullet[b].dif;
 			bool poon = FALSE;

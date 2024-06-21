@@ -543,7 +543,8 @@ int  TraceLook(float ax, float ay, float az,
 
 
 int  TraceShot(float  ax, float  ay, float az,
-               float &bx, float &by, float &bz, bool bDanger)
+               float &bx, float &by, float &bz,
+		   	   bool bDanger, bool bCDanger)
 {
   TraceA.x = ax;
   TraceA.y = ay;
@@ -614,8 +615,9 @@ int  TraceShot(float  ax, float  ay, float az,
     }
 
 //======== trace characters ============//
-  for (int c=0; c<ChCount; c++)
-    TraceCharacter(c);
+  if (bCDanger)
+	  for (int c=0; c<ChCount; c++)
+	    TraceCharacter(c);
 
 
   if (bDanger) TraceHitBox();

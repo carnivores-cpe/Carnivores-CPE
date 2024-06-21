@@ -1622,6 +1622,7 @@ void LoadCharacters()
         PrintLog(logt);
         PrintLog("\n");
       }
+
     }
 
   for (int c=10; c<20; c++)
@@ -3617,8 +3618,6 @@ void ReadCharacterLine(FILE *stream, char *_value, char line[256], bool &spawnIn
 	char *value = _value;
 //	bool overwrite = _overwrite;
 
-
-
 	if (strstr(line, "packinfo")) {
 		if (memberOverwrite) {
 			WipePackMembers2();
@@ -3756,6 +3755,8 @@ void ReadCharacterLine(FILE *stream, char *_value, char line[256], bool &spawnIn
 	if (strstr(line, "HideBinoc")) readBool(value, DinoInfo[TotalC].HideBinoc);
 
 	if (strstr(line, "JumpRange")) DinoInfo[TotalC].jumpRange = atoi(value);
+
+	if (strstr(line, "Weapon")) DinoInfo[TotalC].Weapon = atoi(value);
 
 	if (strstr(line, "runAnim")) DinoInfo[TotalC].runAnim = atoi(value);
 	if (strstr(line, "jumpAnim")) DinoInfo[TotalC].jumpAnim = atoi(value);
