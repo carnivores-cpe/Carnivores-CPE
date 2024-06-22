@@ -2879,7 +2879,8 @@ void AnimatePoacher(TCharacter *cptr)
 
 	if (NewPhase) {
 		if (!cptr->ammo) {
-			cptr->Phase = DinoInfo[cptr->CType].reloadAnim;
+			if (DinoInfo[cptr->CType].reloadAnim>=0) cptr->Phase = DinoInfo[cptr->CType].reloadAnim;
+			else cptr->ammo = DinoInfo[cptr->CType].Reload;
 		} else {
 			cptr->Phase = DinoInfo[cptr->CType].fireAnim;
 		}
@@ -2900,14 +2901,16 @@ ENDPSELECT:
 			cptr->ammo = DinoInfo[cptr->CType].Reload;
 		
 		} else if (cptr->Phase == DinoInfo[cptr->CType].fireAnim) {
-			Vector3d shotpos = SubVectors(cptr->pos, PlayerPos);
-			shotpos.x /= -3.f;
-			shotpos.y /= -3.f;
-			shotpos.z /= -3.f;
-			shotpos = SubVectors(PlayerPos, shotpos);
-			AddVoice3d(cptr->pinfo->SoundFX[cptr->pinfo->Anifx[cptr->Phase]].length,
-				cptr->pinfo->SoundFX[cptr->pinfo->Anifx[cptr->Phase]].lpData,
-				shotpos.x, shotpos.y, shotpos.z);
+			if (WeapInfo[DinoInfo[cptr->CType].Weapon].MGSSound) {
+				Vector3d shotpos = SubVectors(cptr->pos, PlayerPos);
+				shotpos.x /= -3.f;
+				shotpos.y /= -3.f;
+				shotpos.z /= -3.f;
+				shotpos = SubVectors(PlayerPos, shotpos);
+				AddVoice3d(fxGunShot[DinoInfo[cptr->CType].Weapon].length,
+					fxGunShot[DinoInfo[cptr->CType].Weapon].lpData,
+					shotpos.x, shotpos.y, shotpos.z);
+			}
 
 			cptr->ammo -= 1;
 
@@ -8026,7 +8029,7 @@ void AnimateMHunters() {
 			mGunShot[c] = -1;
 			if (WeapInfo[weapon].MGSSound) {
 				TSFX *shotFx = &fxGunShot[WeapInfo[weapon].SFXIndex];
-				AddVoice3d(shotFx->length, shotFx->lpData, pos->x, pos->y, pos->z);
+				AddVoice3d(shotFx->length, shotFx->lpData, pos->x, pos->y, pos->z);//TODO XYZ NEEDS TO BE PLAYER -> SOUND VECTOR
 			}
 			MakeNoise(*pos, ctViewR * 200 * WeapInfo[weapon].Loud);
 		}

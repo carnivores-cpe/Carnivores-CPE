@@ -696,7 +696,8 @@ typedef struct _TDinoInfo
   int jumpRange;
 
   int runAnim, jumpAnim, walkAnim, swimAnim, flyAnim, diveAnim, glideAnim, takeoffAnim, landAnim,
-	  slideAnim, shakeLandAnim, shakeWaterAnim, climbAnim, fireAnim, reloadAnim;
+	  slideAnim, shakeLandAnim, shakeWaterAnim, climbAnim, fireAnim;
+  int reloadAnim = -1;
 
   TDinoDeathType deathType[32];
   int deathTypeCount;

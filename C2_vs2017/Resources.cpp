@@ -1679,14 +1679,12 @@ void LoadCharacters()
 		  PrintLog("\n");
 	  }
 
-	  if (Multiplayer) {
-		  if (WeapInfo[c].MGSSound) {
+	    if (WeapInfo[c].MGSSound) {
 			wsprintf(logt, "MULTIPLAYER\\GUNSHOTS\\%s", WeapInfo[c].SFXName);
 			LoadWav(logt, fxGunShot[c]);
 			WeapInfo[c].SFXIndex = c;
 		  } else WeapInfo[c].SFXIndex = -1;
-	  }
-
+	  
     }
 
   // Allocate space for normals fitting all available weapons

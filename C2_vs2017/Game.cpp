@@ -2053,8 +2053,10 @@ void AddBullet(float ax, float ay, float az,
 	bullet[bulletCh].enemy = enemy;
 	bullet[bulletCh].alpha = FindVectorAlpha(Dx, Dz);
 	bullet[bulletCh].beta = FindVectorAlpha(sqrt(Dz*Dz + Dx*Dx), Dy);
-	if (WeapInfo[parent].onRadar) bullet[bulletCh].RTime = 1;
-	if (WeapInfo[parent].radarTime) bullet[bulletCh].RTime = WeapInfo[parent].radarTime;
+	if (!enemy){
+		if (WeapInfo[parent].onRadar) bullet[bulletCh].RTime = 1;
+		if (WeapInfo[parent].radarTime) bullet[bulletCh].RTime = WeapInfo[parent].radarTime;
+	}
 	if (UNDERWATER) bullet[bulletCh].aqState = 1;
 	else bullet[bulletCh].aqState = 0;
 	bulletCh++;
