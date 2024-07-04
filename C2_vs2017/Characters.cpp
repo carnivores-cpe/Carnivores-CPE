@@ -8244,8 +8244,8 @@ void AnimateCharacters()
 			break;
 
 		case AI_POACHER:
-			if (cptr->Health) AnimatePoacher(cptr);
-			else AnimateDeadCommon(cptr);
+			//if (cptr->Health) AnimatePoacher(cptr);
+			//else AnimateDeadCommon(cptr);
 			break;
 
 		case AI_PARA:
