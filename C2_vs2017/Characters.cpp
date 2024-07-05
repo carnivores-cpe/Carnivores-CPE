@@ -8244,6 +8244,7 @@ void AnimateCharacters()
 			break;
 
 		case AI_POACHER:
+			// TEMP DISABLED
 			//if (cptr->Health) AnimatePoacher(cptr);
 			//else AnimateDeadCommon(cptr);
 			break;

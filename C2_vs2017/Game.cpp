@@ -741,7 +741,7 @@ void HideWeapon()
 				wptr->chinfo[CurrentWeapon].SoundFX[WeapInfo[CurrentWeapon].getAqSnd].lpData, 256);
 	} else {
 		int fx = wptr->chinfo[CurrentWeapon].Anifx[WeapInfo[CurrentWeapon].getAnim];
-		if (fx) AddVoicev(wptr->chinfo[CurrentWeapon].SoundFX[fx].length,
+		if (fx >= 0) AddVoicev(wptr->chinfo[CurrentWeapon].SoundFX[fx].length,
 			wptr->chinfo[CurrentWeapon].SoundFX[fx].lpData, 256);
 	}
     wptr->FTime = 0;
@@ -762,7 +762,7 @@ void HideWeapon()
 			  wptr->chinfo[CurrentWeapon].SoundFX[WeapInfo[CurrentWeapon].putAqSnd].lpData, 256);
   } else {
 	  int fx = wptr->chinfo[CurrentWeapon].Anifx[WeapInfo[CurrentWeapon].putAnim];
-	  if (fx) AddVoicev(wptr->chinfo[CurrentWeapon].SoundFX[fx].length,
+	  if (fx >= 0) AddVoicev(wptr->chinfo[CurrentWeapon].SoundFX[fx].length,
 		  wptr->chinfo[CurrentWeapon].SoundFX[fx].lpData, 256);
   }
   wptr->state = 3;

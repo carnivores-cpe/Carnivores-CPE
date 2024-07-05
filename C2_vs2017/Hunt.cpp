@@ -452,7 +452,7 @@ void ProcessReload() {
 						}
 						else {
 							int fx = wptr->chinfo[CurrentWeapon].Anifx[WeapInfo[CurrentWeapon].rldAnimPart];
-							if (fx) AddVoicev(wptr->chinfo[CurrentWeapon].SoundFX[fx].length,
+							if (fx >= 0) AddVoicev(wptr->chinfo[CurrentWeapon].SoundFX[fx].length,
 								wptr->chinfo[CurrentWeapon].SoundFX[fx].lpData, 256);
 						}
 					}
@@ -472,7 +472,7 @@ void ProcessReload() {
 						}
 						else {
 							int fx = wptr->chinfo[CurrentWeapon].Anifx[WeapInfo[CurrentWeapon].rldAnim];
-							if (fx) AddVoicev(wptr->chinfo[CurrentWeapon].SoundFX[fx].length,
+							if (fx >= 0) AddVoicev(wptr->chinfo[CurrentWeapon].SoundFX[fx].length,
 								wptr->chinfo[CurrentWeapon].SoundFX[fx].lpData, 256);
 						}
 					}
@@ -513,7 +513,7 @@ void ProcessReload() {
 					}
 					else {
 						int fx = wptr->chinfo[CurrentWeapon].Anifx[WeapInfo[CurrentWeapon].rldAnimPart];
-						if (fx) AddVoicev(wptr->chinfo[CurrentWeapon].SoundFX[fx].length,
+						if (fx >= 0) AddVoicev(wptr->chinfo[CurrentWeapon].SoundFX[fx].length,
 							wptr->chinfo[CurrentWeapon].SoundFX[fx].lpData, 256);
 					}
 				}
@@ -532,7 +532,7 @@ void ProcessReload() {
 					}
 					else {
 						int fx = wptr->chinfo[CurrentWeapon].Anifx[WeapInfo[CurrentWeapon].rldAnim];
-						if (fx) AddVoicev(wptr->chinfo[CurrentWeapon].SoundFX[fx].length,
+						if (fx >= 0) AddVoicev(wptr->chinfo[CurrentWeapon].SoundFX[fx].length,
 							wptr->chinfo[CurrentWeapon].SoundFX[fx].lpData, 256);
 					}
 
@@ -564,7 +564,7 @@ void ProcessFireMode() {
 		}
 		else {
 			int fx = wptr->chinfo[CurrentWeapon].Anifx[WeapInfo[CurrentWeapon].modAnim];
-			if (fx) AddVoicev(wptr->chinfo[CurrentWeapon].SoundFX[fx].length,
+			if (fx >= 0) AddVoicev(wptr->chinfo[CurrentWeapon].SoundFX[fx].length,
 				wptr->chinfo[CurrentWeapon].SoundFX[fx].lpData, 256);
 		}
 	}
@@ -590,7 +590,7 @@ void ProcessPump() {
 			}
 			else {
 				int fx = wptr->chinfo[CurrentWeapon].Anifx[WeapInfo[CurrentWeapon].pmpAnim];
-				if (fx) AddVoicev(wptr->chinfo[CurrentWeapon].SoundFX[fx].length,
+				if (fx >= 0) AddVoicev(wptr->chinfo[CurrentWeapon].SoundFX[fx].length,
 					wptr->chinfo[CurrentWeapon].SoundFX[fx].lpData, 256);
 			}
 		}
@@ -1223,7 +1223,7 @@ LONG APIENTRY MainWndProc( HWND hWnd, UINT message, UINT wParam, LONG lParam)
         w = 9;
       else
         w = ((int)wParam - '1');
-      if (!ShotsLeft[w] && !AmmoMag[w])
+      if (!Chambered[w] && !ShotsLeft[w] && !AmmoMag[w])
       {
         AddMessage("No weapon");
         break;
@@ -1484,7 +1484,7 @@ void ProcessShoot()
 	}
 	else {
 		int fx = wptr->chinfo[CurrentWeapon].Anifx[WeapInfo[CurrentWeapon].shtAnim];
-		if (fx) AddVoicev(wptr->chinfo[CurrentWeapon].SoundFX[fx].length,
+		if (fx >= 0) AddVoicev(wptr->chinfo[CurrentWeapon].SoundFX[fx].length,
 			wptr->chinfo[CurrentWeapon].SoundFX[fx].lpData, 256);
 	}
 	
