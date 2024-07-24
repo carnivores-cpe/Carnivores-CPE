@@ -1,0 +1,7 @@
+Weapon : Shotgun
+
+This is a very powerful weapon that uses buck-shot
+bullets as an ammunition. The grouping of shots 
+decreases on farther distances. Shooting from 
+this weapon requires less precise aiming due to
+its grouping of shots.  

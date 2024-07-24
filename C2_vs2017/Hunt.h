@@ -15,7 +15,7 @@
 //1.0.6		=6
 //1.0.6.1	=7
 //1.1		=8
-#define MODDERS_EDITION_VERSION_ID	9 //1.1.1
+#define MODDERS_EDITION_VERSION_ID	10 //1.2
 
 #define DEFAULT_BUFLEN 512
 #define DEFAULT_PORT "1986"
