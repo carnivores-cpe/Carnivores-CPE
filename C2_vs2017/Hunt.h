@@ -1445,12 +1445,12 @@ _EXTORNOT   ScrPoint  scrp[3];
 _EXTORNOT   MScrPoint mscrp[3];
 _EXTORNOT   Vector3d  nv, waterclipbase, Sun3dPos;
 
-
-_EXTORNOT   struct _t
+typedef struct _TKeyMap
 {
   int fkForward, fkBackward, fkUp, fkDown, fkLeft, fkRight, fkFire, fkShow, fkSLeft, fkSRight, fkStrafe, fkJump, fkRun, fkCrouch, fkCall, fkCCall, fkBinoc;
-} KeyMap;
+} TKeyMap;
 
+_EXTORNOT TKeyMap KeyMap;
 
 #define kfForward     0x00000001
 #define kfBackward    0x00000002
