@@ -1,10 +1,4 @@
 
-common {
- survivalArea = 5
- survivalWeapon = 2
- survivalDTM = 0
-}
-
 areatable {
 {
  tree = 7

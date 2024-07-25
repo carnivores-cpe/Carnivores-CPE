@@ -1,0 +1,11 @@
+info 
+{
+	name    = 'Fort Ciskin'
+	mapfile = 'huntdat\\areas\\area2'
+	rscfile = 'huntdat\\areas\\area2.rsc'
+	pic	= 'huntdat\\menu\\pics\\area2.tga'
+	text    = 'huntdat\\menu\\txt\\area2.txt'
+	price   = 100
+}
+
+.

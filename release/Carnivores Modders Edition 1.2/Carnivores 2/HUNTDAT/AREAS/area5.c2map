@@ -1,0 +1,11 @@
+info 
+{
+	name    = 'Mount Ravan'
+	mapfile = 'huntdat\\areas\\area5'
+	rscfile = 'huntdat\\areas\\area5.rsc'
+	pic	= 'huntdat\\menu\\pics\\area5.tga'
+	text    = 'huntdat\\menu\\txt\\area5.txt'
+	price   = 400
+}
+
+.

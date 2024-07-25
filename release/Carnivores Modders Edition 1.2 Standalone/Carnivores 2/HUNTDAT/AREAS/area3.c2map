@@ -1,0 +1,11 @@
+info 
+{
+	name    = 'Vengar Fjords'
+	mapfile = 'huntdat\\areas\\area3'
+	rscfile = 'huntdat\\areas\\area3.rsc'
+	pic	= 'huntdat\\menu\\pics\\area3.tga'
+	text    = 'huntdat\\menu\\txt\\area3.txt'
+	price   = 150
+}
+
+.

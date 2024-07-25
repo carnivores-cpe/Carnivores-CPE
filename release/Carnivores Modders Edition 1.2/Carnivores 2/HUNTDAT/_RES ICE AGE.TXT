@@ -1,10 +1,4 @@
 
-common {
- survivalArea = 0
- survivalWeapon = 0
- survivalDTM = 0
-}
-
 areatable {
 {
  snow{
