@@ -257,7 +257,10 @@ function expand(n) {
 			<h3>Change Log v1.2</h3>
 			
 			<ul>
-				<li></li>
+				<li>Custom menu fonts.</li>
+				<!--<li>10 selectable weapon slots (with numkey binding)</li>
+				<li>10 area slots</li>-->
+				<!--<li>The ability to hide creatures on the menu until the user has sufficient score.</li>-->
 			</ul>
 			
 			<h3>Bug Fixes v1.2</h3>
@@ -389,12 +392,9 @@ function expand(n) {
 				<li>Minimum/maximum depth (fish/mosasaurus AI creatures only)</li>
 				<li>Minimum/maximum altitude for flier AI creatures</li>
 				<li>New overwrite system - Any RES value can be adjusted depending on map, time of day, creature selected or a combination</li>
-				<!--<li>10 selectable weapon slots (with numkey binding)</li>
-				<li>10 area slots</li>-->
 				<li>Optional sleep animation for T-Rex</li>
 				<li>Customisable classic, Primal Prey style or hybrid trophy room.</li>
 				<li>Trophies can be animated (res togglable)</li>
-				<!--<li>The ability to hide creatures on the menu until the user has sufficient score.</li>-->
 				<li>Jump range for mosasaurus ai</li>
 				<li>Toggle crouch.</li>
 				<li>Customisable snow/weather settings for each map</li>
@@ -430,6 +430,10 @@ function expand(n) {
 			    <li>Decide which trophies to take back to the trophy room.</li>
 			    <li>Non-trophy creatures can still give points using basescore.</li>
 				<li>More detailed _RES error messages.</li>
+				<li>Custom menu fonts.</li>
+				<!--<li>10 selectable weapon slots (with numkey binding)</li>
+				<li>10 area slots</li>-->
+				<!--<li>The ability to hide creatures on the menu until the user has sufficient score.</li>-->
 			</ul>
 									
 			<h3>Credits</h3>
@@ -917,6 +921,9 @@ function expand(n) {
 		
 		
 		This res section is for universal game settings.
+		<p><b>
+		This section must be in _menu.txt
+		</b></p>
 
 
 <p style="margin-top:4%;">
@@ -2206,6 +2213,37 @@ reduced by the whole value of densityMulti. e.g. in the above screenshot, the ma
 		<div id="content_171" style="display: none">
 			
 			
+			
+			
+			
+
+<p style="margin-top:4%;">
+	<h2 id="arrow_215" unselectable="on" onclick="expand(215)"
+		style="float:left;margin-top:0;cursor:pointer;
+		-moz-user-select:none;
+		user-select:none;
+		-webkit-user-select: none;
+		-ms-user-select: none;"
+		>></h2>
+	<div class = "con" style="margin-left:4%">
+		<h2 onclick="expand(215)" style="cursor:pointer;">_RES value: price</h2>
+		<div id="content_215" style="display: none">
+		
+			<p><b>Data type: Whole Number</b></p>
+			
+			The menu cost.
+			
+			<p><b>
+			This value should be defined in _menu.txt
+			</b></p>
+				
+		</div>
+	</div>
+</p>
+			
+			
+			
+			
 <p style="margin-top:4%;">
 	<h2 id="arrow_172" unselectable="on" onclick="expand(172)"
 		style="float:left;margin-top:0;cursor:pointer;
@@ -3349,6 +3387,30 @@ Sets the colour of the crosshair (RGB 0-255) (if cross = TRUE).
 				<div class="grid-item">Bear/Yeti</div>
 				
 			</div>
+		</div>
+	</div>
+</p>
+
+<p style="margin-top:4%;">
+	<h2 id="arrow_214" unselectable="on" onclick="expand(214)"
+		style="float:left;margin-top:0;cursor:pointer;
+		-moz-user-select:none;
+		user-select:none;
+		-webkit-user-select: none;
+		-ms-user-select: none;"
+		>></h2>
+	<div class = "con" style="margin-left:4%">
+		<h2 onclick="expand(214)" style="cursor:pointer;">_RES value: price</h2>
+		<div id="content_214" style="display: none">
+		
+			<p><b>Data type: Whole Number</b></p>
+			
+			The menu cost.
+			
+			<p><b>
+			This value should be defined in _menu.txt
+			</b></p>
+				
 		</div>
 	</div>
 </p>
@@ -7810,6 +7872,268 @@ fishIdleAnim = 4
 	</div>
 </p>
 
+
+
+
+<p style="margin-top:4%;">
+	<h2 id="arrow_216" unselectable="on" onclick="expand(216)"
+		style="float:left;margin-left:18%;margin-top:0;cursor:pointer;
+		-moz-user-select:none;
+		user-select:none;
+		-webkit-user-select: none;
+		-ms-user-select: none;"
+		>></h2>
+	<div class = "conbase">
+		<h2 onclick="expand(216)" style="cursor:pointer;">_RES Editing - fonts</h2>
+		<div id="content_216" style="display: none">
+
+
+
+
+
+		
+		This res section controls menu font colour.
+		<p><b>
+		This section must be in _menu.txt
+		</b></p>
+
+
+<p style="margin-top:4%;">
+	<h2 id="arrow_217" unselectable="on" onclick="expand(217)"
+		style="float:left;margin-top:0;cursor:pointer;
+		-moz-user-select:none;
+		user-select:none;
+		-webkit-user-select: none;
+		-ms-user-select: none;"
+		>></h2>
+	<div class = "con" style="margin-left:8%">
+		<h2 onclick="expand(217)" style="cursor:pointer;">_RES value: regOffR, regOffG, regOffB</h2>
+		<div id="content_217" style="display: none">
+		
+			<p><b>Data type: Whole Number</b></p>
+			<p>
+			Sets the font colour (RGB 0-255) for accounts on the registration page.
+			</p>
+		
+		</div>
+	</div>
+</p>
+
+
+<p style="margin-top:4%;">
+	<h2 id="arrow_218" unselectable="on" onclick="expand(218)"
+		style="float:left;margin-top:0;cursor:pointer;
+		-moz-user-select:none;
+		user-select:none;
+		-webkit-user-select: none;
+		-ms-user-select: none;"
+		>></h2>
+	<div class = "con" style="margin-left:8%">
+		<h2 onclick="expand(218)" style="cursor:pointer;">_RES value: regOnR, regOnG, regOnB</h2>
+		<div id="content_218" style="display: none">
+		
+			<p><b>Data type: Whole Number</b></p>
+			<p>
+			Sets the font colour (RGB 0-255) for the selected account on the registration page.
+			</p>
+		
+		</div>
+	</div>
+</p>
+
+
+<p style="margin-top:4%;">
+	<h2 id="arrow_219" unselectable="on" onclick="expand(219)"
+		style="float:left;margin-top:0;cursor:pointer;
+		-moz-user-select:none;
+		user-select:none;
+		-webkit-user-select: none;
+		-ms-user-select: none;"
+		>></h2>
+	<div class = "con" style="margin-left:8%">
+		<h2 onclick="expand(219)" style="cursor:pointer;">_RES value: scoreR, scoreG, scoreB</h2>
+		<div id="content_219" style="display: none">
+		
+			<p><b>Data type: Whole Number</b></p>
+			<p>
+			Sets the font colour (RGB 0-255) for the account name and score displayed at the top of the menu.
+			</p>
+		
+		</div>
+	</div>
+</p>
+
+
+<p style="margin-top:4%;">
+	<h2 id="arrow_220" unselectable="on" onclick="expand(220)"
+		style="float:left;margin-top:0;cursor:pointer;
+		-moz-user-select:none;
+		user-select:none;
+		-webkit-user-select: none;
+		-ms-user-select: none;"
+		>></h2>
+	<div class = "con" style="margin-left:8%">
+		<h2 onclick="expand(220)" style="cursor:pointer;">_RES value: mainStatR, mainStatG, mainStatB</h2>
+		<div id="content_220" style="display: none">
+		
+			<p><b>Data type: Whole Number</b></p>
+			<p>
+			Sets the font colour (RGB 0-255) for main menu statistics.
+			</p>
+		
+		</div>
+	</div>
+</p>
+
+
+<p style="margin-top:4%;">
+	<h2 id="arrow_221" unselectable="on" onclick="expand(221)"
+		style="float:left;margin-top:0;cursor:pointer;
+		-moz-user-select:none;
+		user-select:none;
+		-webkit-user-select: none;
+		-ms-user-select: none;"
+		>></h2>
+	<div class = "con" style="margin-left:8%">
+		<h2 onclick="expand(221)" style="cursor:pointer;">_RES value: huntOffR, huntOffG, huntOffB</h2>
+		<div id="content_221" style="display: none">
+		
+			<p><b>Data type: Whole Number</b></p>
+			<p>
+			Sets the font colour (RGB 0-255) for hunting items that are too expensive.
+			</p>
+		
+		</div>
+	</div>
+</p>
+
+
+<p style="margin-top:4%;">
+	<h2 id="arrow_222" unselectable="on" onclick="expand(222)"
+		style="float:left;margin-top:0;cursor:pointer;
+		-moz-user-select:none;
+		user-select:none;
+		-webkit-user-select: none;
+		-ms-user-select: none;"
+		>></h2>
+	<div class = "con" style="margin-left:8%">
+		<h2 onclick="expand(222)" style="cursor:pointer;">_RES value: huntAvailR, huntAvailG, huntAvailB</h2>
+		<div id="content_222" style="display: none">
+		
+			<p><b>Data type: Whole Number</b></p>
+			<p>
+			Sets the font colour (RGB 0-255) for items that are affordable but unselected.
+			</p>
+		
+		</div>
+	</div>
+</p>
+
+
+<p style="margin-top:4%;">
+	<h2 id="arrow_223" unselectable="on" onclick="expand(223)"
+		style="float:left;margin-top:0;cursor:pointer;
+		-moz-user-select:none;
+		user-select:none;
+		-webkit-user-select: none;
+		-ms-user-select: none;"
+		>></h2>
+	<div class = "con" style="margin-left:8%">
+		<h2 onclick="expand(223)" style="cursor:pointer;">_RES value: huntOnR, huntOnG, huntOnB</h2>
+		<div id="content_223" style="display: none">
+		
+			<p><b>Data type: Whole Number</b></p>
+			<p>
+			Sets the font colour (RGB 0-255) for selected hunting items.
+			</p>
+		
+		</div>
+	</div>
+</p>
+
+
+<p style="margin-top:4%;">
+	<h2 id="arrow_224" unselectable="on" onclick="expand(224)"
+		style="float:left;margin-top:0;cursor:pointer;
+		-moz-user-select:none;
+		user-select:none;
+		-webkit-user-select: none;
+		-ms-user-select: none;"
+		>></h2>
+	<div class = "con" style="margin-left:8%">
+		<h2 onclick="expand(224)" style="cursor:pointer;">_RES value: huntInfoR, huntInfoG, huntInfoB</h2>
+		<div id="content_224" style="display: none">
+		
+			<p><b>Data type: Whole Number</b></p>
+			<p>
+			Sets the font colour (RGB 0-255) for information displayed about maps, creatures and weapons.
+			</p>
+		
+		</div>
+	</div>
+</p>
+
+
+<p style="margin-top:4%;">
+	<h2 id="arrow_225" unselectable="on" onclick="expand(225)"
+		style="float:left;margin-top:0;cursor:pointer;
+		-moz-user-select:none;
+		user-select:none;
+		-webkit-user-select: none;
+		-ms-user-select: none;"
+		>></h2>
+	<div class = "con" style="margin-left:8%">
+		<h2 onclick="expand(225)" style="cursor:pointer;">_RES value: opNameR, opNameG, opNameB</h2>
+		<div id="content_225" style="display: none">
+		
+			<p><b>Data type: Whole Number</b></p>
+			<p>
+			Sets the font colour (RGB 0-255) for the names of settings on the options page.
+			</p>
+		
+		</div>
+	</div>
+</p>
+
+
+<p style="margin-top:4%;">
+	<h2 id="arrow_226" unselectable="on" onclick="expand(226)"
+		style="float:left;margin-top:0;cursor:pointer;
+		-moz-user-select:none;
+		user-select:none;
+		-webkit-user-select: none;
+		-ms-user-select: none;"
+		>></h2>
+	<div class = "con" style="margin-left:8%">
+		<h2 onclick="expand(226)" style="cursor:pointer;">_RES value: opValueR, opValueG, opValueB</h2>
+		<div id="content_226" style="display: none">
+		
+			<p><b>Data type: Whole Number</b></p>
+			<p>
+			Sets the font colour (RGB 0-255) for the values of settings on the options page.
+			</p>
+		
+		</div>
+	</div>
+</p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+		</div>
+	</div>
+</p>
 
 
 <!--	84 next-		-->
