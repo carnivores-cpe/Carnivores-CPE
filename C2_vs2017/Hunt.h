@@ -443,6 +443,7 @@ typedef struct _TCharacter
   int RTime;
 
   int tempScore; //stores killed stats
+  int tempWeap;
   int tempTime;
   int tempDate;
   float tempRange;

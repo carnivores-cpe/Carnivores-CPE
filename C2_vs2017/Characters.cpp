@@ -8194,7 +8194,7 @@ void AnimateCharacters()
 			if (fabs(VectorLength(SubVectors(PlayerPos, cptr->pos))) < DinoInfo[cptr->CType].Radius) {
 				TrophyDisplayBody.ctype = cptr->CType;
 				TrophyDisplayBody.scale = cptr->scale;
-				TrophyDisplayBody.weapon = CurrentWeapon;
+				TrophyDisplayBody.weapon = cptr->tempWeap;
 				TrophyDisplayBody.score = cptr->tempScore;
 				TrophyDisplayBody.phase = (RealTime & 3);
 				TrophyDisplayBody.time = cptr->tempTime;

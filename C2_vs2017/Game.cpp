@@ -616,6 +616,7 @@ void SubmitDinoScore (int cindex) {
 	if (ScentMode) score *= 0.80f;
 	if (CamoMode) score *= 0.85f;
 	TrophyRoom.Score += (int)score;
+	Characters[cindex].tempWeap = CurrentWeapon;
 	Characters[cindex].tempScore = (int)score;
 	Characters[cindex].tempDate = (st.wYear << 20) + (st.wMonth << 10) + st.wDay;
 	Characters[cindex].tempTime = (st.wHour << 10) + st.wMinute;
@@ -660,7 +661,7 @@ void AddShipTask(int cindex)
 		  TrophyBody = t;
 		  TrophyRoom2.Body[t].ctype = Characters[cindex].CType; //0 is blank trophy
 		  TrophyRoom2.Body[t].scale = Characters[cindex].scale;
-		  TrophyRoom2.Body[t].weapon = CurrentWeapon;
+		  TrophyRoom2.Body[t].weapon = Characters[cindex].tempWeap;
 		  TrophyRoom2.Body[t].score = Characters[cindex].tempScore;
 		  TrophyRoom2.Body[t].phase = (RealTime & 3);
 		  TrophyRoom2.Body[t].time = Characters[cindex].tempTime;
