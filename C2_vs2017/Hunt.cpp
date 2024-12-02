@@ -1741,7 +1741,9 @@ void ProcessPlayerMovement()
   if (KeyboardState[KeyMap.fkUp] & 128) ProcessReload(); //UP - RELOAD
 
   //menu option/already used check needed - TODO
-  if (KeyboardState[KeyMap.fkDown] & 128) AddShipSupply(PlayerX,PlayerZ); //DOWN - RESUPPLY
+  if (KeyboardState[KeyMap.fkDown] & 128) 
+	  if (!SurvivalMode)
+		  if (!TrophyMode) AddShipSupply(PlayerX,PlayerZ); //DOWN - RESUPPLY
 
   if (Weapon.state) {
 	  if (KeyboardState[KeyMap.fkLeft] & 128 && !UNDERWATER) { //LEFT - HOLD BREATH

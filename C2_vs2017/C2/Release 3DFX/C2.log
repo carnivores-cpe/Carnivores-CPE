@@ -1,60 +1,47 @@
-﻿  Game.cpp
-c:\users\ojm14\documents\github\carnivores-cpe\c2_vs2017\game.cpp(50): warning C4101: 'temp': unreferenced local variable
-c:\users\ojm14\documents\github\carnivores-cpe\c2_vs2017\game.cpp(175): warning C4244: 'initializing': conversion from 'float' to 'int', possible loss of data
-c:\users\ojm14\documents\github\carnivores-cpe\c2_vs2017\game.cpp(175): warning C4244: '+=': conversion from 'float' to 'int', possible loss of data
-c:\users\ojm14\documents\github\carnivores-cpe\c2_vs2017\game.cpp(176): warning C4244: 'initializing': conversion from 'float' to 'int', possible loss of data
-c:\users\ojm14\documents\github\carnivores-cpe\c2_vs2017\game.cpp(176): warning C4244: '+=': conversion from 'float' to 'int', possible loss of data
-c:\users\ojm14\documents\github\carnivores-cpe\c2_vs2017\game.cpp(266): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
-c:\users\ojm14\documents\github\carnivores-cpe\c2_vs2017\game.cpp(267): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
-c:\users\ojm14\documents\github\carnivores-cpe\c2_vs2017\game.cpp(369): warning C4101: 'hh': unreferenced local variable
-c:\users\ojm14\documents\github\carnivores-cpe\c2_vs2017\game.cpp(973): warning C4305: '+=': truncation from 'double' to 'float'
-c:\users\ojm14\documents\github\carnivores-cpe\c2_vs2017\game.cpp(1019): warning C4244: 'initializing': conversion from 'float' to 'long', possible loss of data
-c:\users\ojm14\documents\github\carnivores-cpe\c2_vs2017\game.cpp(1020): warning C4244: 'initializing': conversion from 'float' to 'long', possible loss of data
-c:\users\ojm14\documents\github\carnivores-cpe\c2_vs2017\game.cpp(1021): warning C4244: 'initializing': conversion from 'float' to 'long', possible loss of data
-c:\users\ojm14\documents\github\carnivores-cpe\c2_vs2017\game.cpp(1022): warning C4244: 'initializing': conversion from 'float' to 'long', possible loss of data
-c:\users\ojm14\documents\github\carnivores-cpe\c2_vs2017\game.cpp(1041): warning C4244: 'initializing': conversion from 'double' to 'long', possible loss of data
-c:\users\ojm14\documents\github\carnivores-cpe\c2_vs2017\game.cpp(1042): warning C4244: 'initializing': conversion from 'double' to 'long', possible loss of data
-c:\users\ojm14\documents\github\carnivores-cpe\c2_vs2017\game.cpp(1047): warning C4244: 'initializing': conversion from 'float' to 'long', possible loss of data
-c:\users\ojm14\documents\github\carnivores-cpe\c2_vs2017\game.cpp(1049): warning C4244: 'initializing': conversion from 'float' to 'long', possible loss of data
-c:\users\ojm14\documents\github\carnivores-cpe\c2_vs2017\game.cpp(1052): warning C4244: 'initializing': conversion from 'float' to 'long', possible loss of data
-c:\users\ojm14\documents\github\carnivores-cpe\c2_vs2017\game.cpp(1055): warning C4244: 'initializing': conversion from 'float' to 'long', possible loss of data
-c:\users\ojm14\documents\github\carnivores-cpe\c2_vs2017\game.cpp(1057): warning C4244: 'initializing': conversion from 'float' to 'long', possible loss of data
-c:\users\ojm14\documents\github\carnivores-cpe\c2_vs2017\game.cpp(1062): warning C4244: 'initializing': conversion from 'float' to 'long', possible loss of data
-c:\users\ojm14\documents\github\carnivores-cpe\c2_vs2017\game.cpp(1570): warning C4305: '=': truncation from 'double' to 'float'
-c:\users\ojm14\documents\github\carnivores-cpe\c2_vs2017\game.cpp(1582): warning C4305: '=': truncation from 'double' to 'float'
-c:\users\ojm14\documents\github\carnivores-cpe\c2_vs2017\game.cpp(1888): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
-c:\users\ojm14\documents\github\carnivores-cpe\c2_vs2017\game.cpp(1889): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
-c:\users\ojm14\documents\github\carnivores-cpe\c2_vs2017\game.cpp(1896): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
-c:\users\ojm14\documents\github\carnivores-cpe\c2_vs2017\game.cpp(1900): warning C4244: 'initializing': conversion from 'int' to 'float', possible loss of data
-c:\users\ojm14\documents\github\carnivores-cpe\c2_vs2017\game.cpp(1916): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
-c:\users\ojm14\documents\github\carnivores-cpe\c2_vs2017\game.cpp(1917): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
-c:\users\ojm14\documents\github\carnivores-cpe\c2_vs2017\game.cpp(1925): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
-c:\users\ojm14\documents\github\carnivores-cpe\c2_vs2017\game.cpp(1926): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
-c:\users\ojm14\documents\github\carnivores-cpe\c2_vs2017\game.cpp(1927): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
-c:\users\ojm14\documents\github\carnivores-cpe\c2_vs2017\game.cpp(1957): warning C4244: 'initializing': conversion from 'float' to 'int', possible loss of data
-c:\users\ojm14\documents\github\carnivores-cpe\c2_vs2017\game.cpp(1958): warning C4244: '=': conversion from 'float' to 'int', possible loss of data
-c:\users\ojm14\documents\github\carnivores-cpe\c2_vs2017\game.cpp(1985): warning C4305: 'argument': truncation from 'double' to 'float'
-c:\users\ojm14\documents\github\carnivores-cpe\c2_vs2017\game.cpp(2014): warning C4244: '+=': conversion from 'float' to 'int', possible loss of data
-c:\users\ojm14\documents\github\carnivores-cpe\c2_vs2017\game.cpp(2015): warning C4244: '+=': conversion from 'float' to 'int', possible loss of data
-c:\users\ojm14\documents\github\carnivores-cpe\c2_vs2017\game.cpp(2020): warning C4244: '-=': conversion from 'float' to 'int', possible loss of data
-c:\users\ojm14\documents\github\carnivores-cpe\c2_vs2017\game.cpp(2021): warning C4244: '-=': conversion from 'float' to 'int', possible loss of data
-c:\users\ojm14\documents\github\carnivores-cpe\c2_vs2017\game.cpp(2057): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
-c:\users\ojm14\documents\github\carnivores-cpe\c2_vs2017\game.cpp(2135): warning C4244: 'initializing': conversion from 'int' to 'float', possible loss of data
-c:\users\ojm14\documents\github\carnivores-cpe\c2_vs2017\game.cpp(2200): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
-c:\users\ojm14\documents\github\carnivores-cpe\c2_vs2017\game.cpp(2301): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
-c:\users\ojm14\documents\github\carnivores-cpe\c2_vs2017\game.cpp(2445): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
-c:\users\ojm14\documents\github\carnivores-cpe\c2_vs2017\game.cpp(2641): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
-c:\users\ojm14\documents\github\carnivores-cpe\c2_vs2017\game.cpp(2642): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
-c:\users\ojm14\documents\github\carnivores-cpe\c2_vs2017\game.cpp(2745): warning C4244: '+=': conversion from 'double' to 'float', possible loss of data
-c:\users\ojm14\documents\github\carnivores-cpe\c2_vs2017\game.cpp(2749): warning C4305: 'argument': truncation from 'double' to 'float'
-c:\users\ojm14\documents\github\carnivores-cpe\c2_vs2017\game.cpp(2757): warning C4244: '-=': conversion from 'double' to 'float', possible loss of data
-c:\users\ojm14\documents\github\carnivores-cpe\c2_vs2017\game.cpp(2760): warning C4305: 'argument': truncation from 'double' to 'float'
-c:\users\ojm14\documents\github\carnivores-cpe\c2_vs2017\game.cpp(2808): warning C4244: 'initializing': conversion from 'int' to 'float', possible loss of data
-c:\users\ojm14\documents\github\carnivores-cpe\c2_vs2017\game.cpp(2842): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
-c:\users\ojm14\documents\github\carnivores-cpe\c2_vs2017\game.cpp(2843): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
-c:\users\ojm14\documents\github\carnivores-cpe\c2_vs2017\game.cpp(2844): warning C4244: 'initializing': conversion from 'int' to 'float', possible loss of data
+﻿  Hunt.cpp
+c:\users\ojm14\documents\github\carnivores-cpe\c2_vs2017\hunt.cpp(661): warning C4244: '+=': conversion from 'float' to 'int', possible loss of data
+c:\users\ojm14\documents\github\carnivores-cpe\c2_vs2017\hunt.cpp(672): warning C4244: '+=': conversion from 'float' to 'int', possible loss of data
+c:\users\ojm14\documents\github\carnivores-cpe\c2_vs2017\hunt.cpp(699): warning C4244: '+=': conversion from 'float' to 'int', possible loss of data
+c:\users\ojm14\documents\github\carnivores-cpe\c2_vs2017\hunt.cpp(719): warning C4244: '+=': conversion from 'float' to 'int', possible loss of data
+c:\users\ojm14\documents\github\carnivores-cpe\c2_vs2017\hunt.cpp(749): warning C4244: '+=': conversion from 'float' to 'int', possible loss of data
+c:\users\ojm14\documents\github\carnivores-cpe\c2_vs2017\hunt.cpp(765): warning C4244: '+=': conversion from 'float' to 'int', possible loss of data
+c:\users\ojm14\documents\github\carnivores-cpe\c2_vs2017\hunt.cpp(777): warning C4244: '+=': conversion from 'float' to 'int', possible loss of data
+c:\users\ojm14\documents\github\carnivores-cpe\c2_vs2017\hunt.cpp(854): warning C4305: '+=': truncation from 'double' to 'float'
+c:\users\ojm14\documents\github\carnivores-cpe\c2_vs2017\hunt.cpp(855): warning C4305: '-=': truncation from 'double' to 'float'
+c:\users\ojm14\documents\github\carnivores-cpe\c2_vs2017\hunt.cpp(887): warning C4244: '=': conversion from 'float' to 'int', possible loss of data
+c:\users\ojm14\documents\github\carnivores-cpe\c2_vs2017\hunt.cpp(957): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+c:\users\ojm14\documents\github\carnivores-cpe\c2_vs2017\hunt.cpp(959): warning C4244: '-=': conversion from 'float' to 'int', possible loss of data
+c:\users\ojm14\documents\github\carnivores-cpe\c2_vs2017\hunt.cpp(961): warning C4244: '-=': conversion from 'float' to 'int', possible loss of data
+c:\users\ojm14\documents\github\carnivores-cpe\c2_vs2017\hunt.cpp(964): warning C4244: '+=': conversion from 'float' to 'int', possible loss of data
+c:\users\ojm14\documents\github\carnivores-cpe\c2_vs2017\hunt.cpp(965): warning C4244: '-=': conversion from 'float' to 'int', possible loss of data
+c:\users\ojm14\documents\github\carnivores-cpe\c2_vs2017\hunt.cpp(971): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+c:\users\ojm14\documents\github\carnivores-cpe\c2_vs2017\hunt.cpp(973): warning C4244: '-=': conversion from 'float' to 'int', possible loss of data
+c:\users\ojm14\documents\github\carnivores-cpe\c2_vs2017\hunt.cpp(974): warning C4244: '-=': conversion from 'float' to 'int', possible loss of data
+c:\users\ojm14\documents\github\carnivores-cpe\c2_vs2017\hunt.cpp(1474): warning C4244: 'initializing': conversion from 'int' to 'float', possible loss of data
+c:\users\ojm14\documents\github\carnivores-cpe\c2_vs2017\hunt.cpp(1497): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+c:\users\ojm14\documents\github\carnivores-cpe\c2_vs2017\hunt.cpp(1508): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+c:\users\ojm14\documents\github\carnivores-cpe\c2_vs2017\hunt.cpp(1509): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+c:\users\ojm14\documents\github\carnivores-cpe\c2_vs2017\hunt.cpp(1511): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+c:\users\ojm14\documents\github\carnivores-cpe\c2_vs2017\hunt.cpp(1512): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+c:\users\ojm14\documents\github\carnivores-cpe\c2_vs2017\hunt.cpp(2127): warning C4305: 'argument': truncation from 'double' to 'float'
+c:\users\ojm14\documents\github\carnivores-cpe\c2_vs2017\hunt.cpp(2143): warning C4305: '+=': truncation from 'double' to 'float'
+c:\users\ojm14\documents\github\carnivores-cpe\c2_vs2017\hunt.cpp(2146): warning C4305: 'argument': truncation from 'double' to 'float'
+c:\users\ojm14\documents\github\carnivores-cpe\c2_vs2017\hunt.cpp(2291): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+c:\users\ojm14\documents\github\carnivores-cpe\c2_vs2017\hunt.cpp(2298): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+  Resources.cpp
+c:\users\ojm14\documents\github\carnivores-cpe\c2_vs2017\resources.cpp(64): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+c:\users\ojm14\documents\github\carnivores-cpe\c2_vs2017\resources.cpp(65): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+c:\users\ojm14\documents\github\carnivores-cpe\c2_vs2017\resources.cpp(569): warning C4018: '<': signed/unsigned mismatch
+c:\users\ojm14\documents\github\carnivores-cpe\c2_vs2017\resources.cpp(2204): warning C4101: 'value': unreferenced local variable
+c:\users\ojm14\documents\github\carnivores-cpe\c2_vs2017\resources.cpp(2915): warning C4101: 'value': unreferenced local variable
+c:\users\ojm14\documents\github\carnivores-cpe\c2_vs2017\resources.cpp(2965): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+c:\users\ojm14\documents\github\carnivores-cpe\c2_vs2017\resources.cpp(3017): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+c:\users\ojm14\documents\github\carnivores-cpe\c2_vs2017\resources.cpp(3427): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+c:\users\ojm14\documents\github\carnivores-cpe\c2_vs2017\resources.cpp(3428): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+c:\users\ojm14\documents\github\carnivores-cpe\c2_vs2017\resources.cpp(3464): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+c:\users\ojm14\documents\github\carnivores-cpe\c2_vs2017\resources.cpp(3465): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
   Generating code
-  1 of 379 functions ( 0.3%) were compiled, the rest were copied from previous compilation.
+  5 of 379 functions ( 1.3%) were compiled, the rest were copied from previous compilation.
     0 functions were new in current compilation
     3 functions had inline decision re-evaluated but remain unchanged
   Finished generating code
