@@ -1730,6 +1730,8 @@ void MakeCall()
   {
     TCharacter *cptr = &Characters[c];
 
+	if (!cptr->Health) continue;
+
 	float d = VectorLength(SubVectors(PlayerPos, cptr->pos));
 	bool canHear = d < (ctViewR * 400)  * (DinoInfo[cptr->CType].HearK * 2);
 
