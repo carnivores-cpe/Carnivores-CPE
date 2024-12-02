@@ -2095,11 +2095,11 @@ void AnimateBullets() {
 		} else {
 
 			if (!bullet[b].Danger)
-				if (VectorLength(SubVectors(bullet[b].a, bullet[b].orig)) > 128.f)
+				if (VectorLength(SubVectors(bullet[b].a, bullet[b].orig)) > 256.f)
 					bullet[b].Danger = TRUE;
 			
 			if (!bullet[b].cDanger)
-				if (VectorLength(SubVectors(bullet[b].a, bullet[b].orig)) > 128.f)
+				if (VectorLength(SubVectors(bullet[b].a, bullet[b].orig)) > 256.f)
 					bullet[b].cDanger = TRUE;
 
 			Vector3d d = bullet[b].dif;

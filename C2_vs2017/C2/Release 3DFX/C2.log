@@ -54,8 +54,8 @@ c:\users\ojm14\documents\github\carnivores-cpe\c2_vs2017\game.cpp(2842): warning
 c:\users\ojm14\documents\github\carnivores-cpe\c2_vs2017\game.cpp(2843): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
 c:\users\ojm14\documents\github\carnivores-cpe\c2_vs2017\game.cpp(2844): warning C4244: 'initializing': conversion from 'int' to 'float', possible loss of data
   Generating code
-  7 of 379 functions ( 1.8%) were compiled, the rest were copied from previous compilation.
+  1 of 379 functions ( 0.3%) were compiled, the rest were copied from previous compilation.
     0 functions were new in current compilation
-    30 functions had inline decision re-evaluated but remain unchanged
+    3 functions had inline decision re-evaluated but remain unchanged
   Finished generating code
   C2.vcxproj -> C:\Users\ojm14\Documents\GitHub\Carnivores-CPE\C2_vs2017\Release 3DFX\v_3dfx.ren
