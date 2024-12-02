@@ -2127,6 +2127,34 @@ void AnimateBullets() {
 			}
    		    */
 
+			//this ought to be adjusted on frame time
+			//char testBuff[100];
+			//sprintf(testBuff, "FR_RATE=%i\n", TimeDt);
+			//PrintLog(testBuff);
+
+			float timeDif = TimeDt;
+			timeDif /= 17;
+			//sprintf(testBuff, "TIMEDIF=%f\n", timeDif);
+			//PrintLog(testBuff);
+
+			//sprintf(testBuff, "D_X    =%f\n", d.x);
+			//PrintLog(testBuff);
+			//sprintf(testBuff, "D_Y    =%f\n", d.y);
+			//PrintLog(testBuff);
+			//sprintf(testBuff, "D_Z    =%f\n", d.z);
+			//PrintLog(testBuff);
+
+			d.x *= timeDif;
+			d.y *= timeDif;
+			d.z *= timeDif;
+
+			//sprintf(testBuff, "D_X    =%f\n", d.x);
+			//PrintLog(testBuff);
+			//sprintf(testBuff, "D_Y    =%f\n", d.y);
+			//PrintLog(testBuff);
+			//sprintf(testBuff, "D_Z    =%f\n\n", d.z);
+			//PrintLog(testBuff);
+
 			int sres = AnimateBullet(
 				bullet[b].a.x,
 				bullet[b].a.y,
@@ -2136,7 +2164,7 @@ void AnimateBullets() {
 				bullet[b].a.z + d.z,
 				b);
 
-			//this ought to be adjusted on frame time
+			
 
 			float pdx = PlayerX - bullet[b].a.x;
 			float pdz = PlayerZ - bullet[b].a.z;

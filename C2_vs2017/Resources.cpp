@@ -2997,11 +2997,11 @@ void ReadAreaTable (FILE *stream, int areaNumber)
 				if (!value && !strstr(line, "snow")) DoHalt("Script loading error: AreaTable");
 				value++;
 
-				char testBuff[100];
-				sprintf(testBuff, "\n TEST: %i", TotalAreaInfo);
-				PrintLog(testBuff);
-				sprintf(testBuff, "\n TES2: %i", areaNumber);
-				PrintLog(testBuff);
+				//char testBuff[100];
+				//sprintf(testBuff, "\n TEST: %i", TotalAreaInfo);
+				//PrintLog(testBuff);
+				//sprintf(testBuff, "\n TES2: %i", areaNumber);
+				//PrintLog(testBuff);
 
 
 				if (TotalAreaInfo == areaNumber) {

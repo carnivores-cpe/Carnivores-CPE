@@ -2,73 +2,7 @@ CarnivoresII 3DFX video driver. Build v2.04. Sep.24 1999.
 Creating main window...Ok.
 Checking 3dfx:
 Voodoo card.
-
- TEST: 0
- TES2: 0
- TEST: 0
- TES2: 0
- TEST: 0
- TES2: 0
- TEST: 0
- TES2: 0
- TEST: 0
- TES2: 0
- TEST: 1
- TES2: 0
- TEST: 1
- TES2: 0
- TEST: 1
- TES2: 0
- TEST: 1
- TES2: 0
- TEST: 1
- TES2: 0
- TEST: 1
- TES2: 0
- TEST: 1
- TES2: 0
- TEST: 1
- TES2: 0
- TEST: 2
- TES2: 0
- TEST: 2
- TES2: 0
- TEST: 3
- TES2: 0
- TEST: 3
- TES2: 0
- TEST: 3
- TES2: 0
- TEST: 3
- TES2: 0
- TEST: 3
- TES2: 0
- TEST: 3
- TES2: 0
- TEST: 3
- TES2: 0
- TEST: 4
- TES2: 0
- TEST: 4
- TES2: 0
- TEST: 4
- TES2: 0
- TEST: 4
- TES2: 0
- TEST: 4
- TES2: 0
- TEST: 4
- TES2: 0
- TEST: 4
- TES2: 0
- TEST: 4
- TES2: 0
- TEST: 4
- TES2: 0
- TEST: 4
- TES2: 0
- TEST: 4
- TES2: 0Trophy Loaded.
+Trophy Loaded.
 TrophyB Loaded.
 Init Engine: Ok.
 
@@ -117,6 +51,10 @@ Loading: HUNTDAT\dimor2.car
 Loading: HUNTDAT\ptera.car
 Loading: HUNTDAT\dimet.car
 Loading: HUNTDAT\par9.car
+Loading: HUNTDAT\allot_iictt.car
+Loading: HUNTDAT\alpharaptor.car
+Loading: HUNTDAT\veloteeth5_iidct2.car
+Loading: HUNTDAT\spino_stt.car
 Loading: HUNTDAT\dangerbrachikiller9.car
 Loading: HUNTDAT\mosa36.car
 Loading: HUNTDAT\climatius4.car
