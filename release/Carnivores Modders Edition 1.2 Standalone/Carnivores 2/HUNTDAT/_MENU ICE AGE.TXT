@@ -193,6 +193,7 @@ characters {
  hear      = 1.00 
  look      = 0.95
  price 	   = 1000
+ hide = TRUE
 }
 
 } //===== end of characters ==========//
