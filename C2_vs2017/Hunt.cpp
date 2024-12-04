@@ -396,6 +396,9 @@ void DrawOpticCross( int v)
 
 void ScanLifeForms()
 {
+
+	if (!BinocScanMode) return;
+
   int li = -1;
   float dm = (float)(ctViewR+2)*256;
   for (int c=0; c<ChCount; c++)
@@ -1112,6 +1115,7 @@ void ToggleBinocular()
   if (Weapon.state) return;
   if (UNDERWATER) return;
   if (!MyHealth) return;
+  if (!BinocMode) return;
   BINMODE = !BINMODE;
   MapMode = FALSE;
 }
@@ -1742,8 +1746,9 @@ void ProcessPlayerMovement()
 
   //menu option/already used check needed - TODO
   if (KeyboardState[KeyMap.fkDown] & 128) 
-	  if (!SurvivalMode)
-		  if (!TrophyMode) AddShipSupply(PlayerX,PlayerZ); //DOWN - RESUPPLY
+	  if (SupplyMode)
+		  if (!SurvivalMode)
+			  if (!TrophyMode) AddShipSupply(PlayerX,PlayerZ); //DOWN - RESUPPLY
 
   if (Weapon.state) {
 	  if (KeyboardState[KeyMap.fkLeft] & 128 && !UNDERWATER) { //LEFT - HOLD BREATH

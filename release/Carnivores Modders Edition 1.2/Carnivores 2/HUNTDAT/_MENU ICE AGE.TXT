@@ -3,6 +3,8 @@ common {
  survivalArea = 0
  survivalWeapon = 0
  survivalDTM = 0
+ bino = TRUE
+ binText = TRUE
 }
 
 weapons {
@@ -195,38 +197,52 @@ characters {
 
 } //===== end of characters ==========//
 
+access {
 
-prices {
- start = 100
- area = 20
- area = 50
- area = 100
- area = 150
- area = 200
-
- dino = 10
- dino = 15
- dino = 20
- dino = 30
- dino = 50
- dino = 100
- dino = 250
- dino = 300
- dino = 500
- dino = 1000
-
- weapon = 20
- weapon = 100
- weapon = 150
- weapon = 50
- weapon = 100
- weapon = 200
-
- acces  = 0
- acces  = 0
- acces  = 0
- acces  = 0
+{
+  name = 'Camouflage'
+  price = 0
+  scoreMod = 0.85
+  camo = TRUE
 }
+
+{
+  name = 'Radar'
+  price = 0
+  scoreMod = 0.7
+  radar = TRUE
+}
+
+{
+  name = 'Cover Scent'
+  price = 0
+  scoreMod = 0.8
+  scent = TRUE
+}
+
+{
+  name = 'Double Ammo'
+  price = 0
+  scoreMod = 1
+  double = TRUE
+}
+
+{
+  name = 'Resupply'
+  price = 100
+  scoreMod = 1
+  supply = TRUE
+}
+
+{
+  name = 'Tranquilizers'
+  price = 0
+  scoreMod = 1.25
+  tranq = TRUE
+}
+
+} //===== end of accessories ==========//
+
 
 fonts {
  regOffR = 165

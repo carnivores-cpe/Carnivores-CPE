@@ -258,8 +258,14 @@ function expand(n) {
 			
 			<ul>
 				<li>Custom menu fonts.</li>
-				<li>10 selectable weapon slots (with numkey binding).</li>
-				<li>255 area slots.</li>
+				<li>Up to 10 selectable weapon slots (with numkey binding).</li>
+				<li>Up to 255 area slots.</li>
+				<li>Up to 10 customisable equipment options.</li>
+				<li>Sonar equipment.</li>
+				<li>Option to remove binoculars or make them optional equipment.</li>
+				<li>Option to remove binocular information or make it optional equipment.</li>
+				<li>Option to make any equipment default.</li>
+				<li>Customisable point deduction for equipement.</li>
 				<!-- huntable dino 255? -->
 				<!--<li>The ability to hide creatures on the menu until the user has sufficient score.</li>-->
 			</ul>
@@ -436,8 +442,14 @@ function expand(n) {
 			    <li>Non-trophy creatures can still give points using basescore.</li>
 				<li>More detailed _RES error messages.</li>
 				<li>Custom menu fonts.</li>
-				<!--<li>10 selectable weapon slots (with numkey binding)</li>
-				<li>10 area slots</li>-->
+				<li>Up to 10 selectable weapon slots (with numkey binding).</li>
+				<li>Up to 255 area slots.</li>
+				<li>Up to 10 customisable equipment options.</li>
+				<li>Sonar equipment.</li>
+				<li>Option to remove binoculars or make them optional equipment.</li>
+				<li>Option to remove binocular information or make it optional equipment.</li>
+				<li>Option to make any equipment default.</li>
+				<li>Customisable point deduction for equipement.</li>
 				<!--<li>The ability to hide creatures on the menu until the user has sufficient score.</li>-->
 			</ul>
 									
@@ -7876,6 +7888,358 @@ fishIdleAnim = 4
 		</div>
 	</div>
 </p>
+
+
+
+<p style="margin-top:4%;">
+	<h2 id="arrow_229" unselectable="on" onclick="expand(229)"
+		style="float:left;margin-left:18%;margin-top:0;cursor:pointer;
+		-moz-user-select:none;
+		user-select:none;
+		-webkit-user-select: none;
+		-ms-user-select: none;"
+		>></h2>
+	<div class = "conbase">
+		<h2 onclick="expand(229)" style="cursor:pointer;">_RES Editing - access</h2>
+		<div id="content_229" style="display: none">
+
+
+
+
+
+		
+		This res section defines the equipment list. You can define up to 10 equipment items and each must have a corresponding image and text file.
+		<p><b>
+		This section must be in _menu.txt
+		</b></p>
+		All the equipment = TRUE values can be added to the common section of the _MENU.txt to activate them by default.
+		
+<p style="margin-top:4%;">
+	<h2 id="arrow_230" unselectable="on" onclick="expand(230)"
+		style="float:left;margin-top:0;cursor:pointer;
+		-moz-user-select:none;
+		user-select:none;
+		-webkit-user-select: none;
+		-ms-user-select: none;"
+		>></h2>
+	<div class = "con" style="margin-left:8%">
+		<h2 onclick="expand(230)" style="cursor:pointer;">_RES value: name</h2>
+		<div id="content_230" style="display: none">
+		
+			<p><b>Data type: Text</b></p>
+			<p>
+			The name of the equipment.
+			</p>
+		
+		</div>
+	</div>
+</p>
+		
+<p style="margin-top:4%;">
+	<h2 id="arrow_231" unselectable="on" onclick="expand(231)"
+		style="float:left;margin-top:0;cursor:pointer;
+		-moz-user-select:none;
+		user-select:none;
+		-webkit-user-select: none;
+		-ms-user-select: none;"
+		>></h2>
+	<div class = "con" style="margin-left:8%">
+		<h2 onclick="expand(231)" style="cursor:pointer;">_RES value: price</h2>
+		<div id="content_231" style="display: none">
+		
+			<p><b>Data type: Whole Number</b></p>
+			<p>
+			The price of the equipment.
+			</p>
+		
+		</div>
+	</div>
+</p>
+		
+<p style="margin-top:4%;">
+	<h2 id="arrow_232" unselectable="on" onclick="expand(232)"
+		style="float:left;margin-top:0;cursor:pointer;
+		-moz-user-select:none;
+		user-select:none;
+		-webkit-user-select: none;
+		-ms-user-select: none;"
+		>></h2>
+	<div class = "con" style="margin-left:8%">
+		<h2 onclick="expand(232)" style="cursor:pointer;">_RES value: scoreMod</h2>
+		<div id="content_232" style="display: none">
+		
+			<p><b>Data type: Decimal Number</b></p>
+			<p>
+			The score multiplier for the equipment.
+			</p>
+			<b>
+			Note: this value is manditory, if the equipment should have no score deduction/multiplier then set as 1.
+			</b>
+			
+			<div class="grid-container">
+				<div class="grid-item"><b>Access</b></div>
+				<div class="grid-item"><b>Vanilla Value</b></div>
+				<div class="grid-item">Radar (-30%)</div>
+				<div class="grid-item">0.7</div>
+				<div class="grid-item">Cover Scent (-20%)</div>
+				<div class="grid-item">0.8</div>
+				<div class="grid-item">Camouflage (-15%)</div>
+				<div class="grid-item">0.85</div>
+				<div class="grid-item">Double Ammo (None)</div>
+				<div class="grid-item">1</div>
+				<div class="grid-item">Resupply (None)</div>
+				<div class="grid-item">1</div>
+				<div class="grid-item">Tranquilizer (+25%)</div>
+				<div class="grid-item">1.25</div>
+			</div>
+			
+		
+		</div>
+	</div>
+</p>
+
+
+		
+<p style="margin-top:4%;">
+	<h2 id="arrow_233" unselectable="on" onclick="expand(233)"
+		style="float:left;margin-top:0;cursor:pointer;
+		-moz-user-select:none;
+		user-select:none;
+		-webkit-user-select: none;
+		-ms-user-select: none;"
+		>></h2>
+	<div class = "con" style="margin-left:8%">
+		<h2 onclick="expand(233)" style="cursor:pointer;">_RES value: radar</h2>
+		<div id="content_233" style="display: none">
+		
+			<p><b>Data type: TRUE/FALSE</b></p>
+			<p>
+			If set to true, this equipment will activate radar.
+			</p>
+			<b>
+			Note: Add this value to the common section of the _menu.txt to activate radar by default.
+			</b>
+		
+		</div>
+	</div>
+</p>
+
+
+		
+<p style="margin-top:4%;">
+	<h2 id="arrow_234" unselectable="on" onclick="expand(234)"
+		style="float:left;margin-top:0;cursor:pointer;
+		-moz-user-select:none;
+		user-select:none;
+		-webkit-user-select: none;
+		-ms-user-select: none;"
+		>></h2>
+	<div class = "con" style="margin-left:8%">
+		<h2 onclick="expand(234)" style="cursor:pointer;">_RES value: camo</h2>
+		<div id="content_234" style="display: none">
+		
+			<p><b>Data type: TRUE/FALSE</b></p>
+			<p>
+			If set to true, this equipment will activate camouflage.
+			</p>
+			<b>
+			Note: Add this value to the common section of the _menu.txt to activate camouflage by default.
+			</b>
+		
+		</div>
+	</div>
+</p>
+
+
+		
+<p style="margin-top:4%;">
+	<h2 id="arrow_235" unselectable="on" onclick="expand(235)"
+		style="float:left;margin-top:0;cursor:pointer;
+		-moz-user-select:none;
+		user-select:none;
+		-webkit-user-select: none;
+		-ms-user-select: none;"
+		>></h2>
+	<div class = "con" style="margin-left:8%">
+		<h2 onclick="expand(235)" style="cursor:pointer;">_RES value: scent</h2>
+		<div id="content_235" style="display: none">
+		
+			<p><b>Data type: TRUE/FALSE</b></p>
+			<p>
+			If set to true, this equipment will activate cover scent.
+			</p>
+			<b>
+			Note: Add this value to the common section of the _menu.txt to activate cover scent by default.
+			</b>
+		
+		</div>
+	</div>
+</p>
+
+
+		
+<p style="margin-top:4%;">
+	<h2 id="arrow_236" unselectable="on" onclick="expand(236)"
+		style="float:left;margin-top:0;cursor:pointer;
+		-moz-user-select:none;
+		user-select:none;
+		-webkit-user-select: none;
+		-ms-user-select: none;"
+		>></h2>
+	<div class = "con" style="margin-left:8%">
+		<h2 onclick="expand(236)" style="cursor:pointer;">_RES value: double</h2>
+		<div id="content_236" style="display: none">
+		
+			<p><b>Data type: TRUE/FALSE</b></p>
+			<p>
+			If set to true, this equipment will activate double ammo.
+			</p>
+			<b>
+			Note: Add this value to the common section of the _menu.txt to activate double ammo by default.
+			</b>
+		
+		</div>
+	</div>
+</p>
+
+
+		
+<p style="margin-top:4%;">
+	<h2 id="arrow_237" unselectable="on" onclick="expand(237)"
+		style="float:left;margin-top:0;cursor:pointer;
+		-moz-user-select:none;
+		user-select:none;
+		-webkit-user-select: none;
+		-ms-user-select: none;"
+		>></h2>
+	<div class = "con" style="margin-left:8%">
+		<h2 onclick="expand(237)" style="cursor:pointer;">_RES value: tranq</h2>
+		<div id="content_237" style="display: none">
+		
+			<p><b>Data type: TRUE/FALSE</b></p>
+			<p>
+			If set to true, this equipment will activate tranquilizer.
+			</p>
+			<b>
+			Note: Add this value to the common section of the _menu.txt to activate tranquilizer by default.
+			</b>
+		
+		</div>
+	</div>
+</p>
+
+
+		
+<p style="margin-top:4%;">
+	<h2 id="arrow_238" unselectable="on" onclick="expand(238)"
+		style="float:left;margin-top:0;cursor:pointer;
+		-moz-user-select:none;
+		user-select:none;
+		-webkit-user-select: none;
+		-ms-user-select: none;"
+		>></h2>
+	<div class = "con" style="margin-left:8%">
+		<h2 onclick="expand(238)" style="cursor:pointer;">_RES value: supply</h2>
+		<div id="content_238" style="display: none">
+		
+			<p><b>Data type: TRUE/FALSE</b></p>
+			<p>
+			If set to true, this equipment will activate the resupply ship.
+			</p>
+			<b>
+			Note: Add this value to the common section of the _menu.txt to activate the resupply ship by default.
+			</b>
+		
+		</div>
+	</div>
+</p>
+
+
+		
+<p style="margin-top:4%;">
+	<h2 id="arrow_239" unselectable="on" onclick="expand(239)"
+		style="float:left;margin-top:0;cursor:pointer;
+		-moz-user-select:none;
+		user-select:none;
+		-webkit-user-select: none;
+		-ms-user-select: none;"
+		>></h2>
+	<div class = "con" style="margin-left:8%">
+		<h2 onclick="expand(239)" style="cursor:pointer;">_RES value: sonar</h2>
+		<div id="content_239" style="display: none">
+		
+			<p><b>Data type: TRUE/FALSE</b></p>
+			<p>
+			If set to true, this equipment will activate sonar.
+			</p>
+			<b>
+			Note: Add this value to the common section of the _menu.txt to activate sonar by default.
+			</b>
+		
+		</div>
+	</div>
+</p>
+
+
+		
+<p style="margin-top:4%;">
+	<h2 id="arrow_240" unselectable="on" onclick="expand(240)"
+		style="float:left;margin-top:0;cursor:pointer;
+		-moz-user-select:none;
+		user-select:none;
+		-webkit-user-select: none;
+		-ms-user-select: none;"
+		>></h2>
+	<div class = "con" style="margin-left:8%">
+		<h2 onclick="expand(240)" style="cursor:pointer;">_RES value: bino</h2>
+		<div id="content_240" style="display: none">
+		
+			<p><b>Data type: TRUE/FALSE</b></p>
+			<p>
+			If set to true, this equipment will activate binoculars.
+			</p>
+			<b>
+			Note: Add this value to the common section of the _menu.txt to activate binoculars by default.
+			</b>
+		
+		</div>
+	</div>
+</p>
+
+
+		
+<p style="margin-top:4%;">
+	<h2 id="arrow_241" unselectable="on" onclick="expand(241)"
+		style="float:left;margin-top:0;cursor:pointer;
+		-moz-user-select:none;
+		user-select:none;
+		-webkit-user-select: none;
+		-ms-user-select: none;"
+		>></h2>
+	<div class = "con" style="margin-left:8%">
+		<h2 onclick="expand(241)" style="cursor:pointer;">_RES value: binText</h2>
+		<div id="content_241" style="display: none">
+		
+			<p><b>Data type: TRUE/FALSE</b></p>
+			<p>
+			If set to true, this equipment will activate creature information in the binoculars.
+			</p>
+			<b>
+			Note: Add this value to the common section of the _menu.txt to activate creature information in the binoculars by default.
+			</b>
+		
+		</div>
+	</div>
+</p>
+
+
+		
+		
+		
+		</div>
+	</div>
+</p>
+
 
 
 

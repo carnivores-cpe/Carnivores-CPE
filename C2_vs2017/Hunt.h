@@ -1267,6 +1267,8 @@ _EXTORNOT int TargetDino, TargetArea, TargetWeapon, WeaponPres, TargetCall,
           CurrentWeapon, ShotsLeft[10], AmmoMag[10],
 	MagShotsLeft[10], Chambered[10], FiringMode[10]; //TrophyTime, 
 
+_EXTORNOT float scoreMultiplier;
+
 //firing mode 0-semiauto 1-fullauto
 
 _EXTORNOT bool alreadyFired;
@@ -1279,7 +1281,9 @@ _EXTORNOT BOOL ScentMode, CamoMode,
           TrophyMode, DoubleAmmo,
           DogMode, Multiplayer,
           Host, CiskMode, SonarMode,
-          ScannerMode, SurvivalMode;
+          ScannerMode, SurvivalMode,
+		  SupplyMode, BinocMode,
+		  BinocScanMode;
 
 _EXTORNOT float sonarPos;
 

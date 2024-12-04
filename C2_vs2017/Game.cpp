@@ -564,17 +564,24 @@ void ProcessCommandLine()
       LockLanding = TRUE;
     }
 
+	
+
     if (strstr(s,"reg=")) TrophyRoom.RegNumber = atoi(&s[4]);
     if (strstr(s,"prj=")) strcpy(ProjectName, (s+4));
     if (strstr(s,"din=")) TargetDino = (atoi(&s[4])*1024);
 	if (strstr(s, "wep=")) WeaponPres = atoi(&s[4]);
 	if (strstr(s, "dtm=")) OptDayNight = atoi(&s[4]);
     if (strstr(s, "server=")) strcpy(ServerAddress, (s + 7));
+	if (strstr(s, "scr=")) {
+		scoreMultiplier = atoi(&s[4]);
+		scoreMultiplier /= 10000;
+	}
 
     if (strstr(s,"-debug"))   DEBUG = TRUE;
     if (strstr(s,"-double"))  DoubleAmmo = TRUE;
 	if (strstr(s, "-huntdog"))  DogMode = TRUE;
     if (strstr(s,"-radar"))   RadarMode = TRUE;
+	if (strstr(s, "-supply"))   SupplyMode = TRUE;
 	if (strstr(s, "-survival"))   SurvivalMode = TRUE;
 	if (strstr(s, "-sonar"))   SonarMode = TRUE;
 	if (strstr(s, "-scanner"))   ScannerMode = TRUE;
@@ -585,6 +592,8 @@ void ProcessCommandLine()
 	if (strstr(s, "-cisk"))   CiskMode = TRUE;
     if (strstr(s,"-tranq")) Tranq = TRUE;
     if (strstr(s,"-observ")) ObservMode = TRUE;
+	if (strstr(s, "-binoc")) BinocMode = TRUE;
+	if (strstr(s, "-bintext")) BinocScanMode = TRUE;
 
   }
 }
@@ -611,10 +620,11 @@ void SubmitDinoScore (int cindex) {
 
 	SYSTEMTIME st;
 	GetLocalTime(&st);
-	if (Tranq) score *= 1.25f;
-	if (RadarMode) score *= 0.70f;
-	if (ScentMode) score *= 0.80f;
-	if (CamoMode) score *= 0.85f;
+	score *= scoreMultiplier;
+	//if (Tranq) score *= 1.25f;
+	//if (RadarMode) score *= 0.70f;
+	//if (ScentMode) score *= 0.80f;
+	//if (CamoMode) score *= 0.85f;
 	TrophyRoom.Score += (int)score;
 	Characters[cindex].tempWeap = CurrentWeapon;
 	Characters[cindex].tempScore = (int)score;
@@ -3012,9 +3022,8 @@ void LoadTrophy()
 
   ReadFile(hfile, &KeyMap, sizeof(KeyMap), &l, NULL);
   ReadFile(hfile, &REVERSEMS, 4, &l, NULL);
-  //INGORE SAVEFILE SETTING FOR EQUIPMENT
   boolean temp;
-  ReadFile(hfile, &temp, 4, &l, NULL);
+  ReadFile(hfile, &temp, 4, &l, NULL);  //INGORE SAVEFILE SETTING FOR EQUIPMENT - done thru cmd line args
   ReadFile(hfile, &temp, 4, &l, NULL);
   ReadFile(hfile, &temp, 4, &l, NULL);
   ReadFile(hfile, &temp, 4, &l, NULL);
