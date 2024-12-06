@@ -5,6 +5,8 @@ common {
  survivalDTM = 0
  bino = TRUE
  binText = TRUE
+ areaMap = TRUE
+ callBox = TRUE
 }
 
 weapons {

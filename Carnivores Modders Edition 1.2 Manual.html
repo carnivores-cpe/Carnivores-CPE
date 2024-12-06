@@ -264,6 +264,8 @@ function expand(n) {
 				<li>Sonar equipment.</li>
 				<li>Option to remove binoculars or make them optional equipment.</li>
 				<li>Option to remove binocular information or make it optional equipment.</li>
+				<li>Option to remove call box or make it optional equipment.</li>
+				<li>Option to remove the area map or make it optional equipment.</li>
 				<li>Option to make any equipment default.</li>
 				<li>Customisable point deduction for equipement.</li>
 				<li>Option to hide creatures on the menu until the user has sufficient score.</li>
@@ -445,6 +447,8 @@ function expand(n) {
 				<li>Sonar equipment.</li>
 				<li>Option to remove binoculars or make them optional equipment.</li>
 				<li>Option to remove binocular information or make it optional equipment.</li>
+				<li>Option to remove call box or make it optional equipment.</li>
+				<li>Option to remove the area map or make it optional equipment.</li>
 				<li>Option to make any equipment default.</li>
 				<li>Customisable point deduction for equipement.</li>
 				<li>Option to hide creatures on the menu until the user has sufficient score.</li>
@@ -453,6 +457,7 @@ function expand(n) {
 			<h3>Credits</h3>
 			Ornithomimid 1 - programming, animating, ichthyornis model & texture.</br>
 			<!--RexHunter - menu programming.</br>-->
+			Adelphospro - programming.</br>
 			Ithamar - programming.</br>
 			Poharex - mosasaurus, climatius, parexus & pink parexus models & textures.</br>
 			Starcrafty - allosaurus call & sleep animations, spinosaurus swim animation, mosasaurus sounds.<br>
@@ -8226,6 +8231,58 @@ fishIdleAnim = 4
 			</p>
 			<b>
 			Note: Add this value to the common section of the _menu.txt to activate creature information in the binoculars by default.
+			</b>
+		
+		</div>
+	</div>
+</p>
+
+
+		
+<p style="margin-top:4%;">
+	<h2 id="arrow_242" unselectable="on" onclick="expand(242)"
+		style="float:left;margin-top:0;cursor:pointer;
+		-moz-user-select:none;
+		user-select:none;
+		-webkit-user-select: none;
+		-ms-user-select: none;"
+		>></h2>
+	<div class = "con" style="margin-left:8%">
+		<h2 onclick="expand(242)" style="cursor:pointer;">_RES value: areaMap</h2>
+		<div id="content_242" style="display: none">
+		
+			<p><b>Data type: TRUE/FALSE</b></p>
+			<p>
+			If set to true, this equipment will activate the area map.
+			</p>
+			<b>
+			Note: Add this value to the common section of the _menu.txt to activate the area map by default.
+			</b>
+		
+		</div>
+	</div>
+</p>
+
+
+		
+<p style="margin-top:4%;">
+	<h2 id="arrow_243" unselectable="on" onclick="expand(243)"
+		style="float:left;margin-top:0;cursor:pointer;
+		-moz-user-select:none;
+		user-select:none;
+		-webkit-user-select: none;
+		-ms-user-select: none;"
+		>></h2>
+	<div class = "con" style="margin-left:8%">
+		<h2 onclick="expand(243)" style="cursor:pointer;">_RES value: callBox</h2>
+		<div id="content_243" style="display: none">
+		
+			<p><b>Data type: TRUE/FALSE</b></p>
+			<p>
+			If set to true, this equipment will activate the ability to make creature calls.
+			</p>
+			<b>
+			Note: Add this value to the common section of the _menu.txt to activate the ability to make creature calls by default.
 			</b>
 		
 		</div>

@@ -1283,7 +1283,8 @@ _EXTORNOT BOOL ScentMode, CamoMode,
           Host, CiskMode, SonarMode,
           ScannerMode, SurvivalMode,
 		  SupplyMode, BinocMode,
-		  BinocScanMode;
+		  BinocScanMode, MapAvailMode,
+		  CallMode;
 
 _EXTORNOT float sonarPos;
 

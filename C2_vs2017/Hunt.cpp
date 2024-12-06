@@ -1096,6 +1096,8 @@ void ChangeViewR(int d1, int d2, int d3)
 
 void ChangeCall()
 {
+	if (!CallMode) return;
+
   if (!TargetDino) return;
   if (ChCallTime)
     for (int t=0; t<32; t++)
@@ -1792,7 +1794,8 @@ void ProcessPlayerMovement()
     if (BinocularPower > 3.0f) BinocularPower = 3.0f;
   }
 
-  if (KeyFlags & kfCall) MakeCall();
+  if (KeyFlags & kfCall) 
+	  if (CallMode) MakeCall();
 
   if (DEBUG)
     if (KeyboardState [VK_CONTROL] & 128)
@@ -2467,7 +2470,7 @@ void ProcessGame()
   DrawScene();
 
   if (!TrophyMode)
-    if (MapMode) DrawHMap();
+    if (MapMode && MapAvailMode) DrawHMap();
 
   DrawPostObjects();
 

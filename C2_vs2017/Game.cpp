@@ -580,6 +580,8 @@ void ProcessCommandLine()
     if (strstr(s,"-debug"))   DEBUG = TRUE;
     if (strstr(s,"-double"))  DoubleAmmo = TRUE;
 	if (strstr(s, "-huntdog"))  DogMode = TRUE;
+	if (strstr(s, "-map"))  MapAvailMode = TRUE;
+	if (strstr(s, "-callbox"))  CallMode = TRUE;
     if (strstr(s,"-radar"))   RadarMode = TRUE;
 	if (strstr(s, "-supply"))   SupplyMode = TRUE;
 	if (strstr(s, "-survival"))   SurvivalMode = TRUE;
