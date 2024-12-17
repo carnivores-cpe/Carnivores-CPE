@@ -995,8 +995,8 @@ void DrawTrophyText(int x0, int y0)
   x = x0;
   FXTextOut(x, y0+48, "Range of kill: ", 0x00BFBFBF);
   x+=GetTextW(hdcMain,"Range of kill: ");
-  if (OptSys) sprintf(t,"%3.1fft", range / 0.3);
-  else        sprintf(t,"%3.1fm", range);
+  if (OptSys) sprintf(t,"%3.1fft", range);
+  else        sprintf(t,"%3.1fm", range/3);
   FXTextOut(x, y0+48, t, 0x0000BFBF);
 
 
@@ -1043,7 +1043,7 @@ void Render_LifeInfo(int li)
 
   FXTextOut(x, y+16, t, 0x0000b000);
 
-  int R  = (int)(VectorLength( SubVectors(Characters[li].pos, PlayerPos) )*3 / 64.f);
+  int R  = (int)(VectorLength( SubVectors(Characters[li].pos, PlayerPos) ) / 64.f);
   if (OptSys) sprintf(t,"Distance: %dft ", R);
   else        sprintf(t,"Distance: %dm  ", R/3);
 
