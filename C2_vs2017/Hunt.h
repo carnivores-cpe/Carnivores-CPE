@@ -767,6 +767,9 @@ typedef struct _TDinoInfo
   int Weapon;
   int Reload;
 
+  float reactTime;
+  float morphTime;
+
 } TDinoInfo;
 
 typedef struct _TPack

@@ -1,5 +1,7 @@
 ﻿  Audio_DLL.cpp
   Characters.cpp
+c:\users\ojm14\documents\github\carnivores-cpe\c2_vs2017\characters.cpp(193): warning C4244: '+=': conversion from 'float' to 'int', possible loss of data
+c:\users\ojm14\documents\github\carnivores-cpe\c2_vs2017\characters.cpp(196): warning C4244: '+=': conversion from 'float' to 'int', possible loss of data
 c:\users\ojm14\documents\github\carnivores-cpe\c2_vs2017\characters.cpp(318): warning C4244: '=': conversion from 'float' to 'int', possible loss of data
 c:\users\ojm14\documents\github\carnivores-cpe\c2_vs2017\characters.cpp(362): warning C4244: 'initializing': conversion from 'int' to 'float', possible loss of data
 c:\users\ojm14\documents\github\carnivores-cpe\c2_vs2017\characters.cpp(1473): warning C4244: '=': conversion from 'double' to 'int', possible loss of data
@@ -12,50 +14,50 @@ c:\users\ojm14\documents\github\carnivores-cpe\c2_vs2017\characters.cpp(1622): w
 c:\users\ojm14\documents\github\carnivores-cpe\c2_vs2017\characters.cpp(1631): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
 c:\users\ojm14\documents\github\carnivores-cpe\c2_vs2017\characters.cpp(1638): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
 c:\users\ojm14\documents\github\carnivores-cpe\c2_vs2017\characters.cpp(1639): warning C4244: 'initializing': conversion from 'float' to 'int', possible loss of data
-c:\users\ojm14\documents\github\carnivores-cpe\c2_vs2017\characters.cpp(2297): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
-c:\users\ojm14\documents\github\carnivores-cpe\c2_vs2017\characters.cpp(2482): warning C4244: 'initializing': conversion from 'int' to 'float', possible loss of data
-c:\users\ojm14\documents\github\carnivores-cpe\c2_vs2017\characters.cpp(2533): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
-c:\users\ojm14\documents\github\carnivores-cpe\c2_vs2017\characters.cpp(2691): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+c:\users\ojm14\documents\github\carnivores-cpe\c2_vs2017\characters.cpp(2296): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+c:\users\ojm14\documents\github\carnivores-cpe\c2_vs2017\characters.cpp(2481): warning C4244: 'initializing': conversion from 'int' to 'float', possible loss of data
+c:\users\ojm14\documents\github\carnivores-cpe\c2_vs2017\characters.cpp(2532): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+c:\users\ojm14\documents\github\carnivores-cpe\c2_vs2017\characters.cpp(2690): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+c:\users\ojm14\documents\github\carnivores-cpe\c2_vs2017\characters.cpp(2918): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
 c:\users\ojm14\documents\github\carnivores-cpe\c2_vs2017\characters.cpp(2919): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
-c:\users\ojm14\documents\github\carnivores-cpe\c2_vs2017\characters.cpp(2920): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
-c:\users\ojm14\documents\github\carnivores-cpe\c2_vs2017\characters.cpp(2894): warning C4102: 'ENDPSELECT': unreferenced label
-c:\users\ojm14\documents\github\carnivores-cpe\c2_vs2017\characters.cpp(3052): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
-c:\users\ojm14\documents\github\carnivores-cpe\c2_vs2017\characters.cpp(3054): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
-c:\users\ojm14\documents\github\carnivores-cpe\c2_vs2017\characters.cpp(3394): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+c:\users\ojm14\documents\github\carnivores-cpe\c2_vs2017\characters.cpp(2893): warning C4102: 'ENDPSELECT': unreferenced label
+c:\users\ojm14\documents\github\carnivores-cpe\c2_vs2017\characters.cpp(3051): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+c:\users\ojm14\documents\github\carnivores-cpe\c2_vs2017\characters.cpp(3053): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+c:\users\ojm14\documents\github\carnivores-cpe\c2_vs2017\characters.cpp(3393): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+c:\users\ojm14\documents\github\carnivores-cpe\c2_vs2017\characters.cpp(3603): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
 c:\users\ojm14\documents\github\carnivores-cpe\c2_vs2017\characters.cpp(3604): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
-c:\users\ojm14\documents\github\carnivores-cpe\c2_vs2017\characters.cpp(3605): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+c:\users\ojm14\documents\github\carnivores-cpe\c2_vs2017\characters.cpp(3610): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
 c:\users\ojm14\documents\github\carnivores-cpe\c2_vs2017\characters.cpp(3611): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
-c:\users\ojm14\documents\github\carnivores-cpe\c2_vs2017\characters.cpp(3612): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+c:\users\ojm14\documents\github\carnivores-cpe\c2_vs2017\characters.cpp(3644): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
 c:\users\ojm14\documents\github\carnivores-cpe\c2_vs2017\characters.cpp(3645): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
-c:\users\ojm14\documents\github\carnivores-cpe\c2_vs2017\characters.cpp(3646): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
-c:\users\ojm14\documents\github\carnivores-cpe\c2_vs2017\characters.cpp(3710): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
-c:\users\ojm14\documents\github\carnivores-cpe\c2_vs2017\characters.cpp(4042): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
-c:\users\ojm14\documents\github\carnivores-cpe\c2_vs2017\characters.cpp(5602): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
-c:\users\ojm14\documents\github\carnivores-cpe\c2_vs2017\characters.cpp(5602): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
-c:\users\ojm14\documents\github\carnivores-cpe\c2_vs2017\characters.cpp(5604): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
-c:\users\ojm14\documents\github\carnivores-cpe\c2_vs2017\characters.cpp(5604): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
-c:\users\ojm14\documents\github\carnivores-cpe\c2_vs2017\characters.cpp(5614): warning C4305: 'argument': truncation from 'double' to 'float'
-c:\users\ojm14\documents\github\carnivores-cpe\c2_vs2017\characters.cpp(5735): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
-c:\users\ojm14\documents\github\carnivores-cpe\c2_vs2017\characters.cpp(5772): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
-c:\users\ojm14\documents\github\carnivores-cpe\c2_vs2017\characters.cpp(5798): warning C4244: 'initializing': conversion from 'int' to 'float', possible loss of data
-c:\users\ojm14\documents\github\carnivores-cpe\c2_vs2017\characters.cpp(6163): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
-c:\users\ojm14\documents\github\carnivores-cpe\c2_vs2017\characters.cpp(6166): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
-c:\users\ojm14\documents\github\carnivores-cpe\c2_vs2017\characters.cpp(6180): warning C4305: 'initializing': truncation from 'double' to 'float'
-c:\users\ojm14\documents\github\carnivores-cpe\c2_vs2017\characters.cpp(7033): warning C4244: '-=': conversion from 'double' to 'float', possible loss of data
-c:\users\ojm14\documents\github\carnivores-cpe\c2_vs2017\characters.cpp(7140): warning C4244: '-=': conversion from 'double' to 'float', possible loss of data
-c:\users\ojm14\documents\github\carnivores-cpe\c2_vs2017\characters.cpp(7993): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
-c:\users\ojm14\documents\github\carnivores-cpe\c2_vs2017\characters.cpp(8494): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
-c:\users\ojm14\documents\github\carnivores-cpe\c2_vs2017\characters.cpp(8496): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
-c:\users\ojm14\documents\github\carnivores-cpe\c2_vs2017\characters.cpp(8550): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
-c:\users\ojm14\documents\github\carnivores-cpe\c2_vs2017\characters.cpp(8553): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
-c:\users\ojm14\documents\github\carnivores-cpe\c2_vs2017\characters.cpp(9049): warning C4244: 'initializing': conversion from 'int' to 'float', possible loss of data
-c:\users\ojm14\documents\github\carnivores-cpe\c2_vs2017\characters.cpp(9074): warning C4244: 'initializing': conversion from 'int' to 'float', possible loss of data
-c:\users\ojm14\documents\github\carnivores-cpe\c2_vs2017\characters.cpp(9167): warning C4244: 'initializing': conversion from 'int' to 'float', possible loss of data
-c:\users\ojm14\documents\github\carnivores-cpe\c2_vs2017\characters.cpp(9580): warning C4101: 'pmk1': unreferenced local variable
-c:\users\ojm14\documents\github\carnivores-cpe\c2_vs2017\characters.cpp(9580): warning C4101: 'pmk2': unreferenced local variable
-c:\users\ojm14\documents\github\carnivores-cpe\c2_vs2017\characters.cpp(9580): warning C4101: 'pk2': unreferenced local variable
-c:\users\ojm14\documents\github\carnivores-cpe\c2_vs2017\characters.cpp(9580): warning C4101: 'pk1': unreferenced local variable
-c:\users\ojm14\documents\github\carnivores-cpe\c2_vs2017\characters.cpp(9568): warning C4101: 'PCurFrame': unreferenced local variable
+c:\users\ojm14\documents\github\carnivores-cpe\c2_vs2017\characters.cpp(3709): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+c:\users\ojm14\documents\github\carnivores-cpe\c2_vs2017\characters.cpp(4041): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+c:\users\ojm14\documents\github\carnivores-cpe\c2_vs2017\characters.cpp(5601): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
+c:\users\ojm14\documents\github\carnivores-cpe\c2_vs2017\characters.cpp(5601): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+c:\users\ojm14\documents\github\carnivores-cpe\c2_vs2017\characters.cpp(5603): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
+c:\users\ojm14\documents\github\carnivores-cpe\c2_vs2017\characters.cpp(5603): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+c:\users\ojm14\documents\github\carnivores-cpe\c2_vs2017\characters.cpp(5613): warning C4305: 'argument': truncation from 'double' to 'float'
+c:\users\ojm14\documents\github\carnivores-cpe\c2_vs2017\characters.cpp(5734): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+c:\users\ojm14\documents\github\carnivores-cpe\c2_vs2017\characters.cpp(5771): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+c:\users\ojm14\documents\github\carnivores-cpe\c2_vs2017\characters.cpp(5797): warning C4244: 'initializing': conversion from 'int' to 'float', possible loss of data
+c:\users\ojm14\documents\github\carnivores-cpe\c2_vs2017\characters.cpp(6162): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+c:\users\ojm14\documents\github\carnivores-cpe\c2_vs2017\characters.cpp(6165): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+c:\users\ojm14\documents\github\carnivores-cpe\c2_vs2017\characters.cpp(6179): warning C4305: 'initializing': truncation from 'double' to 'float'
+c:\users\ojm14\documents\github\carnivores-cpe\c2_vs2017\characters.cpp(7032): warning C4244: '-=': conversion from 'double' to 'float', possible loss of data
+c:\users\ojm14\documents\github\carnivores-cpe\c2_vs2017\characters.cpp(7139): warning C4244: '-=': conversion from 'double' to 'float', possible loss of data
+c:\users\ojm14\documents\github\carnivores-cpe\c2_vs2017\characters.cpp(7992): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+c:\users\ojm14\documents\github\carnivores-cpe\c2_vs2017\characters.cpp(8493): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+c:\users\ojm14\documents\github\carnivores-cpe\c2_vs2017\characters.cpp(8495): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+c:\users\ojm14\documents\github\carnivores-cpe\c2_vs2017\characters.cpp(8549): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+c:\users\ojm14\documents\github\carnivores-cpe\c2_vs2017\characters.cpp(8552): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+c:\users\ojm14\documents\github\carnivores-cpe\c2_vs2017\characters.cpp(9048): warning C4244: 'initializing': conversion from 'int' to 'float', possible loss of data
+c:\users\ojm14\documents\github\carnivores-cpe\c2_vs2017\characters.cpp(9073): warning C4244: 'initializing': conversion from 'int' to 'float', possible loss of data
+c:\users\ojm14\documents\github\carnivores-cpe\c2_vs2017\characters.cpp(9166): warning C4244: 'initializing': conversion from 'int' to 'float', possible loss of data
+c:\users\ojm14\documents\github\carnivores-cpe\c2_vs2017\characters.cpp(9579): warning C4101: 'pmk1': unreferenced local variable
+c:\users\ojm14\documents\github\carnivores-cpe\c2_vs2017\characters.cpp(9579): warning C4101: 'pmk2': unreferenced local variable
+c:\users\ojm14\documents\github\carnivores-cpe\c2_vs2017\characters.cpp(9579): warning C4101: 'pk2': unreferenced local variable
+c:\users\ojm14\documents\github\carnivores-cpe\c2_vs2017\characters.cpp(9579): warning C4101: 'pk1': unreferenced local variable
+c:\users\ojm14\documents\github\carnivores-cpe\c2_vs2017\characters.cpp(9567): warning C4101: 'PCurFrame': unreferenced local variable
   Game.cpp
 c:\users\ojm14\documents\github\carnivores-cpe\c2_vs2017\game.cpp(50): warning C4101: 'temp': unreferenced local variable
 c:\users\ojm14\documents\github\carnivores-cpe\c2_vs2017\game.cpp(175): warning C4244: 'initializing': conversion from 'float' to 'int', possible loss of data
@@ -220,19 +222,19 @@ c:\users\ojm14\documents\github\carnivores-cpe\c2_vs2017\resources.cpp(3464): wa
 c:\users\ojm14\documents\github\carnivores-cpe\c2_vs2017\resources.cpp(3465): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
   Generating code
 c:\users\ojm14\documents\github\carnivores-cpe\c2_vs2017\renderasm.cpp(4320): warning C4731: 'RenderSkyLineFade': frame pointer register 'ebp' modified by inline assembly code
-c:\users\ojm14\documents\github\carnivores-cpe\c2_vs2017\renderasm.cpp(4269): warning C4731: 'RenderSkyLineFadeLo': frame pointer register 'ebp' modified by inline assembly code
-c:\users\ojm14\documents\github\carnivores-cpe\c2_vs2017\renderasm.cpp(4291): warning C4731: 'RenderSkyLineFadeLo': frame pointer register 'ebp' modified by inline assembly code
 c:\users\ojm14\documents\github\carnivores-cpe\c2_vs2017\renderasm.cpp(4341): warning C4731: 'RenderSkyLineFade': frame pointer register 'ebp' modified by inline assembly code
 c:\users\ojm14\documents\github\carnivores-cpe\c2_vs2017\renderasm.cpp(4217): warning C4731: 'RenderSkyLineLo': frame pointer register 'ebp' modified by inline assembly code
 c:\users\ojm14\documents\github\carnivores-cpe\c2_vs2017\renderasm.cpp(4239): warning C4731: 'RenderSkyLineLo': frame pointer register 'ebp' modified by inline assembly code
 c:\users\ojm14\documents\github\carnivores-cpe\c2_vs2017\renderasm.cpp(4172): warning C4731: 'RenderSkyLine': frame pointer register 'ebp' modified by inline assembly code
 c:\users\ojm14\documents\github\carnivores-cpe\c2_vs2017\renderasm.cpp(4193): warning C4731: 'RenderSkyLine': frame pointer register 'ebp' modified by inline assembly code
+c:\users\ojm14\documents\github\carnivores-cpe\c2_vs2017\renderasm.cpp(4269): warning C4731: 'RenderSkyLineFadeLo': frame pointer register 'ebp' modified by inline assembly code
+c:\users\ojm14\documents\github\carnivores-cpe\c2_vs2017\renderasm.cpp(4291): warning C4731: 'RenderSkyLineFadeLo': frame pointer register 'ebp' modified by inline assembly code
+c:\users\ojm14\documents\github\carnivores-cpe\c2_vs2017\renderasm.cpp(2772): warning C4731: 'HLineTxModel50': frame pointer register 'ebp' modified by inline assembly code
+c:\users\ojm14\documents\github\carnivores-cpe\c2_vs2017\renderasm.cpp(2558): warning C4731: 'HLineTxModel25': frame pointer register 'ebp' modified by inline assembly code
+c:\users\ojm14\documents\github\carnivores-cpe\c2_vs2017\renderasm.cpp(2811): warning C4731: 'HLineTxModel50': frame pointer register 'ebp' modified by inline assembly code
+c:\users\ojm14\documents\github\carnivores-cpe\c2_vs2017\renderasm.cpp(2598): warning C4731: 'HLineTxModel25': frame pointer register 'ebp' modified by inline assembly code
 c:\users\ojm14\documents\github\carnivores-cpe\c2_vs2017\renderasm.cpp(2986): warning C4731: 'HLineTxModel75': frame pointer register 'ebp' modified by inline assembly code
 c:\users\ojm14\documents\github\carnivores-cpe\c2_vs2017\renderasm.cpp(3030): warning C4731: 'HLineTxModel75': frame pointer register 'ebp' modified by inline assembly code
-c:\users\ojm14\documents\github\carnivores-cpe\c2_vs2017\renderasm.cpp(2772): warning C4731: 'HLineTxModel50': frame pointer register 'ebp' modified by inline assembly code
-c:\users\ojm14\documents\github\carnivores-cpe\c2_vs2017\renderasm.cpp(2811): warning C4731: 'HLineTxModel50': frame pointer register 'ebp' modified by inline assembly code
-c:\users\ojm14\documents\github\carnivores-cpe\c2_vs2017\renderasm.cpp(2558): warning C4731: 'HLineTxModel25': frame pointer register 'ebp' modified by inline assembly code
-c:\users\ojm14\documents\github\carnivores-cpe\c2_vs2017\renderasm.cpp(2598): warning C4731: 'HLineTxModel25': frame pointer register 'ebp' modified by inline assembly code
 c:\users\ojm14\documents\github\carnivores-cpe\c2_vs2017\renderasm.cpp(2355): warning C4731: 'HLineTxModelBMP': frame pointer register 'ebp' modified by inline assembly code
 c:\users\ojm14\documents\github\carnivores-cpe\c2_vs2017\renderasm.cpp(2384): warning C4731: 'HLineTxModelBMP': frame pointer register 'ebp' modified by inline assembly code
 c:\users\ojm14\documents\github\carnivores-cpe\c2_vs2017\renderasm.cpp(2222): warning C4731: 'HLineTxModel3': frame pointer register 'ebp' modified by inline assembly code
@@ -240,31 +242,31 @@ c:\users\ojm14\documents\github\carnivores-cpe\c2_vs2017\renderasm.cpp(2281): wa
 c:\users\ojm14\documents\github\carnivores-cpe\c2_vs2017\renderasm.cpp(1992): warning C4731: 'HLineTxModel2': frame pointer register 'ebp' modified by inline assembly code
 c:\users\ojm14\documents\github\carnivores-cpe\c2_vs2017\renderasm.cpp(2051): warning C4731: 'HLineTxModel2': frame pointer register 'ebp' modified by inline assembly code
 c:\users\ojm14\documents\github\carnivores-cpe\c2_vs2017\renderasm.cpp(1727): warning C4731: 'HLineTxModel': frame pointer register 'ebp' modified by inline assembly code
-c:\users\ojm14\documents\github\carnivores-cpe\c2_vs2017\renderasm.cpp(1391): warning C4731: 'HLineTxC': frame pointer register 'ebp' modified by inline assembly code
 c:\users\ojm14\documents\github\carnivores-cpe\c2_vs2017\renderasm.cpp(1823): warning C4731: 'HLineTxModel': frame pointer register 'ebp' modified by inline assembly code
+c:\users\ojm14\documents\github\carnivores-cpe\c2_vs2017\renderasm.cpp(1391): warning C4731: 'HLineTxC': frame pointer register 'ebp' modified by inline assembly code
 c:\users\ojm14\documents\github\carnivores-cpe\c2_vs2017\renderasm.cpp(1397): warning C4731: 'HLineTxC': frame pointer register 'ebp' modified by inline assembly code
-c:\users\ojm14\documents\github\carnivores-cpe\c2_vs2017\renderasm.cpp(1159): warning C4731: 'HLineTxB': frame pointer register 'ebp' modified by inline assembly code
 c:\users\ojm14\documents\github\carnivores-cpe\c2_vs2017\renderasm.cpp(1480): warning C4731: 'HLineTxC': frame pointer register 'ebp' modified by inline assembly code
-c:\users\ojm14\documents\github\carnivores-cpe\c2_vs2017\renderasm.cpp(1165): warning C4731: 'HLineTxB': frame pointer register 'ebp' modified by inline assembly code
 c:\users\ojm14\documents\github\carnivores-cpe\c2_vs2017\renderasm.cpp(1485): warning C4731: 'HLineTxC': frame pointer register 'ebp' modified by inline assembly code
-c:\users\ojm14\documents\github\carnivores-cpe\c2_vs2017\renderasm.cpp(1250): warning C4731: 'HLineTxB': frame pointer register 'ebp' modified by inline assembly code
 c:\users\ojm14\documents\github\carnivores-cpe\c2_vs2017\renderasm.cpp(1545): warning C4731: 'HLineTxC': frame pointer register 'ebp' modified by inline assembly code
-c:\users\ojm14\documents\github\carnivores-cpe\c2_vs2017\renderasm.cpp(1255): warning C4731: 'HLineTxB': frame pointer register 'ebp' modified by inline assembly code
 c:\users\ojm14\documents\github\carnivores-cpe\c2_vs2017\renderasm.cpp(1556): warning C4731: 'HLineTxC': frame pointer register 'ebp' modified by inline assembly code
+c:\users\ojm14\documents\github\carnivores-cpe\c2_vs2017\renderasm.cpp(1159): warning C4731: 'HLineTxB': frame pointer register 'ebp' modified by inline assembly code
+c:\users\ojm14\documents\github\carnivores-cpe\c2_vs2017\renderasm.cpp(1165): warning C4731: 'HLineTxB': frame pointer register 'ebp' modified by inline assembly code
+c:\users\ojm14\documents\github\carnivores-cpe\c2_vs2017\renderasm.cpp(1250): warning C4731: 'HLineTxB': frame pointer register 'ebp' modified by inline assembly code
+c:\users\ojm14\documents\github\carnivores-cpe\c2_vs2017\renderasm.cpp(1255): warning C4731: 'HLineTxB': frame pointer register 'ebp' modified by inline assembly code
 c:\users\ojm14\documents\github\carnivores-cpe\c2_vs2017\renderasm.cpp(1317): warning C4731: 'HLineTxB': frame pointer register 'ebp' modified by inline assembly code
 c:\users\ojm14\documents\github\carnivores-cpe\c2_vs2017\renderasm.cpp(1328): warning C4731: 'HLineTxB': frame pointer register 'ebp' modified by inline assembly code
-c:\users\ojm14\documents\github\carnivores-cpe\c2_vs2017\renderasm.cpp(526): warning C4731: 'HLineTDGlass75': frame pointer register 'ebp' modified by inline assembly code
 c:\users\ojm14\documents\github\carnivores-cpe\c2_vs2017\renderasm.cpp(931): warning C4731: 'HLineTxGOURAUD': frame pointer register 'ebp' modified by inline assembly code
-c:\users\ojm14\documents\github\carnivores-cpe\c2_vs2017\renderasm.cpp(609): warning C4731: 'HLineTDGlass75': frame pointer register 'ebp' modified by inline assembly code
 c:\users\ojm14\documents\github\carnivores-cpe\c2_vs2017\renderasm.cpp(741): warning C4731: 'HLineTBGlass25': frame pointer register 'ebp' modified by inline assembly code
 c:\users\ojm14\documents\github\carnivores-cpe\c2_vs2017\renderasm.cpp(937): warning C4731: 'HLineTxGOURAUD': frame pointer register 'ebp' modified by inline assembly code
-c:\users\ojm14\documents\github\carnivores-cpe\c2_vs2017\renderasm.cpp(644): warning C4731: 'HLineTDGlass75': frame pointer register 'ebp' modified by inline assembly code
 c:\users\ojm14\documents\github\carnivores-cpe\c2_vs2017\renderasm.cpp(824): warning C4731: 'HLineTBGlass25': frame pointer register 'ebp' modified by inline assembly code
-c:\users\ojm14\documents\github\carnivores-cpe\c2_vs2017\renderasm.cpp(1023): warning C4731: 'HLineTxGOURAUD': frame pointer register 'ebp' modified by inline assembly code
 c:\users\ojm14\documents\github\carnivores-cpe\c2_vs2017\renderasm.cpp(858): warning C4731: 'HLineTBGlass25': frame pointer register 'ebp' modified by inline assembly code
+c:\users\ojm14\documents\github\carnivores-cpe\c2_vs2017\renderasm.cpp(1023): warning C4731: 'HLineTxGOURAUD': frame pointer register 'ebp' modified by inline assembly code
 c:\users\ojm14\documents\github\carnivores-cpe\c2_vs2017\renderasm.cpp(1028): warning C4731: 'HLineTxGOURAUD': frame pointer register 'ebp' modified by inline assembly code
 c:\users\ojm14\documents\github\carnivores-cpe\c2_vs2017\renderasm.cpp(1090): warning C4731: 'HLineTxGOURAUD': frame pointer register 'ebp' modified by inline assembly code
 c:\users\ojm14\documents\github\carnivores-cpe\c2_vs2017\renderasm.cpp(1102): warning C4731: 'HLineTxGOURAUD': frame pointer register 'ebp' modified by inline assembly code
+c:\users\ojm14\documents\github\carnivores-cpe\c2_vs2017\renderasm.cpp(526): warning C4731: 'HLineTDGlass75': frame pointer register 'ebp' modified by inline assembly code
+c:\users\ojm14\documents\github\carnivores-cpe\c2_vs2017\renderasm.cpp(609): warning C4731: 'HLineTDGlass75': frame pointer register 'ebp' modified by inline assembly code
+c:\users\ojm14\documents\github\carnivores-cpe\c2_vs2017\renderasm.cpp(644): warning C4731: 'HLineTDGlass75': frame pointer register 'ebp' modified by inline assembly code
 c:\users\ojm14\documents\github\carnivores-cpe\c2_vs2017\renderasm.cpp(318): warning C4731: 'HLineTDGlass25': frame pointer register 'ebp' modified by inline assembly code
 c:\users\ojm14\documents\github\carnivores-cpe\c2_vs2017\renderasm.cpp(402): warning C4731: 'HLineTDGlass25': frame pointer register 'ebp' modified by inline assembly code
 c:\users\ojm14\documents\github\carnivores-cpe\c2_vs2017\renderasm.cpp(435): warning C4731: 'HLineTDGlass25': frame pointer register 'ebp' modified by inline assembly code

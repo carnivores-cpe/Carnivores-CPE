@@ -271,6 +271,7 @@ function expand(n) {
 				<li>Customisable point deduction for equipement.</li>
 				<li>Option to hide creatures on the menu until the user has sufficient score.</li>
 				<li>Menu pics for observer mode, dawn, day and night.</li>
+				<li>Customizable speed for morphing between animations.</li>
 				<!-- huntable dino 255? -->
 			</ul>
 			
@@ -282,6 +283,8 @@ function expand(n) {
 				<li>Firing X-Bow or Harpoon at feet no longer kills the hunter</li>
 				<li>Resupply ship can no longer be called in survival mode or the trophy room</li>
 				<li>Trophies now display correct Weapon Used</li>
+				<li>MoveForward creatures now respawn (unless the creature count already exceeds 250)</li>
+
 			</ul>
 			
 			<!--<p>
@@ -291,6 +294,7 @@ function expand(n) {
 			</p>
 			
 			<b>
+			Note: As of 1.2, morphTime = 1 is required for all creatures.
 			<p>
 			Note: As of 1.2 do not run CARN2.exe in compatability  mode.
 			</p>
@@ -447,6 +451,7 @@ function expand(n) {
 			    <li>Non-trophy creatures can still give points using basescore.</li>
 				<li>More detailed _RES error messages.</li>
 				<li>More accurate distance measurements.</li>
+				<li>Customizable speed for morphing between animations.</li>
 				<li>Custom menu font colours.</li>
 				<li>Up to 10 selectable weapon slots (with numkey binding).</li>
 				<li>Up to 255 area slots.</li>
@@ -464,7 +469,6 @@ function expand(n) {
 									
 			<h3>Credits</h3>
 			Ornithomimid 1 - programming, animating, ichthyornis model & texture.</br>
-			<!--RexHunter - menu programming.</br>-->
 			Adelphospro - programming.</br>
 			Ithamar - programming.</br>
 			Poharex - mosasaurus, climatius, parexus & pink parexus models & textures.</br>
@@ -3669,6 +3673,31 @@ dontFear = 18</br>
 		</div>
 	</div>
 </p>
+		
+		
+		
+
+<p style="margin-top:4%;">
+	<h2 id="arrow_245" unselectable="on" onclick="expand(245)"
+		style="float:left;margin-top:0;cursor:pointer;
+		-moz-user-select:none;
+		user-select:none;
+		-webkit-user-select: none;
+		-ms-user-select: none;"
+		>></h2>
+	<div class = "con" style="margin-left:4%">
+		<h2 onclick="expand(245)" style="cursor:pointer;">_RES value: morphTime</h2>
+		<div id="content_245" style="display: none">
+		
+			<p><b>Data type: Decimal Number</b></p>
+			<p>
+			Multiplies the speed of morphing between animations. Must be set to 1 by default.
+			</p>
+		
+		</div>
+	</div>
+</p>		
+		
 		
 		
 <p style="margin-top:4%;">

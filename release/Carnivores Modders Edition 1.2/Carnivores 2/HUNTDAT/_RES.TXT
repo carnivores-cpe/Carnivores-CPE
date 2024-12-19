@@ -258,6 +258,7 @@ characters {
  name    = 'Hunter'
  file    = 'hunter1_brach_mosa12.car'
  ai      = 0
+ morphTime = 1
  health  = 1
 }
 
@@ -266,6 +267,7 @@ characters {
  name    = 'Moshops'
  file    = 'mosh.car'
  ai      = 1
+ morphTime = 1
  hearK      = 0.5
 spawninfo{
  spawngroup = 0
@@ -303,6 +305,7 @@ idlegroup{
  name    = 'Galimimus'
  file    = 'gall.car'
  ai      = 2
+ morphTime = 1
  hearK      = 0.5
 spawninfo{
  spawngroup = 0
@@ -341,6 +344,7 @@ idlegroup{
  name   = 'Dimorphodon'
  file   = 'dimor2.car'
  ai     = 3
+ morphTime = 1
 spawninfo{
  spawngroup = 0
  spawnratio = 1
@@ -367,6 +371,7 @@ deathtype{
  name   = 'Pteranodon'
  file   = 'ptera.car'
  ai     = 4
+ morphTime = 1
 spawninfo{
  spawngroup = 0
  spawnratio = 1
@@ -393,6 +398,7 @@ deathtype{
  name   = 'Dimetrodon'
  file   = 'dimet.car'
  ai     = 5
+ morphTime = 1
  hearK      = 0.5
 spawninfo{
  spawngroup = 0
@@ -430,6 +436,7 @@ idlegroup{
  name      = 'Parasaurolophus'
  file      = 'par9.car'
  ai        = 10
+ morphTime = 1
  callNo = 0
  basescore = 2.5
 overwrite char0 {
@@ -513,6 +520,7 @@ deathtype{
  name = 'Ankylosaurus'
  file = 'anky_tt.car'
  ai        = 11
+ morphTime = 1
  callNo = 1
  basescore = 3
 overwrite char1 {
@@ -595,6 +603,7 @@ deathtype{
  name = 'Stegosaurus'
  file = 'stego_tt.car'
  ai        = 12
+ morphTime = 1
  callNo = 2
  basescore = 3.5
 overwrite char2 {
@@ -675,6 +684,7 @@ deathtype{
  name = 'Allosaurus'
  file = 'allot_iictt.car'
  ai        = 13
+ morphTime = 1
  callNo = 3
  basescore = 5
 overwrite char3 {
@@ -779,6 +789,7 @@ killtype{
  name = 'Chasmosaurus'
  file = 'chasmosa_tt.car'
  ai        = 14
+ morphTime = 1
  callNo = 4
  basescore = 4.5
 overwrite char4 {
@@ -862,6 +873,7 @@ deathtype{
  name = 'Velociraptor'
  file = 'veloteeth5_iidct2.car'
  ai        = 15
+ morphTime = 1
  callNo = 5
  basescore = 6
 overwrite char5 {
@@ -959,6 +971,7 @@ killtype{
  name = 'Spinosaurus'
  file = 'spino_stt.car'
  ai        = 16
+ morphTime = 1
  callNo = 6
  basescore = 7.5
 overwrite char6 {
@@ -1060,6 +1073,7 @@ killtype{
  name = 'Ceratosaurus'
  file = 'cerat_tss.car'
  ai        = 17
+ morphTime = 1
  callNo = 7
 overwrite char7 {
  radar = TRUE
@@ -1155,6 +1169,7 @@ killtype{
  name = 'T-Rex'
  file = 'tirex_tt.car'
  ai        = 18
+ morphTime = 1
  callNo = 8
 overwrite char8 {
  radar = TRUE
@@ -1259,6 +1274,7 @@ killtype{
  name = 'Brachiosaurus'
  file = 'dangerbrachikiller9.car'
  ai  = 34
+ morphTime = 1
  spawngroup{
   spawnmax = 4
   spawnmin = 2

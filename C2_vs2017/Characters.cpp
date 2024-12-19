@@ -190,10 +190,10 @@ void ProcessPrevPhase(TCharacter *cptr)
 	sprintf(buff2, " Ph= %i", cptr->Phase);
 	PrintLog(buff2);*/
 
-	cptr->PPMorphTime += TimeDt;
+	cptr->PPMorphTime += TimeDt * DinoInfo[cptr->CType].morphTime;
 	if (cptr->PPMorphTime > PMORPHTIME) cptr->PrevPhase = cptr->Phase;
 
-	cptr->PrevPFTime += TimeDt;
+	cptr->PrevPFTime += TimeDt * DinoInfo[cptr->CType].morphTime;
  	cptr->PrevPFTime %= cptr->pinfo->Animation[cptr->PrevPhase].AniTime;
 	cptr->PrevPFTime %= cptr->pinfo->Animation[cptr->PrevPhase].AniTime;
 }
@@ -1748,10 +1748,9 @@ BOOL ReplaceCharacterForward(TCharacter *cptr)
 
 void Characters_AddSecondaryOne(TCharacter *cptr)
 {
-
 	if (!spawnGroup[cptr->SpawnGroupType].moveForward) return;
 
-	if (ChCount > 64) return;
+	if (ChCount > 250) return;
 	Characters[ChCount].CType = cptr->CType;
 	Characters[ChCount].SpawnGroupType = cptr->SpawnGroupType;
 	Characters[ChCount].Clone = cptr->Clone;

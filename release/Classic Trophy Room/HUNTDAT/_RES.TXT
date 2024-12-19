@@ -381,6 +381,7 @@ characters {
  name    = 'Hunter'
  file    = 'hunter1_brach_mosa12.car'
  ai      = 0
+ morphTime = 1
  health  = 1
 }
 
@@ -389,6 +390,7 @@ characters {
  name    = 'Moshops'
  file    = 'mosh.car'
  ai      = 1
+ morphTime = 1
  hearK      = 0.5
 spawninfo{
  spawngroup = 0
@@ -426,6 +428,7 @@ idlegroup{
  name    = 'Galimimus'
  file    = 'gall.car'
  ai      = 2
+ morphTime = 1
  hearK      = 0.5
 spawninfo{
  spawngroup = 0
@@ -464,6 +467,7 @@ idlegroup{
  name   = 'Dimorphodon'
  file   = 'dimor2.car'
  ai     = 3
+ morphTime = 1
 spawninfo{
  spawngroup = 0
  spawnratio = 1
@@ -490,6 +494,7 @@ deathtype{
  name   = 'Pteranodon'
  file   = 'ptera.car'
  ai     = 4
+ morphTime = 1
 spawninfo{
  spawngroup = 0
  spawnratio = 1
@@ -516,6 +521,7 @@ deathtype{
  name   = 'Dimetrodon'
  file   = 'dimet.car'
  ai     = 5
+ morphTime = 1
  hearK      = 0.5
 spawninfo{
  spawngroup = 0
@@ -553,6 +559,7 @@ idlegroup{
  name      = 'Parasaurolophus'
  file      = 'par9.car'
  ai        = 10
+ morphTime = 1
  callNo = 0
  tropgroup = 0
  basescore = 2.5
@@ -616,6 +623,7 @@ deathtype{
  name = 'Ankylosaurus'
  file = 'anky_tt.car'
  ai        = 11
+ morphTime = 1
  callNo = 1
  tropgroup = 0
  basescore = 3
@@ -681,6 +689,7 @@ deathtype{
  name = 'Stegosaurus'
  file = 'stego_tt.car'
  ai        = 12
+ morphTime = 1
  callNo = 2
  tropgroup = 0
  basescore = 3.5
@@ -744,6 +753,7 @@ deathtype{
  name = 'Allosaurus'
  file = 'allot_iictt.car'
  ai        = 13
+ morphTime = 1
  callNo = 3
  tropgroup = 0
  basescore = 5
@@ -831,6 +841,7 @@ killtype{
  name = 'Chasmosaurus'
  file = 'chasmosa_tt.car'
  ai        = 14
+ morphTime = 1
  callNo = 4
  tropgroup = 0
  basescore = 4.5
@@ -895,6 +906,7 @@ deathtype{
  name = 'Velociraptor'
  file = 'veloteeth5_iidct2.car'
  ai        = 15
+ morphTime = 1
  callNo = 5
  tropgroup = 0
  basescore = 6
@@ -975,6 +987,7 @@ killtype{
  name = 'Spinosaurus'
  file = 'spino_stt.car'
  ai        = 16
+ morphTime = 1
  callNo = 6
  tropgroup = 0
  basescore = 7.5
@@ -1057,6 +1070,7 @@ killtype{
  name = 'Ceratosaurus'
  file = 'cerat_tss.car'
  ai        = 17
+ morphTime = 1
  callNo = 7
  tropgroup = 0
 overwrite char7 {
@@ -1135,6 +1149,7 @@ killtype{
  name = 'T-Rex'
  file = 'tirex_tt.car'
  ai        = 18
+ morphTime = 1
  callNo = 8
  tropgroup = 0
 overwrite char8 {
@@ -1223,6 +1238,7 @@ killtype{
  name = 'Brachiosaurus'
  file = 'dangerbrachikiller9.car'
  ai  = 34
+ morphTime = 1
  spawngroup{
   spawnmax = 4
   spawnmin = 2

@@ -275,6 +275,7 @@ characters {
  name    = 'Hunter'
  file    = 'hunter ice age.car'
  ai      = 0
+ morphTime = 1
  health  = 1
 }
 
@@ -284,6 +285,7 @@ characters {
  name    = 'Pig'
  file    = 'pig1.car'
  ai      = 6
+ morphTime = 1
  hearK      = 0.5
 spawninfo{
  spawngroup = 0
@@ -321,6 +323,7 @@ endChance = 0.25
  name   = 'Archeopterics'
  file   = 'Archeo.car'
  ai     = 3
+ morphTime = 1
 spawninfo{
  spawngroup = 0
  spawnratio = 1
@@ -349,6 +352,7 @@ deathtype{
  name      = 'Brontoteriy'
  file      = 'bronto.car'
  ai        = 20
+ morphTime = 1
  callNo = 0
  basescore = 2.5
 overwrite char0 {
@@ -432,6 +436,7 @@ killtype{
  name = 'Wild Boar'
  file = 'hog.car'
  ai        = 21
+ morphTime = 1
  callNo = 1
  basescore = 3
 overwrite char1 {
@@ -518,6 +523,7 @@ killtype{
  name = 'Wolf'
  file = 'wolf.car'
  ai        = 22
+ morphTime = 1
  callNo = 2
  basescore = 3.5
 overwrite char2 {
@@ -606,6 +612,7 @@ killtype{
  name = 'Wooly rhinoceros'
  file = 'Rhino.car'
  ai        = 23
+ morphTime = 1
  callNo = 3
  basescore = 5
 overwrite char3 {
@@ -691,6 +698,7 @@ killtype{
  name = 'Diatryma'
  file = 'diatr_s.car'
  ai        = 16
+ morphTime = 1
  callNo = 4
  basescore = 4.5
 overwrite char4 {
@@ -785,6 +793,7 @@ killtype{
  name = 'Giant deer'
  file = 'deer.car'
  ai        = 24
+ morphTime = 1
  callNo = 5
  basescore = 6
 overwrite char5 {
@@ -869,6 +878,7 @@ killtype{
  name = 'Smilodon'
  file = 'smilo.car'
  ai        = 25
+ morphTime = 1
  callNo = 6
  basescore = 7.5
 overwrite char6 {
@@ -958,6 +968,7 @@ killtype{
  name = 'Mammoth'
  file = 'mamm.car'
  ai        = 26
+ morphTime = 1
  callNo = 7
 overwrite char7 {
  radar = TRUE
@@ -1021,6 +1032,7 @@ killtype{
  name = 'Bear'
  file = 'bear.car'
  ai        = 27
+ morphTime = 1
  callNo = 8
 overwrite char8 {
  radar = TRUE
@@ -1099,6 +1111,7 @@ killtype{
  name = 'Yeti'
  file = 'bigfoot.car'
  ai        = 27
+ morphTime = 1
  callNo = 9
 overwrite char9 {
  radar = TRUE
