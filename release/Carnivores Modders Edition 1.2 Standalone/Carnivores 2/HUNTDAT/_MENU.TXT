@@ -204,7 +204,7 @@ access {
   name = 'Radar'
   price = 0
   scoreMod = 0.7
-  radar = TRUE
+  radar1 = TRUE
 }
 
 {

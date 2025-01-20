@@ -4344,60 +4344,12 @@ void Put8pix(int X,int Y)
 
 void DrawLine(int x1, int y1, int R, float D)
 {
-	int dx = sin(D)*R;
-	int dy = cos(D)*R;
-
-	if (!dx) {
-		for (int y=0; y < dy; y++) {
-			PutPixel(x1, y1 + y);
-		}
-		return;
-	}
-	if (!dy) {
-		for (int x=0; x < dx; x++) {
-			PutPixel(x1 + x, y1);
-		}
-		return;
-	}
-
-	float d1 = abs(dx) / abs(dy);
-	float d2 = abs(dy) / abs(dx);
-	
-	int dx1 = 1;
-	if (dx < 0) dx1 = -1;
-	int dy1 = 1;
-	if (dy < 0) dy1 = -1;
-
-	if (d1 > d2) {
-
-		float dd = d1;
-		int xt = 0;
-		int yt = 0;
-		while (abs(yt) < abs(dy)) {
-			while (dd >= 1) {
-				PutPixel(x1 + xt, y1 + yt);
-				xt+= dx1;
-				dd-=1;
-			}
-			dd += d1;
-			yt+= dy1;
-		}
-
-		} else {
-	
-		float dd = d2;
-		int xt = 0;
-		int yt = 0;
-		while (abs(xt) < abs(dx)) {
-			while (dd >= 1) {
-				PutPixel(x1 + xt, y1 + yt);
-				yt+= dy1;
-				dd-=1;
-			}
-			dd += d2;
-			xt+= dx1;
-		}
-
+	for (int prog = 0; prog < R; prog++) {
+		int dx = sin(D)*(prog+1);
+		int dy = cos(D)*(prog+1);
+		int x2 = x1 + dx;
+		int y2 = y1 + dy;
+		PutPixel(x2, y2);
 	}
 
 }
@@ -4488,9 +4440,15 @@ void DrawHMap()
   if (yy<0 || yy>=WinH) goto endmap;
   if (xx<0 || xx>=WinW) goto endmap;
 
-  DrawBox( (WORD*)linfo.lfbPtr, lsw, xx+1, yy+1, 8<<11);
-  DrawBox( (WORD*)linfo.lfbPtr, lsw, xx, yy, 30<<11);
-
+  _CRCOLOR = 4 << 6;
+  DrawCircle(xx + 1, yy + 1, (ctViewR / 4));
+  DrawLine(xx + 1, yy + 1, (ctViewR / 4), pi * 1.25 - PlayerAlpha);
+  DrawLine(xx + 1, yy + 1, (ctViewR / 4), pi * 0.75 - PlayerAlpha);
+  _CRCOLOR = 18 << 6;
+  if (SonarMode || ScannerMode) _CRCOLOR = 14 << 6;
+  DrawCircle(xx, yy, (ctViewR / 4));
+  DrawLine(xx, yy, (ctViewR / 4), pi * 1.25 - PlayerAlpha);
+  DrawLine(xx, yy, (ctViewR / 4), pi * 0.75 - PlayerAlpha);
 
   float _sonarPos;
   if (SonarMode) {
@@ -4502,24 +4460,26 @@ void DrawHMap()
 	  _CRCOLOR = 30 << 6;
 	  DrawCircle(xx, yy, sonarPos);
   }
+
+
   if (ScannerMode) {
 	  _sonarPos = sonarPos;
-	  sonarPos += TimeDt * 0.0002;
+	  sonarPos += TimeDt * 0.001;
 	  if (sonarPos > 2 * pi) sonarPos -= 2 * pi;
 	  _CRCOLOR = 4 << 6;
 	  DrawCircle(xx + 1, yy + 1, 38);
-	  DrawLine(xx+1, yy+1, 38, sonarPos);
+	  DrawLine(xx+1, yy+1, 38, pi - sonarPos);
 	  _CRCOLOR = 30 << 6;
 	  DrawCircle(xx, yy, 38);
-	  DrawLine(xx, yy, 38, sonarPos);
+	  DrawLine(xx, yy, 38, pi - sonarPos);
   }
   
+  
 
-  _CRCOLOR = 4 << 6;
-  DrawCircle(xx + 1, yy + 1, (ctViewR / 4));
-  _CRCOLOR = 18 << 6;
-  if (SonarMode || ScannerMode) _CRCOLOR = 14 << 6;
-  DrawCircle(xx, yy, (ctViewR / 4));
+
+
+  DrawBox((WORD*)linfo.lfbPtr, lsw, xx + 1, yy + 1, 8 << 11);
+  DrawBox((WORD*)linfo.lfbPtr, lsw, xx, yy, 30 << 11);
 
 
   if (Multiplayer) {
@@ -4575,7 +4535,7 @@ void DrawHMap()
 
 				}
 				
-				if (SonarMode) {
+				if (SonarMode || ScannerMode) {
 
 					xx = VideoCX - 128 + (int)Characters[c].pos.x / 1024;
 					yy = VideoCY - 128 + (int)Characters[c].pos.z / 1024;
@@ -4586,15 +4546,48 @@ void DrawHMap()
 					dz = py - yy;
 					int pd = (int) sqrt(dx * dx + dz * dz);
 
+					float bearing;
+					if (dz == 0) {
+						if (dx > 0) bearing = pi * 0.5;
+						if (dx < 0) bearing = pi * 1.5;
+					} else if (dx == 0) {
+						if (dz > 0) bearing = pi;
+						if (dz < 0) bearing = 0;
+					} else {
+						bearing = atan2f(dz, dx);
+					}
+
+					bearing -= pi / 2;
+					if (bearing < 0) bearing += pi * 2;
 
 					if (pd < 38) {
-						if (pd >= _sonarPos && pd <= sonarPos) {
-							Characters[c].showSonar = TRUE;
-							Characters[c].sonar.x = xx;
-							Characters[c].sonar.y = yy;
-							AddVoicev(fxBlip.length, fxBlip.lpData, 256);
+						if (SonarMode) {
+							bool displ = false;
+							if (_sonarPos > sonarPos) {
+								if (pd >= 0 && pd <= sonarPos) displ = true;
+							} else if (pd >= _sonarPos && pd <= sonarPos) displ = true;
+							if (displ){
+								Characters[c].showSonar = TRUE;
+								Characters[c].sonar.x = xx;
+								Characters[c].sonar.y = yy;
+								AddVoicev(fxBlip.length, fxBlip.lpData, 256);
+							}
 						}
+						if (ScannerMode) {
+							bool displ = false;
+							if (_sonarPos > sonarPos) {
+								if (bearing >= _sonarPos && bearing <= 2 * pi) displ = true;
+								if (bearing >= 0 && bearing <= sonarPos) displ = true;
+							} else if (bearing >= _sonarPos && bearing <= sonarPos) displ = true;
+							if (displ) {
+								Characters[c].showSonar = TRUE;
+								Characters[c].sonar.x = xx;
+								Characters[c].sonar.y = yy;
+								AddVoicev(fxBlip.length, fxBlip.lpData, 256);
+							}
+						}						
 					} else Characters[c].showSonar = FALSE;
+
 
 					if (Characters[c].showSonar && !Characters[c].RTime) {
 						if (DinoInfo[Characters[c].CType].Mystery) DrawBoxMystery((WORD*)linfo.lfbPtr, lsw, Characters[c].sonar.x, Characters[c].sonar.y, DinoInfo[Characters[c].CType].radarColour565);

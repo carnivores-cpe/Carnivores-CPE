@@ -1,0 +1,56 @@
+Carnivores CCE Menu Based on Build ADPv2.14.111ALPHA. Jan 20 2025.
+Creating main window...Ok.
+
+==Init Direct Draw==
+DirectDrawCreate: Ok
+Direct Draw activated.
+
+Map File: huntdat\areas\area1.c2map
+Reading Map Description File: huntdat\\menu\\txt\\area1.txt
+Map File: huntdat\areas\area2.c2map
+Reading Map Description File: huntdat\\menu\\txt\\area2.txt
+Map File: huntdat\areas\area3.c2map
+Reading Map Description File: huntdat\\menu\\txt\\area3.txt
+Map File: huntdat\areas\area4.c2map
+Reading Map Description File: huntdat\\menu\\txt\\area4.txt
+Map File: huntdat\areas\area5.c2map
+Reading Map Description File: huntdat\\menu\\txt\\area5.txt
+Trophy Loaded.
+Init Engine: Ok.
+
+DirectSound3D(native) audio driver (Beta 4) v1.2
+No Device Enumerating implemented.. 
+Using native DirectSound 3D (Software emulation mode)
+DSCAPS:
+ dwFreeHw3DAllBuffers 0 
+ dwFreeHw3DStaticBuffers 0 
+ dwFreeHw3DStreamingBuffers 0 
+ dwFreeHwMemBytes 0 
+ dwTotalHwMemBytes 0 
+ dwFreeHwMixingAllBuffers 0 
+ dwFreeHwMixingStaticBuffers 0 
+ dwFreeHwMixingStreamingBuffers 0 
+ dwMaxContigFreeHwMemBytes 0 
+ dwMinSecondarySampleRate 100 
+ dwMaxSecondarySampleRate 200000 
+ dwMaxHw3DAllBuffers 0 
+ dwMaxHw3DStaticBuffers 0 
+ dwMaxHw3DStreamingBuffers 0 
+ dwMaxHwMixingAllBuffers 1 
+ dwMaxHwMixingStaticBuffers 1 
+ dwMaxHwMixingStreamingBuffers 1 
+CreatePrimaryBuffer Ok
+Primary SetFormat() Ok
+Create audio thread #1..ok
+Create Listener3D()
+InitAudioSystem ok
+
+== Loading resources ==
+Loading common resources: Done.
+Reading  and .rsc/n Done.
+Loading area: Done.
+Entering messages loop.
+Entered game
+ReInitGame();
+SetCooperativeLevel: Ok
+Game normal shutdown.

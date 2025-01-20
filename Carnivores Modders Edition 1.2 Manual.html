@@ -262,7 +262,7 @@ function expand(n) {
 				<li>Up to 10 selectable weapon slots (with numkey binding).</li>
 				<li>Up to 255 area slots.</li>
 				<li>Up to 10 customisable equipment options.</li>
-				<li>Sonar equipment.</li>
+				<li>3 styles of radar available as equipment.</li>
 				<li>Option to remove binoculars or make them optional equipment.</li>
 				<li>Option to remove binocular information or make it optional equipment.</li>
 				<li>Option to remove call box or make it optional equipment.</li>
@@ -295,6 +295,10 @@ function expand(n) {
 			
 			<b>
 			Note: As of 1.2, morphTime = 1 is required for all creatures.
+			<p>
+			Note: As of 1.2, each area requires a .c2map file.
+			</p>
+			Note: As of 1.2, all account defaults are set with trophyNEW.sav
 			<p>
 			Note: As of 1.2 do not run CARN2.exe in compatability  mode.
 			</p>
@@ -456,7 +460,7 @@ function expand(n) {
 				<li>Up to 10 selectable weapon slots (with numkey binding).</li>
 				<li>Up to 255 area slots.</li>
 				<li>Up to 10 customisable equipment options.</li>
-				<li>Sonar equipment.</li>
+				<li>3 styles of radar available as equipment.</li>
 				<li>Option to remove binoculars or make them optional equipment.</li>
 				<li>Option to remove binocular information or make it optional equipment.</li>
 				<li>Option to remove call box or make it optional equipment.</li>
@@ -8074,12 +8078,64 @@ fishIdleAnim = 4
 		-ms-user-select: none;"
 		>></h2>
 	<div class = "con" style="margin-left:8%">
-		<h2 onclick="expand(233)" style="cursor:pointer;">_RES value: radar</h2>
+		<h2 onclick="expand(233)" style="cursor:pointer;">_RES value: radar1</h2>
 		<div id="content_233" style="display: none">
 		
 			<p><b>Data type: TRUE/FALSE</b></p>
 			<p>
-			If set to true, this equipment will activate radar.
+			If set to true, this equipment will activate vanilla style radar.
+			</p>
+			<b>
+			Note: Add this value to the common section of the _menu.txt to activate radar by default.
+			</b>
+		
+		</div>
+	</div>
+</p>
+
+
+		
+<p style="margin-top:4%;">
+	<h2 id="arrow_239" unselectable="on" onclick="expand(239)"
+		style="float:left;margin-top:0;cursor:pointer;
+		-moz-user-select:none;
+		user-select:none;
+		-webkit-user-select: none;
+		-ms-user-select: none;"
+		>></h2>
+	<div class = "con" style="margin-left:8%">
+		<h2 onclick="expand(239)" style="cursor:pointer;">_RES value: radar2</h2>
+		<div id="content_239" style="display: none">
+		
+			<p><b>Data type: TRUE/FALSE</b></p>
+			<p>
+			If set to true, this equipment will activate radar with an expanding signal.
+			</p>
+			<b>
+			Note: Add this value to the common section of the _menu.txt to activate radar by default.
+			</b>
+		
+		</div>
+	</div>
+</p>
+
+
+		
+<p style="margin-top:4%;">
+	<h2 id="arrow_246" unselectable="on" onclick="expand(246)"
+		style="float:left;margin-top:0;cursor:pointer;
+		-moz-user-select:none;
+		user-select:none;
+		-webkit-user-select: none;
+		-ms-user-select: none;"
+		>></h2>
+	<div class = "con" style="margin-left:8%">
+		<h2 onclick="expand(246)" style="cursor:pointer;">_RES value: radar3</h2>
+		<div id="content_246" style="display: none">
+		
+			<p><b>Data type: TRUE/FALSE</b></p>
+			<p>
+			If set to true, this equipment will activate radar with a rotating signal.
 			</p>
 			<b>
 			Note: Add this value to the common section of the _menu.txt to activate radar by default.
@@ -8213,32 +8269,6 @@ fishIdleAnim = 4
 			</p>
 			<b>
 			Note: Add this value to the common section of the _menu.txt to activate the resupply ship by default.
-			</b>
-		
-		</div>
-	</div>
-</p>
-
-
-		
-<p style="margin-top:4%;">
-	<h2 id="arrow_239" unselectable="on" onclick="expand(239)"
-		style="float:left;margin-top:0;cursor:pointer;
-		-moz-user-select:none;
-		user-select:none;
-		-webkit-user-select: none;
-		-ms-user-select: none;"
-		>></h2>
-	<div class = "con" style="margin-left:8%">
-		<h2 onclick="expand(239)" style="cursor:pointer;">_RES value: sonar</h2>
-		<div id="content_239" style="display: none">
-		
-			<p><b>Data type: TRUE/FALSE</b></p>
-			<p>
-			If set to true, this equipment will activate sonar.
-			</p>
-			<b>
-			Note: Add this value to the common section of the _menu.txt to activate sonar by default.
 			</b>
 		
 		</div>
