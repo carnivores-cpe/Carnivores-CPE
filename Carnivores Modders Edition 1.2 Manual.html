@@ -271,6 +271,7 @@ function expand(n) {
 				<li>Customisable point deduction for equipement.</li>
 				<li>Option to hide creatures on the menu until the user has sufficient score.</li>
 				<li>Menu pics for observer mode, dawn, day and night.</li>
+				<li>Optional shadows on map image with customisable direction and light for each area.</li>
 				<li>Customizable speed for morphing between animations.</li>
 				<!-- huntable dino 255? -->
 			</ul>
@@ -469,6 +470,7 @@ function expand(n) {
 				<li>Customisable point deduction for equipement.</li>
 				<li>Option to hide creatures on the menu until the user has sufficient score.</li>
 				<li>Menu pics for observer mode, dawn, day and night.</li>
+				<li>Optional shadows on map image with customisable direction and light for each area.</li>
 			</ul>
 									
 			<h3>Credits</h3>
@@ -1452,6 +1454,73 @@ snow{</br>
 		
 		
 		
+		
+<p style="margin-top:4%;">
+	<h2 id="arrow_247" unselectable="on" onclick="expand(247)"
+		style="float:left;margin-top:0;cursor:pointer;
+		-moz-user-select:none;
+		user-select:none;
+		-webkit-user-select: none;
+		-ms-user-select: none;"
+		>></h2>
+	<div class = "con" style="margin-left:4%">
+		<h2 onclick="expand(247)" style="cursor:pointer;">_RES value: mapShadowDir</h2>
+		<div id="content_247" style="display: none">
+		
+			<p><b>Data type: Whole Number</b></p>
+			<p>
+			
+			The direction that shadows are cast on the area map.
+			
+
+			</p>
+			<div class="grid-container">
+				<div class="grid-item"><b>Value</b></div>
+				<div class="grid-item"><b>Direction</b></div>
+				<div class="grid-item">0</div>
+				<div class="grid-item">No shadows</div>
+				<div class="grid-item">1</div>
+				<div class="grid-item">Northwest</div>
+				<div class="grid-item">2</div>
+				<div class="grid-item">Northeast</div>
+				<div class="grid-item">3</div>
+				<div class="grid-item">Southeast</div>
+				<div class="grid-item">4</div>
+				<div class="grid-item">Southwest</div>
+			</div>
+
+		</div>
+	</div>
+</p>		
+		
+		
+		
+		
+<p style="margin-top:4%;">
+	<h2 id="arrow_248" unselectable="on" onclick="expand(248)"
+		style="float:left;margin-top:0;cursor:pointer;
+		-moz-user-select:none;
+		user-select:none;
+		-webkit-user-select: none;
+		-ms-user-select: none;"
+		>></h2>
+	<div class = "con" style="margin-left:4%">
+		<h2 onclick="expand(248)" style="cursor:pointer;">_RES value: mapShadowMax</h2>
+		<div id="content_248" style="display: none">
+		
+			<p><b>Data type: Whole Number</b></p>
+			<p>
+			
+			The strength of the shadows on the area map. The lower the value (minimum 2) the stronger the shadows.
+			
+
+			</p>
+			
+			20 is the recommended value.
+
+		</div>
+	</div>
+</p>	
 		
 		
 		

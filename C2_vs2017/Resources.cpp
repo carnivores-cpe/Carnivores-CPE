@@ -1178,7 +1178,6 @@ void GenerateModelMipMaps(TModel *mptr)
   CreateMipMapMT2(mptr->lpTexture3, mptr->lpTexture2, th);
 }
 
-
 void GenerateMapImage()
 {
   int YShift = 23;
@@ -1194,15 +1193,71 @@ void GenerateMapImage()
       {
         t = WaterList[WMap[y<<2][x<<2]].tindex;
         c= Textures[t]->DataD[(y & 15)*16+(x&15)];
+		if (!HARD3D) c = c >> 1;
       }
       else
       {
         t = TMap1[y<<2][x<<2];
-        c= Textures[t]->DataC[(y & 31)*32+(x&31)];
+        c = Textures[t]->DataC[(y & 31) * 32 + (x & 31)];
+
+		if (MapShadowDir) {
+
+			int gradient;
+			switch (MapShadowDir) {
+			case 1:
+				gradient = HMap[y << 2][x << 2] - HMap[(y << 2) + 4][(x << 2) + 4];
+				break;
+			case 2:
+				gradient = HMap[y << 2][x << 2] - HMap[(y << 2) + 4][(x << 2) - 4];
+				break;
+			case 3:
+				gradient = HMap[y << 2][x << 2] - HMap[(y << 2) - 4][(x << 2) - 4];
+				break;
+			case 4:
+				gradient = HMap[y << 2][x << 2] - HMap[(y << 2) - 4][(x << 2) + 4];
+				break;
+			default:
+				gradient = HMap[y << 2][x << 2] - HMap[(y << 2) + 4][(x << 2) + 4];
+			} 
+
+			if (gradient < 0) gradient = 0;
+			if (gradient > (MapShadowMax*0.9)) gradient = (MapShadowMax*0.9);
+			gradient = MapShadowMax - gradient;
+			byte tempR = c >> 10;
+			byte tempG = c >> 5;
+			byte tempB = c;
+
+			tempR = tempR << 3;
+			tempG = tempG << 3;
+			tempB = tempB << 3;
+
+			int iTempR = tempR;
+			int iTempG = tempG;
+			int iTempB = tempB;
+
+			iTempR *= gradient;
+			iTempG *= gradient;
+			iTempB *= gradient;
+			iTempR /= MapShadowMax;
+			iTempG /= MapShadowMax;
+			iTempB /= MapShadowMax;
+			tempR = iTempR;
+			tempG = iTempG;
+			tempB = iTempB;
+
+			if (!HARD3D) {
+				tempR = tempR / 2;
+				tempG = tempG / 2;
+				tempB = tempB / 2;
+			}
+
+			c = ((tempR >> 3) << 10) | ((tempG >> 3) << 5) | (tempB >> 3);
+
+		} else if (!HARD3D) c = c >> 1;
+		
       }
 
-      if (!HARD3D) c=c>>1;
-      else c=conv_565(c);
+	  if (HARD3D) c=conv_565(c);
       *((WORD*)MapPic.lpImage + (y+YShift)*lsw + x + XShift) = c;
     }
 }
@@ -3011,6 +3066,9 @@ void ReadAreaTable (FILE *stream, int areaNumber)
 					}
 
 					if (strstr(line, "tree")) TreeTable[atoi(value)] = TRUE;
+
+					if (strstr(line, "mapShadowDir")) MapShadowDir = atoi(value);
+					if (strstr(line, "mapShadowMax")) MapShadowMax = atoi(value);
 
 					if (strstr(line, "survivalPlayerX")) SurvivalSpawnX = atoi(value);
 					if (strstr(line, "survivalPlayerY")) SurvivalSpawnZ = atoi(value);

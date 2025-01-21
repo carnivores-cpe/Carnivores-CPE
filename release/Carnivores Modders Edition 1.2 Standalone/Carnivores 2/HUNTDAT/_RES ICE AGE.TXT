@@ -1,6 +1,8 @@
 
 areatable {
 {
+ mapShadowDir = 1
+ mapShadowMax = 20
  snow{
   hSpd = 4
   vSpd = 192
@@ -14,6 +16,8 @@ areatable {
 }
 
 {
+ mapShadowDir = 1
+ mapShadowMax = 20
  snow{
   hSpd = 4
   vSpd = 192
@@ -27,6 +31,8 @@ areatable {
 }
 
 {
+ mapShadowDir = 1
+ mapShadowMax = 20
  snow{
   hSpd = 4
   vSpd = 192
@@ -40,6 +46,8 @@ areatable {
 }
 
 {
+ mapShadowDir = 1
+ mapShadowMax = 20
  snow{
   hSpd = 4
   vSpd = 192
@@ -53,6 +61,8 @@ areatable {
 }
 
 {
+ mapShadowDir = 1
+ mapShadowMax = 20
  snow{
   hSpd = 4
   vSpd = 192

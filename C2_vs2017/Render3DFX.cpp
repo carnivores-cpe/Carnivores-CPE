@@ -4418,6 +4418,7 @@ void DrawHMap()
 
   DrawPicture(VideoCX-MapPic.W/2, VideoCY - MapPic.H/2-6, MapPic);
 
+  
   linfo.size = sizeof(GrLfbInfo_t);
   if (!grLfbLock(
         GR_LFB_WRITE_ONLY,
@@ -4428,7 +4429,7 @@ void DrawHMap()
         &linfo)) return;
 
   lsw = linfo.strideInBytes / 2;
-
+  
 
 
   int xx = VideoCX - 128 + (CCX>>2);
