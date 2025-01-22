@@ -1,10 +1,10 @@
 info 
 {
 	name    = 'Delphaeus Hills'
-	mapfile = 'huntdat\\areas\\area1'
-	rscfile = 'huntdat\\areas\\area1.rsc'
-	pic	= 'huntdat\\menu\\pics\\area1.tga'
-	text    = 'huntdat\\menu\\txt\\area1.txt'
+	mapfile = 'huntdat\areas\area1'
+	rscfile = 'huntdat\areas\area1.rsc'
+	pic	= 'huntdat\menu\pics\area1.tga'
+	text    = 'huntdat\menu\txt\area1.txt'
 	price   = 20
 }
 

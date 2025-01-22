@@ -1,10 +1,10 @@
 info 
 {
 	name    = 'Manya Jungle'
-	mapfile = 'huntdat\\areas\\area4'
-	rscfile = 'huntdat\\areas\\area4.rsc'
-	pic	= 'huntdat\\menu\\pics\\area4.tga'
-	text    = 'huntdat\\menu\\txt\\area4.txt'
+	mapfile = 'huntdat\areas\area4'
+	rscfile = 'huntdat\areas\area4.rsc'
+	pic	= 'huntdat\menu\pics\area4.tga'
+	text    = 'huntdat\menu\txt\area4.txt'
 	price   = 200
 }
 
