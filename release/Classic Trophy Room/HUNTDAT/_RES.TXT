@@ -6,8 +6,6 @@ areatable {
  tree = 11
  tree = 12
  tree = 14
- mapShadowDir = 1
- mapShadowMax = 20
 }
 
 {
@@ -19,15 +17,11 @@ areatable {
  tree = 15
  tree = 16
  tree = 17
- mapShadowDir = 1
- mapShadowMax = 20
 }
 
 {
  tree = 10
  tree = 18
- mapShadowDir = 1
- mapShadowMax = 20
 }
 
 {
@@ -38,8 +32,6 @@ areatable {
  tree = 13
  tree = 14
  tree = 15
- mapShadowDir = 1
- mapShadowMax = 20
 }
 
 {
@@ -47,8 +39,6 @@ areatable {
  tree = 10
  tree = 11
  tree = 23
- mapShadowDir = 1
- mapShadowMax = 20
  survivalPlayerX = 345
  survivalPlayerY = 245
  survivalPlayerA = 345

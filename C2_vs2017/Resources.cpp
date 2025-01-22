@@ -1199,29 +1199,17 @@ void GenerateMapImage()
       {
         t = TMap1[y<<2][x<<2];
         c = Textures[t]->DataC[(y & 31) * 32 + (x & 31)];
+		if (!HARD3D) c = c >> 1;
 
-		if (MapShadowDir) {
+		if (OptDayNight != 2)
+		{
+			int MapShadowMax = 30;
+			if (!OptDayNight) MapShadowMax = 12;
 
-			int gradient;
-			switch (MapShadowDir) {
-			case 1:
-				gradient = HMap[y << 2][x << 2] - HMap[(y << 2) + 4][(x << 2) + 4];
-				break;
-			case 2:
-				gradient = HMap[y << 2][x << 2] - HMap[(y << 2) + 4][(x << 2) - 4];
-				break;
-			case 3:
-				gradient = HMap[y << 2][x << 2] - HMap[(y << 2) - 4][(x << 2) - 4];
-				break;
-			case 4:
-				gradient = HMap[y << 2][x << 2] - HMap[(y << 2) - 4][(x << 2) + 4];
-				break;
-			default:
-				gradient = HMap[y << 2][x << 2] - HMap[(y << 2) + 4][(x << 2) + 4];
-			} 
+			int gradient = HMap[y << 2][x << 2] - HMap[(y << 2) + 4][(x << 2) + 4];
 
 			if (gradient < 0) gradient = 0;
-			if (gradient > (MapShadowMax*0.9)) gradient = (MapShadowMax*0.9);
+			if (gradient > (MapShadowMax*0.8)) gradient = (MapShadowMax*0.8);
 			gradient = MapShadowMax - gradient;
 			byte tempR = c >> 10;
 			byte tempG = c >> 5;
@@ -1245,16 +1233,9 @@ void GenerateMapImage()
 			tempG = iTempG;
 			tempB = iTempB;
 
-			if (!HARD3D) {
-				tempR = tempR / 2;
-				tempG = tempG / 2;
-				tempB = tempB / 2;
-			}
-
 			c = ((tempR >> 3) << 10) | ((tempG >> 3) << 5) | (tempB >> 3);
 
-		} else if (!HARD3D) c = c >> 1;
-		
+		}
       }
 
 	  if (HARD3D) c=conv_565(c);
@@ -3067,8 +3048,8 @@ void ReadAreaTable (FILE *stream, int areaNumber)
 
 					if (strstr(line, "tree")) TreeTable[atoi(value)] = TRUE;
 
-					if (strstr(line, "mapShadowDir")) MapShadowDir = atoi(value);
-					if (strstr(line, "mapShadowMax")) MapShadowMax = atoi(value);
+					//if (strstr(line, "mapShadowDir")) MapShadowDir = atoi(value);
+					//if (strstr(line, "mapShadowMax")) MapShadowMax = atoi(value);
 
 					if (strstr(line, "survivalPlayerX")) SurvivalSpawnX = atoi(value);
 					if (strstr(line, "survivalPlayerY")) SurvivalSpawnZ = atoi(value);

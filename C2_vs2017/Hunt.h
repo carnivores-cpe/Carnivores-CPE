@@ -1374,8 +1374,7 @@ _EXTORNOT int PackCount;
 _EXTORNOT TCharacter     Characters[256];
 _EXTORNOT TCharacter     MPlayers[3]; //multiplayer
 _EXTORNOT THitBox     HitBox;
-_EXTORNOT int MapShadowDir;
-_EXTORNOT int MapShadowMax;
+//_EXTORNOT int MapShadowDir, MapShadowMax;
 
 _EXTORNOT int SurvivalSpawnX; //survival
 _EXTORNOT int SurvivalSpawnZ;
