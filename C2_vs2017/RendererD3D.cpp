@@ -5392,8 +5392,39 @@ void DrawHMap()
     GShift=5;
   }
 
-  int xx = VideoCX - 128 + (CCX>>2);
-  int yy = VideoCY - 128 + (CCY>>2);
+  int miniMapScale = 4;
+  int miniMapScaleB = 128;
+  int miniMapScaleC = 1024;
+  float sonarMax = 38;
+  float sonarMax2 = 41;
+  float sonarRate = 0.02;
+  if (WinW >= 1024) {
+	  miniMapScale = 2;
+	  miniMapScaleB = 256;
+	  miniMapScaleC = 512;
+	  sonarMax = 76;
+	  sonarMax2 = 82;
+	  sonarRate = 0.04;
+  }
+  else if (WinW >= 640) {
+	  miniMapScale = 3;
+	  miniMapScaleB = 171;
+	  miniMapScaleC = 768;
+	  sonarMax = 51;
+	  sonarMax2 = 55;
+	  sonarRate = 0.0266666666666;
+  }
+  else {
+	  miniMapScale = 4;
+	  miniMapScaleB = 128;
+	  miniMapScaleC = 1024;
+	  sonarMax = 38;
+	  sonarMax2 = 41;
+	  sonarRate = 0.02;
+  }
+
+  int xx = VideoCX - miniMapScaleB + (CCX/ miniMapScale);
+  int yy = VideoCY - miniMapScaleB + (CCY/ miniMapScale);
 
   int px = xx;
   int py = yy;
@@ -5413,8 +5444,8 @@ void DrawHMap()
   float _sonarPos;
   if (SonarMode) {
 	  _sonarPos = sonarPos;
-	  sonarPos += TimeDt * 0.02 * cos((pi / 2)*(sonarPos / 41));
-	  if (sonarPos > 38) sonarPos = 1;
+	  sonarPos += TimeDt * sonarRate * cos((pi / 2)*(sonarPos / sonarMax2));
+	  if (sonarPos > sonarMax) sonarPos = 1;
 	  DrawCircle(xx, yy, sonarPos);
   }
 
@@ -5423,11 +5454,11 @@ void DrawHMap()
 	  sonarPos += TimeDt * 0.001;
 	  if (sonarPos > 2 * pi) sonarPos -= 2 * pi;
 	  CColor = 4 << GShift;
-	  DrawCircle(xx + 1, yy + 1, 38);
-	  DrawLine(xx + 1, yy + 1, 38, pi - sonarPos);
+	  DrawCircle(xx + 1, yy + 1, sonarMax);
+	  DrawLine(xx + 1, yy + 1, sonarMax, pi - sonarPos);
 	  CColor = 18 << GShift;
-	  DrawCircle(xx, yy, 38);
-	  DrawLine(xx, yy, 38, pi - sonarPos);
+	  DrawCircle(xx, yy, sonarMax);
+	  DrawLine(xx, yy, sonarMax, pi - sonarPos);
   }
 
 
@@ -5440,8 +5471,8 @@ void DrawHMap()
 
   for (int b = 0; b < bulletCh; b++) {
 	  if (bullet[b].RTime) {
-		  xx = VideoCX - 128 + (int)bullet[b].a.x / 1024;
-		  yy = VideoCY - 128 + (int)bullet[b].a.z / 1024;
+		  xx = VideoCX - miniMapScaleB + (int)bullet[b].a.x / miniMapScaleC;
+		  yy = VideoCY - miniMapScaleB + (int)bullet[b].a.z / miniMapScaleC;
 		  if (yy > 0 && yy < WinH && xx > 0 && xx < WinW) {
 			  if (VMFORMAT565) DrawBox((WORD*)ddsd.lpSurface, lsw, xx, yy, WeapInfo[bullet[b].parent].radarColour565);
 			  else DrawBox((WORD*)ddsd.lpSurface, lsw, xx, yy, WeapInfo[bullet[b].parent].radarColour555);
@@ -5460,8 +5491,8 @@ void DrawHMap()
 
 	  //if (!RadarMode && Characters[c].Clone != AI_HUNTDOG && !Characters[c].RTime) continue;
 
-      xx = VideoCX - 128 + (int)Characters[c].pos.x / 1024;
-      yy = VideoCY - 128 + (int)Characters[c].pos.z / 1024;
+      xx = VideoCX - miniMapScaleB + (int)Characters[c].pos.x / miniMapScaleC;
+      yy = VideoCY - miniMapScaleB + (int)Characters[c].pos.z / miniMapScaleC;
       if (yy<=0 || yy>=WinH) goto endmap;
       if (xx<=0 || xx>=WinW) goto endmap;
 
@@ -5507,7 +5538,7 @@ void DrawHMap()
 			  bearing -= pi / 2;
 			  if (bearing < 0) bearing += pi * 2;
 
-			  if (pd < 38) {
+			  if (pd < sonarMax) {
 				  if (SonarMode) {
 					  bool displ = false;
 					  if (_sonarPos > sonarPos) {

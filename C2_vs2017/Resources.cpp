@@ -1178,26 +1178,26 @@ void GenerateModelMipMaps(TModel *mptr)
   CreateMipMapMT2(mptr->lpTexture3, mptr->lpTexture2, th);
 }
 
-void GenerateMapImage()
+void GenerateMapImage(int miniMapScale, int miniMapSize)
 {
   int YShift = 23;
   int XShift = 11;
   int lsw = MapPic.W;
-  for (int y=0; y<256; y++)
-    for (int x=0; x<256; x++)
+  for (int y=0; y< miniMapSize; y++)
+    for (int x=0; x< miniMapSize; x++)
     {
       int t;
       WORD c;
 
-      if (FMap[y<<2][x<<2] & fmWater)
+      if (FMap[y*miniMapScale][x * miniMapScale] & fmWater)
       {
-        t = WaterList[WMap[y<<2][x<<2]].tindex;
+        t = WaterList[WMap[y * miniMapScale][x * miniMapScale]].tindex;
         c= Textures[t]->DataD[(y & 15)*16+(x&15)];
 		if (!HARD3D) c = c >> 1;
       }
       else
       {
-        t = TMap1[y<<2][x<<2];
+        t = TMap1[y * miniMapScale][x * miniMapScale];
         c = Textures[t]->DataC[(y & 31) * 32 + (x & 31)];
 		if (!HARD3D) c = c >> 1;
 
@@ -1206,7 +1206,7 @@ void GenerateMapImage()
 			int MapShadowMax = 30;
 			if (!OptDayNight) MapShadowMax = 12;
 
-			int gradient = HMap[y << 2][x << 2] - HMap[(y << 2) + 4][(x << 2) + 4];
+			int gradient = HMap[y * miniMapScale][x * miniMapScale] - HMap[(y * miniMapScale) + 4][(x * miniMapScale) + 4];
 
 			if (gradient < 0) gradient = 0;
 			if (gradient > (MapShadowMax*0.8)) gradient = (MapShadowMax*0.8);
@@ -1610,10 +1610,36 @@ void LoadResources()
   CreateTMap();
   RenderLightMap();
 
-  LoadPictureTGA(MapPic, "HUNTDAT\\MENU\\mapframe.tga");
+  int miniMapScale = 4;
+  int miniMapSize = 256;
+  if (WinW >= 1024) {
+	  miniMapScale = 2;
+	  miniMapSize = 512;
+  } else if (WinW >= 640) {
+	  miniMapScale = 3;
+	  miniMapSize = 341;
+  } else {
+	  miniMapScale = 4;
+	  miniMapSize = 256;
+  }
+
+
+  switch (miniMapScale) {
+  case 4:
+	  LoadPictureTGA(MapPic, "HUNTDAT\\MENU\\mapframe256.tga");
+	  break;
+  case 3:
+	  LoadPictureTGA(MapPic, "HUNTDAT\\MENU\\mapframe341.tga");
+	  break;
+  case 2:
+	  LoadPictureTGA(MapPic, "HUNTDAT\\MENU\\mapframe512.tga");
+	  break;
+  default:
+	  LoadPictureTGA(MapPic, "HUNTDAT\\MENU\\mapframe256.tga");
+  }
   conv_pic(MapPic);
 
-  GenerateMapImage();
+  GenerateMapImage(miniMapScale, miniMapSize);
 
   for (int i = 0; i < 4;i++) {
 	  char buff[100];
