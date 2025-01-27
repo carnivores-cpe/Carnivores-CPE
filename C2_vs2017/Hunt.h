@@ -1136,6 +1136,7 @@ void ShutDownEngine();
 void ProcessSyncro();
 void AddShipSupply(float,float);
 void AddShipTask(int);
+void AddDShipTask();
 void SubmitDinoScore(int);
 void LoadTrophy();
 //void LoadPlayersInfo();
@@ -1156,6 +1157,7 @@ void AddBloodTrail(TCharacter *cptr);
 void AddElements(float, float, float, int, int);
 void AddElementsA(float, float, float, int, int, int, bool, float);
 void AddWCircle(float, float, float);
+void AddBeam(float, float, float);
 void AnimateProcesses();
 void DoHalt(LPSTR);
 void DoHalt2(LPSTR);
@@ -1242,6 +1244,7 @@ _EXTORNOT   TWaterEntity  WaterList[256];
 _EXTORNOT   TWind       Wind;
 _EXTORNOT   TShip       Ship;
 _EXTORNOT   TShip       SShip;
+_EXTORNOT   TShip       DShip;
 _EXTORNOT   TShipTask   ShipTask;
 _EXTORNOT   TBag        AmmoBag;
 
@@ -1322,6 +1325,7 @@ _EXTORNOT int MaxObjectVCount; // Maximum VCount of any (loaded) object
 _EXTORNOT TPicture  PausePic, ExitPic, TrophyExit, TrophyPic, TrophyNoCollectPic, ScorePic;
 _EXTORNOT TModel *SunModel;
 _EXTORNOT TCharacterInfo WCircleModel;
+_EXTORNOT TCharacterInfo BeamModel;
 _EXTORNOT TModel *CompasModel;
 _EXTORNOT TModel *Binocular;
 _EXTORNOT TDinoInfo DinoInfo[DINOINFO_MAX];
@@ -1348,6 +1352,7 @@ _EXTORNOT float MuzzGamma;
 _EXTORNOT TCharacterInfo MuzzModel;
 _EXTORNOT TCharacterInfo ShipModel;
 _EXTORNOT TCharacterInfo SShipModel;
+_EXTORNOT TCharacterInfo DShipModel;
 _EXTORNOT TCharacterInfo BagModel;
 _EXTORNOT TSpawnGroup spawnGroup[256];
 //_EXTORNOT int AI_to_CIndex[DINOINFO_MAX];
@@ -1357,7 +1362,8 @@ _EXTORNOT TPackType packType[1024];
 _EXTORNOT int packTypeCount;
 _EXTORNOT TTrophyType trophyType[TROPHY2_COUNT];
 _EXTORNOT int trophyTypeCount;
-_EXTORNOT int ChCount, WCCount, ElCount,
+_EXTORNOT float BeamTime;
+_EXTORNOT int ChCount, WCCount, BeamCount, ElCount,
           ShotDino, TrophyBody, HunterCount; //HunterCount is for multiplayer, up to 3 others
 _EXTORNOT bool TrophyDisplay;
 _EXTORNOT int TrophyDisplayC;
@@ -1388,6 +1394,7 @@ _EXTORNOT int SurvivalIndexCh;
 //_EXTORNOT int TropSlotDataCh = 0;
 
 
+_EXTORNOT TWCircle       Beams[32];
 _EXTORNOT TWCircle       WCircles[2096]; //increased
 
 _EXTORNOT TSnowElement*  Snow;
@@ -1434,7 +1441,7 @@ _EXTORNOT   TElements Elements[700];
 _EXTORNOT   TBTrail   BloodTrail;
 
 _EXTORNOT   int     PrevTime, TimeDt, T, Takt, RealTime, StepTime, MyHealth, ExitTime, WaveNoteTime,
-            ChCallTime, CallLockTime, NextCall;
+            ChCallTime, CallLockTime, NextCall, DropShipMsgTime;
 _EXTORNOT   float   DeltaT;
 _EXTORNOT   float   CameraX, CameraY, CameraZ, CameraAlpha, CameraBeta;
 _EXTORNOT   float   PlayerX, PlayerY, PlayerZ, PlayerAlpha, PlayerBeta,

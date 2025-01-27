@@ -1120,6 +1120,13 @@ void ShowControlElements()
     FXTextOut(10, 10, MessageList.mtext, 0x0020A0A0);
   }
 
+  if (DropShipMsgTime)
+  {
+	  int y = WinH / 3;
+	  wsprintf(buf, "Cannot evacuate from current location.");
+	  FXTextOut(VideoCX - GetTextW(hdcCMain, buf) / 2, y, buf, 0x0060C0D0);
+  }
+
   if (ExitTime)
   {
     int y = WinH / 3;
@@ -2181,6 +2188,59 @@ void RenderGround()
 
 
 
+
+void RenderBeams()
+{
+
+	guAlphaSource(GR_ALPHASOURCE_CC_ALPHA);
+	grFogMode(GR_FOG_WITH_ITERATED_ALPHA);
+	grAlphaBlendFunction(GR_BLEND_SRC_ALPHA,
+		GR_BLEND_ONE,
+		GR_BLEND_ONE,
+		GR_BLEND_ONE);
+
+	TWCircle *wptr;
+	Vector3d rpos;
+	for (int c = 0; c < BeamCount; c++)
+	{
+
+		wptr = &Beams[c];
+		rpos.x = wptr->pos.x - CameraX;
+		rpos.y = wptr->pos.y - CameraY;
+		rpos.z = wptr->pos.z - CameraZ;
+
+		/*
+		float r = (float)max(fabs(rpos.x), fabs(rpos.z));
+		int ri = -1 + (int)(r / 256.f + 0.4f);
+		if (ri < 0) ri = 0;
+		if (ri > ctViewR) continue;
+		*/
+
+		rpos = RotateVector(rpos);
+
+		//if (rpos.z > BackViewR) continue;
+		//if (fabs(rpos.x) > -rpos.z + BackViewR) continue;
+		//if (fabs(rpos.y) > -rpos.z + BackViewR) continue;
+
+		//grConstantColorValue(((2000 - wptr->FTime) / 38) << 24);
+		grConstantColorValue(((wptr->FTime) / 38) << 24);
+
+		CreateMorphedModel(BeamModel.mptr, &BeamModel.Animation[0], (int)(wptr->FTime), wptr->scale);
+
+		if (fabs(rpos.z) + fabs(rpos.x) < 1000)
+			RenderModelClip(BeamModel.mptr,
+				rpos.x, rpos.y, rpos.z, 250, 0, 0, CameraBeta);
+		else
+			RenderModel(BeamModel.mptr,
+				rpos.x, rpos.y, rpos.z, 250, 0, 0, CameraBeta);
+
+
+		PrintLog("BEAM ADDED\n");
+	}
+
+}
+
+
 void RenderWCircles()
 {
 
@@ -2265,6 +2325,7 @@ void RenderWater()
       ProcessMapW(CCX+x, CCY+y, max(abs(x), abs(y)));
 
   RenderWCircles();
+  RenderBeams();
 
   grConstantColorValue(0xFF000000);
   grAlphaBlendFunction(GR_BLEND_SRC_ALPHA,
@@ -3806,6 +3867,31 @@ void RenderSShipPost()
 }
 
 
+void RenderDShipPost()
+{
+	if (!DShip.State) return;
+	GlassL = 0;
+	zs = (int)VectorLength(DShip.rpos);
+	if (zs > 256 * (ctViewR)) return;
+
+	if (zs > 256 * (ctViewR - 4))
+		GlassL = min(255, (int)(zs - 256 * (ctViewR - 4)) / 4);
+
+
+	grConstantColorValue((255 - GlassL) << 24);
+
+	CreateMorphedModel(DShipModel.mptr, &DShipModel.Animation[0], DShip.FTime, 1.0);
+
+	if (fabs(DShip.rpos.z) < 4000)
+		RenderModelClip(DShipModel.mptr,
+			DShip.rpos.x, DShip.rpos.y, DShip.rpos.z, 210, 0, -DShip.alpha - pi / 2 + CameraAlpha, CameraBeta);
+	else
+		RenderModel(DShipModel.mptr,
+			DShip.rpos.x, DShip.rpos.y, DShip.rpos.z, 210, 0, -DShip.alpha - pi / 2 + CameraAlpha, CameraBeta);
+	grConstantColorValue(0xFF000000);
+}
+
+
 void RenderBulletPost(int b) {
 
 			GlassL = 0;
@@ -4214,6 +4300,33 @@ NOSHIP:
 	}
 NOSSHIP:
 	;
+
+	/*
+	DShip.rpos.x = DShip.pos.x - CameraX;
+	DShip.rpos.y = DShip.pos.y - CameraY;
+	DShip.rpos.z = DShip.pos.z - CameraZ;
+	r = (float)max(fabs(DShip.rpos.x), fabs(DShip.rpos.z));
+
+	ri = -1 + (int)(r / 256.f + 0.2f);
+	if (ri < 0) ri = 0;
+	if (ri < ctViewR)
+	{
+
+		if (FOGON)
+		{
+			CalcFogLevel_Gradient(DShip.rpos);
+			grFogColorValue(CurFogColor);
+		}
+
+		DShip.rpos = RotateVector(DShip.rpos);
+		if (DShip.rpos.z > BackViewR) goto NODSHIP;
+		if (fabs(DShip.rpos.x) > -DShip.rpos.z + BackViewR) goto NODSHIP;
+
+		RenderDShipPost();
+	}
+NODSHIP:
+	;
+	*/
 
 	for (int b = 0; b < bulletCh; b++) {
 		if (WeapInfo[bullet[b].parent].bullet) {

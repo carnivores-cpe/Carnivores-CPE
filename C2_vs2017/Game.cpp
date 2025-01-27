@@ -601,6 +601,16 @@ void ProcessCommandLine()
 }
 
 
+void AddBeam(float x, float z, float scale)
+{
+	Beams[BeamCount].pos.x = x;
+	Beams[BeamCount].pos.z = z;
+	Beams[BeamCount].pos.y = GetLandUpH(x, z);
+	Beams[BeamCount].FTime = 2000;
+	Beams[BeamCount].scale = scale;
+	BeamCount++;
+}
+
 
 void AddWCircle(float x, float z, float scale)
 {
@@ -637,6 +647,20 @@ void SubmitDinoScore (int cindex) {
 	ScoreDispTime = 2500;
 	ScoreDisp = (int)score;
 
+}
+
+void AddDShipTask()
+{
+	if (DShip.State) return;
+	if (!ONWATER) {
+		//ExitTime = 40000;
+		// USE DSHIP SOUND
+		AddVoicev(SShipModel.SoundFX[1].length,
+			SShipModel.SoundFX[1].lpData, 256);
+		DShip.State = 1;
+	} else {
+		DropShipMsgTime = 3000;
+	}
 }
 
 void AddShipTask(int cindex)
@@ -2426,6 +2450,178 @@ void AnimateSShip() {
 	
 }
 
+
+//==============================================================
+
+
+void AnimateDShip() {
+	if (!DShip.State) return;
+	
+	// change this for dship!!
+	//Also dis don work 
+	//SetAmbient3d(ShipModel.SoundFX[0].length,
+	//	ShipModel.SoundFX[0].lpData,
+	//	DShip.pos.x, DShip.pos.y, DShip.pos.z);
+
+	int _TimeDt = TimeDt;
+
+TBEGIN:
+
+	if (DShip.State == 1) {
+		DShip.DeltaY = 2048.f;
+
+		DShip.pos.x = PlayerX - 90 * 256;
+		if (DShip.pos.x < 256) DShip.pos.x = PlayerX + 90 * 256;
+		DShip.pos.z = PlayerZ - 90 * 256;
+		if (DShip.pos.z < 256) DShip.pos.z = PlayerZ + 90 * 256;
+		DShip.pos.y = GetLandUpH(DShip.pos.x, DShip.pos.z) + DShip.DeltaY + 1024;
+
+		DShip.tgpos.x = PlayerX;
+		DShip.tgpos.z = PlayerZ;
+		DShip.tgpos.y = GetLandUpH(DShip.tgpos.x, DShip.tgpos.z) + DShip.DeltaY;
+		
+
+		DShip.retpos = DShip.pos;
+		DShip.FTime = 0;
+
+		DShip.State = 2;
+	}
+
+	//===================================
+
+	float L = VectorLength(SubVectors(DShip.tgpos, DShip.pos));
+	float LF = sqrt((DShip.tgpos.x - DShip.pos.x) * (DShip.tgpos.x - DShip.pos.x) +
+		(DShip.tgpos.z - DShip.pos.z) * (DShip.tgpos.z - DShip.pos.z));
+	float LPF = sqrt((PlayerX - DShip.pos.x) * (PlayerX - DShip.pos.x) +
+		(PlayerZ - DShip.pos.z) * (PlayerZ - DShip.pos.z));
+	float L2 = sqrt((DShip.tgpos.x - DShip.pos.x) * (DShip.tgpos.x - DShip.pos.x) +
+		(DShip.tgpos.x - DShip.pos.x) * (DShip.tgpos.x - DShip.pos.x));
+
+	DShip.pos.y += 0.3f*(float)cos(RealTime / 256.f);
+
+
+
+	DShip.tgalpha = FindVectorAlpha(DShip.tgpos.x - DShip.pos.x, DShip.tgpos.z - DShip.pos.z);
+	float currspeed;
+	float dalpha = (float)fabs(DShip.tgalpha - DShip.alpha);
+	float drspd = dalpha;
+	if (drspd > pi) drspd = 2 * pi - drspd;
+
+
+	//====== speed ===============//
+	float vspeed = 1.f + LF / 128.f;
+	if (vspeed > 24) vspeed = 24;
+	//if (DShip.State) vspeed = 24;
+	if (fabs(dalpha) > 0.4) vspeed = 0.f;
+	float _s = DShip.speed;
+	if (vspeed > DShip.speed) DeltaFunc(DShip.speed, vspeed, TimeDt / 200.f);
+	else DShip.speed = vspeed;
+
+	if (DShip.speed > 0 && _s == 0)
+		//todo add this to real thingy DShip Car
+		AddVoice3d(ShipModel.SoundFX[2].length, ShipModel.SoundFX[2].lpData,
+			DShip.pos.x, DShip.pos.y, DShip.pos.z);
+
+	//====== fly ===========//
+	float l = TimeDt * DShip.speed / 16.f;
+
+	//if (fabs(dalpha) < 0.4)
+		if (l < L)
+		{
+			if (l > L2) l = L2 * 0.5f;
+			if (L2 < 0.1) l = 0;
+			DShip.pos.x += (float)cos(DShip.alpha)*l;
+			DShip.pos.z += (float)sin(DShip.alpha)*l;
+		}
+		else
+		{
+			if (DShip.State == 1) {
+				//init pickup phase
+				DShip.pos = DShip.tgpos;
+				Ship.tgpos = Ship.retpos;
+				Ship.tgpos.y = GetLandUpH(Ship.tgpos.x, Ship.tgpos.z) + Ship.DeltaY;
+				Ship.tgpos.y = MAX(Ship.tgpos.y, GetLandUpH(Ship.pos.x, Ship.pos.z) + Ship.DeltaY);
+				DShip.State = 2;
+			}
+			if (DShip.State == 2) {
+				//pickup phase
+				// todo despawn if player moves too far away?
+				if (BeamTime <= 0) {
+					AddBeam(DShip.pos.x, DShip.pos.z, 2.0);
+					BeamTime += 65;
+				} else BeamTime -= TimeDt;
+				if (ExitTime) {
+					if (LPF > 750) {
+						ExitTime = 0;
+					}
+				} else if (LPF < 500) {
+					ExitTime = 4000;
+				}
+			}
+			if (DShip.State == 3) {
+				//
+				//todo do this shit
+			}
+
+			/*
+			if (Ship.State)
+			{
+				//despawn ship and trophy
+				Ship.State = -1;
+				RemoveCharacter(Ship.cindex);
+				return;
+			}
+			else
+			{
+				//initiate trophy pickup
+				Ship.pos = Ship.tgpos;
+				Ship.State = 3;
+				Ship.FTime = 1;
+				Ship.tgpos = Ship.retpos;
+				Ship.tgpos.y = GetLandUpH(Ship.tgpos.x, Ship.tgpos.z) + Ship.DeltaY;
+				Ship.tgpos.y = MAX(Ship.tgpos.y, GetLandUpH(Ship.pos.x, Ship.pos.z) + Ship.DeltaY);
+				Characters[Ship.cindex].StateF = 0xFF;
+				AddVoice3d(ShipModel.SoundFX[1].length, ShipModel.SoundFX[1].lpData,
+					Ship.pos.x, Ship.pos.y, Ship.pos.z);
+			}
+			*/
+		}
+
+	//======= y movement ============//
+	float h = GetLandUpH(DShip.pos.x, DShip.pos.z);
+	DeltaFunc(DShip.pos.y, DShip.tgpos.y, TimeDt / 4.f);
+
+
+	//======= rotation ============//
+
+	if (DShip.tgalpha > DShip.alpha) currspeed = 0.1f + (float)fabs(drspd) / 2.f;
+	else currspeed = -0.1f - (float)fabs(drspd) / 2.f;
+
+	if (fabs(dalpha) > pi) currspeed = -currspeed;
+
+
+	DeltaFunc(DShip.rspeed, currspeed, (float)TimeDt / 420.f);
+
+	float rspd = DShip.rspeed * TimeDt / 1024.f;
+	if (fabs(drspd) < fabs(rspd))
+	{
+		DShip.alpha = DShip.tgalpha;
+		DShip.rspeed /= 2;
+	}
+	else
+	{
+		DShip.alpha += rspd;
+		if (DShip.State)
+			if (DShip.cindex != -1)
+				Characters[DShip.cindex].alpha += rspd;
+	}
+
+	if (DShip.alpha < 0) DShip.alpha += pi * 2;
+	if (DShip.alpha > pi * 2) DShip.alpha -= pi * 2;
+
+
+}
+
 void AnimateShip()
 {
   if (Ship.State==-1)
@@ -2898,9 +3094,30 @@ void AnimateProcesses()
   CheckAfraid();
   AnimateShip();
   AnimateSShip();
+  AnimateDShip();
   AnimateBag();
   if (TrophyMode)
     ProcessTrophy();
+
+  for (int b = 0; b < BeamCount; b++)
+  {
+	  if (Beams[b].scale > 1)
+		  Beams[b].FTime -= (int)(TimeDt * 7 / Beams[b].scale);
+	  else
+		  Beams[b].FTime -= TimeDt * 7;
+
+	  Beams[b].pos.y = 2000 - Beams[b].FTime;
+	  Beams[b].pos.y /= 2000;
+	  Beams[b].pos.y *= DShip.DeltaY;
+	  Beams[b].pos.y += GetLandUpH(Beams[b].pos.x, Beams[b].pos.z);
+
+	  if (Beams[b].FTime <= 0)
+	  {
+		  memcpy(&Beams[b], &Beams[b + 1], sizeof(TWCircle) * (BeamCount + 1 - b));
+		  b--;
+		  BeamCount--;
+	  }
+  }
 
   for (int w=0; w<WCCount; w++)
   {
@@ -2919,6 +3136,11 @@ void AnimateProcesses()
   if (WaveNoteTime) {
 	  WaveNoteTime -= TimeDt;
 	  if (WaveNoteTime <= 0) WaveNoteTime = 0;
+  }
+
+  if (DropShipMsgTime) {
+	  DropShipMsgTime -= TimeDt;
+	  if (DropShipMsgTime <= 0) DropShipMsgTime = 0;
   }
 
   if (ExitTime)

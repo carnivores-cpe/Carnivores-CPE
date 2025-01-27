@@ -283,6 +283,9 @@ NOSHIP:
 	  }
 
 
+
+
+
   if (HARD3D) return;
   //for (int c = 0; c <= ctViewR; c++)
   //  ChRenderList[c].ICount = 0;
@@ -2567,6 +2570,28 @@ void RenderBag()
 	else
 		RenderModel(BagModel.mptr,
 			AmmoBag.rpos.x, AmmoBag.rpos.y, AmmoBag.rpos.z, 240, 0, -0 - pi / 2 + CameraAlpha, CameraBeta);
+}
+
+
+
+void RenderDShip()
+{
+	float zs = (float)VectorLength(DShip.rpos);
+	if (zs > ctViewR * 256) return;
+
+	GlassL = 0;
+	if (zs > 256 * (ctViewR - 4))
+		GlassL = min(255, (zs / 4 - 64 * (ctViewR - 4)));
+
+
+	CreateMorphedModelBetaGamma(DShipModel.mptr, &DShipModel.Animation[0], DShip.FTime, 1.0, DShip.beta, DShip.gamma);
+
+	if (fabs(DShip.rpos.z) < 4000)
+		RenderModelClip(DShipModel.mptr,
+			DShip.rpos.x, DShip.rpos.y, DShip.rpos.z, 240, 0, -DShip.alpha - pi / 2 + CameraAlpha, CameraBeta);
+	else
+		RenderModel(DShipModel.mptr,
+			DShip.rpos.x, DShip.rpos.y, DShip.rpos.z, 240, 0, -DShip.alpha - pi / 2 + CameraAlpha, CameraBeta);
 }
 
 

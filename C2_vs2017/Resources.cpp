@@ -1785,6 +1785,15 @@ void LoadCharacters()
 
 }
 
+void resetDSHip() {
+	DShip.State = 0;
+	DShip.alpha = 0;
+	DShip.speed = 0;
+	DShip.pos.x = 256 * 200;
+	DShip.pos.z = 256 * 200;
+	DShip.pos.y = 256 * 50;
+}
+
 void resetSSHip() {
 	SShip.State = 0;
 	SShip.alpha = 0;
@@ -1843,6 +1852,7 @@ void ReInitGame()
   } else {
 	  PlaceCharacters();
 	  resetSSHip();
+	  resetDSHip();
 	  resetBullets();
 	  if (Multiplayer) {
 		  sendGunShot = -1;
@@ -1885,6 +1895,8 @@ void ReInitGame()
   Weapon.HoldBreath = false;
   Weapon.breathPressed = 0;
 
+  BeamTime = 0;
+  BeamCount = 0;
   WCCount = 0;
   ElCount = 0;
   BloodTrail.Count = 0;
