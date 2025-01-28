@@ -1002,6 +1002,7 @@ void DrawHMap();
 void RenderCharacter(TCharacter*);
 void RenderShip();
 void RenderSShip();
+void RenderDShip();
 void RenderBag();
 void RenderBullet(int);
 void RenderPlayer(int);
@@ -1439,6 +1440,8 @@ _EXTORNOT   int   SKYMin, SKYDTime, GlassL, ctViewR, ctViewR1, ctViewRM,
 _EXTORNOT   WORD  FadeTab[65][0x8000];
 _EXTORNOT   TElements Elements[700];
 _EXTORNOT   TBTrail   BloodTrail;
+
+_EXTORNOT   bool DShipInRange;
 
 _EXTORNOT   int     PrevTime, TimeDt, T, Takt, RealTime, StepTime, MyHealth, ExitTime, WaveNoteTime,
             ChCallTime, CallLockTime, NextCall, DropShipMsgTime;

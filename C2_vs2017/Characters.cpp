@@ -329,8 +329,10 @@ void AddDeadBody(TCharacter *cptr, int phase, bool scream)
 {
 	if (!MyHealth) return;
 
+	/*
 	if (ExitTime)
 		AddMessage("Transportation cancelled.");
+		*/
 	ExitTime = 0;
 
 	OPTICMODE = FALSE;

@@ -4301,7 +4301,7 @@ NOSHIP:
 NOSSHIP:
 	;
 
-	/*
+	
 	DShip.rpos.x = DShip.pos.x - CameraX;
 	DShip.rpos.y = DShip.pos.y - CameraY;
 	DShip.rpos.z = DShip.pos.z - CameraZ;
@@ -4319,14 +4319,14 @@ NOSSHIP:
 		}
 
 		DShip.rpos = RotateVector(DShip.rpos);
-		if (DShip.rpos.z > BackViewR) goto NODSHIP;
-		if (fabs(DShip.rpos.x) > -DShip.rpos.z + BackViewR) goto NODSHIP;
+		//if (DShip.rpos.z > BackViewR) goto NODSHIP;
+		//if (fabs(DShip.rpos.x) > -DShip.rpos.z + BackViewR) goto NODSHIP;
 
 		RenderDShipPost();
 	}
 NODSHIP:
 	;
-	*/
+	
 
 	for (int b = 0; b < bulletCh; b++) {
 		if (WeapInfo[bullet[b].parent].bullet) {

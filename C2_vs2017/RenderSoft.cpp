@@ -310,6 +310,48 @@ NOSSHIP:
 
 
 
+  //=========== dship ================//
+  DShip.rpos.x = DShip.pos.x - CameraX;
+  DShip.rpos.y = DShip.pos.y - CameraY;
+  DShip.rpos.z = DShip.pos.z - CameraZ;
+  r = (float)max(fabs(DShip.rpos.x), fabs(DShip.rpos.z));
+  ri = -1 + (int)(r / 256.f + 1.6f);
+
+  if (DShip.State)
+	  if (ri < ctViewR - 6)
+	  {
+		  int h = (int)((DShip.pos.y - GetLandUpH(DShip.pos.x, DShip.pos.z)) / 1.8);
+		  //           AddShadowCircle((int)Ship.pos.x+h, (int)Ship.pos.z+h, 1200, 24);
+	  }
+
+
+
+
+
+  if (HARD3D) return;
+  //for (int c = 0; c <= ctViewR; c++)
+  //  ChRenderList[c].ICount = 0;
+
+
+  //=========== Dship ================//
+
+  if (!DShip.State) goto NODSHIP;
+  if (ri < 0) ri = 0;
+  if (ri < ctViewR)
+  {
+	  DShip.rpos = RotateVector(DShip.rpos);
+	  //if (DShip.rpos.z > BackViewR) goto NODSHIP;
+	  //if (fabs(DShip.rpos.x) > -DShip.rpos.z + BackViewR) goto NODSHIP;
+
+	  int i = ChRenderList[ri].ICount++;
+	  ChRenderList[ri].Items[i].CType = 8;
+  }
+NODSHIP:
+  ;
+
+
+
+
 
 
   //=========== bag ================//
@@ -368,7 +410,7 @@ NOBAG:
 		  //  ChRenderList[c].ICount = 0;
 
 
-		  //=========== sship ================//
+		  //=========== bullet ================//
 
 		  if (ri < 0) ri = 0;
 		  if (ri < ctViewR)
@@ -491,6 +533,8 @@ void RenderChList(int r)
 		  RenderBag();
 	  }else if (ChRenderList[r].Items[c].CType == 7) {
 		  RenderBullet(ChRenderList[r].Items[c].Index);
+	  } else if (ChRenderList[r].Items[c].CType == 8) {
+		  RenderDShip();
 	  }
 	
   }
@@ -2584,7 +2628,7 @@ void RenderDShip()
 		GlassL = min(255, (zs / 4 - 64 * (ctViewR - 4)));
 
 
-	CreateMorphedModelBetaGamma(DShipModel.mptr, &DShipModel.Animation[0], DShip.FTime, 1.0, DShip.beta, DShip.gamma);
+	CreateMorphedModel(DShipModel.mptr, &DShipModel.Animation[0], DShip.FTime, 1.0);
 
 	if (fabs(DShip.rpos.z) < 4000)
 		RenderModelClip(DShipModel.mptr,

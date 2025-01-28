@@ -5032,6 +5032,30 @@ void RenderShipPost()
   /*grConstantColorValue( 0xFF000000);*/
 }
 
+void RenderDShipPost()
+{
+	if (!DShip.State) return;
+	GlassL = 0;
+	zs = (int)VectorLength(DShip.rpos);
+	if (zs > 256 * (ctViewR)) return;
+
+	if (zs > 256 * (ctViewR - 4))
+		GlassL = MIN(255, (int)(zs - 256 * (ctViewR - 4)) / 4);
+
+
+	//grConstantColorValue((255 - GlassL) << 24);
+
+	CreateMorphedModel(DShipModel.mptr, &DShipModel.Animation[0], DShip.FTime, 1.0);
+
+	if (fabs(DShip.rpos.z) < 4000)
+		RenderModelClip(DShipModel.mptr,
+			DShip.rpos.x, DShip.rpos.y, DShip.rpos.z, 210, 0, -DShip.alpha - pi / 2 + CameraAlpha, CameraBeta);
+	else
+		RenderModel(DShipModel.mptr,
+			DShip.rpos.x, DShip.rpos.y, DShip.rpos.z, 210, 0, -DShip.alpha - pi / 2 + CameraAlpha, CameraBeta);
+	//grConstantColorValue(0xFF000000);
+}
+
 void RenderSShipPost()
 {
 	if (SShip.State < 1) return;
@@ -5214,6 +5238,31 @@ NOSHIP:
 	  RenderSShipPost();
   }
 NOSSHIP:
+  ;
+
+
+  DShip.rpos.x = DShip.pos.x - CameraX;
+  DShip.rpos.y = DShip.pos.y - CameraY;
+  DShip.rpos.z = DShip.pos.z - CameraZ;
+  r = (float)max(fabs(DShip.rpos.x), fabs(DShip.rpos.z));
+
+  ri = -1 + (int)(r / 256.f + 0.2f);
+  if (ri < 0) ri = 0;
+  if (ri < ctViewR)
+  {
+
+	  if (FOGON)
+	  {
+		  CalcFogLevel_Gradient(DShip.rpos);
+	  }
+
+	  DShip.rpos = RotateVector(DShip.rpos);
+	  //if (DShip.rpos.z > BackViewR) goto NODSHIP;
+	  //if (fabs(DShip.rpos.x) > -DShip.rpos.z + BackViewR) goto NODSHIP;
+
+	  RenderDShipPost();
+  }
+NODSHIP:
   ;
 
   AmmoBag.rpos.x = AmmoBag.pos.x - CameraX;

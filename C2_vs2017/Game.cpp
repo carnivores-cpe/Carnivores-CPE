@@ -654,7 +654,7 @@ void AddDShipTask()
 	if (DShip.State) return;
 	if (!ONWATER) {
 		//ExitTime = 40000;
-		// USE DSHIP SOUND
+		// todo USE DSHIP SOUND
 		AddVoicev(SShipModel.SoundFX[1].length,
 			SShipModel.SoundFX[1].lpData, 256);
 		DShip.State = 1;
@@ -2468,7 +2468,7 @@ void AnimateDShip() {
 TBEGIN:
 
 	if (DShip.State == 1) {
-		DShip.DeltaY = 2048.f;
+		DShip.DeltaY = 1450;
 
 		DShip.pos.x = PlayerX - 90 * 256;
 		if (DShip.pos.x < 256) DShip.pos.x = PlayerX + 90 * 256;
@@ -2496,10 +2496,32 @@ TBEGIN:
 		(PlayerZ - DShip.pos.z) * (PlayerZ - DShip.pos.z));
 	float L2 = sqrt((DShip.tgpos.x - DShip.pos.x) * (DShip.tgpos.x - DShip.pos.x) +
 		(DShip.tgpos.x - DShip.pos.x) * (DShip.tgpos.x - DShip.pos.x));
+	float LadderPlayer = sqrt((PlayerY - GetLandUpH(DShip.pos.x, DShip.pos.z)) * (PlayerY - GetLandUpH(DShip.pos.x, DShip.pos.z)) +
+		(LPF * LPF));
 
 	DShip.pos.y += 0.3f*(float)cos(RealTime / 256.f);
 
-
+	if (DShip.State == 3) {
+		//pickup phase
+		// todo despawn if player moves too far away?
+		/*
+		if (BeamTime <= 0) {
+			AddBeam(DShip.pos.x, DShip.pos.z, 2.0);
+			BeamTime += 65;
+		} else BeamTime -= TimeDt;
+		*/
+		if (DShipInRange) {
+			if (LadderPlayer > 500) {
+				ExitTime = 0;
+				DShipInRange = FALSE;
+			}
+		}
+		else if (LadderPlayer < 250) {
+			ExitTime = 3000;
+			DShipInRange = TRUE;
+		}
+		return;
+	}
 
 	DShip.tgalpha = FindVectorAlpha(DShip.tgpos.x - DShip.pos.x, DShip.tgpos.z - DShip.pos.z);
 	float currspeed;
@@ -2511,6 +2533,7 @@ TBEGIN:
 	//====== speed ===============//
 	float vspeed = 1.f + LF / 128.f;
 	if (vspeed > 24) vspeed = 24;
+	DShip.FTime = DShipModel.Animation[0].AniTime * (vspeed/24);
 	//if (DShip.State) vspeed = 24;
 	if (fabs(dalpha) > 0.4) vspeed = 0.f;
 	float _s = DShip.speed;
@@ -2521,6 +2544,19 @@ TBEGIN:
 		//todo add this to real thingy DShip Car
 		AddVoice3d(ShipModel.SoundFX[2].length, ShipModel.SoundFX[2].lpData,
 			DShip.pos.x, DShip.pos.y, DShip.pos.z);
+
+	if (DShip.State == 2 && vspeed < 5) {
+		if (DShipInRange) {
+			if (LadderPlayer > 500) {
+				ExitTime = 0;
+				DShipInRange = FALSE;
+			}
+		}
+		else if (LadderPlayer < 250) {
+			ExitTime = 3000;
+			DShipInRange = TRUE;
+		}
+	}
 
 	//====== fly ===========//
 	float l = TimeDt * DShip.speed / 16.f;
@@ -2535,32 +2571,13 @@ TBEGIN:
 		}
 		else
 		{
-			if (DShip.State == 1) {
+			if (DShip.State == 2) {
 				//init pickup phase
 				DShip.pos = DShip.tgpos;
 				Ship.tgpos = Ship.retpos;
 				Ship.tgpos.y = GetLandUpH(Ship.tgpos.x, Ship.tgpos.z) + Ship.DeltaY;
 				Ship.tgpos.y = MAX(Ship.tgpos.y, GetLandUpH(Ship.pos.x, Ship.pos.z) + Ship.DeltaY);
-				DShip.State = 2;
-			}
-			if (DShip.State == 2) {
-				//pickup phase
-				// todo despawn if player moves too far away?
-				if (BeamTime <= 0) {
-					AddBeam(DShip.pos.x, DShip.pos.z, 2.0);
-					BeamTime += 65;
-				} else BeamTime -= TimeDt;
-				if (ExitTime) {
-					if (LPF > 750) {
-						ExitTime = 0;
-					}
-				} else if (LPF < 500) {
-					ExitTime = 4000;
-				}
-			}
-			if (DShip.State == 3) {
-				//
-				//todo do this shit
+				DShip.State = 3;
 			}
 
 			/*
@@ -2591,6 +2608,7 @@ TBEGIN:
 	float h = GetLandUpH(DShip.pos.x, DShip.pos.z);
 	DeltaFunc(DShip.pos.y, DShip.tgpos.y, TimeDt / 4.f);
 
+	if (DShip.pos.y < h + 1024) DShip.pos.y = h + 1024;
 
 	//======= rotation ============//
 

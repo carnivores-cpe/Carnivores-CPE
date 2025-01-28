@@ -1346,7 +1346,7 @@ LONG APIENTRY MainWndProc( HWND hWnd, UINT message, UINT wParam, LONG lParam)
     case 'Y':
 		if (EXITMODE && !SurvivalMode)
 		{
-			if (MyHealth) ExitTime = 4000;
+			if (MyHealth) AddDShipTask();//ExitTime = 4000;
 			else ExitTime = 1;
 			EXITMODE = FALSE;
 		}
@@ -1355,7 +1355,7 @@ LONG APIENTRY MainWndProc( HWND hWnd, UINT message, UINT wParam, LONG lParam)
     case VK_RETURN:
       if (EXITMODE )
       {
-		if (MyHealth && !SurvivalMode) ExitTime = 4000;
+		if (MyHealth && !SurvivalMode) AddDShipTask();//ExitTime = 4000;
         else ExitTime = 1;
         EXITMODE = FALSE;
       }
@@ -2517,7 +2517,7 @@ int PASCAL WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
   LoadCharacterInfo(WCircleModel, "HUNTDAT\\WCIRCLE2.CAR");
   LoadCharacterInfo(ShipModel, "HUNTDAT\\ship2a.car");
   LoadCharacterInfo(SShipModel, "HUNTDAT\\sship.car");
-//  LoadCharacterInfo(DShipModel, "HUNTDAT\\dship.car");
+  LoadCharacterInfo(DShipModel, "HUNTDAT\\dship.car");
   LoadCharacterInfo(BagModel, "HUNTDAT\\bag1.car");
   LoadCharacterInfo(WindModel, "HUNTDAT\\WIND.CAR");
 
