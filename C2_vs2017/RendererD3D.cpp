@@ -1972,6 +1972,13 @@ void ShowControlElements()
     ddTextOut(10, 10, MessageList.mtext, 0x0020A0A0);
   }
 
+  if (DropShipMsgTime)
+  {
+	  int y = WinH / 3;
+	  wsprintf(buf, DropShipMsg);
+	  ddTextOut(VideoCX - GetTextW(hdcCMain, buf) / 2, y, buf, 0x0060C0D0);
+  }
+
   if (ExitTime)
   {
     int y = WinH / 3;

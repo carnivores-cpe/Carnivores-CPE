@@ -2505,7 +2505,7 @@ TBEGIN:
 		(PlayerZ - DShip.pos.z) * (PlayerZ - DShip.pos.z));
 	float L2 = sqrt((DShip.tgpos.x - DShip.pos.x) * (DShip.tgpos.x - DShip.pos.x) +
 		(DShip.tgpos.x - DShip.pos.x) * (DShip.tgpos.x - DShip.pos.x));
-	float LadderPlayer = sqrt((PlayerY - GetLandUpH(DShip.pos.x, DShip.pos.z)) * (PlayerY - GetLandUpH(DShip.pos.x, DShip.pos.z)) +
+	float LadderPlayer = sqrt((PlayerY - (DShip.pos.y - DShip.DeltaY)) * (PlayerY - (DShip.pos.y - DShip.DeltaY)) +
 		(LPF * LPF));
 
 	DShip.pos.y += 0.3f*(float)cos(RealTime / 256.f);
