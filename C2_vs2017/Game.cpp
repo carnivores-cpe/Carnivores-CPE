@@ -650,15 +650,24 @@ void SubmitDinoScore (int cindex) {
 }
 
 void AddDShipTask()
-{
-	if (DShip.State) return;
+{	
 	if (!ONWATER) {
-		//ExitTime = 40000;
 		// todo USE DSHIP SOUND
 		AddVoicev(SShipModel.SoundFX[1].length,
 			SShipModel.SoundFX[1].lpData, 256);
-		DShip.State = 1;
+		wsprintf(DropShipMsg, "The evacuation ship is en route.");
+		DropShipMsgTime = 3000;
+		if (DShip.State) {
+			wsprintf(DropShipMsg, "The evacuation ship is en route.");
+			DropShipMsgTime = 3000;
+
+			DShip.tgpos.x = PlayerX;
+			DShip.tgpos.z = PlayerZ;
+			DShip.tgpos.y = GetLandUpH(DShip.tgpos.x, DShip.tgpos.z) + DShip.DeltaY;
+			DShip.State = 2;
+		} else DShip.State = 1;
 	} else {
+		wsprintf(DropShipMsg, "Cannot evacuate from current location.");
 		DropShipMsgTime = 3000;
 	}
 }
@@ -2533,12 +2542,13 @@ TBEGIN:
 	//====== speed ===============//
 	float vspeed = 1.f + LF / 128.f;
 	if (vspeed > 24) vspeed = 24;
-	DShip.FTime = DShipModel.Animation[0].AniTime * (vspeed/24);
+	//DShip.FTime = DShipModel.Animation[0].AniTime * (vspeed/24);
 	//if (DShip.State) vspeed = 24;
 	if (fabs(dalpha) > 0.4) vspeed = 0.f;
 	float _s = DShip.speed;
 	if (vspeed > DShip.speed) DeltaFunc(DShip.speed, vspeed, TimeDt / 200.f);
 	else DShip.speed = vspeed;
+	DShip.FTime = DShipModel.Animation[0].AniTime * (DShip.speed / 24);
 
 	if (DShip.speed > 0 && _s == 0)
 		//todo add this to real thingy DShip Car

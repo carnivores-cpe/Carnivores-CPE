@@ -1123,7 +1123,7 @@ void ShowControlElements()
   if (DropShipMsgTime)
   {
 	  int y = WinH / 3;
-	  wsprintf(buf, "Cannot evacuate from current location.");
+	  wsprintf(buf, DropShipMsg);
 	  FXTextOut(VideoCX - GetTextW(hdcCMain, buf) / 2, y, buf, 0x0060C0D0);
   }
 
