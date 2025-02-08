@@ -2505,7 +2505,7 @@ TBEGIN:
 		(PlayerZ - DShip.pos.z) * (PlayerZ - DShip.pos.z));
 	float L2 = sqrt((DShip.tgpos.x - DShip.pos.x) * (DShip.tgpos.x - DShip.pos.x) +
 		(DShip.tgpos.x - DShip.pos.x) * (DShip.tgpos.x - DShip.pos.x));
-	float LadderPlayer = sqrt((PlayerY - (DShip.pos.y - DShip.DeltaY)) * (PlayerY - (DShip.pos.y - DShip.DeltaY)) +
+	float LadderPlayer = sqrt((PlayerY - (DShip.pos.y - DShip.DeltaY)) * (PlayerY - (DShip.pos.y - DShip.DeltaY)	) +
 		(LPF * LPF));
 
 	DShip.pos.y += 0.3f*(float)cos(RealTime / 256.f);
@@ -2555,7 +2555,7 @@ TBEGIN:
 		AddVoice3d(ShipModel.SoundFX[2].length, ShipModel.SoundFX[2].lpData,
 			DShip.pos.x, DShip.pos.y, DShip.pos.z);
 
-	if (DShip.State == 2 && vspeed < 5) {
+	if (DShip.State == 2 && DShip.speed < 5) {
 		if (DShipInRange) {
 			if (LadderPlayer > 500) {
 				ExitTime = 0;

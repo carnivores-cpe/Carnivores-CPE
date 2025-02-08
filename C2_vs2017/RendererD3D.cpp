@@ -1972,7 +1972,7 @@ void ShowControlElements()
     ddTextOut(10, 10, MessageList.mtext, 0x0020A0A0);
   }
 
-  if (DropShipMsgTime)
+  if (!ExitTime && DropShipMsgTime)
   {
 	  int y = WinH / 3;
 	  wsprintf(buf, DropShipMsg);
@@ -5057,7 +5057,7 @@ void RenderDShipPost()
 	if (fabs(DShip.rpos.z) < 4000)
 		RenderModelClip(DShipModel.mptr,
 			DShip.rpos.x, DShip.rpos.y, DShip.rpos.z, 210, 0, -DShip.alpha - pi / 2 + CameraAlpha, CameraBeta);
-	else
+	else if (DShip.rpos.z <= BackViewR && fabs(DShip.rpos.x) <= -DShip.rpos.z + BackViewR)
 		RenderModel(DShipModel.mptr,
 			DShip.rpos.x, DShip.rpos.y, DShip.rpos.z, 210, 0, -DShip.alpha - pi / 2 + CameraAlpha, CameraBeta);
 	//grConstantColorValue(0xFF000000);
@@ -5266,6 +5266,7 @@ NOSSHIP:
 	  DShip.rpos = RotateVector(DShip.rpos);
 	  //if (DShip.rpos.z > BackViewR) goto NODSHIP;
 	  //if (fabs(DShip.rpos.x) > -DShip.rpos.z + BackViewR) goto NODSHIP;
+	  // 2 LINES MOVED INTO RENDERDSHIPPOST BECAUSE LADDER IS TOO TALL
 
 	  RenderDShipPost();
   }
