@@ -3730,6 +3730,7 @@ void ReadCharacterLine(FILE *stream, char *_value, char line[256], bool &spawnIn
 	if (strstr(line, "health")) DinoInfo[TotalC].Health0 = atoi(value);
 	if (strstr(line, "basescore")) DinoInfo[TotalC].BaseScore = (float)atof(value);
 
+	if (strstr(line, "collectRad")) DinoInfo[TotalC].claimRadius = (float)atof(value);
 	if (strstr(line, "morphTime")) DinoInfo[TotalC].morphTime = (float)atof(value);
 
 	if (strstr(line, "ai")) DinoInfo[TotalC].Clone = atoi(value);

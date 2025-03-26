@@ -561,6 +561,7 @@ spawninfo{
  mass      = 1.5
  length    = 5.8
  radius    = 320
+ collectRad = 320
  health    = 6
  smellK     = 0.8
  hearK      = 1.0
@@ -647,6 +648,7 @@ spawninfo{
  mass      = 0.8
  length    = 4.5
  radius    = 280
+ collectRad = 280
  health    = 6
  smellK     = 0.4 
  hearK      = 0.8
@@ -728,6 +730,7 @@ spawninfo{
  mass      = 7
  length    = 7
  radius    = 480
+ collectRad = 480
  health    = 7
  smellK     = 0.4
  hearK      = 0.8
@@ -809,6 +812,7 @@ spawninfo{
  mass      = 0.5
  length    = 4.2
  radius    = 256
+ collectRad = 256
  health    = 6
  scale0    = 1000
  scaleA    = 600
@@ -914,6 +918,7 @@ spawninfo{
  mass      = 3
  length    = 5.0
  radius    = 400
+ collectRad = 400
  health    = 8
  smellK     = 0.6 
  hearK      = 0.5
@@ -994,6 +999,7 @@ overwrite char5 {
  mass      = 0.3
  length    = 4.0
  radius    = 256
+ collectRad = 256
  health    = 12
  scale0    = 1100
  scaleA    = 400
@@ -1071,6 +1077,7 @@ overwrite char5 {
  mass      = 0.3
  length    = 4.0
  radius    = 256
+ collectRad = 256
  health    = 6
  scaleA    = 400
  smellK     = 1.3
@@ -1152,6 +1159,7 @@ spawninfo{
  mass      = 0.3
  length    = 4.0
  radius    = 256
+ collectRad = 256
  health    = 12
  scaleA    = 400
  smellK     = 1.1
@@ -1248,6 +1256,7 @@ spawninfo{
  mass      = 0.3
  length    = 4.0
  radius    = 256
+ collectRad = 256
  health    = 16
  basescore = 18
  scaleA    = 400
@@ -1325,6 +1334,7 @@ spawninfo{
  mass      = 0.3
  length    = 4.0
  radius    = 256
+ collectRad = 256
  health    = 16
  basescore = 18
  scale0    = 700
@@ -1405,6 +1415,7 @@ spawninfo{
  mass      = 6
  length    = 12
  radius    = 400
+ collectRad = 400
  health    = 1024
  basescore = 25
  smellK     = 0.85 
@@ -1504,6 +1515,7 @@ killtype{
  mass      = 9
  length    = 12
  radius    = 400
+ collectRad = 400
  health    = 100
  basescore = 0
  smellK     = 0.4
@@ -1559,6 +1571,7 @@ spawninfo{
  mass      = 0.8
  length    = 4.5
  radius    = 280
+ collectRad = 280
  health    = 6
  basescore = 8
  smellK     = 0.4 
@@ -1629,6 +1642,7 @@ spawninfo{
  mass      = 3
  length    = 5.0
  radius    = 400
+ collectRad = 400
  health    = 8
  basescore = 9
  smellK     = 0.6 
@@ -1702,6 +1716,7 @@ deathtype{
 }
  aggress   = 7
  radius    = 256
+ collectRad = 256
  mass      = 0.1
  length    = 0.8
 deathtype{
@@ -1753,6 +1768,7 @@ deathtype{
  }
  aggress   = 7
  radius    = 256
+ collectRad = 256
  mass      = 0.1
  length    = 0.8
 deathtype{
@@ -1796,6 +1812,7 @@ deathtype{
  }
  aggress   = 7
  radius    = 256
+ collectRad = 256
  mass      = 0.1
  length    = 0.8
 deathtype{
@@ -1835,6 +1852,7 @@ deathtype{
  aggress   = 200
  killdist  = 380
  radius    = 256
+ collectRad = 256
  mass      = 0.3
  length    = 4.0
 deathtype{
@@ -1908,6 +1926,7 @@ killtype{
  mass      = 0.2
  length    = 0.5
  radius    = 256
+ collectRad = 256
  health    = 1
  shipdelta = 16
  fearCall = 3

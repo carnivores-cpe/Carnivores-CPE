@@ -657,7 +657,7 @@ typedef struct _TDinoInfo
 
   char Name[48], FName[48], PName[48];
   int Health0, Clone;
-  float Mass, Length, Radius,
+  float Mass, Length, claimRadius, Radius,
         SmellK, HearK, LookK,
         ShDelta;
   int   Scale0, ScaleA;

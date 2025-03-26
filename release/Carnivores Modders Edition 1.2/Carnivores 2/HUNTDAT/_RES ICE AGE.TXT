@@ -374,6 +374,7 @@ spawninfo{
  mass      = 3
  length    = 6
  radius    = 750
+ collectRad = 750
  health    = 7
  smellK     = 0.65
  hearK      = 0.7
@@ -460,6 +461,7 @@ spawninfo{
  mass      = 0.8
  length    = 4
  radius    = 472
+ collectRad = 472
  health    = 8
  smellK     = 0.6 
  hearK      = 0.75
@@ -545,6 +547,7 @@ spawninfo{
  mass      = 0.5
  length    = 3.5
  radius    = 418
+ collectRad = 418
  scale0 = 800
  scaleA = 400
  health    = 7
@@ -634,6 +637,7 @@ spawninfo{
  mass      = 2.5
  length    = 5
  radius    = 512
+ collectRad = 512
  health    = 9
  scale0    = 800
  scaleA    = 400
@@ -720,6 +724,7 @@ spawninfo{
  mass      = 0.3
  length    = 2.2
  radius    = 220
+ collectRad = 220
  health    = 6
  smellK     = 0.75
  hearK     = 0.5
@@ -815,6 +820,7 @@ spawninfo{
  mass      = 0.6
  length    = 4.0
  radius    = 360
+ collectRad = 360
  health    = 6
  scaleA    = 400
  smellK     = 0.7
@@ -900,6 +906,7 @@ spawninfo{
  mass      = 1.2
  length    = 5.0
  radius    = 600
+ collectRad = 600
  health    = 10
  scaleA    = 400
  smellK     = 0.85
@@ -984,6 +991,7 @@ spawninfo{
  mass      = 5.5
  length    = 10
  radius    = 750
+ collectRad = 750
  health    = 16
  basescore = 18
  scaleA    = 400
@@ -1048,6 +1056,7 @@ spawninfo{
  mass      = 2.5
  length    = 4.5
  radius    = 560
+ collectRad = 560
  health    = 15
  basescore = 25
  smellK     = 0.95 
@@ -1128,6 +1137,7 @@ spawninfo{
  mass      = 1.5
  length    = 4.5
  radius    = 560
+ collectRad = 560
  health    = 18
  basescore = 50
  smellK     = 0.95 
