@@ -370,6 +370,8 @@ typedef struct _TCharacter
   int NoWayCnt, NoFindCnt, AfraidTime, tgtime;
   int PPMorphTime, PrevPhase,PrevPFTime, Phase, FTime;
 
+  bool doNotIndexAnim = FALSE;
+
   int currentIdleGroup;
   int currentIdle2Group;
 
@@ -769,6 +771,9 @@ typedef struct _TDinoInfo
 
   float reactTime;
   float morphTime;
+
+  int animIndex[64];
+  int animCh = 0;
 
 } TDinoInfo;
 

@@ -2312,6 +2312,8 @@ void SkipSector(FILE *stream)
 	}
 }
 
+
+
 void ReadTrophyTypeInfo(FILE *stream, int trophyGroup)
 {
 	char *value;
@@ -2351,14 +2353,14 @@ void ReadTrophyTypeInfo(FILE *stream, int trophyGroup)
 		if (strstr(line, "xscale")) trophyType[trophyTypeCount].xoffsetScale = atoi(value);
 		if (strstr(line, "yscale")) trophyType[trophyTypeCount].yoffsetScale = atoi(value);
 		if (strstr(line, "zscale")) trophyType[trophyTypeCount].zoffsetScale = atoi(value);
-		if (strstr(line, "tropAnim")) trophyType[trophyTypeCount].anim = atoi(value);
+		if (strstr(line, "tropAnim")) trophyType[trophyTypeCount].anim = atoi(value); // in  trophy mode use literal car index
 		if (strstr(line, "xdata")) trophyType[trophyTypeCount].xdata = atoi(value);
 		if (strstr(line, "ydata")) trophyType[trophyTypeCount].ydata = atoi(value);
 		if (strstr(line, "zdata")) trophyType[trophyTypeCount].zdata = atoi(value);
 		if (strstr(line, "playAnim")) readBool(value, trophyType[trophyTypeCount].playAnim);
 
 
-
+		
 	}
 }
 
@@ -3485,6 +3487,12 @@ void WipeIdle2Groups() {
 }
 */
 
+void AddAnim(int &anim, char *value) {
+	DinoInfo[TotalC].animIndex[DinoInfo[TotalC].animCh] = atoi(value);
+	anim = DinoInfo[TotalC].animCh;
+	DinoInfo[TotalC].animCh++;
+}
+
 void ReadIdleGroupInfo(FILE *stream)
 {
 	char *value;
@@ -3514,7 +3522,7 @@ void ReadIdleGroupInfo(FILE *stream)
 			//	DinoInfo[TotalC].idleCount = 0;
 			//	idleOverwrite = false;
 			//}
-			DinoInfo[TotalC].idleGroup[DinoInfo[TotalC].idleGroupCount].anim[DinoInfo[TotalC].idleGroup[DinoInfo[TotalC].idleGroupCount].count] = atoi(value);
+			AddAnim(DinoInfo[TotalC].idleGroup[DinoInfo[TotalC].idleGroupCount].anim[DinoInfo[TotalC].idleGroup[DinoInfo[TotalC].idleGroupCount].count], value);
 			DinoInfo[TotalC].idleGroup[DinoInfo[TotalC].idleGroupCount].count++;
 		}
 
@@ -3551,7 +3559,7 @@ void ReadIdle2GroupInfo(FILE *stream)
 			//	DinoInfo[TotalC].idleCount = 0;
 			//	idleOverwrite = false;
 			//}
-			DinoInfo[TotalC].idle2Group[DinoInfo[TotalC].idle2GroupCount].anim[DinoInfo[TotalC].idle2Group[DinoInfo[TotalC].idle2GroupCount].count] = atoi(value);
+			AddAnim(DinoInfo[TotalC].idle2Group[DinoInfo[TotalC].idle2GroupCount].anim[DinoInfo[TotalC].idle2Group[DinoInfo[TotalC].idle2GroupCount].count], value);
 			DinoInfo[TotalC].idle2Group[DinoInfo[TotalC].idle2GroupCount].count++;
 		}
 
@@ -3577,11 +3585,13 @@ void ReadDeathTypeInfo(FILE *stream)
 		}
 		value++;
 
-		if (strstr(line, "dieAnim")) DinoInfo[TotalC].deathType[DinoInfo[TotalC].deathTypeCount].die = atoi(value);
-		if (strstr(line, "sleepAnim")) DinoInfo[TotalC].deathType[DinoInfo[TotalC].deathTypeCount].sleep = atoi(value);
-		if (strstr(line, "fallAnim")) DinoInfo[TotalC].deathType[DinoInfo[TotalC].deathTypeCount].fall = atoi(value);
+		if (strstr(line, "dieAnim"))   AddAnim(DinoInfo[TotalC].deathType[DinoInfo[TotalC].deathTypeCount].die, value);
+		if (strstr(line, "sleepAnim")) AddAnim(DinoInfo[TotalC].deathType[DinoInfo[TotalC].deathTypeCount].sleep, value);
+		if (strstr(line, "fallAnim"))  AddAnim(DinoInfo[TotalC].deathType[DinoInfo[TotalC].deathTypeCount].fall, value);
+
 		if (strstr(line, "noSleep")) readBool(value, DinoInfo[TotalC].deathType[DinoInfo[TotalC].deathTypeCount].nosleep);
 
+		
 	}
 }
 
@@ -3603,10 +3613,11 @@ void ReadKillTypeInfo(FILE *stream)
 		}
 		value++;
 
-		if (strstr(line, "hunterAnim")) DinoInfo[TotalC].killType[DinoInfo[TotalC].killTypeCount].hunteranim = atoi(value);
-		if (strstr(line, "hunterCarryAnim")) DinoInfo[TotalC].killType[DinoInfo[TotalC].killTypeCount].hunterswimanim = atoi(value);
-		if (strstr(line, "hunterOffset")) DinoInfo[TotalC].killType[DinoInfo[TotalC].killTypeCount].offset = atoi(value);
-		if (strstr(line, "eatAnim")) DinoInfo[TotalC].killType[DinoInfo[TotalC].killTypeCount].anim = atoi(value);
+		if (strstr(line, "hunterAnim")) DinoInfo[TotalC].killType[DinoInfo[TotalC].killTypeCount].hunteranim = atoi(value); // hunter uses anim index in car file
+		if (strstr(line, "hunterCarryAnim")) DinoInfo[TotalC].killType[DinoInfo[TotalC].killTypeCount].hunterswimanim = atoi(value); // hunter uses anim index in car file
+		if (strstr(line, "hunterOffset")) DinoInfo[TotalC].killType[DinoInfo[TotalC].killTypeCount].offset = atoi(value); // hunter uses anim index in car file
+		if (strstr(line, "eatAnim")) AddAnim(DinoInfo[TotalC].killType[DinoInfo[TotalC].killTypeCount].anim, value);
+
 		if (strstr(line, "hunterSync")) readBool(value, DinoInfo[TotalC].killType[DinoInfo[TotalC].killTypeCount].elevate);
 		if (strstr(line, "carryCorpse")) readBool(value, DinoInfo[TotalC].killType[DinoInfo[TotalC].killTypeCount].carryCorpse);
 		if (strstr(line, "dontloop")) readBool(value, DinoInfo[TotalC].killType[DinoInfo[TotalC].killTypeCount].dontloop);
@@ -3684,7 +3695,6 @@ void ReadAvoidInfo(FILE *stream)
 
 }
 */
-
 
 
 void ReadCharacterLine(FILE *stream, char *_value, char line[256], bool &spawnInfoOverwrite, bool &spawnGroupOverwrite,
@@ -3843,21 +3853,21 @@ void ReadCharacterLine(FILE *stream, char *_value, char line[256], bool &spawnIn
 			DinoInfo[TotalC].Reload = WeapInfo[DinoInfo[TotalC].Weapon].Reload;
 	}
 
-	if (strstr(line, "runAnim")) DinoInfo[TotalC].runAnim = atoi(value);
-	if (strstr(line, "jumpAnim")) DinoInfo[TotalC].jumpAnim = atoi(value);
-	if (strstr(line, "walkAnim")) DinoInfo[TotalC].walkAnim = atoi(value);
-	if (strstr(line, "swimAnim")) DinoInfo[TotalC].swimAnim = atoi(value);
-	if (strstr(line, "flyAnim")) DinoInfo[TotalC].flyAnim = atoi(value);
-	if (strstr(line, "diveAnim")) DinoInfo[TotalC].diveAnim = atoi(value);
-	if (strstr(line, "glideAnim")) DinoInfo[TotalC].glideAnim = atoi(value);
-	if (strstr(line, "takeoffAnim")) DinoInfo[TotalC].takeoffAnim = atoi(value);
-	if (strstr(line, "landAnim")) DinoInfo[TotalC].landAnim = atoi(value);
-	if (strstr(line, "slideAnim")) DinoInfo[TotalC].slideAnim = atoi(value);
-	if (strstr(line, "shakeLAnim")) DinoInfo[TotalC].shakeLandAnim = atoi(value);
-	if (strstr(line, "shakeWAnim")) DinoInfo[TotalC].shakeWaterAnim = atoi(value);
-	if (strstr(line, "climbAnim")) DinoInfo[TotalC].climbAnim = atoi(value);
-	if (strstr(line, "fireAnim")) DinoInfo[TotalC].fireAnim = atoi(value);
-	if (strstr(line, "reloadAnim")) DinoInfo[TotalC].reloadAnim = atoi(value);
+	if (strstr(line, "runAnim"))  AddAnim(DinoInfo[TotalC].runAnim, value);
+	if (strstr(line, "jumpAnim"))  AddAnim(DinoInfo[TotalC].jumpAnim, value);
+	if (strstr(line, "walkAnim"))  AddAnim(DinoInfo[TotalC].walkAnim, value);
+	if (strstr(line, "swimAnim"))  AddAnim(DinoInfo[TotalC].swimAnim, value);
+	if (strstr(line, "flyAnim"))  AddAnim(DinoInfo[TotalC].flyAnim, value);
+	if (strstr(line, "diveAnim"))  AddAnim(DinoInfo[TotalC].diveAnim, value);
+	if (strstr(line, "glideAnim"))  AddAnim(DinoInfo[TotalC].glideAnim, value);
+	if (strstr(line, "takeoffAnim"))  AddAnim(DinoInfo[TotalC].takeoffAnim, value);
+	if (strstr(line, "landAnim"))  AddAnim(DinoInfo[TotalC].landAnim, value);
+	if (strstr(line, "slideAnim"))  AddAnim(DinoInfo[TotalC].slideAnim, value);
+	if (strstr(line, "shakeLAnim"))  AddAnim(DinoInfo[TotalC].shakeLandAnim, value);
+	if (strstr(line, "shakeWAnim"))  AddAnim(DinoInfo[TotalC].shakeWaterAnim, value);
+	if (strstr(line, "climbAnim"))  AddAnim(DinoInfo[TotalC].climbAnim, value);
+	if (strstr(line, "fireAnim"))  AddAnim(DinoInfo[TotalC].fireAnim, value);
+	if (strstr(line, "reloadAnim"))  AddAnim(DinoInfo[TotalC].reloadAnim, value);
 
 	
 	if (strstr(line, "lookAnim") || strstr(line, "fishIdleAnim")) {
@@ -3865,7 +3875,7 @@ void ReadCharacterLine(FILE *stream, char *_value, char line[256], bool &spawnIn
 			DinoInfo[TotalC].lookCount = 0;
 			idleOverwrite = false;
 		}
-		DinoInfo[TotalC].lookAnim[DinoInfo[TotalC].lookCount] = atoi(value);
+		AddAnim(DinoInfo[TotalC].lookAnim[DinoInfo[TotalC].lookCount], value);
 		DinoInfo[TotalC].lookCount++;
 	}
 
@@ -3874,7 +3884,7 @@ void ReadCharacterLine(FILE *stream, char *_value, char line[256], bool &spawnIn
 			DinoInfo[TotalC].smellCount = 0;
 			idle2Overwrite = false;
 		}
-		DinoInfo[TotalC].smellAnim[DinoInfo[TotalC].smellCount] = atoi(value);
+		AddAnim(DinoInfo[TotalC].smellAnim[DinoInfo[TotalC].smellCount], value);
 		DinoInfo[TotalC].smellCount++;
 	}
 	
@@ -3884,7 +3894,7 @@ void ReadCharacterLine(FILE *stream, char *_value, char line[256], bool &spawnIn
 			DinoInfo[TotalC].roarCount = 0;
 			roarOverwrite = false;
 		}
-		DinoInfo[TotalC].roarAnim[DinoInfo[TotalC].roarCount] = atoi(value);
+		AddAnim(DinoInfo[TotalC].roarAnim[DinoInfo[TotalC].roarCount], value);
 		DinoInfo[TotalC].roarCount++;
 	}
 
@@ -3893,7 +3903,7 @@ void ReadCharacterLine(FILE *stream, char *_value, char line[256], bool &spawnIn
 			DinoInfo[TotalC].waterDieCount = 0;
 			waterDieOverwrite = false;
 		}
-		DinoInfo[TotalC].waterDieAnim[DinoInfo[TotalC].waterDieCount] = atoi(value);
+		AddAnim(DinoInfo[TotalC].waterDieAnim[DinoInfo[TotalC].waterDieCount], value);
 		DinoInfo[TotalC].waterDieCount++;
 	}
 

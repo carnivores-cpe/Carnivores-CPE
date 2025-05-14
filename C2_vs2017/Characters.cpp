@@ -194,16 +194,23 @@ void ProcessPrevPhase(TCharacter *cptr)
 	if (cptr->PPMorphTime > PMORPHTIME) cptr->PrevPhase = cptr->Phase;
 
 	cptr->PrevPFTime += TimeDt * DinoInfo[cptr->CType].morphTime;
- 	cptr->PrevPFTime %= cptr->pinfo->Animation[cptr->PrevPhase].AniTime;
-	cptr->PrevPFTime %= cptr->pinfo->Animation[cptr->PrevPhase].AniTime;
-}
+	int PrevPhaseIndexed = DinoInfo[cptr->CType].animIndex[cptr->PrevPhase];
+	if (cptr->doNotIndexAnim || TrophyMode) PrevPhaseIndexed = cptr->PrevPhase;
 
+ 	cptr->PrevPFTime %= cptr->pinfo->Animation[PrevPhaseIndexed].AniTime;
+	cptr->PrevPFTime %= cptr->pinfo->Animation[PrevPhaseIndexed].AniTime;
+}
 
 void ActivateCharacterFxAquatic(TCharacter *cptr)
 {
+	
 	if (cptr->CType) //== not hunter ==//
 		if (!UNDERWATER) return;
-	int fx = cptr->pinfo->Anifx[cptr->Phase];
+	int fx;
+	if (cptr->doNotIndexAnim || TrophyMode) fx = cptr->pinfo->Anifx[cptr->Phase];
+	else fx = cptr->pinfo->Anifx[DinoInfo[cptr->CType].animIndex[cptr->Phase]];
+
+	
 	if (fx == -1) return;
 
 	if (VectorLength(SubVectors(PlayerPos, cptr->pos)) > 68 * 256) return;
@@ -227,7 +234,11 @@ void ActivateCharacterFx(TCharacter *cptr)
 
 	if (cptr->CType) //== not hunter ==//
 		if (UNDERWATER) return;
-	int fx = cptr->pinfo->Anifx[cptr->Phase];
+	
+
+	int fx;
+	if (cptr->doNotIndexAnim || TrophyMode) fx = cptr->pinfo->Anifx[cptr->Phase];
+	else fx = cptr->pinfo->Anifx[DinoInfo[cptr->CType].animIndex[cptr->Phase]];
 	if (fx == -1) return;
 
 	if (VectorLength(SubVectors(PlayerPos, cptr->pos)) > 68 * 256) return;
@@ -259,6 +270,8 @@ void ResetCharacter(TCharacter *cptr)
 	cptr->AfraidTime = 0;
 	cptr->BloodTTime = 0;
 	cptr->BloodTime = 0;
+
+	cptr->doNotIndexAnim = false;
 
 	cptr->claimed = false;
 
@@ -345,6 +358,8 @@ void AddDeadBody(TCharacter *cptr, int phase, bool scream)
 	if (phase != HUNT_BREATH && scream){
 		AddVoicev(fxScream[r].length, fxScream[r].lpData, 256);
 	}
+
+	Characters[ChCount].doNotIndexAnim = TRUE;
 
 	Characters[ChCount].Health = 0;
 	MyHealth = 0;
@@ -2214,7 +2229,7 @@ void AnimateDeadCommon(TCharacter *cptr)
 		ProcessPrevPhase(cptr);
 
 		cptr->FTime += TimeDt;
-		if (cptr->FTime >= cptr->pinfo->Animation[cptr->Phase].AniTime)
+		if (cptr->FTime >= cptr->pinfo->Animation[DinoInfo[cptr->CType].animIndex[cptr->Phase]].AniTime)
 			if (Tranq && !DinoInfo[cptr->CType].deathType[cptr->deathType].nosleep)
 			{
 				cptr->FTime = 0;
@@ -2222,7 +2237,7 @@ void AnimateDeadCommon(TCharacter *cptr)
 				ActivateCharacterFx(cptr);
 			}
 			else
-				cptr->FTime = cptr->pinfo->Animation[cptr->Phase].AniTime - 1;
+				cptr->FTime = cptr->pinfo->Animation[DinoInfo[cptr->CType].animIndex[cptr->Phase]].AniTime - 1;
 	}
 
 	//======= movement ===========//
@@ -2463,9 +2478,9 @@ NOTHINK:
 	//======== select new phase =======================//
 	cptr->FTime += TimeDt;
 
-	if (cptr->FTime >= cptr->pinfo->Animation[cptr->Phase].AniTime)
+	if (cptr->FTime >= cptr->pinfo->Animation[DinoInfo[cptr->CType].animIndex[cptr->Phase]].AniTime)
 	{
-		cptr->FTime %= cptr->pinfo->Animation[cptr->Phase].AniTime;
+		cptr->FTime %= cptr->pinfo->Animation[DinoInfo[cptr->CType].animIndex[cptr->Phase]].AniTime;
 
 		if (cptr->Phase == DinoInfo[cptr->CType].killType[cptr->killType].anim && DinoInfo[cptr->CType].killTypeCount) {
 			if (DinoInfo[cptr->CType].killType[cptr->killType].dontloop) {
@@ -2670,7 +2685,7 @@ ENDPSELECT:
 				_Phase == DinoInfo[cptr->CType].walkAnim) &&
 				(cptr->Phase == DinoInfo[cptr->CType].runAnim ||
 					cptr->Phase == DinoInfo[cptr->CType].walkAnim))
-				cptr->FTime = _FTime * cptr->pinfo->Animation[cptr->Phase].AniTime / cptr->pinfo->Animation[_Phase].AniTime + 64;
+				cptr->FTime = _FTime * cptr->pinfo->Animation[DinoInfo[cptr->CType].animIndex[cptr->Phase]].AniTime / cptr->pinfo->Animation[DinoInfo[cptr->CType].animIndex[_Phase]].AniTime + 64;
 			else if (!NewPhase) cptr->FTime = 0;
 		}
 
@@ -2682,7 +2697,7 @@ ENDPSELECT:
 		}
 	}
 
-	cptr->FTime %= cptr->pinfo->Animation[cptr->Phase].AniTime;
+	cptr->FTime %= cptr->pinfo->Animation[DinoInfo[cptr->CType].animIndex[cptr->Phase]].AniTime;
 
 
 
@@ -2869,9 +2884,9 @@ void AnimatePoacher(TCharacter *cptr)
 	ProcessPrevPhase(cptr);
 
 	//======== select new phase =======================//
-	if (cptr->FTime >= cptr->pinfo->Animation[cptr->Phase].AniTime)
+	if (cptr->FTime >= cptr->pinfo->Animation[DinoInfo[cptr->CType].animIndex[cptr->Phase]].AniTime)
 	{
-		cptr->FTime %= cptr->pinfo->Animation[cptr->Phase].AniTime;
+		cptr->FTime %= cptr->pinfo->Animation[DinoInfo[cptr->CType].animIndex[cptr->Phase]].AniTime;
 
 		NewPhase = TRUE;
 	}
@@ -2961,7 +2976,7 @@ ENDPSELECT:
 				_Phase == DinoInfo[cptr->CType].walkAnim) &&
 				(cptr->Phase == DinoInfo[cptr->CType].runAnim ||
 					cptr->Phase == DinoInfo[cptr->CType].walkAnim))
-				cptr->FTime = _FTime * cptr->pinfo->Animation[cptr->Phase].AniTime / cptr->pinfo->Animation[_Phase].AniTime + 64;
+				cptr->FTime = _FTime * cptr->pinfo->Animation[DinoInfo[cptr->CType].animIndex[cptr->Phase]].AniTime / cptr->pinfo->Animation[DinoInfo[cptr->CType].animIndex[_Phase]].AniTime + 64;
 			else if (!NewPhase) cptr->FTime = 0;
 		}
 
@@ -2973,7 +2988,7 @@ ENDPSELECT:
 		}
 	}
 
-	cptr->FTime %= cptr->pinfo->Animation[cptr->Phase].AniTime;
+	cptr->FTime %= cptr->pinfo->Animation[DinoInfo[cptr->CType].animIndex[cptr->Phase]].AniTime;
 
 }
 
@@ -3260,9 +3275,9 @@ NOTHINK:
 	//======== select new phase =======================//
 	cptr->FTime += TimeDt;
 
-	if (cptr->FTime >= cptr->pinfo->Animation[cptr->Phase].AniTime)
+	if (cptr->FTime >= cptr->pinfo->Animation[DinoInfo[cptr->CType].animIndex[cptr->Phase]].AniTime)
 	{
-		cptr->FTime %= cptr->pinfo->Animation[cptr->Phase].AniTime;
+		cptr->FTime %= cptr->pinfo->Animation[DinoInfo[cptr->CType].animIndex[cptr->Phase]].AniTime;
 
 		if (cptr->Phase == DinoInfo[cptr->CType].killType[cptr->killType].anim && DinoInfo[cptr->CType].killTypeCount) {
 			if (DinoInfo[cptr->CType].killType[cptr->killType].dontloop) {
@@ -3373,7 +3388,7 @@ ENDPSELECT:
 				_Phase == DinoInfo[cptr->CType].walkAnim) &&
 				(cptr->Phase == DinoInfo[cptr->CType].runAnim ||
 					cptr->Phase == DinoInfo[cptr->CType].walkAnim))
-				cptr->FTime = _FTime * cptr->pinfo->Animation[cptr->Phase].AniTime / cptr->pinfo->Animation[_Phase].AniTime + 64;
+				cptr->FTime = _FTime * cptr->pinfo->Animation[DinoInfo[cptr->CType].animIndex[cptr->Phase]].AniTime / cptr->pinfo->Animation[DinoInfo[cptr->CType].animIndex[_Phase]].AniTime + 64;
 			else if (!NewPhase) cptr->FTime = 0;
 		}
 
@@ -3385,7 +3400,7 @@ ENDPSELECT:
 		}
 	}
 
-	cptr->FTime %= cptr->pinfo->Animation[cptr->Phase].AniTime;
+	cptr->FTime %= cptr->pinfo->Animation[DinoInfo[cptr->CType].animIndex[cptr->Phase]].AniTime;
 
 
 
@@ -3897,9 +3912,9 @@ NOTHINK:
 
 	cptr->FTime += TimeDt;
 
-	if (cptr->FTime >= cptr->pinfo->Animation[cptr->Phase].AniTime)
+	if (cptr->FTime >= cptr->pinfo->Animation[DinoInfo[cptr->CType].animIndex[cptr->Phase]].AniTime)
 	{
-		cptr->FTime %= cptr->pinfo->Animation[cptr->Phase].AniTime;
+		cptr->FTime %= cptr->pinfo->Animation[DinoInfo[cptr->CType].animIndex[cptr->Phase]].AniTime;
 
 		if (cptr->Phase == DinoInfo[cptr->CType].killType[cptr->killType].anim && DinoInfo[cptr->CType].killTypeCount) {
 			if (DinoInfo[cptr->CType].killType[cptr->killType].dontloop) {
@@ -4021,7 +4036,7 @@ ENDPSELECT:
 				_Phase == DinoInfo[cptr->CType].walkAnim) &&
 				(cptr->Phase == DinoInfo[cptr->CType].runAnim ||
 					cptr->Phase == DinoInfo[cptr->CType].walkAnim))
-				cptr->FTime = _FTime * cptr->pinfo->Animation[cptr->Phase].AniTime / cptr->pinfo->Animation[_Phase].AniTime + 64;
+				cptr->FTime = _FTime * cptr->pinfo->Animation[DinoInfo[cptr->CType].animIndex[cptr->Phase]].AniTime / cptr->pinfo->Animation[DinoInfo[cptr->CType].animIndex[_Phase]].AniTime + 64;
 			else if (!NewPhase) cptr->FTime = 0;
 		}
 
@@ -4033,7 +4048,7 @@ ENDPSELECT:
 		}
 	}
 
-	cptr->FTime %= cptr->pinfo->Animation[cptr->Phase].AniTime;
+	cptr->FTime %= cptr->pinfo->Animation[DinoInfo[cptr->CType].animIndex[cptr->Phase]].AniTime;
 
 
 
@@ -4448,14 +4463,14 @@ NOTHINK:
 	//======== select new phase =======================//
 	cptr->FTime += TimeDt;
 
-	if (cptr->FTime >= cptr->pinfo->Animation[cptr->Phase].AniTime)
+	if (cptr->FTime >= cptr->pinfo->Animation[DinoInfo[cptr->CType].animIndex[cptr->Phase]].AniTime)
 	{
-		cptr->FTime %= cptr->pinfo->Animation[cptr->Phase].AniTime;
+		cptr->FTime %= cptr->pinfo->Animation[DinoInfo[cptr->CType].animIndex[cptr->Phase]].AniTime;
 
 		NewPhase = TRUE;
 	}
 
-	//even if not newphase...
+	//even if not newphase...//                       TODO - WHAT IS THIS? PHASE == 2? NEED TO UPDATE THIS?
 	if (cptr->Phase == 2 && _Phase != 2) {
 
 		if (DinoInfo[cptr->CType].smellCount > 0) {
@@ -4525,7 +4540,7 @@ ENDPSELECT:
 			_Phase == DinoInfo[cptr->CType].walkAnim) &&
 			(cptr->Phase == DinoInfo[cptr->CType].runAnim ||
 				cptr->Phase == DinoInfo[cptr->CType].walkAnim))
-			cptr->FTime = _FTime * cptr->pinfo->Animation[cptr->Phase].AniTime / cptr->pinfo->Animation[_Phase].AniTime + 64;
+			cptr->FTime = _FTime * cptr->pinfo->Animation[DinoInfo[cptr->CType].animIndex[cptr->Phase]].AniTime / cptr->pinfo->Animation[DinoInfo[cptr->CType].animIndex[_Phase]].AniTime + 64;
 		else if (!NewPhase) cptr->FTime = 0;
 
 		if (cptr->PPMorphTime > 128)
@@ -4536,7 +4551,7 @@ ENDPSELECT:
 		}
 	}
 
-	cptr->FTime %= cptr->pinfo->Animation[cptr->Phase].AniTime;
+	cptr->FTime %= cptr->pinfo->Animation[DinoInfo[cptr->CType].animIndex[cptr->Phase]].AniTime;
 
 
 
@@ -4851,9 +4866,9 @@ NOTHINK:
 
 	cptr->FTime += TimeDt;
 
-	if (cptr->FTime >= cptr->pinfo->Animation[cptr->Phase].AniTime)
+	if (cptr->FTime >= cptr->pinfo->Animation[DinoInfo[cptr->CType].animIndex[cptr->Phase]].AniTime)
 	{
-		cptr->FTime %= cptr->pinfo->Animation[cptr->Phase].AniTime;
+		cptr->FTime %= cptr->pinfo->Animation[DinoInfo[cptr->CType].animIndex[cptr->Phase]].AniTime;
 
 		if (cptr->Phase == DinoInfo[cptr->CType].killType[cptr->killType].anim && DinoInfo[cptr->CType].killTypeCount) {
 			if (DinoInfo[cptr->CType].killType[cptr->killType].dontloop) {
@@ -4971,7 +4986,7 @@ ENDPSELECT:
 				_Phase == DinoInfo[cptr->CType].walkAnim) &&
 				(cptr->Phase == DinoInfo[cptr->CType].runAnim ||
 					cptr->Phase == DinoInfo[cptr->CType].walkAnim))
-				cptr->FTime = _FTime * cptr->pinfo->Animation[cptr->Phase].AniTime / cptr->pinfo->Animation[_Phase].AniTime + 64;
+				cptr->FTime = _FTime * cptr->pinfo->Animation[DinoInfo[cptr->CType].animIndex[cptr->Phase]].AniTime / cptr->pinfo->Animation[DinoInfo[cptr->CType].animIndex[_Phase]].AniTime + 64;
 			else if (!NewPhase) cptr->FTime = 0;
 		}
 
@@ -4983,7 +4998,7 @@ ENDPSELECT:
 		}
 	}
 
-	cptr->FTime %= cptr->pinfo->Animation[cptr->Phase].AniTime;
+	cptr->FTime %= cptr->pinfo->Animation[DinoInfo[cptr->CType].animIndex[cptr->Phase]].AniTime;
 
 
 
@@ -5074,7 +5089,7 @@ SKIPROT:
 
 }
 
-//multiplayer
+//multiplayer animate dino on client end
 void AnimateMClientCharacter(TCharacter *cptr)
 {
 	NewPhase = FALSE;
@@ -5087,11 +5102,11 @@ void AnimateMClientCharacter(TCharacter *cptr)
 	//======== select new phase =======================//
 	cptr->FTime += TimeDt;
 
-	if (cptr->FTime >= cptr->pinfo->Animation[cptr->Phase].AniTime)
+	if (cptr->FTime >= cptr->pinfo->Animation[DinoInfo[cptr->CType].animIndex[cptr->Phase]].AniTime)
 	{
-		if (cptr->Phase == DinoInfo[cptr->CType].deathType[cptr->deathType].die) cptr->FTime = cptr->pinfo->Animation[cptr->Phase].AniTime - 1;
+		if (cptr->Phase == DinoInfo[cptr->CType].deathType[cptr->deathType].die) cptr->FTime = cptr->pinfo->Animation[DinoInfo[cptr->CType].animIndex[cptr->Phase]].AniTime - 1;
 		else {
-			cptr->FTime %= cptr->pinfo->Animation[cptr->Phase].AniTime;
+			cptr->FTime %= cptr->pinfo->Animation[DinoInfo[cptr->CType].animIndex[cptr->Phase]].AniTime;
 			NewPhase = TRUE;
 		}
 	}
@@ -5113,7 +5128,7 @@ void AnimateMClientCharacter(TCharacter *cptr)
 				cptr->_PhaseM == DinoInfo[cptr->CType].walkAnim) &&
 				(cptr->Phase == DinoInfo[cptr->CType].runAnim ||
 					cptr->Phase == DinoInfo[cptr->CType].walkAnim))
-				cptr->FTime = _FTime * cptr->pinfo->Animation[cptr->Phase].AniTime / cptr->pinfo->Animation[cptr->_PhaseM].AniTime + 64;
+				cptr->FTime = _FTime * cptr->pinfo->Animation[DinoInfo[cptr->CType].animIndex[cptr->Phase]].AniTime / cptr->pinfo->Animation[DinoInfo[cptr->CType].animIndex[cptr->_PhaseM]].AniTime + 64;
 			else if (!NewPhase) cptr->FTime = 0;
 
 			if (cptr->PPMorphTime > 128)
@@ -5124,7 +5139,7 @@ void AnimateMClientCharacter(TCharacter *cptr)
 			}
 		}
 
-		cptr->FTime %= cptr->pinfo->Animation[cptr->Phase].AniTime;
+		cptr->FTime %= cptr->pinfo->Animation[DinoInfo[cptr->CType].animIndex[cptr->Phase]].AniTime;
 
 	}
 
@@ -5361,9 +5376,9 @@ TBEGIN:
 	//======== select new phase =======================//
 	cptr->FTime += TimeDt;
 
-	if (cptr->FTime >= cptr->pinfo->Animation[cptr->Phase].AniTime)
+	if (cptr->FTime >= cptr->pinfo->Animation[DinoInfo[cptr->CType].animIndex[cptr->Phase]].AniTime)
 	{
-		cptr->FTime %= cptr->pinfo->Animation[cptr->Phase].AniTime;
+		cptr->FTime %= cptr->pinfo->Animation[DinoInfo[cptr->CType].animIndex[cptr->Phase]].AniTime;
 		NewPhase = TRUE;
 	}
 
@@ -5446,7 +5461,7 @@ ENDPSELECT:
 			_Phase == DinoInfo[cptr->CType].walkAnim) &&
 			(cptr->Phase == DinoInfo[cptr->CType].runAnim ||
 				cptr->Phase == DinoInfo[cptr->CType].walkAnim))
-			cptr->FTime = _FTime * cptr->pinfo->Animation[cptr->Phase].AniTime / cptr->pinfo->Animation[_Phase].AniTime + 64;
+			cptr->FTime = _FTime * cptr->pinfo->Animation[DinoInfo[cptr->CType].animIndex[cptr->Phase]].AniTime / cptr->pinfo->Animation[DinoInfo[cptr->CType].animIndex[_Phase]].AniTime + 64;
 		else if (!NewPhase) cptr->FTime = 0;
 
 		if (cptr->PPMorphTime > 128)
@@ -5457,7 +5472,7 @@ ENDPSELECT:
 		}
 	}
 
-	cptr->FTime %= cptr->pinfo->Animation[cptr->Phase].AniTime;
+	cptr->FTime %= cptr->pinfo->Animation[DinoInfo[cptr->CType].animIndex[cptr->Phase]].AniTime;
 
 
 
@@ -5862,9 +5877,9 @@ NOTHINK:
 	cptr->FTime += TimeDt;
 
 
-	if (cptr->FTime >= cptr->pinfo->Animation[cptr->Phase].AniTime)
+	if (cptr->FTime >= cptr->pinfo->Animation[DinoInfo[cptr->CType].animIndex[cptr->Phase]].AniTime)
 	{	
-		cptr->FTime %= cptr->pinfo->Animation[cptr->Phase].AniTime;
+		cptr->FTime %= cptr->pinfo->Animation[DinoInfo[cptr->CType].animIndex[cptr->Phase]].AniTime;
 
 		if (cptr->Phase == DinoInfo[cptr->CType].killType[cptr->killType].anim && DinoInfo[cptr->CType].killTypeCount) {
 			if (DinoInfo[cptr->CType].killType[cptr->killType].dontloop) {
@@ -5985,7 +6000,7 @@ ENDPSELECT:
 			_Phase == DinoInfo[cptr->CType].walkAnim) &&
 			(cptr->Phase == DinoInfo[cptr->CType].runAnim ||
 				cptr->Phase == DinoInfo[cptr->CType].walkAnim)) {
-			cptr->FTime = _FTime * cptr->pinfo->Animation[cptr->Phase].AniTime / cptr->pinfo->Animation[_Phase].AniTime + 64;
+			cptr->FTime = _FTime * cptr->pinfo->Animation[DinoInfo[cptr->CType].animIndex[cptr->Phase]].AniTime / cptr->pinfo->Animation[DinoInfo[cptr->CType].animIndex[_Phase]].AniTime + 64;
 		}
 		//else if (!NewPhase) cptr->FTime = 0;
 
@@ -5997,7 +6012,7 @@ ENDPSELECT:
 		}
 	}
 
-	cptr->FTime %= cptr->pinfo->Animation[cptr->Phase].AniTime;
+	cptr->FTime %= cptr->pinfo->Animation[DinoInfo[cptr->CType].animIndex[cptr->Phase]].AniTime;
 
 
 
@@ -6391,9 +6406,9 @@ TBEGIN:
 	//======== select new phase =======================//
 
 
-	if (cptr->FTime >= cptr->pinfo->Animation[cptr->Phase].AniTime)
+	if (cptr->FTime >= cptr->pinfo->Animation[DinoInfo[cptr->CType].animIndex[cptr->Phase]].AniTime)
 	{
-		cptr->FTime %= cptr->pinfo->Animation[cptr->Phase].AniTime;
+		cptr->FTime %= cptr->pinfo->Animation[DinoInfo[cptr->CType].animIndex[cptr->Phase]].AniTime;
 		NewPhase = TRUE;
 	}
 
@@ -6739,7 +6754,7 @@ ENDPSELECT:
 			&&
 			(cptr->Phase == DinoInfo[cptr->CType].walkAnim || cptr->Phase == DinoInfo[cptr->CType].swimAnim || cptr->Phase == DinoInfo[cptr->CType].flyAnim
 				|| cptr->Phase == DinoInfo[cptr->CType].glideAnim || cptr->Phase == DinoInfo[cptr->CType].landAnim || cptr->Phase == DinoInfo[cptr->CType].takeoffAnim))
-			cptr->FTime = _FTime * cptr->pinfo->Animation[cptr->Phase].AniTime / cptr->pinfo->Animation[_Phase].AniTime + 64;
+			cptr->FTime = _FTime * cptr->pinfo->Animation[DinoInfo[cptr->CType].animIndex[cptr->Phase]].AniTime / cptr->pinfo->Animation[DinoInfo[cptr->CType].animIndex[_Phase]].AniTime + 64;
 		else if (!NewPhase) cptr->FTime = 0;
 
 		if (cptr->PPMorphTime > 128)
@@ -6750,7 +6765,7 @@ ENDPSELECT:
 		}
 	}
 
-	cptr->FTime %= cptr->pinfo->Animation[cptr->Phase].AniTime;
+	cptr->FTime %= cptr->pinfo->Animation[DinoInfo[cptr->CType].animIndex[cptr->Phase]].AniTime;
 
 
 
@@ -7011,7 +7026,7 @@ void AnimateDeadFish(TCharacter *cptr)
 	float lh = GetLandH(cptr->pos.x, cptr->pos.z);
 
 	cptr->FTime += TimeDt;
-	if (cptr->FTime >= cptr->pinfo->Animation[cptr->Phase].AniTime) cptr->FTime = cptr->pinfo->Animation[cptr->Phase].AniTime - 1;
+	if (cptr->FTime >= cptr->pinfo->Animation[DinoInfo[cptr->CType].animIndex[cptr->Phase]].AniTime) cptr->FTime = cptr->pinfo->Animation[DinoInfo[cptr->CType].animIndex[cptr->Phase]].AniTime - 1;
 
 
 	//======= movement ===========//
@@ -7091,7 +7106,7 @@ void AnimateIcthDead(TCharacter *cptr)
 	if (!DinoInfo[cptr->CType].waterDieCount) OnWaterQ = false;
 
 	cptr->FTime += TimeDt;
-	if (cptr->FTime >= cptr->pinfo->Animation[cptr->Phase].AniTime)
+	if (cptr->FTime >= cptr->pinfo->Animation[DinoInfo[cptr->CType].animIndex[cptr->Phase]].AniTime)
 	{
 		if (cptr->Phase == DinoInfo[cptr->CType].deathType[cptr->deathType].die ||
 			(cptr->Phase == cptr->waterDieAnim && DinoInfo[cptr->CType].waterDieCount) ||
@@ -7105,11 +7120,11 @@ void AnimateIcthDead(TCharacter *cptr)
 			}
 			else
 			{
-				cptr->FTime = cptr->pinfo->Animation[cptr->Phase].AniTime - 1;
+				cptr->FTime = cptr->pinfo->Animation[DinoInfo[cptr->CType].animIndex[cptr->Phase]].AniTime - 1;
 			}
 		}
 		else
-			cptr->FTime %= cptr->pinfo->Animation[cptr->Phase].AniTime;
+			cptr->FTime %= cptr->pinfo->Animation[DinoInfo[cptr->CType].animIndex[cptr->Phase]].AniTime;
 
 
 	}
@@ -7433,9 +7448,9 @@ NOTHINK:
 	//======== select new phase =======================//
 	cptr->FTime += TimeDt;
 
-	if (cptr->FTime >= cptr->pinfo->Animation[cptr->Phase].AniTime)
+	if (cptr->FTime >= cptr->pinfo->Animation[DinoInfo[cptr->CType].animIndex[cptr->Phase]].AniTime)
 	{
-		cptr->FTime %= cptr->pinfo->Animation[cptr->Phase].AniTime;
+		cptr->FTime %= cptr->pinfo->Animation[DinoInfo[cptr->CType].animIndex[cptr->Phase]].AniTime;
 
 		if (cptr->Phase == DinoInfo[cptr->CType].killType[cptr->killType].anim && DinoInfo[cptr->CType].killTypeCount) {
 			if (DinoInfo[cptr->CType].killType[cptr->killType].dontloop) {
@@ -7554,7 +7569,7 @@ ENDPSELECT:
 		}
 	}
 
-	cptr->FTime %= cptr->pinfo->Animation[cptr->Phase].AniTime;
+	cptr->FTime %= cptr->pinfo->Animation[DinoInfo[cptr->CType].animIndex[cptr->Phase]].AniTime;
 
 
 
@@ -7697,9 +7712,9 @@ TBEGIN:
 	//======== select new phase =======================//
 	cptr->FTime += TimeDt;
 
-	if (cptr->FTime >= cptr->pinfo->Animation[cptr->Phase].AniTime)
+	if (cptr->FTime >= cptr->pinfo->Animation[DinoInfo[cptr->CType].animIndex[cptr->Phase]].AniTime)
 	{
-		cptr->FTime %= cptr->pinfo->Animation[cptr->Phase].AniTime;
+		cptr->FTime %= cptr->pinfo->Animation[DinoInfo[cptr->CType].animIndex[cptr->Phase]].AniTime;
 		NewPhase = TRUE;
 	}
 
@@ -7764,7 +7779,7 @@ ENDPSELECT:
 		}
 	}
 
-	cptr->FTime %= cptr->pinfo->Animation[cptr->Phase].AniTime;
+	cptr->FTime %= cptr->pinfo->Animation[DinoInfo[cptr->CType].animIndex[cptr->Phase]].AniTime;
 
 
 
@@ -7908,9 +7923,9 @@ TBEGIN:
 	//======== select new phase =======================//
 	cptr->FTime += TimeDt;
 
-	if (cptr->FTime >= cptr->pinfo->Animation[cptr->Phase].AniTime)
+	if (cptr->FTime >= cptr->pinfo->Animation[DinoInfo[cptr->CType].animIndex[cptr->Phase]].AniTime)
 	{
-		cptr->FTime %= cptr->pinfo->Animation[cptr->Phase].AniTime;
+		cptr->FTime %= cptr->pinfo->Animation[DinoInfo[cptr->CType].animIndex[cptr->Phase]].AniTime;
 		NewPhase = TRUE;
 	}
 
@@ -7945,7 +7960,7 @@ TBEGIN:
 	}
 
 
-	cptr->FTime %= cptr->pinfo->Animation[cptr->Phase].AniTime;
+	cptr->FTime %= cptr->pinfo->Animation[DinoInfo[cptr->CType].animIndex[cptr->Phase]].AniTime;
 
 
 	//========== rotation to tgalpha ===================//
@@ -8071,7 +8086,7 @@ void AnimateCharacters()
 
 			if (cptr->animateTrophy) {
 				cptr->FTime += TimeDt;
-				if (cptr->FTime >= cptr->pinfo->Animation[cptr->Phase].AniTime)
+				if (cptr->FTime >= cptr->pinfo->Animation[cptr->Phase].AniTime) // no anim indexing in trophy mode
 				{
 					cptr->FTime %= cptr->pinfo->Animation[cptr->Phase].AniTime;
 				}
@@ -9434,8 +9449,15 @@ void PlaceCharacters()
 void CreateChMorphedModel(TCharacter *cptr)
 {
 
-	TAni *aptr = &cptr->pinfo->Animation[cptr->Phase];
-	TAni *paptr = &cptr->pinfo->Animation[cptr->PrevPhase];
+	int pno = DinoInfo[cptr->CType].animIndex[cptr->Phase];
+	int ppno = DinoInfo[cptr->CType].animIndex[cptr->PrevPhase];
+	if (cptr->doNotIndexAnim || TrophyMode) {
+		pno = cptr->Phase;
+		ppno = cptr->PrevPhase;
+	}
+
+	TAni *aptr = &cptr->pinfo->Animation[pno];
+	TAni *paptr = &cptr->pinfo->Animation[ppno];
 
 	int CurFrame, SplineD, PCurFrame, PSplineD;
 	float scale = cptr->scale;

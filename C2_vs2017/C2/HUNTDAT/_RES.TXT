@@ -1797,6 +1797,79 @@ deathtype{
  weaveRange = 0
 }
 
+
+
+{
+ name = 'Ichthyornis'
+ file = 'burianicth_2023_7.car'
+ ai  = 31
+ morphTime = 1
+ hearK      = 0.5
+ spawngroup{
+  spawnmax = 3
+  spawnmin = 1
+  spawnrate = 0.5
+  moveForward = TRUE
+ }
+ maxalt = 2800
+ minalt = 1800
+ waterLevel = 110
+ scale0    = 500
+ scaleA    = 0
+ mass      = 0.2
+ length    = 0.5
+ radius    = 256
+ collectRad = 256
+ health    = 1
+ shipdelta = 16
+ fearCall = 3
+ fearCall = 5
+ fearCall = 6
+ fearCall = 7
+ fearCall = 8
+ wlkspd = 0.20
+ swmspd = 0.25
+ flyspd = 2.00
+ gldspd = 1.80
+ lndspd = 0.30
+ tkfspd = 1.50
+ walkAnim = 0
+ shakeLAnim = 9
+ swimAnim = 1
+ shakeWAnim = 10
+ flyAnim = 2
+ glideAnim = 3
+ takeoffAnim = 4
+ landAnim = 5
+idlegroup{
+ anim = 11
+ startChance = 0.0703125
+ endChance = 1
+ instantRepeat = TRUE
+}
+idlegroup{
+ anim = 12
+ startChance = 0.0703125
+ endChance = 1
+ instantRepeat = TRUE
+}
+waterIgroup{
+ anim = 13
+ startChance = 0.140625
+ endChance = 1 
+ instantRepeat = TRUE
+}
+deathtype{
+ fallAnim = 6
+ dieAnim = 7
+ sleepAnim = 8
+}
+ bloR = 112
+ bloG = 0
+ bloB = 0
+}
+
+
 {
  name      = 'Poacher'
  file      = 'poacher.car'

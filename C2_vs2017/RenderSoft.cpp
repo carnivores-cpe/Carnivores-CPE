@@ -28,7 +28,7 @@ typedef struct _CharListLine
   TCharListItem Items[256];
 } TCharListLine;
 
-TCharListLine ChRenderList[128];
+TCharListLine ChRenderList[256];
 
 
 Vector2di ORList[2][2048];

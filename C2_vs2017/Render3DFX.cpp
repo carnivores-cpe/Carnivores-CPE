@@ -3748,7 +3748,9 @@ void RenderCharacterPost(TCharacter *cptr)
   int Al = 0x50;
   if (cptr->Health==0)
   {
-    int at = cptr->pinfo->Animation[cptr->Phase].AniTime;
+	  int at;
+	  if (cptr->doNotIndexAnim || TrophyMode) at = cptr->pinfo->Animation[cptr->Phase].AniTime;
+	  else at = cptr->pinfo->Animation[DinoInfo[cptr->CType].animIndex[cptr->Phase]].AniTime;
     if (Tranq) return;
     if (cptr->FTime==at-1) return;
     Al = Al * (at-cptr->FTime) / at;
