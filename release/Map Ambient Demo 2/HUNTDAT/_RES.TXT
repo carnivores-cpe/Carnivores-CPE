@@ -363,6 +363,10 @@ characters {
  ai      = 0
  morphTime = 1
  health  = 1
+ bloR = 112
+ bloG = 0
+ bloB = 0
+
 }
 
 
