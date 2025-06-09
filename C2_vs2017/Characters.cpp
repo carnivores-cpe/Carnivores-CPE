@@ -2396,6 +2396,9 @@ TBEGIN:
 
 	}
 
+	if (pdist > (ctViewR + 20) * 256)
+		if (ReplaceCharacterForward(cptr)) goto TBEGIN;
+
 	if (!cptr->State)
 	{
 		cptr->AfraidTime = 0;
@@ -2445,7 +2448,9 @@ NOTHINK:
 	{
 		cptr->tgalpha = CorrectedAlpha(FindVectorAlpha(targetdx, targetdz), cptr->alpha);//FindVectorAlpha(targetdx, targetdz);
 
-		if (cptr->State && pdist > DinoInfo[cptr->CType].weaveRange && !DinoInfo[cptr->CType].dontWeave)
+		float wr = DinoInfo[cptr->CType].weaveRange;
+		if (cptr->gliding) wr *= 3;
+		if (cptr->State && pdist > wr && !DinoInfo[cptr->CType].dontWeave)
 		{
 			float rTD;
 			rTD = 824.f;
@@ -7938,6 +7943,8 @@ TBEGIN:
 		else if (cptr->Phase == DinoInfo[cptr->CType].glideAnim)
 			if (cptr->pos.y < GetLandH(cptr->pos.x, cptr->pos.z) + DinoInfo[cptr->CType].minDepth)
 				cptr->Phase = DinoInfo[cptr->CType].flyAnim;
+			else;
+		else cptr->Phase = DinoInfo[cptr->CType].flyAnim;
 	}
 
 
@@ -8291,8 +8298,8 @@ void AnimateCharacters()
 			break;
 		case AI_TITAN:
 			//TEMP DISABLED
-			//if (cptr->Health) AnimateTitan(cptr);
-			//else AnimateIcthDead(cptr);
+			if (cptr->Health) AnimateTitan(cptr);
+			else AnimateIcthDead(cptr);
 			break;
 		case AI_MICRO:
 			//TEMP DISABLED
