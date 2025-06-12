@@ -9013,6 +9013,7 @@ void PlaceCharacters()
 	//TODO - HALF AMBIENT SPAWN AT NIGHT MANUALLY IN RES?
 
 
+
 	if (!RestartMode) {
 
 		for (int di = 0; di < DINOINFO_MAX; di++) {
@@ -9047,7 +9048,7 @@ void PlaceCharacters()
 		}
 
 		for (int p = 0; p < packTypeCount; p++) {
-			if (packType[p].SpawnInfoCh){
+			if (packType[p].SpawnInfoCh && packType[p].packMemberCh){
 				for (int si = 0; si < packType[p].SpawnInfoCh; si++) {
 					spawnGroup[packType[p].SpawnInfo[si].spawnGroup].packIndex[spawnGroup[packType[p].SpawnInfo[si].spawnGroup].packIndexCh] = p;
 					spawnGroup[packType[p].SpawnInfo[si].spawnGroup].spawnInfoIndex[spawnGroup[packType[p].SpawnInfo[si].spawnGroup].packIndexCh] = si;
@@ -9058,12 +9059,16 @@ void PlaceCharacters()
 
 	}
 
+	
+
 	for (int sg = 0; sg < TotalSpawnGroup; sg++){
 	//for (TSpawnGroup sg : spawnGroup) {
 		
-		
 
 		if (spawnGroup[sg].packIndexCh) {
+
+
+
 			int spawnNo = spawnGroup[sg].SpawnMin;
 			for (int i = 0; i < spawnGroup[sg].SpawnMax - spawnGroup[sg].SpawnMin; i++) {
 				if (spawnGroup[sg].SpawnRate * 30000 > rRand(30000)) spawnNo++;
@@ -9443,6 +9448,7 @@ void PlaceCharacters()
 
 	}
 	*/
+
 
 	PrintLog("\n");
 	DemoPoint.DemoTime = 0;
