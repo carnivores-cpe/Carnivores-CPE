@@ -257,7 +257,7 @@ function expand(n) {
 			<h3>Change Log v1.2</h3>
 			
 			<ul>
-				<li>Animation numbers is the res can be repeated.</li>
+				<li>Animation numbers in the res can be repeated.</li>
 				<li>Custom menu font colours.</li>
 				<li>Up to 10 selectable weapon slots (with numkey binding).</li>
 				<li>Up to 255 area slots.</li>
@@ -273,6 +273,7 @@ function expand(n) {
 				<li>Menu pics for observer mode, dawn, day and night.</li>
 				<li>Bigger map view on high resolutions.</li>
 				<li>Shadows on map view.</li>
+				<li>Wary Flyer AI.</li>
 				<li>Customizable speed for morphing between animations.</li>
 				<!-- huntable dino 255? -->
 			</ul>
@@ -283,6 +284,7 @@ function expand(n) {
 				<li>More accurate radar positions in software mode</li>
 				<li>More accurate distance measurements</li>
 				<li>Creatures no longer respond to calls when tranquillized</li>
+				<li>Creatures no longer weave in perfect unison</li>
 				<li>Bullet speed adjusts to compensate for framerate</li>
 				<li>Firing X-Bow or Harpoon at feet no longer kills the hunter</li>
 				<li>Resupply ship can no longer be called in survival mode or the trophy room</li>
@@ -299,6 +301,9 @@ function expand(n) {
 			</p>
 			
 			<b>
+			<p>
+			Note: Wary flyer AI requires hearK, lookK and smellK values.
+			</p>
 			Note: As of 1.2 creatures cannot exceed 64 animations.
 			<p>
 			Note: As of 1.2, all trophy creatures require a collectRad value.
@@ -379,6 +384,7 @@ function expand(n) {
 				<li>All Ice Age AI</li>
 				<li>Dangerous brachiosaurus AI</li>
 				<li>(Dangerous) land brachiosaurus AI</li>
+				<li>Wary Flyer AI.</li>
 				<li>Ichthyornis AI</li>
 				<li>Fish AI</li>
 				<li>Mosasaurus AI</li>
@@ -3466,6 +3472,8 @@ Sets the colour of the crosshair (RGB 0-255) (if cross = TRUE).
 				<div class="grid-item">Dimorphodon/Archeopterics</div>
 				<div class="grid-item">4</div>
 				<div class="grid-item">Pteranodon</div>
+				<div class="grid-item">36</div>
+				<div class="grid-item">Wary Flyer</div>
 				<div class="grid-item">5</div>
 				<div class="grid-item">Dimetrodon</div>
 				<div class="grid-item">6</div>
@@ -5127,7 +5135,27 @@ dontFear = 18</br>
 
 
 
-
+<p style="margin-top:4%;">
+	<h2 id="arrow_250" unselectable="on" onclick="expand(250)"
+		style="float:left;margin-top:0;cursor:pointer;
+		-moz-user-select:none;
+		user-select:none;
+		-webkit-user-select: none;
+		-ms-user-select: none;"
+		>></h2>
+	<div class = "con" style="margin-left:4%">
+		<h2 onclick="expand(250)" style="cursor:pointer;">_RES value: alarmCall</h2>
+		<div id="content_250" style="display: none">
+		
+			<p><b>Data type: Whole Number</b></p>
+			<p>
+			Wary Flyer AI only - optional value. Position of alarm call sound in the .car file (staring from 0). Alarm call will play when the creature detects the hunter and replaces flight calls while startled.
+		    </p>
+			
+			
+		</div>
+	</div>
+</p>
 
 
 

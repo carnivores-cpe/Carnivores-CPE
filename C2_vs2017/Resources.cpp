@@ -3846,6 +3846,8 @@ void ReadCharacterLine(FILE *stream, char *_value, char line[256], bool &spawnIn
 
 	if (strstr(line, "JumpRange")) DinoInfo[TotalC].jumpRange = atoi(value);
 
+	if (strstr(line, "alarmCall")) DinoInfo[TotalC].alarmCall = atoi(value);
+
 	if (strstr(line, "Weapon")) {
 		DinoInfo[TotalC].Weapon = atoi(value);
 		DinoInfo[TotalC].Reload = WeapInfo[DinoInfo[TotalC].Weapon].Shots;
@@ -4321,6 +4323,7 @@ void LoadResourcesScript()
 	AIInfo[AI_SMILO].sniffer = TRUE;
 	AIInfo[AI_MAMM].sniffer = TRUE;
 	AIInfo[AI_BEAR].sniffer = TRUE;
+	AIInfo[AI_WARYDIMOR].sniffer = TRUE;
 
 	AIInfo[AI_HUNTDOG].targetDistance = 8048.f;
 	AIInfo[AI_HUNTDOG].noWayCntMin = 8;
@@ -4789,10 +4792,23 @@ void LoadResourcesScript()
 
 
 	AIInfo[AI_MOSH].idleStart = 76;
-	AIInfo[AI_DIMET].idleStart = 76;
-	AIInfo[AI_GALL].idleStart = 76;
-	AIInfo[AI_PIG].idleStart = 96;
+	AIInfo[AI_MOSH].targetDistance = 2048.f; //unused
 
+	AIInfo[AI_DIMET].idleStart = 76;
+	AIInfo[AI_DIMET].targetDistance = 2048.f; //unused
+
+	AIInfo[AI_GALL].idleStart = 76;
+	AIInfo[AI_GALL].targetDistance = 2048.f; //unused
+
+	AIInfo[AI_PIG].idleStart = 96;
+	AIInfo[AI_PIG].targetDistance = 2048.f; //unused
+
+	AIInfo[AI_DIMOR].targetDistance = 4048.f; //unused
+	AIInfo[AI_PTERA].targetDistance = 4048.f; //unused
+
+
+	AIInfo[AI_WARYDIMOR].targetDistance = 4048.f;
+	AIInfo[AI_WARYDIMOR].tGAIncrement = 2.f;
 
 
 

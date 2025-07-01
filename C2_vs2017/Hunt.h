@@ -367,6 +367,7 @@ typedef struct _TCharacter
   TCharacterInfo *pinfo;
   int StateF;
   int State;
+  int _State; //WaryDimor
   int NoWayCnt, NoFindCnt, AfraidTime, tgtime;
   int PPMorphTime, PrevPhase,PrevPFTime, Phase, FTime;
 
@@ -379,6 +380,8 @@ typedef struct _TCharacter
   int Slide;
   float slidex, slidez;
   float tgx, tgz;
+
+  float tgalphaOffset; //randomised offset for weaving
 
   Vector3d pos, rpos;
   float tgalpha, alpha, beta,
@@ -701,6 +704,8 @@ typedef struct _TDinoInfo
   int runAnim, jumpAnim, walkAnim, swimAnim, flyAnim, diveAnim, glideAnim, takeoffAnim, landAnim,
 	  slideAnim, shakeLandAnim, shakeWaterAnim, climbAnim, fireAnim;
   int reloadAnim = -1;
+
+  int alarmCall = -1;
 
   TDinoDeathType deathType[32];
   int deathTypeCount;
@@ -1587,6 +1592,8 @@ _EXTORNOT TKeyMap KeyMap;
 
 
 #define AI_POACHER     8
+
+#define AI_WARYDIMOR     36
 
 //#define AI_FINAL	  29 //Last AI of max huntable roster (menu can only display 10)
 

@@ -256,6 +256,7 @@ void ResetCharacter(TCharacter *cptr)
 	cptr->pinfo = &ChInfo[cptr->CType];
 	cptr->Clone = DinoInfo[cptr->CType].Clone;
 	cptr->State = 0;
+	cptr->_State = 0;
 	cptr->StateF = 0;
 	cptr->Phase = 0;
 	cptr->FTime = 0;
@@ -270,6 +271,8 @@ void ResetCharacter(TCharacter *cptr)
 	cptr->AfraidTime = 0;
 	cptr->BloodTTime = 0;
 	cptr->BloodTime = 0;
+
+	cptr->tgalphaOffset = rRand(pi *  2);
 
 	cptr->doNotIndexAnim = false;
 
@@ -2455,7 +2458,7 @@ NOTHINK:
 			float rTD;
 			rTD = 824.f;
 
-			cptr->tgalpha += (float)sin(RealTime / rTD) / AIInfo[cptr->Clone].tGAIncrement;
+			cptr->tgalpha += (float)sin(cptr->tgalphaOffset + (RealTime / rTD)) / AIInfo[cptr->Clone].tGAIncrement;
 			if (cptr->tgalpha < 0) cptr->tgalpha += 2 * pi;
 			if (cptr->tgalpha > 2 * pi) cptr->tgalpha -= 2 * pi;
 		}
@@ -3254,7 +3257,7 @@ NOTHINK:
 			} else {
 				rTD = 1024.f;
 			}
-			cptr->tgalpha += (float)sin(RealTime / rTD) / AIInfo[cptr->Clone].tGAIncrement;
+			cptr->tgalpha += (float)sin(cptr->tgalphaOffset + (RealTime / rTD)) / AIInfo[cptr->Clone].tGAIncrement;
 			if (cptr->tgalpha < 0) cptr->tgalpha += 2 * pi;
 			if (cptr->tgalpha > 2 * pi) cptr->tgalpha -= 2 * pi;
 		}
@@ -3888,7 +3891,7 @@ NOTHINK:
 			float rTD;
 			rTD = 824.f;
 
-			cptr->tgalpha += (float)sin(RealTime / rTD) / AIInfo[cptr->Clone].tGAIncrement;
+			cptr->tgalpha += (float)sin(cptr->tgalphaOffset + (RealTime / rTD)) / AIInfo[cptr->Clone].tGAIncrement;
 			if (cptr->tgalpha < 0) cptr->tgalpha += 2 * pi;
 			if (cptr->tgalpha > 2 * pi) cptr->tgalpha -= 2 * pi;
 		}
@@ -7845,7 +7848,280 @@ SKIPROT:
 }
 
 
+void AnimateWaryDimor(TCharacter *cptr)
+{
+	NewPhase = FALSE;
+	int _Phase = cptr->Phase;
+	int _FTime = cptr->FTime;
+	float _tgalpha = cptr->tgalpha;
+	if (cptr->AfraidTime) cptr->AfraidTime = MAX(0, cptr->AfraidTime - TimeDt);
 
+	bool alertInit = FALSE;
+	if (cptr->State == 2) alertInit = TRUE;
+	if (cptr->packId >= 0) {
+		if (!cptr->State && Packs[cptr->packId]._alert) alertInit = TRUE;
+	}
+
+	if (alertInit) {
+		NewPhase = TRUE;
+		cptr->State = 1;
+	}
+
+TBEGIN:
+	float targetx = cptr->tgx;
+	float targetz = cptr->tgz;
+	float targetdx = targetx - cptr->pos.x;
+	float targetdz = targetz - cptr->pos.z;
+
+	float tdist = (float)sqrt(targetdx * targetdx + targetdz * targetdz);
+
+	float playerdx = PlayerX - cptr->pos.x;
+	float playerdz = PlayerZ - cptr->pos.z;
+	float pdist = (float)sqrt(playerdx * playerdx + playerdz * playerdz);
+
+
+	//=========== run away =================//
+
+	if (pdist > (ctViewR + 20) * 256)
+		if (ReplaceCharacterForward(cptr)) goto TBEGIN;
+
+
+	//======== exploring area ===============//
+
+
+	if (cptr->State)
+	{
+
+		nv.x = playerdx;
+		nv.z = playerdz;
+		nv.y = 0;
+		NormVector(nv, 2048.f);
+		cptr->tgx = cptr->pos.x - nv.x;
+		cptr->tgz = cptr->pos.z - nv.z;
+		cptr->tgtime = 0;
+
+
+		if (!cptr->AfraidTime)
+		{
+
+			if (pdist < 2048.f) {
+				cptr->AfraidTime = (15 + rRand(5)) * 1024;
+				if (cptr->packId >= 0) Packs[cptr->packId].alert = TRUE;
+			}
+
+			if (cptr->packId >= 0) {
+				if (pdist > 4096.f)
+				{
+					if (!Packs[cptr->packId]._alert) {
+						SetNewTargetPlace(cptr, AIInfo[cptr->Clone].targetDistance);
+						cptr->State = 0;
+					}
+				}
+				else Packs[cptr->packId].alert = true;
+			}
+			else if (pdist > 4096.f) {
+				SetNewTargetPlace(cptr, AIInfo[cptr->Clone].targetDistance);
+				cptr->State = 0;
+			}
+
+		} else if (cptr->packId >= 0) Packs[cptr->packId].alert = TRUE;
+
+
+	}
+
+	if (!cptr->State)
+	{
+
+		cptr->_State = 0;
+		cptr->AfraidTime = 0;
+		if (pdist < 812.f)
+		{
+			cptr->State = 1;
+			cptr->AfraidTime = (5 + rRand(5)) * 1024;
+			goto TBEGIN;
+		}
+
+		if (cptr->packId >= 0) {
+			float leaderdx = Packs[cptr->packId].leader->pos.x - cptr->pos.x;
+			float leaderdz = Packs[cptr->packId].leader->pos.z - cptr->pos.z;
+			float leaderdist = (float)sqrt(leaderdx * leaderdx + leaderdz * leaderdz);
+
+			if (cptr->followLeader) {
+				if (leaderdist < cptr->packDensity * 128 * 0.6)
+				{
+					cptr->followLeader = false;
+					SetNewTargetPlace(cptr, 4048.f);
+					goto TBEGIN;
+				}
+			}
+			else {
+				if (leaderdist > cptr->packDensity * 128 * 1.3)
+				{
+					cptr->followLeader = true;
+				}
+			}
+
+		}
+
+		if (cptr->followLeader) {
+			cptr->tgx = Packs[cptr->packId].leader->pos.x;
+			cptr->tgz = Packs[cptr->packId].leader->pos.z;
+		}
+		else if (tdist < 1024)
+		{
+			SetNewTargetPlace(cptr, 4048.f);
+			goto TBEGIN;
+		}
+
+	}
+	
+
+
+	//============================================//
+
+
+	cptr->tgalpha = CorrectedAlpha(FindVectorAlpha(targetdx, targetdz), cptr->alpha);//FindVectorAlpha(targetdx, targetdz);
+
+	
+	if (cptr->State && pdist > DinoInfo[cptr->CType].weaveRange && !DinoInfo[cptr->CType].dontWeave)
+	{
+		float rTD = 1024.f;
+		cptr->tgalpha += (float)sin(cptr->tgalphaOffset + (RealTime / rTD)) / AIInfo[cptr->Clone].tGAIncrement;
+		if (cptr->tgalpha < 0) cptr->tgalpha += 2 * pi;
+		if (cptr->tgalpha > 2 * pi) cptr->tgalpha -= 2 * pi;
+	}
+
+	if (cptr->tgalpha < 0) cptr->tgalpha += 2 * pi;
+	if (cptr->tgalpha > 2 * pi) cptr->tgalpha -= 2 * pi;
+
+	//===============================================//
+
+	ProcessPrevPhase(cptr);
+
+	//======== select new phase =======================//
+	cptr->FTime += TimeDt;
+
+	if (cptr->FTime >= cptr->pinfo->Animation[DinoInfo[cptr->CType].animIndex[cptr->Phase]].AniTime)
+	{
+		cptr->FTime %= cptr->pinfo->Animation[DinoInfo[cptr->CType].animIndex[cptr->Phase]].AniTime;
+		NewPhase = TRUE;
+	}
+
+	if (NewPhase)
+	{
+		if (cptr->Phase == DinoInfo[cptr->CType].flyAnim)
+			if (cptr->pos.y > GetLandH(cptr->pos.x, cptr->pos.z) + DinoInfo[cptr->CType].maxDepth)
+				cptr->Phase = DinoInfo[cptr->CType].glideAnim;
+			else;
+		else if (cptr->Phase == DinoInfo[cptr->CType].glideAnim)
+			if (cptr->pos.y < GetLandH(cptr->pos.x, cptr->pos.z) + DinoInfo[cptr->CType].minDepth)
+				cptr->Phase = DinoInfo[cptr->CType].flyAnim;
+			else;
+		else cptr->Phase = DinoInfo[cptr->CType].flyAnim;
+	}
+
+
+
+
+	//====== process phase changing ===========//
+	if ((_Phase != cptr->Phase) || NewPhase)
+
+
+		if (cptr->State && !cptr->_State) {
+			cptr->_State = 1;
+			if (DinoInfo[cptr->CType].alarmCall >= 0)
+				AddVoice3d(cptr->pinfo->SoundFX[DinoInfo[cptr->CType].alarmCall].length,
+					cptr->pinfo->SoundFX[DinoInfo[cptr->CType].alarmCall].lpData,
+					cptr->pos.x, cptr->pos.y, cptr->pos.z);
+		} else if ((rand() & 1023) > 980)
+		{
+			if (cptr->State && DinoInfo[cptr->CType].alarmCall >= 0)
+				AddVoice3d(cptr->pinfo->SoundFX[DinoInfo[cptr->CType].alarmCall].length,
+					cptr->pinfo->SoundFX[DinoInfo[cptr->CType].alarmCall].lpData,
+					cptr->pos.x, cptr->pos.y, cptr->pos.z);
+			else ActivateCharacterFx(cptr);
+		}
+
+	if (_Phase != cptr->Phase)
+	{
+		if (!NewPhase) cptr->FTime = 0;
+		if (cptr->PPMorphTime > 128)
+		{
+			cptr->PrevPhase = _Phase;
+			cptr->PrevPFTime = _FTime;
+			cptr->PPMorphTime = 0;
+		}
+	}
+
+
+	cptr->FTime %= cptr->pinfo->Animation[DinoInfo[cptr->CType].animIndex[cptr->Phase]].AniTime;
+
+
+	//========== rotation to tgalpha ===================//
+
+	float rspd, currspeed, tgbend;
+	float dalpha = (float)fabs(cptr->tgalpha - cptr->alpha);
+	float drspd = dalpha;
+	if (drspd > pi) drspd = 2 * pi - drspd;
+
+
+	if (drspd > 0.02)
+		if (cptr->tgalpha > cptr->alpha) currspeed = 0.6f + drspd * 1.2f;
+		else currspeed = -0.6f - drspd * 1.2f;
+	else currspeed = 0;
+
+	if (dalpha > pi) currspeed *= -1;
+	DeltaFunc(cptr->rspeed, currspeed, (float)TimeDt / 460.f);
+
+	tgbend = drspd / 2.f;
+	if (tgbend > pi / 2) tgbend = pi / 2;
+
+	tgbend *= SGN(currspeed);
+	if (fabs(tgbend) > fabs(cptr->bend)) DeltaFunc(cptr->bend, tgbend, (float)TimeDt / 800.f);
+	else DeltaFunc(cptr->bend, tgbend, (float)TimeDt / 400.f);
+
+
+	rspd = cptr->rspeed * TimeDt / 1024.f;
+	if (drspd < fabs(rspd)) cptr->alpha = cptr->tgalpha;
+	else cptr->alpha += rspd;
+
+
+	if (cptr->alpha > pi * 2) cptr->alpha -= pi * 2;
+	if (cptr->alpha < 0) cptr->alpha += pi * 2;
+
+	//========== movement ==============================//
+	cptr->lookx = (float)cos(cptr->alpha);
+	cptr->lookz = (float)sin(cptr->alpha);
+
+	float curspeed = 0;
+	if (cptr->Phase == DinoInfo[cptr->CType].flyAnim) curspeed = DinoInfo[cptr->CType].flyspd;
+	if (cptr->Phase == DinoInfo[cptr->CType].glideAnim) curspeed = DinoInfo[cptr->CType].gldspd;
+
+	if (drspd > pi / 2.f) curspeed *= 2.f - 2.f*drspd / pi;
+
+	if (cptr->Phase == DinoInfo[cptr->CType].flyAnim)
+		DeltaFunc(cptr->pos.y, GetLandH(cptr->pos.x, cptr->pos.z) + (DinoInfo[cptr->CType].maxDepth * 1.5), TimeDt / 6.f);
+	else
+		DeltaFunc(cptr->pos.y, GetLandH(cptr->pos.x, cptr->pos.z), TimeDt / 16.f);
+
+
+	if (cptr->pos.y < GetLandH(cptr->pos.x, cptr->pos.z) + 236)
+		cptr->pos.y = GetLandH(cptr->pos.x, cptr->pos.z) + 256;
+
+
+
+	//========== process speed =============//
+	curspeed *= cptr->scale;
+	DeltaFunc(cptr->vspeed, curspeed, TimeDt / 2024.f);
+
+	cptr->pos.x += cptr->lookx * cptr->vspeed * TimeDt;
+	cptr->pos.z += cptr->lookz * cptr->vspeed * TimeDt;
+
+	cptr->tggamma = cptr->rspeed / 4.0f;
+	if (cptr->tggamma > pi / 6.f) cptr->tggamma = pi / 6.f;
+	if (cptr->tggamma < -pi / 6.f) cptr->tggamma = -pi / 6.f;
+	DeltaFunc(cptr->gamma, cptr->tggamma, TimeDt / 2048.f);
+}
 
 
 
@@ -8254,6 +8530,10 @@ void AnimateCharacters()
 		case AI_DIMET:
 			if (cptr->Health) AnimateClassicAmbient(cptr);
 			else AnimateDeadCommon(cptr);
+			break;
+		case AI_WARYDIMOR:
+			if (cptr->Health) AnimateWaryDimor(cptr);
+			else AnimateIcthDead(cptr);
 			break;
 		case AI_DIMOR:
 		case AI_PTERA:
