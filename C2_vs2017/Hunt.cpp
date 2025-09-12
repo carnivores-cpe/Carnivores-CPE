@@ -135,11 +135,18 @@ void PreCashGroundModel()
         rv.y = WaterList[ WMap[yy][xx] ].wlevel*ctHScale - CameraY;
 
         float wdelta = (float)sin(-pi/2 + RandomMap[yy & 31][xx & 31]/128+RealTime/200.f);
+		float magn = (0.03 * (getWaterLev(xx * 256, yy * 256) - GetLandH(xx * 256, yy * 256)));
 
         if ( (FMap[yy][xx] & fmWater) && (r < ctViewR1-4))
         {
           rv.x+=(float)sin(xx+yy + RealTime/200.f) * 16.f;
           rv.z+=(float)sin(pi/2.f + xx+yy + RealTime/200.f) * 16.f;
+		  rv.y += (float)sin((
+			  (float)sqrt(abs(xx - 512) * abs(xx - 512) + abs(yy - 512) * abs(yy - 512)))
+			  * 0.3 + RealTime / 500.f) *
+			  (10.f + magn);// dst2;
+		  rv.y += (float)sin((xx + yy) * 0.5 + RealTime / 500.f) * magn/3.f;
+		  //131072
         }
 
         rv = RotateVector(rv);
@@ -2052,6 +2059,7 @@ void ProcessControls()
     }
   }
 
+  
   if ((CrouchMode) | (UNDERWATER) )
   {
     if (HeadY<110.f) HeadY = 110.f;
@@ -2064,11 +2072,13 @@ void ProcessControls()
     HeadY+=DeltaT*(60 + (220 - HeadY) * 5);
     if (HeadY>220.f) HeadY = 220.f;
   }
-
+  
 
   float h  = GetLandQH(PlayerX, PlayerZ);
   float hu = GetLandCeilH(PlayerX, PlayerZ)-64;
   float hwater = GetLandUpH(PlayerX, PlayerZ);
+
+  if (SWIM) PlayerY = hwater - 148;
 
   if (DemoPoint.DemoTime) goto SKIPYMOVE;
 
@@ -2084,6 +2094,7 @@ void ProcessControls()
 
   if (FLY) YSpeed=0;
   PlayerY+=YSpeed*DeltaT;
+  
 
 
   if (PlayerY+HeadY>hu)
@@ -2097,7 +2108,7 @@ void ProcessControls()
       if (HeadY<110) HeadY = 110;
     }
   }
-
+  
   if (PlayerY<h)
   {
     if (YSpeed<-800) HeadY+=YSpeed/100;
@@ -2109,15 +2120,17 @@ void ProcessControls()
                 fxStep[(RealTime % 3)].lpData, 64);
     YSpeed = 0;
   }
-
+  
 SKIPYMOVE:
 
+  
+	
   SWIM = FALSE;
   if (!UNDERWATER && (KeyFlags & kfJump) )
-    if (PlayerY<hwater-148)
+    if (PlayerY<=hwater - 148)
     {
       SWIM = TRUE;
-      PlayerY = hwater-148;
+	  PlayerY = hwater -148;
       YSpeed = 0;
     }
 
@@ -2127,6 +2140,7 @@ SKIPYMOVE:
   else stepdy = (float)MIN(1.f,fabs(VSpeed) + (float)fabs(SSpeed)) * (float)sin((float)RealTime / 80.f) * 22.f;
   float d = stepdy - _s;
 
+  
   if (!UNDERWATER)
     if (PlayerY<h+64)
       if (d<0 && stepdd >= 0)
@@ -2139,11 +2153,11 @@ SKIPYMOVE:
         else
           AddVoicev(fxStep[(RealTime % 3)].length,
                     fxStep[(RealTime % 3)].lpData, 24+(int)(VSpeed*50.f));
+  
   stepdd = d;
-
+  
   if (PlayerBeta> 1.46f) PlayerBeta= 1.46f;
   if (PlayerBeta<-1.26f) PlayerBeta=-1.26f;
-
 
 //======== set camera pos ===================//
 
@@ -2163,7 +2177,7 @@ SKIPYMOVE:
     CameraBeta  = PlayerBeta  + HeadBeta;
 
 	CameraX = PlayerX - sa * HeadBackR;
-    CameraY = PlayerY + HeadY + stepdy;// + 2024;
+	CameraY = PlayerY + HeadY + stepdy;// + 2024;
     CameraZ = PlayerZ + ca * HeadBackR;
   }
 

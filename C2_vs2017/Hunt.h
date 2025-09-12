@@ -1133,6 +1133,7 @@ float GetLandCeilH(float, float);
 float GetLandH(float, float);
 float GetLandOH(int, int);
 float GetLandLt(float, float);
+float getWaterLev(float, float);
 float GetLandUpH(float, float);
 float GetLandQH(float, float);
 float GetLandQHNoObj(float, float);

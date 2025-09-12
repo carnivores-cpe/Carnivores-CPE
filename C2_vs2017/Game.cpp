@@ -156,7 +156,17 @@ float GetLandOUH(int x, int y)
     return (float)((int)(HMap[y][x]+HMap[y+1][x+1])/2.f)*ctHScale;
 }
 
+float getWaterLev(float x, float y) //no waves
+{
 
+	int CX = (int)x / 256;
+	int CY = (int)y / 256;
+
+	if (!(FMap[CY][CX] & fmWaterA)) return GetLandH(x, y);
+
+	return (float)(WaterList[WMap[CY][CX]].wlevel * ctHScale);
+
+}
 
 float GetLandUpH(float x, float y)
 {
@@ -166,8 +176,15 @@ float GetLandUpH(float x, float y)
 
   if (!(FMap[CY][CX] & fmWaterA)) return GetLandH(x,y);
 
-  return (float)(WaterList[ WMap[CY][CX] ].wlevel * ctHScale);
-
+  float xx = x / 256;
+  float yy = y / 256;
+  float magn = (0.03 * (getWaterLev(xx * 256, yy * 256) - GetLandH(xx * 256, yy * 256)));
+  float depth = (float)sin((
+	  (float)sqrt(fabs(xx - 512) * fabs(xx - 512) + fabs(yy - 512) * fabs(yy - 512)))
+	  * 0.3 + RealTime / 500.f) *
+	  (10.f + magn);// dst2;
+  depth += (float)sin((xx + yy) * 0.5 + RealTime / 500.f) * magn / 3.f;
+  return (float)(WaterList[WMap[CY][CX]].wlevel * ctHScale) + depth;
 }
 
 bool waterNear(float x, float y, float maxDist)
