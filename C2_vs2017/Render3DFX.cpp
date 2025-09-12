@@ -2074,9 +2074,6 @@ void ProcessMapW(int x, int y, int r)
 
 }
 
-
-
-
 void ProcessMapW2(int x, int y, int r)
 {
   if (!( (FMap[y  ][x  ] & fmWaterA) &&
@@ -2290,7 +2287,7 @@ void RenderWCircles()
 
 void RenderWater()
 {
-  grDepthMask( FXFALSE );
+  grDepthMask( FXTRUE );
   grConstantColorValue(0xFF000000);
   guAlphaSource(GR_ALPHASOURCE_ITERATED_ALPHA);
   grFogMode(GR_FOG_DISABLE);

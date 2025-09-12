@@ -1,7 +1,10 @@
-CarnivoresII 3DFX video driver. Build v2.04. Sep.24 1999.
+CarnivoresII Soft video driver. Build v2.04. Sep.24 1999.
 Creating main window...Ok.
-Checking 3dfx:
-Voodoo card.
+
+==Init Direct Draw==
+DirectDrawCreate: Ok
+Direct Draw activated.
+
 Trophy Loaded.
 TrophyB Loaded.
 Init Engine: Ok.
@@ -50,15 +53,12 @@ Loading: HUNTDAT\gall.car
 Loading: HUNTDAT\dimor2.car
 Loading: HUNTDAT\ptera.car
 Loading: HUNTDAT\dimet.car
+Loading: HUNTDAT\par9.car
 Loading: HUNTDAT\anky_tt.car
 Loading: HUNTDAT\allot_iictt.car
 Loading: HUNTDAT\chasmosa_tt.car
 Loading: HUNTDAT\spino_stt.car
 Loading: HUNTDAT\dangerbrachikiller9.car
-Loading: HUNTDAT\mosa36.car
-Loading: HUNTDAT\climatius4.car
-Loading: HUNTDAT\parexusn5.car
-Loading: HUNTDAT\parexusn5_pink.car
 Loading: HUNTDAT\burianicth_2023_7.car
 Loading: HUNTDAT\poacher.car
 Loading: HUNTDAT\titanopteryx_flier-placeholder.car
@@ -91,9 +91,7 @@ Loading: HUNTDAT\WEAPONS\harpoon2.car
 Loading: HUNTDAT\WEAPONS\bullet6.tga
 Loading: HUNTDAT\WEAPONS\chambpoon.tga
 Loading: MULTIPLAYER\AVATARS\Hitbox.car
-Voodoo: Can't set selected video mode
-Start Address: 0
-End   Address: 8388592
+SetCooperativeLevel: Ok
 Audio_UpdateGeometry: 324 faces uploaded
 Trophy Loaded.
 TrophyB Loaded.
