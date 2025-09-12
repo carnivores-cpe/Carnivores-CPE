@@ -52,8 +52,8 @@ Loading: HUNTDAT\ptera.car
 Loading: HUNTDAT\dimet.car
 Loading: HUNTDAT\par9.car
 Loading: HUNTDAT\anky_tt.car
+Loading: HUNTDAT\stego_tt.car
 Loading: HUNTDAT\allot_iictt.car
-Loading: HUNTDAT\chasmosa_tt.car
 Loading: HUNTDAT\alpharaptor.car
 Loading: HUNTDAT\veloteeth5_iidct2.car
 Loading: HUNTDAT\dangerbrachikiller9.car
@@ -97,8 +97,8 @@ Voodoo: Can't set selected video mode
 Start Address: 0
 End   Address: 8388592
 Audio_UpdateGeometry: 324 faces uploaded
-Trophy Loaded.
-TrophyB Loaded.
+Trophy Saved.
+TrophyB Saved.
   AudioStop ()
  Releasing Listener3D
  Releasing PrimaryBuffer

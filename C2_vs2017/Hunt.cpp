@@ -2115,9 +2115,9 @@ void ProcessControls()
     if (PlayerY < h-80) PlayerY = h - 80;
     PlayerY+=(h-PlayerY+32)*DeltaT*4;
     if (PlayerY>h) PlayerY = h;
-    if (YSpeed<-600)
-      AddVoicev(fxStep[(RealTime % 3)].length,
-                fxStep[(RealTime % 3)].lpData, 64);
+    //if (YSpeed<-600)
+    //  AddVoicev(fxStep[(RealTime % 3)].length,
+    //            fxStep[(RealTime % 3)].lpData, 64);
     YSpeed = 0;
   }
   
@@ -2134,27 +2134,28 @@ SKIPYMOVE:
       YSpeed = 0;
     }
 
-  float _s = stepdy;
+  //float _s = stepdy;
+  stepdd = stepdy;
 
   if (SWIM) stepdy = (float)sin((float)RealTime / 360) * 20;
   else stepdy = (float)MIN(1.f,fabs(VSpeed) + (float)fabs(SSpeed)) * (float)sin((float)RealTime / 80.f) * 22.f;
-  float d = stepdy - _s;
+  //float d = stepdy - _s;
 
   
   if (!UNDERWATER)
     if (PlayerY<h+64)
-      if (d<0 && stepdd >= 0)
-        if (ONWATER)
-        {
-          AddWCircle(CameraX, CameraZ, 1.2);
-          AddVoicev(fxStepW[(RealTime % 3)].length,
-                    fxStepW[(RealTime % 3)].lpData, 64+(int)(VSpeed*30.f));
-        }
-        else
-          AddVoicev(fxStep[(RealTime % 3)].length,
-                    fxStep[(RealTime % 3)].lpData, 24+(int)(VSpeed*50.f));
+		if (stepdy < 0 && stepdd >= 0) {
+			if (ONWATER) {
+				AddWCircle(CameraX, CameraZ, 1.2);
+				AddVoicev(fxStepW[(RealTime % 3)].length,
+					fxStepW[(RealTime % 3)].lpData, 64 + (int)(VSpeed*30.f));
+			} else {
+				AddVoicev(fxStep[(RealTime % 3)].length,
+					fxStep[(RealTime % 3)].lpData, 24 + (int)(VSpeed*50.f));
+			}
+		}
   
-  stepdd = d;
+//  stepdd = d;
   
   if (PlayerBeta> 1.46f) PlayerBeta= 1.46f;
   if (PlayerBeta<-1.26f) PlayerBeta=-1.26f;
