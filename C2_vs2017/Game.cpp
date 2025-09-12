@@ -3166,7 +3166,8 @@ void AnimateProcesses()
 
   for (int w=0; w<WCCount; w++)
   {
-    if (WCircles[w].scale > 1)
+	  WCircles[w].pos.y = GetLandUpH(WCircles[w].pos.x, WCircles[w].pos.z);
+	  if (WCircles[w].scale > 1)
       WCircles[w].FTime+=(int)(TimeDt*3 / WCircles[w].scale);
     else
       WCircles[w].FTime+=TimeDt*3;
