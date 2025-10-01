@@ -2530,6 +2530,7 @@ int PASCAL WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 
 //  LoadCharacterInfo(BeamModel, "HUNTDAT\\BEAM.CAR");
   LoadCharacterInfo(WCircleModel, "HUNTDAT\\WCIRCLE2.CAR");
+  LoadCharacterInfo(BoatModel, "HUNTDAT\\boat.car");
   LoadCharacterInfo(ShipModel, "HUNTDAT\\ship2a.car");
   LoadCharacterInfo(SShipModel, "HUNTDAT\\sship.car");
   LoadCharacterInfo(DShipModel, "HUNTDAT\\dship.car");

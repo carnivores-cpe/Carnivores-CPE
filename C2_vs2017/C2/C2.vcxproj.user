@@ -14,7 +14,7 @@
     <DebuggerFlavor>WindowsLocalDebugger</DebuggerFlavor>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release Soft|Win32'">
-    <LocalDebuggerCommandArguments>prj=huntdat\areas\area2 reg=0 din=1 wep=127 dtm=1 -binoc -bintext -callbox -map -radar -double -supply </LocalDebuggerCommandArguments>
+    <LocalDebuggerCommandArguments>prj=huntdat\areas\area1 reg=0 din=8 wep=127 dtm=1 -binoc -bintext -callbox -map -radar -double -supply </LocalDebuggerCommandArguments>
     <DebuggerFlavor>WindowsLocalDebugger</DebuggerFlavor>
   </PropertyGroup>
 </Project>

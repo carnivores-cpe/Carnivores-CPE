@@ -2668,6 +2668,11 @@ TBEGIN:
 
 }
 
+void AnimateBoat()
+{
+	Boat.pos.y = GetLandUpH(Boat.pos.x, Boat.pos.z);
+}
+
 void AnimateShip()
 {
   if (Ship.State==-1)
@@ -3138,6 +3143,7 @@ void AnimateProcesses()
   }
 
   CheckAfraid();
+  AnimateBoat();
   AnimateShip();
   AnimateSShip();
   AnimateDShip();

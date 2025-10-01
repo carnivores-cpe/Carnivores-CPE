@@ -275,6 +275,49 @@ NOSHIP:
 
 
 
+  //=========== boat ================//
+  Boat.rpos.x = Boat.pos.x - CameraX;
+  Boat.rpos.y = Boat.pos.y - CameraY;
+  Boat.rpos.z = Boat.pos.z - CameraZ;
+  r = (float)max(fabs(Boat.rpos.x), fabs(Boat.rpos.z));
+  ri = -1 + (int)(r / 256.f + 1.6f);
+
+  if (Boat.State < 1)
+	  if (ri < ctViewR - 6)
+	  {
+		  int h = (int)((Boat.pos.y - GetLandUpH(Boat.pos.x, Boat.pos.z)) / 1.8);
+		  //           AddShadowCircle((int)Ship.pos.x+h, (int)Ship.pos.z+h, 1200, 24);
+	  }
+
+
+
+
+
+  if (HARD3D) return;
+  //for (int c = 0; c <= ctViewR; c++)
+  //  ChRenderList[c].ICount = 0;
+
+
+  //=========== boat ================//
+
+  if (Boat.State == -1) goto NOBOAT;
+  if (ri < 0) ri = 0;
+  if (ri < ctViewR)
+  {
+	  Boat.rpos = RotateVector(Boat.rpos);
+	  if (Boat.rpos.z > BackViewR) goto NOBOAT;
+	  if (fabs(Boat.rpos.x) > -Boat.rpos.z + BackViewR) goto NOBOAT;
+
+	  int i = ChRenderList[ri].ICount++;
+	  ChRenderList[ri].Items[i].CType = 9;
+  }
+NOBOAT:
+  ;
+
+
+
+
+
   //=========== sship ================//
   SShip.rpos.x = SShip.pos.x - CameraX;
   SShip.rpos.y = SShip.pos.y - CameraY;
@@ -543,6 +586,8 @@ void RenderChList(int r)
 		  RenderBullet(ChRenderList[r].Items[c].Index);
 	  } else if (ChRenderList[r].Items[c].CType == 8) {
 		  RenderDShip();
+	  } else if (ChRenderList[r].Items[c].CType == 9) {
+		  RenderBoat();
 	  }
 	
   }
@@ -2644,6 +2689,28 @@ void RenderDShip()
 	else if(DShip.rpos.z <= BackViewR && fabs(DShip.rpos.x) <= -DShip.rpos.z + BackViewR)
 		RenderModel(DShipModel.mptr,
 			DShip.rpos.x, DShip.rpos.y, DShip.rpos.z, 240, 0, -DShip.alpha - pi / 2 + CameraAlpha, CameraBeta);
+}
+
+
+
+void RenderBoat()
+{
+	float zs = (float)VectorLength(Boat.rpos);
+	if (zs > ctViewR * 256) return;
+
+	GlassL = 0;
+	if (zs > 256 * (ctViewR - 4))
+		GlassL = min(255, (zs / 4 - 64 * (ctViewR - 4)));
+
+
+	CreateMorphedModelBetaGamma(BoatModel.mptr, &BoatModel.Animation[0], Boat.FTime, 1.0, Boat.beta, Boat.gamma);
+
+	if (fabs(Boat.rpos.z) < 4000)
+		RenderModelClip(BoatModel.mptr,
+			Boat.rpos.x, Boat.rpos.y, Boat.rpos.z, 240, 0, -Boat.alpha - pi / 2 + CameraAlpha, CameraBeta);
+	else
+		RenderModel(BoatModel.mptr,
+			Boat.rpos.x, Boat.rpos.y, Boat.rpos.z, 240, 0, -Boat.alpha - pi / 2 + CameraAlpha, CameraBeta);
 }
 
 

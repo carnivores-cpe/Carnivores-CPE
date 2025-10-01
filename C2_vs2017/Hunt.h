@@ -1011,6 +1011,7 @@ void DrawSurvivalText(int, int);
 void DrawHMap();
 void RenderCharacter(TCharacter*);
 void RenderShip();
+void RenderBoat();
 void RenderSShip();
 void RenderDShip();
 void RenderBag();
@@ -1257,6 +1258,7 @@ _EXTORNOT   TWind       Wind;
 _EXTORNOT   TShip       Ship;
 _EXTORNOT   TShip       SShip;
 _EXTORNOT   TShip       DShip;
+_EXTORNOT   TShip       Boat;
 _EXTORNOT   TShipTask   ShipTask;
 _EXTORNOT   TBag        AmmoBag;
 
@@ -1366,6 +1368,7 @@ _EXTORNOT TCharacterInfo ShipModel;
 _EXTORNOT TCharacterInfo SShipModel;
 _EXTORNOT TCharacterInfo DShipModel;
 _EXTORNOT TCharacterInfo BagModel;
+_EXTORNOT TCharacterInfo BoatModel;
 _EXTORNOT TSpawnGroup spawnGroup[256];
 //_EXTORNOT int AI_to_CIndex[DINOINFO_MAX];
 //_EXTORNOT int TrophyIndex[DINOINFO_MAX];
@@ -1394,6 +1397,9 @@ _EXTORNOT TCharacter     MPlayers[3]; //multiplayer
 _EXTORNOT THitBox     HitBox;
 //_EXTORNOT int MapShadowDir, MapShadowMax;
 
+_EXTORNOT int BoatSpawnX;
+_EXTORNOT int BoatSpawnZ;
+_EXTORNOT float BoatSpawnA;
 _EXTORNOT int SurvivalSpawnX; //survival
 _EXTORNOT int SurvivalSpawnZ;
 _EXTORNOT float SurvivalSpawnA;

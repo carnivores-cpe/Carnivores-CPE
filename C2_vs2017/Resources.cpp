@@ -1794,6 +1794,15 @@ void resetDSHip() {
 	DShip.pos.y = 256 * 50;
 }
 
+void resetBoat() {
+	if (BoatSpawnX) Boat.State = 1;
+	Boat.alpha = 0;
+	Boat.speed = 0;
+	Boat.pos.x = 256 * BoatSpawnX;
+	Boat.pos.z = 256 * BoatSpawnZ;
+	Boat.alpha = BoatSpawnA;
+}
+
 void resetSSHip() {
 	SShip.State = 0;
 	SShip.alpha = 0;
@@ -1851,6 +1860,7 @@ void ReInitGame()
 	  PlaceCharactersSurvival();
   } else {
 	  PlaceCharacters();
+	  resetBoat();
 	  resetSSHip();
 	  resetDSHip();
 	  resetBullets();
@@ -3092,6 +3102,16 @@ void ReadAreaTable (FILE *stream, int areaNumber)
 
 					//if (strstr(line, "mapShadowDir")) MapShadowDir = atoi(value);
 					//if (strstr(line, "mapShadowMax")) MapShadowMax = atoi(value);
+
+					if (strstr(line, "boatX")) {
+						BoatSpawnX = atoi(value);
+						Boat.State = 1;
+					}
+					if (strstr(line, "boatY")) {
+						BoatSpawnZ = atoi(value);
+						Boat.State = 1;
+					}
+					if (strstr(line, "boatA")) BoatSpawnA = atof(value);
 
 					if (strstr(line, "survivalPlayerX")) SurvivalSpawnX = atoi(value);
 					if (strstr(line, "survivalPlayerY")) SurvivalSpawnZ = atoi(value);

@@ -5065,6 +5065,31 @@ void RenderDShipPost()
 	//grConstantColorValue(0xFF000000);
 }
 
+void RenderBoatPost()
+{
+	if (Boat.State < 1) return;
+	GlassL = 0;
+	zs = (int)VectorLength(Boat.rpos);
+	if (zs > 256 * (ctViewR)) return;
+
+	if (zs > 256 * (ctViewR - 4))
+		GlassL = MIN(255, (int)(zs - 256 * (ctViewR - 4)) / 4);
+
+
+	/*grConstantColorValue( (255-GlassL) << 24);*/
+
+	CreateMorphedModelBetaGamma(BoatModel.mptr, &BoatModel.Animation[0], Boat.FTime, 1.0, Boat.beta, Boat.gamma);
+
+	if (fabs(Boat.rpos.z) < 4000)
+		RenderModelClip(BoatModel.mptr,
+			Boat.rpos.x, Boat.rpos.y, Boat.rpos.z, 210, 0, -Boat.alpha - pi / 2 + CameraAlpha, CameraBeta);
+	else
+		RenderModel(BoatModel.mptr,
+			Boat.rpos.x, Boat.rpos.y, Boat.rpos.z, 210, 0, -Boat.alpha - pi / 2 + CameraAlpha, CameraBeta);
+
+	/*grConstantColorValue( 0xFF000000);*/
+}
+
 void RenderSShipPost()
 {
 	if (SShip.State < 1) return;
@@ -5226,6 +5251,27 @@ void Render3DHardwarePosts()
     RenderShipPost();
   }
 NOSHIP:
+  ;
+
+  Boat.rpos.x = Boat.pos.x - CameraX;
+  Boat.rpos.y = Boat.pos.y - CameraY;
+  Boat.rpos.z = Boat.pos.z - CameraZ;
+  r = (float)MAX(fabs(Boat.rpos.x), fabs(Boat.rpos.z));
+
+  ri = -1 + (int)(r / 256.f + 0.2f);
+  if (ri < 0) ri = 0;
+  if (ri < ctViewR)
+  {
+	  if (FOGON)
+		  CalcFogLevel_Gradient(Boat.rpos);
+
+	  Boat.rpos = RotateVector(Boat.rpos);
+	  if (Boat.rpos.z > BackViewR) goto NOBOAT;
+	  if (fabs(Boat.rpos.x) > -Boat.rpos.z + BackViewR) goto NOBOAT;
+
+	  RenderBoatPost();
+  }
+NOBOAT:
   ;
 
   SShip.rpos.x = SShip.pos.x - CameraX;
