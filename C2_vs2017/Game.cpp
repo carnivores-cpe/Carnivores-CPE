@@ -631,6 +631,7 @@ void AddBeam(float x, float z, float scale)
 
 void AddWCircle(float x, float z, float scale)
 {
+	if (WCCount > 2000) return;
   WCircles[WCCount].pos.x = x;
   WCircles[WCCount].pos.z = z;
   WCircles[WCCount].pos.y = GetLandUpH(x, z);
