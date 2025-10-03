@@ -16,6 +16,9 @@ areatable {
  mapShadowMax = 20
  boatX = 100
  boatY = 100
+ boatA = -45
+ boatL = 1024
+ boatW = 512
 }
 
 {

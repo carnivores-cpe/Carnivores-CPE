@@ -4741,7 +4741,7 @@ void DrawHMap()
   if (Boat.State) {
 	  xx = VideoCX - miniMapScaleB + (int)Boat.pos.x / miniMapScaleC;
 	  yy = VideoCY - miniMapScaleB + (int)Boat.pos.z / miniMapScaleC;
-	  DrawBoxBoat((WORD*)linfo.lfbPtr, lsw, xx + 1, yy + 1, 8 << 11);
+	  DrawBoxBoat((WORD*)linfo.lfbPtr, lsw, xx + 1, yy + 1, 8 << 6);
 	  DrawBoxBoat((WORD*)linfo.lfbPtr, lsw, xx, yy, 30 << 6);
   }
 

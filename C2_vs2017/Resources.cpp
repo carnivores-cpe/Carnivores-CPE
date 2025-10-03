@@ -1800,7 +1800,7 @@ void resetBoat() {
 	Boat.speed = 0;
 	Boat.pos.x = 256 * BoatSpawnX;
 	Boat.pos.z = 256 * BoatSpawnZ;
-	Boat.alpha = BoatSpawnA;
+	Boat.alpha = pi * 2 * BoatSpawnA / 360.f;
 }
 
 void resetSSHip() {
@@ -3111,7 +3111,11 @@ void ReadAreaTable (FILE *stream, int areaNumber)
 						BoatSpawnZ = atoi(value);
 						Boat.State = 1;
 					}
+
 					if (strstr(line, "boatA")) BoatSpawnA = atof(value);
+					if (strstr(line, "boatW")) BoatWidth = atof(value);
+					if (strstr(line, "boatL")) BoatLength = atof(value);
+
 
 					if (strstr(line, "survivalPlayerX")) SurvivalSpawnX = atoi(value);
 					if (strstr(line, "survivalPlayerY")) SurvivalSpawnZ = atoi(value);

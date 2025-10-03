@@ -2528,9 +2528,15 @@ int PASCAL WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
   LoadModelEx(CompasModel, "HUNTDAT\\COMPAS.3DF");
   LoadModelEx(Binocular,   "HUNTDAT\\BINOCUL.3DF");
 
+//  if (BoatSpawnIn) {
+//	  wsprintf(logt, "HUNTDAT\\%s", BoatFName);
+//	  LoadCharacterInfo(BoatModel, logt);
+//  }
+
+  LoadCharacterInfo(BoatModel, "HUNTDAT\\boat.CAR");
+
 //  LoadCharacterInfo(BeamModel, "HUNTDAT\\BEAM.CAR");
   LoadCharacterInfo(WCircleModel, "HUNTDAT\\WCIRCLE2.CAR");
-  LoadCharacterInfo(BoatModel, "HUNTDAT\\boat.car");
   LoadCharacterInfo(ShipModel, "HUNTDAT\\ship2a.car");
   LoadCharacterInfo(SShipModel, "HUNTDAT\\sship.car");
   LoadCharacterInfo(DShipModel, "HUNTDAT\\dship.car");

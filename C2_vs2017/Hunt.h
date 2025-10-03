@@ -1400,6 +1400,8 @@ _EXTORNOT THitBox     HitBox;
 _EXTORNOT int BoatSpawnX;
 _EXTORNOT int BoatSpawnZ;
 _EXTORNOT float BoatSpawnA;
+_EXTORNOT float BoatLength;
+_EXTORNOT float BoatWidth;
 _EXTORNOT int SurvivalSpawnX; //survival
 _EXTORNOT int SurvivalSpawnZ;
 _EXTORNOT float SurvivalSpawnA;
