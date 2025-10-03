@@ -4543,6 +4543,67 @@ void DrawCircle(int cx, int cy, int R)
 }
 
 
+void DrawBoxBoat(WORD *lfbPtr, int lsw, int xx, int yy, WORD c)
+{
+	yy = yy * lsw + xx;
+	*(lfbPtr + yy + 1) = c;
+	*(lfbPtr + yy + 2) = c;
+	*(lfbPtr + yy + 3) = c;
+	*(lfbPtr + yy + 4) = c;
+	*(lfbPtr + yy + 5) = c;
+	yy += lsw;
+	*(lfbPtr + yy -4) = c;
+	*(lfbPtr + yy -3) = c;
+	*(lfbPtr + yy -2) = c;
+	yy += lsw;
+	*(lfbPtr + yy -3) = c;
+	*(lfbPtr + yy -2) = c;
+	*(lfbPtr + yy -1) = c;
+	*(lfbPtr + yy) = c;
+	*(lfbPtr + yy + 1) = c;
+	*(lfbPtr + yy + 2) = c;
+	*(lfbPtr + yy + 3) = c;
+	*(lfbPtr + yy + 4) = c;
+	yy += lsw;
+	*(lfbPtr + yy -2) = c;
+	*(lfbPtr + yy -1) = c;
+	*(lfbPtr + yy) = c;
+	*(lfbPtr + yy + 1) = c;
+	*(lfbPtr + yy + 2) = c;
+	*(lfbPtr + yy + 3) = c;
+	*(lfbPtr + yy + 4) = c;
+	yy -= lsw * 4;
+	*(lfbPtr + yy -5) = c;
+	*(lfbPtr + yy -4) = c;
+	*(lfbPtr + yy -3) = c;
+	*(lfbPtr + yy -2) = c;
+	*(lfbPtr + yy -1) = c;
+	*(lfbPtr + yy + 1) = c;
+	*(lfbPtr + yy + 2) = c;
+	*(lfbPtr + yy + 3) = c;
+	*(lfbPtr + yy + 4) = c;
+	yy -= lsw;
+	*(lfbPtr + yy -4) = c;
+	*(lfbPtr + yy -3) = c;
+	*(lfbPtr + yy -2) = c;
+	*(lfbPtr + yy -1) = c;
+	*(lfbPtr + yy + 1) = c;
+	*(lfbPtr + yy + 2) = c;
+	*(lfbPtr + yy + 3) = c;
+	yy -= lsw;
+	*(lfbPtr + yy -3) = c;
+	*(lfbPtr + yy -2) = c;
+	*(lfbPtr + yy -1) = c;
+	*(lfbPtr + yy + 1) = c;
+	*(lfbPtr + yy + 2) = c;
+	yy -= lsw;
+	*(lfbPtr + yy -2) = c;
+	*(lfbPtr + yy -1) = c;
+	*(lfbPtr + yy + 1) = c;
+	yy -= lsw;
+	*(lfbPtr + yy -1) = c;
+}
+
 
 void DrawBoxMystery(WORD *lfbPtr, int lsw, int xx, int yy, WORD c)
 {
@@ -4677,6 +4738,12 @@ void DrawHMap()
   DrawBox((WORD*)linfo.lfbPtr, lsw, xx + 1, yy + 1, 8 << 11);
   DrawBox((WORD*)linfo.lfbPtr, lsw, xx, yy, 30 << 11);
 
+  if (Boat.State) {
+	  xx = VideoCX - miniMapScaleB + (int)Boat.pos.x / miniMapScaleC;
+	  yy = VideoCY - miniMapScaleB + (int)Boat.pos.z / miniMapScaleC;
+	  DrawBoxBoat((WORD*)linfo.lfbPtr, lsw, xx + 1, yy + 1, 8 << 11);
+	  DrawBoxBoat((WORD*)linfo.lfbPtr, lsw, xx, yy, 30 << 6);
+  }
 
   if (Multiplayer) {
 

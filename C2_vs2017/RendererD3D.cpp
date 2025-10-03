@@ -5439,6 +5439,67 @@ void DrawCircle(int cx, int cy, int R)
   Put8pix(x,y);
 }
 
+void DrawBoxBoat(WORD *lfbPtr, int lsw, int xx, int yy, WORD c)
+{
+	yy = yy * lsw + xx;
+	*(lfbPtr + yy + 1) = c;
+	*(lfbPtr + yy + 2) = c;
+	*(lfbPtr + yy + 3) = c;
+	*(lfbPtr + yy + 4) = c;
+	*(lfbPtr + yy + 5) = c;
+	yy += lsw;
+	*(lfbPtr + yy - 4) = c;
+	*(lfbPtr + yy - 3) = c;
+	*(lfbPtr + yy - 2) = c;
+	yy += lsw;
+	*(lfbPtr + yy - 3) = c;
+	*(lfbPtr + yy - 2) = c;
+	*(lfbPtr + yy - 1) = c;
+	*(lfbPtr + yy) = c;
+	*(lfbPtr + yy + 1) = c;
+	*(lfbPtr + yy + 2) = c;
+	*(lfbPtr + yy + 3) = c;
+	*(lfbPtr + yy + 4) = c;
+	yy += lsw;
+	*(lfbPtr + yy - 2) = c;
+	*(lfbPtr + yy - 1) = c;
+	*(lfbPtr + yy) = c;
+	*(lfbPtr + yy + 1) = c;
+	*(lfbPtr + yy + 2) = c;
+	*(lfbPtr + yy + 3) = c;
+	*(lfbPtr + yy + 4) = c;
+	yy -= lsw * 4;
+	*(lfbPtr + yy - 5) = c;
+	*(lfbPtr + yy - 4) = c;
+	*(lfbPtr + yy - 3) = c;
+	*(lfbPtr + yy - 2) = c;
+	*(lfbPtr + yy - 1) = c;
+	*(lfbPtr + yy + 1) = c;
+	*(lfbPtr + yy + 2) = c;
+	*(lfbPtr + yy + 3) = c;
+	*(lfbPtr + yy + 4) = c;
+	yy -= lsw;
+	*(lfbPtr + yy - 4) = c;
+	*(lfbPtr + yy - 3) = c;
+	*(lfbPtr + yy - 2) = c;
+	*(lfbPtr + yy - 1) = c;
+	*(lfbPtr + yy + 1) = c;
+	*(lfbPtr + yy + 2) = c;
+	*(lfbPtr + yy + 3) = c;
+	yy -= lsw;
+	*(lfbPtr + yy - 3) = c;
+	*(lfbPtr + yy - 2) = c;
+	*(lfbPtr + yy - 1) = c;
+	*(lfbPtr + yy + 1) = c;
+	*(lfbPtr + yy + 2) = c;
+	yy -= lsw;
+	*(lfbPtr + yy - 2) = c;
+	*(lfbPtr + yy - 1) = c;
+	*(lfbPtr + yy + 1) = c;
+	yy -= lsw;
+	*(lfbPtr + yy - 1) = c;
+}
+
 void DrawBoxMystery(WORD *lfbPtr, int lsw, int xx, int yy, WORD c)
 {
 	yy = yy * lsw + xx;
@@ -5573,6 +5634,13 @@ void DrawHMap()
 
   DrawBox((WORD*)ddsd.lpSurface, lsw, xx + 1, yy + 1, 8 << RShift);
   DrawBox((WORD*)ddsd.lpSurface, lsw, xx, yy, 30 << RShift);
+
+  if (Boat.State) {
+	  xx = VideoCX - miniMapScaleB + (int)Boat.pos.x / miniMapScaleC;
+	  yy = VideoCY - miniMapScaleB + (int)Boat.pos.z / miniMapScaleC;
+	  DrawBoxBoat((WORD*)ddsd.lpSurface, lsw, xx + 1, yy + 1, 8 << 11);
+	  DrawBoxBoat((WORD*)ddsd.lpSurface, lsw, xx, yy, 30 << GShift);
+  }
 
   for (int b = 0; b < bulletCh; b++) {
 	  if (bullet[b].RTime) {

@@ -2933,6 +2933,66 @@ void DrawCircle(int cx, int cy, int R)
   Put8pix(x,y);
 }
 
+void DrawBoxBoat(WORD *lfbPtr, int xx, int yy, WORD c)
+{
+	*((WORD*)lpVideoBuf + yy * 1024 + xx + 1) = c;
+	*((WORD*)lpVideoBuf + yy * 1024 + xx + 2) = c;
+	*((WORD*)lpVideoBuf + yy * 1024 + xx + 3) = c;
+	*((WORD*)lpVideoBuf + yy * 1024 + xx + 4) = c;
+	*((WORD*)lpVideoBuf + yy * 1024 + xx + 5) = c;
+	yy ++;
+	*((WORD*)lpVideoBuf + yy * 1024 + xx - 4) = c;
+	*((WORD*)lpVideoBuf + yy * 1024 + xx - 3) = c;
+	*((WORD*)lpVideoBuf + yy * 1024 + xx - 2) = c;
+	yy++;
+	*((WORD*)lpVideoBuf + yy * 1024 + xx - 3) = c;
+	*((WORD*)lpVideoBuf + yy * 1024 + xx - 2) = c;
+	*((WORD*)lpVideoBuf + yy * 1024 + xx - 1) = c;
+	*((WORD*)lpVideoBuf + yy * 1024 + xx) = c;
+	*((WORD*)lpVideoBuf + yy * 1024 + xx + 1) = c;
+	*((WORD*)lpVideoBuf + yy * 1024 + xx + 2) = c;
+	*((WORD*)lpVideoBuf + yy * 1024 + xx + 3) = c;
+	*((WORD*)lpVideoBuf + yy * 1024 + xx + 4) = c;
+	yy++;
+	*((WORD*)lpVideoBuf + yy * 1024 + xx - 2) = c;
+	*((WORD*)lpVideoBuf + yy * 1024 + xx - 1) = c;
+	*((WORD*)lpVideoBuf + yy * 1024 + xx) = c;
+	*((WORD*)lpVideoBuf + yy * 1024 + xx + 1) = c;
+	*((WORD*)lpVideoBuf + yy * 1024 + xx + 2) = c;
+	*((WORD*)lpVideoBuf + yy * 1024 + xx + 3) = c;
+	*((WORD*)lpVideoBuf + yy * 1024 + xx + 4) = c;
+	yy -= 4;
+	*((WORD*)lpVideoBuf + yy * 1024 + xx - 5) = c;
+	*((WORD*)lpVideoBuf + yy * 1024 + xx - 4) = c;
+	*((WORD*)lpVideoBuf + yy * 1024 + xx - 3) = c;
+	*((WORD*)lpVideoBuf + yy * 1024 + xx - 2) = c;
+	*((WORD*)lpVideoBuf + yy * 1024 + xx - 1) = c;
+	*((WORD*)lpVideoBuf + yy * 1024 + xx + 1) = c;
+	*((WORD*)lpVideoBuf + yy * 1024 + xx + 2) = c;
+	*((WORD*)lpVideoBuf + yy * 1024 + xx + 3) = c;
+	*((WORD*)lpVideoBuf + yy * 1024 + xx + 4) = c;
+	yy --;
+	*((WORD*)lpVideoBuf + yy * 1024 + xx - 4) = c;
+	*((WORD*)lpVideoBuf + yy * 1024 + xx - 3) = c;
+	*((WORD*)lpVideoBuf + yy * 1024 + xx - 2) = c;
+	*((WORD*)lpVideoBuf + yy * 1024 + xx - 1) = c;
+	*((WORD*)lpVideoBuf + yy * 1024 + xx + 1) = c;
+	*((WORD*)lpVideoBuf + yy * 1024 + xx + 2) = c;
+	*((WORD*)lpVideoBuf + yy * 1024 + xx + 3) = c;
+	yy--;
+	*((WORD*)lpVideoBuf + yy * 1024 + xx - 3) = c;
+	*((WORD*)lpVideoBuf + yy * 1024 + xx - 2) = c;
+	*((WORD*)lpVideoBuf + yy * 1024 + xx - 1) = c;
+	*((WORD*)lpVideoBuf + yy * 1024 + xx + 1) = c;
+	*((WORD*)lpVideoBuf + yy * 1024 + xx + 2) = c;
+	yy--;
+	*((WORD*)lpVideoBuf + yy * 1024 + xx - 2) = c;
+	*((WORD*)lpVideoBuf + yy * 1024 + xx - 1) = c;
+	*((WORD*)lpVideoBuf + yy * 1024 + xx + 1) = c;
+	yy--;
+	*((WORD*)lpVideoBuf + yy * 1024 + xx - 1) = c;
+}
+
 void DrawBoxMystery(WORD *lfbPtr, int xx, int yy, WORD c)
 {
 	*((WORD*)lpVideoBuf + yy * 1024 + xx + 1) = c;
@@ -3036,6 +3096,12 @@ void DrawHMap()
 	  DrawBox((WORD*)lpVideoBuf, xx, yy, 31 << 10);
   }
   
+  if (Boat.State) {
+	  xx = VideoCX - miniMapScaleB + (int)Boat.pos.x / miniMapScaleC;
+	  yy = VideoCY - miniMapScaleB + ((int)Boat.pos.z / miniMapScaleC) + 6;
+	  DrawBoxBoat((WORD*)lpVideoBuf, xx, yy, 30 << 6);
+  }
+
   for (int b = 0; b < bulletCh; b++) {
 	  if (bullet[b].RTime) {
 		  xx = VideoCX - miniMapScaleB + (int)bullet[b].a.x / miniMapScaleC;
