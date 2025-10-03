@@ -2678,30 +2678,18 @@ void AnimateBoat()
 	//=== y ===//
 	Boat.pos.y = GetLandUpH(Boat.pos.x, Boat.pos.z);
 
-	//ThinkY_Beta_Gamma(cptr, 200, 196, 0.6f, 0.5f);
-	//ThinkY_Beta_Gamma(TCharacter *cptr, float blook, float glook, float blim, float glim)
-
-
 	float blook = 1024;
 	float glook = 512;
 
 	//=== beta ===//
 	float hlook = GetLandUpH(Boat.pos.x + boatLookX * blook, Boat.pos.z + boatLookZ * blook);
 	float hlook2 = GetLandUpH(Boat.pos.x - boatLookX * blook, Boat.pos.z - boatLookZ * blook);
-	DeltaFunc(Boat.beta, (hlook - hlook2) / (blook * 3.2f), TimeDt / 800.f);
-
-	//if (Boat.beta > blim) Boat.beta = blim;
-	//if (Boat.beta < -blim) Boat.beta = -blim;
+	DeltaFunc(Boat.beta, (hlook - hlook2) / blook, TimeDt / 1800.f);
 
 	//=== gamma ===//
 	hlook = GetLandUpH(Boat.pos.x + boatLookZ * glook, Boat.pos.z - boatLookX *glook);
 	hlook2 = GetLandUpH(Boat.pos.x - boatLookZ * glook, Boat.pos.z + boatLookX *glook);
-	DeltaFunc(Boat.gamma, (hlook2 - hlook) / (glook * 3.2f), TimeDt / 800.f);
-
-	//Boat.tggamma = (hlook - hlook2) / (glook * 3.2f);
-	//if (Boat.tggamma > glim) Boat.tggamma = glim;
-	//if (Boat.tggamma < -glim) Boat.tggamma = -glim;
-
+	DeltaFunc(Boat.gamma, (hlook2 - hlook) / glook, TimeDt / 1800.f);
 
 }
 
