@@ -1132,6 +1132,7 @@ BOOL _HeapFree(HANDLE hHeap, DWORD  dwFlags, LPVOID lpMem);
 //============ game ===========================//
 float GetLandCeilH(float, float);
 float GetLandH(float, float);
+float GetBoatDeck(float, float);
 float GetLandOH(int, int);
 float GetLandLt(float, float);
 float getWaterLev(float, float);
@@ -1402,6 +1403,7 @@ _EXTORNOT int BoatSpawnZ;
 _EXTORNOT float BoatSpawnA;
 _EXTORNOT float BoatLength;
 _EXTORNOT float BoatWidth;
+_EXTORNOT float BoatHeight;
 _EXTORNOT int SurvivalSpawnX; //survival
 _EXTORNOT int SurvivalSpawnZ;
 _EXTORNOT float SurvivalSpawnA;

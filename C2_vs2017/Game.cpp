@@ -200,6 +200,177 @@ bool waterNear(float x, float y, float maxDist)
 }
 
 
+float GetBoatDeck(float x, float z)
+{
+	//check if on boat deck, return 0 if not
+
+	int CX = (int)x / 256;
+	int CZ = (int)z / 256;
+
+	int dx = (int)x % 256;
+	int dz = (int)z % 256;
+
+	
+	float aLookX = (float)cos(Boat.alpha);
+	float aLookZ = (float)sin(Boat.alpha);
+
+	Vector3d point[4];
+	point[0].x = BoatLength;
+	point[1].x = BoatLength;
+	point[2].x = -BoatLength;
+	point[3].x = -BoatLength;
+
+	point[0].z = BoatWidth;
+	point[1].z = -BoatWidth;
+	point[2].z = BoatWidth;
+	point[3].z = -BoatWidth;
+
+	float sb = (float)sin(Boat.beta);
+	float cb = (float)cos(Boat.beta);
+	float sg = (float)sin(Boat.gamma);
+	float cg = (float)cos(Boat.gamma);
+
+	//test
+	PrintLog("\n\n");
+	char buff[100];
+	sprintf(buff, "\n Boat.pos.x= %f", Boat.pos.x);
+	PrintLog(buff);
+	sprintf(buff, "\n Boat.pos.z= %f", Boat.pos.z);
+	PrintLog(buff);
+
+	sprintf(buff, "\n Boat.alpha= %f", Boat.alpha);
+	PrintLog(buff);
+	sprintf(buff, "\n Boat.beta= %f", Boat.beta);
+	PrintLog(buff);
+	sprintf(buff, "\n Boat.gamma= %f", Boat.gamma);
+	PrintLog(buff);
+	PrintLog("\n");
+
+	sprintf(buff, "\n point[0].x= %f", point[0].x);
+	PrintLog(buff);
+	sprintf(buff, "\n point[0].z= %f", point[0].z);
+	PrintLog(buff);
+	sprintf(buff, "\n point[1].x= %f", point[1].x);
+	PrintLog(buff);
+	sprintf(buff, "\n point[1].z= %f", point[1].z);
+	PrintLog(buff);
+	sprintf(buff, "\n point[2].x= %f", point[2].x);
+	PrintLog(buff);
+	sprintf(buff, "\n point[2].z= %f", point[2].z);
+	PrintLog(buff);
+	sprintf(buff, "\n point[3].x= %f", point[3].x);
+	PrintLog(buff);
+	sprintf(buff, "\n point[3].z= %f", point[3].z);
+	PrintLog(buff);
+	//test
+
+	for (int p = 0; p < 4; p++) {
+		point[p].y = BoatHeight;
+		point[p].x *= aLookX;
+		point[p].z *= aLookZ;
+		float pzz = point[p].z;
+		float pxx = cg * point[p].x - sg * point[p].y;
+		float pyy = cg * point[p].y + sg * point[p].x;
+		point[p].x = pxx;
+		point[p].y = cb * pyy - sb * pzz;
+		point[p].z = cb * pzz + sb * pyy;
+	}
+
+	//test
+	PrintLog("\nPostProcess");
+	sprintf(buff, "\n point[0].x= %f", point[0].x);
+	PrintLog(buff);
+	sprintf(buff, "\n point[0].z= %f", point[0].z);
+	PrintLog(buff);
+	sprintf(buff, "\n point[1].x= %f", point[1].x);
+	PrintLog(buff);
+	sprintf(buff, "\n point[1].z= %f", point[1].z);
+	PrintLog(buff);
+	sprintf(buff, "\n point[2].x= %f", point[2].x);
+	PrintLog(buff);
+	sprintf(buff, "\n point[2].z= %f", point[2].z);
+	PrintLog(buff);
+	sprintf(buff, "\n point[3].x= %f", point[3].x);
+	PrintLog(buff);
+	sprintf(buff, "\n point[3].z= %f", point[3].z);
+	PrintLog(buff);
+	PrintLog("\n");
+	//test
+
+	for (int p = 0; p < 4; p++) {
+		point[p].x += Boat.pos.x;
+		point[p].y += Boat.pos.y;
+		point[p].z += Boat.pos.z;
+	}
+
+	float maxX = point[0].x;
+	float minX = point[0].x;
+	float maxZ = point[0].z;
+	float minZ = point[0].z;
+
+	for (int p = 0; p < 4; p++) {
+		if (point[p].x > maxX) maxX = point[p].x;
+		if (point[p].x < minX) minX = point[p].x;
+		if (point[p].z > maxZ) maxZ = point[p].z;
+		if (point[p].z < minZ) minZ = point[p].z;
+	}
+
+	//test
+	PrintLog("\nPostProcess2");
+	sprintf(buff, "\n point[0].x= %f", point[0].x);
+	PrintLog(buff);
+	sprintf(buff, "\n point[0].z= %f", point[0].z);
+	PrintLog(buff);
+	sprintf(buff, "\n point[1].x= %f", point[1].x);
+	PrintLog(buff);
+	sprintf(buff, "\n point[1].z= %f", point[1].z);
+	PrintLog(buff);
+	sprintf(buff, "\n point[2].x= %f", point[2].x);
+	PrintLog(buff);
+	sprintf(buff, "\n point[2].z= %f", point[2].z);
+	PrintLog(buff);
+	sprintf(buff, "\n point[3].x= %f", point[3].x);
+	PrintLog(buff);
+	sprintf(buff, "\n point[3].z= %f", point[3].z);
+	PrintLog(buff);
+	PrintLog("\n");
+	//test
+
+	//test
+	sprintf(buff, "\n maxX= %f", maxX);
+	PrintLog(buff);
+	sprintf(buff, "\n minX= %f", minX);
+	PrintLog(buff);
+	sprintf(buff, "\n maxZ= %f", maxZ);
+	PrintLog(buff);
+	sprintf(buff, "\n minZ= %f", minZ);
+	PrintLog(buff);
+	PrintLog("\n");
+	//test
+
+	if (x > maxX) {
+		return 0.f;
+		PrintLog("FALSE\n");
+	}
+	if (x < minX) {
+		return 0.f;
+		PrintLog("FALSE\n");
+	}
+	if (z > maxZ) {
+		return 0.f;
+		PrintLog("FALSE\n");
+	}
+	if (z < minZ) {
+		return 0.f;
+		PrintLog("FALSE\n");
+	}
+
+	PrintLog("TRUE\n");
+
+	return Boat.pos.y + BoatHeight;
+
+}
+
 float GetLandH(float x, float y)
 {
   int CX = (int)x / 256;
@@ -2678,18 +2849,15 @@ void AnimateBoat()
 	//=== y ===//
 	Boat.pos.y = GetLandUpH(Boat.pos.x, Boat.pos.z);
 
-	float blook = 1024;
-	float glook = 512;
-
 	//=== beta ===//
-	float hlook = GetLandUpH(Boat.pos.x + boatLookX * blook, Boat.pos.z + boatLookZ * blook);
-	float hlook2 = GetLandUpH(Boat.pos.x - boatLookX * blook, Boat.pos.z - boatLookZ * blook);
-	DeltaFunc(Boat.beta, (hlook - hlook2) / blook, TimeDt / 1800.f);
+	float hlook = GetLandUpH(Boat.pos.x + boatLookX * BoatLength, Boat.pos.z + boatLookZ * BoatLength);
+	float hlook2 = GetLandUpH(Boat.pos.x - boatLookX * BoatLength, Boat.pos.z - boatLookZ * BoatLength);
+	DeltaFunc(Boat.beta, (hlook - hlook2) / BoatLength, TimeDt / 1800.f);
 
 	//=== gamma ===//
-	hlook = GetLandUpH(Boat.pos.x + boatLookZ * glook, Boat.pos.z - boatLookX *glook);
-	hlook2 = GetLandUpH(Boat.pos.x - boatLookZ * glook, Boat.pos.z + boatLookX *glook);
-	DeltaFunc(Boat.gamma, (hlook2 - hlook) / glook, TimeDt / 1800.f);
+	hlook = GetLandUpH(Boat.pos.x + boatLookZ * BoatWidth, Boat.pos.z - boatLookX * BoatWidth);
+	hlook2 = GetLandUpH(Boat.pos.x - boatLookZ * BoatWidth, Boat.pos.z + boatLookX * BoatWidth);
+	DeltaFunc(Boat.gamma, (hlook2 - hlook) / BoatWidth, TimeDt / 1800.f);
 
 }
 

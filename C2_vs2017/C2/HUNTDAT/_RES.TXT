@@ -14,11 +14,12 @@ areatable {
  tree = 14
  mapShadowDir = 1
  mapShadowMax = 20
- boatX = 100
- boatY = 100
- boatA = 0
- boatL = 1024
- boatW = 512
+ boatX = 800
+ boatY = 230
+ boatA = 195
+ boatL = 2000
+ boatW = 700
+ boatH = 128
 }
 
 {

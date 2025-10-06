@@ -3859,7 +3859,7 @@ void RenderBoatPost()
 	if (fabs(Boat.rpos.z) < 4000)
 		RenderModelClip(BoatModel.mptr,
 			Boat.rpos.x, Boat.rpos.y, Boat.rpos.z, 210, 0, -Boat.alpha - pi / 2 + CameraAlpha, CameraBeta);
-	else
+	else if (Boat.rpos.z <= BackViewR && fabs(Boat.rpos.x) <= -Boat.rpos.z + BackViewR)
 		RenderModel(BoatModel.mptr,
 			Boat.rpos.x, Boat.rpos.y, Boat.rpos.z, 210, 0, -Boat.alpha - pi / 2 + CameraAlpha, CameraBeta);
 	grConstantColorValue(0xFF000000);
@@ -4318,8 +4318,8 @@ NOSHIP:
 		}
 
 		Boat.rpos = RotateVector(Boat.rpos);
-		if (Boat.rpos.z > BackViewR) goto NOBOAT;
-		if (fabs(Boat.rpos.x) > -Boat.rpos.z + BackViewR) goto NOBOAT;
+		//if (Boat.rpos.z > BackViewR) goto NOBOAT;
+		//if (fabs(Boat.rpos.x) > -Boat.rpos.z + BackViewR) goto NOBOAT;
 
 		RenderBoatPost();
 	}

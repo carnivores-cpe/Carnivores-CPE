@@ -3115,6 +3115,7 @@ void ReadAreaTable (FILE *stream, int areaNumber)
 					if (strstr(line, "boatA")) BoatSpawnA = atof(value);
 					if (strstr(line, "boatW")) BoatWidth = atof(value);
 					if (strstr(line, "boatL")) BoatLength = atof(value);
+					if (strstr(line, "boatH")) BoatHeight = atof(value);
 
 
 					if (strstr(line, "survivalPlayerX")) SurvivalSpawnX = atoi(value);

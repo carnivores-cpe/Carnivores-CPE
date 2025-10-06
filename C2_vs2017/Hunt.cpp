@@ -2073,10 +2073,15 @@ void ProcessControls()
     if (HeadY>220.f) HeadY = 220.f;
   }
   
-
+  float boatY = GetBoatDeck(PlayerX, PlayerZ);
   float h  = GetLandQH(PlayerX, PlayerZ);
   float hu = GetLandCeilH(PlayerX, PlayerZ)-64;
   float hwater = GetLandUpH(PlayerX, PlayerZ);
+
+  if (boatY != 0) {
+	  PlayerY = boatY;
+	  goto SKIPYMOVE;
+  }
 
   if (SWIM) PlayerY = hwater - 148;
 
@@ -2122,7 +2127,6 @@ void ProcessControls()
   }
   
 SKIPYMOVE:
-
   
 	
   SWIM = FALSE;
