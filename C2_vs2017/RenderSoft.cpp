@@ -305,8 +305,8 @@ NOSHIP:
   if (ri < ctViewR)
   {
 	  Boat.rpos = RotateVector(Boat.rpos);
-	  if (Boat.rpos.z > BackViewR) goto NOBOAT;
-	  if (fabs(Boat.rpos.x) > -Boat.rpos.z + BackViewR) goto NOBOAT;
+	  //if (Boat.rpos.z > BackViewR) goto NOBOAT;
+	  //if (fabs(Boat.rpos.x) > -Boat.rpos.z + BackViewR) goto NOBOAT;
 
 	  int i = ChRenderList[ri].ICount++;
 	  ChRenderList[ri].Items[i].CType = 9;
@@ -2708,7 +2708,7 @@ void RenderBoat()
 	if (fabs(Boat.rpos.z) < 4000)
 		RenderModelClip(BoatModel.mptr,
 			Boat.rpos.x, Boat.rpos.y, Boat.rpos.z, 240, 0, -Boat.alpha - pi / 2 + CameraAlpha, CameraBeta);
-	else
+	else if (Boat.rpos.z <= BackViewR && fabs(Boat.rpos.x) <= -Boat.rpos.z + BackViewR)
 		RenderModel(BoatModel.mptr,
 			Boat.rpos.x, Boat.rpos.y, Boat.rpos.z, 240, 0, -Boat.alpha - pi / 2 + CameraAlpha, CameraBeta);
 }

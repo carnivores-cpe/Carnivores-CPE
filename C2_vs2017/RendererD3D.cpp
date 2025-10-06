@@ -5083,7 +5083,7 @@ void RenderBoatPost()
 	if (fabs(Boat.rpos.z) < 4000)
 		RenderModelClip(BoatModel.mptr,
 			Boat.rpos.x, Boat.rpos.y, Boat.rpos.z, 210, 0, -Boat.alpha - pi / 2 + CameraAlpha, CameraBeta);
-	else
+	else if (Boat.rpos.z <= BackViewR && fabs(Boat.rpos.x) <= -Boat.rpos.z + BackViewR)
 		RenderModel(BoatModel.mptr,
 			Boat.rpos.x, Boat.rpos.y, Boat.rpos.z, 210, 0, -Boat.alpha - pi / 2 + CameraAlpha, CameraBeta);
 
@@ -5287,8 +5287,8 @@ NOBOAT:
 		  CalcFogLevel_Gradient(SShip.rpos);
 
 	  SShip.rpos = RotateVector(SShip.rpos);
-	  if (SShip.rpos.z > BackViewR) goto NOSSHIP;
-	  if (fabs(SShip.rpos.x) > -SShip.rpos.z + BackViewR) goto NOSSHIP;
+	  //if (SShip.rpos.z > BackViewR) goto NOSSHIP;
+	  //if (fabs(SShip.rpos.x) > -SShip.rpos.z + BackViewR) goto NOSSHIP;
 
 	  RenderSShipPost();
   }
