@@ -2540,7 +2540,7 @@ int PASCAL WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 //  }
 
   //TEMP DISABLED
-  LoadCharacterInfo(BoatModel, "HUNTDAT\\boat.CAR");
+  //LoadCharacterInfo(BoatModel, "HUNTDAT\\boat.CAR");
 
 //  LoadCharacterInfo(BeamModel, "HUNTDAT\\BEAM.CAR");
   LoadCharacterInfo(WCircleModel, "HUNTDAT\\WCIRCLE2.CAR");
