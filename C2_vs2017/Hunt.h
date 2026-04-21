@@ -1263,6 +1263,9 @@ _EXTORNOT   TShip       Boat;
 _EXTORNOT   TShipTask   ShipTask;
 _EXTORNOT   TBag        AmmoBag;
 
+_EXTORNOT   Vector3d boatpoint[4];
+
+
 _EXTORNOT   int SkyR, SkyG, SkyB, WaterR, WaterG, WaterB, WaterA,
             SkyTR,SkyTG,SkyTB, CurFogColor;
 _EXTORNOT   int RandomMap[32][32];

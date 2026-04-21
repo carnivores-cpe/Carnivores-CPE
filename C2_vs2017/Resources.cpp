@@ -1795,6 +1795,8 @@ void resetDSHip() {
 }
 
 void resetBoat() {
+	//TEMP DISABLED
+	//return;
 	if (BoatSpawnX) Boat.State = 1;
 	Boat.alpha = 0;
 	Boat.speed = 0;
@@ -3105,11 +3107,11 @@ void ReadAreaTable (FILE *stream, int areaNumber)
 
 					if (strstr(line, "boatX")) {
 						BoatSpawnX = atoi(value);
-						Boat.State = 1;
+						Boat.State = 1;//TEMP DISABLED
 					}
 					if (strstr(line, "boatY")) {
 						BoatSpawnZ = atoi(value);
-						Boat.State = 1;
+						Boat.State = 1;//TEMP DISABLED
 					}
 
 					if (strstr(line, "boatA")) BoatSpawnA = atof(value);

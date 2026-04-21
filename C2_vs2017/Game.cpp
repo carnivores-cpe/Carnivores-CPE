@@ -214,16 +214,16 @@ float GetBoatDeck(float x, float z)
 	float aLookX = (float)cos(Boat.alpha);
 	float aLookZ = (float)sin(Boat.alpha);
 
-	Vector3d point[4];
-	point[0].x = BoatLength;
-	point[1].x = BoatLength;
-	point[2].x = -BoatLength;
-	point[3].x = -BoatLength;
+	
+	boatpoint[0].x = BoatLength;
+	boatpoint[1].x = BoatLength;
+	boatpoint[2].x = -BoatLength;
+	boatpoint[3].x = -BoatLength;
 
-	point[0].z = BoatWidth;
-	point[1].z = -BoatWidth;
-	point[2].z = BoatWidth;
-	point[3].z = -BoatWidth;
+	boatpoint[0].z = BoatWidth;
+	boatpoint[1].z = -BoatWidth;
+	boatpoint[2].z = BoatWidth;
+	boatpoint[3].z = -BoatWidth;
 
 	float sb = (float)sin(Boat.beta);
 	float cb = (float)cos(Boat.beta);
@@ -231,6 +231,23 @@ float GetBoatDeck(float x, float z)
 	float cg = (float)cos(Boat.gamma);
 
 	//test
+	/*
+	Characters[ChCount - 1].pos.x = boatpoint[0].x + Boat.pos.x;
+	Characters[ChCount - 1].pos.z = boatpoint[0].z + Boat.pos.z;
+	Characters[ChCount - 1].pos.y = Boat.pos.y;
+	Characters[ChCount - 2].pos.x = boatpoint[1].x + Boat.pos.x;
+	Characters[ChCount - 2].pos.z = boatpoint[1].z + Boat.pos.z;
+	Characters[ChCount - 2].pos.y = Boat.pos.y;
+	Characters[ChCount - 3].pos.x = boatpoint[2].x + Boat.pos.x;
+	Characters[ChCount - 3].pos.z = boatpoint[2].z + Boat.pos.z;
+	Characters[ChCount - 3].pos.y = Boat.pos.y;
+	Characters[ChCount - 4].pos.x = boatpoint[3].x + Boat.pos.x;
+	Characters[ChCount - 4].pos.z = boatpoint[3].z + Boat.pos.z;
+	Characters[ChCount - 4].pos.y = Boat.pos.y;
+	*/
+
+	//test
+	/*
 	PrintLog("\n\n");
 	char buff[100];
 	sprintf(buff, "\n Boat.pos.x= %f", Boat.pos.x);
@@ -246,92 +263,98 @@ float GetBoatDeck(float x, float z)
 	PrintLog(buff);
 	PrintLog("\n");
 
-	sprintf(buff, "\n point[0].x= %f", point[0].x);
+	sprintf(buff, "\n point[0].x= %f", boatpoint[0].x);
 	PrintLog(buff);
-	sprintf(buff, "\n point[0].z= %f", point[0].z);
+	sprintf(buff, "\n point[0].z= %f", boatpoint[0].z);
 	PrintLog(buff);
-	sprintf(buff, "\n point[1].x= %f", point[1].x);
+	sprintf(buff, "\n point[1].x= %f", boatpoint[1].x);
 	PrintLog(buff);
-	sprintf(buff, "\n point[1].z= %f", point[1].z);
+	sprintf(buff, "\n point[1].z= %f", boatpoint[1].z);
 	PrintLog(buff);
-	sprintf(buff, "\n point[2].x= %f", point[2].x);
+	sprintf(buff, "\n point[2].x= %f", boatpoint[2].x);
 	PrintLog(buff);
-	sprintf(buff, "\n point[2].z= %f", point[2].z);
+	sprintf(buff, "\n point[2].z= %f", boatpoint[2].z);
 	PrintLog(buff);
-	sprintf(buff, "\n point[3].x= %f", point[3].x);
+	sprintf(buff, "\n point[3].x= %f", boatpoint[3].x);
 	PrintLog(buff);
-	sprintf(buff, "\n point[3].z= %f", point[3].z);
+	sprintf(buff, "\n point[3].z= %f", boatpoint[3].z);
 	PrintLog(buff);
 	//test
+	*/
 
 	for (int p = 0; p < 4; p++) {
-		point[p].y = BoatHeight;
-		point[p].x *= aLookX;
-		point[p].z *= aLookZ;
-		float pzz = point[p].z;
-		float pxx = cg * point[p].x - sg * point[p].y;
-		float pyy = cg * point[p].y + sg * point[p].x;
-		point[p].x = pxx;
-		point[p].y = cb * pyy - sb * pzz;
-		point[p].z = cb * pzz + sb * pyy;
+		boatpoint[p].y = BoatHeight;
+		boatpoint[p].x *= aLookX;
+		boatpoint[p].z *= aLookZ;
+		//float pzz = boatpoint[p].z;
+		//float pxx = cg * boatpoint[p].x - sg * boatpoint[p].y;
+		//float pyy = cg * boatpoint[p].y + sg * boatpoint[p].x;
+		//boatpoint[p].x = pxx;
+		//boatpoint[p].y = cb * pyy - sb * pzz;
+		//boatpoint[p].z = cb * pzz + sb * pyy;
 	}
 
 	//test
+	/*
 	PrintLog("\nPostProcess");
-	sprintf(buff, "\n point[0].x= %f", point[0].x);
+	sprintf(buff, "\n point[0].x= %f", boatpoint[0].x);
 	PrintLog(buff);
-	sprintf(buff, "\n point[0].z= %f", point[0].z);
+	sprintf(buff, "\n point[0].z= %f", boatpoint[0].z);
 	PrintLog(buff);
-	sprintf(buff, "\n point[1].x= %f", point[1].x);
+	sprintf(buff, "\n point[1].x= %f", boatpoint[1].x);
 	PrintLog(buff);
-	sprintf(buff, "\n point[1].z= %f", point[1].z);
+	sprintf(buff, "\n point[1].z= %f", boatpoint[1].z);
 	PrintLog(buff);
-	sprintf(buff, "\n point[2].x= %f", point[2].x);
+	sprintf(buff, "\n point[2].x= %f", boatpoint[2].x);
 	PrintLog(buff);
-	sprintf(buff, "\n point[2].z= %f", point[2].z);
+	sprintf(buff, "\n point[2].z= %f", boatpoint[2].z);
 	PrintLog(buff);
-	sprintf(buff, "\n point[3].x= %f", point[3].x);
+	sprintf(buff, "\n point[3].x= %f", boatpoint[3].x);
 	PrintLog(buff);
-	sprintf(buff, "\n point[3].z= %f", point[3].z);
+	sprintf(buff, "\n point[3].z= %f", boatpoint[3].z);
 	PrintLog(buff);
 	PrintLog("\n");
 	//test
+	*/
 
 	for (int p = 0; p < 4; p++) {
-		point[p].x += Boat.pos.x;
-		point[p].y += Boat.pos.y;
-		point[p].z += Boat.pos.z;
+		boatpoint[p].x += Boat.pos.x;
+		boatpoint[p].y += Boat.pos.y;
+		boatpoint[p].z += Boat.pos.z;
 	}
 
-	float maxX = point[0].x;
-	float minX = point[0].x;
-	float maxZ = point[0].z;
-	float minZ = point[0].z;
+	float maxX = boatpoint[0].x;
+	float minX = boatpoint[0].x;
+	float maxZ = boatpoint[0].z;
+	float minZ = boatpoint[0].z;
 
 	for (int p = 0; p < 4; p++) {
-		if (point[p].x > maxX) maxX = point[p].x;
-		if (point[p].x < minX) minX = point[p].x;
-		if (point[p].z > maxZ) maxZ = point[p].z;
-		if (point[p].z < minZ) minZ = point[p].z;
+		if (boatpoint[p].x > maxX) maxX = boatpoint[p].x;
+		if (boatpoint[p].x < minX) minX = boatpoint[p].x;
+		if (boatpoint[p].z > maxZ) maxZ = boatpoint[p].z;
+		if (boatpoint[p].z < minZ) minZ = boatpoint[p].z;
 	}
+
+
 
 	//test
+	/*
 	PrintLog("\nPostProcess2");
-	sprintf(buff, "\n point[0].x= %f", point[0].x);
+	sprintf(buff, "\n point[0].x= %f", boatpoint[0].x);
 	PrintLog(buff);
-	sprintf(buff, "\n point[0].z= %f", point[0].z);
+	sprintf(buff, "\n point[0].z= %f", boatpoint[0].z);
 	PrintLog(buff);
-	sprintf(buff, "\n point[1].x= %f", point[1].x);
+	sprintf(buff, "\n point[1].x= %f", boatpoint[1].x);
 	PrintLog(buff);
-	sprintf(buff, "\n point[1].z= %f", point[1].z);
+	sprintf(buff, "\n point[1].z= %f", boatpoint[1].z);
 	PrintLog(buff);
-	sprintf(buff, "\n point[2].x= %f", point[2].x);
+	sprintf(buff, "\n point[2].x= %f", boatpoint[2].x);
 	PrintLog(buff);
-	sprintf(buff, "\n point[2].z= %f", point[2].z);
+	sprintf(buff, "\n point[2].z= %f", boatpoint[2].z);
 	PrintLog(buff);
-	sprintf(buff, "\n point[3].x= %f", point[3].x);
+	sprintf(buff, "\n point[3].x= %f", boatpoint[3].x);
 	PrintLog(buff);
-	sprintf(buff, "\n point[3].z= %f", point[3].z);
+	sprintf(buff, "\n point[3].z= %f", boatpoint[3].z);
 	PrintLog(buff);
 	PrintLog("\n");
 	//test
@@ -347,26 +370,56 @@ float GetBoatDeck(float x, float z)
 	PrintLog(buff);
 	PrintLog("\n");
 	//test
+	*/
 
 	if (x > maxX) {
 		return 0.f;
-		PrintLog("FALSE\n");
+		PrintLog("FALSE\n"); //test
 	}
 	if (x < minX) {
 		return 0.f;
-		PrintLog("FALSE\n");
+		PrintLog("FALSE\n"); //test
 	}
 	if (z > maxZ) {
 		return 0.f;
-		PrintLog("FALSE\n");
+		PrintLog("FALSE\n"); //test
 	}
 	if (z < minZ) {
 		return 0.f;
-		PrintLog("FALSE\n");
+		PrintLog("FALSE\n"); //test
 	}
 
-	PrintLog("TRUE\n");
+	PrintLog("TRUE\n"); //test
 
+	
+	//test
+	Characters[ChCount - 1].pos.x = boatpoint[0].x;
+	Characters[ChCount - 1].pos.z = boatpoint[0].z;
+	Characters[ChCount - 1].pos.y = Boat.pos.y;
+	Characters[ChCount - 2].pos.x = boatpoint[1].x;
+	Characters[ChCount - 2].pos.z = boatpoint[1].z;
+	Characters[ChCount - 2].pos.y = Boat.pos.y;
+	Characters[ChCount - 3].pos.x = boatpoint[2].x;
+	Characters[ChCount - 3].pos.z = boatpoint[2].z;
+	Characters[ChCount - 3].pos.y = Boat.pos.y;
+	Characters[ChCount - 4].pos.x = boatpoint[3].x;
+	Characters[ChCount - 4].pos.z = boatpoint[3].z;
+	Characters[ChCount - 4].pos.y = Boat.pos.y;
+	/*
+	//test
+	Characters[ChCount - 1].pos.x = maxX;
+	Characters[ChCount - 1].pos.z = maxZ;
+	Characters[ChCount - 1].pos.y = GetLandUpH(boatpoint[0].x, boatpoint[0].z);
+	Characters[ChCount - 2].pos.x = maxX;
+	Characters[ChCount - 2].pos.z = minZ;
+	Characters[ChCount - 2].pos.y = GetLandUpH(boatpoint[1].x, boatpoint[1].z);
+	Characters[ChCount - 3].pos.x = minX;
+	Characters[ChCount - 3].pos.z = maxZ;
+	Characters[ChCount - 3].pos.y = GetLandUpH(boatpoint[2].x, boatpoint[2].z);
+	Characters[ChCount - 4].pos.x = minX;
+	Characters[ChCount - 4].pos.z = minZ;
+	Characters[ChCount - 4].pos.y = GetLandUpH(boatpoint[3].x, boatpoint[3].z);
+	*/
 	return Boat.pos.y + BoatHeight;
 
 }

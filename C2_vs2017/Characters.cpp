@@ -9509,6 +9509,11 @@ void PlaceCharacters()
 	//END NEW SYSTEM
 
 
+	// BOAT TEST MARKERS
+	//ChCount++;
+	//ChCount++;
+	//ChCount++;
+	//ChCount++;
 
 
 	//======== lohs =========//
