@@ -2880,6 +2880,11 @@ SKIPROT:
 
 }
 
+
+
+
+
+
 void AnimatePoacher(TCharacter *cptr)
 {
 	NewPhase = FALSE;
@@ -2888,6 +2893,14 @@ void AnimatePoacher(TCharacter *cptr)
 	float _tgalpha = cptr->tgalpha;
 
 	cptr->FTime += TimeDt;
+
+TBEGIN:
+	float targetx = cptr->tgx;
+	float targetz = cptr->tgz;
+	float targetdx = targetx - cptr->pos.x;
+	float targetdz = targetz - cptr->pos.z;
+
+	float tdist = (float)sqrt(targetdx * targetdx + targetdz * targetdz);
 
 	ProcessPrevPhase(cptr);
 
@@ -2910,12 +2923,17 @@ void AnimatePoacher(TCharacter *cptr)
 		}
 	}
 
-	cptr->alpha += pi/650;
-	if (cptr->alpha > 2 * pi) cptr->alpha -= 2 * pi;
+	//test
+	//cptr->alpha += pi/650;
+	//if (cptr->alpha > 2 * pi) cptr->alpha -= 2 * pi;
 
+NOTHINK:
 
+	cptr->tgx = PlayerX;
+	cptr->tgz = PlayerZ;
 
-ENDPSELECT:
+	cptr->tgalpha = CorrectedAlpha(FindVectorAlpha(targetdx, targetdz), cptr->alpha);
+
 
 	//====== process phase changing ===========//
 	if ((_Phase != cptr->Phase) || NewPhase) {
@@ -2975,6 +2993,8 @@ ENDPSELECT:
 		}
 	}
 
+ENDPSELECT:
+
 	if (_Phase != cptr->Phase)
 	{
 		//==== set proportional FTime for better morphing =//
@@ -2997,6 +3017,56 @@ ENDPSELECT:
 	}
 
 	cptr->FTime %= cptr->pinfo->Animation[DinoInfo[cptr->CType].animIndex[cptr->Phase]].AniTime;
+
+
+	//========== rotation to tgalpha ===================//
+
+	float rspd, currspeed;
+	float dalpha = fabs(cptr->tgalpha - cptr->alpha);
+	float drspd = dalpha;
+	if (drspd > pi) drspd = 2 * pi - drspd;
+
+	//if (cptr->Phase == DinoInfo[cptr->CType].killType[cptr->killType].anim && DinoInfo[cptr->CType].killTypeCount) goto SKIPROT;
+	if (cptr->currentIdleGroup >= 0) goto SKIPROT;
+
+
+
+		if (drspd > 0.02)
+			if (cptr->tgalpha > cptr->alpha) currspeed = 0.6f + drspd * 1.2f;
+			else currspeed = -0.6f - drspd * 1.2f;
+		else currspeed = 0;
+		if (cptr->AfraidTime) currspeed *= 2.5;
+
+		if (dalpha > pi) currspeed *= -1;
+		if ((cptr->StateF & csONWATER) || cptr->Phase == DinoInfo[cptr->CType].walkAnim) currspeed /= 1.4f;
+
+		if (cptr->AfraidTime) DeltaFunc(cptr->rspeed, currspeed, (float)TimeDt / 160.f);
+		else DeltaFunc(cptr->rspeed, currspeed, (float)TimeDt / 180.f);
+
+		/*
+		tgbend = drspd / AIInfo[cptr->Clone].targetBendRotSpd;
+		if (tgbend > pi / 5) tgbend = pi / 5;
+
+		tgbend *= SGN(currspeed);
+		if (fabs(tgbend) > fabs(cptr->bend)) DeltaFunc(cptr->bend, tgbend, (float)TimeDt / 800.f);
+		else DeltaFunc(cptr->bend, tgbend, (float)TimeDt / 600.f);
+		*/
+
+		rspd = cptr->rspeed * TimeDt / 1024.f;
+
+	if (drspd < fabs(rspd)) cptr->alpha = cptr->tgalpha;
+	else cptr->alpha += rspd;
+
+
+	if (cptr->alpha > pi * 2) cptr->alpha -= pi * 2;
+	if (cptr->alpha < 0) cptr->alpha += pi * 2;
+
+SKIPROT:
+	
+	if (1 == 0)
+	{
+		//temp
+	}
 
 }
 
@@ -8548,8 +8618,8 @@ void AnimateCharacters()
 
 		case AI_POACHER:
 			// TEMP DISABLED
-			//if (cptr->Health) AnimatePoacher(cptr);
-			//else AnimateDeadCommon(cptr);
+			if (cptr->Health) AnimatePoacher(cptr);
+			else AnimateDeadCommon(cptr);
 			break;
 
 		case AI_PARA:

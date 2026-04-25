@@ -4704,6 +4704,22 @@ void LoadResourcesScript()
 	//AIInfo[AI_ALLO].weaveRange = 1648;
 	AIInfo[AI_ALLO].pWMin = 2048;
 
+	AIInfo[AI_POACHER].agressMulti = 4;
+	AIInfo[AI_POACHER].targetBendRotSpd = 2;
+	AIInfo[AI_POACHER].yBetaGamma1 = 64;
+	AIInfo[AI_POACHER].yBetaGamma2 = 32;
+	AIInfo[AI_POACHER].yBetaGamma3 = 0.5f;
+	AIInfo[AI_POACHER].yBetaGamma4 = 0.4f;
+	AIInfo[AI_POACHER].walkTargetGammaRot = 10.0f;
+	AIInfo[AI_POACHER].targetGammaRot = 8.0f;
+	AIInfo[AI_POACHER].tGAIncrement = 2.f;
+	AIInfo[AI_POACHER].idleStartD = 118;
+	AIInfo[AI_POACHER].noWayCntMin = 12;
+	AIInfo[AI_POACHER].noFindWayMed = 16;
+	AIInfo[AI_POACHER].noFindWayRange = 20;
+	AIInfo[AI_POACHER].targetDistance = 8048.f;
+	AIInfo[AI_POACHER].pWMin = 2048;
+
 	AIInfo[AI_VELO].agressMulti = 8;
 	AIInfo[AI_VELO].targetBendRotSpd = 3;
 	//AIInfo[AI_VELO].waterLevel = 140;
