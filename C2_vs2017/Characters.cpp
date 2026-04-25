@@ -2956,6 +2956,9 @@ NOTHINK:
 
 			cptr->ammo -= 1;
 
+			float targetdy = PlayerY - cptr->pos.y;
+			float tbeta = -atan(targetdy / tdist);
+
 			for (int s = 0; s <= WeapInfo[DinoInfo[cptr->CType].Weapon].TraceC; s++)
 			{
 				float rA = siRand(128) * 0.00010 * (2.f - WeapInfo[DinoInfo[cptr->CType].Weapon].Prec);
@@ -2964,8 +2967,11 @@ NOTHINK:
 
 				float ca = (float)cos(cptr->alpha + rA + pi / 2);
 				float sa = (float)sin(cptr->alpha + rA + pi / 2);
-				float cb = (float)cos(cptr->beta + rB);
-				float sb = (float)sin(cptr->beta + rB);
+				
+				//float cb = (float)cos(cptr->beta + rB); //vertical aim inline with poacher beta
+				//float sb = (float)sin(cptr->beta + rB);
+				float cb = (float)cos(tbeta + rB);
+				float sb = (float)sin(tbeta + rB);
 
 				nv.x = sa;
 				nv.y = 0;
