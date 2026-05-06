@@ -420,6 +420,8 @@ typedef struct _TCharacter
 
   bool awareHunter;
   bool heardShot;
+  
+  bool hunterLOS; //hunter line of sight
 
   bool aquaticIdle;
 
@@ -702,7 +704,7 @@ typedef struct _TDinoInfo
   int jumpRange;
 
   int runAnim, jumpAnim, walkAnim, swimAnim, flyAnim, diveAnim, glideAnim, takeoffAnim, landAnim,
-	  slideAnim, shakeLandAnim, shakeWaterAnim, climbAnim, fireAnim;
+	  slideAnim, shakeLandAnim, shakeWaterAnim, climbAnim, fireAnim, pauseAnim;
   int reloadAnim = -1;
 
   int alarmCall = -1;

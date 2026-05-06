@@ -3896,6 +3896,7 @@ void ReadCharacterLine(FILE *stream, char *_value, char line[256], bool &spawnIn
 	if (strstr(line, "shakeWAnim"))  AddAnim(DinoInfo[TotalC].shakeWaterAnim, value);
 	if (strstr(line, "climbAnim"))  AddAnim(DinoInfo[TotalC].climbAnim, value);
 	if (strstr(line, "fireAnim"))  AddAnim(DinoInfo[TotalC].fireAnim, value);
+	if (strstr(line, "pauseAnim"))  AddAnim(DinoInfo[TotalC].pauseAnim, value);
 	if (strstr(line, "reloadAnim"))  AddAnim(DinoInfo[TotalC].reloadAnim, value);
 
 	
@@ -4704,6 +4705,7 @@ void LoadResourcesScript()
 	//AIInfo[AI_ALLO].weaveRange = 1648;
 	AIInfo[AI_ALLO].pWMin = 2048;
 
+	AIInfo[AI_POACHER].sniffer = TRUE;
 	AIInfo[AI_POACHER].agressMulti = 4;
 	AIInfo[AI_POACHER].targetBendRotSpd = 2;
 	AIInfo[AI_POACHER].yBetaGamma1 = 64;

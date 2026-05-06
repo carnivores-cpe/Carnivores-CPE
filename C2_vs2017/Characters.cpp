@@ -2892,6 +2892,8 @@ void AnimatePoacher(TCharacter *cptr)
 	int _FTime = cptr->FTime;
 	float _tgalpha = cptr->tgalpha;
 
+	if (!MyHealth) cptr->hunterLOS = false;
+
 	cptr->FTime += TimeDt;
 
 TBEGIN:
@@ -2915,13 +2917,19 @@ TBEGIN:
 
 
 	if (NewPhase) {
+		 // /* 
 		if (!cptr->ammo) {
 			if (DinoInfo[cptr->CType].reloadAnim>=0) cptr->Phase = DinoInfo[cptr->CType].reloadAnim;
 			else cptr->ammo = DinoInfo[cptr->CType].Reload;
 		} else {
-			cptr->Phase = DinoInfo[cptr->CType].fireAnim;
+			if (cptr->hunterLOS) {
+				cptr->Phase = DinoInfo[cptr->CType].fireAnim;
+			} else cptr->Phase = DinoInfo[cptr->CType].pauseAnim;
+			
 		}
+		// */
 	}
+
 
 	//test
 	//cptr->alpha += pi/650;
@@ -2982,9 +2990,9 @@ NOTHINK:
 				nv.z *= cb;
 
 				float v = WeapInfo[DinoInfo[cptr->CType].Weapon].Veloc;
-				if (UNDERWATER) v = WeapInfo[DinoInfo[cptr->CType].Weapon].VelocAq;
+				//if (UNDERWATER) v = WeapInfo[DinoInfo[cptr->CType].Weapon].VelocAq;
 				float l = WeapInfo[DinoInfo[cptr->CType].Weapon].Veloc;
-				if (WeapInfo[DinoInfo[cptr->CType].Weapon].aqLow) l = WeapInfo[DinoInfo[cptr->CType].Weapon].VelocAq;
+				//if (WeapInfo[DinoInfo[cptr->CType].Weapon].aqLow) l = WeapInfo[DinoInfo[cptr->CType].Weapon].VelocAq;
 
 				AddBullet(cptr->pos.x, cptr->pos.y + (170 * cptr->scale), cptr->pos.z,
 					nv.x * 64 * v,
@@ -8735,6 +8743,8 @@ void CheckAfraid()
 	for (int c = 0; c < ChCount; c++)
 	{
 		TCharacter *cptr = &Characters[c];
+		cptr->hunterLOS = FALSE;
+
 		if (!cptr->Health) continue;
 		if (!AIInfo[cptr->Clone].sniffer) continue;
 		//if (cptr->AfraidTime || cptr->State == 1) continue;
@@ -8795,7 +8805,7 @@ void CheckAfraid()
 		if (kRes < 1.0)
 		{
 
-			isAfraid:
+		isAfraid:
 
 			//MessageBeep(0xFFFFFFFF);
 			char t[128];
@@ -8809,12 +8819,14 @@ void CheckAfraid()
 
 			kRes = MIN(kRes, kR);
 			cptr->AfraidTime = (int)(1.0 / (kRes + 0.1) * 10.f * 1000.f);
-			if (cptr->State==0) {
+			if (cptr->State == 0) {
 				cptr->State = 2;
 			}
 			cptr->awareHunter = TRUE;
 			if (cptr->Clone == AI_TREX) //===== T-Rex
 				if (kALook > kASmell) cptr->State = 3;
+			if (cptr->Clone == AI_POACHER) //===== Poacher
+				cptr->hunterLOS = TRUE;
 			cptr->NoFindCnt = 0;
 		}
 	}

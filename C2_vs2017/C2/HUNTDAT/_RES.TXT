@@ -1822,7 +1822,7 @@ deathtype{
  health    = 3
  smellK     = 0.0
  hearK      = 1.0
- lookK      = 0.4
+ lookK      = 0.5
  shipdelta = 48
  fearCall = 8
  runspd = 1.6
@@ -1830,12 +1830,8 @@ deathtype{
  runAnim = 1
  walkAnim = 0
  fireAnim = 4
+ pauseAnim = 2
  reloadAnim = 3
-idlegroup{
- anim = 2
- startChance = 0.0625
- endChance = 0.5
-}
 deathtype{
  dieAnim = 5
  sleepAnim = 6
