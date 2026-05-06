@@ -420,7 +420,8 @@ typedef struct _TCharacter
 
   bool awareHunter;
   bool heardShot;
-  
+
+  bool PhunterLOS; //prev
   bool hunterLOS; //hunter line of sight
 
   bool aquaticIdle;

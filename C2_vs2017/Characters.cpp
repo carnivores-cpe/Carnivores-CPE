@@ -2913,7 +2913,11 @@ TBEGIN:
 
 		NewPhase = TRUE;
 	}
-
+	
+	if (cptr->Phase != DinoInfo[cptr->CType].fireAnim &&
+		cptr->Phase != DinoInfo[cptr->CType].reloadAnim &&
+		cptr->hunterLOS && !cptr->PhunterLOS) NewPhase = TRUE;
+	cptr->PhunterLOS = cptr->hunterLOS;
 
 
 	if (NewPhase) {
