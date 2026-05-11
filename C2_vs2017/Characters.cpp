@@ -2893,6 +2893,7 @@ void AnimatePoacher(TCharacter *cptr)
 	float _tgalpha = cptr->tgalpha;
 
 	if (!MyHealth) cptr->hunterLOS = false;
+	if (DEBUG || UNDERWATER || ObservMode) cptr->hunterLOS = false;
 
 	cptr->FTime += TimeDt;
 
@@ -2914,11 +2915,9 @@ TBEGIN:
 		NewPhase = TRUE;
 	}
 	
-	if (cptr->Phase != DinoInfo[cptr->CType].fireAnim &&
-		cptr->Phase != DinoInfo[cptr->CType].reloadAnim &&
-		cptr->hunterLOS && !cptr->PhunterLOS) NewPhase = TRUE;
-	cptr->PhunterLOS = cptr->hunterLOS;
+	
 
+	
 
 	if (NewPhase) {
 		 // /* 
@@ -2935,9 +2934,15 @@ TBEGIN:
 	}
 
 
-	//test
-	//cptr->alpha += pi/650;
-	//if (cptr->alpha > 2 * pi) cptr->alpha -= 2 * pi;
+	if (cptr->Phase != DinoInfo[cptr->CType].fireAnim &&
+		cptr->Phase != DinoInfo[cptr->CType].reloadAnim &&
+		cptr->hunterLOS && !cptr->PhunterLOS) {
+		NewPhase = TRUE;
+		cptr->FTime = 0;
+		cptr->Phase = DinoInfo[cptr->CType].fireAnim;
+	}
+	cptr->PhunterLOS = cptr->hunterLOS;
+
 
 NOTHINK:
 
@@ -2970,7 +2975,7 @@ NOTHINK:
 
 			float targetdy = PlayerY - cptr->pos.y;
 			float tbeta = -atan(targetdy / tdist);
-
+			
 			for (int s = 0; s <= WeapInfo[DinoInfo[cptr->CType].Weapon].TraceC; s++)
 			{
 				float rA = siRand(128) * 0.00010 * (2.f - WeapInfo[DinoInfo[cptr->CType].Weapon].Prec);
@@ -3008,6 +3013,9 @@ NOTHINK:
 					DinoInfo[cptr->CType].Weapon,
 					true);
 			}
+			
+
+
 		}
 	}
 
