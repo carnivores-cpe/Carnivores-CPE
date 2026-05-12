@@ -2895,6 +2895,8 @@ void AnimatePoacher(TCharacter *cptr)
 	if (!MyHealth) cptr->hunterLOS = false;
 	if (DEBUG || UNDERWATER || ObservMode) cptr->hunterLOS = false;
 
+	bool _aimOk = cptr->aimOk;
+
 	cptr->FTime += TimeDt;
 
 TBEGIN:
@@ -2916,8 +2918,9 @@ TBEGIN:
 	}
 	
 	
-
-	
+	float alphaAim = fabs(cptr->tgalpha - cptr->alpha);
+	if (alphaAim > pi) alphaAim = 2 * pi - alphaAim;
+	cptr->aimOk = alphaAim < (27 * (2.f - WeapInfo[DinoInfo[cptr->CType].Weapon].Prec)) / tdist;
 
 	if (NewPhase) {
 		 // /* 
@@ -2925,7 +2928,7 @@ TBEGIN:
 			if (DinoInfo[cptr->CType].reloadAnim>=0) cptr->Phase = DinoInfo[cptr->CType].reloadAnim;
 			else cptr->ammo = DinoInfo[cptr->CType].Reload;
 		} else {
-			if (cptr->hunterLOS) {
+			if (cptr->hunterLOS && cptr->aimOk) {
 				cptr->Phase = DinoInfo[cptr->CType].fireAnim;
 			} else cptr->Phase = DinoInfo[cptr->CType].pauseAnim;
 			
@@ -2936,7 +2939,7 @@ TBEGIN:
 
 	if (cptr->Phase != DinoInfo[cptr->CType].fireAnim &&
 		cptr->Phase != DinoInfo[cptr->CType].reloadAnim &&
-		cptr->hunterLOS && !cptr->PhunterLOS) {
+		cptr->hunterLOS && cptr->aimOk && (!cptr->PhunterLOS || !_aimOk)) {
 		NewPhase = TRUE;
 		cptr->FTime = 0;
 		cptr->Phase = DinoInfo[cptr->CType].fireAnim;
@@ -2976,11 +2979,11 @@ NOTHINK:
 			float targetdy = PlayerY - cptr->pos.y;
 			float tbeta = -atan(targetdy / tdist);
 			
+			 
 			for (int s = 0; s <= WeapInfo[DinoInfo[cptr->CType].Weapon].TraceC; s++)
 			{
 				float rA = siRand(128) * 0.00010 * (2.f - WeapInfo[DinoInfo[cptr->CType].Weapon].Prec);
 				float rB = siRand(128) * 0.00010 * (2.f - WeapInfo[DinoInfo[cptr->CType].Weapon].Prec);
-
 
 				float ca = (float)cos(cptr->alpha + rA + pi / 2);
 				float sa = (float)sin(cptr->alpha + rA + pi / 2);
@@ -3013,7 +3016,7 @@ NOTHINK:
 					DinoInfo[cptr->CType].Weapon,
 					true);
 			}
-			
+			 
 
 
 		}
@@ -3057,31 +3060,34 @@ ENDPSELECT:
 
 
 
-		if (drspd > 0.02)
-			if (cptr->tgalpha > cptr->alpha) currspeed = 0.6f + drspd * 1.2f;
-			else currspeed = -0.6f - drspd * 1.2f;
-		else currspeed = 0;
-		if (cptr->AfraidTime) currspeed *= 2.5;
+	if (drspd > 0.02)
+		if (cptr->tgalpha > cptr->alpha) currspeed = 0.6f + drspd * 1.2f;
+		else currspeed = -0.6f - drspd * 1.2f;
+	else currspeed = 0;
+	if (cptr->AfraidTime) currspeed *= 2.5;
 
-		if (dalpha > pi) currspeed *= -1;
-		if ((cptr->StateF & csONWATER) || cptr->Phase == DinoInfo[cptr->CType].walkAnim) currspeed /= 1.4f;
+	if (dalpha > pi) currspeed *= -1;
+	if ((cptr->StateF & csONWATER) || cptr->Phase == DinoInfo[cptr->CType].walkAnim) currspeed /= 1.4f;
 
-		if (cptr->AfraidTime) DeltaFunc(cptr->rspeed, currspeed, (float)TimeDt / 160.f);
-		else DeltaFunc(cptr->rspeed, currspeed, (float)TimeDt / 180.f);
+	if (cptr->AfraidTime) DeltaFunc(cptr->rspeed, currspeed, (float)TimeDt / 160.f);
+	else DeltaFunc(cptr->rspeed, currspeed, (float)TimeDt / 180.f);
 
-		/*
-		tgbend = drspd / AIInfo[cptr->Clone].targetBendRotSpd;
-		if (tgbend > pi / 5) tgbend = pi / 5;
+	/*
+	tgbend = drspd / AIInfo[cptr->Clone].targetBendRotSpd;
+	if (tgbend > pi / 5) tgbend = pi / 5;
 
-		tgbend *= SGN(currspeed);
-		if (fabs(tgbend) > fabs(cptr->bend)) DeltaFunc(cptr->bend, tgbend, (float)TimeDt / 800.f);
-		else DeltaFunc(cptr->bend, tgbend, (float)TimeDt / 600.f);
-		*/
+	tgbend *= SGN(currspeed);
+	if (fabs(tgbend) > fabs(cptr->bend)) DeltaFunc(cptr->bend, tgbend, (float)TimeDt / 800.f);
+	else DeltaFunc(cptr->bend, tgbend, (float)TimeDt / 600.f);
+	*/
 
-		rspd = cptr->rspeed * TimeDt / 1024.f;
+	rspd = cptr->rspeed * TimeDt / 1024.f;
 
-	if (drspd < fabs(rspd)) cptr->alpha = cptr->tgalpha;
-	else cptr->alpha += rspd;
+	if (cptr->hunterLOS) {
+		if (drspd < fabs(rspd)) cptr->alpha = cptr->tgalpha;
+		else cptr->alpha += rspd;
+	}
+
 
 
 	if (cptr->alpha > pi * 2) cptr->alpha -= pi * 2;

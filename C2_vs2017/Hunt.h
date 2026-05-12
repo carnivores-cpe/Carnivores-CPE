@@ -423,6 +423,7 @@ typedef struct _TCharacter
 
   bool PhunterLOS; //prev
   bool hunterLOS; //hunter line of sight
+  bool aimOk; //is xz aim correct
 
   bool aquaticIdle;
 
