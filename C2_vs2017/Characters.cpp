@@ -3115,11 +3115,7 @@ void AnimatePoacher(TCharacter *cptr)
 
 	bool _aimOk = cptr->aimOk;
 
-	if (cptr->State == 2)
-	{
-		if (!AIInfo[cptr->Clone].carnivore) NewPhase = TRUE;
-		cptr->State = 1;
-	}
+	if (cptr->State == 2) cptr->State = 1;
 
 TBEGIN:
 	float targetx = cptr->tgx;
@@ -3133,6 +3129,7 @@ TBEGIN:
 	playerdx = PlayerX - cptr->pos.x - cptr->lookx * 100 * cptr->scale;
 	playerdz = PlayerZ - cptr->pos.z - cptr->lookz * 100 * cptr->scale;
 
+	float pAlpha = CorrectedAlpha(FindVectorAlpha(playerdx, playerdz), cptr->alpha);
 	float pdist = (float)sqrt(playerdx * playerdx + playerdz * playerdz);
 
 
@@ -3204,7 +3201,7 @@ NOTHINK:
 	{
 		cptr->tgalpha = CorrectedAlpha(FindVectorAlpha(targetdx, targetdz), cptr->alpha);
 
-		if (cptr->State && pdist > DinoInfo[cptr->CType].weaveRange && !DinoInfo[cptr->CType].dontWeave)
+		if (cptr->State && pdist > DinoInfo[cptr->CType].weaveRange && !DinoInfo[cptr->CType].dontWeave && (cptr->Phase == DinoInfo[cptr->CType].walkAnim || cptr->Phase == DinoInfo[cptr->CType].runAnim))
 		{
 			cptr->tgalpha += (float)sin(cptr->tgalphaOffset + (RealTime / 824.f)) / AIInfo[cptr->Clone].tGAIncrement;
 			if (cptr->tgalpha < 0) cptr->tgalpha += 2 * pi;
@@ -3239,27 +3236,13 @@ NOTHINK:
 		NewPhase = TRUE;
 	}
 
-	float alphaAim = fabs(cptr->tgalpha - cptr->alpha);
+	float alphaAim = fabs(pAlpha - cptr->alpha);
 	if (alphaAim > pi) alphaAim = 2 * pi - alphaAim;
-	cptr->aimOk = alphaAim < (27 * (2.f - WeapInfo[DinoInfo[cptr->CType].Weapon].Prec)) / tdist;
+	cptr->aimOk = alphaAim < (25 * (2.f - WeapInfo[DinoInfo[cptr->CType].Weapon].Prec)) / tdist;
 
+	//bool minRan = pdist < ctViewR * DinoInfo[cptr->CType].poachMinRange + OptAgres / AIInfo[cptr->Clone].agressMulti;
 
 	if (NewPhase)
-
-
-		if (!cptr->ammo) {
-			if (DinoInfo[cptr->CType].reloadAnim >= 0) {
-				cptr->Phase = DinoInfo[cptr->CType].reloadAnim;
-				goto ENDPSELECT;
-			} else cptr->ammo = DinoInfo[cptr->CType].Reload;
-		}
-		else {
-			if (cptr->hunterLOS && cptr->aimOk) {
-				cptr->Phase = DinoInfo[cptr->CType].fireAnim;
-				goto ENDPSELECT;
-			}
-			//else cptr->Phase = DinoInfo[cptr->CType].pauseAnim;
-		}
 
 
 		if (!cptr->State)
@@ -3307,14 +3290,24 @@ NOTHINK:
 			}
 
 		}
-		else cptr->Phase = DinoInfo[cptr->CType].runAnim;
+		else if (!cptr->ammo) {
+			cptr->ammo = DinoInfo[cptr->CType].Reload;
+			cptr->Phase = DinoInfo[cptr->CType].reloadAnim;
+			goto ENDPSELECT;
+		} else if (cptr->hunterLOS && cptr->aimOk) {
+				cptr->Phase = DinoInfo[cptr->CType].fireAnim;
+				goto ENDPSELECT;
+		} else if (cptr->hunterLOS) cptr->Phase = DinoInfo[cptr->CType].pauseAnim; else cptr->Phase = DinoInfo[cptr->CType].runAnim;
 
-	if (cptr->currentIdleGroup == -1) {
+
+	if (cptr->currentIdleGroup == -1 &&
+		cptr->Phase != DinoInfo[cptr->CType].fireAnim &&
+		cptr->Phase != DinoInfo[cptr->CType].reloadAnim) {
 		if (!cptr->State) cptr->Phase = DinoInfo[cptr->CType].walkAnim;
 		else if (fabs(cptr->tgalpha - cptr->alpha) < 1.0 ||
-			fabs(cptr->tgalpha - cptr->alpha) > 2 * pi - 1.0)
-			cptr->Phase = DinoInfo[cptr->CType].runAnim;
-		else cptr->Phase = DinoInfo[cptr->CType].walkAnim;
+			fabs(cptr->tgalpha - cptr->alpha) > 2 * pi - 1.0) {
+			if (cptr->hunterLOS) cptr->Phase = DinoInfo[cptr->CType].pauseAnim; else cptr->Phase = DinoInfo[cptr->CType].runAnim;
+		} else cptr->Phase = DinoInfo[cptr->CType].walkAnim;
 	}
 
 
@@ -3330,17 +3323,12 @@ NOTHINK:
 
 ENDPSELECT:
 
+	
 	//====== process phase changing ===========//
 	if ((_Phase != cptr->Phase) || NewPhase) {
 		ActivateCharacterFx(cptr);
 
-
-		if (cptr->Phase == DinoInfo[cptr->CType].reloadAnim) {
-
-			cptr->ammo = DinoInfo[cptr->CType].Reload;
-
-		}
-		else if (cptr->Phase == DinoInfo[cptr->CType].fireAnim) {
+		if (cptr->Phase == DinoInfo[cptr->CType].fireAnim) {
 			if (WeapInfo[DinoInfo[cptr->CType].Weapon].MGSSound) {
 				Vector3d shotpos = SubVectors(cptr->pos, PlayerPos);
 				shotpos.x /= -3.f;
@@ -3435,6 +3423,11 @@ ENDPSELECT:
 	if (drspd > pi) drspd = 2 * pi - drspd;
 
 	if (cptr->currentIdleGroup >= 0) goto SKIPROT;
+
+
+	// ?? no rotation for these anims???
+	//if (cptr->Phase == DinoInfo[cptr->CType].fireAnim) goto SKIPROT;
+	if (cptr->Phase == DinoInfo[cptr->CType].reloadAnim) goto SKIPROT;
 
 	if (drspd > 0.02)
 		if (cptr->tgalpha > cptr->alpha) currspeed = 0.6f + drspd * 1.2f;

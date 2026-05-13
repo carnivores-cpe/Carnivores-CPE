@@ -693,6 +693,7 @@ typedef struct _TDinoInfo
 
   //int hunterDeathAnim, hunterDeathOffset;
   int aggress, killDist, flyDist;
+  int poachMinRange = 50;
 
   bool onRadar;
   float runspd, jmpspd, wlkspd, swmspd, flyspd, gldspd, tkfspd, lndspd, divspd;

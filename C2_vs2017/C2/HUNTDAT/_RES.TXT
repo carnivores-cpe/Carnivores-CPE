@@ -1826,7 +1826,7 @@ deathtype{
  shipdelta = 48
  runspd = 1.6
  wlkspd = 0.40
- aggress = 128
+ aggress = 150
  runAnim = 1
  walkAnim = 0
  fireAnim = 4
