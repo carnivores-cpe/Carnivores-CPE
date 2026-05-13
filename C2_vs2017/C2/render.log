@@ -96,27 +96,8 @@ Voodoo: Can't set selected video mode
 Start Address: 0
 End   Address: 8388592
 Audio_UpdateGeometry: 324 faces uploaded
-Trophy Loaded.
-TrophyB Loaded.
-  AudioStop ()
-Entered game
-ReInitGame();
-Placing...
-Loading: HUNTDAT\par9.car
-Loading: HUNTDAT\spino_stt.car
-Loading: HUNTDAT\WEAPONS\pistolbullet1.car
-Loading: HUNTDAT\WEAPONS\shotgunbullet1.car
-Loading: HUNTDAT\WEAPONS\shotgunbullet1.car
-Loading: HUNTDAT\WEAPONS\arrow9.car
-Loading: HUNTDAT\WEAPONS\riflebullet1.car
-Loading: HUNTDAT\WEAPONS\riflebullet1.car
-Loading: HUNTDAT\WEAPONS\harpoon2.car
-Loading: MULTIPLAYER\AVATARS\Hitbox.car
-Voodoo: Can't set selected video mode
-Start Address: 0
-End   Address: 8388592
-Trophy Loaded.
-TrophyB Loaded.
+Trophy Saved.
+TrophyB Saved.
   AudioStop ()
  Releasing Listener3D
  Releasing PrimaryBuffer

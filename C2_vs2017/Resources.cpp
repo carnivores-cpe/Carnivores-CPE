@@ -4716,6 +4716,7 @@ void LoadResourcesScript()
 	AIInfo[AI_POACHER].targetGammaRot = 8.0f;
 	AIInfo[AI_POACHER].tGAIncrement = 2.f;
 	AIInfo[AI_POACHER].idleStartD = 118;
+	AIInfo[AI_ALLO].carnivore = true;
 	AIInfo[AI_POACHER].noWayCntMin = 12;
 	AIInfo[AI_POACHER].noFindWayMed = 16;
 	AIInfo[AI_POACHER].noFindWayRange = 20;

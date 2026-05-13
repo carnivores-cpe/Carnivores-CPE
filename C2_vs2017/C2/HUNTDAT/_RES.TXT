@@ -1818,15 +1818,15 @@ deathtype{
   spawnmin = 0
   spawnrate = 1.0
  }
- dogSmell  = TRUE
+ radius    = 256
  health    = 3
  smellK     = 0.0
  hearK      = 1.0
  lookK      = 0.5
  shipdelta = 48
- fearCall = 8
  runspd = 1.6
  wlkspd = 0.40
+ aggress = 128
  runAnim = 1
  walkAnim = 0
  fireAnim = 4
@@ -1844,13 +1844,13 @@ deathtype{
  bloR = 112
  bloG = 0
  bloB = 0
- weaveRange = 0
+ weaveRange = 1648
  HideBinoc = TRUE
  Weapon = 2
  radar = TRUE
  radR = 240
- radG = 0
- radB = 240
+ radG = 240
+ radB = 0
 }
 
 {
