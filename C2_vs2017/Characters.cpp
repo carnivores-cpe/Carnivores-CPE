@@ -3294,21 +3294,15 @@ NOTHINK:
 			cptr->ammo = DinoInfo[cptr->CType].Reload;
 			cptr->Phase = DinoInfo[cptr->CType].reloadAnim;
 			goto ENDPSELECT;
-		} else if (cptr->hunterLOS && cptr->aimOk) {
+		} else if (cptr->hunterLOS) {
+			if (cptr->aimOk){
 				cptr->Phase = DinoInfo[cptr->CType].fireAnim;
 				goto ENDPSELECT;
-		} else if (cptr->hunterLOS) cptr->Phase = DinoInfo[cptr->CType].pauseAnim; else cptr->Phase = DinoInfo[cptr->CType].runAnim;
-
-
-	if (cptr->currentIdleGroup == -1 &&
-		cptr->Phase != DinoInfo[cptr->CType].fireAnim &&
-		cptr->Phase != DinoInfo[cptr->CType].reloadAnim) {
-		if (!cptr->State) cptr->Phase = DinoInfo[cptr->CType].walkAnim;
-		else if (fabs(cptr->tgalpha - cptr->alpha) < 1.0 ||
+			} else cptr->Phase = DinoInfo[cptr->CType].pauseAnim;
+		} else if (fabs(cptr->tgalpha - cptr->alpha) < 1.0 ||
 			fabs(cptr->tgalpha - cptr->alpha) > 2 * pi - 1.0) {
-			if (cptr->hunterLOS) cptr->Phase = DinoInfo[cptr->CType].pauseAnim; else cptr->Phase = DinoInfo[cptr->CType].runAnim;
+			cptr->Phase = DinoInfo[cptr->CType].runAnim;
 		} else cptr->Phase = DinoInfo[cptr->CType].walkAnim;
-	}
 
 
 	if (cptr->Phase != DinoInfo[cptr->CType].fireAnim &&
