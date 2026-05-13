@@ -3110,6 +3110,11 @@ void AnimatePoacher(TCharacter *cptr)
 	int _FTime = cptr->FTime;
 	float _tgalpha = cptr->tgalpha;
 
+	if (!MyHealth) cptr->hunterLOS = false;
+	if (DEBUG || UNDERWATER || ObservMode) cptr->hunterLOS = false;
+
+	bool _aimOk = cptr->aimOk;
+
 	if (cptr->State == 2)
 	{
 		if (!AIInfo[cptr->Clone].carnivore) NewPhase = TRUE;
@@ -3234,7 +3239,29 @@ NOTHINK:
 		NewPhase = TRUE;
 	}
 
+	float alphaAim = fabs(cptr->tgalpha - cptr->alpha);
+	if (alphaAim > pi) alphaAim = 2 * pi - alphaAim;
+	cptr->aimOk = alphaAim < (27 * (2.f - WeapInfo[DinoInfo[cptr->CType].Weapon].Prec)) / tdist;
+
+
 	if (NewPhase)
+
+
+		if (!cptr->ammo) {
+			if (DinoInfo[cptr->CType].reloadAnim >= 0) {
+				cptr->Phase = DinoInfo[cptr->CType].reloadAnim;
+				goto ENDPSELECT;
+			} else cptr->ammo = DinoInfo[cptr->CType].Reload;
+		}
+		else {
+			if (cptr->hunterLOS && cptr->aimOk) {
+				cptr->Phase = DinoInfo[cptr->CType].fireAnim;
+				goto ENDPSELECT;
+			}
+			//else cptr->Phase = DinoInfo[cptr->CType].pauseAnim;
+		}
+
+
 		if (!cptr->State)
 		{
 
@@ -3291,11 +3318,89 @@ NOTHINK:
 	}
 
 
+	if (cptr->Phase != DinoInfo[cptr->CType].fireAnim &&
+		cptr->Phase != DinoInfo[cptr->CType].reloadAnim &&
+		cptr->hunterLOS && cptr->aimOk && (!cptr->PhunterLOS || !_aimOk)) {
+		NewPhase = TRUE;
+		cptr->FTime = 0;
+		cptr->Phase = DinoInfo[cptr->CType].fireAnim;
+	}
+	cptr->PhunterLOS = cptr->hunterLOS;
+
+
 ENDPSELECT:
 
 	//====== process phase changing ===========//
-	if ((_Phase != cptr->Phase) || NewPhase)
+	if ((_Phase != cptr->Phase) || NewPhase) {
 		ActivateCharacterFx(cptr);
+
+
+		if (cptr->Phase == DinoInfo[cptr->CType].reloadAnim) {
+
+			cptr->ammo = DinoInfo[cptr->CType].Reload;
+
+		}
+		else if (cptr->Phase == DinoInfo[cptr->CType].fireAnim) {
+			if (WeapInfo[DinoInfo[cptr->CType].Weapon].MGSSound) {
+				Vector3d shotpos = SubVectors(cptr->pos, PlayerPos);
+				shotpos.x /= -3.f;
+				shotpos.y /= -3.f;
+				shotpos.z /= -3.f;
+				shotpos = SubVectors(PlayerPos, shotpos);
+				AddVoice3d(fxGunShot[DinoInfo[cptr->CType].Weapon].length,
+					fxGunShot[DinoInfo[cptr->CType].Weapon].lpData,
+					shotpos.x, shotpos.y, shotpos.z);
+			}
+
+			cptr->ammo -= 1;
+
+			float targetdy = PlayerY - cptr->pos.y;
+			float tbeta = -atan(targetdy / tdist);
+
+
+			for (int s = 0; s <= WeapInfo[DinoInfo[cptr->CType].Weapon].TraceC; s++)
+			{
+				float rA = siRand(128) * 0.00010 * (2.f - WeapInfo[DinoInfo[cptr->CType].Weapon].Prec);
+				float rB = siRand(128) * 0.00010 * (2.f - WeapInfo[DinoInfo[cptr->CType].Weapon].Prec);
+
+				float ca = (float)cos(cptr->alpha + rA + pi / 2);
+				float sa = (float)sin(cptr->alpha + rA + pi / 2);
+
+				//float cb = (float)cos(cptr->beta + rB); //vertical aim inline with poacher beta
+				//float sb = (float)sin(cptr->beta + rB);
+				float cb = (float)cos(tbeta + rB);
+				float sb = (float)sin(tbeta + rB);
+
+				nv.x = sa;
+				nv.y = 0;
+				nv.z = -ca;
+
+				nv.x *= cb;
+				nv.y = -sb;
+				nv.z *= cb;
+
+				float v = WeapInfo[DinoInfo[cptr->CType].Weapon].Veloc;
+				//if (UNDERWATER) v = WeapInfo[DinoInfo[cptr->CType].Weapon].VelocAq;
+				float l = WeapInfo[DinoInfo[cptr->CType].Weapon].Veloc;
+				//if (WeapInfo[DinoInfo[cptr->CType].Weapon].aqLow) l = WeapInfo[DinoInfo[cptr->CType].Weapon].VelocAq;
+
+				AddBullet(cptr->pos.x, cptr->pos.y + (170 * cptr->scale), cptr->pos.z,
+					nv.x * 64 * v,
+					nv.y * 64 * v,
+					nv.z * 64 * v,
+					nv.x * 64 * l,
+					nv.y * 64 * l,
+					nv.z * 64 * l,
+					DinoInfo[cptr->CType].Weapon,
+					true);
+			}
+
+
+
+		}
+
+
+	}
 
 	if (_Phase != cptr->Phase)
 	{
