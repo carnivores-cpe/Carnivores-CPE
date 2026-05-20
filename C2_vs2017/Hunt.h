@@ -1415,6 +1415,8 @@ _EXTORNOT float BoatHeight;
 _EXTORNOT int SurvivalSpawnX; //survival
 _EXTORNOT int SurvivalSpawnZ;
 _EXTORNOT float SurvivalSpawnA;
+_EXTORNOT int TrophySpawnX;
+_EXTORNOT int TrophySpawnZ;
 _EXTORNOT TSpawnRegion SurvivalDinoSpawn; //dino spawn zone
 _EXTORNOT int SurvivalWave;
 _EXTORNOT int SurvivalIndex[128];

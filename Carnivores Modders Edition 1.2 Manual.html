@@ -257,6 +257,7 @@ function expand(n) {
 			<h3>Change Log v1.2</h3>
 			
 			<ul>
+				<li>Wary Flyer AI.</li>
 				<li>Animation numbers in the res can be repeated.</li>
 				<li>Custom menu font colours.</li>
 				<li>Up to 10 selectable weapon slots (with numkey binding).</li>
@@ -273,7 +274,7 @@ function expand(n) {
 				<li>Menu pics for observer mode, dawn, day and night.</li>
 				<li>Bigger map view on high resolutions.</li>
 				<li>Shadows on map view.</li>
-				<li>Wary Flyer AI.</li>
+				<li>Custom spawn point for the trophy room.</li>
 				<li>Customizable speed for morphing between animations.</li>
 				<!-- huntable dino 255? -->
 			</ul>
@@ -320,6 +321,10 @@ function expand(n) {
 			Note: As of 1.2 prices are stored in each individual entry in the _menu.txt, the start price is in the common section.
 			<p>
 			Note: As of 1.2 observ.tga, dawn.tga, day.tga, night.tga are required in the pics folder
+			</p>
+			
+			<p>
+			Note: As of 1.2 trophyPlayerX and trophyPlayerY values are required in the common section of the _res.txt
 			</p>
 			</b>
 			
@@ -434,6 +439,7 @@ function expand(n) {
 				<li>New overwrite system - Any RES value can be adjusted depending on map, time of day, creature selected or a combination</li>
 				<li>Optional sleep animation for T-Rex</li>
 				<li>Customisable classic, Primal Prey style or hybrid trophy room.</li>
+				<li>Custom spawn point for the trophy room.</li>
 				<li>Trophies can be animated (res togglable)</li>
 				<li>Jump range for mosasaurus ai</li>
 				<li>Toggle crouch.</li>
@@ -974,7 +980,7 @@ function expand(n) {
 		
 		This res section is for universal game settings.
 		<p><b>
-		This section must be in _menu.txt
+		This section must be in _menu.txt and _res.txt
 		</b></p>
 		Equipment can be activated by defauly by adding it here (see the access section)
 
@@ -1066,8 +1072,45 @@ function expand(n) {
 		
 		</div>
 	</div>
-</p>		
+</p>
+
+
+<p style="margin-top:4%;">
+	<h2 id="arrow_251" unselectable="on" onclick="expand(251)"
+		style="float:left;margin-top:0;cursor:pointer;
+		-moz-user-select:none;
+		user-select:none;
+		-webkit-user-select: none;
+		-ms-user-select: none;"
+		>></h2>
+	<div class = "con" style="margin-left:8%">
+		<h2 onclick="expand(251)" style="cursor:pointer;">_RES value: trophyPlayerX trophyPlayerY</h2>
+		<div id="content_251" style="display: none">
 		
+			<p><b>Data type: Whole Number</b></p>
+			<p>
+			The xy position of the player in trophy mode.
+			</p>
+			
+			<div class="grid-container">
+				<div class="grid-item"><b></b></div>
+				<div class="grid-item"><b>Vanilla Value</b></div>
+				<div class="grid-item">trophyPlayerX</div>
+				<div class="grid-item">76</div>
+				<div class="grid-item">trophyPlayerY</div>
+				<div class="grid-item">70</div>
+			</div>
+
+		</div>
+	</div>
+</p>	
+
+
+
+
+
+
+
 		
 		
 		</div>

@@ -54,8 +54,8 @@ void PlaceHunter()
 
   if (TrophyMode)
   {
-    PlayerX = 76*256+128;
-    PlayerZ = 70*256+128;
+    PlayerX = TrophySpawnX *256+128; //76
+    PlayerZ = TrophySpawnZ *256+128; //70
     PlayerY = GetLandQH(PlayerX, PlayerZ);
     return;
   }
@@ -3058,6 +3058,38 @@ void ReadSnowType(FILE *stream)
 }
 
 
+void ReadCommonTable(FILE *stream)
+{
+	packTypeCount = 0;
+
+	if (SurvivalMode) {
+		SkipSector(stream);
+		return;
+	}
+
+	char *value;
+	char line[256];
+	while (fgets(line, 255, stream))
+	{
+		if (strstr(line, "}")) break;
+		value = strstr(line, "=");
+		if (!value) {
+			char errorBuff[100];
+			sprintf(errorBuff, "Script loading error: Common");
+			DoHalt(errorBuff);
+		}
+		value++;
+
+		if (strstr(line, "trophyPlayerX")) TrophySpawnX = atoi(value);
+		if (strstr(line, "trophyPlayerY")) TrophySpawnZ = atoi(value);
+
+	}
+
+}
+
+
+
+
 void ReadAreaTable (FILE *stream, int areaNumber)
 {
 	SnowCh = 0;
@@ -4930,6 +4962,9 @@ void LoadResourcesScript()
 	//if (strstr(line, "corpseambients")) ReadCharacters(stream, false, nextTrophySlot);
     if (strstr(line, "characters") ) ReadCharacters(stream);
 	//if (strstr(line, "mapambients")) ReadCharacters(stream, true, nextTrophySlot);
+	
+	if (strstr(line, "common")) ReadCommonTable(stream);
+	
 
   }
 
