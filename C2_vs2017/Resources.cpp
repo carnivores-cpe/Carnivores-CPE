@@ -4366,7 +4366,7 @@ void AddPoacherInfo()
 	if (ObservMode || SurvivalMode || TrophyMode) return;
 
 	strcpy(DinoInfo[TotalC].Name, "Poacher");
-	strcpy(DinoInfo[TotalC].FName, "poacher.car");
+	strcpy(DinoInfo[TotalC].FName, "../MULTIPLAYER/AVATARS/poacher.car");
 	DinoInfo[TotalC].Clone = AI_POACHER;
 	DinoInfo[TotalC].morphTime = 1.f;
 	
