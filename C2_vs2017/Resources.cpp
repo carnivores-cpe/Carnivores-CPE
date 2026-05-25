@@ -4372,8 +4372,12 @@ void AddPoacherInfo()
 	WeapInfo[TotalW].TraceC = 5;
 	WeapInfo[TotalW].Shots = 6;
 	WeapInfo[TotalW].Reload = 2;
-	strcpy(WeapInfo[TotalW].SFXName, "../MULTIPLAYER/GUNSHOTS/dbsgun.wav");
+	strcpy(WeapInfo[TotalW].SFXName, "dbsgun.wav");
 	WeapInfo[TotalW].MGSSound = TRUE;
+
+	wsprintf(logt, "MULTIPLAYER\\GUNSHOTS\\%s", WeapInfo[TotalW].SFXName);
+	LoadWav(logt, fxGunShot[TotalW]);
+	WeapInfo[TotalW].SFXIndex = TotalW;
 
 	strcpy(DinoInfo[TotalC].Name, "Poacher");
 	strcpy(DinoInfo[TotalC].FName, "../MULTIPLAYER/AVATARS/poacher.car");
