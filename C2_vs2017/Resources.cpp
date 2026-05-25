@@ -3552,6 +3552,12 @@ void AddAnim(int &anim, char *value) {
 	DinoInfo[TotalC].animCh++;
 }
 
+void AddAnimInt(int &anim, int value) {
+	DinoInfo[TotalC].animIndex[DinoInfo[TotalC].animCh] = value;
+	anim = DinoInfo[TotalC].animCh;
+	DinoInfo[TotalC].animCh++;
+}
+
 void ReadIdleGroupInfo(FILE *stream)
 {
 	char *value;
@@ -4354,6 +4360,74 @@ void ReadCharacters(FILE *stream)
 
 
 
+void AddPoacherInfo()
+{
+
+	if (ObservMode || SurvivalMode || TrophyMode) return;
+
+	strcpy(DinoInfo[TotalC].Name, "Poacher");
+	strcpy(DinoInfo[TotalC].FName, "poacher.car");
+	DinoInfo[TotalC].Clone = AI_POACHER;
+	DinoInfo[TotalC].morphTime = 1.f;
+	
+	//TEMP
+	spawnGroup[TotalSpawnGroup].SpawnRate = 1.f;
+	spawnGroup[TotalSpawnGroup].SpawnMax = 1;
+	spawnGroup[TotalSpawnGroup].SpawnMin = 0;
+	DinoInfo[TotalC].SpawnInfo[DinoInfo[TotalC].SpawnInfoCh].spawnRatio = 1;
+	DinoInfo[TotalC].SpawnInfo[DinoInfo[TotalC].SpawnInfoCh].spawnGroup = TotalSpawnGroup;
+	DinoInfo[TotalC].SpawnInfoCh++;
+	TotalSpawnGroup++;
+	
+	DinoInfo[TotalC].Radius = 256.f;
+	DinoInfo[TotalC].Health0 = 3;
+	DinoInfo[TotalC].SmellK = 0.f;
+	DinoInfo[TotalC].HearK = 1.f;
+	DinoInfo[TotalC].LookK = 0.5;
+	DinoInfo[TotalC].ShDelta = 48.f;
+	DinoInfo[TotalC].runspd = 1.6;
+	DinoInfo[TotalC].wlkspd = 0.4;
+	DinoInfo[TotalC].aggress = 150;
+	AddAnimInt(DinoInfo[TotalC].runAnim, 1);
+	AddAnimInt(DinoInfo[TotalC].walkAnim, 0);
+	AddAnimInt(DinoInfo[TotalC].fireAnim, 4);
+	AddAnimInt(DinoInfo[TotalC].pauseAnim, 2);
+	AddAnimInt(DinoInfo[TotalC].reloadAnim, 3);
+	
+	AddAnimInt(DinoInfo[TotalC].deathType[DinoInfo[TotalC].deathTypeCount].die, 5);
+	AddAnimInt(DinoInfo[TotalC].deathType[DinoInfo[TotalC].deathTypeCount].sleep, 6);
+	DinoInfo[TotalC].deathTypeCount++;
+
+	DinoInfo[TotalC].waterLevel = 30;
+	DinoInfo[TotalC].camDemoPoint = 256.f;
+	DinoInfo[TotalC].camDemoPointWater = 256.f;
+	DinoInfo[TotalC].camBase = 824.f;
+	DinoInfo[TotalC].camBaseWater = 824.f;
+	DinoInfo[TotalC].bloodRed = 112;
+	DinoInfo[TotalC].bloodGreen = 0;
+	DinoInfo[TotalC].bloodBlue = 0;
+	DinoInfo[TotalC].weaveRange = 1648.f;
+	DinoInfo[TotalC].HideBinoc = TRUE;
+	DinoInfo[TotalC].Weapon = 2;
+	DinoInfo[TotalC].Reload = WeapInfo[DinoInfo[TotalC].Weapon].Shots;
+	if (WeapInfo[DinoInfo[TotalC].Weapon].Reload)
+		DinoInfo[TotalC].Reload = WeapInfo[DinoInfo[TotalC].Weapon].Reload;
+
+	//TEMP
+	DinoInfo[TotalC].onRadar = TRUE;
+	DinoInfo[TotalC].radarRed = 240;
+	DinoInfo[TotalC].radarGreen = 240;
+	DinoInfo[TotalC].radarBlue = 0;
+
+	DinoInfo[TotalC].radarColour565 = ((DinoInfo[TotalC].radarRed >> 3) << 11) | ((DinoInfo[TotalC].radarGreen >> 2) << 5) | (DinoInfo[TotalC].radarBlue >> 3);
+	DinoInfo[TotalC].radarColour555 = ((DinoInfo[TotalC].radarRed >> 3) << 10) | ((DinoInfo[TotalC].radarGreen >> 3) << 5) | (DinoInfo[TotalC].radarBlue >> 3);
+
+	TotalC++;
+
+}
+
+
+
 void LoadResourcesScript()
 {
 
@@ -4960,7 +5034,10 @@ void LoadResourcesScript()
 	//if (strstr(line, "hunterinfo")) ReadCharacters(stream, false, nextTrophySlot);
 	//if (strstr(line, "oldambients")) ReadCharacters(stream, false, nextTrophySlot);
 	//if (strstr(line, "corpseambients")) ReadCharacters(stream, false, nextTrophySlot);
-    if (strstr(line, "characters") ) ReadCharacters(stream);
+	if (strstr(line, "characters")) {
+		ReadCharacters(stream);
+		AddPoacherInfo();
+	}
 	//if (strstr(line, "mapambients")) ReadCharacters(stream, true, nextTrophySlot);
 	
 	if (strstr(line, "common")) ReadCommonTable(stream);
