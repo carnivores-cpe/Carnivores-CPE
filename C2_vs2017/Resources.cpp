@@ -4365,6 +4365,16 @@ void AddPoacherInfo()
 
 	if (ObservMode || SurvivalMode || TrophyMode) return;
 
+	WeapInfo[TotalW].Power = 1.f;
+	WeapInfo[TotalW].Veloc = 12.f;
+	WeapInfo[TotalW].Prec = 0.2;
+	WeapInfo[TotalW].Loud = 1.9;
+	WeapInfo[TotalW].TraceC = 5;
+	WeapInfo[TotalW].Shots = 6;
+	WeapInfo[TotalW].Reload = 2;
+	strcpy(WeapInfo[TotalW].SFXName, "../MULTIPLAYER/GUNSHOTS/dbsgun.wav");
+	WeapInfo[TotalW].MGSSound = TRUE;
+
 	strcpy(DinoInfo[TotalC].Name, "Poacher");
 	strcpy(DinoInfo[TotalC].FName, "../MULTIPLAYER/AVATARS/poacher.car");
 	DinoInfo[TotalC].Clone = AI_POACHER;
@@ -4408,7 +4418,9 @@ void AddPoacherInfo()
 	DinoInfo[TotalC].bloodBlue = 0;
 	DinoInfo[TotalC].weaveRange = 1648.f;
 	DinoInfo[TotalC].HideBinoc = TRUE;
-	DinoInfo[TotalC].Weapon = 2;
+
+
+	DinoInfo[TotalC].Weapon = TotalW;
 	DinoInfo[TotalC].Reload = WeapInfo[DinoInfo[TotalC].Weapon].Shots;
 	if (WeapInfo[DinoInfo[TotalC].Weapon].Reload)
 		DinoInfo[TotalC].Reload = WeapInfo[DinoInfo[TotalC].Weapon].Reload;
@@ -4423,6 +4435,8 @@ void AddPoacherInfo()
 	DinoInfo[TotalC].radarColour555 = ((DinoInfo[TotalC].radarRed >> 3) << 10) | ((DinoInfo[TotalC].radarGreen >> 3) << 5) | (DinoInfo[TotalC].radarBlue >> 3);
 
 	TotalC++;
+
+	TotalW++;
 
 }
 

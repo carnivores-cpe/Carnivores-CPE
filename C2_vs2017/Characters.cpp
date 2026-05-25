@@ -3366,6 +3366,7 @@ ENDPSELECT:
 				float l = WeapInfo[DinoInfo[cptr->CType].Weapon].Veloc;
 				//if (WeapInfo[DinoInfo[cptr->CType].Weapon].aqLow) l = WeapInfo[DinoInfo[cptr->CType].Weapon].VelocAq;
 
+				// /*
 				AddBullet(cptr->pos.x, cptr->pos.y + (170 * cptr->scale), cptr->pos.z,
 					nv.x * 64 * v,
 					nv.y * 64 * v,
@@ -3375,6 +3376,7 @@ ENDPSELECT:
 					nv.z * 64 * l,
 					DinoInfo[cptr->CType].Weapon,
 					true);
+				// */
 			}
 
 
