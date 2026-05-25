@@ -4399,8 +4399,8 @@ void AddPoacherInfo()
 	DinoInfo[TotalC].HearK = 1.f;
 	DinoInfo[TotalC].LookK = 0.5;
 	DinoInfo[TotalC].ShDelta = 48.f;
-	DinoInfo[TotalC].runspd = 1.6;
-	DinoInfo[TotalC].wlkspd = 0.4;
+	DinoInfo[TotalC].runspd = 0.9;
+	DinoInfo[TotalC].wlkspd = 0.2;
 	DinoInfo[TotalC].aggress = 150;
 	AddAnimInt(DinoInfo[TotalC].runAnim, 1);
 	AddAnimInt(DinoInfo[TotalC].walkAnim, 0);
