@@ -2889,7 +2889,7 @@ SKIPROT:
 
 
 
-
+/*
 void AnimatePoacher2(TCharacter *cptr)
 {
 	NewPhase = FALSE;
@@ -2938,7 +2938,7 @@ TBEGIN:
 			} else cptr->Phase = DinoInfo[cptr->CType].pauseAnim;
 			
 		}
-		// */
+		// 
 	}
 
 
@@ -3077,14 +3077,14 @@ ENDPSELECT:
 	if (cptr->AfraidTime) DeltaFunc(cptr->rspeed, currspeed, (float)TimeDt / 160.f);
 	else DeltaFunc(cptr->rspeed, currspeed, (float)TimeDt / 180.f);
 
-	/*
+	
 	tgbend = drspd / AIInfo[cptr->Clone].targetBendRotSpd;
 	if (tgbend > pi / 5) tgbend = pi / 5;
 
 	tgbend *= SGN(currspeed);
 	if (fabs(tgbend) > fabs(cptr->bend)) DeltaFunc(cptr->bend, tgbend, (float)TimeDt / 800.f);
 	else DeltaFunc(cptr->bend, tgbend, (float)TimeDt / 600.f);
-	*/
+	
 
 	rspd = cptr->rspeed * TimeDt / 1024.f;
 
@@ -3106,6 +3106,10 @@ SKIPROT:
 	}
 
 }
+
+
+*/
+
 
 
 void AnimatePoacher(TCharacter *cptr)
@@ -3243,7 +3247,7 @@ NOTHINK:
 		NewPhase = TRUE;
 	}
 
-	cptr->aimOk = AngleDifference(cptr->alpha, palpha) < (27 * (2.f - WeapInfo[DinoInfo[cptr->CType].Weapon].Prec)) / tdist;
+	cptr->aimOk = AngleDifference(cptr->alpha, palpha) < (0.085* (2.f - WeapInfo[DinoInfo[cptr->CType].Weapon].Prec));
 
 	//bool minRan = pdist < ctViewR * DinoInfo[cptr->CType].poachMinRange + OptAgres / AIInfo[cptr->Clone].agressMulti;
 
@@ -3371,7 +3375,7 @@ ENDPSELECT:
 				float l = WeapInfo[DinoInfo[cptr->CType].Weapon].Veloc;
 				//if (WeapInfo[DinoInfo[cptr->CType].Weapon].aqLow) l = WeapInfo[DinoInfo[cptr->CType].Weapon].VelocAq;
 
-				 /*
+				// /*
 				AddBullet(cptr->pos.x, cptr->pos.y + (170 * cptr->scale), cptr->pos.z,
 					nv.x * 64 * v,
 					nv.y * 64 * v,
@@ -3381,7 +3385,7 @@ ENDPSELECT:
 					nv.z * 64 * l,
 					DinoInfo[cptr->CType].Weapon,
 					true);
-				 */
+				//  */
 			}
 
 
