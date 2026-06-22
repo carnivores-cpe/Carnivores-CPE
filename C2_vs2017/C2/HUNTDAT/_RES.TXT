@@ -397,6 +397,7 @@ idlegroup{
  file    = 'gall.car'
  ai      = 2
  morphTime = 0.65
+ overwrite area1 {
  packgroup{
   packMax = 9
   packMin = 7
@@ -415,6 +416,7 @@ idlegroup{
    }
   }
  }
+}
  radar = TRUE
  radR = 240
  radG = 240

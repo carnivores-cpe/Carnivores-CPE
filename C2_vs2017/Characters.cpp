@@ -322,7 +322,11 @@ void ResetCharacter(TCharacter *cptr)
 	cptr->Health = DinoInfo[cptr->CType].Health0;
 	if (OptAgres > 128) cptr->Health = (cptr->Health*OptAgres) / 128;
 
-	cptr->scale = (float)(DinoInfo[cptr->CType].Scale0 + rRand(DinoInfo[cptr->CType].ScaleA)) / 1000.f;
+	float tempScaleA = rRand(DinoInfo[cptr->CType].ScaleA);
+	cptr->scale = (float)(DinoInfo[cptr->CType].Scale0 + tempScaleA) / 1000.f;
+	if (tempScaleA > 0 && DinoInfo[cptr->CType].ScaleA > 0 && DinoInfo[cptr->CType].HealthA)
+		cptr->Health += (int)((tempScaleA / DinoInfo[cptr->CType].ScaleA)*DinoInfo[cptr->CType].HealthA);
+	
 
 	//When does need to get set? not here huh?
 	//cptr->RType = spawnGroup[cptr->SpawnGroupType].spawnRegionCh;
@@ -3129,7 +3133,7 @@ TBEGIN:
 	playerdx = PlayerX - cptr->pos.x - cptr->lookx * 100 * cptr->scale;
 	playerdz = PlayerZ - cptr->pos.z - cptr->lookz * 100 * cptr->scale;
 
-	float pAlpha = CorrectedAlpha(FindVectorAlpha(playerdx, playerdz), cptr->alpha);
+	float palpha = CorrectedAlpha(FindVectorAlpha(playerdx, playerdz), cptr->alpha);
 	float pdist = (float)sqrt(playerdx * playerdx + playerdz * playerdz);
 
 
@@ -3201,7 +3205,8 @@ NOTHINK:
 	{
 		cptr->tgalpha = CorrectedAlpha(FindVectorAlpha(targetdx, targetdz), cptr->alpha);
 
-		if (cptr->State && pdist > DinoInfo[cptr->CType].weaveRange && !DinoInfo[cptr->CType].dontWeave && (cptr->Phase == DinoInfo[cptr->CType].walkAnim || cptr->Phase == DinoInfo[cptr->CType].runAnim))
+		if (cptr->State && pdist > DinoInfo[cptr->CType].weaveRange &&
+			!DinoInfo[cptr->CType].dontWeave && !cptr->hunterLOS)
 		{
 			cptr->tgalpha += (float)sin(cptr->tgalphaOffset + (RealTime / 824.f)) / AIInfo[cptr->Clone].tGAIncrement;
 			if (cptr->tgalpha < 0) cptr->tgalpha += 2 * pi;
@@ -3209,14 +3214,15 @@ NOTHINK:
 		}
 	}
 
-	LookForAWay(cptr, !DinoInfo[cptr->CType].canSwim, TRUE);
+	if (!cptr->hunterLOS) {
+		LookForAWay(cptr, !DinoInfo[cptr->CType].canSwim, TRUE);
 
-	if (cptr->NoWayCnt > AIInfo[cptr->Clone].noWayCntMin)
-	{
-		cptr->NoWayCnt = 0;
-		cptr->NoFindCnt = AIInfo[cptr->Clone].noFindWayMed + rRand(AIInfo[cptr->Clone].noFindWayRange);
+		if (cptr->NoWayCnt > AIInfo[cptr->Clone].noWayCntMin)
+		{
+			cptr->NoWayCnt = 0;
+			cptr->NoFindCnt = AIInfo[cptr->Clone].noFindWayMed + rRand(AIInfo[cptr->Clone].noFindWayRange);
+		}
 	}
-
 
 	if (cptr->tgalpha < 0) cptr->tgalpha += 2 * pi;
 	if (cptr->tgalpha > 2 * pi) cptr->tgalpha -= 2 * pi;
@@ -3236,9 +3242,7 @@ NOTHINK:
 		NewPhase = TRUE;
 	}
 
-	float alphaAim = fabs(pAlpha - cptr->alpha);
-	if (alphaAim > pi) alphaAim = 2 * pi - alphaAim;
-	cptr->aimOk = alphaAim < (25 * (2.f - WeapInfo[DinoInfo[cptr->CType].Weapon].Prec)) / tdist;
+	cptr->aimOk = AngleDifference(cptr->alpha, palpha) < (27 * (2.f - WeapInfo[DinoInfo[cptr->CType].Weapon].Prec)) / tdist;
 
 	//bool minRan = pdist < ctViewR * DinoInfo[cptr->CType].poachMinRange + OptAgres / AIInfo[cptr->Clone].agressMulti;
 
@@ -3366,7 +3370,7 @@ ENDPSELECT:
 				float l = WeapInfo[DinoInfo[cptr->CType].Weapon].Veloc;
 				//if (WeapInfo[DinoInfo[cptr->CType].Weapon].aqLow) l = WeapInfo[DinoInfo[cptr->CType].Weapon].VelocAq;
 
-				// /*
+				 /*
 				AddBullet(cptr->pos.x, cptr->pos.y + (170 * cptr->scale), cptr->pos.z,
 					nv.x * 64 * v,
 					nv.y * 64 * v,
@@ -3376,7 +3380,7 @@ ENDPSELECT:
 					nv.z * 64 * l,
 					DinoInfo[cptr->CType].Weapon,
 					true);
-				// */
+				 */
 			}
 
 
@@ -3412,6 +3416,8 @@ ENDPSELECT:
 
 
 	//========== rotation to tgalpha ===================//
+
+	if (cptr->Phase == DinoInfo[cptr->CType].pauseAnim) cptr->tgalpha = palpha;
 
 	float rspd, currspeed, tgbend;
 	float dalpha = fabs(cptr->tgalpha - cptr->alpha);

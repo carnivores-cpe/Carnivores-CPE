@@ -3805,6 +3805,8 @@ void ReadCharacterLine(FILE *stream, char *_value, char line[256], bool &spawnIn
 	if (strstr(line, "health")) DinoInfo[TotalC].Health0 = atoi(value);
 	if (strstr(line, "basescore")) DinoInfo[TotalC].BaseScore = (float)atof(value);
 
+	if (strstr(line, "hpA")) DinoInfo[TotalC].HealthA = atoi(value);
+
 	if (strstr(line, "collectRad")) DinoInfo[TotalC].claimRadius = (float)atof(value);
 	if (strstr(line, "morphTime")) DinoInfo[TotalC].morphTime = (float)atof(value);
 
@@ -4394,7 +4396,7 @@ void AddPoacherInfo()
 	TotalSpawnGroup++;
 	
 	DinoInfo[TotalC].Radius = 256.f;
-	DinoInfo[TotalC].Health0 = 3;
+	DinoInfo[TotalC].Health0 = 1;
 	DinoInfo[TotalC].SmellK = 0.f;
 	DinoInfo[TotalC].HearK = 1.f;
 	DinoInfo[TotalC].LookK = 0.5;
