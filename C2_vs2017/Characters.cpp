@@ -327,6 +327,7 @@ void ResetCharacter(TCharacter *cptr)
 	if (tempScaleA > 0 && DinoInfo[cptr->CType].ScaleA > 0 && DinoInfo[cptr->CType].HealthA)
 		cptr->Health += (int)((tempScaleA / DinoInfo[cptr->CType].ScaleA)*DinoInfo[cptr->CType].HealthA);
 	
+	cptr->damaged = FALSE;
 
 	//When does need to get set? not here huh?
 	//cptr->RType = spawnGroup[cptr->SpawnGroupType].spawnRegionCh;
@@ -2325,8 +2326,8 @@ TBEGIN:
 				DinoInfo[cptr->CType].aggress <= 0 || !cptr->awareHunter) {
 				fleeMode = TRUE;
 			}
-			else if (DinoInfo[cptr->CType].defensive && cptr->Health == DinoInfo[cptr->CType].Health0) fleeMode = TRUE;
-			else if (DinoInfo[cptr->CType].fearShot && cptr->Health < DinoInfo[cptr->CType].Health0) fleeMode = TRUE;
+			else if (DinoInfo[cptr->CType].defensive && !cptr->damaged) fleeMode = TRUE;
+			else if (DinoInfo[cptr->CType].fearShot && cptr->damaged) fleeMode = TRUE;
 			else if (DinoInfo[cptr->CType].fearHearShot && cptr->heardShot) fleeMode = TRUE;
 			else if (cptr->packId >= 0) Packs[cptr->packId].attack = TRUE;
 		}
@@ -3579,8 +3580,8 @@ TBEGIN:
 				DinoInfo[cptr->CType].aggress <= 0 || !cptr->awareHunter) {
 				fleeMode = TRUE;
 			}
-			else if (DinoInfo[cptr->CType].defensive && cptr->Health == DinoInfo[cptr->CType].Health0) fleeMode = TRUE;
-			else if (DinoInfo[cptr->CType].fearShot && cptr->Health < DinoInfo[cptr->CType].Health0) fleeMode = TRUE;
+			else if (DinoInfo[cptr->CType].defensive && !cptr->damaged) fleeMode = TRUE;
+			else if (DinoInfo[cptr->CType].fearShot && cptr->damaged) fleeMode = TRUE;
 			else if (DinoInfo[cptr->CType].fearHearShot && cptr->heardShot) fleeMode = TRUE;
 			else if (cptr->packId >= 0) Packs[cptr->packId].attack = TRUE;
 		}
@@ -4234,8 +4235,8 @@ TBEGIN:
 				DinoInfo[cptr->CType].aggress <= 0 || !cptr->awareHunter) {
 				fleeMode = TRUE;
 			}
-			else if (DinoInfo[cptr->CType].defensive && cptr->Health == DinoInfo[cptr->CType].Health0) fleeMode = TRUE;
-			else if (DinoInfo[cptr->CType].fearShot && cptr->Health < DinoInfo[cptr->CType].Health0) fleeMode = TRUE;
+			else if (DinoInfo[cptr->CType].defensive && !cptr->damaged) fleeMode = TRUE;
+			else if (DinoInfo[cptr->CType].fearShot && cptr->damaged) fleeMode = TRUE;
 			else if (DinoInfo[cptr->CType].fearHearShot && cptr->heardShot) fleeMode = TRUE;
 			else if (cptr->packId >= 0) Packs[cptr->packId].attack = TRUE;
 		}
@@ -7768,8 +7769,8 @@ TBEGIN:
 			if (pdist > attackDist || !playerAttackable || DinoInfo[cptr->CType].aggress <= 0 || !cptr->awareHunter) {
 				fleeMode = TRUE;
 			}
-			else if (DinoInfo[cptr->CType].defensive && cptr->Health == DinoInfo[cptr->CType].Health0) fleeMode = TRUE;
-			else if (DinoInfo[cptr->CType].fearShot && cptr->Health < DinoInfo[cptr->CType].Health0) fleeMode = TRUE;
+			else if (DinoInfo[cptr->CType].defensive && !cptr->damaged) fleeMode = TRUE;
+			else if (DinoInfo[cptr->CType].fearShot && cptr->damaged) fleeMode = TRUE;
 			else if (DinoInfo[cptr->CType].fearHearShot && cptr->heardShot) fleeMode = TRUE;
 			else if (cptr->packId >= 0) Packs[cptr->packId].attack = TRUE;
 		}

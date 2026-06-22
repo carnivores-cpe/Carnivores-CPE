@@ -2500,6 +2500,8 @@ void AnimateBullets() {
 
 void registerDamage(int Dino, bool enemyBullet) {
 
+	Characters[Dino].damaged = TRUE;
+
 	if (!Characters[Dino].Health)
 	{
 		if ((DinoInfo[Characters[Dino].CType].BaseScore || DinoInfo[Characters[Dino].CType].trophy) && !Multiplayer && !SurvivalMode && !enemyBullet) //No trophies in multiplayer for now - update this at later date?

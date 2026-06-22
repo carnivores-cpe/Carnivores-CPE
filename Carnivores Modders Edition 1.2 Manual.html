@@ -258,6 +258,7 @@ function expand(n) {
 			
 			<ul>
 				<li>Wary Flyer AI.</li>
+				<li>Optional bigger dinos can have more health.</li>
 				<li>Animation numbers in the res can be repeated.</li>
 				<li>Custom menu font colours.</li>
 				<li>Up to 10 selectable weapon slots (with numkey binding).</li>
@@ -294,6 +295,7 @@ function expand(n) {
 				<li>MoveForward creatures now respawn (unless the creature count already exceeds 250)</li>
 				<li>flyanim fixed for pteranodon and dimorphodon ai</li>
 				<li>Game no longer crashes due to too many water circles</li>
+				<li>fearShotHit and defensive now work properly when aggression option is increased</li>
 			</ul>
 			
 			<!--<p>
@@ -420,6 +422,7 @@ function expand(n) {
 				<li>Creatures showing on radar can be individually toggled</li>
 				<li>Set radar colour for creatures</li>
 				<li>Set blood colour for creatures</li>
+				<li>Optional bigger dinos can have more health.</li>
 				<li>Option to disable bending for creatures</li>
 				<li>Option to disable/enable weaving for all creatures</li>
 				<li>Customise the weaving range for creatures</li>
@@ -2425,6 +2428,11 @@ reduced by the whole value of densityMulti. e.g. in the above screenshot, the ma
 		</div>
 	</div>
 </p>
+
+
+
+
+
 			
 			
 			
@@ -3602,6 +3610,48 @@ Sets the colour of the crosshair (RGB 0-255) (if cross = TRUE).
 	</div>
 </p>
 		
+		
+		
+		<p style="margin-top:4%;">
+	<h2 id="arrow_252" unselectable="on" onclick="expand(252)"
+		style="float:left;margin-top:0;cursor:pointer;
+		-moz-user-select:none;
+		user-select:none;
+		-webkit-user-select: none;
+		-ms-user-select: none;"
+		>></h2>
+	<div class = "con" style="margin-left:4%">
+		<h2 onclick="expand(252)" style="cursor:pointer;">_RES value: hpA</h2>
+		<div id="content_252" style="display: none">
+		
+			<p><b>Data type: Whole Number</b></p>
+			
+			Optional. Bigger dinos have more initial health. e.g.
+
+			
+			
+							<div class="grid-container">
+				<div class="grid-item" style="text-align: left">
+ health    = 6</br>
+ hpA    = 4</br>
+ scale0    = 1000</br>
+ scaleA    = 600
+				</div>
+			</div>
+			
+			
+			
+			
+				The above res settings would make the smallest dino (scale 1000) have 6 health, but the largest (scale 1600) have 10 health (6+4).
+				Intermediate sized dinos will intermediate health between 6 and 10.
+				
+				
+
+				
+				
+		</div>
+	</div>
+</p>
 		
 		
 <p style="margin-top:4%;">
