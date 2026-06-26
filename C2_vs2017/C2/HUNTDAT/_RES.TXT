@@ -342,7 +342,6 @@ characters {
  name    = 'Hunter'
  file    = 'hunter1_brach_mosa12.car'
  ai      = 0
- morphTime = 1
  health  = 1
  bloR = 112
  bloG = 0
@@ -354,7 +353,6 @@ characters {
  name    = 'Moshops'
  file    = 'mosh.car'
  ai      = 1
- morphTime = 0.65
  radar = TRUE
  radR = 240
  radG = 240
@@ -396,7 +394,6 @@ idlegroup{
  name    = 'Galimimus'
  file    = 'gall.car'
  ai      = 2
- morphTime = 0.65
  overwrite area1 {
  packgroup{
   packMax = 9
@@ -459,7 +456,6 @@ idlegroup{
  name   = 'Dimorphodon'
  file   = 'dimor2.car'
  ai     = 3
- morphTime = 1
  radar = TRUE
  radR = 240
  radG = 240
@@ -490,7 +486,6 @@ deathtype{
  name   = 'Pteranodon'
  file   = 'ptera.car'
  ai     = 4
- morphTime = 1
  radar = TRUE
  radR = 240
  radG = 240
@@ -521,7 +516,6 @@ deathtype{
  name   = 'Dimetrodon'
  file   = 'dimet.car'
  ai     = 5
- morphTime = 1
  radar = TRUE
  radR = 240
  radG = 240
@@ -563,7 +557,6 @@ idlegroup{
  name      = 'Parasaurolophus'
  file      = 'par9.car'
  ai        = 10
- morphTime = 1
  callNo = 0
  radar = TRUE
  radR = 240
@@ -652,7 +645,6 @@ deathtype{
  name = 'Ankylosaurus'
  file = 'anky_tt.car'
  ai        = 11
- morphTime = 1
  callNo = 1
  radar = TRUE
  radR = 240
@@ -740,7 +732,6 @@ deathtype{
  name = 'Stegosaurus'
  file = 'stego_tt.car'
  ai        = 12
- morphTime = 1
  callNo = 2
  radar = TRUE
  radR = 240
@@ -826,7 +817,6 @@ deathtype{
  name = 'Allosaurus'
  file = 'allot_iictt.car'
  ai        = 13
- morphTime = 1
  callNo = 3
  radar = TRUE
  radR = 240
@@ -936,7 +926,6 @@ killtype{
  name = 'Chasmosaurus'
  file = 'chasmosa_tt.car'
  ai        = 14
- morphTime = 1
  callNo = 4
  radar = TRUE
  radR = 240
@@ -1025,7 +1014,6 @@ deathtype{
  name = 'Alpha Velociraptor'
  file = 'alpharaptor.car'
  ai        = 15
- morphTime = 1
  callNo = 5
  packinfo{
   group = 0
@@ -1124,7 +1112,6 @@ killtype{
  name = 'Velociraptor'
  file = 'veloteeth5_iidct2.car'
  ai        = 15
- morphTime = 1
  callNo = 5
  packinfo{
   group = 0
@@ -1223,7 +1210,6 @@ killtype{
  name = 'Spinosaurus'
  file = 'spino_stt.car'
  ai        = 16
- morphTime = 1
  callNo = 6
  radar = TRUE
  radR = 240
@@ -1330,7 +1316,6 @@ killtype{
  name = 'Ceratosaurus'
  file = 'cerat_tss.car'
  ai        = 17
- morphTime = 1
  callNo = 7
  radar = TRUE
  radR = 240
@@ -1431,7 +1416,6 @@ killtype{
  name = 'T-Rex'
  file = 'tirex_tt.car'
  ai        = 18
- morphTime = 1
  callNo = 8
  radar = TRUE
  radR = 240
@@ -1541,7 +1525,6 @@ killtype{
  name = 'Brachiosaurus'
  file = 'dangerbrachikiller9.car'
  ai  = 34
- morphTime = 1
  radar = TRUE
  radR = 240
  radG = 240
@@ -1603,7 +1586,6 @@ killtype{
  name = 'Mosasaurus'
  file = 'mosa36.car'
  ai  = 33
- morphTime = 1
  overwrite area1 {
  spawngroup{
   spawnmax = 3
@@ -1677,7 +1659,6 @@ killtype{
  name = 'Climatius'
  file = 'climatius4.car'
  ai  = 32
- morphTime = 1
  radar = TRUE
  radG = 130
  overwrite area1 {
@@ -1718,7 +1699,6 @@ deathtype{
  name = 'Parexus'
  file = 'parexusn5.car'
  ai  = 32
- morphTime = 1
  overwrite area1 {
   spawngroup{
    spawnmax = 3
@@ -1770,7 +1750,6 @@ deathtype{
  name = 'Pink Parexus'
  file = 'parexusn5_pink.car'
  ai  = 32
- morphTime = 1
  overwrite area1 {
   spawngroup{
    spawnmax = 7
@@ -1815,7 +1794,6 @@ deathtype{
  name = 'Titanopteryx'
  file = 'titanopteryx_flier-placeholder.car'
  ai  = 28
- morphTime = 1
  radar = TRUE
  radR = 240
  radG = 0
@@ -1919,7 +1897,6 @@ killtype{
  name = 'Ichthyornis'
  file = 'burianicth_2023_7.car'
  ai  = 31
- morphTime = 1
  hearK      = 0.5
  spawngroup{
   spawnmax = 5

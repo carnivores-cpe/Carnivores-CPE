@@ -277,6 +277,7 @@ function expand(n) {
 				<li>Shadows on map view.</li>
 				<li>Custom spawn point for the trophy room.</li>
 				<li>Customizable speed for morphing between animations.</li>
+				<li>Customizable radius within which a trophy can be claimed.</li>
 				<!-- huntable dino 255? -->
 			</ul>
 			
@@ -312,7 +313,6 @@ function expand(n) {
 			<p>
 			Note: As of 1.2, all trophy creatures require a collectRad value.
 			</p>
-			Note: As of 1.2, morphTime = 1 is required for all creatures.
 			<p>
 			Note: As of 1.2, each area requires a .c2map file.
 			</p>
@@ -3874,7 +3874,7 @@ dontFear = 18</br>
 		
 			<p><b>Data type: Decimal Number</b></p>
 			<p>
-			Multiplies the speed of morphing between animations. Must be set to 1 by default.
+			Optional. Multiplies the speed of morphing between animations. If not set in the RES, defaults to 1 (vanilla morphing speed).
 			</p>
 		
 		</div>

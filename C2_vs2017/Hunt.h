@@ -782,7 +782,7 @@ typedef struct _TDinoInfo
   int Reload;
 
   float reactTime;
-  float morphTime;
+  float morphTime = 1.f;
 
   int animIndex[64];
   int animCh = 0;
