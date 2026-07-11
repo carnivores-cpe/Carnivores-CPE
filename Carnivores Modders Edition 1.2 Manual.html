@@ -260,6 +260,7 @@ function expand(n) {
 				<li>Wary Flyer AI.</li>
 				<li>Optional bigger dinos can have more health.</li>
 				<li>Animation numbers in the res can be repeated.</li>
+				<li>Option to make mosh/dimet/gall/pig ai dash faster if the hunter gets too close.</li>
 				<li>Custom menu font colours.</li>
 				<li>Up to 10 selectable weapon slots (with numkey binding).</li>
 				<li>Up to 255 area slots.</li>
@@ -423,6 +424,7 @@ function expand(n) {
 				<li>Set radar colour for creatures</li>
 				<li>Set blood colour for creatures</li>
 				<li>Optional bigger dinos can have more health.</li>
+				<li>Option to make mosh/dimet/gall/pig ai dash faster if the hunter gets too close.</li>
 				<li>Option to disable bending for creatures</li>
 				<li>Option to disable/enable weaving for all creatures</li>
 				<li>Customise the weaving range for creatures</li>
@@ -1092,7 +1094,7 @@ function expand(n) {
 		
 			<p><b>Data type: Whole Number</b></p>
 			<p>
-			The xy position of the player in trophy mode.
+			The xy spawn position of the player in trophy mode.
 			</p>
 			
 			<div class="grid-container">
@@ -3612,7 +3614,7 @@ Sets the colour of the crosshair (RGB 0-255) (if cross = TRUE).
 		
 		
 		
-		<p style="margin-top:4%;">
+<p style="margin-top:4%;">
 	<h2 id="arrow_252" unselectable="on" onclick="expand(252)"
 		style="float:left;margin-top:0;cursor:pointer;
 		-moz-user-select:none;
@@ -3652,6 +3654,31 @@ Sets the colour of the crosshair (RGB 0-255) (if cross = TRUE).
 		</div>
 	</div>
 </p>
+		
+		
+		
+<p style="margin-top:4%;">
+	<h2 id="arrow_253" unselectable="on" onclick="expand(253)"
+		style="float:left;margin-top:0;cursor:pointer;
+		-moz-user-select:none;
+		user-select:none;
+		-webkit-user-select: none;
+		-ms-user-select: none;"
+		>></h2>
+	<div class = "con" style="margin-left:4%">
+		<h2 onclick="expand(253)" style="cursor:pointer;">_RES value: dash</h2>
+		<div id="content_253" style="display: none">
+		
+			<p><b>Data type: TRUE/FALSE</b></p>
+			
+			Gallimimus, Moshops, Dimetrodon and Pig AI only. If set to true, the dino will run faster if the hunter chases too closely.
+				
+		</div>
+	</div>
+</p>		
+		
+		
+		
 		
 		
 <p style="margin-top:4%;">

@@ -3840,6 +3840,7 @@ void ReadCharacterLine(FILE *stream, char *_value, char line[256], bool &spawnIn
 	if (strstr(line, "radar")) readBool(value, DinoInfo[TotalC].onRadar);
 	if (strstr(line, "dontswimaway")) readBool(value, DinoInfo[TotalC].dontSwimAway);
 
+	if (strstr(line, "dash")) readBool(value, DinoInfo[TotalC].dash);
 
 	if (strstr(line, "survivalIndex")) {
 		DinoInfo[TotalC].survivalDino = TRUE;

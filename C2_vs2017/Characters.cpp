@@ -5883,6 +5883,14 @@ TBEGIN:
 	//======== select new phase =======================//
 	cptr->FTime += TimeDt;
 
+	float dashMulti;
+	if (DinoInfo[cptr->CType].dash) {
+		dashMulti = (600.f - pdist[0]) / 600.f;
+		if (dashMulti > 0.5) dashMulti = 0.5;
+		if (pdist[0] < 600) cptr->FTime += TimeDt * dashMulti;
+	}
+
+
 	if (cptr->FTime >= cptr->pinfo->Animation[DinoInfo[cptr->CType].animIndex[cptr->Phase]].AniTime)
 	{
 		cptr->FTime %= cptr->pinfo->Animation[DinoInfo[cptr->CType].animIndex[cptr->Phase]].AniTime;
@@ -6033,6 +6041,9 @@ SKIPROT:
 	float curspeed = 0;
 	if (cptr->Phase == DinoInfo[cptr->CType].runAnim) curspeed = DinoInfo[cptr->CType].runspd;
 	if (cptr->Phase == DinoInfo[cptr->CType].walkAnim) curspeed = DinoInfo[cptr->CType].wlkspd;
+
+	if (DinoInfo[cptr->CType].dash)
+		if (pdist[0] < 600) curspeed += DinoInfo[cptr->CType].runspd * dashMulti;
 
 	if (DinoInfo[cptr->CType].canSwim) {
 		if (cptr->Phase == DinoInfo[cptr->CType].swimAnim) curspeed = DinoInfo[cptr->CType].swmspd;
@@ -9046,7 +9057,6 @@ void AnimateCharacters()
 			break;
 
 		case AI_POACHER:
-			// TEMP DISABLED
 			if (cptr->Health) AnimatePoacher(cptr);
 			else AnimateDeadCommon(cptr);
 			break;

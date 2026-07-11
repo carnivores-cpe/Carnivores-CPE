@@ -697,6 +697,8 @@ typedef struct _TDinoInfo
   int aggress, killDist, flyDist;
   int poachMinRange = 50;
 
+  bool dash;
+
   bool onRadar;
   float runspd, jmpspd, wlkspd, swmspd, flyspd, gldspd, tkfspd, lndspd, divspd;
 
