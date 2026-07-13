@@ -9450,6 +9450,10 @@ replaceSMA:
 
 
 	int mindist = 40;
+	if (DinoInfo[Characters[ChCount].CType].Clone == AI_POACHER) {
+		if (tr > 10000) mindist = ctViewR + 300;
+		else mindist = ctViewR + 1;
+	}
 	if (SurvivalMode) {
 		mindist = ctViewR + 1;
 	}
