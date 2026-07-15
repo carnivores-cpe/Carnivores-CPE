@@ -2280,13 +2280,26 @@ int AnimateBullet(float ax, float ay, float az,
 	  if (sres != tresChar && sres != tresHunter) return sres;
 	  if (!poon) AddElements(bx, by, bz, partBlood, 4 + powerL * 4);
 	  int sNo = rRand(2);
-	  if (!UNDERWATER && !poon) AddVoice3dv(fxImpactChar[sNo].length, fxImpactChar[sNo].lpData, bx, by, bz, 256);
+	  if (sres == tresChar)
+		if (!UNDERWATER && !poon) AddVoice3dv(fxImpactChar[sNo].length, fxImpactChar[sNo].lpData, bx, by, bz, 256);
+
+	  if (sres == tresHunter && !PainTime) {
+		  int v = rRand(2);
+		  AddVoicev(fxPain[r].length, fxPain[r].lpData, 256);
+		  PainTime = 1000;
+	  }
+
 	  if (UNDERWATER && poon) AddVoice3dv(fxImpactAquatic[sNo].length, fxImpactAquatic[sNo].lpData, bx, by, bz, 256); //change this to aquatic sound
 
 	  if (sres == tresHunter) {
-		AddDeadBody(NULL, HUNT_EAT, TRUE);
-		Characters[ChCount - 1].alpha = PlayerAlpha - pi / 2;
-		return sres;
+
+		  MyHealth -= 30000;
+		  if (MyHealth <= 0) {
+			  AddDeadBody(NULL, HUNT_EAT, TRUE);
+			  Characters[ChCount - 1].alpha = PlayerAlpha - pi / 2;
+			  return sres;
+		  }
+
 	  } else if (!Characters[ShotDino].Health) return sres;
 
 //======= character damage =========//
@@ -2305,8 +2318,12 @@ int AnimateBullet(float ax, float ay, float az,
   } else {
 	  if (mort && !WeapInfo[bullet[b].parent].cannotMortal) Characters[ShotDino].Health = 0;
 	  else {
-		  if (poon) Characters[ShotDino].Health -= WeapInfo[CurrentWeapon].PowerAq;
-		  else Characters[ShotDino].Health -= WeapInfo[CurrentWeapon].Power;
+
+		  if (!Characters[ShotDino].Clone == AI_POACHER || !bullet[b].enemy) {
+			  if (poon) Characters[ShotDino].Health -= WeapInfo[CurrentWeapon].PowerAq;
+			  else Characters[ShotDino].Health -= WeapInfo[CurrentWeapon].Power;
+		  }
+		  
 	  }
 	  if (Characters[ShotDino].Health < 0) Characters[ShotDino].Health = 0;
 	  registerDamage(ShotDino, bullet[b].enemy);
@@ -3437,6 +3454,11 @@ void AnimateProcesses()
   if (DropShipMsgTime) {
 	  DropShipMsgTime -= TimeDt;
 	  if (DropShipMsgTime <= 0) DropShipMsgTime = 0;
+  }
+
+  if (PainTime) {
+	  PainTime -= TimeDt;
+	  if (PainTime <= 0) PainTime = 0;
   }
 
   if (ExitTime)

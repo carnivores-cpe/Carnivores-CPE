@@ -2596,6 +2596,10 @@ int PASCAL WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
   LoadWav("HUNTDAT\\SOUNDFX\\hum_die3.wav",  fxScream[2]);
   LoadWav("HUNTDAT\\SOUNDFX\\hum_die4.wav",  fxScream[3]);
 
+  LoadWav("HUNTDAT\\SOUNDFX\\hum_pain1.wav", fxPain[0]);
+  LoadWav("HUNTDAT\\SOUNDFX\\hum_pain2.wav", fxPain[1]);
+  LoadWav("HUNTDAT\\SOUNDFX\\hum_pain3.wav", fxPain[2]);
+
   LoadPictureTGA(PausePic,   "HUNTDAT\\MENU\\pause.tga");
   conv_pic(PausePic);
   if (SurvivalMode) LoadPictureTGA(ExitPic, "HUNTDAT\\MENU\\exit_s.tga");

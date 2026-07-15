@@ -1247,7 +1247,7 @@ _EXTORNOT   TSFX    fxImpactGround[3];
 _EXTORNOT   TSFX    fxImpactModel[3];
 _EXTORNOT   TSFX    fxImpactWater[3];
 _EXTORNOT   TSFX    fxImpactChar[3];
-_EXTORNOT   TSFX    fxCall[10][3], fxScream[4];
+_EXTORNOT   TSFX    fxCall[10][3], fxScream[4], fxPain[3];;
 _EXTORNOT   TSFX	fxGunShot[11];
 _EXTORNOT   TSFX    fxUnderwater, fxWaterIn, fxWaterOut, fxJump, fxStep[3], fxStepW[3];
 //========== map =====================//
@@ -1480,7 +1480,7 @@ _EXTORNOT   TBTrail   BloodTrail;
 _EXTORNOT   bool DShipInRange;
 
 _EXTORNOT   int     PrevTime, TimeDt, T, Takt, RealTime, StepTime, MyHealth, ExitTime, WaveNoteTime,
-            ChCallTime, CallLockTime, NextCall, DropShipMsgTime;
+            ChCallTime, CallLockTime, NextCall, DropShipMsgTime, PainTime;
 _EXTORNOT   char	DropShipMsg[128];
 _EXTORNOT   float   DeltaT;
 _EXTORNOT   float   CameraX, CameraY, CameraZ, CameraAlpha, CameraBeta;

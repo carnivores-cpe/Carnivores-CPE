@@ -2885,12 +2885,8 @@ SKIPROT:
 
 }
 
-
-
-
-
-/*
-void AnimatePoacher2(TCharacter *cptr)
+//Basic animal AI with shooting - unused
+void AnimatePerfectPoacher(TCharacter *cptr)
 {
 	NewPhase = FALSE;
 	int _Phase = cptr->Phase;
@@ -2902,7 +2898,7 @@ void AnimatePoacher2(TCharacter *cptr)
 
 	bool _aimOk = cptr->aimOk;
 
-	cptr->FTime += TimeDt;
+	if (cptr->State == 2) cptr->State = 1;
 
 TBEGIN:
 	float targetx = cptr->tgx;
@@ -2912,34 +2908,188 @@ TBEGIN:
 
 	float tdist = (float)sqrt(targetdx * targetdx + targetdz * targetdz);
 
+	float playerdx, playerdz;
+	playerdx = PlayerX - cptr->pos.x - cptr->lookx * 100 * cptr->scale;
+	playerdz = PlayerZ - cptr->pos.z - cptr->lookz * 100 * cptr->scale;
+
+	float palpha = CorrectedAlpha(FindVectorAlpha(playerdx, playerdz), cptr->alpha);
+	float pdist = (float)sqrt(playerdx * playerdx + playerdz * playerdz);
+
+
+
+
+	if (GetLandUpH(cptr->pos.x, cptr->pos.z) - GetLandH(cptr->pos.x, cptr->pos.z) > DinoInfo[cptr->CType].waterLevel * cptr->scale)
+		cptr->StateF |= csONWATER;
+	else
+		cptr->StateF &= (!csONWATER);
+
+	//============================================//			// (run away)
+	if (!MyHealth) cptr->State = 0;
+	if (cptr->State)
+	{
+		cptr->currentIdleGroup = -1;
+
+		float aDist;
+		aDist = ctViewR * DinoInfo[cptr->CType].aggress + OptAgres / AIInfo[cptr->Clone].agressMulti;
+
+		bool fleeMode = FALSE;
+		if (!SurvivalMode) {
+			if (pdist > aDist ||
+				DinoInfo[cptr->CType].aggress <= 0) {
+				fleeMode = TRUE;
+			}
+		}
+
+		if (fleeMode) {
+			nv.x = playerdx;
+			nv.z = playerdz;
+			nv.y = 0;
+			NormVector(nv, 2048.f);
+			cptr->tgx = cptr->pos.x - nv.x;
+			cptr->tgz = cptr->pos.z - nv.z;
+			cptr->tgtime = 0;
+			cptr->AfraidTime -= TimeDt;
+
+			if (cptr->AfraidTime <= 0) {
+				cptr->AfraidTime = 0;
+				cptr->State = 0;
+			}
+
+		}
+		else
+		{
+			cptr->tgx = PlayerX;
+			cptr->tgz = PlayerZ;
+			cptr->tgtime = 0;
+		}
+
+
+	}
+
+
+
+	if (!cptr->State)
+	{
+		if (tdist < 456)
+		{
+			SetNewTargetPlace(cptr, AIInfo[cptr->Clone].targetDistance);
+			goto TBEGIN;
+		}
+	}
+
+NOTHINK:
+	if (pdist < AIInfo[cptr->Clone].pWMin) cptr->NoFindCnt = 0;
+	if (cptr->NoFindCnt) cptr->NoFindCnt--;
+	else
+	{
+		cptr->tgalpha = CorrectedAlpha(FindVectorAlpha(targetdx, targetdz), cptr->alpha);
+
+		if (cptr->State && pdist > DinoInfo[cptr->CType].weaveRange &&
+			!DinoInfo[cptr->CType].dontWeave && !cptr->hunterLOS)
+		{
+			cptr->tgalpha += (float)sin(cptr->tgalphaOffset + (RealTime / 824.f)) / AIInfo[cptr->Clone].tGAIncrement;
+			if (cptr->tgalpha < 0) cptr->tgalpha += 2 * pi;
+			if (cptr->tgalpha > 2 * pi) cptr->tgalpha -= 2 * pi;
+		}
+	}
+
+	if (!cptr->hunterLOS) {
+		LookForAWay(cptr, !DinoInfo[cptr->CType].canSwim, TRUE);
+
+		if (cptr->NoWayCnt > AIInfo[cptr->Clone].noWayCntMin)
+		{
+			cptr->NoWayCnt = 0;
+			cptr->NoFindCnt = AIInfo[cptr->Clone].noFindWayMed + rRand(AIInfo[cptr->Clone].noFindWayRange);
+		}
+	}
+
+	if (cptr->tgalpha < 0) cptr->tgalpha += 2 * pi;
+	if (cptr->tgalpha > 2 * pi) cptr->tgalpha -= 2 * pi;
+
+	//===============================================//
+
 	ProcessPrevPhase(cptr);
 
+
 	//======== select new phase =======================//
+	cptr->FTime += TimeDt;
+
 	if (cptr->FTime >= cptr->pinfo->Animation[DinoInfo[cptr->CType].animIndex[cptr->Phase]].AniTime)
 	{
 		cptr->FTime %= cptr->pinfo->Animation[DinoInfo[cptr->CType].animIndex[cptr->Phase]].AniTime;
 
 		NewPhase = TRUE;
 	}
-	
-	
-	float alphaAim = fabs(cptr->tgalpha - cptr->alpha);
-	if (alphaAim > pi) alphaAim = 2 * pi - alphaAim;
-	cptr->aimOk = alphaAim < (27 * (2.f - WeapInfo[DinoInfo[cptr->CType].Weapon].Prec)) / tdist;
 
-	if (NewPhase) {
-		 // /* 
-		if (!cptr->ammo) {
-			if (DinoInfo[cptr->CType].reloadAnim>=0) cptr->Phase = DinoInfo[cptr->CType].reloadAnim;
-			else cptr->ammo = DinoInfo[cptr->CType].Reload;
-		} else {
-			if (cptr->hunterLOS && cptr->aimOk) {
-				cptr->Phase = DinoInfo[cptr->CType].fireAnim;
-			} else cptr->Phase = DinoInfo[cptr->CType].pauseAnim;
-			
+	cptr->aimOk = AngleDifference(cptr->alpha, palpha) < (0.085* (2.f - WeapInfo[DinoInfo[cptr->CType].Weapon].Prec));
+
+	//bool minRan = pdist < ctViewR * DinoInfo[cptr->CType].poachMinRange + OptAgres / AIInfo[cptr->Clone].agressMulti;
+
+	if (NewPhase)
+
+
+		if (!cptr->State)
+		{
+
+			if (DinoInfo[cptr->CType].idleGroupCount
+				&& (MyHealth || !DinoInfo[cptr->CType].killType[cptr->killType].carryCorpse)
+				&& !(cptr->StateF & csONWATER)) {
+
+				if (cptr->currentIdleGroup >= 0) {
+					if (rRand(127) + 1 > (1 - DinoInfo[cptr->CType].idleGroup[cptr->currentIdleGroup].end) * 128
+						&& (DinoInfo[cptr->CType].idleGroup[cptr->currentIdleGroup].endOnAny
+							|| cptr->Phase == DinoInfo[cptr->CType].idleGroup[cptr->currentIdleGroup].anim[DinoInfo[cptr->CType].idleGroup[cptr->currentIdleGroup].count - 1])) {
+						cptr->Phase = DinoInfo[cptr->CType].walkAnim;
+						if (DinoInfo[cptr->CType].idleGroup[cptr->currentIdleGroup].instantRepeat) {
+							cptr->currentIdleGroup = -1; //this must be done inside the if statement
+						}
+						else {
+							cptr->currentIdleGroup = -1; //this must be done inside the if statement
+							goto ENDPSELECT;
+						}
+					}
+					else {
+						cptr->Phase = DinoInfo[cptr->CType].idleGroup[cptr->currentIdleGroup].anim[rRand(DinoInfo[cptr->CType].idleGroup[cptr->currentIdleGroup].count - 1)];
+						goto ENDPSELECT;
+					}
+				}
+
+				for (int idleGroupNo = 0; idleGroupNo < DinoInfo[cptr->CType].idleGroupCount; idleGroupNo++) {
+					if (rRand(127) + 1 > (1 - DinoInfo[cptr->CType].idleGroup[idleGroupNo].start) * 128) cptr->currentIdleGroup = idleGroupNo;
+				}
+				if (cptr->currentIdleGroup >= 0) {
+					if (DinoInfo[cptr->CType].idleGroup[cptr->currentIdleGroup].startOnAny)
+						cptr->Phase = DinoInfo[cptr->CType].idleGroup[cptr->currentIdleGroup].anim[rRand(DinoInfo[cptr->CType].idleGroup[cptr->currentIdleGroup].count - 1)];
+					else
+						cptr->Phase = DinoInfo[cptr->CType].idleGroup[cptr->currentIdleGroup].anim[0];
+					goto ENDPSELECT;
+				}
+				else cptr->Phase = DinoInfo[cptr->CType].walkAnim;
+
+
+			}
+			else {
+				cptr->Phase = DinoInfo[cptr->CType].walkAnim;
+			}
+
 		}
-		// 
-	}
+		else if (!cptr->ammo) {
+			cptr->ammo = DinoInfo[cptr->CType].Reload;
+			cptr->Phase = DinoInfo[cptr->CType].reloadAnim;
+			goto ENDPSELECT;
+		}
+		else if (cptr->hunterLOS) {
+			if (cptr->aimOk) {
+				cptr->Phase = DinoInfo[cptr->CType].fireAnim;
+				goto ENDPSELECT;
+			}
+			else cptr->Phase = DinoInfo[cptr->CType].pauseAnim;
+		}
+		else if (fabs(cptr->tgalpha - cptr->alpha) < 1.0 ||
+			fabs(cptr->tgalpha - cptr->alpha) > 2 * pi - 1.0) {
+			cptr->Phase = DinoInfo[cptr->CType].runAnim;
+		}
+		else cptr->Phase = DinoInfo[cptr->CType].walkAnim;
 
 
 	if (cptr->Phase != DinoInfo[cptr->CType].fireAnim &&
@@ -2952,22 +3102,14 @@ TBEGIN:
 	cptr->PhunterLOS = cptr->hunterLOS;
 
 
-NOTHINK:
-
-	cptr->tgx = PlayerX;
-	cptr->tgz = PlayerZ;
-
-	cptr->tgalpha = CorrectedAlpha(FindVectorAlpha(targetdx, targetdz), cptr->alpha);
+ENDPSELECT:
 
 
 	//====== process phase changing ===========//
 	if ((_Phase != cptr->Phase) || NewPhase) {
 		ActivateCharacterFx(cptr);
-		if (cptr->Phase == DinoInfo[cptr->CType].reloadAnim) {
-		
-			cptr->ammo = DinoInfo[cptr->CType].Reload;
-		
-		} else if (cptr->Phase == DinoInfo[cptr->CType].fireAnim) {
+
+		if (cptr->Phase == DinoInfo[cptr->CType].fireAnim) {
 			if (WeapInfo[DinoInfo[cptr->CType].Weapon].MGSSound) {
 				Vector3d shotpos = SubVectors(cptr->pos, PlayerPos);
 				shotpos.x /= -3.f;
@@ -2983,8 +3125,8 @@ NOTHINK:
 
 			float targetdy = PlayerY - cptr->pos.y;
 			float tbeta = -atan(targetdy / tdist);
-			
-			 
+
+
 			for (int s = 0; s <= WeapInfo[DinoInfo[cptr->CType].Weapon].TraceC; s++)
 			{
 				float rA = siRand(128) * 0.00010 * (2.f - WeapInfo[DinoInfo[cptr->CType].Weapon].Prec);
@@ -2992,7 +3134,7 @@ NOTHINK:
 
 				float ca = (float)cos(cptr->alpha + rA + pi / 2);
 				float sa = (float)sin(cptr->alpha + rA + pi / 2);
-				
+
 				//float cb = (float)cos(cptr->beta + rB); //vertical aim inline with poacher beta
 				//float sb = (float)sin(cptr->beta + rB);
 				float cb = (float)cos(tbeta + rB);
@@ -3011,6 +3153,7 @@ NOTHINK:
 				float l = WeapInfo[DinoInfo[cptr->CType].Weapon].Veloc;
 				//if (WeapInfo[DinoInfo[cptr->CType].Weapon].aqLow) l = WeapInfo[DinoInfo[cptr->CType].Weapon].VelocAq;
 
+				// /*
 				AddBullet(cptr->pos.x, cptr->pos.y + (170 * cptr->scale), cptr->pos.z,
 					nv.x * 64 * v,
 					nv.y * 64 * v,
@@ -3020,14 +3163,15 @@ NOTHINK:
 					nv.z * 64 * l,
 					DinoInfo[cptr->CType].Weapon,
 					true);
+				//  */
 			}
-			 
+
 
 
 		}
-	}
 
-ENDPSELECT:
+
+	}
 
 	if (_Phase != cptr->Phase)
 	{
@@ -3053,17 +3197,22 @@ ENDPSELECT:
 	cptr->FTime %= cptr->pinfo->Animation[DinoInfo[cptr->CType].animIndex[cptr->Phase]].AniTime;
 
 
+
 	//========== rotation to tgalpha ===================//
 
-	float rspd, currspeed;
+	if (cptr->Phase == DinoInfo[cptr->CType].pauseAnim) cptr->tgalpha = palpha;
+
+	float rspd, currspeed, tgbend;
 	float dalpha = fabs(cptr->tgalpha - cptr->alpha);
 	float drspd = dalpha;
 	if (drspd > pi) drspd = 2 * pi - drspd;
 
-	//if (cptr->Phase == DinoInfo[cptr->CType].killType[cptr->killType].anim && DinoInfo[cptr->CType].killTypeCount) goto SKIPROT;
 	if (cptr->currentIdleGroup >= 0) goto SKIPROT;
 
 
+	// ?? no rotation for these anims???
+	//if (cptr->Phase == DinoInfo[cptr->CType].fireAnim) goto SKIPROT;
+	if (cptr->Phase == DinoInfo[cptr->CType].reloadAnim) goto SKIPROT;
 
 	if (drspd > 0.02)
 		if (cptr->tgalpha > cptr->alpha) currspeed = 0.6f + drspd * 1.2f;
@@ -3077,39 +3226,57 @@ ENDPSELECT:
 	if (cptr->AfraidTime) DeltaFunc(cptr->rspeed, currspeed, (float)TimeDt / 160.f);
 	else DeltaFunc(cptr->rspeed, currspeed, (float)TimeDt / 180.f);
 
-	
 	tgbend = drspd / AIInfo[cptr->Clone].targetBendRotSpd;
 	if (tgbend > pi / 5) tgbend = pi / 5;
 
 	tgbend *= SGN(currspeed);
 	if (fabs(tgbend) > fabs(cptr->bend)) DeltaFunc(cptr->bend, tgbend, (float)TimeDt / 800.f);
 	else DeltaFunc(cptr->bend, tgbend, (float)TimeDt / 600.f);
-	
 
 	rspd = cptr->rspeed * TimeDt / 1024.f;
 
-	if (cptr->hunterLOS) {
-		if (drspd < fabs(rspd)) cptr->alpha = cptr->tgalpha;
-		else cptr->alpha += rspd;
-	}
 
+	if (drspd < fabs(rspd)) cptr->alpha = cptr->tgalpha;
+	else cptr->alpha += rspd;
 
 
 	if (cptr->alpha > pi * 2) cptr->alpha -= pi * 2;
 	if (cptr->alpha < 0) cptr->alpha += pi * 2;
 
 SKIPROT:
-	
-	if (1 == 0)
-	{
-		//temp
-	}
+
+	//========== movement ==============================//
+	cptr->lookx = (float)cos(cptr->alpha);
+	cptr->lookz = (float)sin(cptr->alpha);
+
+	float curspeed = 0;
+	if (cptr->Phase == DinoInfo[cptr->CType].runAnim) curspeed = DinoInfo[cptr->CType].runspd;
+	if (cptr->Phase == DinoInfo[cptr->CType].walkAnim) curspeed = DinoInfo[cptr->CType].wlkspd;
+
+	//========== process speed =============//
+
+	DeltaFunc(cptr->vspeed, curspeed, TimeDt / 500.f);
+
+	MoveCharacter(cptr, cptr->lookx * cptr->vspeed * TimeDt * cptr->scale,
+		cptr->lookz * cptr->vspeed * TimeDt * cptr->scale, !DinoInfo[cptr->CType].canSwim, TRUE);
+
+	//============ Y movement =================//
+
+	ThinkY_Beta_Gamma(cptr,
+		AIInfo[cptr->Clone].yBetaGamma1,
+		AIInfo[cptr->Clone].yBetaGamma2,
+		AIInfo[cptr->Clone].yBetaGamma3,
+		AIInfo[cptr->Clone].yBetaGamma4);
+
+	//=== process to tggamma ===//
+	if (cptr->Phase == DinoInfo[cptr->CType].walkAnim) cptr->tggamma += cptr->rspeed / AIInfo[cptr->Clone].walkTargetGammaRot;
+	else cptr->tggamma += cptr->rspeed / AIInfo[cptr->Clone].targetGammaRot;
+
+	DeltaFunc(cptr->gamma, cptr->tggamma, TimeDt / 1624.f);
+
+	//==================================================//
 
 }
-
-
-*/
-
 
 
 void AnimatePoacher(TCharacter *cptr)
@@ -3160,8 +3327,7 @@ TBEGIN:
 
 		bool fleeMode = FALSE;
 		if (!SurvivalMode) {
-			if (pdist > aDist ||
-				DinoInfo[cptr->CType].aggress <= 0) {
+			if (pdist > aDist) {
 				fleeMode = TRUE;
 			}
 		}

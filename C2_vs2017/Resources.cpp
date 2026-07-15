@@ -4397,7 +4397,7 @@ void AddPoacherInfo()
 	TotalSpawnGroup++;
 	
 	DinoInfo[TotalC].Radius = 256.f;
-	DinoInfo[TotalC].Health0 = 1;
+	DinoInfo[TotalC].Health0 = 3;
 	DinoInfo[TotalC].SmellK = 0.f;
 	DinoInfo[TotalC].HearK = 1.f;
 	DinoInfo[TotalC].LookK = 0.5;
