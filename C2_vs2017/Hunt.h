@@ -383,6 +383,8 @@ typedef struct _TCharacter
 
   float tgalphaOffset; //randomised offset for weaving
 
+  float survivalSink, survivalSinkR;
+
   Vector3d pos, rpos;
   float tgalpha, alpha, beta,
         tggamma,gamma,

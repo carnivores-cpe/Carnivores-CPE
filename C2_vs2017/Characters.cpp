@@ -272,6 +272,8 @@ void ResetCharacter(TCharacter *cptr)
 	cptr->BloodTTime = 0;
 	cptr->BloodTime = 0;
 
+	cptr->survivalSink = 0;
+
 	cptr->tgalphaOffset = rRand(pi *  2);
 
 	cptr->doNotIndexAnim = false;
@@ -458,7 +460,7 @@ float CorrectedAlpha(float a, float b)
 
 void ThinkY_Beta_Gamma(TCharacter *cptr, float blook, float glook, float blim, float glim)
 {
-	cptr->pos.y = GetLandH(cptr->pos.x, cptr->pos.z);
+	cptr->pos.y = GetLandH(cptr->pos.x, cptr->pos.z) - cptr->survivalSink;
 
 	//=== beta ===//
 	float hlook = GetLandH(cptr->pos.x + cptr->lookx * blook, cptr->pos.z + cptr->lookz * blook);
@@ -8871,6 +8873,19 @@ void AnimateCharacters()
 		case 0:
 			AnimateHuntDead(cptr);
 			break;
+		}
+
+		if (!cptr->Health && SurvivalMode) {
+			if (cptr->survivalSinkR < 1) {
+				cptr->survivalSinkR += TimeDt * 0.0001;
+				if (cptr->survivalSinkR > 1) cptr->survivalSinkR = 1;
+			}
+			cptr->survivalSink += cptr->survivalSinkR;
+			if (cptr->survivalSink > 256.f + (DinoInfo[cptr->CType].ShDelta * cptr->scale)) {
+
+				memcpy(&Characters[CurDino], &Characters[CurDino + 1], (255 - CurDino) * sizeof(TCharacter));
+				ChCount -= 1;
+			}
 		}
 
 	}
