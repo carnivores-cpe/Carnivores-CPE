@@ -1548,9 +1548,9 @@ void ProcessShoot()
                nv.x * 64* v,
                nv.y * 64* v,
 	           nv.z * 64* v,
-		  nv.x * 64 * l,
-		  nv.y * 64 * l,
-		  nv.z * 64 * l,
+		       nv.x * 64 * l,
+		       nv.y * 64 * l,
+		       nv.z * 64 * l,
 			   CurrentWeapon,
 			   false);
     }

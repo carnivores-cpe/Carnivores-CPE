@@ -1481,6 +1481,7 @@ _EXTORNOT   bool DShipInRange;
 
 _EXTORNOT   int     PrevTime, TimeDt, T, Takt, RealTime, StepTime, MyHealth, ExitTime, WaveNoteTime,
             ChCallTime, CallLockTime, NextCall, DropShipMsgTime, PainTime;
+_EXTORNOT   bool	PainReg;
 _EXTORNOT   char	DropShipMsg[128];
 _EXTORNOT   float   DeltaT;
 _EXTORNOT   float   CameraX, CameraY, CameraZ, CameraAlpha, CameraBeta;

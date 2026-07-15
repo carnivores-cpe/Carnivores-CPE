@@ -2283,21 +2283,18 @@ int AnimateBullet(float ax, float ay, float az,
 	  if (sres == tresChar)
 		if (!UNDERWATER && !poon) AddVoice3dv(fxImpactChar[sNo].length, fxImpactChar[sNo].lpData, bx, by, bz, 256);
 
-	  if (sres == tresHunter && !PainTime) {
-		  int v = rRand(2);
-		  AddVoicev(fxPain[r].length, fxPain[r].lpData, 256);
-		  PainTime = 1000;
-	  }
-
 	  if (UNDERWATER && poon) AddVoice3dv(fxImpactAquatic[sNo].length, fxImpactAquatic[sNo].lpData, bx, by, bz, 256); //change this to aquatic sound
 
 	  if (sres == tresHunter) {
 
-		  MyHealth -= 30000;
-		  if (MyHealth <= 0) {
-			  AddDeadBody(NULL, HUNT_EAT, TRUE);
-			  Characters[ChCount - 1].alpha = PlayerAlpha - pi / 2;
-			  return sres;
+		  if (MyHealth > 0) {
+			  MyHealth -= 30000;
+			  PainReg = TRUE;
+			  if (MyHealth <= 0) {
+				  AddDeadBody(NULL, HUNT_EAT, TRUE);
+				  Characters[ChCount - 1].alpha = PlayerAlpha - pi / 2;
+				  return sres;
+			  }
 		  }
 
 	  } else if (!Characters[ShotDino].Health) return sres;
@@ -3454,6 +3451,15 @@ void AnimateProcesses()
   if (DropShipMsgTime) {
 	  DropShipMsgTime -= TimeDt;
 	  if (DropShipMsgTime <= 0) DropShipMsgTime = 0;
+  }
+
+  if (PainReg) {
+	  PainReg = FALSE;
+	  if (!PainTime && MyHealth) {
+		  int v = rRand(2);
+		  AddVoicev(fxPain[r].length, fxPain[r].lpData, 96);
+		  PainTime = 1000;
+	  }
   }
 
   if (PainTime) {
