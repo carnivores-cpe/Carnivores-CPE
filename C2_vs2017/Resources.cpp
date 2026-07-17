@@ -3810,7 +3810,10 @@ void ReadCharacterLine(FILE *stream, char *_value, char line[256], bool &spawnIn
 	if (strstr(line, "collectRad")) DinoInfo[TotalC].claimRadius = (float)atof(value);
 	if (strstr(line, "morphTime")) DinoInfo[TotalC].morphTime = (float)atof(value);
 
-	if (strstr(line, "ai")) DinoInfo[TotalC].Clone = atoi(value);
+	if (strstr(line, "ai")) {
+		DinoInfo[TotalC].Clone = atoi(value);
+		if (DinoInfo[TotalC].Clone == AI_POACHER) DinoInfo[TotalC].Clone = 0;
+	}
 
 	if (strstr(line, "smellK")) DinoInfo[TotalC].SmellK = (float)atof(value);
 	if (strstr(line, "hearK")) DinoInfo[TotalC].HearK = (float)atof(value);

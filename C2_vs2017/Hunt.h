@@ -424,9 +424,10 @@ typedef struct _TCharacter
   bool heardShot;
   bool damaged;
 
-  bool PhunterLOS; //prev
+  bool lastShootOk; //was poacher shooting in last frame
   bool hunterLOS; //hunter line of sight
   bool aimOk; //is xz aim correct
+  float aimDist; //min range to fire
 
   bool aquaticIdle;
 
@@ -1584,6 +1585,8 @@ _EXTORNOT TKeyMap KeyMap;
 #define AI_PIG        6
 
 
+#define AI_POACHER    8
+
 #define AI_HUNTDOG    9
 
 #define AI_PARA       10
@@ -1620,7 +1623,6 @@ _EXTORNOT TKeyMap KeyMap;
 #define AI_LANDBRACH   35
 
 
-#define AI_POACHER     8
 
 #define AI_WARYDIMOR     36
 

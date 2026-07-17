@@ -274,6 +274,9 @@ void ResetCharacter(TCharacter *cptr)
 
 	cptr->survivalSink = 0;
 
+	cptr->aimDist = 15;// 30;
+	cptr->lastShootOk = false;
+
 	cptr->tgalphaOffset = rRand(pi *  2);
 
 	cptr->doNotIndexAnim = false;
@@ -2898,8 +2901,6 @@ void AnimatePoacher(TCharacter *cptr)
 	if (!MyHealth) cptr->hunterLOS = false;
 	if (DEBUG || UNDERWATER || ObservMode) cptr->hunterLOS = false;
 
-	bool _aimOk = cptr->aimOk;
-
 	if (cptr->State == 2) cptr->State = 1;
 
 TBEGIN:
@@ -2916,7 +2917,7 @@ TBEGIN:
 
 	float palpha = CorrectedAlpha(FindVectorAlpha(playerdx, playerdz), cptr->alpha);
 	float pdist = (float)sqrt(playerdx * playerdx + playerdz * playerdz);
-
+	bool aimDistOk = cptr->aimDist * 256 >= pdist;
 
 
 
@@ -2933,35 +2934,19 @@ TBEGIN:
 
 		float aDist;
 		aDist = ctViewR * DinoInfo[cptr->CType].aggress + OptAgres / AIInfo[cptr->Clone].agressMulti;
+		
+		nv.x = playerdx;
+		nv.z = playerdz;
+		nv.y = 0;
+		NormVector(nv, 2048.f);
+		cptr->tgx = cptr->pos.x - nv.x;
+		cptr->tgz = cptr->pos.z - nv.z;
+		cptr->tgtime = 0;
+		cptr->AfraidTime -= TimeDt;
 
-		bool fleeMode = FALSE;
-		if (!SurvivalMode) {
-			if (pdist > aDist) {
-				fleeMode = TRUE;
-			}
-		}
-
-		if (fleeMode) {
-			nv.x = playerdx;
-			nv.z = playerdz;
-			nv.y = 0;
-			NormVector(nv, 2048.f);
-			cptr->tgx = cptr->pos.x - nv.x;
-			cptr->tgz = cptr->pos.z - nv.z;
-			cptr->tgtime = 0;
-			cptr->AfraidTime -= TimeDt;
-
-			if (cptr->AfraidTime <= 0) {
-				cptr->AfraidTime = 0;
-				cptr->State = 0;
-			}
-
-		}
-		else
-		{
-			cptr->tgx = PlayerX;
-			cptr->tgz = PlayerZ;
-			cptr->tgtime = 0;
+		if (cptr->AfraidTime <= 0) {
+			cptr->AfraidTime = 0;
+			cptr->State = 0;
 		}
 
 
@@ -2986,7 +2971,7 @@ NOTHINK:
 		cptr->tgalpha = CorrectedAlpha(FindVectorAlpha(targetdx, targetdz), cptr->alpha);
 
 		if (cptr->State && pdist > DinoInfo[cptr->CType].weaveRange &&
-			!DinoInfo[cptr->CType].dontWeave && !cptr->hunterLOS)
+			!DinoInfo[cptr->CType].dontWeave && (!cptr->hunterLOS || !aimDistOk))
 		{
 			cptr->tgalpha += (float)sin(cptr->tgalphaOffset + (RealTime / 824.f)) / AIInfo[cptr->Clone].tGAIncrement;
 			if (cptr->tgalpha < 0) cptr->tgalpha += 2 * pi;
@@ -3023,7 +3008,7 @@ NOTHINK:
 	}
 
 	cptr->aimOk = AngleDifference(cptr->alpha, palpha) < (0.085* (2.f - WeapInfo[DinoInfo[cptr->CType].Weapon].Prec));
-
+	
 	//bool minRan = pdist < ctViewR * DinoInfo[cptr->CType].poachMinRange + OptAgres / AIInfo[cptr->Clone].agressMulti;
 
 	if (NewPhase)
@@ -3078,7 +3063,7 @@ NOTHINK:
 			cptr->ammo = DinoInfo[cptr->CType].Reload;
 			cptr->Phase = DinoInfo[cptr->CType].reloadAnim;
 			goto ENDPSELECT;
-		} else if (cptr->hunterLOS) {
+		} else if (cptr->hunterLOS && aimDistOk) {
 			if (cptr->aimOk){
 				cptr->Phase = DinoInfo[cptr->CType].fireAnim;
 				goto ENDPSELECT;
@@ -3088,16 +3073,17 @@ NOTHINK:
 			cptr->Phase = DinoInfo[cptr->CType].runAnim;
 		} else cptr->Phase = DinoInfo[cptr->CType].walkAnim;
 
-
+		
+	bool shootOk = cptr->hunterLOS && cptr->aimOk && aimDistOk;
 	if (cptr->Phase != DinoInfo[cptr->CType].fireAnim &&
 		cptr->Phase != DinoInfo[cptr->CType].reloadAnim &&
-		cptr->hunterLOS && cptr->aimOk && (!cptr->PhunterLOS || !_aimOk)) {
+		shootOk && !cptr->lastShootOk) {
 		NewPhase = TRUE;
 		cptr->FTime = 0;
 		cptr->Phase = DinoInfo[cptr->CType].fireAnim;
 	}
-	cptr->PhunterLOS = cptr->hunterLOS;
-
+	cptr->lastShootOk = shootOk;
+	
 
 ENDPSELECT:
 
