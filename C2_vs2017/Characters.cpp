@@ -2935,20 +2935,9 @@ TBEGIN:
 		float aDist;
 		aDist = ctViewR * DinoInfo[cptr->CType].aggress + OptAgres / AIInfo[cptr->Clone].agressMulti;
 		
-		nv.x = playerdx;
-		nv.z = playerdz;
-		nv.y = 0;
-		NormVector(nv, 2048.f);
-		cptr->tgx = cptr->pos.x - nv.x;
-		cptr->tgz = cptr->pos.z - nv.z;
+		cptr->tgx = PlayerX;
+		cptr->tgz = PlayerZ;
 		cptr->tgtime = 0;
-		cptr->AfraidTime -= TimeDt;
-
-		if (cptr->AfraidTime <= 0) {
-			cptr->AfraidTime = 0;
-			cptr->State = 0;
-		}
-
 
 	}
 
