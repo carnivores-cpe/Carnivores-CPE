@@ -274,8 +274,14 @@ void ResetCharacter(TCharacter *cptr)
 
 	cptr->survivalSink = 0;
 
-	cptr->aimDist = 15;// 30;
-	cptr->lastShootOk = false;
+
+	if (cptr->Clone == AI_POACHER) {
+		cptr->aimDist = 12 + rRand(10); //12-22
+		cptr->lastShootOk = false;
+		cptr->ammo = DinoInfo[cptr->CType].Reload;
+		PoacherHitScore = 0;
+		PoacherHitRange = 0;
+	}
 
 	cptr->tgalphaOffset = rRand(pi *  2);
 
@@ -344,9 +350,6 @@ void ResetCharacter(TCharacter *cptr)
 	cptr->spcDepth = DinoInfo[cptr->CType].spacingDepth + (cptr->scale * 500) - 500;
 
 	cptr->showSonar = FALSE;
-
-	//poacher
-	cptr->ammo = DinoInfo[cptr->CType].Reload;
 
 }
 
@@ -2917,9 +2920,21 @@ TBEGIN:
 
 	float palpha = CorrectedAlpha(FindVectorAlpha(playerdx, playerdz), cptr->alpha);
 	float pdist = (float)sqrt(playerdx * playerdx + playerdz * playerdz);
-	bool aimDistOk = cptr->aimDist * 256 >= pdist;
 
+	
+	
+	float ppalpha = FindVectorAlpha(playerdx, playerdz) + (pi * 1.5);
+	if (ppalpha > pi * 2) ppalpha -= pi * 2;
+	bool hunterLooking = fabs(AngleDifference(ppalpha, CameraAlpha)) < pi / 3;
 
+	int adjustedRange = cptr->aimDist;
+	if (hunterLooking) adjustedRange *= 2;
+	adjustedRange += PoacherHitRange;
+	if (adjustedRange < 10) adjustedRange = 10;
+	bool aimDistOk = adjustedRange * 256 >= pdist;
+
+	//test
+	//if (hunterLooking) return;
 
 	if (GetLandUpH(cptr->pos.x, cptr->pos.z) - GetLandH(cptr->pos.x, cptr->pos.z) > DinoInfo[cptr->CType].waterLevel * cptr->scale)
 		cptr->StateF |= csONWATER;
@@ -2996,9 +3011,7 @@ NOTHINK:
 		NewPhase = TRUE;
 	}
 
-	cptr->aimOk = AngleDifference(cptr->alpha, palpha) < (0.085* (2.f - WeapInfo[DinoInfo[cptr->CType].Weapon].Prec));
-	
-	//bool minRan = pdist < ctViewR * DinoInfo[cptr->CType].poachMinRange + OptAgres / AIInfo[cptr->Clone].agressMulti;
+	cptr->aimOk = AngleDifference(cptr->alpha, palpha) < (0.01* (2.f - WeapInfo[DinoInfo[cptr->CType].Weapon].Prec));
 
 	if (NewPhase)
 
@@ -9214,7 +9227,7 @@ replaceSMA:
 
 	int mindist = 40;
 	if (DinoInfo[Characters[ChCount].CType].Clone == AI_POACHER) {
-		if (tr > 10000) mindist = ctViewR + 300;
+		if (tr > 10150) mindist = ctViewR + 300;
 		else mindist = ctViewR + 1;
 	}
 	if (SurvivalMode) {

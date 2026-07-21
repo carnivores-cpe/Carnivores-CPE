@@ -2467,6 +2467,20 @@ void AnimateBullets() {
 				b);
 
 			
+			if (bullet[b].enemy && sres > 0) {
+				if (sres == tresHunter) PoacherHitScore += 1;
+				else PoacherHitScore -= 1;
+
+				if (PoacherHitScore > 3) {
+					PoacherHitRange += 5;
+					PoacherHitScore = 0;
+				} else if (PoacherHitScore < -3) {
+					PoacherHitRange -= 5;
+					PoacherHitScore = 0;
+				}
+
+			}
+
 
 			float pdx = PlayerX - bullet[b].a.x;
 			float pdz = PlayerZ - bullet[b].a.z;
