@@ -3108,7 +3108,7 @@ ENDPSELECT:
 
 			cptr->ammo -= 1;
 
-			float targetdy = PlayerY - cptr->pos.y;
+			float targetdy = (PlayerY + 40) - cptr->pos.y;
 			float tbeta = -atan(targetdy / tdist);
 
 
