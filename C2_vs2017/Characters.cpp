@@ -2893,6 +2893,16 @@ SKIPROT:
 
 }
 
+bool PoacherCoverScan(float ax, float ay, float az,
+	float bx, float by, float bz)
+{
+	int sres;
+	sres = TraceShot(ax, ay, az, bx, by, bz, true, false);
+	sres &= 0xFF;
+
+	if (sres == tresHunter) return true;
+	else return false;
+}
 
 void AnimatePoacher(TCharacter *cptr)
 {
@@ -2915,14 +2925,43 @@ TBEGIN:
 	float tdist = (float)sqrt(targetdx * targetdx + targetdz * targetdz);
 
 	float playerdx, playerdz;
-	playerdx = PlayerX - cptr->pos.x - cptr->lookx * 100 * cptr->scale;
-	playerdz = PlayerZ - cptr->pos.z - cptr->lookz * 100 * cptr->scale;
+	playerdx = PlayerX - cptr->pos.x;// -cptr->lookx * 100 * cptr->scale;
+	playerdz = PlayerZ - cptr->pos.z;// -cptr->lookz * 100 * cptr->scale;
 
 	float palpha = CorrectedAlpha(FindVectorAlpha(playerdx, playerdz), cptr->alpha);
 	float pdist = (float)sqrt(playerdx * playerdx + playerdz * playerdz);
 
+	if (pdist < 512.f) cptr->hunterLOS = TRUE;
+
+	bool LOS2 = false;
+	float playerdy = (PlayerY + 20) - cptr->pos.y;
+	float tbeta = -atan(playerdy / tdist);
+
+	if (cptr->State) {
+		float palpha2 = FindVectorAlpha(playerdx, playerdz);
+		float ca = (float)cos(palpha2 + pi / 2);
+		float sa = (float)sin(palpha2 + pi / 2);
+		float cb = (float)cos(tbeta);
+		float sb = (float)sin(tbeta);
+
+		nv.x = sa;
+		nv.y = 0;
+		nv.z = -ca;
+
+		nv.x *= cb;
+		nv.y = -sb;
+		nv.z *= cb;
+
+		LOS2 = (PoacherCoverScan(
+			cptr->pos.x,
+			cptr->pos.y + (170 * cptr->scale),
+			cptr->pos.z,
+			cptr->pos.x + nv.x * 256 * ctViewR,
+			cptr->pos.y + (170 * cptr->scale) + nv.y * 256 * ctViewR,
+			cptr->pos.z + nv.z * 256 * ctViewR));
+	}
 	
-	
+
 	float ppalpha = FindVectorAlpha(playerdx, playerdz) + (pi * 1.5);
 	if (ppalpha > pi * 2) ppalpha -= pi * 2;
 	bool hunterLooking = fabs(AngleDifference(ppalpha, CameraAlpha)) < pi / 3;
@@ -2932,9 +2971,6 @@ TBEGIN:
 	adjustedRange += PoacherHitRange;
 	if (adjustedRange < 10) adjustedRange = 10;
 	bool aimDistOk = adjustedRange * 256 >= pdist;
-
-	//test
-	//if (hunterLooking) return;
 
 	if (GetLandUpH(cptr->pos.x, cptr->pos.z) - GetLandH(cptr->pos.x, cptr->pos.z) > DinoInfo[cptr->CType].waterLevel * cptr->scale)
 		cptr->StateF |= csONWATER;
@@ -2969,13 +3005,14 @@ TBEGIN:
 
 NOTHINK:
 	if (pdist < AIInfo[cptr->Clone].pWMin) cptr->NoFindCnt = 0;
-	if (cptr->NoFindCnt) cptr->NoFindCnt--;
-	else
-	{
+	if (cptr->NoFindCnt) {
+		cptr->NoFindCnt--;
+		if (cptr->Phase == DinoInfo[cptr->CType].pauseAnim) cptr->tgalpha = CorrectedAlpha(FindVectorAlpha(targetdx, targetdz), cptr->alpha);
+	} else {
 		cptr->tgalpha = CorrectedAlpha(FindVectorAlpha(targetdx, targetdz), cptr->alpha);
 
 		if (cptr->State && pdist > DinoInfo[cptr->CType].weaveRange &&
-			!DinoInfo[cptr->CType].dontWeave && (!cptr->hunterLOS || !aimDistOk))
+			!DinoInfo[cptr->CType].dontWeave && (!cptr->hunterLOS || !aimDistOk || !LOS2))
 		{
 			cptr->tgalpha += (float)sin(cptr->tgalphaOffset + (RealTime / 824.f)) / AIInfo[cptr->Clone].tGAIncrement;
 			if (cptr->tgalpha < 0) cptr->tgalpha += 2 * pi;
@@ -3011,7 +3048,7 @@ NOTHINK:
 		NewPhase = TRUE;
 	}
 
-	cptr->aimOk = AngleDifference(cptr->alpha, palpha) < (0.01* (2.f - WeapInfo[DinoInfo[cptr->CType].Weapon].Prec));
+	cptr->aimOk = AngleDifference(cptr->alpha, palpha) < (float)(0.01* (2.f - WeapInfo[DinoInfo[cptr->CType].Weapon].Prec));
 
 	if (NewPhase)
 
@@ -3065,7 +3102,7 @@ NOTHINK:
 			cptr->ammo = DinoInfo[cptr->CType].Reload;
 			cptr->Phase = DinoInfo[cptr->CType].reloadAnim;
 			goto ENDPSELECT;
-		} else if (cptr->hunterLOS && aimDistOk) {
+		} else if (cptr->hunterLOS && aimDistOk && LOS2) {
 			if (cptr->aimOk){
 				cptr->Phase = DinoInfo[cptr->CType].fireAnim;
 				goto ENDPSELECT;
@@ -3076,7 +3113,7 @@ NOTHINK:
 		} else cptr->Phase = DinoInfo[cptr->CType].walkAnim;
 
 		
-	bool shootOk = cptr->hunterLOS && cptr->aimOk && aimDistOk;
+	bool shootOk = cptr->hunterLOS && cptr->aimOk && aimDistOk && LOS2;
 	if (cptr->Phase != DinoInfo[cptr->CType].fireAnim &&
 		cptr->Phase != DinoInfo[cptr->CType].reloadAnim &&
 		shootOk && !cptr->lastShootOk) {
@@ -3107,9 +3144,6 @@ ENDPSELECT:
 			}
 
 			cptr->ammo -= 1;
-
-			float targetdy = (PlayerY + 40) - cptr->pos.y;
-			float tbeta = -atan(targetdy / tdist);
 
 
 			for (int s = 0; s <= WeapInfo[DinoInfo[cptr->CType].Weapon].TraceC; s++)
@@ -3148,7 +3182,7 @@ ENDPSELECT:
 					nv.z * 64 * l,
 					DinoInfo[cptr->CType].Weapon,
 					true);
-				  
+				 
 			}
 
 
