@@ -2925,8 +2925,8 @@ TBEGIN:
 	float tdist = (float)sqrt(targetdx * targetdx + targetdz * targetdz);
 
 	float playerdx, playerdz;
-	playerdx = PlayerX - cptr->pos.x;// -cptr->lookx * 100 * cptr->scale;
-	playerdz = PlayerZ - cptr->pos.z;// -cptr->lookz * 100 * cptr->scale;
+	playerdx = PlayerX - cptr->pos.x;
+	playerdz = PlayerZ - cptr->pos.z;
 
 	float palpha = CorrectedAlpha(FindVectorAlpha(playerdx, playerdz), cptr->alpha);
 	float pdist = (float)sqrt(playerdx * playerdx + playerdz * playerdz);
@@ -2934,7 +2934,10 @@ TBEGIN:
 	if (pdist < 512.f) cptr->hunterLOS = TRUE;
 
 	bool LOS2 = false;
-	float playerdy = (PlayerY + 20) - cptr->pos.y;
+
+	int hunterAimH = 30;
+	if (CrouchMode) hunterAimH = -70;
+	float playerdy = (PlayerY + hunterAimH) - cptr->pos.y;
 	float tbeta = -atan(playerdy / tdist);
 
 	if (cptr->State) {
@@ -2960,7 +2963,6 @@ TBEGIN:
 			cptr->pos.y + (170 * cptr->scale) + nv.y * 256 * ctViewR,
 			cptr->pos.z + nv.z * 256 * ctViewR));
 	}
-	
 
 	float ppalpha = FindVectorAlpha(playerdx, playerdz) + (pi * 1.5);
 	if (ppalpha > pi * 2) ppalpha -= pi * 2;
