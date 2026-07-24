@@ -4435,6 +4435,7 @@ void AddPoacherInfo()
 	if (WeapInfo[DinoInfo[TotalC].Weapon].Reload)
 		DinoInfo[TotalC].Reload = WeapInfo[DinoInfo[TotalC].Weapon].Reload;
 
+
 	//TEMP
 	DinoInfo[TotalC].onRadar = TRUE;
 	DinoInfo[TotalC].radarRed = 240;

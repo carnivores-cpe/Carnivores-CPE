@@ -3109,6 +3109,9 @@ NOTHINK:
 				cptr->Phase = DinoInfo[cptr->CType].fireAnim;
 				goto ENDPSELECT;
 			} else cptr->Phase = DinoInfo[cptr->CType].pauseAnim;
+		} else if (!LOS2 && (!cptr->hunterLOS || pdist > 2048.f) && cptr->ammo < DinoInfo[cptr->CType].Reload) {
+			cptr->ammo = DinoInfo[cptr->CType].Reload;
+			cptr->Phase = DinoInfo[cptr->CType].reloadAnim;
 		} else if (fabs(cptr->tgalpha - cptr->alpha) < 1.0 ||
 			fabs(cptr->tgalpha - cptr->alpha) > 2 * pi - 1.0) {
 			cptr->Phase = DinoInfo[cptr->CType].runAnim;
