@@ -281,6 +281,8 @@ void ResetCharacter(TCharacter *cptr)
 		cptr->ammo = DinoInfo[cptr->CType].Reload;
 		PoacherHitScore = 0;
 		PoacherHitRange = 0;
+		cptr->noShootTime = 0;
+		cptr->minRange = ctViewR * 256;
 	}
 
 	cptr->tgalphaOffset = rRand(pi *  2);
@@ -2984,13 +2986,37 @@ TBEGIN:
 	if (cptr->State)
 	{
 		cptr->currentIdleGroup = -1;
-
-		float aDist;
-		aDist = ctViewR * DinoInfo[cptr->CType].aggress + OptAgres / AIInfo[cptr->Clone].agressMulti;
 		
-		cptr->tgx = PlayerX;
-		cptr->tgz = PlayerZ;
-		cptr->tgtime = 0;
+		bool fleeMode = FALSE;
+		if (!SurvivalMode) {
+			if (pdist > (ctViewR + 20) * 256 ||
+				DinoInfo[cptr->CType].aggress <= 0 || !cptr->awareHunter) {
+				fleeMode = TRUE;
+			}
+		}
+
+		if (fleeMode) {
+			nv.x = playerdx;
+			nv.z = playerdz;
+			nv.y = 0;
+			NormVector(nv, 2048.f);
+			cptr->tgx = cptr->pos.x - nv.x;
+			cptr->tgz = cptr->pos.z - nv.z;
+			cptr->tgtime = 0;
+			cptr->AfraidTime -= TimeDt;
+
+			if (cptr->AfraidTime <= 0) {
+				cptr->AfraidTime = 0;
+				cptr->State = 0;
+			}
+
+		}
+		else
+		{
+			cptr->tgx = PlayerX;
+			cptr->tgz = PlayerZ;
+			cptr->tgtime = 0;
+		}
 
 	}
 
@@ -3003,6 +3029,12 @@ TBEGIN:
 			SetNewTargetPlace(cptr, AIInfo[cptr->Clone].targetDistance);
 			goto TBEGIN;
 		}
+
+		cptr->minRange = ctViewR * 256;
+		cptr->noShootTime = 0;
+		PoacherHitScore = 0;
+		PoacherHitRange = 0;
+
 	}
 
 NOTHINK:
@@ -3109,14 +3141,37 @@ NOTHINK:
 				cptr->Phase = DinoInfo[cptr->CType].fireAnim;
 				goto ENDPSELECT;
 			} else cptr->Phase = DinoInfo[cptr->CType].pauseAnim;
-		} else if (!LOS2 && (!cptr->hunterLOS || pdist > 2048.f) && cptr->ammo < DinoInfo[cptr->CType].Reload) {
-			cptr->ammo = DinoInfo[cptr->CType].Reload;
-			cptr->Phase = DinoInfo[cptr->CType].reloadAnim;
-		} else if (fabs(cptr->tgalpha - cptr->alpha) < 1.0 ||
-			fabs(cptr->tgalpha - cptr->alpha) > 2 * pi - 1.0) {
-			cptr->Phase = DinoInfo[cptr->CType].runAnim;
-		} else cptr->Phase = DinoInfo[cptr->CType].walkAnim;
+		} else {
 
+			if (!LOS2 && (!cptr->hunterLOS || pdist > 2048.f) && cptr->ammo < DinoInfo[cptr->CType].Reload) {
+				cptr->ammo = DinoInfo[cptr->CType].Reload;
+				cptr->Phase = DinoInfo[cptr->CType].reloadAnim;
+			} else {
+
+
+
+				if (LOS2) {
+					cptr->noShootTime += 1;
+					if (pdist < cptr->minRange) {
+						cptr->minRange = pdist;
+						cptr->noShootTime = 0;
+					}
+
+					if (cptr->noShootTime > 7) {
+						cptr->noShootTime = 0;
+						//PoacherHitRange *= 2;
+						PoacherHitRange = 15 + (int)(pdist / 256);
+					}
+				}
+
+
+				if (fabs(cptr->tgalpha - cptr->alpha) < 1.0 ||
+					fabs(cptr->tgalpha - cptr->alpha) > 2 * pi - 1.0) {
+					cptr->Phase = DinoInfo[cptr->CType].runAnim;
+				}
+				else cptr->Phase = DinoInfo[cptr->CType].walkAnim;
+			}
+		}
 		
 	bool shootOk = cptr->hunterLOS && cptr->aimOk && aimDistOk && LOS2;
 	if (cptr->Phase != DinoInfo[cptr->CType].fireAnim &&
@@ -3173,10 +3228,8 @@ ENDPSELECT:
 				nv.z *= cb;
 
 				float v = WeapInfo[DinoInfo[cptr->CType].Weapon].Veloc;
-				//if (UNDERWATER) v = WeapInfo[DinoInfo[cptr->CType].Weapon].VelocAq;
 				float l = WeapInfo[DinoInfo[cptr->CType].Weapon].Veloc;
-				//if (WeapInfo[DinoInfo[cptr->CType].Weapon].aqLow) l = WeapInfo[DinoInfo[cptr->CType].Weapon].VelocAq;
-
+				
 				 
 				AddBullet(cptr->pos.x, cptr->pos.y + (170 * cptr->scale), cptr->pos.z,
 					nv.x * 64 * v,

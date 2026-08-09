@@ -464,6 +464,8 @@ typedef struct _TCharacter
 
   //poacher
   int ammo;
+  int noShootTime;
+  float minRange;
 
 } TCharacter;
 
@@ -786,7 +788,6 @@ typedef struct _TDinoInfo
   //poacher
   int Weapon;
   int Reload;
-  float noShootTime;
 
   float reactTime;
   float morphTime = 1.f;

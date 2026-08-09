@@ -4438,9 +4438,9 @@ void AddPoacherInfo()
 
 	//TEMP
 	DinoInfo[TotalC].onRadar = TRUE;
-	DinoInfo[TotalC].radarRed = 240;
-	DinoInfo[TotalC].radarGreen = 240;
-	DinoInfo[TotalC].radarBlue = 0;
+	DinoInfo[TotalC].radarRed = 120;
+	DinoInfo[TotalC].radarGreen = 120;
+	DinoInfo[TotalC].radarBlue = 240;
 
 	DinoInfo[TotalC].radarColour565 = ((DinoInfo[TotalC].radarRed >> 3) << 11) | ((DinoInfo[TotalC].radarGreen >> 2) << 5) | (DinoInfo[TotalC].radarBlue >> 3);
 	DinoInfo[TotalC].radarColour555 = ((DinoInfo[TotalC].radarRed >> 3) << 10) | ((DinoInfo[TotalC].radarGreen >> 3) << 5) | (DinoInfo[TotalC].radarBlue >> 3);
@@ -4847,7 +4847,7 @@ void LoadResourcesScript()
 	AIInfo[AI_POACHER].targetGammaRot = 8.0f;
 	AIInfo[AI_POACHER].tGAIncrement = 2.f;
 	AIInfo[AI_POACHER].idleStartD = 118;
-	AIInfo[AI_ALLO].carnivore = true;
+	AIInfo[AI_POACHER].carnivore = true;
 	AIInfo[AI_POACHER].noWayCntMin = 12;
 	AIInfo[AI_POACHER].noFindWayMed = 16;
 	AIInfo[AI_POACHER].noFindWayRange = 20;
