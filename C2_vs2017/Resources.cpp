@@ -4418,7 +4418,7 @@ void AddPoacherInfo()
 	AddAnimInt(DinoInfo[TotalC].deathType[DinoInfo[TotalC].deathTypeCount].sleep, 6);
 	DinoInfo[TotalC].deathTypeCount++;
 
-	DinoInfo[TotalC].waterLevel = 30;
+	//DinoInfo[TotalC].waterLevel = 30;
 	DinoInfo[TotalC].camDemoPoint = 256.f;
 	DinoInfo[TotalC].camDemoPointWater = 256.f;
 	DinoInfo[TotalC].camBase = 824.f;

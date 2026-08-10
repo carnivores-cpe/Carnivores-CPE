@@ -282,7 +282,7 @@ void ResetCharacter(TCharacter *cptr)
 		PoacherHitScore = 0;
 		PoacherHitRange = 0;
 		cptr->noShootTime = 0;
-		cptr->minRange = ctViewR * 256;
+		cptr->minRange = (float)(ctViewR * 256);
 	}
 
 	cptr->tgalphaOffset = rRand(pi *  2);
@@ -2987,7 +2987,7 @@ TBEGIN:
 	{
 		cptr->currentIdleGroup = -1;
 		
-		bool fleeMode = FALSE;
+		bool fleeMode = GetLandUpH(cptr->pos.x, cptr->pos.z) > GetLandH(cptr->pos.x,cptr->pos.z);
 		if (!SurvivalMode) {
 			if (pdist > (ctViewR + 20) * 256 ||
 				DinoInfo[cptr->CType].aggress <= 0 || !cptr->awareHunter) {
@@ -3030,7 +3030,7 @@ TBEGIN:
 			goto TBEGIN;
 		}
 
-		cptr->minRange = ctViewR * 256;
+		cptr->minRange = (float)(ctViewR * 256);
 		cptr->noShootTime = 0;
 		PoacherHitScore = 0;
 		PoacherHitRange = 0;
@@ -3054,8 +3054,10 @@ NOTHINK:
 		}
 	}
 
-	if (!cptr->hunterLOS) {
-		LookForAWay(cptr, !DinoInfo[cptr->CType].canSwim, TRUE);
+	//if (cptr->Phase == DinoInfo[cptr->CType].walkAnim || cptr->Phase == DinoInfo[cptr->CType].runAnim) {
+	//if (!cptr->hunterLOS) {
+	if (!cptr->hunterLOS || !aimDistOk || !LOS2){
+		LookForAWay(cptr, TRUE, TRUE); //!canswim
 
 		if (cptr->NoWayCnt > AIInfo[cptr->Clone].noWayCntMin)
 		{
@@ -3160,16 +3162,20 @@ NOTHINK:
 					if (cptr->noShootTime > 7) {
 						cptr->noShootTime = 0;
 						//PoacherHitRange *= 2;
-						PoacherHitRange = 15 + (int)(pdist / 256);
+						PoacherHitRange = 15 + (int)(pdist / 256.f);
 					}
 				}
 
+				float tAD = fabs(AngleDifference(cptr->tgalpha, cptr->alpha));
 
-				if (fabs(cptr->tgalpha - cptr->alpha) < 1.0 ||
-					fabs(cptr->tgalpha - cptr->alpha) > 2 * pi - 1.0) {
+				if (tAD < 1.0 ||
+					tAD > 2 * pi - 1.0) {
 					cptr->Phase = DinoInfo[cptr->CType].runAnim;
+				} else if (tAD < 2.3 ||
+					tAD > 2 * pi - 2.3) {
+					cptr->Phase = DinoInfo[cptr->CType].walkAnim;
 				}
-				else cptr->Phase = DinoInfo[cptr->CType].walkAnim;
+				else cptr->Phase = DinoInfo[cptr->CType].pauseAnim;
 			}
 		}
 		
@@ -3230,7 +3236,7 @@ ENDPSELECT:
 				float v = WeapInfo[DinoInfo[cptr->CType].Weapon].Veloc;
 				float l = WeapInfo[DinoInfo[cptr->CType].Weapon].Veloc;
 				
-				 
+				  
 				AddBullet(cptr->pos.x, cptr->pos.y + (170 * cptr->scale), cptr->pos.z,
 					nv.x * 64 * v,
 					nv.y * 64 * v,
@@ -3240,7 +3246,7 @@ ENDPSELECT:
 					nv.z * 64 * l,
 					DinoInfo[cptr->CType].Weapon,
 					true);
-				 
+				  
 			}
 
 
@@ -3277,7 +3283,7 @@ ENDPSELECT:
 
 	//========== rotation to tgalpha ===================//
 
-	if (cptr->Phase == DinoInfo[cptr->CType].pauseAnim) cptr->tgalpha = palpha;
+	//if (cptr->Phase == DinoInfo[cptr->CType].pauseAnim) cptr->tgalpha = palpha;
 
 	float rspd, currspeed, tgbend;
 	float dalpha = fabs(cptr->tgalpha - cptr->alpha);
