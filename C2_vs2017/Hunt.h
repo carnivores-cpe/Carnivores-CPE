@@ -425,7 +425,7 @@ typedef struct _TCharacter
   bool damaged;
 
   bool lastShootOk; //was poacher shooting in last frame
-  bool hunterLOS; //hunter line of sight
+  //bool hunterLOS; //hunter line of sight
   bool aimOk; //is xz aim correct
   float aimDist; //min range to fire
 
