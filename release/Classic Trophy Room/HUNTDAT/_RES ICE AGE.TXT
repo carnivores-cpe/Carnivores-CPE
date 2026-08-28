@@ -1,6 +1,8 @@
 
 areatable {
 {
+ mapShadowDir = 1
+ mapShadowMax = 20
  snow{
   hSpd = 4
   vSpd = 192
@@ -14,6 +16,8 @@ areatable {
 }
 
 {
+ mapShadowDir = 1
+ mapShadowMax = 20
  snow{
   hSpd = 4
   vSpd = 192
@@ -27,6 +31,8 @@ areatable {
 }
 
 {
+ mapShadowDir = 1
+ mapShadowMax = 20
  snow{
   hSpd = 4
   vSpd = 192
@@ -40,6 +46,8 @@ areatable {
 }
 
 {
+ mapShadowDir = 1
+ mapShadowMax = 20
  snow{
   hSpd = 4
   vSpd = 192
@@ -53,6 +61,8 @@ areatable {
 }
 
 {
+ mapShadowDir = 1
+ mapShadowMax = 20
  snow{
   hSpd = 4
   vSpd = 192
@@ -397,7 +407,6 @@ characters {
  name    = 'Hunter'
  file    = 'hunter ice age.car'
  ai      = 0
- morphTime = 1
  health  = 1
  bloR = 112
  bloG = 0
@@ -411,7 +420,6 @@ characters {
  name    = 'Pig'
  file    = 'pig1.car'
  ai      = 6
- morphTime = 1
  hearK      = 0.5
 spawninfo{
  spawngroup = 0
@@ -449,7 +457,6 @@ endChance = 0.25
  name   = 'Archeopterics'
  file   = 'Archeo.car'
  ai     = 3
- morphTime = 1
 spawninfo{
  spawngroup = 0
  spawnratio = 1
@@ -478,7 +485,6 @@ deathtype{
  name      = 'Brontoteriy'
  file      = 'bronto.car'
  ai        = 20
- morphTime = 1
  callNo = 0
  tropgroup = 0
  basescore = 2.5
@@ -548,7 +554,6 @@ killtype{
  name = 'Wild Boar'
  file = 'hog.car'
  ai        = 21
- morphTime = 1
  callNo = 1
  tropgroup = 0
  basescore = 3
@@ -621,7 +626,6 @@ killtype{
  name = 'Wolf'
  file = 'wolf.car'
  ai        = 22
- morphTime = 1
  callNo = 2
  tropgroup = 0
  basescore = 3.5
@@ -696,7 +700,6 @@ killtype{
  name = 'Wooly rhinoceros'
  file = 'Rhino.car'
  ai        = 23
- morphTime = 1
  callNo = 3
  tropgroup = 0
  basescore = 5
@@ -768,7 +771,6 @@ killtype{
  name = 'Diatryma'
  file = 'diatr_s.car'
  ai        = 16
- morphTime = 1
  callNo = 4
  tropgroup = 0
  basescore = 4.5
@@ -849,7 +851,6 @@ killtype{
  name = 'Giant deer'
  file = 'deer.car'
  ai        = 24
- morphTime = 1
  callNo = 5
  tropgroup = 0
  basescore = 6
@@ -920,7 +921,6 @@ killtype{
  name = 'Smilodon'
  file = 'smilo.car'
  ai        = 25
- morphTime = 1
  callNo = 6
  tropgroup = 0
  basescore = 7.5
@@ -996,7 +996,6 @@ killtype{
  name = 'Mammoth'
  file = 'mamm.car'
  ai        = 26
- morphTime = 1
  callNo = 7
  tropgroup = 0
 overwrite char7 {
@@ -1062,7 +1061,6 @@ killtype{
  name = 'Bear'
  file = 'bear.car'
  ai        = 27
- morphTime = 1
  callNo = 8
  tropgroup = 0
 overwrite char8 {
@@ -1127,7 +1125,6 @@ killtype{
  name = 'Yeti'
  file = 'bigfoot.car'
  ai        = 27
- morphTime = 1
  callNo = 9
  tropgroup = 0
 overwrite char9 {

@@ -5056,14 +5056,10 @@ void LoadResourcesScript()
 	if (strstr(line, "trophytable")) ReadTrophyTable(stream);
 	if (strstr(line, "areatable")) ReadAreaTable(stream, areaNumber);
     if (strstr(line, "weapons") ) ReadWeapons(stream);
-	//if (strstr(line, "hunterinfo")) ReadCharacters(stream, false, nextTrophySlot);
-	//if (strstr(line, "oldambients")) ReadCharacters(stream, false, nextTrophySlot);
-	//if (strstr(line, "corpseambients")) ReadCharacters(stream, false, nextTrophySlot);
 	if (strstr(line, "characters")) {
 		ReadCharacters(stream);
-		AddPoacherInfo();
+		//AddPoacherInfo();
 	}
-	//if (strstr(line, "mapambients")) ReadCharacters(stream, true, nextTrophySlot);
 	
 	if (strstr(line, "common")) ReadCommonTable(stream);
 	

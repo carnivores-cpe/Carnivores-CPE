@@ -2903,7 +2903,7 @@ bool PoacherCoverScan(float ax, float ay, float az,
 	sres &= 0xFF;
 
 	//TEST
-	/*
+	 /*
 	if (sres == tresHunter) {
 		AddElements(bx, by, bz, 1, 6 + 3 * 4);
 		AddVoice3dv(fxImpactChar[0].length, fxImpactChar[0].lpData, bx, by, bz, 256);
@@ -2914,7 +2914,7 @@ bool PoacherCoverScan(float ax, float ay, float az,
 		AddElements(bx, by, bz, 3, 6 + 3 * 4);
 		AddVoice3dv(fxImpactGround[0].length, fxImpactGround[0].lpData, bx, by, bz, 256);
 	}
-	*/
+	 */
 
 	if (sres == tresHunter) return true;
 	else return false;
@@ -3263,7 +3263,7 @@ ENDPSELECT:
 				float v = WeapInfo[DinoInfo[cptr->CType].Weapon].Veloc;
 				float l = WeapInfo[DinoInfo[cptr->CType].Weapon].Veloc;
 				
-				  
+				//	/*  
 				AddBullet(cptr->pos.x, cptr->pos.y + (170 * cptr->scale), cptr->pos.z,
 					nv.x * 64 * v,
 					nv.y * 64 * v,
@@ -3273,7 +3273,8 @@ ENDPSELECT:
 					nv.z * 64 * l,
 					DinoInfo[cptr->CType].Weapon,
 					true);
-				  
+				//  */
+
 			}
 
 
