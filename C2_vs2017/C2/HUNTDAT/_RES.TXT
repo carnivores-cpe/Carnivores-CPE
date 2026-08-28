@@ -5,6 +5,7 @@ common {
  survivalDTM = 0
  trophyPlayerX = 76
  trophyPlayerY = 70
+ dropShip = TRUE
 }
 
 areatable {

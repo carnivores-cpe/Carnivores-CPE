@@ -3083,6 +3083,8 @@ void ReadCommonTable(FILE *stream)
 		if (strstr(line, "trophyPlayerX")) TrophySpawnX = atoi(value);
 		if (strstr(line, "trophyPlayerY")) TrophySpawnZ = atoi(value);
 
+		if(strstr(line, "dropShip")) readBool(value, DropShipMode);
+
 	}
 
 }

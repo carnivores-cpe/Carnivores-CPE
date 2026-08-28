@@ -1353,8 +1353,10 @@ LONG APIENTRY MainWndProc( HWND hWnd, UINT message, UINT wParam, LONG lParam)
     case 'Y':
 		if (EXITMODE && !SurvivalMode)
 		{
-			if (MyHealth) AddDShipTask();//ExitTime = 4000;
-			else ExitTime = 1;
+			if (MyHealth) {
+				if (DropShipMode) AddDShipTask();
+				else ExitTime = 4000;
+			} else ExitTime = 1;
 			EXITMODE = FALSE;
 		}
 		break;
@@ -1362,8 +1364,10 @@ LONG APIENTRY MainWndProc( HWND hWnd, UINT message, UINT wParam, LONG lParam)
     case VK_RETURN:
       if (EXITMODE )
       {
-		if (MyHealth && !SurvivalMode) AddDShipTask();//ExitTime = 4000;
-        else ExitTime = 1;
+		  if (MyHealth && !SurvivalMode) {
+			  if (DropShipMode) AddDShipTask();
+			  else ExitTime = 4000;
+		  } else ExitTime = 1;
         EXITMODE = FALSE;
       }
       break;

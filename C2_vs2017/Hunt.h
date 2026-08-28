@@ -1432,6 +1432,8 @@ _EXTORNOT int SurvivalWave;
 _EXTORNOT int SurvivalIndex[128];
 _EXTORNOT int SurvivalIndexCh;
 
+_EXTORNOT bool DropShipMode;
+
 //_EXTORNOT int TropSlotData[128]; //ctype per trophySlot
 //_EXTORNOT int TropSlotDataCh = 0;
 
