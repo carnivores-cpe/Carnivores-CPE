@@ -3062,10 +3062,10 @@ void ReadCommonTable(FILE *stream)
 {
 	packTypeCount = 0;
 
-	if (SurvivalMode) {
-		SkipSector(stream);
-		return;
-	}
+	//if (SurvivalMode) {
+	//	SkipSector(stream);
+	//	return;
+	//}
 
 	char *value;
 	char line[256];
