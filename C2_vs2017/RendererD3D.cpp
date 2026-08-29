@@ -1023,9 +1023,11 @@ void d3dDetectCaps()
   PrintLog(logt);
   ResetTextureMap();
 
-  wsprintf(logt, "DETECTED: Texture transfer speed: %dK/sec.\n", 128*10000 / T);
-  PrintLog(logt);
-
+  if (T != 0)
+  {
+    wsprintf(logt, "DETECTED: Texture transfer speed: %dK/sec.\n", 128 * 10000 / T);
+    PrintLog(logt);
+  }
 
   DDSURFACEDESC ddsd;
   ZeroMemory( &ddsd, sizeof(DDSURFACEDESC) );
