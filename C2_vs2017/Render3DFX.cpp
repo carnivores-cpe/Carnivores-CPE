@@ -1127,7 +1127,7 @@ void ShowControlElements()
 	  FXTextOut(VideoCX - GetTextW(hdcCMain, buf) / 2, y, buf, 0x0060C0D0);
   }
 
-  if (ExitTime)
+  if (ExitTime && !DShipInRange)
   {
     int y = WinH / 3;
     wsprintf(buf,"Preparing for evacuation...");

@@ -1359,7 +1359,7 @@ LONG APIENTRY MainWndProc( HWND hWnd, UINT message, UINT wParam, LONG lParam)
 		if (EXITMODE && !SurvivalMode)
 		{
 			if (MyHealth) {
-				if (DropShipMode) AddDShipTask();
+				if (DropShipMode && !ObservMode) AddDShipTask();
 				else ExitTime = 4000;
 			} else ExitTime = 1;
 			EXITMODE = FALSE;
@@ -1370,7 +1370,7 @@ LONG APIENTRY MainWndProc( HWND hWnd, UINT message, UINT wParam, LONG lParam)
       if (EXITMODE )
       {
 		  if (MyHealth && !SurvivalMode) {
-			  if (DropShipMode) AddDShipTask();
+			  if (DropShipMode && !ObservMode) AddDShipTask();
 			  else ExitTime = 4000;
 		  } else ExitTime = 1;
         EXITMODE = FALSE;

@@ -108,7 +108,7 @@ void ShowControlElements()
   }
 
 
-  if (ExitTime)
+  if (ExitTime && !DShipInRange)
   {
     int y = WinH / 3;
     wsprintf(buf,"Preparing for evacuation...");

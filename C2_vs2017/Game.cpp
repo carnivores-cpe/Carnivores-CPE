@@ -2780,8 +2780,7 @@ TBEGIN:
 		(PlayerZ - DShip.pos.z) * (PlayerZ - DShip.pos.z));
 	float L2 = sqrt((DShip.tgpos.x - DShip.pos.x) * (DShip.tgpos.x - DShip.pos.x) +
 		(DShip.tgpos.x - DShip.pos.x) * (DShip.tgpos.x - DShip.pos.x));
-	float LadderPlayer = sqrt((PlayerY - (DShip.pos.y - DShip.DeltaY)) * (PlayerY - (DShip.pos.y - DShip.DeltaY)	) +
-		(LPF * LPF));
+	//float LadderPlayer = sqrt((PlayerY - DShip.pos.y) * (PlayerY - DShip.pos.y	) + (LPF * LPF));
 
 	DShip.pos.y += 0.3f*(float)cos(RealTime / 256.f);
 
@@ -2795,13 +2794,14 @@ TBEGIN:
 		} else BeamTime -= TimeDt;
 		// */
 		if (DShipInRange) {
-			if (LadderPlayer > 500) {
+			if (PlayerY > DShip.pos.y - 500) ExitTime = 1;
+			else if (LPF > 500) {
 				ExitTime = 0;
 				DShipInRange = FALSE;
-			}
+			} else YSpeed += TimeDt * 4;
 		}
-		else if (LadderPlayer < 250) {
-			ExitTime = 300;
+		else if (LPF < 250 && PlayerY < DShip.pos.y) {
+			ExitTime = 4000;
 			DShipInRange = TRUE;
 		}
 		return;
