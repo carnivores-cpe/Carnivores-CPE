@@ -482,6 +482,46 @@ NOBAG:
   }
 
 
+
+  
+  for (int b = 0; b < BeamCount; b++) {
+
+
+		  //=========== beams ================//
+		  Beams[b].rpos.x = Beams[b].pos.x - CameraX;
+		  Beams[b].rpos.y = Beams[b].pos.y - CameraY;
+		  Beams[b].rpos.z = Beams[b].pos.z - CameraZ;
+		  r = (float)max(fabs(Beams[b].rpos.x), fabs(Beams[b].rpos.z));
+		  ri = -1 + (int)(r / 256.f + 1.6f);
+
+		  if (HARD3D) return;
+		  //for (int c = 0; c <= ctViewR; c++)
+		  //  ChRenderList[c].ICount = 0;
+
+
+		  //=========== beams ================//
+
+		  if (ri < 0) ri = 0;
+		  if (ri < ctViewR)
+		  {
+			  Beams[b].rpos = RotateVector(Beams[b].rpos);
+			  if (Beams[b].rpos.z > BackViewR) goto NOBEAM;
+			  if (fabs(Beams[b].rpos.x) > -Beams[b].rpos.z + BackViewR) goto NOBEAM;
+
+			  int i = ChRenderList[ri].ICount++;
+			  ChRenderList[ri].Items[i].CType = 10;
+			  ChRenderList[ri].Items[i].Index = b;
+		  }
+	  NOBEAM:
+		  ;
+
+
+  }
+
+
+
+
+
 //============= Dinosaurs ====================//
   TCharacter *cptr;
   for (int c=0; c<ChCount; c++)
@@ -588,6 +628,8 @@ void RenderChList(int r)
 		  RenderDShip();
 	  } else if (ChRenderList[r].Items[c].CType == 9) {
 		  RenderBoat();
+	  } else if (ChRenderList[r].Items[c].CType == 10) {
+		  RenderBeamSoft(ChRenderList[r].Items[c].Index);
 	  }
 	
   }
@@ -2693,6 +2735,9 @@ void RenderDShip()
 
 
 
+
+
+
 void RenderBoat()
 {
 	float zs = (float)VectorLength(Boat.rpos);
@@ -2777,6 +2822,27 @@ void RenderBullet(int b)
 	else
 		RenderModel(Weapon.Bullet[bullet[b].parent].mptr,
 			bullet[b].rpos.x, bullet[b].rpos.y, bullet[b].rpos.z, 240, 0, -bullet[b].alpha - pi / 2 + CameraAlpha, CameraBeta);
+}
+
+
+void RenderBeamSoft(int b)
+{
+	float zs = (float)VectorLength(Beams[b].rpos);
+	if (zs > ctViewR * 256) return;
+
+	GlassL = 0;
+	if (zs > 256 * (ctViewR - 4))
+		GlassL = min(255, (zs / 4 - 64 * (ctViewR - 4)));
+
+
+	CreateMorphedModelBetaGamma(BeamModel.mptr, &BeamModel.Animation[0], Beams[b].FTime, Beams[b].scale, 0, 0);
+
+	if (fabs(Beams[b].rpos.z) < 4000)
+		RenderModelClip(BeamModel.mptr,
+			Beams[b].rpos.x, Beams[b].rpos.y, Beams[b].rpos.z, 240, 0, 0, CameraBeta);
+	else
+		RenderModel(BeamModel.mptr,
+			Beams[b].rpos.x, Beams[b].rpos.y, Beams[b].rpos.z, 240, 0, 0, CameraBeta);
 }
 
 

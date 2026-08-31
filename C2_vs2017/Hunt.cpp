@@ -380,7 +380,12 @@ void DrawScene()
 
   Render3DHardwarePosts();
 
+  
   if (NeedWater) RenderWater();
+
+#ifdef _3dfx
+  RenderBeams();
+#endif
 
   RenderElements();
 }
@@ -2546,7 +2551,7 @@ int PASCAL WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
   //TEMP DISABLED
   //LoadCharacterInfo(BoatModel, "HUNTDAT\\boat.CAR");
 
-//  LoadCharacterInfo(BeamModel, "HUNTDAT\\BEAM.CAR");
+  LoadCharacterInfo(BeamModel, "HUNTDAT\\BEAM.CAR");
   LoadCharacterInfo(WCircleModel, "HUNTDAT\\WCIRCLE2.CAR");
   LoadCharacterInfo(ShipModel, "HUNTDAT\\ship2a.car");
   LoadCharacterInfo(SShipModel, "HUNTDAT\\sship.car");

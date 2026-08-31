@@ -343,6 +343,13 @@ typedef struct _TWCircle
   int FTime;
 } TWCircle;
 
+typedef struct _TBeam
+{
+	Vector3d pos, rpos;
+	float scale;
+	int FTime;
+} TBeam;
+
 typedef struct _TSnowType {
 	int snow_vSpd;//vertical
 	int snow_hSpd;//horizontal
@@ -1031,6 +1038,7 @@ void RenderSShip();
 void RenderDShip();
 void RenderBag();
 void RenderBullet(int);
+void RenderBeamSoft(int);
 void RenderPlayer(int);
 void RenderSkyPlane();
 void RenderHealthBar();
@@ -1438,7 +1446,7 @@ _EXTORNOT bool DropShipMode;
 //_EXTORNOT int TropSlotDataCh = 0;
 
 
-_EXTORNOT TWCircle       Beams[32];
+_EXTORNOT TBeam 		 Beams[32];
 _EXTORNOT TWCircle       WCircles[2096]; //increased
 
 _EXTORNOT TSnowElement*  Snow;
@@ -1688,6 +1696,7 @@ void Init3DHardware();
 void Activate3DHardware();
 void ShutDown3DHardware();
 void Render3DHardwarePosts();
+void RenderBeams();
 void CopyBackToDIB();
 void CopyHARDToDIB();
 void Hardware_ZBuffer(BOOL zb);

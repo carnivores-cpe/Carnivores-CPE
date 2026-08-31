@@ -2186,6 +2186,8 @@ void RenderGround()
 
 
 
+
+/*
 void RenderBeams()
 {
 
@@ -2206,36 +2208,37 @@ void RenderBeams()
 		rpos.y = wptr->pos.y - CameraY;
 		rpos.z = wptr->pos.z - CameraZ;
 
-		/*
+
 		float r = (float)max(fabs(rpos.x), fabs(rpos.z));
 		int ri = -1 + (int)(r / 256.f + 0.4f);
 		if (ri < 0) ri = 0;
 		if (ri > ctViewR) continue;
-		*/
 
 		rpos = RotateVector(rpos);
 
-		//if (rpos.z > BackViewR) continue;
-		//if (fabs(rpos.x) > -rpos.z + BackViewR) continue;
-		//if (fabs(rpos.y) > -rpos.z + BackViewR) continue;
+		if (rpos.z > BackViewR) continue;
+		if (fabs(rpos.x) > -rpos.z + BackViewR) continue;
+		if (fabs(rpos.y) > -rpos.z + BackViewR) continue;
 
-		//grConstantColorValue(((2000 - wptr->FTime) / 38) << 24);
-		grConstantColorValue(((wptr->FTime) / 38) << 24);
+
+		grConstantColorValue(((2000 - wptr->FTime) / 38) << 24);
 
 		CreateMorphedModel(BeamModel.mptr, &BeamModel.Animation[0], (int)(wptr->FTime), wptr->scale);
 
-		if (fabs(rpos.z) + fabs(rpos.x) < 1000)
+		if (fabs(rpos.z) + fabs(rpos.x) < 4000)
 			RenderModelClip(BeamModel.mptr,
-				rpos.x, rpos.y, rpos.z, 250, 0, 0, CameraBeta);
+				rpos.x, rpos.y, rpos.z, 210, 0, 0, CameraBeta);
 		else
 			RenderModel(BeamModel.mptr,
-				rpos.x, rpos.y, rpos.z, 250, 0, 0, CameraBeta);
+				rpos.x, rpos.y, rpos.z, 210, 0, 0, CameraBeta);
 
-
-		PrintLog("BEAM ADDED\n");
 	}
-
 }
+*/
+
+
+
+
 
 
 void RenderWCircles()
@@ -2322,7 +2325,7 @@ void RenderWater()
       ProcessMapW(CCX+x, CCY+y, max(abs(x), abs(y)));
 
   RenderWCircles();
-  RenderBeams();
+//  RenderBeams();
 
   grConstantColorValue(0xFF000000);
   grAlphaBlendFunction(GR_BLEND_SRC_ALPHA,
@@ -3916,6 +3919,40 @@ void RenderDShipPost()
 }
 
 
+void RenderBeamPost(int b) {
+
+	//guAlphaSource(GR_ALPHASOURCE_CC_ALPHA);
+	//grFogMode(GR_FOG_WITH_ITERATED_ALPHA);
+	//grAlphaBlendFunction(GR_BLEND_SRC_ALPHA,
+	//	GR_BLEND_ONE,
+	//	GR_BLEND_ONE,
+	//	GR_BLEND_ONE);
+
+	GlassL = 0;
+	zs = (int)VectorLength(Beams[b].rpos);
+	if (zs > 256 * (ctViewR)) return;
+
+	if (zs > 256 * (ctViewR - 4))
+		GlassL = min(255, (int)(zs - 256 * (ctViewR - 4)) / 4);
+
+	//grConstantColorValue((255 - GlassL) << 24);
+	grConstantColorValue(((2000 - Beams[b].FTime) / 38) << 24);
+
+	CreateMorphedModelBetaGamma(BeamModel.mptr, &BeamModel.Animation[0],
+		Beams[b].FTime, Beams[b].scale, 0, 0);
+
+	if (fabs(Beams[b].rpos.z) < 4000)
+		RenderModelClip(BeamModel.mptr,
+			Beams[b].rpos.x, Beams[b].rpos.y, Beams[b].rpos.z, 210, 0,
+			- pi / 2 + CameraAlpha, CameraBeta);
+	else
+		RenderModel(BeamModel.mptr,
+			Beams[b].rpos.x, Beams[b].rpos.y, Beams[b].rpos.z, 210, 0,
+			- pi / 2 + CameraAlpha, CameraBeta);
+	//grConstantColorValue(0xFF000000);
+}
+
+
 void RenderBulletPost(int b) {
 
 			GlassL = 0;
@@ -4203,6 +4240,48 @@ void RenderElements()
   grDepthMask( FXTRUE );
 }
 
+
+void RenderBeams() {
+	if (!BeamCount) return;
+
+	grAlphaBlendFunction(GR_BLEND_SRC_ALPHA,
+		GR_BLEND_ONE,
+		GR_BLEND_ONE,
+		GR_BLEND_ONE);
+
+	for (int b = 0; b < BeamCount; b++) {
+
+		Beams[b].rpos.x = Beams[b].pos.x - CameraX;
+		Beams[b].rpos.y = Beams[b].pos.y - CameraY;
+		Beams[b].rpos.z = Beams[b].pos.z - CameraZ;
+		r = (float)max(fabs(Beams[b].rpos.x), fabs(Beams[b].rpos.z));
+
+		int ri = -1 + (int)(r / 256.f + 0.2f);
+		if (ri < 0) ri = 0;
+		if (ri < ctViewR)
+		{
+			if (FOGON)
+			{
+				CalcFogLevel_Gradient(Beams[b].rpos);
+				grFogColorValue(CurFogColor);
+			}
+
+			Beams[b].rpos = RotateVector(Beams[b].rpos);
+			if (Beams[b].rpos.z > BackViewR) goto NOBEAM;
+			if (fabs(Beams[b].rpos.x) > -Beams[b].rpos.z + BackViewR) goto NOBEAM;
+			RenderBeamPost(b);
+		}
+	NOBEAM:
+		;
+
+	}
+
+	grAlphaBlendFunction(GR_BLEND_SRC_ALPHA,
+		GR_BLEND_ONE_MINUS_SRC_ALPHA,
+		GR_BLEND_ONE,
+		GR_BLEND_ONE);
+
+}
 
 
 void Render3DHardwarePosts()
@@ -4873,6 +4952,7 @@ endmap:
 
 void RenderSun(float x, float y, float z)
 {
+
   SunScrX = VideoCX + (int)(x / (-z) * CameraW);
   SunScrY = VideoCY - (int)(y / (-z) * CameraH);
   GetSkyK(SunScrX, SunScrY);
@@ -5072,6 +5152,7 @@ void RenderSkyPlane2()
 
 void RenderSkyPlane()
 {
+
   Vector3d v,vbase;
   Vector3d tx,ty,nv;
   float p,q, qx, qy, qz, px, py, pz, rx, ry, rz, ddx, ddy;

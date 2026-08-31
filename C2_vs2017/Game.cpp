@@ -844,6 +844,7 @@ void ProcessCommandLine()
 
 void AddBeam(float x, float z, float scale)
 {
+	if (BeamCount > 30) return;
 	Beams[BeamCount].pos.x = x;
 	Beams[BeamCount].pos.z = z;
 	Beams[BeamCount].pos.y = GetLandUpH(x, z);
@@ -2787,12 +2788,12 @@ TBEGIN:
 	if (DShip.State == 3) {
 		//pickup phase
 		// todo despawn if player moves too far away?
-		/*
+		// /*
 		if (BeamTime <= 0) {
 			AddBeam(DShip.pos.x, DShip.pos.z, 2.0);
 			BeamTime += 65;
 		} else BeamTime -= TimeDt;
-		*/
+		// */
 		if (DShipInRange) {
 			if (LadderPlayer > 500) {
 				ExitTime = 0;
@@ -2800,7 +2801,7 @@ TBEGIN:
 			}
 		}
 		else if (LadderPlayer < 250) {
-			ExitTime = 3000;
+			ExitTime = 300;
 			DShipInRange = TRUE;
 		}
 		return;
@@ -2829,6 +2830,7 @@ TBEGIN:
 		AddVoice3d(ShipModel.SoundFX[2].length, ShipModel.SoundFX[2].lpData,
 			DShip.pos.x, DShip.pos.y, DShip.pos.z);
 
+	/*
 	if (DShip.State == 2 && DShip.speed < 5) {
 		if (DShipInRange) {
 			if (LadderPlayer > 500) {
@@ -2841,6 +2843,7 @@ TBEGIN:
 			DShipInRange = TRUE;
 		}
 	}
+	*/
 
 	//====== fly ===========//
 	float l = TimeDt * DShip.speed / 16.f;
@@ -3438,7 +3441,7 @@ void AnimateProcesses()
 
 	  if (Beams[b].FTime <= 0)
 	  {
-		  memcpy(&Beams[b], &Beams[b + 1], sizeof(TWCircle) * (BeamCount + 1 - b));
+		  memcpy(&Beams[b], &Beams[b + 1], sizeof(TBeam) * (BeamCount + 1 - b));
 		  b--;
 		  BeamCount--;
 	  }
