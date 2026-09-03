@@ -1948,6 +1948,7 @@ void ReInitGame()
   ExitTime = 0;
   DropShipMsgTime = 0;
   DShipInRange = FALSE;
+  DShipHuntRange = 0.f;
 
   // Allocate (vertex count based) buffers for renderers
   rVertex = (Vector3d*)_HeapAlloc(Heap, 0, sizeof(Vector3d) * MaxObjectVCount);

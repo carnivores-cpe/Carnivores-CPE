@@ -1493,6 +1493,7 @@ _EXTORNOT   TElements Elements[700];
 _EXTORNOT   TBTrail   BloodTrail;
 
 _EXTORNOT   bool DShipInRange;
+_EXTORNOT   float DShipHuntRange;
 
 _EXTORNOT   int     PrevTime, TimeDt, T, Takt, RealTime, StepTime, MyHealth, ExitTime, WaveNoteTime,
             ChCallTime, CallLockTime, NextCall, DropShipMsgTime, PainTime;

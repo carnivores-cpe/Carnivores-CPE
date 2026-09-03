@@ -894,6 +894,11 @@ void SubmitDinoScore (int cindex) {
 
 void AddDShipTask()
 {	
+	if (DShip.State) {
+		wsprintf(DropShipMsg, "The evacuation ship is already deployed.");
+		DropShipMsgTime = 3000;
+		return;
+	}
 	if (!ONWATER) {
 		// todo USE DSHIP SOUND
 		AddVoicev(SShipModel.SoundFX[1].length,
@@ -2758,7 +2763,7 @@ TBEGIN:
 		if (DShip.pos.x < 256) DShip.pos.x = PlayerX + 90 * 256;
 		DShip.pos.z = PlayerZ - 90 * 256;
 		if (DShip.pos.z < 256) DShip.pos.z = PlayerZ + 90 * 256;
-		DShip.pos.y = GetLandUpH(DShip.pos.x, DShip.pos.z) + DShip.DeltaY + 1024;
+		DShip.pos.y = GetLandUpH(DShip.pos.x, DShip.pos.z) + DShip.DeltaY + 3072.f;
 
 		DShip.tgpos.x = PlayerX;
 		DShip.tgpos.z = PlayerZ;
@@ -2784,15 +2789,18 @@ TBEGIN:
 
 	DShip.pos.y += 0.3f*(float)cos(RealTime / 256.f);
 
+	if (DShip.State == 4) {
+
+
+
+	}
+
 	if (DShip.State == 3) {
-		//pickup phase
-		// todo despawn if player moves too far away?
-		// /*
 		if (BeamTime <= 0) {
 			AddBeam(DShip.pos.x, DShip.pos.z, 2.0);
 			BeamTime += 65;
 		} else BeamTime -= TimeDt;
-		// */
+
 		if (DShipInRange) {
 			if (PlayerY > DShip.pos.y - 500) ExitTime = 1;
 			else if (LPF > 500) {
@@ -2804,6 +2812,20 @@ TBEGIN:
 			ExitTime = 4000;
 			DShipInRange = TRUE;
 		}
+
+		DShipHuntRange -= ((float)TimeDt) ;// / 100.f;
+		if (DShipHuntRange <= 0.f) {
+			DShipHuntRange = 0.f;
+			DShip.State = 4;
+
+			DShip.tgpos.x = DShip.pos.x - 90 * 256;
+			if (DShip.tgpos.x < 256) DShip.tgpos.x = DShip.pos.x + 90 * 256;
+			DShip.tgpos.z = DShip.pos.z - 90 * 256;
+			if (DShip.tgpos.z < 256) DShip.tgpos.z = DShip.pos.z + 90 * 256;
+			DShip.tgpos.y = GetLandUpH(DShip.tgpos.x, DShip.tgpos.z) + DShip.DeltaY + 3072;
+		}
+
+
 		return;
 	}
 
@@ -2816,14 +2838,16 @@ TBEGIN:
 
 	//====== speed ===============//
 	float vspeed = 1.f + LF / 128.f;
-	if (vspeed > 24) vspeed = 24;
+	if (vspeed > 32) {
+		vspeed = 32;
+	}
 	//DShip.FTime = DShipModel.Animation[0].AniTime * (vspeed/24);
 	//if (DShip.State) vspeed = 24;
 	if (fabs(dalpha) > 0.4) vspeed = 0.f;
 	float _s = DShip.speed;
 	if (vspeed > DShip.speed) DeltaFunc(DShip.speed, vspeed, TimeDt / 200.f);
 	else DShip.speed = vspeed;
-	DShip.FTime = DShipModel.Animation[0].AniTime * (DShip.speed / 24);
+	//DShip.FTime = DShipModel.Animation[0].AniTime * (DShip.speed / 24);
 
 	if (DShip.speed > 0 && _s == 0)
 		//todo add this to real thingy DShip Car
@@ -2846,6 +2870,22 @@ TBEGIN:
 	*/
 
 	//====== fly ===========//
+	if (DShip.State == 4 && DShip.speed == 32) DShip.State = 5;
+	if (DShip.State == 5) {
+
+		if (LPF > (float)((ctViewR + 20) * 256)) {
+			DShip.State = 0;
+			DShip.alpha = 0;
+			DShip.speed = 0;
+			DShipInRange = FALSE;
+			DShipHuntRange = 0.f;
+			return;
+		}
+
+		DShip.speed = 32;
+		DShip.tgpos.x += (float)cos(DShip.alpha) * 36;
+		DShip.tgpos.z += (float)sin(DShip.alpha) * 36;
+	}
 	float l = TimeDt * DShip.speed / 16.f;
 
 	//if (fabs(dalpha) < 0.4)
@@ -2865,6 +2905,7 @@ TBEGIN:
 				Ship.tgpos.y = GetLandUpH(Ship.tgpos.x, Ship.tgpos.z) + Ship.DeltaY;
 				Ship.tgpos.y = MAX(Ship.tgpos.y, GetLandUpH(Ship.pos.x, Ship.pos.z) + Ship.DeltaY);
 				DShip.State = 3;
+				DShipHuntRange = 3000;
 			}
 
 			/*
@@ -2890,6 +2931,9 @@ TBEGIN:
 			}
 			*/
 		}
+
+	SKIPSPEED:
+
 
 	//======= y movement ============//
 	float h = GetLandUpH(DShip.pos.x, DShip.pos.z);
