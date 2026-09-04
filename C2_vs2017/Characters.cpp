@@ -8990,7 +8990,7 @@ void AnimateCharacters()
 			break;
 		}
 
-		if (!cptr->Health && SurvivalMode && cptr->Clone != 0) {
+		if (!cptr->Health && SurvivalMode && MyHealth && cptr->Clone != 0) {
 			if (cptr->survivalSinkR < 1) {
 				cptr->survivalSinkR += TimeDt * 0.0001;
 				if (cptr->survivalSinkR > 1) cptr->survivalSinkR = 1;
