@@ -801,6 +801,7 @@ int CheckPlaceCollision(TCharacter *cptr, Vector3d &v, BOOL wc, BOOL mc)
 				{
 					int ob = OMap[ccz + z][ccx + x];
 					if (MObjects[ob].info.Radius < 10) continue;
+					if ((float)(MObjects[ob].info.YHi) + GetLandOH(ccx + x,ccz + z) < cptr->pos.y) continue;
 					float CR = (float)MObjects[ob].info.Radius + 64;
 
 					float oz = (ccz + z) * 256.f + 128.f;
