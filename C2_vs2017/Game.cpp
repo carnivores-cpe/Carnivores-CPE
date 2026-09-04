@@ -2803,18 +2803,19 @@ TBEGIN:
 
 		if (DShipInRange) {
 			if (PlayerY > DShip.pos.y - 500) ExitTime = 1;
-			else if (LPF > 500) {
+			else if (LPF > 350.f) {
 				ExitTime = 0;
 				DShipInRange = FALSE;
-			} else YSpeed += TimeDt * 4;
+			} else YSpeed += (float)(TimeDt * 4);
 		}
-		else if (LPF < 250 && PlayerY < DShip.pos.y) {
-			ExitTime = 4000;
+		else if (LPF < 250.f && PlayerY < DShip.pos.y) {
+			//ExitTime = 4000;
 			DShipInRange = TRUE;
 		}
 
-		DShipHuntRange -= ((float)TimeDt) ;// / 100.f;
-		if (DShipHuntRange <= 0.f) {
+		if (!DShipInRange) DShipHuntRange -= ((float)TimeDt) / 2;// / 100.f;
+		if (LPF < 512.f && DShipHuntRange < 512.f) DShipHuntRange = 512.f;
+		if (DShipHuntRange <= LPF) {
 			DShipHuntRange = 0.f;
 			DShip.State = 4;
 
@@ -2901,11 +2902,12 @@ TBEGIN:
 			if (DShip.State == 2) {
 				//init pickup phase
 				DShip.pos = DShip.tgpos;
-				Ship.tgpos = Ship.retpos;
-				Ship.tgpos.y = GetLandUpH(Ship.tgpos.x, Ship.tgpos.z) + Ship.DeltaY;
-				Ship.tgpos.y = MAX(Ship.tgpos.y, GetLandUpH(Ship.pos.x, Ship.pos.z) + Ship.DeltaY);
+				DShip.tgpos = DShip.retpos;
+				DShip.tgpos.y = GetLandUpH(DShip.tgpos.x, DShip.tgpos.z) + DShip.DeltaY;
+				DShip.tgpos.y = MAX(DShip.tgpos.y, GetLandUpH(DShip.pos.x, DShip.pos.z) + DShip.DeltaY);
 				DShip.State = 3;
-				DShipHuntRange = 3000;
+				DShipHuntRange = LPF * 2;
+				if (DShipHuntRange < 8192.f) DShipHuntRange = 8192.f;
 			}
 
 			/*
